@@ -79,7 +79,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     boolean allMatch = map.values().stream().allMatch(tally -> 1 == tally);
     if (value && allMatch)
       return tensor.stream().filter(cycle -> 1 < cycle.length()); //
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 
   private static NavigableMap<Integer, Integer> map(Stream<Tensor> stream) {

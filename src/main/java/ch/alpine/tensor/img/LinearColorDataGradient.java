@@ -32,7 +32,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
    * @throws Exception if tensor is empty, or is not of the above form */
   public static ColorDataGradient of(Tensor tensor) {
     if (Tensors.isEmpty(tensor))
-      throw Throw.of(tensor);
+      throw new Throw(tensor);
     tensor.stream().forEach(ColorFormat::toColor);
     return new LinearColorDataGradient(tensor.map(CLIP::requireInside));
   }

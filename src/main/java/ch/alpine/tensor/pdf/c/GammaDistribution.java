@@ -33,7 +33,7 @@ public class GammaDistribution implements Distribution, //
   public static Distribution of(Scalar alpha, Scalar beta) {
     if (Scalars.lessEquals(alpha, RealScalar.ZERO) || //
         Scalars.lessEquals(beta, RealScalar.ZERO))
-      throw Throw.of(alpha, beta);
+      throw new Throw(alpha, beta);
     if (alpha.equals(RealScalar.ONE))
       return ExponentialDistribution.of(beta.reciprocal());
     return new GammaDistribution(alpha, beta);

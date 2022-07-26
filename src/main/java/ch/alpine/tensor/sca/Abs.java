@@ -27,7 +27,7 @@ public enum Abs implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof AbsInterface absInterface)
       return absInterface.abs();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

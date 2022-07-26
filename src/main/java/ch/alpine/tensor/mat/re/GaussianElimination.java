@@ -58,7 +58,7 @@ public class GaussianElimination extends AbstractReduce {
       pivot(c0, c0);
       Scalar piv = lhs[ind(c0)].Get(c0);
       if (Scalars.isZero(piv))
-        throw Throw.of(matrix, piv);
+        throw new Throw(matrix, piv);
       eliminate(c0, piv);
     }
   }

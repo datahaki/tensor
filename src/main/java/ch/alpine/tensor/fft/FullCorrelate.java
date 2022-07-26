@@ -58,7 +58,7 @@ public class FullCorrelate implements TensorUnaryOperator {
   public Tensor apply(Tensor tensor) {
     List<Integer> size = Dimensions.of(tensor);
     if (size.size() <= level)
-      throw Throw.of(kernel, tensor);
+      throw new Throw(kernel, tensor);
     List<Integer> dimensions = IntStream.range(0, mask.size()) //
         .map(index -> size.get(index) + mask.get(index) - 1) //
         .mapToObj(Integers::requirePositive) //

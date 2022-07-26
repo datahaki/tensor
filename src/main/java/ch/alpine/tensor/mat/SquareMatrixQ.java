@@ -23,6 +23,6 @@ public enum SquareMatrixQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 }

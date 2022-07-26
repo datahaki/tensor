@@ -31,6 +31,6 @@ public enum TensorRank {
     Dimensions dimensions = new Dimensions(tensor);
     if (dimensions.isArray())
       return dimensions.list().size();
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 }

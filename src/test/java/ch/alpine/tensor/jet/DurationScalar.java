@@ -74,7 +74,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
   @Override // from Scalar
   public DurationScalar multiply(Scalar scalar) {
     if (scalar instanceof DurationScalar) // condition inserted for clarity
-      throw Throw.of(this, scalar);
+      throw new Throw(this, scalar);
     return fromSeconds(seconds().multiply(scalar));
   }
 
@@ -91,7 +91,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
       return durationScalar.seconds().divide(seconds());
     if (scalar instanceof RealScalar realScalar)
       return realScalar.divide(seconds());
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Scalar
@@ -106,7 +106,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
 
   @Override // from Scalar
   public Number number() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
@@ -125,7 +125,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
       return new DurationScalar(duration.plus(durationScalar.duration));
     if (scalar instanceof DateTimeScalar)
       return scalar.add(this);
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from AbsInterface
@@ -139,12 +139,12 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
       return ArcTan.of(durationScalar.seconds(), seconds());
     if (x instanceof RealScalar realScalar)
       return ArcTan.of(realScalar, seconds());
-    throw Throw.of(x, this);
+    throw new Throw(x, this);
   }
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from ChopInterface
@@ -158,7 +158,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
   public int compareTo(Scalar scalar) {
     if (scalar instanceof DurationScalar durationScalar)
       return duration.compareTo(durationScalar.duration);
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from SignInterface

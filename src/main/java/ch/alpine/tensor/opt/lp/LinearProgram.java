@@ -170,13 +170,13 @@ public class LinearProgram implements Serializable {
   public Tensor requireFeasible(Tensor x) {
     if (variables.equals(Variables.NON_NEGATIVE) && //
         !StaticHelper.isNonNegative(x))
-      throw Throw.of(c, A, b, x);
+      throw new Throw(c, A, b, x);
     if (constraintType.equals(ConstraintType.LESS_EQUALS) && //
         !StaticHelper.isNonNegative(b.subtract(A.dot(x))))
-      throw Throw.of(c, A, b, x);
+      throw new Throw(c, A, b, x);
     if (constraintType.equals(ConstraintType.GREATER_EQUALS) && //
         !StaticHelper.isNonNegative(A.dot(x).subtract(b)))
-      throw Throw.of(c, A, b, x);
+      throw new Throw(c, A, b, x);
     return x;
   }
 

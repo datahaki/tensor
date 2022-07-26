@@ -87,6 +87,6 @@ public enum Power {
   private static Scalar evaluate(Scalar scalar, Scalar exponent) {
     if (scalar instanceof PowerInterface powerInterface)
       return powerInterface.power(exponent);
-    throw Throw.of(scalar, exponent);
+    throw new Throw(scalar, exponent);
   }
 }

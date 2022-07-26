@@ -78,7 +78,7 @@ public interface Quantity extends Scalar, //
   static Scalar of(Scalar value, Unit unit) {
     if (value instanceof Quantity || //
         value instanceof StringScalar)
-      throw Throw.of(value);
+      throw new Throw(value);
     return QuantityImpl.of( //
         Objects.requireNonNull(value), //
         unit);

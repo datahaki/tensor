@@ -43,7 +43,7 @@ public enum ColorFormat {
    * @throws Exception if either color value is outside the allowed range [0, ..., 255] */
   public static Color toColor(Tensor vector) {
     if (vector.length() != 4)
-      throw Throw.of(vector);
+      throw new Throw(vector);
     return new Color( //
         vector.Get(0).number().intValue(), //
         vector.Get(1).number().intValue(), //

@@ -28,7 +28,7 @@ public class ChiSquareDistribution implements UnivariateDistribution, Serializab
   public static Distribution of(Scalar nu) {
     if (Scalars.lessThan(RealScalar.ZERO, nu))
       return new ChiSquareDistribution(nu);
-    throw Throw.of(nu);
+    throw new Throw(nu);
   }
 
   /** @param nu positive real

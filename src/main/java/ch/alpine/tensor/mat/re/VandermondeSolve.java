@@ -47,7 +47,7 @@ public enum VandermondeSolve {
         t = xx.multiply(t).add(b);
       }
       if (Scalars.isZero(t))
-        throw Throw.of(x, q);
+        throw new Throw(x, q);
       w.append(s.divide(t));
     }
     return w;

@@ -63,7 +63,7 @@ public enum LenientAdd {
           : Quantity.of(sum, mqu); // 0[m] + 3[s] == 3[s]; 0 + 3[s] == 3[s]; 0[m] + 3 == 3
     if (q_zero)
       return Quantity.of(sum, mpu); // 3[m] + 0[s] == 3[m]; 3 + 0[s] == 3; 3[m] + 0 == 3[m]
-    throw Throw.of(p, q);
+    throw new Throw(p, q);
   }
 
   /** @param p

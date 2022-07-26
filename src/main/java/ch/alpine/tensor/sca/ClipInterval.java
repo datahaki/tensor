@@ -51,7 +51,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
   public final Scalar requireInside(Scalar scalar) {
     if (isInside(scalar))
       return scalar;
-    throw Throw.of(min, max, scalar);
+    throw new Throw(min, max, scalar);
   }
 
   @Override // from Clip

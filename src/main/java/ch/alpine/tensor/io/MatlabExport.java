@@ -44,7 +44,7 @@ public enum MatlabExport {
   public static Stream<String> of(Tensor tensor, Function<Scalar, String> function) {
     Dimensions dimensions = new Dimensions(tensor);
     if (!dimensions.isArray())
-      throw Throw.of(tensor);
+      throw new Throw(tensor);
     List<String> list = new LinkedList<>();
     list.add("function a=anonymous");
     list.add("% auto-generated code. do not modify.");

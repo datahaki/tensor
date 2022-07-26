@@ -31,7 +31,7 @@ public record DeBoor(BinaryAverage binaryAverage, int degree, Tensor knots, Tens
     Integers.requireEquals(control.length(), degree + 1);
     if (Integers.isEven(length))
       return new DeBoor(Objects.requireNonNull(binaryAverage), degree, VectorQ.require(knots), control);
-    throw Throw.of(knots, control);
+    throw new Throw(knots, control);
   }
 
   @Override

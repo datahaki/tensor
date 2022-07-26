@@ -25,7 +25,7 @@ public abstract class AbstractScalar implements Scalar {
 
   @Override // from Tensor
   public final Tensor get(int i) {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
@@ -33,7 +33,7 @@ public abstract class AbstractScalar implements Scalar {
   public final Tensor get(int... index) {
     if (index.length == 0)
       return this;
-    throw Throw.of(this);
+    throw new Throw(this, Integers.asList(index));
   }
 
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
@@ -41,17 +41,17 @@ public abstract class AbstractScalar implements Scalar {
   public final Tensor get(List<Integer> index) {
     if (index.size() == 0)
       return this;
-    throw Throw.of(this);
+    throw new Throw(this, index);
   }
 
   @Override // from Tensor
   public final Scalar Get(int i) {
-    throw Throw.of(this);
+    throw new Throw(this, i);
   }
 
   @Override // from Tensor
   public final Scalar Get(int i, int j) {
-    throw Throw.of(this);
+    throw new Throw(this, i, j);
   }
 
   @Override // from Tensor
@@ -61,7 +61,7 @@ public abstract class AbstractScalar implements Scalar {
 
   @Override // from Tensor
   public final Stream<Tensor> stream() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Tensor
@@ -71,49 +71,49 @@ public abstract class AbstractScalar implements Scalar {
 
   @Override // from Tensor
   public final void set(Tensor tensor, int... index) {
-    throw Throw.of(this, tensor);
+    throw new Throw(this, tensor, Integers.asList(index));
   }
 
   @Override // from Tensor
   public void set(Tensor tensor, List<Integer> index) {
-    throw Throw.of(this, tensor);
+    throw new Throw(this, tensor, index);
   }
 
   @Override // from Tensor
   public final <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index) {
-    throw Throw.of(this);
+    throw new Throw(this, Integers.asList(index));
   }
 
   @Override // from Tensor
   public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
-    throw Throw.of(this);
+    throw new Throw(this, index);
   }
 
   @Override // from Tensor
   public final Tensor append(Tensor tensor) {
-    throw Throw.of(this, tensor);
+    throw new Throw(this, tensor);
   }
 
   @Override // from Tensor
   public final Iterator<Tensor> iterator() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Tensor
   public final Tensor extract(int fromIndex, int toIndex) {
-    throw Throw.of(this);
+    throw new Throw(this, fromIndex, toIndex);
   }
 
   @Override // from Tensor
   public final Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
     if (Integers.requireEquals(fromIndex.size(), dimensions.size()) == 0)
       return this;
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Tensor
   public final Tensor dot(Tensor tensor) {
-    throw Throw.of(this, tensor);
+    throw new Throw(this, tensor);
   }
 
   // ---

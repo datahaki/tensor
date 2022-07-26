@@ -22,7 +22,7 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
   public static Distribution of(Scalar k, Scalar alpha) {
     if (Scalars.lessThan(RealScalar.ZERO, k))
       return new ParetoDistribution(k, Sign.requirePositive(alpha));
-    throw Throw.of(k);
+    throw new Throw(k);
   }
 
   /** @param k strictly positive real number

@@ -29,7 +29,7 @@ public enum ToeplitzMatrix {
   public static Tensor of(Tensor vector) {
     ScalarQ.thenThrow(vector);
     if (Integers.isEven(vector.length()))
-      throw Throw.of(vector);
+      throw new Throw(vector);
     int n = (vector.length() + 1) / 2;
     int semi = n - 1;
     return Tensors.matrix((i, j) -> vector.Get(semi - i + j), n, n);

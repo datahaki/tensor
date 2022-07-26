@@ -41,7 +41,7 @@ public enum OrthogonalMatrixQ {
   public static Tensor require(Tensor tensor, Chop chop) {
     if (of(tensor, chop))
       return tensor;
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 
   /** @param tensor
@@ -51,6 +51,6 @@ public enum OrthogonalMatrixQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 }

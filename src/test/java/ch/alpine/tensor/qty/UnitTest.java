@@ -30,7 +30,7 @@ class UnitTest {
   public static Scalar requireNonZero(Scalar scalar) {
     if (scalar instanceof Quantity || //
         Scalars.isZero(scalar))
-      throw Throw.of(scalar);
+      throw new Throw(scalar);
     return scalar;
   }
 

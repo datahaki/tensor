@@ -40,7 +40,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
    * @throws Exception unless a <= b <= c <= d and a < d */
   public static Distribution of(Scalar a, Scalar b, Scalar c, Scalar d) {
     if (Scalars.lessThan(c, b) || Scalars.lessEquals(d, a))
-      throw Throw.of(b, c);
+      throw new Throw(b, c);
     return new TrapezoidalDistribution(a, b, c, d);
   }
 

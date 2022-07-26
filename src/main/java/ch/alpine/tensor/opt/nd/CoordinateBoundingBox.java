@@ -78,7 +78,7 @@ public class CoordinateBoundingBox implements Serializable {
   public Tensor requireInside(Tensor vector) {
     if (isInside(vector))
       return vector;
-    throw Throw.of(vector);
+    throw new Throw(vector);
   }
 
   // ---

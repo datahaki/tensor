@@ -33,7 +33,7 @@ public enum MapThread {
     if (Integers.requirePositiveOrZero(level) == 0)
       return function.apply(list);
     if (list.stream().map(Tensor::length).distinct().skip(1).findAny().isPresent())
-      throw Throw.of(list.toArray(Object[]::new));
+      throw new Throw(list.toArray(Object[]::new));
     return list.isEmpty() //
         ? Tensors.empty()
         : Tensor.of(IntStream.range(0, list.get(0).length()) //

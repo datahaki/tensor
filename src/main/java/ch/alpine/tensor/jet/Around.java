@@ -143,7 +143,7 @@ public class Around extends MultiplexScalar implements //
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
     if (exponent instanceof Around)
-      throw Throw.of(this, exponent);
+      throw new Throw(this, exponent);
     Scalar scalar = Power.of(mean, exponent);
     return of(scalar, Abs.FUNCTION.apply(scalar.divide(mean).multiply(sigma).multiply(exponent)));
   }

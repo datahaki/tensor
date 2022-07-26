@@ -40,6 +40,6 @@ public abstract class MultiplexScalar extends AbstractScalar {
 
   @Override // from Scalar
   public final Number number() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 }

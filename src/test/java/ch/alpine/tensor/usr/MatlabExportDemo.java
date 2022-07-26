@@ -27,7 +27,7 @@ import ch.alpine.tensor.io.StringScalar;
         "{Infinity, 0, 0, 2.1342134E-300, -Infinity, NaN, 0, 136458123548175/23947236498726349876239876234}");
     boolean status = tensor.stream().anyMatch(s -> s instanceof StringScalar);
     if (status)
-      throw Throw.of(tensor);
+      throw new Throw(tensor);
     Export.of(HomeDirectory.file("me_vector2.m"), tensor);
   }
 

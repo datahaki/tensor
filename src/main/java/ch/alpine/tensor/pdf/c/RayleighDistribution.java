@@ -22,7 +22,7 @@ public class RayleighDistribution extends AbstractContinuousDistribution impleme
   public static Distribution of(Scalar sigma) {
     if (Scalars.lessThan(RealScalar.ZERO, sigma))
       return new RayleighDistribution(sigma);
-    throw Throw.of(sigma);
+    throw new Throw(sigma);
   }
 
   /** @param sigma positive

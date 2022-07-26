@@ -60,7 +60,7 @@ import ch.alpine.tensor.sca.pow.Power;
       if (isClose)
         return;
     }
-    throw Throw.of(matrix);
+    throw new Throw(matrix);
   }
 
   @Override // from MatrixSqrt

@@ -47,45 +47,45 @@ public class StringScalar extends AbstractScalar implements //
 
   @Override // from Scalar
   public Scalar reciprocal() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Scalar
   public Scalar negate() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
   public Scalar zero() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
   public Scalar one() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
   public Number number() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
     if (scalar instanceof StringScalar stringScalar)
       return string.compareTo(stringScalar.string);
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   // ---

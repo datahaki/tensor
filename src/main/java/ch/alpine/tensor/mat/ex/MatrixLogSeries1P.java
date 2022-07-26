@@ -27,6 +27,6 @@ import ch.alpine.tensor.ext.Integers;
       if (sum.equals(sum = sum.add(nxt.divide(den))))
         return sum;
     }
-    throw Throw.of(x); // insufficient convergence
+    throw new Throw(x); // insufficient convergence
   }
 }

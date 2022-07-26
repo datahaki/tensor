@@ -33,9 +33,9 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
    * @return */
   public static Distribution of(Scalar lambda) {
     if (Scalars.lessEquals(lambda, RealScalar.ZERO))
-      throw Throw.of(lambda);
+      throw new Throw(lambda);
     if (Scalars.lessThan(LAMBDA_MAX, lambda))
-      throw Throw.of(lambda);
+      throw new Throw(lambda);
     return new PoissonDistribution(lambda);
   }
 

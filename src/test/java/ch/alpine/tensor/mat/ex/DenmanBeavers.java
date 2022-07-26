@@ -31,7 +31,7 @@ import ch.alpine.tensor.mat.re.Inverse;
       yk = yn;
       zk = zn;
     }
-    throw Throw.of(a);
+    throw new Throw(a);
   }
 
   @Override

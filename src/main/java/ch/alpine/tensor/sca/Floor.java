@@ -49,7 +49,7 @@ public enum Floor implements ScalarUnaryOperator {
       return roundingInterface.floor();
     if (scalar instanceof MultiplexScalar multiplexScalar)
       return multiplexScalar.eachMap(FUNCTION);
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** Examples:

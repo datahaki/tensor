@@ -36,7 +36,7 @@ public class Projection implements TensorUnaryOperator {
     vc = Conjugate.of(vector);
     Scalar scalar = (Scalar) vc.dot(vector);
     if (Scalars.isZero(scalar))
-      throw Throw.of(vector);
+      throw new Throw(vector);
     vs = vector.divide(scalar);
   }
 

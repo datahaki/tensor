@@ -67,7 +67,7 @@ import ch.alpine.tensor.sca.Sign;
     m = tab.length() - 1;
     n = Unprotect.dimension1Hint(tab) - 1;
     if (!StaticHelper.isInsideRange(ind, n) || ind.length() != m)
-      throw Throw.of(ind);
+      throw new Throw(ind);
     while (true) {
       /* the tests pass for "c = tab.get(m)" as well!? */
       Tensor c = tab.get(m).extract(0, n);

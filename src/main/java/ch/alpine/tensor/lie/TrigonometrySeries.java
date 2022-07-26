@@ -35,7 +35,7 @@ import ch.alpine.tensor.sca.Chop;
       if (chop.isClose(xn0, xn1))
         return xn1;
     }
-    throw Throw.of(x);
+    throw new Throw(x);
   }
 
   /** @param x
@@ -52,7 +52,7 @@ import ch.alpine.tensor.sca.Chop;
       if (chop.isClose(xn0, xn1))
         return xn1;
     }
-    throw Throw.of(x);
+    throw new Throw(x);
   }
 
   /** @param x
@@ -72,7 +72,7 @@ import ch.alpine.tensor.sca.Chop;
       if (chop.isClose(xn0, xn1))
         return xn1;
     }
-    throw Throw.of(x);
+    throw new Throw(x);
   }
 
   /** @param x
@@ -89,6 +89,6 @@ import ch.alpine.tensor.sca.Chop;
       if (chop.isClose(xn0, xn1))
         return xn1;
     }
-    throw Throw.of(x);
+    throw new Throw(x);
   }
 }

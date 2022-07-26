@@ -60,7 +60,7 @@ public enum Orthogonalize {
     int k = matrix.length();
     int n = Unprotect.dimension1Hint(matrix);
     if (n < k) // case is forbidden to avoid confusion (despite functionally permissive)
-      throw Throw.of(matrix);
+      throw new Throw(matrix);
     return k < n //
         ? PolarDecompositionSvd.pu(ConjugateTranspose.of(matrix)).getConjugateTransposeUnitary()
         : PolarDecompositionSvd.pu(matrix).getUnitaryWithDetOne();

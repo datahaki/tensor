@@ -49,7 +49,7 @@ public enum Ceiling implements ScalarUnaryOperator {
       return roundingInterface.ceiling();
     if (scalar instanceof MultiplexScalar multiplexScalar)
       return multiplexScalar.eachMap(FUNCTION);
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** Examples:

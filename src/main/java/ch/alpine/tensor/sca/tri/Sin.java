@@ -24,7 +24,7 @@ public enum Sin implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof TrigonometryInterface trigonometryInterface)
       return trigonometryInterface.sin();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

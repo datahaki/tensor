@@ -72,7 +72,7 @@ public enum MatrixLog {
       matrix = denmanBeaversDet.sqrt();
       rem = matrix.subtract(id);
     }
-    throw Throw.of(matrix);
+    throw new Throw(matrix);
   }
 
   /** Hint: use {@link Symmetrize} on result for extra precision

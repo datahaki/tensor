@@ -17,7 +17,7 @@ public enum QuaternionToRotationMatrix {
   public static Tensor of(Quaternion quaternion) {
     Scalar abs = quaternion.abs();
     if (Scalars.isZero(abs))
-      throw Throw.of(quaternion);
+      throw new Throw(quaternion);
     Quaternion unit = quaternion.divide(abs); // normalize
     Scalar q_w = unit.w();
     Tensor xyz = unit.xyz();

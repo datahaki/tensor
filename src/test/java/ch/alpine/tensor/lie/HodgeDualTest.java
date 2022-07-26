@@ -37,7 +37,7 @@ class HodgeDualTest {
         product = TensorContract.of(product, 0, rank - index);
       return product.divide(Factorial.of(rank));
     }
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 
   @Test

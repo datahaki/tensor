@@ -67,7 +67,7 @@ public enum Roots {
     case 3: // a + b*x + c*x^2 + d*x^3 == 0
       return RootsDegree3.of(coeffs);
     default:
-      throw Throw.of(coeffs);
+      throw new Throw(coeffs);
     }
   }
 

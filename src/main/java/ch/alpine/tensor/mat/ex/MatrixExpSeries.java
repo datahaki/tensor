@@ -34,6 +34,6 @@ import ch.alpine.tensor.sca.N;
       if (sum.equals(sum = sum.add(nxt)))
         return sum;
     }
-    throw Throw.of(matrix); // insufficient convergence
+    throw new Throw(matrix); // insufficient convergence
   }
 }

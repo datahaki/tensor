@@ -33,6 +33,6 @@ import ch.alpine.tensor.sca.Abs;
   public Scalar apply(Scalar scalar) {
     if (Scalars.lessThan(Abs.of(scalar), DoubleScalar.of(0.7))) // error < 10^-9
       return POLYNOMIAL.apply(scalar);
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 }

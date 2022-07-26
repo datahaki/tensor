@@ -48,7 +48,7 @@ public enum Unprotect {
     int length = dimension1Hint(tensor);
     if (tensor.stream().skip(1).allMatch(entry -> entry.length() == length))
       return length;
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !

@@ -24,7 +24,7 @@ public enum Cos implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof TrigonometryInterface trigonometryInterface)
       return trigonometryInterface.cos();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

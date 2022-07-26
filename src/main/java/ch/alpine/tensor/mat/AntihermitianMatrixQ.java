@@ -33,7 +33,7 @@ public enum AntihermitianMatrixQ {
   public static Tensor require(Tensor tensor, Chop chop) {
     if (of(tensor, chop))
       return tensor;
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 
   /** @param tensor

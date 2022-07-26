@@ -70,7 +70,7 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
   @Override
   public Scalar reciprocal() {
     if (clip.isInside(zero()))
-      throw Throw.of(this);
+      throw new Throw(this);
     return of( //
         clip.max().reciprocal(), //
         clip.min().reciprocal());
@@ -156,7 +156,7 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
     Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
     if (optional.isPresent())
       return BINARY_POWER.raise(this, optional.orElseThrow());
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from SignInterface

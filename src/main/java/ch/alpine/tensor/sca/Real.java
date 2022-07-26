@@ -20,7 +20,7 @@ public enum Real implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ComplexEmbedding complexEmbedding)
       return complexEmbedding.real();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

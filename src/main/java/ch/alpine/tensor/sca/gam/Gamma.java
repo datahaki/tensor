@@ -48,7 +48,7 @@ public enum Gamma implements ScalarUnaryOperator {
     if (z.equals(round)) { // ..., -2, -1, 0, 1, 2, ...
       z = round;
       if (Scalars.lessEquals(z, RealScalar.ZERO)) // ..., -2, -1, 0
-        throw Throw.of(z); // ComplexInfinity
+        throw new Throw(z); // ComplexInfinity
       try {
         return Factorial.of(Math.subtractExact(Scalars.intValueExact(round), 1));
       } catch (Exception exception) {

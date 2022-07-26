@@ -28,7 +28,7 @@ public class GeometricDistribution extends AbstractDiscreteDistribution implemen
     if (p.equals(RealScalar.ONE))
       return BinomialDistribution.of(0, p);
     if (Scalars.lessEquals(p, RealScalar.ZERO) || Scalars.lessEquals(RealScalar.ONE, p))
-      throw Throw.of(p);
+      throw new Throw(p);
     return new GeometricDistribution(p);
   }
 

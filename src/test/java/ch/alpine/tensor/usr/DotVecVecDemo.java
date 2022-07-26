@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.Chop;
         Tensor cp = Parallelize.dot(a, b);
         s_par.stop();
         if (!Chop._12.isClose(cs, cp))
-          throw Throw.of(cs);
+          throw new Throw(cs);
       }
       timing.append(Tensors.vector(s_ser.nanoSeconds() / trials, s_par.nanoSeconds() / trials));
     }

@@ -50,7 +50,7 @@ public enum Round implements ScalarUnaryOperator {
       return roundingInterface.round();
     if (scalar instanceof MultiplexScalar multiplexScalar)
       return multiplexScalar.eachMap(FUNCTION);
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** Examples:

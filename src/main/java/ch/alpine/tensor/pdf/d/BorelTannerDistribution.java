@@ -23,7 +23,7 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
     if (Scalars.lessThan(RealScalar.ZERO, alpha) && //
         Scalars.lessThan(alpha, RealScalar.ONE))
       return new BorelTannerDistribution(alpha, Integers.requirePositive(n));
-    throw Throw.of(alpha);
+    throw new Throw(alpha);
   }
 
   /** @param alpha inside open interval (0, 1)

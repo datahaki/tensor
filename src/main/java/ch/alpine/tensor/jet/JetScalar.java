@@ -59,7 +59,7 @@ public class JetScalar extends MultiplexScalar implements //
    * @return */
   public static JetScalar of(Tensor vector) {
     if (vector.stream().anyMatch(JetScalar.class::isInstance))
-      throw Throw.of(vector);
+      throw new Throw(vector);
     return new JetScalar(VectorQ.require(vector).copy());
   }
 
@@ -74,7 +74,7 @@ public class JetScalar extends MultiplexScalar implements //
    * J{x, 1, 0, 0, ...} */
   public static JetScalar of(Scalar scalar, int n) {
     if (scalar instanceof JetScalar)
-      throw Throw.of(scalar);
+      throw new Throw(scalar);
     if (n == 1)
       return new JetScalar(Tensors.of(scalar));
     Tensor vector = UnitVector.of(n, 1);

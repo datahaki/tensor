@@ -92,7 +92,7 @@ public enum LinearSolve {
     }
     for (; row < matrix.length(); ++row)
       if (Scalars.nonZero(reduce.Get(row, last)))
-        throw Throw.of(matrix, b);
+        throw new Throw(matrix, b);
     return x;
   }
 }

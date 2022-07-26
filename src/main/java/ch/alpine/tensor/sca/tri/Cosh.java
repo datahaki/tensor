@@ -24,7 +24,7 @@ public enum Cosh implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof TrigonometryInterface trigonometryInterface)
       return trigonometryInterface.cosh();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

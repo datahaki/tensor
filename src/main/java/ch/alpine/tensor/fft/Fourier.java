@@ -40,7 +40,7 @@ public enum Fourier {
   public static Tensor of(Tensor vector, int b) {
     int n = vector.length();
     if (!Integers.isPowerOf2(n))
-      throw Throw.of(vector); // vector length is not a power of two
+      throw new Throw(vector); // vector length is not a power of two
     Scalar[] array = ScalarArray.ofVector(vector);
     for (int j = 0, i = 0; i < n; ++i) {
       if (j > i) {

@@ -19,7 +19,7 @@ public enum Sqrt implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof SqrtInterface sqrtInterface)
       return sqrtInterface.sqrt();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

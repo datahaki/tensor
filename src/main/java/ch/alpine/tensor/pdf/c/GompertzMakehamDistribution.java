@@ -22,7 +22,7 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
    * @return */
   public static Distribution of(Scalar lambda, Scalar xi) {
     if (Scalars.lessEquals(xi, RealScalar.ZERO))
-      throw Throw.of(xi);
+      throw new Throw(xi);
     return new GompertzMakehamDistribution(Sign.requirePositive(lambda), xi);
   }
 
@@ -43,7 +43,7 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
     this.xi = xi;
     lambda_xi = lambda.multiply(xi);
     if (Scalars.isZero(lambda_xi))
-      throw Throw.of(lambda, xi);
+      throw new Throw(lambda, xi);
   }
 
   @Override // from PDF

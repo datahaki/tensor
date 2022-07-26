@@ -13,6 +13,6 @@ public enum ScalarQ {
    * @throws Exception if given tensor is an instance of {@link Scalar} */
   public static void thenThrow(Tensor tensor) {
     if (tensor instanceof Scalar)
-      throw Throw.of(tensor);
+      throw new Throw(tensor);
   }
 }

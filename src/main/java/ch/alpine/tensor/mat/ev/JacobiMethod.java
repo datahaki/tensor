@@ -59,7 +59,7 @@ import ch.alpine.tensor.sca.Abs;
             eliminate(p, q);
         }
     }
-    throw Throw.of();
+    throw new Throw();
   }
 
   /** @param p

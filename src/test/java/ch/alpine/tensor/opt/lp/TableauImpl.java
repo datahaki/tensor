@@ -58,7 +58,7 @@ import ch.alpine.tensor.sca.Sign;
       if (Sign.isNegative(c.Get(j))) {
         int argmax = ArgMax.of(tab.get(Tensor.ALL, j).extract(0, m));
         if (!Sign.isPositive(tab.Get(argmax, j)))
-          throw Throw.of(tab); // problem unbounded
+          throw new Throw(tab); // problem unbounded
         Integer pivot = null;
         Scalar min = null;
         for (int i = 0; i < m; ++i)

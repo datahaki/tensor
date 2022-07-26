@@ -30,7 +30,7 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
     if (Scalars.lessThan(RealScalar.ZERO, alpha) && //
         Scalars.lessThan(RealScalar.ZERO, lambda))
       return new BirnbaumSaundersDistribution(alpha, lambda);
-    throw Throw.of(alpha, lambda);
+    throw new Throw(alpha, lambda);
   }
 
   /** @param alpha any real number

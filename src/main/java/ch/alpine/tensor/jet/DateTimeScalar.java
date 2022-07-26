@@ -47,29 +47,29 @@ public class DateTimeScalar extends AbstractScalar implements //
       return TemporalScalars.seconds(Duration.between(dateTimeScalar.localDateTime, localDateTime));
     if (tensor instanceof Scalar scalar)
       return new DateTimeScalar(localDateTime.minus(TemporalScalars.duration(scalar)));
-    throw Throw.of(this, tensor);
+    throw new Throw(this, tensor);
   }
 
   @Override // from AbstractScalar
   public Scalar multiply(Scalar scalar) {
     if (scalar.equals(one()))
       return this;
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Scalar
   public Scalar negate() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
   public Scalar reciprocal() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
   public Number number() {
-    throw Throw.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
@@ -91,7 +91,7 @@ public class DateTimeScalar extends AbstractScalar implements //
   public int compareTo(Scalar scalar) {
     if (scalar instanceof DateTimeScalar dateTimeScalar)
       return localDateTime.compareTo(dateTimeScalar.localDateTime);
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Object

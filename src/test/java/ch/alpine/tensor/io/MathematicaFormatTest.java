@@ -145,7 +145,7 @@ class MathematicaFormatTest {
 
   @Test
   void testSmallMatrix() {
-    String string = Throw.of(RealScalar.of(3), 12).getMessage();
+    String string = new Throw(RealScalar.of(3), 12).getMessage();
     assertEquals(string, "Throw[3, 12]");
   }
 }

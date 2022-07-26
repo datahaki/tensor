@@ -47,7 +47,7 @@ public class VectorNorm implements TensorScalarFunction {
 
   private VectorNorm(Scalar p) {
     if (Scalars.lessThan(p, RealScalar.ONE))
-      throw Throw.of(p);
+      throw new Throw(p);
     p_power = Power.function(p);
     this.p = p;
     p_reciprocal = p.reciprocal();

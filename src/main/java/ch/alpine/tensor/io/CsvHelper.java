@@ -27,9 +27,9 @@ import ch.alpine.tensor.sca.N;
     if (scalar instanceof DecimalScalar)
       return N.DOUBLE.apply(scalar);
     if (scalar instanceof ComplexScalar)
-      throw Throw.of(scalar);
+      throw new Throw(scalar);
     if (scalar instanceof Quantity)
-      throw Throw.of(scalar);
+      throw new Throw(scalar);
     return scalar;
   }
 

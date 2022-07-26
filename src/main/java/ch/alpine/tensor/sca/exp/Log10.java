@@ -34,7 +34,7 @@ public enum Log10 implements ScalarUnaryOperator {
     }
     if (scalar instanceof ComplexScalar z)
       return Log.FUNCTION.apply(z).divide(LOG10);
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

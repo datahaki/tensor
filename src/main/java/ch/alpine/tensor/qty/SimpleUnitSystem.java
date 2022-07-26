@@ -75,7 +75,7 @@ public class SimpleUnitSystem implements UnitSystem {
   // helper function
   private static Scalar requireNumeric(Scalar scalar) {
     if (scalar instanceof StringScalar)
-      throw Throw.of(scalar);
+      throw new Throw(scalar);
     return scalar;
   }
 

@@ -91,7 +91,7 @@ import ch.alpine.tensor.sca.tri.Sin;
       return new QuaternionImpl(w.add(quaternion.w()), xyz.add(quaternion.xyz()));
     if (scalar instanceof RealScalar)
       return new QuaternionImpl(w.add(scalar), xyz);
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Scalar

@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.Chop;
       if (isClose)
         return;
     }
-    throw Throw.of(matrix);
+    throw new Throw(matrix);
   }
 
   @Override // from MatrixSqrt

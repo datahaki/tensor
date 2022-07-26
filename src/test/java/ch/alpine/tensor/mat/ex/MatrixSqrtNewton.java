@@ -27,6 +27,6 @@ import ch.alpine.tensor.mat.re.LinearSolve;
         return xp;
       xp = xn;
     }
-    throw Throw.of(matrix);
+    throw new Throw(matrix);
   }
 }

@@ -51,7 +51,7 @@ import ch.alpine.tensor.sca.N;
     for (int count = 0; count < MAX_ITERATIONS; ++count)
       if (Tolerance.CHOP.isClose(ai, ai = refine(ai)))
         return ai;
-    throw Throw.of(matrix);
+    throw new Throw(matrix);
   }
 
   /** @param ai matrix that approximates the pseudo inverse of given matrix

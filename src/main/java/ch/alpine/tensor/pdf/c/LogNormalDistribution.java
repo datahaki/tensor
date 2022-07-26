@@ -41,7 +41,7 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
     if (mu instanceof RealScalar && //
         sigma instanceof RealScalar)
       return new LogNormalDistribution(mu, sigma);
-    throw Throw.of(mu, sigma);
+    throw new Throw(mu, sigma);
   }
 
   /** @param mu any real number

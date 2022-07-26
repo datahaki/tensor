@@ -35,7 +35,7 @@ public class Mod implements ScalarUnaryOperator {
    * @return remainder on division by n with offset d */
   public static Mod function(Scalar n, Scalar d) {
     if (Scalars.isZero(n))
-      throw Throw.of(n);
+      throw new Throw(n);
     return new Mod(n, Objects.requireNonNull(d));
   }
 

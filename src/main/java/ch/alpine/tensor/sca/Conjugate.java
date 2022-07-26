@@ -24,7 +24,7 @@ public enum Conjugate implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ConjugateInterface conjugateInterface)
       return conjugateInterface.conjugate();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

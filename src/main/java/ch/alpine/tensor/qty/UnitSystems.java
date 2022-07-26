@@ -70,7 +70,7 @@ public enum UnitSystems {
       Scalar value = entry.getValue();
       if (map.containsKey(key)) {
         if (!map.get(key).equals(value))
-          throw Throw.of(map.get(key), value);
+          throw new Throw(map.get(key), value);
       } else
         map.put(key, value);
     }

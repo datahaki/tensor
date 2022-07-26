@@ -30,7 +30,7 @@ public enum VectorQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 
   /** @param tensor
@@ -41,6 +41,6 @@ public enum VectorQ {
     if (tensor.length() == length && //
         tensor.stream().allMatch(Scalar.class::isInstance))
       return tensor;
-    throw Throw.of(tensor);
+    throw new Throw(tensor);
   }
 }

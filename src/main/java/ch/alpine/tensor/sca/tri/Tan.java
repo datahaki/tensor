@@ -26,7 +26,7 @@ public enum Tan implements ScalarUnaryOperator {
       return DoubleScalar.of(Math.tan(scalar.number().doubleValue()));
     if (scalar instanceof ComplexScalar z)
       return Sin.FUNCTION.apply(z).divide(Cos.FUNCTION.apply(z));
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

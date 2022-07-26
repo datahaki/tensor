@@ -54,7 +54,7 @@ public enum Transpose {
   public static Tensor of(Tensor tensor) {
     int length = Unprotect.dimension1(tensor);
     if (length == Scalar.LENGTH)
-      throw Throw.of(tensor);
+      throw new Throw(tensor);
     return tensor instanceof SparseArray //
         ? of(tensor, 1, 0)
         : Tensors.vector(i -> tensor.get(Tensor.ALL, i), length);

@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.Sign;
       for (int iteration = 0; iteration <= MAX_ITERATIONS; ++iteration) {
         int l = levelW(i, init.chop);
         if (!Unprotect.getUnitUnique(w).equals(Unprotect.getUnitUnique(r)))
-          throw Throw.of(w, r);
+          throw new Throw(w, r);
         if (l == i)
           break;
         if (iteration == MAX_ITERATIONS)

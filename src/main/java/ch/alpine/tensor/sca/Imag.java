@@ -20,7 +20,7 @@ public enum Imag implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ComplexEmbedding complexEmbedding)
       return complexEmbedding.imag();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

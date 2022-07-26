@@ -25,7 +25,7 @@ import ch.alpine.tensor.chq.FiniteScalarQ;
   @Override // from ScalarTensorFunction
   public final Tensor apply(Scalar scalar) {
     if (scalar instanceof MultiplexScalar)
-      throw Throw.of(scalar);
+      throw new Throw(scalar);
     return FiniteScalarQ.of(scalar) //
         ? tensor.get(toInt(scalar))
         : Transparent.rgba();

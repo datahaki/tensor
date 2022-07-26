@@ -50,6 +50,6 @@ import ch.alpine.tensor.sca.Abs;
     Scalar min = (Scalar) diag.stream().reduce(Min::of).orElseThrow();
     if (Tolerance.CHOP.isZero(min) || //
         Tolerance.CHOP.isZero(min.divide(max)))
-      throw Throw.of(max, min);
+      throw new Throw(max, min);
   }
 }

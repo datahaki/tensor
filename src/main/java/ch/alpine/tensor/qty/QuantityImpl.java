@@ -160,7 +160,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
     if (scalar instanceof DateTimeScalar dateTimeScalar)
       return dateTimeScalar.add(this);
     // ---
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   // ---
@@ -178,7 +178,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
   public Scalar arcTan(Scalar x) {
     if (x instanceof Quantity quantity && unit.equals(quantity.unit()))
       return ArcTan.of(quantity.value(), value);
-    throw Throw.of(this, x);
+    throw new Throw(this, x);
   }
 
   @Override // from ArgInterface
@@ -234,7 +234,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
   public int compareTo(Scalar scalar) {
     if (scalar instanceof Quantity quantity && unit.equals(quantity.unit()))
       return Scalars.compare(value, quantity.value());
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   // ---

@@ -23,7 +23,7 @@ public enum Log implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof LogInterface logInterface)
       return logInterface.log();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor
@@ -43,7 +43,7 @@ public enum Log implements ScalarUnaryOperator {
   public static ScalarUnaryOperator base(Scalar base) {
     Scalar log_b = FUNCTION.apply(base);
     if (Scalars.isZero(log_b))
-      throw Throw.of(base);
+      throw new Throw(base);
     return scalar -> FUNCTION.apply(scalar).divide(log_b);
   }
 

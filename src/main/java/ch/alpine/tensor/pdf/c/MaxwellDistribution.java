@@ -32,7 +32,7 @@ public class MaxwellDistribution implements Distribution, CDF, PDF, MeanInterfac
   public static Distribution of(Scalar sigma) {
     if (Scalars.lessThan(RealScalar.ZERO, sigma))
       return new MaxwellDistribution(sigma);
-    throw Throw.of(sigma);
+    throw new Throw(sigma);
   }
 
   /** @param sigma positive

@@ -29,7 +29,7 @@ public enum Arg implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ArgInterface argInterface)
       return argInterface.arg();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

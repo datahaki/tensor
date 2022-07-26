@@ -14,47 +14,47 @@ import ch.alpine.tensor.num.Pi;
 class ThrowTest {
   @Test
   void testFull() throws ClassNotFoundException, IOException {
-    Exception exception = Serialization.copy(Throw.of(Tensors.vector(1, 2), Tensors.vector(9, 3)));
+    Exception exception = Serialization.copy(new Throw(Tensors.vector(1, 2), Tensors.vector(9, 3)));
     assertEquals(exception.getMessage(), "Throw[{1, 2}, {9, 3}]");
   }
 
   @Test
   void testFullScalar() {
-    Exception exception = Throw.of(Tensors.vector(1, 2), RationalScalar.HALF, Tensors.empty());
+    Exception exception = new Throw(Tensors.vector(1, 2), RationalScalar.HALF, Tensors.empty());
     assertEquals(exception.getMessage(), "Throw[{1, 2}, 1/2, {}]");
   }
 
   @Test
   void testObject() {
-    assertEquals(Throw.of("abc").getMessage(), "Throw[abc]");
+    assertEquals(new Throw("abc").getMessage(), "Throw[abc]");
   }
 
   @Test
   void testShort() {
-    Exception exception = Throw.of(Array.zeros(20, 10, 5), RealScalar.ONE);
+    Exception exception = new Throw(Array.zeros(20, 10, 5), RealScalar.ONE);
     assertEquals(exception.getMessage(), "Throw[T[20, 10, 5], 1]");
   }
 
   @Test
   void testEmpty() {
-    assertEquals(Throw.of().getMessage(), "Throw[]");
+    assertEquals(new Throw().getMessage(), "Throw[]");
   }
 
   @Test
   void testSerializable() throws Exception {
-    Exception exception = Serialization.copy(Throw.of(RealScalar.ONE));
+    Exception exception = Serialization.copy(new Throw(RealScalar.ONE));
     assertEquals(exception.getMessage(), "Throw[1]");
   }
 
   @Test
   void testMessage() {
-    Exception exception = Throw.of(Pi.VALUE);
+    Exception exception = new Throw(Pi.VALUE);
     assertEquals(exception.getMessage(), "Throw[3.141592653589793]");
   }
 
   @Test
   void testNull() {
-    Exception exception = Throw.of(Tensors.vector(4, 7, 1, 1), null, RealScalar.ONE);
+    Exception exception = new Throw(Tensors.vector(4, 7, 1, 1), null, RealScalar.ONE);
     assertEquals(exception.getMessage(), "Throw[{4, 7, 1, 1}, null, 1]");
   }
 }

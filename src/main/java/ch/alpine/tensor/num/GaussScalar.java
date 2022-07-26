@@ -78,7 +78,7 @@ public class GaussScalar extends AbstractScalar implements //
       return ComplexScalar.of( //
           multiply(complexScalar.real()), //
           multiply(complexScalar.imag()));
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from AbstractScalar
@@ -126,7 +126,7 @@ public class GaussScalar extends AbstractScalar implements //
   protected GaussScalar plus(Scalar scalar) {
     if (scalar instanceof GaussScalar gaussScalar)
       return in(value.add(requireCommonPrime(gaussScalar)), prime);
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   // ---
@@ -144,13 +144,13 @@ public class GaussScalar extends AbstractScalar implements //
   public int compareTo(Scalar scalar) {
     if (scalar instanceof GaussScalar gaussScalar)
       return value.compareTo(requireCommonPrime(gaussScalar));
-    throw Throw.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   private BigInteger requireCommonPrime(GaussScalar gaussScalar) {
     if (prime.equals(gaussScalar.prime))
       return gaussScalar.value;
-    throw Throw.of(this, gaussScalar);
+    throw new Throw(this, gaussScalar);
   }
 
   @Override // from ConjugateInterface
@@ -190,7 +190,7 @@ public class GaussScalar extends AbstractScalar implements //
     if (Objects.nonNull(gaussScalar))
       return gaussScalar;
     // examples of gauss scalars without sqrt: 2 mod 5, 3 mod 5, 6 mod 11, etc.
-    throw Throw.of(this); // sqrt of this does not exist
+    throw new Throw(this); // sqrt of this does not exist
   }
 
   // ---

@@ -125,7 +125,7 @@ public class Chop implements ScalarUnaryOperator {
    * @throws Exception if {@link #apply(Scalar)} evaluates to non zero */
   public void requireZero(Scalar scalar) {
     if (!isZero(scalar))
-      throw Throw.of(scalar);
+      throw new Throw(scalar);
   }
 
   /** @param scalar
@@ -133,7 +133,7 @@ public class Chop implements ScalarUnaryOperator {
    * @throws Exception if given scalar is zero based on chop */
   public Scalar requireNonZero(Scalar scalar) {
     if (isZero(scalar))
-      throw Throw.of(scalar);
+      throw new Throw(scalar);
     return scalar;
   }
 
@@ -141,7 +141,7 @@ public class Chop implements ScalarUnaryOperator {
    * @throws Exception if {@link #allZero(Tensor)} evaluates to false */
   public void requireAllZero(Tensor tensor) {
     if (!allZero(tensor))
-      throw Throw.of(tensor);
+      throw new Throw(tensor);
   }
 
   /** Careful:
@@ -188,7 +188,7 @@ public class Chop implements ScalarUnaryOperator {
   private Scalar _requireClose(Scalar lhs, Scalar rhs) {
     if (isClose(lhs, rhs))
       return null; // never to be used
-    throw Throw.of(lhs, rhs, lhs.subtract(rhs));
+    throw new Throw(lhs, rhs, lhs.subtract(rhs));
   }
 
   /** @param tensor

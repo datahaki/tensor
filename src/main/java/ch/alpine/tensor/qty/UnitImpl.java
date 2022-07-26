@@ -62,7 +62,7 @@ import ch.alpine.tensor.ext.MergeIllegal;
   @Override // from Unit
   public Unit multiply(Scalar scalar) {
     if (scalar instanceof Quantity)
-      throw Throw.of(scalar);
+      throw new Throw(scalar);
     NavigableMap<String, Scalar> map = new TreeMap<>();
     for (Entry<String, Scalar> entry : navigableMap.entrySet()) {
       Scalar value = entry.getValue().multiply(scalar);

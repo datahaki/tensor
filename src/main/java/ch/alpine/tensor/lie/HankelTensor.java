@@ -17,7 +17,7 @@ public enum HankelTensor {
   public static Tensor of(Tensor vector, int rank) {
     int last = vector.length() - 1;
     if (last % rank != 0)
-      throw Throw.of(vector);
+      throw new Throw(vector);
     return Array.of(list -> vector.Get(list.stream().reduce(Integer::sum).orElseThrow()), //
         Collections.nCopies(rank, last / rank + 1));
   }

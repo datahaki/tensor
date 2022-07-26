@@ -164,7 +164,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
           ? tensor.copy()
           : StaticHelper.of(fallback, list, tensor));
     else
-      throw Throw.of(tensor);
+      throw new Throw(tensor);
   }
 
   @Override // from Tensor

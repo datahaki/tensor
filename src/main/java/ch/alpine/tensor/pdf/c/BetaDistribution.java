@@ -29,7 +29,7 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
   public static Distribution of(Scalar a1, Scalar a2) {
     if (Scalars.lessEquals(a1, RealScalar.ZERO) || //
         Scalars.lessEquals(a2, RealScalar.ZERO))
-      throw Throw.of(a1, a2);
+      throw new Throw(a1, a2);
     return new BetaDistribution(a1, a2);
   }
 

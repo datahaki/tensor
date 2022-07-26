@@ -43,6 +43,6 @@ public enum FiniteScalarQ {
   public static Scalar require(Scalar scalar) {
     if (of(scalar))
       return scalar;
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 }

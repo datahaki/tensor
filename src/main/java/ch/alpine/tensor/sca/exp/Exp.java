@@ -23,7 +23,7 @@ public enum Exp implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ExpInterface expInterface)
       return expInterface.exp();
-    throw Throw.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor
