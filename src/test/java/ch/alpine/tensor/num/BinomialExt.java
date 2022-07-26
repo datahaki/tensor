@@ -60,6 +60,6 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("BinomialExt", n);
+    return MathematicaFormat.concise("BinomialExt", n);
   }
 }

@@ -88,6 +88,6 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("BinomialDistribution", n, p);
+    return MathematicaFormat.concise("BinomialDistribution", n, p);
   }
 }

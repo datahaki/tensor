@@ -75,6 +75,6 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("LaplaceDistribution", mean, beta);
+    return MathematicaFormat.concise("LaplaceDistribution", mean, beta);
   }
 }

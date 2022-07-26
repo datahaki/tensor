@@ -88,6 +88,6 @@ public class MaxwellDistribution implements Distribution, CDF, PDF, MeanInterfac
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("MaxwellDistribution", sigma);
+    return MathematicaFormat.concise("MaxwellDistribution", sigma);
   }
 }

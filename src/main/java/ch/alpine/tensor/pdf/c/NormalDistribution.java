@@ -127,6 +127,6 @@ public class NormalDistribution implements UnivariateDistribution, //
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("NormalDistribution", mean, sigma);
+    return MathematicaFormat.concise("NormalDistribution", mean, sigma);
   }
 }

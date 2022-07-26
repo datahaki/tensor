@@ -97,6 +97,6 @@ public class Normalize implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("Normalize", tensorScalarFunction);
+    return MathematicaFormat.concise("Normalize", tensorScalarFunction);
   }
 }

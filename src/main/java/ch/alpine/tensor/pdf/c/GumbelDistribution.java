@@ -77,6 +77,6 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
 
   @Override // from Object
   public final String toString() {
-    return MathematicaFormat.of("GumbelDistribution", alpha, beta);
+    return MathematicaFormat.concise("GumbelDistribution", alpha, beta);
   }
 }

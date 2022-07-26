@@ -155,6 +155,6 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("SingularValueDecomposition", getU(), values(), getV());
+    return MathematicaFormat.concise("SingularValueDecomposition", getU(), values(), getV());
   }
 }

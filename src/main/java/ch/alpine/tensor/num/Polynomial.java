@@ -272,6 +272,6 @@ public class Polynomial extends HornerScheme {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("Polynomial", coeffs);
+    return MathematicaFormat.concise("Polynomial", coeffs);
   }
 }

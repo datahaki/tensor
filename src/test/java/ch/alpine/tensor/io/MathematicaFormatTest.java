@@ -133,14 +133,14 @@ class MathematicaFormatTest {
 
   @Test
   void testOf() {
-    String string = MathematicaFormat.of("Function", 12);
+    String string = MathematicaFormat.concise("Function", 12);
     assertEquals(string, "Function[12]");
   }
 
   @Test
   void testFail() {
     assertThrows(Exception.class, () -> MathematicaFormat.of(null));
-    assertThrows(Exception.class, () -> MathematicaFormat.of(null, 12));
+    assertThrows(Exception.class, () -> MathematicaFormat.concise(null, 12));
   }
 
   @Test

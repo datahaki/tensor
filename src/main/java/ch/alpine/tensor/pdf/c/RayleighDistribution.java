@@ -74,6 +74,6 @@ public class RayleighDistribution extends AbstractContinuousDistribution impleme
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("RayleighDistribution", sigma);
+    return MathematicaFormat.concise("RayleighDistribution", sigma);
   }
 }

@@ -81,6 +81,6 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("HypergeometricDistribution", N, n, m_n);
+    return MathematicaFormat.concise("HypergeometricDistribution", N, n, m_n);
   }
 }

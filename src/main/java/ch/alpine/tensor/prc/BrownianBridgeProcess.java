@@ -47,6 +47,6 @@ public class BrownianBridgeProcess implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("BrownianBridgeProcess", volatility);
+    return MathematicaFormat.concise("BrownianBridgeProcess", volatility);
   }
 }

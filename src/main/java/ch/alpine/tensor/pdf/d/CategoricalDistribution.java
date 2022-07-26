@@ -91,6 +91,6 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("CategoricalDistribution", pdf);
+    return MathematicaFormat.concise("CategoricalDistribution", pdf);
   }
 }

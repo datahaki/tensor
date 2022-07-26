@@ -93,6 +93,6 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
 
   @Override
   public String toString() {
-    return MathematicaFormat.of("BirnbaumSaundersDistribution", alpha, lambda);
+    return MathematicaFormat.concise("BirnbaumSaundersDistribution", alpha, lambda);
   }
 }

@@ -206,6 +206,6 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("TrapezoidalDistribution", a, b, c, d);
+    return MathematicaFormat.concise("TrapezoidalDistribution", a, b, c, d);
   }
 }

@@ -28,6 +28,6 @@ public class NdEntry<V> implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("NdEntry", location, value);
+    return MathematicaFormat.concise("NdEntry", location, value);
   }
 }

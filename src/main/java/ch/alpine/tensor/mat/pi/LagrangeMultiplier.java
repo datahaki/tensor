@@ -91,6 +91,6 @@ public final class LagrangeMultiplier implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("LagrangeMultiplier", matrix);
+    return MathematicaFormat.concise("LagrangeMultiplier", matrix);
   }
 }

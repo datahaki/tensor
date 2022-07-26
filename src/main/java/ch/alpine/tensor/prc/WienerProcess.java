@@ -28,6 +28,6 @@ import ch.alpine.tensor.io.MathematicaFormat;
 
   @Override
   public String toString() {
-    return MathematicaFormat.of("WienerProcess", mu, sigma);
+    return MathematicaFormat.concise("WienerProcess", mu, sigma);
   }
 }

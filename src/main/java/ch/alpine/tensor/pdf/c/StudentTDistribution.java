@@ -80,6 +80,6 @@ public class StudentTDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("StudentTDistribution", mu, sigma, v);
+    return MathematicaFormat.concise("StudentTDistribution", mu, sigma, v);
   }
 }

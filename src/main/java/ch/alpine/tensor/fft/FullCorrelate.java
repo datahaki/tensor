@@ -75,6 +75,6 @@ public class FullCorrelate implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("FullCorrelate", kernel);
+    return MathematicaFormat.concise("FullCorrelate", kernel);
   }
 }

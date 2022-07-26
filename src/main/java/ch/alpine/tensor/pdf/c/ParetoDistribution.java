@@ -80,6 +80,6 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("ParetoDistribution", k, alpha);
+    return MathematicaFormat.concise("ParetoDistribution", k, alpha);
   }
 }

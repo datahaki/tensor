@@ -76,6 +76,6 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("NegativeBinomialDistribution", n, p);
+    return MathematicaFormat.concise("NegativeBinomialDistribution", n, p);
   }
 }

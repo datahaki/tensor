@@ -89,6 +89,6 @@ import ch.alpine.tensor.io.MathematicaFormat;
 
   @Override // from Object
   public final String toString() {
-    return MathematicaFormat.of("Clip", min(), max());
+    return MathematicaFormat.concise("Clip", min(), max());
   }
 }

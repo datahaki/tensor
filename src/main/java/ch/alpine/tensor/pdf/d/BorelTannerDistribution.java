@@ -77,6 +77,6 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("BorelTannerDistribution", alpha, _n);
+    return MathematicaFormat.concise("BorelTannerDistribution", alpha, _n);
   }
 }

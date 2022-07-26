@@ -86,6 +86,6 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("PoissonDistribution", lambda);
+    return MathematicaFormat.concise("PoissonDistribution", lambda);
   }
 }

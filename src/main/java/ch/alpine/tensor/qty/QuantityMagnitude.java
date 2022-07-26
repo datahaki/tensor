@@ -88,7 +88,7 @@ public class QuantityMagnitude implements Serializable {
 
     @Override // from Object
     public String toString() {
-      return MathematicaFormat.of("QuantityMagnitude", unitSystem, unit);
+      return MathematicaFormat.concise("QuantityMagnitude", unitSystem, unit);
     }
   }
 }

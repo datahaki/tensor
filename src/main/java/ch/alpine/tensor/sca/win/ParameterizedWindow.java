@@ -22,7 +22,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 
   @Override // from Object
   public final String toString() {
-    return MathematicaFormat.of(title(), alpha);
+    return MathematicaFormat.concise(title(), alpha);
   }
 
   /** @param x guaranteed to be in the interval [-1/2, 1/2]

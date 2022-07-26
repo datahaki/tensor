@@ -85,7 +85,7 @@ public class TruncatedDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("TruncatedDistribution", univariateDistribution, clip);
+    return MathematicaFormat.concise("TruncatedDistribution", univariateDistribution, clip);
   }
 
   @PackageTestAccess

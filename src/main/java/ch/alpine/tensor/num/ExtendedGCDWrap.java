@@ -52,7 +52,7 @@ import ch.alpine.tensor.sca.Mod;
 
     @Override
     public String toString() {
-      return MathematicaFormat.of("ExtendedGCD", a, x, b, y, gcd);
+      return MathematicaFormat.concise("ExtendedGCD", a, x, b, y, gcd);
     }
   }
 }

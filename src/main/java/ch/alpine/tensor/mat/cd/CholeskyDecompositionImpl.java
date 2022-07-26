@@ -81,6 +81,6 @@ import ch.alpine.tensor.sca.Conjugate;
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("CholeskyDecomposition", diagonal(), getL());
+    return MathematicaFormat.concise("CholeskyDecomposition", diagonal(), getL());
   }
 }

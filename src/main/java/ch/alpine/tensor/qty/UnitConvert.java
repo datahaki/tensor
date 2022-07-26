@@ -73,7 +73,7 @@ public class UnitConvert implements Serializable {
 
     @Override // from Object
     public String toString() {
-      return MathematicaFormat.of("UnitConvert", unitSystem, unit);
+      return MathematicaFormat.concise("UnitConvert", unitSystem, unit);
     }
   }
 }

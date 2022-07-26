@@ -67,6 +67,6 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("PascalDistribution", n, p);
+    return MathematicaFormat.concise("PascalDistribution", n, p);
   }
 }

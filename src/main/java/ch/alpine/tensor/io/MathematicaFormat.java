@@ -84,7 +84,7 @@ public enum MathematicaFormat {
    * @param objects
    * @return */
   @SafeVarargs
-  public static String of(String string, Object... objects) {
+  public static String concise(String string, Object... objects) {
     return Arrays.stream(objects) //
         .map(object -> object instanceof Tensor tensor //
             ? MathematicaFormat.format(tensor)

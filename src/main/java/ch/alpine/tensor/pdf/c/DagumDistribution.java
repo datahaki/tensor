@@ -108,6 +108,6 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("DagumDistribution", p, a, b);
+    return MathematicaFormat.concise("DagumDistribution", p, a, b);
   }
 }

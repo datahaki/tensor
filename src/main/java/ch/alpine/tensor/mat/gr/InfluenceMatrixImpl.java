@@ -76,7 +76,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("InfluenceMatrix", matrix());
+    return MathematicaFormat.concise("InfluenceMatrix", matrix());
   }
 
   /** @return whether image(vector) is computed as the product vector . design . d_pinv,

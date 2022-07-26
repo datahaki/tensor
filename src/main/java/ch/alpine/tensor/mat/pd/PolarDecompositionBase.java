@@ -6,6 +6,6 @@ import ch.alpine.tensor.io.MathematicaFormat;
 /* package */ abstract class PolarDecompositionBase implements PolarDecomposition {
   @Override // from Object
   public final String toString() {
-    return MathematicaFormat.of("PolarDecomposition", getPositiveSemidefinite(), getUnitary());
+    return MathematicaFormat.concise("PolarDecomposition", getPositiveSemidefinite(), getUnitary());
   }
 }

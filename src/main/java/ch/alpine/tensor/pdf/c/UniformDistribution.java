@@ -122,6 +122,6 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("UniformDistribution", clip.min(), clip.max());
+    return MathematicaFormat.concise("UniformDistribution", clip.min(), clip.max());
   }
 }

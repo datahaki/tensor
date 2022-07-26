@@ -80,6 +80,6 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("LogisticDistribution", a, b);
+    return MathematicaFormat.concise("LogisticDistribution", a, b);
   }
 }

@@ -76,6 +76,6 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("CauchyDistribution", a, b);
+    return MathematicaFormat.concise("CauchyDistribution", a, b);
   }
 }

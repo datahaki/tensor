@@ -80,6 +80,6 @@ public class EqualizingDistribution implements UnivariateDistribution, Serializa
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("EqualizingDistribution", categoricalDistribution);
+    return MathematicaFormat.concise("EqualizingDistribution", categoricalDistribution);
   }
 }

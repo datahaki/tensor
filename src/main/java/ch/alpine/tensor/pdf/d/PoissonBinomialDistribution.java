@@ -81,6 +81,6 @@ public class PoissonBinomialDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("PoissonBinomialDistribution", p_vector);
+    return MathematicaFormat.concise("PoissonBinomialDistribution", p_vector);
   }
 }

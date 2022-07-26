@@ -70,6 +70,6 @@ public class GammaDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("GammaDistribution", alpha, beta);
+    return MathematicaFormat.concise("GammaDistribution", alpha, beta);
   }
 }

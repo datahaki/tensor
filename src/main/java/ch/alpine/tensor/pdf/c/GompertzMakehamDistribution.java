@@ -83,6 +83,6 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("GompertzMakehamDistribution", lambda, xi);
+    return MathematicaFormat.concise("GompertzMakehamDistribution", lambda, xi);
   }
 }

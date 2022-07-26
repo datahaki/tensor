@@ -78,6 +78,6 @@ public class DiracDeltaDistribution implements UnivariateDistribution, CentralMo
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("DiracDeltaDistribution", value);
+    return MathematicaFormat.concise("DiracDeltaDistribution", value);
   }
 }

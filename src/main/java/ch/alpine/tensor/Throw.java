@@ -14,7 +14,7 @@ public class Throw extends RuntimeException {
    * @param objects */
   @SafeVarargs
   public Throw(Object... objects) {
-    this(MathematicaFormat.of("Throw", objects));
+    this(MathematicaFormat.concise("Throw", objects));
   }
 
   private Throw(String string) {

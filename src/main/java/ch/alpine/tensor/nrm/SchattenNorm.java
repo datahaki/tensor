@@ -50,6 +50,6 @@ public class SchattenNorm implements TensorScalarFunction {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("SchattenNorm", p);
+    return MathematicaFormat.concise("SchattenNorm", p);
   }
 }

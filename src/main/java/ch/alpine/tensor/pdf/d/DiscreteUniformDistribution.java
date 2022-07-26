@@ -103,6 +103,6 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("DiscreteUniformDistribution", min, max);
+    return MathematicaFormat.concise("DiscreteUniformDistribution", min, max);
   }
 }

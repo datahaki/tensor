@@ -88,6 +88,6 @@ public class ChiSquareDistribution implements UnivariateDistribution, Serializab
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("ChiSquareDistribution", nu);
+    return MathematicaFormat.concise("ChiSquareDistribution", nu);
   }
 }

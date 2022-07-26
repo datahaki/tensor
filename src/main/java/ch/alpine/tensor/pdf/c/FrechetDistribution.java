@@ -113,6 +113,6 @@ public class FrechetDistribution implements UnivariateDistribution, Serializable
 
   @Override // from Object
   public final String toString() {
-    return MathematicaFormat.of("FrechetDistribution", alpha, beta);
+    return MathematicaFormat.concise("FrechetDistribution", alpha, beta);
   }
 }

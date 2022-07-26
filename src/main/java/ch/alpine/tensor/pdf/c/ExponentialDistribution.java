@@ -122,6 +122,6 @@ public class ExponentialDistribution implements UnivariateDistribution, //
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("ExponentialDistribution", lambda);
+    return MathematicaFormat.concise("ExponentialDistribution", lambda);
   }
 }

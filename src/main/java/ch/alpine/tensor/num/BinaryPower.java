@@ -49,6 +49,6 @@ public final class BinaryPower<T> implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("BinaryPower", groupInterface);
+    return MathematicaFormat.concise("BinaryPower", groupInterface);
   }
 }

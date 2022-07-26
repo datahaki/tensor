@@ -37,6 +37,6 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
 
   @Override // from Object
   public final String toString() {
-    return MathematicaFormat.of("QRDecomposition", getQ(), getR());
+    return MathematicaFormat.concise("QRDecomposition", getQ(), getR());
   }
 }

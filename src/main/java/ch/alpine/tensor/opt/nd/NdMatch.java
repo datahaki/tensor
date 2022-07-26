@@ -36,6 +36,6 @@ public class NdMatch<V> implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("NdMatch", ndEntry, distance);
+    return MathematicaFormat.concise("NdMatch", ndEntry, distance);
   }
 }

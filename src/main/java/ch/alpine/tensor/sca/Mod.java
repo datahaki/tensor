@@ -68,6 +68,6 @@ public class Mod implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("Mod", n, d);
+    return MathematicaFormat.concise("Mod", n, d);
   }
 }

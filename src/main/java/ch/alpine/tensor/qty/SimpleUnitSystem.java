@@ -173,6 +173,6 @@ public class SimpleUnitSystem implements UnitSystem {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("UnitSystem", map);
+    return MathematicaFormat.concise("UnitSystem", map);
   }
 }

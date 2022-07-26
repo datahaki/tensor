@@ -96,6 +96,6 @@ public class GeometricDistribution extends AbstractDiscreteDistribution implemen
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("GeometricDistribution", p);
+    return MathematicaFormat.concise("GeometricDistribution", p);
   }
 }

@@ -118,6 +118,6 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("Mahalanobis", design);
+    return MathematicaFormat.concise("Mahalanobis", design);
   }
 }

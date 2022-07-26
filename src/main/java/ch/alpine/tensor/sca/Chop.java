@@ -200,6 +200,6 @@ public class Chop implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("Chop", threshold);
+    return MathematicaFormat.concise("Chop", threshold);
   }
 }

@@ -136,6 +136,6 @@ public class SpectrogramArray implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("SpectrogramArray", windowLength, offset, tensorUnaryOperator);
+    return MathematicaFormat.concise("SpectrogramArray", windowLength, offset, tensorUnaryOperator);
   }
 }

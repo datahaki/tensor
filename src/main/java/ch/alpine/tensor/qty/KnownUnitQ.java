@@ -79,6 +79,6 @@ public class KnownUnitQ implements Predicate<Unit>, Serializable {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("KnownUnitQ", set);
+    return MathematicaFormat.concise("KnownUnitQ", set);
   }
 }

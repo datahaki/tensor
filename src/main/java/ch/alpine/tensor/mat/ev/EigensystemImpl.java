@@ -36,6 +36,6 @@ import ch.alpine.tensor.io.MathematicaFormat;
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.of("Eigensystem", values(), vectors());
+    return MathematicaFormat.concise("Eigensystem", values(), vectors());
   }
 }
