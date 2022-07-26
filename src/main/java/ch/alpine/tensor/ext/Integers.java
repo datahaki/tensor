@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.IntUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Integers.html">Integers</a> */
@@ -70,6 +71,14 @@ public enum Integers {
    * @throws Exception if given value is negative or zero */
   public static boolean isPowerOf2(int value) {
     return 0 == (requirePositive(value) & (value - 1));
+  }
+
+  /** @param min inclusive
+   * @param max inclusive
+   * @return function that maps an integer x into the closed interval [min, max] */
+  public static IntUnaryOperator clip(int min, int max) {
+    requireLessEquals(min, max);
+    return operand -> Math.min(Math.max(min, operand), max);
   }
 
   // ---

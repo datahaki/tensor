@@ -166,6 +166,23 @@ class IntegersTest {
   }
 
   @Test
+  void testClip() {
+    assertEquals(Integer.MIN_VALUE, Integers.clip(Integer.MIN_VALUE, Integer.MAX_VALUE).applyAsInt(Integer.MIN_VALUE));
+    assertEquals(Integer.MAX_VALUE, Integers.clip(0, Integer.MAX_VALUE).applyAsInt(Integer.MAX_VALUE));
+    assertEquals(3, Integers.clip(Integer.MIN_VALUE, Integer.MAX_VALUE).applyAsInt(3));
+    assertEquals(3, Integers.clip(0, 5).applyAsInt(3));
+    assertEquals(4, Integers.clip(4, 4).applyAsInt(3));
+    assertEquals(4, Integers.clip(4, 4).applyAsInt(4));
+    assertEquals(4, Integers.clip(4, 4).applyAsInt(5));
+  }
+
+  @Test
+  void testClipFail() {
+    assertThrows(IllegalArgumentException.class, () -> Integers.clip(0, -1));
+    assertThrows(IllegalArgumentException.class, () -> Integers.clip(3, 2));
+  }
+
+  @Test
   void testParity() {
     assertEquals(Integers.parity(new int[] { 0, 1 }), 0);
     assertEquals(Integers.parity(new int[] { 1, 0 }), 1);

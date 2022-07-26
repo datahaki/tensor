@@ -4,6 +4,7 @@ package ch.alpine.tensor.itp;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarTensorFunction;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
@@ -39,7 +40,7 @@ public class BSplineFunctionString extends BSplineFunctionBase {
 
   @Override // from BSplineFunction
   protected int bound(int index) {
-    return Math.min(Math.max(0, index), last);
+    return Integers.clip(0, last).applyAsInt(index);
   }
 
   @Override // from BSplineFunctionBase
