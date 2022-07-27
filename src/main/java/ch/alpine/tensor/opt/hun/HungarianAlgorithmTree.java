@@ -35,12 +35,13 @@ import ch.alpine.tensor.red.Min;
     resetEscape();
   }
 
-  public void setAlpha(int x) {
+  public int setAlphaAndS(int x) {
     Arrays.fill(escapeFromY, x);
     Scalar xLabelX = xLabel[x];
     for (int y = 0; y < alpha.length; ++y)
       alpha[y] = matrix[x][y].subtract(yLabel[y]).subtract(xLabelX);
     S.add(x);
+    return addS();
   }
 
   public void updateAlpha(int x) { // slows down (n x n)-Problem
@@ -89,7 +90,7 @@ import ch.alpine.tensor.red.Min;
     return escapeFromY[y];
   }
 
-  public int addS() {
+  private int addS() {
     while (true) {
       int y = pickNlsMinusT();
       if (yMatch[y] == BipartiteMatching.UNASSIGNED)
