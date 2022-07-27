@@ -3,6 +3,7 @@ package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
@@ -39,10 +40,12 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
   // ---
   private final Tensor tensor;
   private final LanczosKernel lanczosKernel;
+  private final IntUnaryOperator clip;
 
   private LanczosInterpolation(Tensor tensor, LanczosKernel lanczosKernel) {
     this.tensor = Objects.requireNonNull(tensor);
     this.lanczosKernel = lanczosKernel;
+    clip = Integers.clip(0, tensor.length() - 1);
   }
 
   @Override // from Interpolation
@@ -68,7 +71,7 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
   }
 
   private Tensor flow(Tensor tensor, int count, Scalar value) {
-    return tensor.get(Integers.clip(0, tensor.length() - 1).applyAsInt(count)) //
+    return tensor.get(clip.applyAsInt(count)) //
         .multiply(lanczosKernel.apply(value.subtract(RealScalar.of(count))));
   }
 }
