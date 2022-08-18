@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +49,7 @@ class MathematicaFormatTest {
         .findAny();
     boolean containsStringScalar = optional.isPresent();
     if (containsStringScalar)
-      System.out.println(optional.get());
+      fail("" + optional.get());
     assertFalse(containsStringScalar);
     assertFalse(StringScalarQ.any(tensor));
   }

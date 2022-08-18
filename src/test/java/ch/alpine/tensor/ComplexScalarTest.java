@@ -117,25 +117,18 @@ class ComplexScalarTest {
   @Test
   void testAsField() {
     // primes not resulting in field: 5,13,17
-    // int c = 0;
     // primes resulting in field:
     for (int p : new int[] { 3, 7, 11, 19 }) { // also 23, 31, 43
       Scalar neutral = GaussScalar.of(1, p);
       for (int i = 0; i < p; ++i)
         for (int j = (0 < i ? 0 : 1); j < p; ++j) {
           Scalar scalar = ComplexScalar.of(GaussScalar.of(i, p), GaussScalar.of(j, p));
-          // try {
           assertEquals(scalar.reciprocal().multiply(scalar), neutral);
           assertEquals(scalar.multiply(scalar.reciprocal()), neutral);
           assertEquals(scalar.divide(scalar), neutral);
           assertEquals(scalar.under(scalar), neutral);
-          // } catch (Exception e) {
-          // System.out.println(scalar);
-          // ++c;
-          // }
         }
     }
-    // System.out.println(c + " of " + p * p);
   }
 
   @Test

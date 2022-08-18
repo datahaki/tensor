@@ -78,9 +78,7 @@ class PartitionTest {
     for (int offset = -20; offset <= 0; ++offset)
       try {
         Tensor partition = Partition.of(tensor, 2, offset);
-        System.out.println(offset);
-        System.out.println(partition);
-        fail();
+        fail(offset + " " + partition);
       } catch (Exception exception) {
         // ---
       }
