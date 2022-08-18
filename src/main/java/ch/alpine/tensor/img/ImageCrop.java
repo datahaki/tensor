@@ -23,6 +23,7 @@ public class ImageCrop implements TensorUnaryOperator {
    * 
    * @param value
    * @return operator that removes the boundary of images of given color value */
+  // TODO TENSOR API perhaps rename to eq
   @SuppressWarnings("unchecked")
   public static TensorUnaryOperator color(Tensor value) {
     return new ImageCrop((Predicate<Tensor> & Serializable) value::equals);

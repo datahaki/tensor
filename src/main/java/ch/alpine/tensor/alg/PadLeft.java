@@ -30,7 +30,6 @@ public class PadLeft extends PadBase {
   /** @param element
    * @param dimensions non-empty
    * @return */
-  @SafeVarargs
   public static TensorUnaryOperator with(Tensor element, int... dimensions) {
     return new PadLeft(Objects.requireNonNull(element), Integers.asList(dimensions));
   }
@@ -43,7 +42,6 @@ public class PadLeft extends PadBase {
 
   /** @param dimensions non-empty
    * @return */
-  @SafeVarargs
   public static TensorUnaryOperator zeros(int... dimensions) {
     return zeros(Integers.asList(dimensions));
   }

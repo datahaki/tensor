@@ -32,7 +32,6 @@ public enum ConstantArray {
   /** @param entry non-null
    * @param dimensions
    * @return unmodifiable tensor with given dimensions and entries as given entry */
-  @SafeVarargs
   public static Tensor of(Tensor entry, int... dimensions) {
     return of(entry, Integers.asList(dimensions));
   }

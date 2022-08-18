@@ -24,7 +24,6 @@ public class Dot {
    * @return (...((tensors[0].tensors[1]).tensors[2]) ... ).tensors[n-1]
    * with the guarantee that minimal number of multiplications is used
    * @throws Exception if tensors is empty array */
-  @SafeVarargs
   public static Tensor of(Tensor... tensors) {
     if (tensors.length == 1)
       return tensors[0].copy();

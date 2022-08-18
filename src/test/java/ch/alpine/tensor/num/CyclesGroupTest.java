@@ -83,11 +83,11 @@ class CyclesGroupTest {
   @Test
   void testOrbit3() {
     Set<Cycles> set = new HashSet<>();
-    set.add(Cycles.of("{{0, 1}}"));
-    set.add(Cycles.of("{{0, 1, 2}}"));
+    set.add(TestHelper.of("{{0, 1}}"));
+    set.add(TestHelper.of("{{0, 1, 2}}"));
     Set<Cycles> group = _group(set);
     assertEquals(group.size(), 6);
-    Cycles other = Cycles.of("{{2, 3}}");
+    Cycles other = TestHelper.of("{{2, 3}}");
     assertEquals(6, group.stream().map(other::combine).distinct().count());
     assertEquals(6, group.stream().map(e -> e.combine(other)).distinct().count());
     assertEquals(6, group.stream().map(Cycles::inverse).distinct().count());
@@ -103,11 +103,11 @@ class CyclesGroupTest {
   @Test
   void testOrbit4() {
     Set<Cycles> set = new HashSet<>();
-    set.add(Cycles.of("{{0, 1}}"));
-    set.add(Cycles.of("{{0, 1, 2, 3}}"));
+    set.add(TestHelper.of("{{0, 1}}"));
+    set.add(TestHelper.of("{{0, 1, 2, 3}}"));
     Set<Cycles> group = _group(set);
     assertEquals(group.size(), 24);
-    Cycles other = Cycles.of("{{2, 3}}");
+    Cycles other = TestHelper.of("{{2, 3}}");
     assertEquals(24, group.stream().map(other::combine).distinct().count());
     assertEquals(24, group.stream().map(e -> e.combine(other)).distinct().count());
     Map<Integer, Long> map = group.stream() //
@@ -127,14 +127,14 @@ class CyclesGroupTest {
   @Test
   void testGroupEx1() {
     Set<Cycles> gen = new HashSet<>();
-    gen.add(Cycles.of("{{2, 10}, {4, 11}, {5, 7}}"));
-    gen.add(Cycles.of("{{1, 4, 3}, {2, 5, 6}}"));
+    gen.add(TestHelper.of("{{2, 10}, {4, 11}, {5, 7}}"));
+    gen.add(TestHelper.of("{{1, 4, 3}, {2, 5, 6}}"));
     assertEquals(_group(gen).size(), 1440);
   }
 
   @Test
   void testGroupEx2() {
-    Cycles cycles = Cycles.of( //
+    Cycles cycles = TestHelper.of( //
         "{{1, 18, 25, 8, 11, 33, 45, 34, 19, 39, 4, 35, 46, 37, 10, 48, 7, 31, 6, 42, 36, 15, 29}, {2, 21, 14, 38, 26, 24, 41, 22, 12, 49}, {3, 28,  20, 50, 43, 23, 9, 5, 16, 44, 30, 27, 17}, {13, 40, 32, 47}}");
     int[] array = cycles.toTensor().stream().mapToInt(Tensor::length).toArray();
     Scalar scalar = Tensors.vectorInt(array).stream().map(Scalar.class::cast).reduce(LCM::of).get();

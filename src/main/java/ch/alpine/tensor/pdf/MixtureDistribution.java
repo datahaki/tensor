@@ -20,7 +20,6 @@ public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterfac
   /** @param weights vector with non-negative entries
    * @param distributions
    * @return */
-  @SafeVarargs
   public static Distribution of(Tensor weights, Distribution... distributions) {
     return of(weights, List.of(distributions));
   }

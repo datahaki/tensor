@@ -35,7 +35,6 @@ public class CoordinateBoundingBox implements Serializable {
 
   /** @param clips
    * @return */
-  @SafeVarargs
   public static CoordinateBoundingBox of(Clip... clips) {
     return new CoordinateBoundingBox(List.of(clips));
   }

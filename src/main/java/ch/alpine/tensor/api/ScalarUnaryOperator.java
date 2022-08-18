@@ -36,7 +36,6 @@ public interface ScalarUnaryOperator extends UnaryOperator<Scalar>, Serializable
    * @param scalarUnaryOperators
    * @return operator that nests given operators with execution from left to right
    * @throws Exception if any given operator is null */
-  @SafeVarargs
   static ScalarUnaryOperator chain(ScalarUnaryOperator... scalarUnaryOperators) {
     return List.of(scalarUnaryOperators).stream() //
         .reduce(IDENTITY, ScalarUnaryOperator::andThen);

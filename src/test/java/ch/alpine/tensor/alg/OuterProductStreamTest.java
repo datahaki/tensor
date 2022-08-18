@@ -23,7 +23,7 @@ class OuterProductStreamTest {
   @Test
   void testSpecific() {
     IntStream intStream = OuterProductStream.of(Size.of(Arrays.asList(3, 2, 4)), new int[] { 0, 2, 1 });
-    intStream.forEach(System.out::println);
-    // assertEquals(count, 12);
+    // intStream.forEach(System.out::println);
+    assertEquals(intStream.count(), 24);
   }
 }
