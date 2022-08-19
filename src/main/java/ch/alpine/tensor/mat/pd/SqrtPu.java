@@ -1,13 +1,30 @@
 // code by jph
 package ch.alpine.tensor.mat.pd;
 
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;
+import ch.alpine.tensor.sca.Imag;
 
 /* package */ class SqrtPu extends PolarDecompositionSqrt {
-  public SqrtPu(Tensor matrix) {
-    super(matrix, MatrixSqrt.of(MatrixDotConjugateTranspose.of(matrix)));
+  /** @param matrix
+   * @return */
+  public static PolarDecompositionSqrt of(Tensor matrix) {
+    boolean isReal = matrix.flatten(-1) //
+        .map(Scalar.class::cast) //
+        .map(Imag.FUNCTION) //
+        .allMatch(Scalars::isZero);
+    Tensor mmt = MatrixDotConjugateTranspose.of(matrix);
+    MatrixSqrt matrixSqrt = isReal //
+        ? MatrixSqrt.ofSymmetric(mmt)
+        : MatrixSqrt.ofHermitian(mmt);
+    return new SqrtPu(matrix, matrixSqrt);
+  }
+
+  private SqrtPu(Tensor matrix, MatrixSqrt matrixSqrt) {
+    super(matrix, matrixSqrt);
   }
 
   @Override // from PolarDecomposition

@@ -18,7 +18,7 @@ class SqrtUpTest {
     Random random = new Random(2);
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, n, n);
-      PolarDecomposition polarDecomposition = new SqrtUp(matrix);
+      PolarDecomposition polarDecomposition = SqrtUp.of(matrix);
       Tensor s = polarDecomposition.getPositiveSemidefinite();
       Tensor u = polarDecomposition.getUnitary();
       Tensor tensor = polarDecomposition.getUnitary().dot(s);

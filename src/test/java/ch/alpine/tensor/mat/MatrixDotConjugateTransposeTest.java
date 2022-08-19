@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
@@ -27,5 +29,29 @@ class MatrixDotConjugateTransposeTest {
     Tensor expect = Dot.of(tensor, ConjugateTranspose.of(tensor));
     Tolerance.CHOP.requireClose(result, expect);
     assertEquals(result, expect);
+  }
+
+  @RepeatedTest(8)
+  void testComplexSquare(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n);
+    Tensor polard = MatrixDotConjugateTranspose.of(matrix);
+    HermitianMatrixQ.require(polard);
+  }
+
+  @RepeatedTest(8)
+  void testComplex1(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n + 2);
+    Tensor polard = MatrixDotConjugateTranspose.of(matrix);
+    HermitianMatrixQ.require(polard);
+  }
+
+  @RepeatedTest(8)
+  void testComplex2(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n + 2, n);
+    Tensor polard = MatrixDotConjugateTranspose.of(matrix);
+    HermitianMatrixQ.require(polard);
   }
 }
