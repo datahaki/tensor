@@ -23,9 +23,8 @@ public class ImageCrop implements TensorUnaryOperator {
    * 
    * @param value
    * @return operator that removes the boundary of images of given color value */
-  // TODO TENSOR API perhaps rename to eq
   @SuppressWarnings("unchecked")
-  public static TensorUnaryOperator color(Tensor value) {
+  public static TensorUnaryOperator eq(Tensor value) {
     return new ImageCrop((Predicate<Tensor> & Serializable) value::equals);
   }
 
@@ -38,28 +37,31 @@ public class ImageCrop implements TensorUnaryOperator {
 
   @Override
   public Tensor apply(Tensor image) {
+    // int depth = 2;
     // TODO TENSOR IMG not as efficient as could be
     int dim0 = image.length();
+    final Tensor fimage = image;
+    int d0lo = IntStream.range(0, dim0) //
+        .filter(i -> !fimage.get(i).stream().allMatch(predicate)) //
+        .findFirst() //
+        .orElse(dim0);
+    int d0hi = IntStream.range(d0lo, dim0) //
+        .map(i -> dim0 - i - 1) //
+        .filter(i -> !fimage.get(i).stream().allMatch(predicate)) //
+        .findFirst() //
+        .orElse(dim0);
+    image = Tensor.of(image.stream().skip(d0lo).limit(d0hi - d0lo + 1));
     int dim1 = Unprotect.dimension1(image);
     Tensor boole = TensorMap.of(entry -> Boole.of(predicate.test(entry)), image, 2);
     Tensor vectorX = TensorMap.of(Total::of, boole, 0);
-    Tensor vectorY = TensorMap.of(Total::of, boole, 1);
-    Scalar dimS0 = RealScalar.of(dim0);
-    Scalar dimS1 = RealScalar.of(dim1);
-    OptionalInt xMin = IntStream.range(0, dim1) //
+    int fdim0 = image.length();
+    Scalar dimS0 = RealScalar.of(fdim0);
+    OptionalInt d1min1 = IntStream.range(0, dim1) //
         .filter(index -> !vectorX.Get(index).equals(dimS0)).findFirst();
-    OptionalInt xMax = IntStream.range(0, dim1) //
+    OptionalInt d1max = IntStream.range(0, dim1) //
         .filter(index -> !vectorX.Get(dim1 - 1 - index).equals(dimS0)).findFirst();
-    OptionalInt yMin = IntStream.range(0, dim0) //
-        .filter(index -> !vectorY.Get(index).equals(dimS1)).findFirst();
-    OptionalInt yMax = IntStream.range(0, dim0) //
-        .filter(index -> !vectorY.Get(dim0 - 1 - index).equals(dimS1)).findFirst();
-    int xmin = xMin.orElse(0);
-    int xmax = dim1 - xMax.orElse(0);
-    int skip = yMin.orElse(0);
-    return Tensor.of(image.stream() //
-        .skip(skip) //
-        .limit(dim0 - yMax.orElse(0) - skip) //
-        .map(row -> row.extract(xmin, xmax)));
+    int xmin = d1min1.orElse(0);
+    int xmax = dim1 - d1max.orElse(0);
+    return Tensor.of(image.stream().map(row -> row.extract(xmin, xmax)));
   }
 }

@@ -12,14 +12,14 @@ import ch.alpine.tensor.sca.Imag;
   /** @param matrix
    * @return */
   public static PolarDecompositionSqrt of(Tensor matrix) {
-    boolean isReal = matrix.flatten(-1) //
+    Tensor square = MatrixDotConjugateTranspose.of(matrix);
+    boolean isReal = square.flatten(-1) //
         .map(Scalar.class::cast) //
         .map(Imag.FUNCTION) //
         .allMatch(Scalars::isZero);
-    Tensor mmt = MatrixDotConjugateTranspose.of(matrix);
     MatrixSqrt matrixSqrt = isReal //
-        ? MatrixSqrt.ofSymmetric(mmt)
-        : MatrixSqrt.ofHermitian(mmt);
+        ? MatrixSqrt.ofSymmetric(square)
+        : MatrixSqrt.ofHermitian(square);
     return new SqrtPu(matrix, matrixSqrt);
   }
 
