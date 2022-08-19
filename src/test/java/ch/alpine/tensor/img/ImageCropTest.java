@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
@@ -83,8 +83,47 @@ class ImageCropTest {
   }
 
   @Test
+  void testArray0() {
+    Tensor tensor = Array.zeros(3, 4, 5, 6);
+    ArrayQ.require(tensor);
+    ImageCrop imageCrop = new ImageCrop(4, RealScalar.ZERO::equals);
+    Tensor result = imageCrop.apply(tensor);
+    assertEquals(result, Tensors.empty());
+  }
+
+  @Test
+  void testArray1() {
+    Tensor tensor = Array.zeros(3, 4, 5, 6);
+    tensor.set(RealScalar.TWO, 1, 2, 3, 2);
+    ArrayQ.require(tensor);
+    ImageCrop imageCrop = new ImageCrop(4, RealScalar.ZERO::equals);
+    Tensor result = imageCrop.apply(tensor);
+    assertEquals(result, Tensors.fromString("{{{{2}}}}"));
+  }
+
+  @Test
+  void testArray2() {
+    Tensor tensor = Array.zeros(3, 4, 5, 6);
+    tensor.set(RealScalar.TWO, 0, 0, 0, 0);
+    ArrayQ.require(tensor);
+    ImageCrop imageCrop = new ImageCrop(4, RealScalar.ZERO::equals);
+    Tensor result = imageCrop.apply(tensor);
+    assertEquals(result, Tensors.fromString("{{{{2}}}}"));
+  }
+
+  @Test
+  void testArray3() {
+    Tensor tensor = Array.zeros(3, 4, 5, 6);
+    tensor.set(RealScalar.TWO, 2, 3, 4, 5);
+    ArrayQ.require(tensor);
+    ImageCrop imageCrop = new ImageCrop(4, RealScalar.ZERO::equals);
+    Tensor result = imageCrop.apply(tensor);
+    assertEquals(result, Tensors.fromString("{{{{2}}}}"));
+  }
+
+  @Test
   void testVectorFail() {
     TensorUnaryOperator tensorUnaryOperator = ImageCrop.eq(RealScalar.ONE);
-    assertThrows(Throw.class, () -> tensorUnaryOperator.apply(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> tensorUnaryOperator.apply(Tensors.vector(1, 2, 3)));
   }
 }

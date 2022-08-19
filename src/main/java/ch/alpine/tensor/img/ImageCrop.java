@@ -2,18 +2,18 @@
 package ch.alpine.tensor.img;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.OptionalInt;
+import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.alg.TensorMap;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.TensorRank;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.TensorUnaryOperator;
-import ch.alpine.tensor.num.Boole;
-import ch.alpine.tensor.red.Total;
+import ch.alpine.tensor.ext.Integers;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ImageCrop.html">ImageCrop</a> */
@@ -25,43 +25,38 @@ public class ImageCrop implements TensorUnaryOperator {
    * @return operator that removes the boundary of images of given color value */
   @SuppressWarnings("unchecked")
   public static TensorUnaryOperator eq(Tensor value) {
-    return new ImageCrop((Predicate<Tensor> & Serializable) value::equals);
+    return new ImageCrop(2, (Predicate<Tensor> & Serializable) value::equals);
   }
 
   // ---
+  private final int[] sigma;
   private final Predicate<Tensor> predicate;
 
-  private ImageCrop(Predicate<Tensor> predicate) {
-    this.predicate = predicate;
+  public ImageCrop(int depth, Predicate<Tensor> predicate) {
+    sigma = new int[depth];
+    sigma[0] = depth - 1;
+    for (int count = 1; count < depth; ++count)
+      sigma[count] = count - 1;
+    this.predicate = Objects.requireNonNull(predicate);
   }
 
   @Override
-  public Tensor apply(Tensor image) {
-    // int depth = 2;
-    // TODO TENSOR IMG not as efficient as could be
-    int dim0 = image.length();
-    final Tensor fimage = image;
-    int d0lo = IntStream.range(0, dim0) //
-        .filter(i -> !fimage.get(i).stream().allMatch(predicate)) //
-        .findFirst() //
-        .orElse(dim0);
-    int d0hi = IntStream.range(d0lo, dim0) //
-        .map(i -> dim0 - i - 1) //
-        .filter(i -> !fimage.get(i).stream().allMatch(predicate)) //
-        .findFirst() //
-        .orElse(dim0);
-    image = Tensor.of(image.stream().skip(d0lo).limit(d0hi - d0lo + 1));
-    int dim1 = Unprotect.dimension1(image);
-    Tensor boole = TensorMap.of(entry -> Boole.of(predicate.test(entry)), image, 2);
-    Tensor vectorX = TensorMap.of(Total::of, boole, 0);
-    int fdim0 = image.length();
-    Scalar dimS0 = RealScalar.of(fdim0);
-    OptionalInt d1min1 = IntStream.range(0, dim1) //
-        .filter(index -> !vectorX.Get(index).equals(dimS0)).findFirst();
-    OptionalInt d1max = IntStream.range(0, dim1) //
-        .filter(index -> !vectorX.Get(dim1 - 1 - index).equals(dimS0)).findFirst();
-    int xmin = d1min1.orElse(0);
-    int xmax = dim1 - d1max.orElse(0);
-    return Tensor.of(image.stream().map(row -> row.extract(xmin, xmax)));
+  public Tensor apply(Tensor tensor) {
+    int depth = sigma.length;
+    Integers.requireLessEquals(depth, TensorRank.of(tensor));
+    for (int count = 0; count < depth; ++count) {
+      Tensor ftensor = tensor;
+      IntPredicate intPredicate = i -> !ftensor.get(i).flatten(depth - 2).allMatch(predicate);
+      int length = tensor.length();
+      OptionalInt optionalInt = IntStream.range(0, length).filter(intPredicate).findFirst();
+      if (optionalInt.isEmpty())
+        return Tensors.empty();
+      int lo = optionalInt.getAsInt();
+      int hi = IntStream.range(0, length - lo).map(i -> length - i - 1) //
+          .filter(intPredicate).findFirst().getAsInt();
+      tensor = Tensor.of(tensor.stream().skip(lo).limit(hi - lo + 1));
+      tensor = Transpose.of(tensor, sigma);
+    }
+    return tensor;
   }
 }
