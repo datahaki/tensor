@@ -56,13 +56,13 @@ class RangeTest {
 
   @Test
   void testClip() {
-    assertEquals(Range.of(Clips.unit()), Tensors.vector(0, 1));
-    assertEquals(Range.of(Clips.interval(3, 3)), Tensors.vector(3));
+    assertEquals(Range.closed(Clips.unit()), Tensors.vector(0, 1));
+    assertEquals(Range.closed(Clips.interval(3, 3)), Tensors.vector(3));
   }
 
   @Test
   void testClipFail() {
-    assertThrows(Throw.class, () -> Range.of(Clips.interval(3, 3.4)));
-    assertThrows(Throw.class, () -> Range.of(Clips.interval(3.4, 4)));
+    assertThrows(Throw.class, () -> Range.closed(Clips.interval(3, 3.4)));
+    assertThrows(Throw.class, () -> Range.closed(Clips.interval(3.4, 4)));
   }
 }

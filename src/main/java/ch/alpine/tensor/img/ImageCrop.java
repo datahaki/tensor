@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.function.IntPredicate;
@@ -29,10 +30,15 @@ public class ImageCrop implements TensorUnaryOperator {
   }
 
   // ---
+  private final int depth;
   private final int[] sigma;
   private final Predicate<Tensor> predicate;
 
+  /** @param depth strictly positive of where to apply predicate,
+   * for images, depth equals 2
+   * @param predicate */
   public ImageCrop(int depth, Predicate<Tensor> predicate) {
+    this.depth = depth;
     sigma = new int[depth];
     sigma[0] = depth - 1;
     for (int count = 1; count < depth; ++count)
@@ -42,11 +48,11 @@ public class ImageCrop implements TensorUnaryOperator {
 
   @Override
   public Tensor apply(Tensor tensor) {
-    int depth = sigma.length;
     Integers.requireLessEquals(depth, TensorRank.of(tensor));
+    int level = Math.max(0, depth - 2);
     for (int count = 0; count < depth; ++count) {
       Tensor ftensor = tensor;
-      IntPredicate intPredicate = i -> !ftensor.get(i).flatten(depth - 2).allMatch(predicate);
+      IntPredicate intPredicate = i -> !ftensor.get(i).flatten(level).allMatch(predicate);
       int length = tensor.length();
       OptionalInt optionalInt = IntStream.range(0, length).filter(intPredicate).findFirst();
       if (optionalInt.isEmpty())
@@ -54,8 +60,7 @@ public class ImageCrop implements TensorUnaryOperator {
       int lo = optionalInt.getAsInt();
       int hi = IntStream.range(0, length - lo).map(i -> length - i - 1) //
           .filter(intPredicate).findFirst().getAsInt();
-      tensor = Tensor.of(tensor.stream().skip(lo).limit(hi - lo + 1));
-      tensor = Transpose.of(tensor, sigma);
+      tensor = Transpose.of(tensor.block(List.of(lo), List.of(hi - lo + 1)), sigma);
     }
     return tensor;
   }

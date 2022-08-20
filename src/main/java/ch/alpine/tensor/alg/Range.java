@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import java.math.BigInteger;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -55,12 +56,13 @@ public enum Range {
   }
 
   /** Careful: max is inclusive
+   * API inspired by {@link IntStream#rangeClosed(int, int)}
    * 
    * @param clip with min and max satisfy {@link IntegerQ} predicate
    * @return [clip.min, clip.min+1, ..., clip.max-1, clip.max], i.e.
    * min and max of given clip are included in a range
    * @throws Exception if clip.min or clip.max do not correspond to BigInteger's */
-  public static Tensor of(Clip clip) {
+  public static Tensor closed(Clip clip) {
     return of( //
         Scalars.bigIntegerValueExact(clip.min()), //
         Scalars.bigIntegerValueExact(clip.max()).add(BigInteger.ONE));
