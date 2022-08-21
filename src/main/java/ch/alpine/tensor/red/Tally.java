@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -21,8 +22,7 @@ import ch.alpine.tensor.pdf.CDF;
  * <a href="https://reference.wolfram.com/language/ref/Tally.html">Tally</a> */
 public enum Tally {
   ;
-  /** Hint: the keys in the map are references to the elements in the provided tensor.
-   * This is a feature and not a bug.
+  /** Careful: the keys in the map are references to selected elements in the provided tensor.
    * 
    * @param tensor
    * @return map that assigns elements of the tensor their multiplicity in given tensor
@@ -31,17 +31,16 @@ public enum Tally {
     return of(tensor.stream());
   }
 
-  /** Hint: the keys in the map are references to the elements in the provided stream.
-   * This is a feature and not a bug.
+  /** Careful: the keys in the map are references to selected elements in the provided tensor.
    * 
    * @param stream
    * @return map that assigns elements of the stream their multiplicity in given stream */
   public static <T extends Tensor> Map<T, Long> of(Stream<T> stream) {
-    return stream.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    return stream.collect(Collectors.groupingBy( //
+        Function.identity(), LinkedHashMap::new, Collectors.counting()));
   }
 
-  /** Hint: the keys in the map are references to the elements in the provided tensor.
-   * This is a feature and not a bug.
+  /** Careful: the keys in the map are references to selected elements in the provided tensor.
    * 
    * function can be used to compute
    * <ul>
@@ -57,12 +56,12 @@ public enum Tally {
     return sorted(tensor.stream());
   }
 
-  /** Hint: the keys in the map are references to the elements in the provided stream.
-   * This is a feature and not a bug.
+  /** Careful: the keys in the map are references to selected elements in the provided tensor.
    * 
    * @param stream
    * @return */
   public static <T extends Tensor> NavigableMap<T, Long> sorted(Stream<T> stream) {
-    return stream.collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()));
+    return stream.collect(Collectors.groupingBy( //
+        Function.identity(), TreeMap::new, Collectors.counting()));
   }
 }
