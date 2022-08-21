@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -79,5 +80,11 @@ class MixtureDistributionTest {
         NormalDistribution.of(0, 1), //
         NormalDistribution.of(3, 1), //
         NormalDistribution.of(10, 1)));
+  }
+
+  @Test
+  void testFailEmpty() {
+    assertThrows(Exception.class, () -> MixtureDistribution.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> MixtureDistribution.of(Tensors.empty(), List.of()));
   }
 }

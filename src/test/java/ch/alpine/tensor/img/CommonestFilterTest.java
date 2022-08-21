@@ -32,8 +32,19 @@ class CommonestFilterTest {
   @Test
   void testIdentityMatrix() {
     Tensor tensor = IdentityMatrix.of(10);
-    Tensor result = CommonestFilter.of(tensor, 2);
-    assertEquals(result, ConstantArray.of(RealScalar.ZERO, 10, 10));
+    for (int count = 2; count < 4; ++count) {
+      Tensor result = CommonestFilter.of(tensor, count);
+      assertEquals(result, ConstantArray.of(RealScalar.ZERO, 10, 10));
+    }
+  }
+
+  @Test
+  void testIdentityMatrixSparse() {
+    Tensor tensor = IdentityMatrix.sparse(8);
+    for (int count = 2; count < 4; ++count) {
+      Tensor result = CommonestFilter.of(tensor, count);
+      assertEquals(result, ConstantArray.of(RealScalar.ZERO, 8, 8));
+    }
   }
 
   @Test

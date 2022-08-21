@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -20,5 +22,6 @@ class MitchellNetravaliFilterTest {
     ScalarUnaryOperator scalarUnaryOperator = MitchellNetravaliFilter.of(0.5);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.ZERO);
     Tolerance.CHOP.requireClose(scalar, RealScalar.ONE);
+    assertTrue(scalarUnaryOperator.toString().startsWith("MitchellNetravaliFilter["));
   }
 }

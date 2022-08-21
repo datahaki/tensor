@@ -40,6 +40,12 @@ class CyclesTest {
   }
 
   @Test
+  void testSingleSimple() {
+    Cycles c1 = Cycles.single(new int[] { 5 });
+    assertEquals(c1, Cycles.identity());
+  }
+
+  @Test
   void testSingleton() throws ClassNotFoundException, IOException {
     Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertEquals(cycles.toTensor(), Tensors.of(Tensors.vector(5, 9)));

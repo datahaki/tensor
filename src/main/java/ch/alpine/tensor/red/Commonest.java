@@ -4,6 +4,7 @@ package ch.alpine.tensor.red;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -15,7 +16,13 @@ public enum Commonest {
   /** @param tensor
    * @return list of elements that have the maximal occurrence in the given tensor */
   public static Tensor of(Tensor tensor) {
-    Map<Tensor, Long> map = Tally.of(tensor);
+    return of(tensor.stream());
+  }
+
+  /** @param stream
+   * @return list of elements that have the maximal occurrence in the given stream of tensors */
+  public static Tensor of(Stream<Tensor> stream) {
+    Map<Tensor, Long> map = Tally.of(stream);
     Optional<Long> optional = map.values().stream().reduce(Math::max);
     if (optional.isPresent()) {
       long value = optional.get();
