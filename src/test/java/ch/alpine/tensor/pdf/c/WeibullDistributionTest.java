@@ -42,14 +42,13 @@ class WeibullDistributionTest {
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(2.1635084739905746));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(3.2784354158217064));
   }
-  
+
   @Test
   void testFails() {
-    assertThrows(Exception.class, ()->WeibullDistribution.of(0, 1));
-    assertThrows(Exception.class, ()->WeibullDistribution.of(1, 0));
-    assertThrows(Exception.class, ()->WeibullDistribution.of(1, -2));
-    assertThrows(Exception.class, ()->WeibullDistribution.of(-1, 2));
-    assertThrows(Exception.class, ()->WeibullDistribution.of(-1, -2));
+    assertThrows(Exception.class, () -> WeibullDistribution.of(0, 1));
+    assertThrows(Exception.class, () -> WeibullDistribution.of(1, 0));
+    assertThrows(Exception.class, () -> WeibullDistribution.of(1, -2));
+    assertThrows(Exception.class, () -> WeibullDistribution.of(-1, 2));
+    assertThrows(Exception.class, () -> WeibullDistribution.of(-1, -2));
   }
-
 }

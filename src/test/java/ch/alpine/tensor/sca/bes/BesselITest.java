@@ -25,6 +25,7 @@ class BesselITest {
     Scalar scalar = BesselI._0(8.7);
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(824.4498841770287));
   }
+
   @Test
   void test1() {
     Scalar scalar = BesselI._1(1.2);

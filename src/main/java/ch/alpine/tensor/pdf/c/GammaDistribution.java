@@ -57,6 +57,7 @@ public class GammaDistribution implements Distribution, //
           .multiply(Power.of(x, alpha.subtract(RealScalar.ONE))).multiply(factor);
     return RealScalar.ZERO;
   }
+  // CDF requires GammaRegularized
 
   @Override // from MeanInterface
   public Scalar mean() {

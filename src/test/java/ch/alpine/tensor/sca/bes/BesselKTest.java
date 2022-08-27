@@ -14,7 +14,6 @@ class BesselKTest {
     Chop._08.requireClose(scalar, RealScalar.of(0.3185082202865937));
   }
 
-
   @Test
   void test0Stage() {
     Scalar scalar = BesselK._0(3.7);

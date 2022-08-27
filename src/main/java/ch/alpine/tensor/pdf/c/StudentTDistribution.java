@@ -63,6 +63,7 @@ public class StudentTDistribution implements Distribution, //
     Scalar f = x.subtract(mu).divide(sigma);
     return power.apply(v.divide(f.multiply(f).add(v))).divide(factor);
   }
+  // CDF requires BetaRegularized
 
   @Override // from MeanInterface
   public Scalar mean() {

@@ -43,6 +43,7 @@ class BesselJTest {
     Scalar scalar = BesselJ._1(8.7);
     Chop._08.requireClose(scalar, RealScalar.of(0.2697190240921003));
   }
+
   @Test
   void test1StageNeg() {
     Scalar scalar = BesselJ._1(-8.7);
