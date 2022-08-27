@@ -7,16 +7,6 @@
 package ch.alpine.tensor.sca.bes;
 
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.num.Polynomial;
-import ch.alpine.tensor.red.Times;
-import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.sca.tri.Cos;
-import ch.alpine.tensor.sca.tri.Sin;
 
 /** Bessel and Airy functions. */
 enum Bessel {
@@ -341,66 +331,6 @@ enum Bessel {
     return z;
   }
 
-  /** Returns the Bessel function of the first kind of order 0 of the argument.
-   * 
-   * @param x the value to compute the bessel function of. */
-  public static Scalar j0(Scalar x) {
-    Scalar ax = Abs.FUNCTION.apply(x);
-    if (Scalars.lessThan(ax, RealScalar.of(8))) {
-      Polynomial num = Polynomial.of(Tensors.vector( //
-          57568490574.0, -13362590354.0, 651619640.7, -11214424.18, 77392.33017, -184.9052456));
-      Polynomial den = Polynomial.of(Tensors.vector( //
-          57568490411.0, 1029532985.0, 9494680.718, 59272.64853, 267.8532712, 1.0));
-      Scalar y = x.multiply(x);
-      return num.apply(y).divide(den.apply(y));
-    }
-    Scalar z = RealScalar.of(8).divide(ax);
-    Polynomial num = Polynomial.of(Tensors.vector( //
-        1.0, -0.1098628627e-2, 0.2734510407e-4, -0.2073370639e-5, 0.2093887211e-6));
-    Polynomial den = Polynomial.of(Tensors.vector( //
-        -0.1562499995e-1, 0.1430488765e-3, -0.6911147651e-5, 0.7621095161e-6, -0.934935152e-7));
-    Scalar y = z.multiply(z);
-    Scalar ans1 = num.apply(y);
-    Scalar ans2 = den.apply(y);
-    Scalar xx = ax.add(RealScalar.of(-0.785398164));
-    return Sqrt.FUNCTION.apply(RealScalar.of(0.636619772).divide(ax)).multiply( //
-        Cos.FUNCTION.apply(xx).multiply(ans1).subtract(Times.of(z, Sin.FUNCTION.apply(xx), ans2)));
-  }
-
-  /** Returns the Bessel function of the first kind of order 1 of the argument.
-   * 
-   * @param x the value to compute the bessel function of. */
-  public static Scalar j1(Scalar x) {
-    Scalar ax = Abs.FUNCTION.apply(x);
-    Scalar y;
-    Scalar ans1;
-    Scalar ans2;
-    if (Scalars.lessThan(ax, RealScalar.of(8))) {
-      y = x.multiply(x);
-      Polynomial num = Polynomial.of(Tensors.vector( //
-          72362614232.0, -7895059235.0, 242396853.1, -2972611.439, 15704.48260, -30.16036606));
-      ans1 = num.apply(y).multiply(x);
-      Polynomial den = Polynomial.of(Tensors.vector( //
-          144725228442.0, 2300535178.0, 18583304.74, 99447.43394, 376.9991397, 1.0));
-      ans2 = den.apply(y);
-      return ans1.divide(ans2);
-    }
-    Scalar z = RealScalar.of(8).divide(ax);
-    Scalar xx = ax.add(RealScalar.of(-2.356194491));
-    y = z.multiply(z);
-    Polynomial num = Polynomial.of(Tensors.vector( //
-        1.0, 0.183105e-2, -0.3516396496e-4, 0.2457520174e-5, -0.240337019e-6));
-    ans1 = num.apply(y);
-    Polynomial den = Polynomial.of(Tensors.vector( //
-        0.04687499995, -0.2002690873e-3, 0.8449199096e-5, -0.88228987e-6, 0.105787412e-6));
-    ans2 = den.apply(y);
-    Scalar ans = Sqrt.FUNCTION.apply(RealScalar.of(0.636619772).divide(ax)).multiply( //
-        Cos.FUNCTION.apply(xx).multiply(ans1).subtract(Times.of(z, Sin.FUNCTION.apply(xx), ans2)));
-    if (Sign.isNegative(x))
-      ans = ans.negate();
-    return ans;
-  }
-
   /** Returns the Bessel function of the first kind of order <tt>n</tt> of the argument.
    * 
    * @param n the order of the Bessel function.
@@ -413,16 +343,16 @@ enum Bessel {
     final double BIGNO = 1.0e+10;
     final double BIGNI = 1.0e-10;
     if (n == 0)
-      return j0(RealScalar.of(x)).number().doubleValue();
+      return BesselJ._0(RealScalar.of(x)).number().doubleValue();
     if (n == 1)
-      return j1(RealScalar.of(x)).number().doubleValue();
+      return BesselJ._1(RealScalar.of(x)).number().doubleValue();
     ax = Math.abs(x);
     if (ax == 0.0)
       return 0.0;
     if (ax > n) {
       tox = 2.0 / ax;
-      bjm = j0(RealScalar.of(ax)).number().doubleValue();
-      bj = j1(RealScalar.of(ax)).number().doubleValue();
+      bjm = BesselJ._0(RealScalar.of(ax)).number().doubleValue();
+      bj = BesselJ._1(RealScalar.of(ax)).number().doubleValue();
       for (j = 1; j < n; j++) {
         bjp = j * tox * bj - bjm;
         bjm = bj;
@@ -689,65 +619,6 @@ enum Bessel {
     return ans;
   }
 
-  /** Returns the Bessel function of the second kind of order 0 of the argument.
-   * 
-   * @param x the value to compute the bessel function of. */
-  public static double y0(double x) {
-    // TODO TENSOR case x < 0 missing!
-    if (x < 8.0) {
-      double y = x * x;
-      double ans1 = -2957821389.0 + y * (7062834065.0 + y * (-512359803.6 + y * (10879881.29 + y * (-86327.92757 + y * 228.4622733))));
-      double ans2 = 40076544269.0 + y * (745249964.8 + y * (7189466.438 + y * (47447.26470 + y * (226.1030244 + y * 1.0))));
-      return (ans1 / ans2) + 0.636619772 * j0(RealScalar.of(x)).number().doubleValue() * Math.log(x);
-    }
-    double z = 8.0 / x;
-    double y = z * z;
-    double xx = x - 0.785398164;
-    double ans1 = 1.0 + y * (-0.1098628627e-2 + y * (0.2734510407e-4 + y * (-0.2073370639e-5 + y * 0.2093887211e-6)));
-    double ans2 = -0.1562499995e-1 + y * (0.1430488765e-3 + y * (-0.6911147651e-5 + y * (0.7621095161e-6 + y * (-0.934945152e-7))));
-    return Math.sqrt(0.636619772 / x) * (Math.sin(xx) * ans1 + z * Math.cos(xx) * ans2);
-  }
-
-  /** Returns the Bessel function of the second kind of order 1 of the argument.
-   * 
-   * @param x the value to compute the bessel function of. */
-  public static double y1(double x) {
-    // TODO TENSOR case x < 0 missing!
-    if (x < 8.0) {
-      double y = x * x;
-      double ans1 = x * (-0.4900604943e13 + y * (0.1275274390e13 + y * (-0.5153438139e11 + y * (0.7349264551e9 + y * (-0.4237922726e7 + y * 0.8511937935e4)))));
-      double ans2 = 0.2499580570e14 + y * (0.4244419664e12 + y * (0.3733650367e10 + y * (0.2245904002e8 + y * (0.1020426050e6 + y * (0.3549632885e3 + y)))));
-      return (ans1 / ans2) + 0.636619772 * (j1(RealScalar.of(x)).number().doubleValue() * Math.log(x) - 1.0 / x);
-    }
-    double z = 8.0 / x;
-    double y = z * z;
-    double xx = x - 2.356194491;
-    double ans1 = 1.0 + y * (0.183105e-2 + y * (-0.3516396496e-4 + y * (0.2457520174e-5 + y * (-0.240337019e-6))));
-    double ans2 = 0.04687499995 + y * (-0.2002690873e-3 + y * (0.8449199096e-5 + y * (-0.88228987e-6 + y * 0.105787412e-6)));
-    return Math.sqrt(0.636619772 / x) * (Math.sin(xx) * ans1 + z * Math.cos(xx) * ans2);
-  }
-
-  /** Returns the Bessel function of the second kind of order <tt>n</tt> of the argument.
-   * 
-   * @param n the order of the Bessel function.
-   * @param x the value to compute the bessel function of. */
-  public static double yn(int n, double x) {
-    double by, bym, byp, tox;
-    if (n == 0)
-      return y0(x);
-    if (n == 1)
-      return y1(x);
-    tox = 2.0 / x;
-    by = y1(x);
-    bym = y0(x);
-    for (int j = 1; j < n; j++) {
-      byp = j * tox * by - bym;
-      bym = by;
-      by = byp;
-    }
-    return by;
-  }
-
   /** Evaluates the series of Chebyshev polynomials Ti at argument x/2.
    * The series is given by
    * <pre>
@@ -777,10 +648,9 @@ enum Bessel {
    * Chebyshev polynomials, the routine requires one more
    * addition per loop than evaluating a nested polynomial of
    * the same degree.
-   *
-   * @param x argument to the polynomial.
-   * @param coef the coefficients of the polynomial.
-   * @param N the number of coefficients. */
+   * 
+   * @param coef the coefficients of the polynomial
+   * @param x argument to the polynomial */
   private static double chbevl(double[] coef, double x) {
     double b2;
     int p = 0;

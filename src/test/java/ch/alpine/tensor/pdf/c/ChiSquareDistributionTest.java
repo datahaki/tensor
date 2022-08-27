@@ -38,15 +38,15 @@ class ChiSquareDistributionTest {
 
   @Test
   void testCdfFails() {
-    CDF cdf = CDF.of(ChiSquareDistribution.of(3));
-    assertThrows(UnsupportedOperationException.class, () -> cdf.p_lessThan(RealScalar.TWO));
-    assertThrows(UnsupportedOperationException.class, () -> cdf.p_lessEquals(RealScalar.TWO));
+    assertThrows(Exception.class, () -> CDF.of(ChiSquareDistribution.of(3)));
+    // assertThrows(UnsupportedOperationException.class, () -> cdf.p_lessThan(RealScalar.TWO));
+    // assertThrows(UnsupportedOperationException.class, () -> cdf.p_lessEquals(RealScalar.TWO));
   }
 
   @Test
   void testInverseCdfFails() {
-    InverseCDF cdf = InverseCDF.of(ChiSquareDistribution.of(3));
-    assertThrows(UnsupportedOperationException.class, () -> cdf.quantile(RationalScalar.HALF));
+    assertThrows(Exception.class, () -> InverseCDF.of(ChiSquareDistribution.of(3)));
+    // assertThrows(UnsupportedOperationException.class, () -> cdf.quantile(RationalScalar.HALF));
   }
 
   @Test

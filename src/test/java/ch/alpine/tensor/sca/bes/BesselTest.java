@@ -63,7 +63,7 @@ class BesselTest {
 
   @Test
   void testY0() {
-    double i0 = Bessel.y0(2.3);
+    double i0 = BesselY._0(2.3).number().doubleValue();
     // System.out.println(i0);
     assertEquals(i0, 0.5180753919477299); // !
     // ............. 0.5180753962076221
@@ -71,7 +71,7 @@ class BesselTest {
 
   @Test
   void testY1() {
-    double i1 = Bessel.y1(2.3);
+    double i1 = BesselY._1(2.3).number().doubleValue();
     // System.out.println(i1);
     assertEquals(i1, 0.0522773155615776);
     // ............. 0.05227731584422475
@@ -79,7 +79,7 @@ class BesselTest {
 
   @Test
   void testY5() {
-    double i1 = Bessel.yn(5, 2.3);
+    double i1 = BesselY.of(5, 2.3).number().doubleValue();
     // System.out.println(i1);
     assertEquals(i1, -5.4143236590500425);
     // ............. -5.414323703733118
