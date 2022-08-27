@@ -7,7 +7,8 @@
 package ch.alpine.tensor.sca.bes;
 
 /** Bessel and Airy functions. */
-class Bessel {
+enum Bessel {
+  ;
   protected static final double MACHEP =  1.11022302462515654042E-16;
   protected static final double MAXLOG =  7.09782712893383996732E2;
 	/****************************************
@@ -20,6 +21,7 @@ class Bessel {
 	 *
 	 * lim(x->0){ exp(-x) I0(x) } = 1.
 	 */
+  // 30 elements
 	protected static final double[] A_i0 = {
 		-4.41534164647933937950E-18, //
 		 3.33079451882223809783E-17, //
@@ -61,6 +63,7 @@ class Bessel {
 	 *
 	 * lim(x->inf){ exp(-x) sqrt(x) I0(x) } = 1/sqrt(2pi).
 	 */
+	// 25 elements
 	protected static final double[] B_i0 = {
 		-7.23318048787475395456E-18, //
 		-4.83050448594418207126E-18, //
@@ -100,6 +103,7 @@ class Bessel {
 	 *
 	 * lim(x->0){ exp(-x) I1(x) / x } = 1/2.
 	 */
+	// 29 elements
 	protected static final double[] A_i1 = {
 		 2.77791411276104639959E-18,  //
 		-2.11142121435816608115E-17,  //
@@ -138,6 +142,7 @@ class Bessel {
 	 *
 	 * lim(x->inf){ exp(-x) sqrt(x) I1(x) } = 1/sqrt(2pi).
 	 */
+	// 25 elements
 	protected static final double[] B_i1 = {
 		 7.51729631084210481353E-18,  //
 		 4.41434832307170791151E-18,  //
@@ -178,6 +183,7 @@ class Bessel {
 	 * 
 	 * lim(x->0){ K0(x) + log(x/2) I0(x) } = -EUL.
 	 */
+	// 10 elements
 	protected static final double[] A_k0 = {
 		 1.37446543561352307156E-16, //
 		 4.25981614279661018399E-14, //
@@ -196,6 +202,7 @@ class Bessel {
 	 * 
 	 * lim(x->inf){ exp(x) sqrt(x) K0(x) } = sqrt(pi/2).
 	 */
+	// 25 elements
 	protected static final double[] B_k0 = {
 		 5.30043377268626276149E-18,  //
 		-1.64758043015242134646E-17,  //
@@ -235,6 +242,7 @@ class Bessel {
 	 * 
 	 * lim(x->0){ x(K1(x) - log(x/2) I1(x)) } = 1.
 	 */
+	// 11 elements
 	protected static final double[] A_k1 = {
 		-7.02386347938628759343E-18,  //
 		-2.42744985051936593393E-15,  //
@@ -254,6 +262,7 @@ class Bessel {
 	 *
 	 * lim(x->inf){ exp(x) sqrt(x) K1(x) } = sqrt(pi/2).
 	 */
+	// 25 elements
 	protected static final double[] B_k1 = {
 		-5.75674448366501715755E-18,  //
 		 1.79405087314755922667E-17,  //
@@ -283,10 +292,6 @@ class Bessel {
 		};
 
 /**
- * Makes this class non instantiable, but still let's others inherit from it.
- */
-protected Bessel() {}
-/**
  * Returns the modified Bessel function of order 0 of the
  * argument.
  * <p>
@@ -298,15 +303,15 @@ protected Bessel() {}
  *
  * @param x the value to compute the bessel function of.
  */
-public static double i0(double x) throws ArithmeticException {
+public static double i0(double x) {
   double y;
   if (x < 0)
     x = -x;
   if (x <= 8.0) {
     y = (x / 2.0) - 2.0;
-    return Math.exp(x) * chbevl(y, A_i0, 30);
+    return Math.exp(x) * chbevl(y, A_i0);
   }
-  return Math.exp(x) * chbevl(32.0 / x - 2.0, B_i0, 25) / Math.sqrt(x);
+  return Math.exp(x) * chbevl(32.0 / x - 2.0, B_i0) / Math.sqrt(x);
 }
 /**
  * Returns the exponentially scaled modified Bessel function
@@ -317,15 +322,16 @@ public static double i0(double x) throws ArithmeticException {
  *
  * @param x the value to compute the bessel function of.
  */
-public static double i0e(double x) throws ArithmeticException {
+// TODO TENSOR call from i0
+public static double i0e(double x) {
   double y;
   if (x < 0)
     x = -x;
   if (x <= 8.0) {
     y = (x / 2.0) - 2.0;
-    return chbevl(y, A_i0, 30);
+    return chbevl(y, A_i0);
   }
-  return chbevl(32.0 / x - 2.0, B_i0, 25) / Math.sqrt(x);
+  return chbevl(32.0 / x - 2.0, B_i0) / Math.sqrt(x);
 }
 
 /** Returns the modified Bessel function of order 1 of the
@@ -338,14 +344,14 @@ public static double i0e(double x) throws ArithmeticException {
  * in each interval.
  *
  * @param x the value to compute the bessel function of. */
-public static double i1(double x) throws ArithmeticException {
+public static double i1(double x) {
   double y, z;
   z = Math.abs(x);
   if (z <= 8.0) {
     y = (z / 2.0) - 2.0;
-    z = chbevl(y, A_i1, 29) * z * Math.exp(z);
+    z = chbevl(y, A_i1) * z * Math.exp(z);
   } else {
-    z = Math.exp(z) * chbevl(32.0 / z - 2.0, B_i1, 25) / Math.sqrt(z);
+    z = Math.exp(z) * chbevl(32.0 / z - 2.0, B_i1) / Math.sqrt(z);
   }
   if (x < 0.0)
     z = -z;
@@ -359,14 +365,14 @@ public static double i1(double x) throws ArithmeticException {
  * 
  * @param x the value to compute the bessel function of.
  */
-public static double i1e(double x) throws ArithmeticException {
+public static double i1e(double x) {
   double y, z;
   z = Math.abs(x);
   if (z <= 8.0) {
     y = (z / 2.0) - 2.0;
-    z = chbevl(y, A_i1, 29) * z;
+    z = chbevl(y, A_i1) * z;
   } else {
-    z = chbevl(32.0 / z - 2.0, B_i1, 25) / Math.sqrt(z);
+    z = chbevl(32.0 / z - 2.0, B_i1) / Math.sqrt(z);
   }
   if (x < 0.0)
     z = -z;
@@ -376,7 +382,7 @@ public static double i1e(double x) throws ArithmeticException {
  * Returns the Bessel function of the first kind of order 0 of the argument.
  * @param x the value to compute the bessel function of.
  */
-public static  double j0(double x) throws ArithmeticException {
+public static  double j0(double x) {
 	double ax;
 
 	if( (ax=Math.abs(x)) < 8.0 ) {
@@ -405,7 +411,7 @@ public static  double j0(double x) throws ArithmeticException {
  * Returns the Bessel function of the first kind of order 1 of the argument.
  * @param x the value to compute the bessel function of.
  */
-public static double j1(double x) throws ArithmeticException {
+public static double j1(double x) {
 	double ax;
 	double y;
 	double ans1, ans2;
@@ -437,56 +443,56 @@ public static double j1(double x) throws ArithmeticException {
  * @param n the order of the Bessel function.
  * @param x the value to compute the bessel function of.
  */
-public static double jn(int n, double x) throws ArithmeticException {
-	int j,m;
-	double ax,bj,bjm,bjp,sum,tox,ans;
-	boolean jsum;
-
-	final double ACC   = 40.0;
-	final double BIGNO = 1.0e+10;
-	final double BIGNI = 1.0e-10;
-
-	if(n == 0) return j0(x);
-	if(n == 1) return j1(x);
-
-	ax=Math.abs(x);
-	if(ax == 0.0)  return 0.0;
-
-	if (ax > n) {
-		tox=2.0/ax;
-		bjm=j0(ax);
-		bj=j1(ax);
-		for (j=1;j<n;j++) {
-			bjp=j*tox*bj-bjm;
-			bjm=bj;
-			bj=bjp;
-		}
-		ans=bj;
-	} 
-	else {
-		tox=2.0/ax;
-		m=2*((n+(int)Math.sqrt(ACC*n))/2);
-		jsum=false;
-		bjp=ans=sum=0.0;
-		bj=1.0;
-		for (j=m;j>0;j--) {
-			bjm=j*tox*bj-bjp;
-			bjp=bj;
-			bj=bjm;
-			if (Math.abs(bj) > BIGNO) {
-				bj *= BIGNI;
-				bjp *= BIGNI;
-				ans *= BIGNI;
-				sum *= BIGNI;
-			}
-			if (jsum) sum += bj;
-			jsum=!jsum;
-			if (j == n) ans=bjp;
-		}
-		sum=2.0*sum-bj;
-		ans /= sum;
-	}
-	return  x < 0.0 && n%2 == 1 ? -ans : ans;
+public static double jn(int n, double x) {
+  int j, m;
+  double ax, bj, bjm, bjp, sum, tox, ans;
+  boolean jsum;
+  final double ACC = 40.0;
+  final double BIGNO = 1.0e+10;
+  final double BIGNI = 1.0e-10;
+  if (n == 0)
+    return j0(x);
+  if (n == 1)
+    return j1(x);
+  ax = Math.abs(x);
+  if (ax == 0.0)
+    return 0.0;
+  if (ax > n) {
+    tox = 2.0 / ax;
+    bjm = j0(ax);
+    bj = j1(ax);
+    for (j = 1; j < n; j++) {
+      bjp = j * tox * bj - bjm;
+      bjm = bj;
+      bj = bjp;
+    }
+    ans = bj;
+  } else {
+    tox = 2.0 / ax;
+    m = 2 * ((n + (int) Math.sqrt(ACC * n)) / 2);
+    jsum = false;
+    bjp = ans = sum = 0.0;
+    bj = 1.0;
+    for (j = m; j > 0; j--) {
+      bjm = j * tox * bj - bjp;
+      bjp = bj;
+      bj = bjm;
+      if (Math.abs(bj) > BIGNO) {
+        bj *= BIGNI;
+        bjp *= BIGNI;
+        ans *= BIGNI;
+        sum *= BIGNI;
+      }
+      if (jsum)
+        sum += bj;
+      jsum = !jsum;
+      if (j == n)
+        ans = bjp;
+    }
+    sum = 2.0 * sum - bj;
+    ans /= sum;
+  }
+  return x < 0.0 && n % 2 == 1 ? -ans : ans;
 }
 /**
  * Returns the modified Bessel function of the third kind
@@ -498,18 +504,17 @@ public static double jn(int n, double x) throws ArithmeticException {
  *
  * @param x the value to compute the bessel function of.
  */
-public static double k0(double x) throws ArithmeticException {
+public static double k0(double x) {
   double y, z;
   if (x <= 0.0)
     throw new ArithmeticException();
   if (x <= 2.0) {
     y = x * x - 2.0;
-    y = chbevl(y, A_k0, 10) - Math.log(0.5 * x) * i0(x);
+    y = chbevl(y, A_k0) - Math.log(0.5 * x) * i0(x);
     return (y);
   }
   z = 8.0 / x - 2.0;
-  y = Math.exp(-x) * chbevl(z, B_k0, 25) / Math.sqrt(x);
-  return (y);
+  return   Math.exp(-x) * chbevl(z, B_k0) / Math.sqrt(x);
 }
 /**
  * Returns the exponentially scaled modified Bessel function
@@ -517,18 +522,16 @@ public static double k0(double x) throws ArithmeticException {
  *
  * @param x the value to compute the bessel function of.
  */
-public static double k0e(double x) throws ArithmeticException {
-	double y;
-
-	if( x <= 0.0 ) throw new ArithmeticException();
-	if( x <= 2.0 ) {
-		y = x * x - 2.0;
-		y = chbevl( y, A_k0, 10 ) - Math.log( 0.5 * x ) * i0(x);
-		return( y * Math.exp(x) );
-	}
-
-	y = chbevl( 8.0/x - 2.0, B_k0, 25 ) / Math.sqrt(x);
-	return(y);
+public static double k0e(double x) {
+  double y;
+  if (x <= 0.0)
+    throw new ArithmeticException();
+  if (x <= 2.0) {
+    y = x * x - 2.0;
+    y = chbevl(y, A_k0) - Math.log(0.5 * x) * i0(x);
+    return y * Math.exp(x);
+  }
+  return  chbevl(8.0 / x - 2.0, B_k0) / Math.sqrt(x);
 }
 /**
  * Returns the modified Bessel function of the third kind
@@ -540,18 +543,17 @@ public static double k0e(double x) throws ArithmeticException {
  *
  * @param x the value to compute the bessel function of.
  */
-public static double k1(double x) throws ArithmeticException {
-	double y, z;
-
-	z = 0.5 * x;
-	if( z <= 0.0 ) throw new ArithmeticException();	
-	if( x <= 2.0 ) {
-		y = x * x - 2.0;
-		y =  Math.log(z) * i1(x)  +  chbevl( y, A_k1, 11 ) / x;
-		return( y );
-	}
-
-	return(  Math.exp(-x) * chbevl( 8.0/x - 2.0, B_k1, 25 ) / Math.sqrt(x) );
+public static double k1(double x) {
+  double y, z;
+  z = 0.5 * x;
+  if (z <= 0.0)
+    throw new ArithmeticException();
+  if (x <= 2.0) {
+    y = x * x - 2.0;
+    y = Math.log(z) * i1(x) + chbevl(y, A_k1) / x;
+    return y;
+  }
+  return Math.exp(-x) * chbevl(8.0 / x - 2.0, B_k1) / Math.sqrt(x);
 }
 /**
  * Returns the exponentially scaled modified Bessel function
@@ -561,17 +563,16 @@ public static double k1(double x) throws ArithmeticException {
  *
  * @param x the value to compute the bessel function of.
  */
-public static double k1e(double x) throws ArithmeticException {
-	double y;
-
-	if( x <= 0.0 ) throw new ArithmeticException();
-	if( x <= 2.0 ) {
-		y = x * x - 2.0;
-		y =  Math.log( 0.5 * x ) * i1(x)  +  chbevl( y, A_k1, 11 ) / x;
-		return( y * Math.exp(x) );
-	}
-
-	return(  chbevl( 8.0/x - 2.0, B_k1, 25 ) / Math.sqrt(x) );
+public static double k1e(double x) {
+  double y;
+  if (x <= 0.0)
+    throw new ArithmeticException();
+  if (x <= 2.0) {
+    y = x * x - 2.0;
+    y = Math.log(0.5 * x) * i1(x) + chbevl(y, A_k1) / x;
+    return y * Math.exp(x);
+  }
+  return chbevl(8.0 / x - 2.0, B_k1) / Math.sqrt(x);
 }
 /**
  * Returns the modified Bessel function of the third kind
@@ -584,7 +585,7 @@ public static double k1e(double x) throws ArithmeticException {
  * @param nn the order of the Bessel function.
  * @param x the value to compute the bessel function of.
  */
-public static double kn(int nn, double x) throws ArithmeticException {
+public static double kn(int nn, double x) {
 /*
 Algorithm for Kn.
 					   n-1 
@@ -710,7 +711,7 @@ asymptotically, where
 			s = -s;
 		ans += s;
 
-		return(ans);
+		return ans;
 	}
 
 
@@ -733,7 +734,7 @@ asymptotically, where
 		nk1f = Math.abs(t);
 		if( (i >= n) && (nk1f > nkf) ) {
 			ans = Math.exp(-x) * Math.sqrt( Math.PI/(2.0*x) ) * s;
-			return(ans);
+			return ans;
 		}
 		nkf = nk1f;
 		s += t;
@@ -744,13 +745,14 @@ asymptotically, where
 
 
 	ans = Math.exp(-x) * Math.sqrt( Math.PI/(2.0*x) ) * s;
-	return(ans);
+	return ans;
 }
 /**
  * Returns the Bessel function of the second kind of order 0 of the argument.
  * @param x the value to compute the bessel function of.
  */
-public static double y0(double x) throws ArithmeticException {
+public static double y0(double x) {
+  // TODO TENSOR case x < 0 missing!
 	if (x < 8.0) {
 		double y=x*x;
 		double ans1 = -2957821389.0+y*(7062834065.0+y*(-512359803.6
@@ -776,7 +778,8 @@ public static double y0(double x) throws ArithmeticException {
  * Returns the Bessel function of the second kind of order 1 of the argument.
  * @param x the value to compute the bessel function of.
  */
-public static double y1(double x) throws ArithmeticException {
+public static double y1(double x) {
+  // TODO TENSOR case x < 0 missing!
 	if (x < 8.0) {
 		double y=x*x;
 		double ans1=x*(-0.4900604943e13+y*(0.1275274390e13
@@ -803,7 +806,7 @@ public static double y1(double x) throws ArithmeticException {
  * @param n the order of the Bessel function.
  * @param x the value to compute the bessel function of.
  */
-public static double yn(int n, double x) throws ArithmeticException {
+public static double yn(int n, double x) {
   double by, bym, byp, tox;
   if (n == 0)
     return y0(x);
@@ -854,13 +857,12 @@ public static double yn(int n, double x) throws ArithmeticException {
  * @param coef the coefficients of the polynomial.
  * @param N the number of coefficients.
  */
-private static double chbevl(double x, double[] coef, int N) throws ArithmeticException {
-  double b0, b1, b2;
+private static double chbevl(double x, double[] coef) {
+  double  b2;
   int p = 0;
-  int i;
-  b0 = coef[p++];
-  b1 = 0.0;
-  i = N - 1;
+  double b0 = coef[p++];
+  double b1 = 0.0;
+  int i = coef.length - 1;
   do {
     b2 = b1;
     b1 = b0;
