@@ -1,0 +1,30 @@
+// code by jph
+package ch.alpine.tensor.sca.win;
+
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
+
+/** inspired by
+ * <a href="https://reference.wolfram.com/language/ref/KaiserBesselWindow.html">KaiserBesselWindow</a> */
+public enum KaiserBesselWindow implements ScalarUnaryOperator {
+  FUNCTION;
+
+  private static final Scalar A0 = RationalScalar.of(402, 1000);
+  private static final Scalar A1 = RationalScalar.of(498, 1000);
+  private static final Scalar A2 = RationalScalar.of(99, 1000);
+  private static final Scalar A3 = RationalScalar.of(1, 1000);
+
+  @Override
+  public Scalar apply(Scalar x) {
+    return StaticHelper.SEMI.isInside(x) //
+        ? StaticHelper.deg3(A0, A1, A2, A3, x)
+        : RealScalar.ZERO;
+  }
+
+  @Override // from Object
+  public String toString() {
+    return "KaiserBesselWindow";
+  }
+}
