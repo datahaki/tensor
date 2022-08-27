@@ -20,14 +20,14 @@ class BesselTest {
 
   @Test
   void testJ0() {
-    double i0 = Bessel.j0(2.3);
+    double i0 = BesselJ._0(2.3).number().doubleValue();
     assertEquals(i0, 0.055539786578263826); // !
     // ............. 0.055539784445602064);
   }
 
   @Test
   void testJ1() {
-    double i1 = Bessel.j1(2.3);
+    double i1 = BesselJ._1(2.3).number().doubleValue();
     assertEquals(i1, 0.5398725327300683);
     // ............. 0.5398725326043137
   }

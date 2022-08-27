@@ -18,7 +18,7 @@ public enum BesselJ {
   }
 
   public static Scalar _0(Scalar x) {
-    return RealScalar.of(Bessel.j0(x.number().doubleValue()));
+    return Bessel.j0(x);
   }
 
   public static Scalar _0(Number x) {
@@ -26,7 +26,7 @@ public enum BesselJ {
   }
 
   public static Scalar _1(Scalar x) {
-    return RealScalar.of(Bessel.j1(x.number().doubleValue()));
+    return Bessel.j1(x);
   }
 
   public static Scalar _1(Number x) {
