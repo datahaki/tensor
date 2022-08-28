@@ -41,7 +41,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * @param coef the coefficients of the polynomial
  * @param x argument to the polynomial */
 class Chebyshev implements ScalarUnaryOperator {
-  public static Chebyshev of(double... values) {
+  public static ScalarUnaryOperator of(double... values) {
     return new Chebyshev(values);
   }
 
@@ -64,9 +64,5 @@ class Chebyshev implements ScalarUnaryOperator {
       b0 = x.multiply(b1).subtract(b2).add(coef[p++]);
     } while (--i > 0);
     return b0.subtract(b2).multiply(RationalScalar.HALF);
-  }
-
-  double run(double y) {
-    return apply(RealScalar.of(y)).number().doubleValue();
   }
 }

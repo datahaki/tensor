@@ -113,7 +113,7 @@ public enum BesselI {
    *
    * lim(x->0){ exp(-x) I1(x) / x } = 1/2. */
   // 29 elements
-  protected static final Chebyshev A_i1 = Chebyshev.of( //
+  private static final ScalarUnaryOperator A_i1 = Chebyshev.of( //
       2.77791411276104639959E-18, //
       -2.11142121435816608115E-17, //
       1.55363195773620046921E-16, //
@@ -149,7 +149,7 @@ public enum BesselI {
    *
    * lim(x->inf){ exp(-x) sqrt(x) I1(x) } = 1/sqrt(2pi). */
   // 25 elements
-  protected static final Chebyshev B_i1 = Chebyshev.of( //
+  private static final ScalarUnaryOperator B_i1 = Chebyshev.of( //
       7.51729631084210481353E-18, //
       4.41434832307170791151E-18, //
       -4.65030536848935832153E-17, //

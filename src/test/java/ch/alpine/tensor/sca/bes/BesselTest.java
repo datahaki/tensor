@@ -42,14 +42,14 @@ class BesselTest {
 
   @Test
   void testK0() {
-    double i0 = Bessel.k0(2.3);
+    double i0 = BesselK._0(2.3).number().doubleValue();
     assertEquals(i0, 0.07913993300209364); // !
     // ............. 0.07913993300209367
   }
 
   @Test
   void testK1() {
-    double i1 = Bessel.k1(2.3);
+    double i1 = BesselK._1(2.3).number().doubleValue();
     assertEquals(i1, 0.09498244384536267);
     // ............. 0.09498244384536267
   }
