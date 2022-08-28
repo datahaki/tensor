@@ -1,21 +1,15 @@
-// code by jph
+// adapted from colt by jph
 package ch.alpine.tensor.sca.bes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-class BesselTest {
+class ChebyshevClenshawTest {
   @Test
   void testI0() {
     double i0 = BesselI._0(2.3).number().doubleValue();
     assertEquals(i0, 2.8296056006275854);
-  }
-
-  @Test
-  void testI1() {
-    double i1 = BesselI._1(2.3).number().doubleValue();
-    assertEquals(i1, 2.097800027517421);
   }
 
   @Test
@@ -56,7 +50,7 @@ class BesselTest {
 
   @Test
   void testK2() {
-    double i1 = Bessel.kn(2, 2.3);
+    double i1 = BesselK.kn(2, 2.3);
     assertEquals(i1, 0.16173336243284375);
     // ............. 0.1617333624328438
   }

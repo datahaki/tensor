@@ -39,30 +39,40 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * the same degree.
  * 
  * @param coef the coefficients of the polynomial
- * @param x argument to the polynomial */
-class Chebyshev implements ScalarUnaryOperator {
-  public static ScalarUnaryOperator of(double... values) {
-    return new Chebyshev(values);
+ * @param x argument to the polynomial
+ * 
+ * Reference:
+ * https://en.wikipedia.org/wiki/Clenshaw_algorithm */
+class ChebyshevClenshaw implements ScalarUnaryOperator {
+  public static ScalarUnaryOperator forward(Scalar den, Scalar aff, double... coef) {
+    return new ChebyshevClenshaw(x -> x.divide(den).subtract(aff), coef);
   }
 
-  private final Scalar[] coef;
+  public static ScalarUnaryOperator reverse(Scalar num, Scalar aff, double... coef) {
+    return new ChebyshevClenshaw(x -> num.divide(x).subtract(aff), coef);
+  }
 
-  public Chebyshev(double[] _coef) {
-    coef = DoubleStream.of(_coef).mapToObj(RealScalar::of).toArray(Scalar[]::new);
+  // ---
+  private final ScalarUnaryOperator suo;
+  private final Scalar[] a;
+
+  private ChebyshevClenshaw(ScalarUnaryOperator suo, double[] _coef) {
+    this.suo = suo;
+    a = DoubleStream.of(_coef).mapToObj(RealScalar::of).toArray(Scalar[]::new);
   }
 
   @Override
-  public Scalar apply(Scalar x) {
-    Scalar b2;
-    int p = 0;
-    Scalar b0 = coef[p++];
-    Scalar b1 = RealScalar.ZERO;
-    int i = coef.length - 1;
-    do {
-      b2 = b1;
-      b1 = b0;
-      b0 = x.multiply(b1).subtract(b2).add(coef[p++]);
-    } while (--i > 0);
-    return b0.subtract(b2).multiply(RationalScalar.HALF);
+  public Scalar apply(Scalar _x) {
+    Scalar x = suo.apply(_x);
+    int k = 0;
+    Scalar bk2 = RealScalar.ZERO;
+    Scalar bk1 = RealScalar.ZERO;
+    Scalar bk0 = a[k++];
+    for (; k < a.length; ++k) {
+      bk2 = bk1;
+      bk1 = bk0;
+      bk0 = x.multiply(bk1).subtract(bk2).add(a[k]);
+    }
+    return bk0.subtract(bk2).multiply(RationalScalar.HALF);
   }
 }

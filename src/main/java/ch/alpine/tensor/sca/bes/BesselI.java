@@ -19,7 +19,8 @@ public enum BesselI {
    *
    * lim(x->0){ exp(-x) I0(x) } = 1. */
   // 30 elements
-  private static final ScalarUnaryOperator A_i0 = Chebyshev.of( //
+  private static final ScalarUnaryOperator A_i0 = ChebyshevClenshaw.forward( //
+      RealScalar.TWO, RealScalar.TWO, //
       -4.41534164647933937950E-18, //
       3.33079451882223809783E-17, //
       -2.43127984654795469359E-16, //
@@ -56,7 +57,8 @@ public enum BesselI {
    *
    * lim(x->inf){ exp(-x) sqrt(x) I0(x) } = 1/sqrt(2pi). */
   // 25 elements
-  private static final ScalarUnaryOperator B_i0 = Chebyshev.of( //
+  private static final ScalarUnaryOperator B_i0 = ChebyshevClenshaw.reverse( //
+      RealScalar.of(32), RealScalar.TWO, //
       -7.23318048787475395456E-18, //
       -4.83050448594418207126E-18, //
       4.46562142029675999901E-17, //
@@ -97,11 +99,10 @@ public enum BesselI {
   public static Scalar _0(Scalar x) {
     if (Sign.isNegative(x))
       x = x.negate();
-    if (Scalars.lessEquals(x, RealScalar.of(8))) {
-      Scalar y = x.divide(RealScalar.TWO).subtract(RealScalar.TWO);
-      return Exp.FUNCTION.apply(x).multiply(A_i0.apply(y));
-    }
-    return Exp.FUNCTION.apply(x).multiply(B_i0.apply(RealScalar.of(32.0).divide(x).subtract(RealScalar.of(2)))).divide(Sqrt.FUNCTION.apply(x));
+    Scalar y = Scalars.lessEquals(x, RealScalar.of(8)) //
+        ? A_i0.apply(x)
+        : B_i0.apply(x).divide(Sqrt.FUNCTION.apply(x));
+    return Exp.FUNCTION.apply(x).multiply(y);
   }
 
   public static Scalar _0(Number x) {
@@ -113,7 +114,8 @@ public enum BesselI {
    *
    * lim(x->0){ exp(-x) I1(x) / x } = 1/2. */
   // 29 elements
-  private static final ScalarUnaryOperator A_i1 = Chebyshev.of( //
+  private static final ScalarUnaryOperator A_i1 = ChebyshevClenshaw.forward( //
+      RealScalar.TWO, RealScalar.TWO, //
       2.77791411276104639959E-18, //
       -2.11142121435816608115E-17, //
       1.55363195773620046921E-16, //
@@ -149,7 +151,8 @@ public enum BesselI {
    *
    * lim(x->inf){ exp(-x) sqrt(x) I1(x) } = 1/sqrt(2pi). */
   // 25 elements
-  private static final ScalarUnaryOperator B_i1 = Chebyshev.of( //
+  private static final ScalarUnaryOperator B_i1 = ChebyshevClenshaw.reverse( //
+      RealScalar.of(32), RealScalar.TWO, //
       7.51729631084210481353E-18, //
       4.41434832307170791151E-18, //
       -4.65030536848935832153E-17, //
@@ -188,14 +191,11 @@ public enum BesselI {
    *
    * @param x the value to compute the bessel function of. */
   public static Scalar _1(Scalar x) {
-    Scalar y;
     Scalar z = Abs.FUNCTION.apply(x);
-    if (Scalars.lessEquals(z, RealScalar.of(8))) {
-      y = z.divide(RealScalar.TWO).subtract(RealScalar.TWO);
-      z = A_i1.apply(y).multiply(z).multiply(Exp.FUNCTION.apply(z));
-    } else {
-      z = Exp.FUNCTION.apply(z).multiply(B_i1.apply(RealScalar.of(32.0).divide(z).subtract(RealScalar.TWO))).divide(Sqrt.FUNCTION.apply(z));
-    }
+    Scalar r = Scalars.lessEquals(z, RealScalar.of(8)) //
+        ? A_i1.apply(z).multiply(z)
+        : B_i1.apply(z).divide(Sqrt.FUNCTION.apply(z));
+    z = Exp.FUNCTION.apply(z).multiply(r);
     if (Sign.isNegative(x))
       z = z.negate();
     return z;
