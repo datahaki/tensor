@@ -6,8 +6,6 @@
  * It is provided "as is" without expressed or implied warranty. */
 package ch.alpine.tensor.sca.bes;
 
-import ch.alpine.tensor.RealScalar;
-
 /** Bessel and Airy functions. */
 enum Bessel {
   ;
@@ -19,7 +17,8 @@ enum Bessel {
    *
    * lim(x->0){ exp(-x) I0(x) } = 1. */
   // 30 elements
-  protected static final double[] A_i0 = { -4.41534164647933937950E-18, //
+  protected static final Chebyshev A_i0 = Chebyshev.of( //
+      -4.41534164647933937950E-18, //
       3.33079451882223809783E-17, //
       -2.43127984654795469359E-16, //
       1.71539128555513303061E-15, //
@@ -49,13 +48,14 @@ enum Bessel {
       1.71620901522208775349E-1, //
       -3.04682672343198398683E-1, //
       6.76795274409476084995E-1 //
-  };
+  );
   /** Chebyshev coefficients for exp(-x) sqrt(x) I0(x)
    * in the inverted interval [8,infinity].
    *
    * lim(x->inf){ exp(-x) sqrt(x) I0(x) } = 1/sqrt(2pi). */
   // 25 elements
-  protected static final double[] B_i0 = { -7.23318048787475395456E-18, //
+  protected static final Chebyshev B_i0 = Chebyshev.of( //
+      -7.23318048787475395456E-18, //
       -4.83050448594418207126E-18, //
       4.46562142029675999901E-17, //
       3.46122286769746109310E-17, //
@@ -80,14 +80,15 @@ enum Bessel {
       6.88975834691682398426E-5, //
       3.36911647825569408990E-3, //
       8.04490411014108831608E-1 //
-  };
+  );
   /**************************************** COEFFICIENTS FOR METHODS i1, i1e * ****************************************/
   /** Chebyshev coefficients for exp(-x) I1(x) / x
    * in the interval [0,8].
    *
    * lim(x->0){ exp(-x) I1(x) / x } = 1/2. */
   // 29 elements
-  protected static final double[] A_i1 = { 2.77791411276104639959E-18, //
+  protected static final Chebyshev A_i1 = Chebyshev.of( //
+      2.77791411276104639959E-18, //
       -2.11142121435816608115E-17, //
       1.55363195773620046921E-16, //
       -1.10559694773538630805E-15, //
@@ -116,13 +117,14 @@ enum Bessel {
       1.02643658689847095384E-1, //
       -1.76416518357834055153E-1, //
       2.52587186443633654823E-1 //
-  };
+  );
   /* Chebyshev coefficients for exp(-x) sqrt(x) I1(x)
    * in the inverted interval [8,infinity].
    *
    * lim(x->inf){ exp(-x) sqrt(x) I1(x) } = 1/sqrt(2pi). */
   // 25 elements
-  protected static final double[] B_i1 = { 7.51729631084210481353E-18, //
+  protected static final Chebyshev B_i1 = Chebyshev.of( //
+      7.51729631084210481353E-18, //
       4.41434832307170791151E-18, //
       -4.65030536848935832153E-17, //
       -3.20952592199342395980E-17, //
@@ -147,7 +149,7 @@ enum Bessel {
       -1.10588938762623716291E-4, //
       -9.76109749136146840777E-3, //
       7.78576235018280120474E-1 //
-  };
+  );
   /**************************************** COEFFICIENTS FOR METHODS k0, k0e * ****************************************/
   /* Chebyshev coefficients for K0(x) + log(x/2) I0(x)
    * in the interval [0,2]. The odd order coefficients are all
@@ -155,7 +157,8 @@ enum Bessel {
    * 
    * lim(x->0){ K0(x) + log(x/2) I0(x) } = -EUL. */
   // 10 elements
-  protected static final double[] A_k0 = { 1.37446543561352307156E-16, //
+  protected static final Chebyshev A_k0 = Chebyshev.of( //
+      1.37446543561352307156E-16, //
       4.25981614279661018399E-14, //
       1.03496952576338420167E-11, //
       1.90451637722020886025E-9, //
@@ -165,13 +168,14 @@ enum Bessel {
       3.59799365153615016266E-2, //
       3.44289899924628486886E-1, //
       -5.35327393233902768720E-1 //
-  };
+  );
   /* Chebyshev coefficients for exp(x) sqrt(x) K0(x)
    * in the inverted interval [2,infinity].
    * 
    * lim(x->inf){ exp(x) sqrt(x) K0(x) } = sqrt(pi/2). */
   // 25 elements
-  protected static final double[] B_k0 = { 5.30043377268626276149E-18, //
+  protected static final Chebyshev B_k0 = Chebyshev.of( //
+      5.30043377268626276149E-18, //
       -1.64758043015242134646E-17, //
       5.21039150503902756861E-17, //
       -1.67823109680541210385E-16, //
@@ -196,14 +200,15 @@ enum Bessel {
       1.56988388573005337491E-3, //
       -3.14481013119645005427E-2, //
       2.44030308206595545468E0 //
-  };
+  );
   /**************************************** COEFFICIENTS FOR METHODS k1, k1e * ****************************************/
   /* Chebyshev coefficients for x(K1(x) - log(x/2) I1(x))
    * in the interval [0,2].
    * 
    * lim(x->0){ x(K1(x) - log(x/2) I1(x)) } = 1. */
   // 11 elements
-  protected static final double[] A_k1 = { -7.02386347938628759343E-18, //
+  protected static final Chebyshev A_k1 = Chebyshev.of( //
+      -7.02386347938628759343E-18, //
       -2.42744985051936593393E-15, //
       -6.66690169419932900609E-13, //
       -1.41148839263352776110E-10, //
@@ -214,13 +219,14 @@ enum Bessel {
       -1.22611180822657148235E-1, //
       -3.53155960776544875667E-1, //
       1.52530022733894777053E0 //
-  };
+  );
   /* Chebyshev coefficients for exp(x) sqrt(x) K1(x)
    * in the interval [2,infinity].
    *
    * lim(x->inf){ exp(x) sqrt(x) K1(x) } = sqrt(pi/2). */
   // 25 elements
-  protected static final double[] B_k1 = { -5.75674448366501715755E-18, //
+  protected static final Chebyshev B_k1 = Chebyshev.of( //
+      -5.75674448366501715755E-18, //
       1.79405087314755922667E-17, //
       -5.68946255844285935196E-17, //
       1.83809354436663880070E-16, //
@@ -245,7 +251,7 @@ enum Bessel {
       -2.85781685962277938680E-3, //
       1.03923736576817238437E-1, //
       2.72062619048444266945E0 //
-  };
+  );
 
   /** Returns the modified Bessel function of order 0 of the
    * argument.
@@ -263,29 +269,12 @@ enum Bessel {
       x = -x;
     if (x <= 8.0) {
       y = (x / 2.0) - 2.0;
-      return Math.exp(x) * chbevl(A_i0, y);
+      return Math.exp(x) * A_i0.run(y);
     }
-    return Math.exp(x) * chbevl(B_i0, 32.0 / x - 2.0) / Math.sqrt(x);
+    return Math.exp(x) * B_i0.run(32.0 / x - 2.0) / Math.sqrt(x);
   }
 
-  /** Returns the exponentially scaled modified Bessel function
-   * of order 0 of the argument.
-   * <p>
-   * The function is defined as <tt>i0e(x) = exp(-|x|) j0( ix )</tt>.
-   *
-   *
-   * @param x the value to compute the bessel function of. */
-  // TODO TENSOR call from i0
-  public static double i0e(double x) {
-    double y;
-    if (x < 0)
-      x = -x;
-    if (x <= 8.0) {
-      y = (x / 2.0) - 2.0;
-      return chbevl(A_i0, y);
-    }
-    return chbevl(B_i0, 32.0 / x - 2.0) / Math.sqrt(x);
-  }
+  
 
   /** Returns the modified Bessel function of order 1 of the
    * argument.
@@ -302,90 +291,15 @@ enum Bessel {
     z = Math.abs(x);
     if (z <= 8.0) {
       y = (z / 2.0) - 2.0;
-      z = chbevl(A_i1, y) * z * Math.exp(z);
+      z = A_i1.run(y) * z * Math.exp(z);
     } else {
-      z = Math.exp(z) * chbevl(B_i1, 32.0 / z - 2.0) / Math.sqrt(z);
+      z = Math.exp(z) * B_i1.run(32.0 / z - 2.0) / Math.sqrt(z);
     }
     if (x < 0.0)
       z = -z;
     return z;
   }
 
-  /** Returns the exponentially scaled modified Bessel function
-   * of order 1 of the argument.
-   * <p>
-   * The function is defined as <tt>i1(x) = -i exp(-|x|) j1( ix )</tt>.
-   * 
-   * @param x the value to compute the bessel function of. */
-  public static double i1e(double x) {
-    double y, z;
-    z = Math.abs(x);
-    if (z <= 8.0) {
-      y = (z / 2.0) - 2.0;
-      z = chbevl(A_i1, y) * z;
-    } else {
-      z = chbevl(B_i1, 32.0 / z - 2.0) / Math.sqrt(z);
-    }
-    if (x < 0.0)
-      z = -z;
-    return z;
-  }
-
-  /** Returns the Bessel function of the first kind of order <tt>n</tt> of the argument.
-   * 
-   * @param n the order of the Bessel function.
-   * @param x the value to compute the bessel function of. */
-  public static double jn(int n, double x) {
-    int j, m;
-    double ax, bj, bjm, bjp, sum, tox, ans;
-    boolean jsum;
-    final double ACC = 40.0;
-    final double BIGNO = 1.0e+10;
-    final double BIGNI = 1.0e-10;
-    if (n == 0)
-      return BesselJ._0(RealScalar.of(x)).number().doubleValue();
-    if (n == 1)
-      return BesselJ._1(RealScalar.of(x)).number().doubleValue();
-    ax = Math.abs(x);
-    if (ax == 0.0)
-      return 0.0;
-    if (ax > n) {
-      tox = 2.0 / ax;
-      bjm = BesselJ._0(RealScalar.of(ax)).number().doubleValue();
-      bj = BesselJ._1(RealScalar.of(ax)).number().doubleValue();
-      for (j = 1; j < n; j++) {
-        bjp = j * tox * bj - bjm;
-        bjm = bj;
-        bj = bjp;
-      }
-      ans = bj;
-    } else {
-      tox = 2.0 / ax;
-      m = 2 * ((n + (int) Math.sqrt(ACC * n)) / 2);
-      jsum = false;
-      bjp = ans = sum = 0.0;
-      bj = 1.0;
-      for (j = m; j > 0; j--) {
-        bjm = j * tox * bj - bjp;
-        bjp = bj;
-        bj = bjm;
-        if (Math.abs(bj) > BIGNO) {
-          bj *= BIGNI;
-          bjp *= BIGNI;
-          ans *= BIGNI;
-          sum *= BIGNI;
-        }
-        if (jsum)
-          sum += bj;
-        jsum = !jsum;
-        if (j == n)
-          ans = bjp;
-      }
-      sum = 2.0 * sum - bj;
-      ans /= sum;
-    }
-    return x < 0.0 && n % 2 == 1 ? -ans : ans;
-  }
 
   /** Returns the modified Bessel function of the third kind
    * of order 0 of the argument.
@@ -401,28 +315,14 @@ enum Bessel {
       throw new ArithmeticException();
     if (x <= 2.0) {
       y = x * x - 2.0;
-      y = chbevl(A_k0, y) - Math.log(0.5 * x) * i0(x);
+      y = A_k0.run(y) - Math.log(0.5 * x) * i0(x);
       return (y);
     }
     z = 8.0 / x - 2.0;
-    return Math.exp(-x) * chbevl(B_k0, z) / Math.sqrt(x);
+    return Math.exp(-x) * B_k0.run(z) / Math.sqrt(x);
   }
 
-  /** Returns the exponentially scaled modified Bessel function
-   * of the third kind of order 0 of the argument.
-   *
-   * @param x the value to compute the bessel function of. */
-  public static double k0e(double x) {
-    double y;
-    if (x <= 0.0)
-      throw new ArithmeticException();
-    if (x <= 2.0) {
-      y = x * x - 2.0;
-      y = chbevl(A_k0, y) - Math.log(0.5 * x) * i0(x);
-      return y * Math.exp(x);
-    }
-    return chbevl(B_k0, 8.0 / x - 2.0) / Math.sqrt(x);
-  }
+ 
 
   /** Returns the modified Bessel function of the third kind
    * of order 1 of the argument.
@@ -439,29 +339,13 @@ enum Bessel {
       throw new ArithmeticException();
     if (x <= 2.0) {
       y = x * x - 2.0;
-      y = Math.log(z) * i1(x) + chbevl(A_k1, y) / x;
+      y = Math.log(z) * i1(x) + A_k1.run(y) / x;
       return y;
     }
-    return Math.exp(-x) * chbevl(B_k1, 8.0 / x - 2.0) / Math.sqrt(x);
+    return Math.exp(-x) * B_k1.run(8.0 / x - 2.0) / Math.sqrt(x);
   }
 
-  /** Returns the exponentially scaled modified Bessel function
-   * of the third kind of order 1 of the argument.
-   * <p>
-   * <tt>k1e(x) = exp(x) * k1(x)</tt>.
-   *
-   * @param x the value to compute the bessel function of. */
-  public static double k1e(double x) {
-    double y;
-    if (x <= 0.0)
-      throw new ArithmeticException();
-    if (x <= 2.0) {
-      y = x * x - 2.0;
-      y = Math.log(0.5 * x) * i1(x) + chbevl(A_k1, y) / x;
-      return y * Math.exp(x);
-    }
-    return chbevl(B_k1, 8.0 / x - 2.0) / Math.sqrt(x);
-  }
+  
 
   /** Returns the modified Bessel function of the third kind
    * of order <tt>nn</tt> of the argument.
@@ -615,53 +499,6 @@ enum Bessel {
       pk += 2.0;
       i += 1;
     } while (Math.abs(t / s) > MACHEP);
-    ans = Math.exp(-x) * Math.sqrt(Math.PI / (2.0 * x)) * s;
-    return ans;
-  }
-
-  /** Evaluates the series of Chebyshev polynomials Ti at argument x/2.
-   * The series is given by
-   * <pre>
-   * N-1
-   * - '
-   * y = > coef[i] T (x/2)
-   * - i
-   * i=0
-   * </pre>
-   * Coefficients are stored in reverse order, i.e. the zero
-   * order term is last in the array. Note N is the number of
-   * coefficients, not the order.
-   * <p>
-   * If coefficients are for the interval a to b, x must
-   * have been transformed to x -> 2(2x - b - a)/(b-a) before
-   * entering the routine. This maps x from (a, b) to (-1, 1),
-   * over which the Chebyshev polynomials are defined.
-   * <p>
-   * If the coefficients are for the inverted interval, in
-   * which (a, b) is mapped to (1/b, 1/a), the transformation
-   * required is x -> 2(2ab/x - b - a)/(b-a). If b is infinity,
-   * this becomes x -> 4a/x - 1.
-   * <p>
-   * SPEED:
-   * <p>
-   * Taking advantage of the recurrence properties of the
-   * Chebyshev polynomials, the routine requires one more
-   * addition per loop than evaluating a nested polynomial of
-   * the same degree.
-   * 
-   * @param coef the coefficients of the polynomial
-   * @param x argument to the polynomial */
-  private static double chbevl(double[] coef, double x) {
-    double b2;
-    int p = 0;
-    double b0 = coef[p++];
-    double b1 = 0.0;
-    int i = coef.length - 1;
-    do {
-      b2 = b1;
-      b1 = b0;
-      b0 = x * b1 - b2 + coef[p++];
-    } while (--i > 0);
-    return 0.5 * (b0 - b2);
+    return Math.exp(-x) * Math.sqrt(Math.PI / (2.0 * x)) * s;
   }
 }

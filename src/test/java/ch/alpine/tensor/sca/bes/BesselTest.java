@@ -34,7 +34,7 @@ class BesselTest {
 
   @Test
   void testJ2() {
-    double i1 = Bessel.jn(2, 2.3);
+    double i1 = BesselJ.of(2, 2.3).number().doubleValue();
     // System.out.println(i1);
     // ............. 0.41391459173206196
     assertEquals(i1, 0.41391458970875217);

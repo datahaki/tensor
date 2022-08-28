@@ -17,8 +17,67 @@ import ch.alpine.tensor.sca.tri.Sin;
  * <a href="https://reference.wolfram.com/language/ref/BesselI.html">BesselI</a> */
 public enum BesselJ {
   ;
+  /** Returns the Bessel function of the first kind of order <tt>n</tt> of the argument.
+   * 
+   * @param n the order of the Bessel function.
+   * @param x the value to compute the bessel function of. */
+  public static Scalar of(int n, Scalar x) {
+    int j, m;
+    Scalar bj, bjm, bjp, sum, tox, ans;
+    boolean jsum;
+    final Scalar ACC = RealScalar.of(40.0);
+    final Scalar BIGNO = RealScalar.of(1.0e+10);
+    final Scalar BIGNI = RealScalar.of(1.0e-10);
+    if (n == 0)
+      return _0(x);
+    if (n == 1)
+      return _1(x);
+    Scalar ax = Abs.FUNCTION.apply(x);
+    if (Scalars.isZero(ax))
+      return RealScalar.ZERO;
+    if (Scalars.lessThan(RealScalar.of(n), ax)) {
+      tox = RealScalar.of(2.0).divide(ax);
+      bjm = _0(ax);
+      bj = _1(ax);
+      for (j = 1; j < n; j++) {
+        bjp = RealScalar.of(j).multiply(tox).multiply(bj).subtract(bjm);
+        bjm = bj;
+        bj = bjp;
+      }
+      ans = bj;
+    } else {
+      tox = RealScalar.of(2.0).divide(ax);
+      Scalar sqrt = Sqrt.FUNCTION.apply(ACC.multiply(RealScalar.of(n)));
+      m = 2 * ((n + sqrt.number().intValue()) / 2);
+      jsum = false;
+      bjp = ans = sum = RealScalar.ZERO;
+      bj = RealScalar.of(1.0);
+      for (j = m; j > 0; j--) {
+        bjm = RealScalar.of(j).multiply(tox).multiply(bj).subtract(bjp);
+        bjp = bj;
+        bj = bjm;
+        if (Scalars.lessThan(BIGNO, Abs.FUNCTION.apply(bj))) {
+          bj = bj.multiply(BIGNI);
+          bjp = bjp.multiply(BIGNI);
+          ans = ans.multiply(BIGNI);
+          sum = sum.multiply(BIGNI);
+        }
+        if (jsum)
+          sum = sum.add(bj);
+        jsum = !jsum;
+        if (j == n)
+          ans = bjp;
+      }
+      sum = RealScalar.of(2.0).multiply(sum).subtract(bj);
+      ans = ans.divide(sum);
+    }
+    return Sign.isNegative(x) && n % 2 == 1 //
+        ? ans.negate()
+        : ans;
+  }
+
   public static Scalar of(Scalar n, Scalar x) {
-    return RealScalar.of(Bessel.jn(Scalars.intValueExact(n), x.number().doubleValue()));
+    return of(Scalars.intValueExact(n), x);
   }
 
   public static Scalar of(Number n, Number x) {

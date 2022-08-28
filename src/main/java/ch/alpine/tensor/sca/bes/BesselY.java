@@ -1,4 +1,4 @@
-// code by jph
+// adapted from colt by jph
 package ch.alpine.tensor.sca.bes;
 
 import ch.alpine.tensor.RealScalar;
@@ -20,24 +20,24 @@ public enum BesselY {
    * 
    * @param n the order of the Bessel function.
    * @param x the value to compute the bessel function of. */
-  public static Scalar yn(int n, Scalar x) {
+  public static Scalar of(int n, Scalar x) {
     if (n == 0)
       return _0(x);
     if (n == 1)
       return _1(x);
     Scalar tox = RealScalar.of(2).divide(x);
-    Scalar by = _1(x);
     Scalar bym = _0(x);
+    Scalar byn = _1(x);
     for (int j = 1; j < n; j++) {
-      Scalar byp = RealScalar.of(j).multiply(tox).multiply(by).subtract(bym);
-      bym = by;
-      by = byp;
+      Scalar byp = RealScalar.of(j).multiply(tox).multiply(byn).subtract(bym);
+      bym = byn;
+      byn = byp;
     }
-    return by;
+    return byn;
   }
 
   public static Scalar of(Scalar n, Scalar x) {
-    return BesselY.yn(Scalars.intValueExact(n), x);
+    return BesselY.of(Scalars.intValueExact(n), x);
   }
 
   public static Scalar of(Number n, Number x) {
