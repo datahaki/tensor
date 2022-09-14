@@ -13,8 +13,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityCompatibleScalar;
+import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Floor;
 
@@ -36,7 +38,10 @@ import ch.alpine.tensor.sca.Floor;
  * This class is immutable and thread-safe. */
 public class DateTimeScalar extends AbstractScalar implements //
     Comparable<Scalar>, QuantityCompatibleScalar, Serializable {
-  private static final Unit UNIT_S = Unit.of("s");
+  /* package */ static final Unit UNIT_S = Unit.of("s");
+  /* package */ static final long NANOS_LONG = 1_000_000_000;
+  /* package */ static final Scalar NANOS = RealScalar.of(NANOS_LONG);
+  /* package */ static final ScalarUnaryOperator TO_SECONDS = QuantityMagnitude.SI().in(UNIT_S);
 
   /** @param localDateTime
    * @return
@@ -49,9 +54,9 @@ public class DateTimeScalar extends AbstractScalar implements //
    * @param zoneOffset
    * @return */
   public static DateTimeScalar ofEpochSecond(Scalar scalar, ZoneOffset zoneOffset) {
-    Scalar seconds = TemporalScalars.TO_SECONDS.apply(scalar);
+    Scalar seconds = TO_SECONDS.apply(scalar);
     Scalar floor = Floor.FUNCTION.apply(seconds);
-    Scalar nanos = seconds.subtract(floor).multiply(TemporalScalars.NANOS);
+    Scalar nanos = seconds.subtract(floor).multiply(DateTimeScalar.NANOS);
     return new DateTimeScalar(LocalDateTime.ofEpochSecond( //
         floor.number().longValue(), //
         nanos.number().intValue(), //
@@ -86,7 +91,7 @@ public class DateTimeScalar extends AbstractScalar implements //
    * @return seconds from the epoch of 1970-01-01T00:00:00Z with unit "s"
    * which is negative for dates before that threshold in exact precision */
   public Scalar toEpochSecond(ZoneOffset zoneOffset) {
-    Scalar nanos = RationalScalar.of(localDateTime.getNano(), TemporalScalars.NANOS_LONG);
+    Scalar nanos = RationalScalar.of(localDateTime.getNano(), DateTimeScalar.NANOS_LONG);
     return Quantity.of( //
         RealScalar.of(localDateTime.toEpochSecond(zoneOffset)).add(nanos), UNIT_S);
   }
