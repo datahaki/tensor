@@ -6,7 +6,9 @@ import java.util.stream.DoubleStream;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.ScalarArray;
 
 /** Evaluates the series of Chebyshev polynomials Ti at argument x/2.
  * The series is given by
@@ -43,22 +45,30 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * 
  * Reference:
  * https://en.wikipedia.org/wiki/Clenshaw_algorithm */
-class ChebyshevClenshaw implements ScalarUnaryOperator {
+public class ChebyshevClenshaw implements ScalarUnaryOperator {
   public static ScalarUnaryOperator forward(Scalar den, Scalar aff, double... coef) {
-    return new ChebyshevClenshaw(x -> x.divide(den).subtract(aff), coef);
+    return of(x -> x.divide(den).subtract(aff), coef);
   }
 
   public static ScalarUnaryOperator reverse(Scalar num, Scalar aff, double... coef) {
-    return new ChebyshevClenshaw(x -> num.divide(x).subtract(aff), coef);
+    return of(x -> num.divide(x).subtract(aff), coef);
+  }
+
+  private static ScalarUnaryOperator of(ScalarUnaryOperator suo, double[] _coef) {
+    return new ChebyshevClenshaw(suo, DoubleStream.of(_coef).mapToObj(RealScalar::of).toArray(Scalar[]::new));
+  }
+
+  public static ScalarUnaryOperator of(Tensor coeffs) {
+    return new ChebyshevClenshaw(ScalarUnaryOperator.IDENTITY, ScalarArray.ofVector(coeffs));
   }
 
   // ---
   private final ScalarUnaryOperator suo;
   private final Scalar[] a;
 
-  private ChebyshevClenshaw(ScalarUnaryOperator suo, double[] _coef) {
+  private ChebyshevClenshaw(ScalarUnaryOperator suo, Scalar[] array) {
     this.suo = suo;
-    a = DoubleStream.of(_coef).mapToObj(RealScalar::of).toArray(Scalar[]::new);
+    a = array;
   }
 
   @Override

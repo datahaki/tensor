@@ -10,7 +10,7 @@ import ch.alpine.tensor.sca.Chop;
 class BesselYTest {
   @Test
   void test0() {
-    Scalar scalar = BesselY._0(1.2);
+    Scalar scalar = BesselY.of(0, 1.2);
     Chop._08.requireClose(scalar, RealScalar.of(0.22808350322719695));
   }
 
@@ -22,7 +22,7 @@ class BesselYTest {
 
   @Test
   void test1() {
-    Scalar scalar = BesselY._1(1.2);
+    Scalar scalar = BesselY.of(1, 1.2);
     Chop._08.requireClose(scalar, RealScalar.of(-0.621136379748848));
   }
 

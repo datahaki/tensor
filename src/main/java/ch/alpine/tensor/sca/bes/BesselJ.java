@@ -32,9 +32,9 @@ public enum BesselJ {
       return _0(x);
     if (n == 1)
       return _1(x);
-    Scalar ax = Abs.FUNCTION.apply(x);
-    if (Scalars.isZero(ax))
+    if (Scalars.isZero(x))
       return RealScalar.ZERO;
+    Scalar ax = Abs.FUNCTION.apply(x);
     if (Scalars.lessThan(RealScalar.of(n), ax)) {
       tox = RealScalar.of(2.0).divide(ax);
       bjm = _0(ax);
@@ -68,7 +68,7 @@ public enum BesselJ {
         if (j == n)
           ans = bjp;
       }
-      sum = RealScalar.of(2.0).multiply(sum).subtract(bj);
+      sum = sum.add(sum).subtract(bj);
       ans = ans.divide(sum);
     }
     return Sign.isNegative(x) && n % 2 == 1 //

@@ -14,6 +14,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityCompatibleScalar;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Floor;
 
@@ -28,10 +29,13 @@ import ch.alpine.tensor.sca.Floor;
  * Subtraction of two instances of {@link DateTimeScalar} results in a {@link Quantity}.
  * Negation of a {@link DateTimeScalar} results in an exception.
  * 
+ * <p>similar to
+ * <a href="https://reference.wolfram.com/language/ref/DateObject.html">DateObject</a>
+ * 
  * @implSpec
  * This class is immutable and thread-safe. */
 public class DateTimeScalar extends AbstractScalar implements //
-    Comparable<Scalar>, Serializable {
+    Comparable<Scalar>, QuantityCompatibleScalar, Serializable {
   private static final Unit UNIT_S = Unit.of("s");
 
   /** @param localDateTime
