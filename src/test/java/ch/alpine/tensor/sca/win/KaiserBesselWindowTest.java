@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -18,5 +20,11 @@ class KaiserBesselWindowTest {
   void testOutside() {
     Tolerance.CHOP.requireZero(KaiserBesselWindow.FUNCTION.apply(RealScalar.of(-0.51)));
     Tolerance.CHOP.requireZero(KaiserBesselWindow.FUNCTION.apply(RealScalar.of(+0.51)));
+  }
+
+  @Test
+  void testToString() {
+    String string = KaiserBesselWindow.FUNCTION.toString();
+    assertEquals(string, "KaiserBesselWindow");
   }
 }

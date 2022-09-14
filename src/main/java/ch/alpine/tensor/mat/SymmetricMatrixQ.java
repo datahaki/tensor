@@ -37,7 +37,7 @@ public enum SymmetricMatrixQ {
   public static Tensor require(Tensor tensor, Chop chop) {
     if (of(tensor, chop))
       return tensor;
-    throw new Throw(tensor);
+    throw new Throw(tensor, chop);
   }
 
   /** @param tensor

@@ -13,7 +13,7 @@ import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.gam.Beta;
 
-public class WaringYuleDistribution extends AbstractDiscreteDistribution implements Serializable {
+class WaringYuleDistribution extends AbstractDiscreteDistribution implements Serializable {
   public static Distribution of(Scalar alpha) {
     return new WaringYuleDistribution(alpha);
   }
@@ -36,19 +36,21 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
 
   @Override
   protected Scalar protected_p_equals(int x) {
-    return 0 <= x //
-        ? Beta.of(alpha.add(RealScalar.ONE), RealScalar.of(x + 1)).multiply(alpha)
-        : RealScalar.ZERO;
+    return Beta.of(alpha.add(RealScalar.ONE), RealScalar.of(x + 1)).multiply(alpha);
   }
 
   @Override
   public Scalar p_lessThan(Scalar x) {
-    return private_cdf(Ceiling.FUNCTION.apply(x.subtract(RealScalar.ONE)));
+    return Scalars.lessThan(RealScalar.ZERO, x) //
+        ? private_cdf(Ceiling.FUNCTION.apply(x.subtract(RealScalar.ONE)))
+        : RealScalar.ZERO;
   }
 
   @Override
   public Scalar p_lessEquals(Scalar x) {
-    return private_cdf(Floor.FUNCTION.apply(x));
+    return Scalars.lessEquals(RealScalar.ZERO, x) //
+        ? private_cdf(Floor.FUNCTION.apply(x))
+        : RealScalar.ZERO;
   }
 
   private Scalar private_cdf(Scalar x) {

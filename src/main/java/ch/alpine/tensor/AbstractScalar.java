@@ -25,7 +25,7 @@ public abstract class AbstractScalar implements Scalar {
 
   @Override // from Tensor
   public final Tensor get(int i) {
-    throw new Throw(this);
+    throw new Throw(this, i);
   }
 
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
@@ -108,7 +108,7 @@ public abstract class AbstractScalar implements Scalar {
   public final Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
     if (Integers.requireEquals(fromIndex.size(), dimensions.size()) == 0)
       return this;
-    throw new Throw(this);
+    throw new Throw(this, fromIndex, dimensions);
   }
 
   @Override // from Tensor

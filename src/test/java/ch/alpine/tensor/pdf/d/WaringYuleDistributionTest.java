@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,11 +24,13 @@ class WaringYuleDistributionTest {
   @Test
   void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(WaringYuleDistribution.of(1.4));
-    Scalar scalar = PDF.of(distribution).at(RealScalar.TWO);
+    PDF pdf = PDF.of(distribution);
+    Scalar scalar = pdf.at(RealScalar.TWO);
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(0.0779857397504456));
     Scalar mean = Mean.of(distribution);
     Tolerance.CHOP.requireClose(mean, RealScalar.of(2.5));
     assertTrue(distribution.toString().startsWith("WaringYuleDistribution["));
+    Tolerance.CHOP.requireZero(pdf.at(RealScalar.ONE.negate()));
   }
 
   @Test
@@ -49,7 +52,10 @@ class WaringYuleDistributionTest {
   @Test
   void testCdfLt() {
     Distribution distribution = WaringYuleDistribution.of(1.4);
-    Scalar scalar = CDF.of(distribution).p_lessThan(RealScalar.of(131));
+    CDF cdf = CDF.of(distribution);
+    Scalar scalar = cdf.p_lessThan(RealScalar.of(131));
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(0.9986681412708701));
+    assertEquals(cdf.p_lessThan(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(cdf.p_lessEquals(RealScalar.of(-1e-100)), RealScalar.ZERO);
   }
 }

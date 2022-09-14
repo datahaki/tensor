@@ -41,6 +41,6 @@ public enum VectorQ {
     if (tensor.length() == length && //
         tensor.stream().allMatch(Scalar.class::isInstance))
       return tensor;
-    throw new Throw(tensor);
+    throw new Throw(tensor, length);
   }
 }

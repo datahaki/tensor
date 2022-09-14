@@ -17,6 +17,10 @@ import ch.alpine.tensor.qty.Unit;
 /** encodes an absolute point in a local calendar by wrapping an instance of
  * {@link LocalDateTime}
  * 
+ * Addition and subtraction of a quantity with temporal SI unit is supported.
+ * This includes the units "s", "ms", "h", "days", ...
+ * The result of the sum is a new instance of {@link DateTimeScalar}.
+ * 
  * Addition of two instances of {@link DateTimeScalar} results in an exception.
  * Subtraction of two instances of {@link DateTimeScalar} results in a {@link Quantity}.
  * Negation of a {@link DateTimeScalar} results in an exception.
@@ -39,6 +43,11 @@ public class DateTimeScalar extends AbstractScalar implements //
 
   /* package */ DateTimeScalar(LocalDateTime localDateTime) {
     this.localDateTime = localDateTime;
+  }
+
+  /** @return instance of {@link LocalDateTime} backing this {@link DateTimeScalar} */
+  public LocalDateTime localDateTime() {
+    return localDateTime;
   }
 
   @Override // from AbstractScalar

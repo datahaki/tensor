@@ -82,7 +82,7 @@ public class FindRoot implements Serializable {
     final Scalar s0 = Sign.FUNCTION.apply(y0); // s0 is never 0
     final Scalar s1 = Sign.FUNCTION.apply(y1); // s1 is never 0
     if (s0.equals(s1))
-      throw new Throw(clip.min(), clip.max(), y0, y1);
+      throw new Throw(clip, y0, y1);
     // ---
     for (int index = 0; index < MAX_ITERATIONS; ++index) {
       Scalar xn = index % 2 == 0 //
@@ -104,7 +104,7 @@ public class FindRoot implements Serializable {
         y1 = yn;
       }
     }
-    throw new Throw(clip.min(), clip.max(), y0, y1);
+    throw new Throw(clip, y0, y1);
   }
 
   /** Function is equivalent to
