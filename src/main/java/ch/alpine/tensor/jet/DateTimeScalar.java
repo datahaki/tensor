@@ -4,15 +4,18 @@ package ch.alpine.tensor.jet;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.sca.Floor;
 
 /** encodes an absolute point in a local calendar by wrapping an instance of
  * {@link LocalDateTime}
@@ -38,6 +41,19 @@ public class DateTimeScalar extends AbstractScalar implements //
     return new DateTimeScalar(Objects.requireNonNull(localDateTime));
   }
 
+  /** @param scalar
+   * @param zoneOffset
+   * @return */
+  public static DateTimeScalar ofEpochSecond(Scalar scalar, ZoneOffset zoneOffset) {
+    Scalar seconds = TemporalScalars.TO_SECONDS.apply(scalar);
+    Scalar floor = Floor.FUNCTION.apply(seconds);
+    Scalar nanos = seconds.subtract(floor).multiply(TemporalScalars.NANOS);
+    return new DateTimeScalar(LocalDateTime.ofEpochSecond( //
+        floor.number().longValue(), //
+        nanos.number().intValue(), //
+        zoneOffset));
+  }
+
   // ---
   private final LocalDateTime localDateTime;
 
@@ -48,6 +64,27 @@ public class DateTimeScalar extends AbstractScalar implements //
   /** @return instance of {@link LocalDateTime} backing this {@link DateTimeScalar} */
   public LocalDateTime localDateTime() {
     return localDateTime;
+  }
+
+  /** Careful: the below-second part is not considered for the output
+   * 
+   * function exists because the return type of
+   * localDateTime.toEpochSecond(...) is long, i.e. without unit.
+   * 
+   * @param zoneOffset
+   * @return the number of seconds from the epoch of 1970-01-01T00:00:00Z with unit "s"
+   * which is negative for dates before that threshold */
+  public Scalar toEpochSecondFloor(ZoneOffset zoneOffset) {
+    return Quantity.of(localDateTime.toEpochSecond(zoneOffset), UNIT_S);
+  }
+
+  /** @param zoneOffset
+   * @return seconds from the epoch of 1970-01-01T00:00:00Z with unit "s"
+   * which is negative for dates before that threshold in exact precision */
+  public Scalar toEpochSecond(ZoneOffset zoneOffset) {
+    Scalar nanos = RationalScalar.of(localDateTime.getNano(), TemporalScalars.NANOS_LONG);
+    return Quantity.of( //
+        RealScalar.of(localDateTime.toEpochSecond(zoneOffset)).add(nanos), UNIT_S);
   }
 
   @Override // from AbstractScalar

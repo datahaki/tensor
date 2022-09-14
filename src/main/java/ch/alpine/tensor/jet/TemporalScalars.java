@@ -37,10 +37,10 @@ public enum TemporalScalars {
     return Scalars.fromString(string);
   }
 
-  private static final long NANOS_LONG = 1_000_000_000;
-  private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
+  /* package */ static final long NANOS_LONG = 1_000_000_000;
+  /* package */ static final Scalar NANOS = RealScalar.of(NANOS_LONG);
   private static final Unit UNIT_S = Unit.of("s");
-  private static final ScalarUnaryOperator TO_SECONDS = QuantityMagnitude.SI().in(UNIT_S);
+  /* package */ static final ScalarUnaryOperator TO_SECONDS = QuantityMagnitude.SI().in(UNIT_S);
 
   /** @param scalar with unit "s" or compatible
    * @return */
