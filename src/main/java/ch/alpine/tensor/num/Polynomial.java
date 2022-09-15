@@ -231,6 +231,17 @@ public class Polynomial extends HornerScheme {
   }
 
   /** @param polynomial
+   * @return this minus given polynomial */
+  public Polynomial minus(Polynomial polynomial) {
+    return plus(polynomial.negate());
+  }
+
+  /** @return negative of this polynomial */
+  public Polynomial negate() {
+    return Polynomial.of(coeffs.negate());
+  }
+
+  /** @param polynomial
    * @return polynomial that is the product of this and given polynomials */
   public Polynomial times(Polynomial polynomial) {
     return of(FullConvolve.of(coeffs, polynomial.coeffs()));

@@ -73,7 +73,8 @@ public class ChebyshevClenshaw implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar _x) {
-    Scalar x = suo.apply(_x);
+    Scalar x1 = suo.apply(_x);
+    Scalar x2 = x1.add(x1);
     int k = 0;
     Scalar bk2 = RealScalar.ZERO;
     Scalar bk1 = RealScalar.ZERO;
@@ -81,7 +82,7 @@ public class ChebyshevClenshaw implements ScalarUnaryOperator {
     for (; k < a.length; ++k) {
       bk2 = bk1;
       bk1 = bk0;
-      bk0 = x.multiply(bk1).subtract(bk2).add(a[k]);
+      bk0 = x2.multiply(bk1).subtract(bk2).add(a[k]);
     }
     return bk0.subtract(bk2).multiply(RationalScalar.HALF);
   }

@@ -83,6 +83,14 @@ class PolynomialTest {
   }
 
   @Test
+  void testMinus() {
+    Polynomial p1 = Polynomial.of(Tensors.vector(1, 5, 2, 10));
+    Polynomial diff = p1.minus(p1);
+    Polynomial zero = p1.times(RealScalar.ZERO);
+    assertEquals(diff, zero);
+  }
+
+  @Test
   void testDegree() {
     assertEquals(Polynomial.of(Tensors.vector(3, 0, 0)).degree(), 0);
     assertEquals(Polynomial.of(Tensors.vector(0, 0, 0)).degree(), -1);

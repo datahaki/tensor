@@ -6,9 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.temporal.ChronoUnit;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 class UnitQTest {
   @Test
@@ -41,5 +44,17 @@ class UnitQTest {
     Scalar wtp = UnitConvert.SI().to("mass%").apply(scalar);
     assertEquals(wtp, Quantity.of(20, "mass%"));
     assertFalse(UnitQ.isOne(QuantityUnit.of(wtp)));
+  }
+
+  @Test
+  void testChrono() {
+    ScalarUnaryOperator suo = QuantityMagnitude.SI().in("s");
+    assertEquals(ChronoUnit.WEEKS.getDuration().getSeconds(), suo.apply(Quantity.of(1, "wk")).number().longValue());
+    // WEEKS 2629746
+    // System.out.println(ChronoUnit.DECADES.getDuration().getSeconds());
+    // YEARS 31556952
+    assertEquals(ChronoUnit.DECADES.getDuration().getSeconds(), suo.apply(Quantity.of(1, "decades")).number().longValue());
+    assertEquals(ChronoUnit.CENTURIES.getDuration().getSeconds(), suo.apply(Quantity.of(1, "centuries")).number().longValue());
+    assertEquals(ChronoUnit.MILLENNIA.getDuration().getSeconds(), suo.apply(Quantity.of(1, "millennia")).number().longValue());
   }
 }

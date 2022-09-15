@@ -36,7 +36,7 @@ public enum BesselK {
    * lim(x->0){ K0(x) + log(x/2) I0(x) } = -EUL. */
   // 10 elements
   private static final ScalarUnaryOperator A_k0 = ChebyshevClenshaw.forward( //
-      RealScalar.ONE, RealScalar.TWO, //
+      RealScalar.TWO, RealScalar.ONE, //
       1.37446543561352307156E-16, //
       4.25981614279661018399E-14, //
       1.03496952576338420167E-11, //
@@ -54,7 +54,7 @@ public enum BesselK {
    * lim(x->inf){ exp(x) sqrt(x) K0(x) } = sqrt(pi/2). */
   // 25 elements
   private static final ScalarUnaryOperator B_k0 = ChebyshevClenshaw.reverse( //
-      RealScalar.of(8), RealScalar.TWO, //
+      RealScalar.of(4), RealScalar.ONE, //
       5.30043377268626276149E-18, //
       -1.64758043015242134646E-17, //
       5.21039150503902756861E-17, //
@@ -103,12 +103,12 @@ public enum BesselK {
   }
 
   /* Chebyshev coefficients for x(K1(x) - log(x/2) I1(x))
-   * in the interval [0,2].
+   * in the interval [0,2]. (or 4 !?)
    * 
    * lim(x->0){ x(K1(x) - log(x/2) I1(x)) } = 1. */
   // 11 elements
   private static final ScalarUnaryOperator A_k1 = ChebyshevClenshaw.forward( //
-      RealScalar.ONE, RealScalar.TWO, //
+      RealScalar.TWO, RealScalar.ONE, //
       -7.02386347938628759343E-18, //
       -2.42744985051936593393E-15, //
       -6.66690169419932900609E-13, //
@@ -127,7 +127,7 @@ public enum BesselK {
    * lim(x->inf){ exp(x) sqrt(x) K1(x) } = sqrt(pi/2). */
   // 25 elements
   private static final ScalarUnaryOperator B_k1 = ChebyshevClenshaw.reverse( //
-      RealScalar.of(8), RealScalar.TWO, //
+      RealScalar.of(4), RealScalar.ONE, //
       -5.75674448366501715755E-18, //
       1.79405087314755922667E-17, //
       -5.68946255844285935196E-17, //
