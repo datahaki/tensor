@@ -82,7 +82,7 @@ public class QuantityMagnitude implements Serializable {
     public Scalar apply(Scalar scalar) {
       Scalar result = unitSystem.apply(StaticHelper.multiply(scalar, base));
       if (result instanceof Quantity)
-        throw new Throw(result);
+        throw new Throw(scalar, unit);
       return result;
     }
 

@@ -53,6 +53,7 @@ public class ErlangDistribution implements Distribution, MeanInterface, PDF, Var
         .multiply(Power.of(x, k.subtract(RealScalar.ONE))).multiply(factor);
   }
 
+  // CDF requires GammaRegularized
   @Override // from MeanInterface
   public Scalar mean() {
     return k.divide(lambda);

@@ -63,6 +63,7 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
             : RealScalar.ZERO;
   }
 
+  // CDF requires BetaRegularized
   @Override // from MeanInterface
   public Scalar mean() {
     return a1.divide(a1.add(a2));

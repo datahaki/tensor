@@ -159,7 +159,7 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
     Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
     if (optional.isPresent())
       return BINARY_POWER.raise(this, optional.orElseThrow());
-    throw new Throw(this);
+    throw new Throw(this, exponent);
   }
 
   @Override // from SignInterface

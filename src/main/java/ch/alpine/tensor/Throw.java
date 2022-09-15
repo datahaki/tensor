@@ -12,7 +12,6 @@ public class Throw extends RuntimeException {
   /** exception with message consisting of truncated string expressions of given objects
    * 
    * @param objects */
-  @SafeVarargs
   public Throw(Object... objects) {
     this(MathematicaFormat.concise("Throw", objects));
   }

@@ -20,7 +20,6 @@ public class CyclicColorDataIndexed extends BaseColorDataIndexed {
 
   /** @param colors
    * @return palette of given colors where index maps to colors[index] */
-  @SafeVarargs
   public static ColorDataIndexed of(Color... colors) {
     return new CyclicColorDataIndexed(Tensor.of(Arrays.stream(colors).map(ColorFormat::toVector)));
   }

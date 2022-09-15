@@ -24,8 +24,6 @@ import ch.alpine.tensor.red.Min;
 /* package */ class HungarianAlgorithm extends HungarianAlgorithmGraph {
   private transient final HungarianAlgorithmTree hungarianAlgorithmTree;
   private transient final Set<Integer> freeX = new HashSet<>();
-  // TODO TENSOR freeY is never read
-  private transient final Set<Integer> freeY = new HashSet<>();
   private int iterations = 0;
 
   public HungarianAlgorithm(Tensor _matrix) {
@@ -37,8 +35,8 @@ import ch.alpine.tensor.red.Min;
     setInitialMatching(xLabel);
     initializeFreeNodes();
     while (!isSolved()) {
-      int x = pickFreeX();
-      int y = hungarianAlgorithmTree.addS();
+      int x = freeX.stream().findFirst().orElseThrow();
+      int y = hungarianAlgorithmTree.setAlphaAndS(x);
       augmentMatching(x, y);
       hungarianAlgorithmTree.clear();
       ++iterations;
@@ -60,7 +58,6 @@ import ch.alpine.tensor.red.Min;
 
   private void initializeFreeNodes() {
     IntStream.range(0, xMatch.length).filter(i -> xMatch[i] == UNASSIGNED).forEach(freeX::add);
-    IntStream.range(0, yMatch.length).filter(i -> yMatch[i] == UNASSIGNED).forEach(freeY::add);
   }
 
   private void augmentMatching(int stoppingX, int startingY) {
@@ -72,17 +69,10 @@ import ch.alpine.tensor.red.Min;
       y = hungarianAlgorithmTree.escapeFromX(x);
     } while (x != stoppingX);
     freeX.remove(stoppingX);
-    freeY.remove(startingY);
   }
 
   private boolean isSolved() {
     return freeX.isEmpty();
-  }
-
-  private int pickFreeX() {
-    int x = freeX.stream().findFirst().orElseThrow();
-    hungarianAlgorithmTree.setAlpha(x);
-    return x;
   }
 
   public int iterations() {

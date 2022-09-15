@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
@@ -23,7 +24,9 @@ class OuterProductStreamTest {
   @Test
   void testSpecific() {
     IntStream intStream = OuterProductStream.of(Size.of(Arrays.asList(3, 2, 4)), new int[] { 0, 2, 1 });
-    intStream.forEach(System.out::println);
-    // assertEquals(count, 12);
+    int[] array = intStream.toArray();
+    int[] expect = new int[] { //
+        0, 4, 1, 5, 2, 6, 3, 7, 8, 12, 9, 13, 10, 14, 11, 15, 16, 20, 17, 21, 18, 22, 19, 23 };
+    assertArrayEquals(expect, array);
   }
 }

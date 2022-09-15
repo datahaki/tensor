@@ -34,7 +34,7 @@ public enum InfluenceMatrixQ {
   public static Tensor require(Tensor matrix, Chop chop) {
     if (of(matrix, chop))
       return matrix;
-    throw new Throw(matrix);
+    throw new Throw(matrix, chop);
   }
 
   /** @param matrix

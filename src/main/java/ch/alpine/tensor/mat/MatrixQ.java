@@ -49,6 +49,6 @@ public enum MatrixQ {
   public static Tensor requireSize(Tensor tensor, int rows, int cols) {
     if (ofSize(tensor, rows, cols))
       return tensor;
-    throw new Throw(tensor);
+    throw new Throw(tensor, rows, cols);
   }
 }

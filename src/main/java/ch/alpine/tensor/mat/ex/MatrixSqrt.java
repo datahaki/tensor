@@ -30,6 +30,7 @@ public interface MatrixSqrt {
             .map(Imag.FUNCTION) //
             .allMatch(Scalars::isZero))
       return ofSymmetric(matrix);
+    // TODO TENSOR ALG faster check if symmetric, check if hermitian
     return new DenmanBeaversDet(matrix, Tolerance.CHOP);
   }
 

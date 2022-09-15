@@ -46,7 +46,6 @@ public interface TensorUnaryOperator extends UnaryOperator<Tensor>, Serializable
    * @param tensorUnaryOperators
    * @return operator that nests given operators with execution from left to right
    * @throws Exception if any given operator is null */
-  @SafeVarargs
   static TensorUnaryOperator chain(TensorUnaryOperator... tensorUnaryOperators) {
     return List.of(tensorUnaryOperators).stream() //
         .reduce(IDENTITY, TensorUnaryOperator::andThen);

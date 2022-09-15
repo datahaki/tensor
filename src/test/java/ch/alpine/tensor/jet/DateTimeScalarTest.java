@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +26,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Sign;
 
 class DateTimeScalarTest {
@@ -124,8 +126,34 @@ class DateTimeScalarTest {
   }
 
   @Test
+  void testDTSHi() {
+    DateTimeScalar dts1 = DateTimeScalar.of(LocalDateTime.of(2013, 11, 30, 4, 54, 0, 123_213_678));
+    Scalar scalar1 = dts1.toEpochSecondFloor(ZoneOffset.MIN);
+    Scalar scalar2 = dts1.toEpochSecond(ZoneOffset.MIN);
+    Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
+    assertEquals(scalar1, scalar3);
+    Sign.requirePositive(scalar1);
+    DateTimeScalar dts2 = DateTimeScalar.ofEpochSecond(scalar2, ZoneOffset.MIN);
+    assertEquals(dts1, dts2);
+  }
+
+  @Test
+  void testDTSLo() {
+    DateTimeScalar dts1 = DateTimeScalar.of(LocalDateTime.of(1965, 11, 30, 4, 54, 0, 123_213_678));
+    Scalar scalar1 = dts1.toEpochSecondFloor(ZoneOffset.MAX);
+    Scalar scalar2 = dts1.toEpochSecond(ZoneOffset.MAX);
+    Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
+    assertEquals(scalar1, scalar3);
+    Sign.requirePositive(scalar1.negate());
+    DateTimeScalar dts2 = DateTimeScalar.ofEpochSecond(scalar2, ZoneOffset.MAX);
+    assertEquals(dts1, dts2);
+  }
+
+  @Test
   void testPiHours() {
     DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.of(2013, 11, 30, 4, 54, 0));
+    LocalDateTime localDateTime = dateTimeScalar.localDateTime();
+    assertEquals(localDateTime, LocalDateTime.of(2013, 11, 30, 4, 54, 0));
     Scalar scalar = Quantity.of(Pi.in(30), "h");
     Scalar result = dateTimeScalar.add(scalar);
     assertEquals(result.toString(), "2013-11-30T08:02:29.733552923");
@@ -141,6 +169,19 @@ class DateTimeScalarTest {
     assertEquals(result.toString(), "2013-12-03T08:17:53.605270158");
     Scalar swapin = scalar.add(dateTimeScalar);
     assertEquals(swapin.toString(), "2013-12-03T08:17:53.605270158");
+  }
+
+  @Test
+  void testAdd() {
+    final Scalar delta = Quantity.of(3, "s");
+    DateTimeScalar dateTimeScalar1 = DateTimeScalar.of(LocalDateTime.of(2000, 1, 30, 4, 54, 0));
+    Scalar scalar1 = dateTimeScalar1.add(delta);
+    DateTimeScalar dateTimeScalar2 = DateTimeScalar.of(LocalDateTime.of(2000, 1, 30, 4, 54, 3));
+    assertEquals(scalar1, dateTimeScalar2);
+    Scalar scalar2 = dateTimeScalar2.subtract(delta);
+    assertEquals(scalar2, dateTimeScalar1);
+    Scalar scalar3 = delta.add(dateTimeScalar1);
+    assertEquals(scalar3, dateTimeScalar2);
   }
 
   @Test

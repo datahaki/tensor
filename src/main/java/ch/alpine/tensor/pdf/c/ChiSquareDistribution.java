@@ -11,7 +11,10 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.UnivariateDistribution;
+import ch.alpine.tensor.pdf.MeanInterface;
+import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.RandomVariateInterface;
+import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.gam.LogGamma;
@@ -21,7 +24,8 @@ import ch.alpine.tensor.sca.pow.Power;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ChiSquareDistribution.html">ChiSquareDistribution</a> */
-public class ChiSquareDistribution implements UnivariateDistribution, Serializable {
+public class ChiSquareDistribution implements Distribution, //
+    PDF, RandomVariateInterface, MeanInterface, VarianceInterface, Serializable {
   /** @param nu positive real
    * @return
    * @throws Exception if nu is not positive or not an instance of {@link RealScalar} */
@@ -56,21 +60,7 @@ public class ChiSquareDistribution implements UnivariateDistribution, Serializab
     return RealScalar.ZERO;
   }
 
-  @Override // from CDF
-  public Scalar p_lessThan(Scalar x) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override // from CDF
-  public Scalar p_lessEquals(Scalar x) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    throw new UnsupportedOperationException();
-  }
-
+  // CDF requires GammaRegularized
   @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
     throw new UnsupportedOperationException();

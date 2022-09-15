@@ -29,7 +29,7 @@ public interface PolarDecomposition {
   static PolarDecomposition pu(Tensor matrix) {
     int cols = Unprotect.dimension1Hint(matrix);
     return matrix.length() <= cols //
-        ? new SqrtPu(matrix)
+        ? SqrtPu.of(matrix)
         : PolarDecompositionSvd.pu(matrix);
   }
 
@@ -42,7 +42,7 @@ public interface PolarDecomposition {
   static PolarDecomposition up(Tensor matrix) {
     int cols = Unprotect.dimension1Hint(matrix);
     return matrix.length() <= cols //
-        ? new SqrtUp(matrix)
+        ? SqrtUp.of(matrix)
         : PolarDecompositionSvd.up(matrix);
   }
 

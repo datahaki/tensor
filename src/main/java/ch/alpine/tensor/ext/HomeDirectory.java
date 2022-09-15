@@ -22,7 +22,6 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/string[0]/string[1]/... */
-  @SafeVarargs
   public static File file(String... strings) {
     return concat(USER_HOME, strings);
   }
@@ -32,7 +31,6 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Desktop/string[0]/string[1]/... */
-  @SafeVarargs
   public static File Desktop(String... strings) {
     return subfolder("Desktop", strings);
   }
@@ -42,7 +40,6 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Documents/string[0]/string[1]/... */
-  @SafeVarargs
   public static File Documents(String... strings) {
     return subfolder("Documents", strings);
   }
@@ -52,7 +49,6 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Downloads/string[0]/string[1]/... */
-  @SafeVarargs
   public static File Downloads(String... strings) {
     return subfolder("Downloads", strings);
   }
@@ -62,7 +58,6 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Pictures/string[0]/string[1]/... */
-  @SafeVarargs
   public static File Pictures(String... strings) {
     return subfolder("Pictures", strings);
   }
@@ -72,7 +67,6 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Music/string[0]/string[1]/... */
-  @SafeVarargs
   public static File Music(String... strings) {
     return subfolder("Music", strings);
   }
@@ -82,13 +76,11 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Videos/string[0]/string[1]/... */
-  @SafeVarargs
   public static File Videos(String... strings) {
     return subfolder("Videos", strings);
   }
 
   // helper function
-  @SafeVarargs
   private static File subfolder(String folder, String... strings) {
     File file = file(folder);
     file.mkdir();

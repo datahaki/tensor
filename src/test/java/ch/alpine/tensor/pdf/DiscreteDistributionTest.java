@@ -4,7 +4,8 @@ package ch.alpine.tensor.pdf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
@@ -31,7 +32,7 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Sign;
 
 class DiscreteDistributionTest {
-  static final Distribution[] DISTRIBUTIONS = { //
+  private static final Distribution[] DISTRIBUTIONS = { //
       BernoulliDistribution.of(0.3), //
       BinomialDistribution.of(5, .4), //
       DiscreteUniformDistribution.of(2, 10), //
@@ -44,48 +45,49 @@ class DiscreteDistributionTest {
       PoissonDistribution.of(0.3), //
   };
 
-  @Test
-  void testInverseCDF() {
-    for (Distribution distribution : DISTRIBUTIONS)
-      if (distribution instanceof InverseCDF) {
-        InverseCDF inverseCDF = InverseCDF.of(distribution);
-        Scalar scalar = Median.of(distribution);
-        FiniteScalarQ.require(scalar);
-        IntegerQ.require(scalar);
-        assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-        assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
-        FiniteScalarQ.require(inverseCDF.quantile(RealScalar.ZERO));
-        FiniteScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
-      }
+  private static Distribution[] distributions() {
+    return DISTRIBUTIONS;
   }
 
-  @Test
-  void testInverseCDFIncreasing() {
-    for (Distribution distribution : DISTRIBUTIONS)
-      if (distribution instanceof InverseCDF) {
-        InverseCDF inverseCDF = InverseCDF.of(distribution);
-        Sign.requirePositiveOrZero(InterquartileRange.of(distribution));
-        Scalar lo = inverseCDF.quantile(RationalScalar.of(1, 8));
-        Scalar hi = inverseCDF.quantile(RationalScalar.of(3, 8));
-        assertTrue(Scalars.lessEquals(lo, hi));
-      }
-  }
-
-  @Test
-  void testMean() {
-    for (Distribution distribution : DISTRIBUTIONS) {
-      RandomVariate.of(distribution);
-      Scalar scalar = Mean.of(distribution);
+  @MethodSource("distributions")
+  @ParameterizedTest
+  void testInverseCDF(Distribution distribution) {
+    if (distribution instanceof InverseCDF) {
+      InverseCDF inverseCDF = InverseCDF.of(distribution);
+      Scalar scalar = Median.of(distribution);
       FiniteScalarQ.require(scalar);
+      IntegerQ.require(scalar);
+      assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+      assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
+      FiniteScalarQ.require(inverseCDF.quantile(RealScalar.ZERO));
+      FiniteScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
     }
   }
 
-  @Test
-  void testVariance() {
-    for (Distribution distribution : DISTRIBUTIONS) {
-      Scalar scalar = Variance.of(distribution);
-      FiniteScalarQ.require(scalar);
-      // System.out.println(distribution);
+  @MethodSource("distributions")
+  @ParameterizedTest
+  void testInverseCDFIncreasing(Distribution distribution) {
+    if (distribution instanceof InverseCDF) {
+      InverseCDF inverseCDF = InverseCDF.of(distribution);
+      Sign.requirePositiveOrZero(InterquartileRange.of(distribution));
+      Scalar lo = inverseCDF.quantile(RationalScalar.of(1, 8));
+      Scalar hi = inverseCDF.quantile(RationalScalar.of(3, 8));
+      assertTrue(Scalars.lessEquals(lo, hi));
     }
+  }
+
+  @MethodSource("distributions")
+  @ParameterizedTest
+  void testMean(Distribution distribution) {
+    RandomVariate.of(distribution);
+    Scalar scalar = Mean.of(distribution);
+    FiniteScalarQ.require(scalar);
+  }
+
+  @MethodSource("distributions")
+  @ParameterizedTest
+  void testVariance(Distribution distribution) {
+    Scalar scalar = Variance.of(distribution);
+    FiniteScalarQ.require(scalar);
   }
 }

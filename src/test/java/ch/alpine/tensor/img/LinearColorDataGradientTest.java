@@ -33,6 +33,7 @@ class LinearColorDataGradientTest {
 
   @Test
   void testCornerCaseLo() {
+    LinearColorDataGradient.of(Tensors.fromString("{{255, 255, 255, 255}, {0, 0, 0, 255}}"));
     assertThrows(Throw.class, () -> LinearColorDataGradient.of(Tensors.fromString("{{0, 0, 0, 0}, {-0.1, 0, 0, 0}}")));
   }
 

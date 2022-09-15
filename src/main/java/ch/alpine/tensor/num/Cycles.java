@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
@@ -55,10 +56,16 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return new Cycles(map(check(tensor)));
   }
 
-  /** @param string for instance "{{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}}"
-   * @return */
-  public static Cycles of(String string) {
-    return of(Tensors.fromString(string));
+  // TODO TENSOR API not yet finalized
+  /* package */ static Cycles single(int[] cycle) {
+    IntStream.of(cycle).forEach(Integers::requirePositiveOrZero);
+    if (cycle.length < 2)
+      return IDENTITY;
+    NavigableMap<Integer, Integer> navigableMap = new TreeMap<>();
+    int prev = cycle[cycle.length - 1];
+    for (int next : cycle)
+      navigableMap.put(prev, prev = next);
+    return new Cycles(navigableMap);
   }
 
   /** @return identity permutation corresponding to Cycles[{}] */
