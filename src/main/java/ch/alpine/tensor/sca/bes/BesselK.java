@@ -17,6 +17,7 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.ply.ClenshawChebyshev;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** inspired by
@@ -37,7 +38,7 @@ public enum BesselK {
    * 
    * lim(x->0){ K0(x) + log(x/2) I0(x) } = -EUL. */
   // 10 elements
-  private static final ScalarUnaryOperator A_k0 = ChebyshevClenshaw.forward( //
+  private static final ScalarUnaryOperator A_k0 = ClenshawChebyshev.forward( //
       Clips.interval(0, 4), //
       Tensors.vectorDouble( //
           -0.2676636966169514, //
@@ -56,7 +57,7 @@ public enum BesselK {
    * 
    * lim(x->inf){ exp(x) sqrt(x) K0(x) } = sqrt(pi/2). */
   // 25 elements
-  private static final ScalarUnaryOperator B_k0 = ChebyshevClenshaw.inverse( //
+  private static final ScalarUnaryOperator B_k0 = ClenshawChebyshev.inverse( //
       RealScalar.of(4), //
       Tensors.vectorDouble( //
           1.2201515410329777, //
@@ -111,7 +112,7 @@ public enum BesselK {
    * 
    * lim(x->0){ x(K1(x) - log(x/2) I1(x)) } = 1. */
   // 11 elements
-  private static final ScalarUnaryOperator A_k1 = ChebyshevClenshaw.forward( //
+  private static final ScalarUnaryOperator A_k1 = ClenshawChebyshev.forward( //
       Clips.interval(0, 4), //
       Tensors.vectorDouble( //
           0.7626501136694739, //
@@ -131,7 +132,7 @@ public enum BesselK {
    *
    * lim(x->inf){ exp(x) sqrt(x) K1(x) } = sqrt(pi/2). */
   // 25 elements
-  private static final ScalarUnaryOperator B_k1 = ChebyshevClenshaw.inverse( //
+  private static final ScalarUnaryOperator B_k1 = ClenshawChebyshev.inverse( //
       RealScalar.of(4), //
       Tensors.vectorDouble( //
           1.3603130952422213, //

@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.num;
+package ch.alpine.tensor.sca.ply;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -31,6 +31,8 @@ import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;

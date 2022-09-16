@@ -12,7 +12,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
@@ -28,6 +27,7 @@ import ch.alpine.tensor.pdf.c.RayleighDistribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
+import ch.alpine.tensor.sca.ply.Polynomial;
 
 class StaticHelperTest {
   @Test

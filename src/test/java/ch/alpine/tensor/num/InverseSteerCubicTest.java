@@ -15,6 +15,8 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.ply.Polynomial;
+import ch.alpine.tensor.sca.ply.Roots;
 
 class InverseSteerCubicTest {
   @Test

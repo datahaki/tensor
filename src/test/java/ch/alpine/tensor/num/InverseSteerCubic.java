@@ -5,6 +5,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.sca.ply.Roots;
 
 /** safety critical code used for the gokart steering system */
 /* package */ class InverseSteerCubic implements ScalarUnaryOperator {

@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.num;
+package ch.alpine.tensor.sca.ply;
 
 import java.util.ArrayList;
 import java.util.List;

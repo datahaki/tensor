@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.num;
+package ch.alpine.tensor.sca.ply;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;

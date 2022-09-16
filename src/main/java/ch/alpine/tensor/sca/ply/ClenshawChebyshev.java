@@ -1,5 +1,5 @@
 // adapted from colt by jph
-package ch.alpine.tensor.sca.bes;
+package ch.alpine.tensor.sca.ply;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -45,17 +45,18 @@ import ch.alpine.tensor.sca.Clip;
  * 
  * Reference:
  * https://en.wikipedia.org/wiki/Clenshaw_algorithm */
-public class ChebyshevClenshaw implements ScalarUnaryOperator {
+public class ClenshawChebyshev implements ScalarUnaryOperator {
   /** evaluation of affine combination of Chebyshev polynomials
-   * defined over interval [-1, 1] with coefficients
+   * defined over the interval [-1, 1] with coefficients
    * coeffs == {a, b, c, ...}
-   * that define the weights of T0[x], T1[x], T2[x], ... as
+   * for the basis functions T0[x], T1[x], T2[x], ... that result
+   * in the weighted combination as
    * p[x] == a T0[x] + b T1[x] + c T2[x] + ...
    * 
-   * @param coeffs
+   * @param coeffs vector
    * @return */
   public static ScalarUnaryOperator of(Tensor coeffs) {
-    return new ChebyshevClenshaw(ScalarUnaryOperator.IDENTITY, coeffs);
+    return new ClenshawChebyshev(ScalarUnaryOperator.IDENTITY, coeffs);
   }
 
   public static ScalarUnaryOperator forward(Clip clip, Tensor coef) {
@@ -69,14 +70,14 @@ public class ChebyshevClenshaw implements ScalarUnaryOperator {
   }
 
   private static ScalarUnaryOperator of(ScalarUnaryOperator suo, Tensor _coef) {
-    return new ChebyshevClenshaw(suo, _coef);
+    return new ClenshawChebyshev(suo, _coef);
   }
 
   // ---
   private final ScalarUnaryOperator suo;
   private final Scalar[] a;
 
-  private ChebyshevClenshaw(ScalarUnaryOperator suo, Tensor coeffs) {
+  private ClenshawChebyshev(ScalarUnaryOperator suo, Tensor coeffs) {
     this.suo = suo;
     a = ScalarArray.ofVector(Reverse.of(coeffs));
   }
@@ -86,14 +87,14 @@ public class ChebyshevClenshaw implements ScalarUnaryOperator {
     Scalar x1 = suo.apply(_x);
     Scalar x2 = x1.add(x1);
     int k = 0;
-    Scalar bk2 = RealScalar.ZERO;
-    Scalar bk1 = RealScalar.ZERO;
     Scalar bk0 = a[k++];
+    Scalar bk2 = bk0.zero();
+    Scalar bk1 = bk2;
     for (; k < a.length; ++k) {
       bk2 = bk1;
       bk1 = bk0;
       bk0 = x2.multiply(bk1).subtract(bk2).add(a[k]);
     }
-    return bk0.subtract(bk2).add(a[a.length - 1]).multiply(RationalScalar.HALF);
+    return bk0.subtract(bk2).add(a[--k]).multiply(RationalScalar.HALF);
   }
 }

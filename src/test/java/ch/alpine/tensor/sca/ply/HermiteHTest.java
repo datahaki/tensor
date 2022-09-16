@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.num;
+package ch.alpine.tensor.sca.ply;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

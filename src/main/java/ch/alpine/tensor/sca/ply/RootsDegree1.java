@@ -1,8 +1,9 @@
 // code by jph
-package ch.alpine.tensor.num;
+package ch.alpine.tensor.sca.ply;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.num.GaussScalar;
 
 /** implementation permits coefficients of type {@link GaussScalar} */
 /* package */ enum RootsDegree1 {

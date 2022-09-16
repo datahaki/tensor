@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.num;
+package ch.alpine.tensor.sca.ply;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,6 +9,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Chop;
 
 class RootsDegree2Test {

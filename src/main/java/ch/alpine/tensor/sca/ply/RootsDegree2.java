@@ -1,9 +1,10 @@
 // code by jph
-package ch.alpine.tensor.num;
+package ch.alpine.tensor.sca.ply;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** implementation permits coefficients of type {@link GaussScalar} */
