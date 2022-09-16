@@ -9,7 +9,7 @@ class ChebyshevClenshawTest {
   @Test
   void testI0() {
     double i0 = BesselI._0(2.3).number().doubleValue();
-    assertEquals(i0, 2.8296056006275854);
+    assertEquals(i0, 2.829605600627585);
   }
 
   @Test
@@ -37,7 +37,7 @@ class ChebyshevClenshawTest {
   @Test
   void testK0() {
     double i0 = BesselK._0(2.3).number().doubleValue();
-    assertEquals(i0, 0.07913993300209364); // !
+    assertEquals(i0, 0.07913993300209365); // !
     // ............. 0.07913993300209367
   }
 
