@@ -11,9 +11,18 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Cos;
 
-/** <p>inspired by
+/** Reference:
+ * https://en.wikipedia.org/wiki/Discrete_cosine_transform
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FourierDCTMatrix.html">FourierDCTMatrix</a> */
 public enum FourierDCTMatrix {
+  _1 {
+    @Override
+    public Tensor of(int n) {
+      throw new UnsupportedOperationException();
+    }
+  },
   _2 {
     @Override
     public Tensor of(int n) {
