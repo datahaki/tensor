@@ -16,19 +16,19 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
 
-class FourierDCTMatrixTest {
+class FourierDSTMatrixTest {
   @RepeatedTest(8)
   void test1(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
-    Tensor matrix = FourierDCTMatrix._1.of(n);
+    Tensor matrix = FourierDSTMatrix._1.of(n);
     Tolerance.CHOP.requireClose(matrix, Inverse.of(matrix));
   }
 
   @RepeatedTest(8)
   void test23(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
-    Tensor matrix2 = FourierDCTMatrix._2.of(n);
-    Tensor matrix3 = FourierDCTMatrix._3.of(n);
+    Tensor matrix2 = FourierDSTMatrix._2.of(n);
+    Tensor matrix3 = FourierDSTMatrix._3.of(n);
     Tensor result = matrix2.dot(matrix3);
     Tolerance.CHOP.requireClose(result, IdentityMatrix.of(n));
   }
@@ -36,19 +36,19 @@ class FourierDCTMatrixTest {
   @RepeatedTest(8)
   void test4(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
-    Tensor matrix = FourierDCTMatrix._4.of(n);
+    Tensor matrix = FourierDSTMatrix._4.of(n);
     Tolerance.CHOP.requireClose(matrix, Inverse.of(matrix));
   }
 
   @Test
   void testSpecific() {
-    Scalar scalar = FourierDCTMatrix._2.of(7).Get(5, 6);
-    Tolerance.CHOP.requireClose(scalar, RealScalar.of(-0.2356569943861637));
+    Scalar scalar = FourierDSTMatrix._2.of(7).Get(5, 6);
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(-0.3779644730092272));
   }
 
   @ParameterizedTest
   @EnumSource
-  void testFail(FourierDCTMatrix fourierDCTMatrix) {
-    assertThrows(Exception.class, () -> fourierDCTMatrix.of(0));
+  void testFail(FourierDSTMatrix fourierDSTMatrix) {
+    assertThrows(Exception.class, () -> fourierDSTMatrix.of(0));
   }
 }

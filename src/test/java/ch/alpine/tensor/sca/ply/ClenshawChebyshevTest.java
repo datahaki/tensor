@@ -4,6 +4,8 @@ package ch.alpine.tensor.sca.ply;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -20,15 +22,17 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.bes.BesselI;
 import ch.alpine.tensor.sca.bes.BesselJ;
 import ch.alpine.tensor.sca.bes.BesselK;
 import ch.alpine.tensor.sca.bes.BesselY;
 
 class ClenshawChebyshevTest {
-  @Test
-  void testRandom() {
-    Tensor coeffs = RandomVariate.of(NormalDistribution.standard(), 8);
+  @RepeatedTest(8)
+  void testRandom(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor coeffs = RandomVariate.of(NormalDistribution.standard(), n);
     Scalar x = RandomVariate.of(NormalDistribution.standard());
     ScalarUnaryOperator suo = ClenshawChebyshev.of(coeffs);
     Scalar expect = suo.apply(x);
@@ -38,22 +42,24 @@ class ClenshawChebyshevTest {
     Tolerance.CHOP.requireClose(expect, result);
   }
 
-  @Test
-  void testRandomUnit() {
-    Tensor coeffs = RandomVariate.of(NormalDistribution.standard(), 8).map(s -> Quantity.of(s, "m"));
+  @RepeatedTest(8)
+  void testRandomUnit(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor coeffs = RandomVariate.of(NormalDistribution.standard(), n).map(s -> Quantity.of(s, "m"));
     Scalar x = RandomVariate.of(NormalDistribution.standard());
     ScalarUnaryOperator suo = ClenshawChebyshev.of(coeffs);
     Scalar expect = suo.apply(x);
     Scalar result = Quantity.of(0, "m");
     for (int k = 0; k < coeffs.length(); ++k)
       result = result.add(coeffs.Get(k).multiply(Chebyshev.T.of(k).apply(x)));
-    Tolerance.CHOP.requireClose(expect, result);
+    Chop._08.requireClose(expect, result);
   }
 
-  @Test
-  void testRandomUnitExact() {
+  @RepeatedTest(8)
+  void testRandomUnitExact(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
-    Tensor coeffs = RandomVariate.of(distribution, 7).map(s -> Quantity.of(s, "m"));
+    Tensor coeffs = RandomVariate.of(distribution, n).map(s -> Quantity.of(s, "m"));
     Scalar x = RandomVariate.of(distribution);
     ScalarUnaryOperator suo = ClenshawChebyshev.of(coeffs);
     Scalar expect = suo.apply(x);

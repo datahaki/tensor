@@ -6,7 +6,9 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Cos;
@@ -20,7 +22,18 @@ public enum FourierDCTMatrix {
   _1 {
     @Override
     public Tensor of(int n) {
-      throw new UnsupportedOperationException();
+      if (Integers.requirePositive(n) == 1)
+        return IdentityMatrix.of(1);
+      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(2, n - 1));
+      Tensor matrix = Tensors.empty();
+      matrix.append(ConstantArray.of(RationalScalar.HALF, n));
+      Scalar factor = Pi.VALUE.divide(RealScalar.of(n - 1));
+      for (int i = 1; i < n - 1; ++i) {
+        int fi = i;
+        matrix.append(Tensors.vector(j -> Cos.FUNCTION.apply(factor.multiply(RealScalar.of(fi * j))), n));
+      }
+      matrix.append(Tensors.vector(i -> i % 2 == 0 ? RationalScalar.HALF : RationalScalar.HALF.negate(), n));
+      return matrix.multiply(scalar);
     }
   },
   _2 {
@@ -36,7 +49,7 @@ public enum FourierDCTMatrix {
     @Override
     public Tensor of(int n) {
       Scalar s1 = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
-      Scalar s2 = Sqrt.FUNCTION.apply(RationalScalar.of(4, Integers.requirePositive(n)));
+      Scalar s2 = Sqrt.FUNCTION.apply(RationalScalar.of(4, n));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + n));
       return Tensors.matrix((i, j) -> //
       i == 0 ? s1 : Cos.FUNCTION.apply(RealScalar.of(i * (j + j + 1)).multiply(factor)).multiply(s2), n, n);
