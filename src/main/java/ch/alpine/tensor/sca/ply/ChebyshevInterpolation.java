@@ -11,7 +11,11 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.red.Total;
 
-/** Reference:
+/** References:
+ * "Barycentric Lagrange Interpolation"
+ * by Jean-Paul Berrut, Lloyd N. Trefethen
+ * 
+ * "Barycentric interpolation in Chebyshev points"
  * Trefethen 5.2 eq. 5.13 */
 public class ChebyshevInterpolation implements ScalarUnaryOperator {
   public static ScalarUnaryOperator of(ScalarUnaryOperator function, ChebyshevNodes chebyshevNodes, int n) {
@@ -24,10 +28,12 @@ public class ChebyshevInterpolation implements ScalarUnaryOperator {
     return ClenshawChebyshev.of(coeffs);
   }
 
+  // private final BinaryAverage binaryAverage;
   private final Tensor xv;
   private final Tensor f;
 
   private ChebyshevInterpolation(ScalarUnaryOperator function, ChebyshevNodes chebyshevNodes, int n) {
+    // this.binaryAverage=binaryAverage;
     xv = chebyshevNodes.of(n);
     f = xv.map(function);
   }
@@ -44,6 +50,6 @@ public class ChebyshevInterpolation implements ScalarUnaryOperator {
     }
     weights.set(RationalScalar.HALF::multiply, 0);
     weights.set(RationalScalar.HALF::multiply, weights.length() - 1);
-    return (Scalar) weights.dot(f).divide(Total.ofVector(weights));
+    return (Scalar) weights.divide(Total.ofVector(weights)).dot(f);
   }
 }
