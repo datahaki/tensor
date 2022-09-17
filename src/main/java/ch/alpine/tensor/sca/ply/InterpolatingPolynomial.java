@@ -1,6 +1,6 @@
 // original code by Behzad Torkian
 // adapted to binary averages by jph
-package ch.alpine.tensor.itp;
+package ch.alpine.tensor.sca.ply;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -12,6 +12,8 @@ import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.itp.BinaryAverage;
+import ch.alpine.tensor.itp.LinearBinaryAverage;
 
 /** evaluates polynomial at given point without solving for the coefficients
  * 

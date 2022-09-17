@@ -20,6 +20,7 @@ public enum Chebyshev {
   U(2);
 
   private static final Polynomial _2_X = Polynomial.of(Tensors.vector(0, 2));
+  // ---
   private final List<Polynomial> list = new ArrayList<>();
 
   Chebyshev(int seed) {

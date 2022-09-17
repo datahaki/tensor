@@ -16,7 +16,6 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.fft.FullConvolve;
 import ch.alpine.tensor.io.MathematicaFormat;
-import ch.alpine.tensor.itp.InterpolatingPolynomial;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.pi.LeastSquares;
@@ -74,6 +73,7 @@ public class Polynomial extends HornerScheme {
    * @see InterpolatingPolynomial */
   public static Polynomial fit(Tensor xdata, Tensor ydata, int degree) {
     int excess = Integers.requirePositiveOrZero(xdata.length() - degree - 1);
+    // TODO TENSOR ALG use Chebyshev
     return new Polynomial(truncate(excess == 0 //
         ? LinearSolve.of(VandermondeMatrix.of(xdata), ydata)
         : LeastSquares.of(VandermondeMatrix.of(xdata, degree), ydata), Tolerance.CHOP::isZero));

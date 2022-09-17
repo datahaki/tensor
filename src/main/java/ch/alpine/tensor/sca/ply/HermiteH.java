@@ -17,7 +17,7 @@ import ch.alpine.tensor.ext.Integers;
  * <a href="https://reference.wolfram.com/language/ref/HermiteH.html">HermiteH</a> */
 public enum HermiteH {
   ;
-  private static final Polynomial H1 = Polynomial.of(Tensors.of(RealScalar.ZERO, RealScalar.TWO));
+  private static final Polynomial H1 = Polynomial.of(Tensors.vector(0, 2));
   private static final List<Polynomial> LIST = new ArrayList<>();
   static {
     LIST.add(Polynomial.of(Tensors.of(RealScalar.ONE)));
