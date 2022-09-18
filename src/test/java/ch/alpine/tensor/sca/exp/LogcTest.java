@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.exp;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -35,14 +36,12 @@ class LogcTest {
     return Log.FUNCTION.apply(lambda).divide(den);
   }
 
-  @Test
+  @RepeatedTest(10)
   void testRandom() {
     Distribution distribution = UniformDistribution.of(0, 2e-10);
-    for (int count = 0; count < 100; ++count) {
-      Scalar mu = RealScalar.ONE.add(RandomVariate.of(distribution));
-      Chop._06.requireClose( //
-          Logc.FUNCTION.apply(mu), //
-          RealScalar.ONE);
-    }
+    Scalar mu = RealScalar.ONE.add(RandomVariate.of(distribution));
+    Chop._06.requireClose( //
+        Logc.FUNCTION.apply(mu), //
+        RealScalar.ONE);
   }
 }

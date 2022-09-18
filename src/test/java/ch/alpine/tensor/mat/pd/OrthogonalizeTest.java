@@ -40,7 +40,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
@@ -188,7 +188,7 @@ class OrthogonalizeTest {
     Tensor r1 = Orthogonalize.usingPD(matrix);
     Tolerance.CHOP.requireClose(r1, s1);
     OrthogonalMatrixQ.require(r1);
-    Chop.NONE.requireAllZero(Imag.of(r1));
+    Chop.NONE.requireAllZero(Im.of(r1));
     Tensor s2 = Orthogonalize.usingSvd(s1);
     Tensor r2 = Orthogonalize.usingPD(r1);
     Tolerance.CHOP.requireClose(r1, r2);

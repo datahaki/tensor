@@ -18,8 +18,8 @@ class ConjugateTest {
   void testQuantity1() {
     Scalar scalar = Scalars.fromString("0+0*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
-    assertEquals(Real.of(scalar).toString(), "0[m*s]");
-    assertEquals(Imag.of(scalar).toString(), "0[m*s]");
+    assertEquals(Re.of(scalar).toString(), "0[m*s]");
+    assertEquals(Im.of(scalar).toString(), "0[m*s]");
     assertEquals(Conjugate.of(scalar).toString(), "0[m*s]");
   }
 
@@ -27,8 +27,8 @@ class ConjugateTest {
   void testQuantity2() {
     Scalar scalar = Scalars.fromString("3+5*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
-    assertEquals(Real.of(scalar), Quantity.of(3, "m*s"));
-    assertEquals(Imag.of(scalar), Quantity.of(5, "m*s"));
+    assertEquals(Re.of(scalar), Quantity.of(3, "m*s"));
+    assertEquals(Im.of(scalar), Quantity.of(5, "m*s"));
     assertEquals(Conjugate.of(scalar), Scalars.fromString("3-5*I[m*s]"));
   }
 

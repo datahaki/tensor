@@ -13,7 +13,7 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.tri.Sin;
 
 /** inspired by document by Paul Bourke */
@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.tri.Sin;
     Scalar z = ComplexScalar.of(re, im);
     for (int count = 0; count < MAX_ITERATIONS; ++count) {
       z = Sin.FUNCTION.apply(z).multiply(c);
-      if (Scalars.lessThan(MAX, Abs.of(Imag.of(z))))
+      if (Scalars.lessThan(MAX, Abs.of(Im.of(z))))
         return DoubleScalar.INDETERMINATE;
     }
     return Arg.FUNCTION.apply(z);

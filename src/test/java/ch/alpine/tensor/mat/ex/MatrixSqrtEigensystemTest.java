@@ -23,7 +23,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Sign;
 
 class MatrixSqrtEigensystemTest {
@@ -54,7 +54,7 @@ class MatrixSqrtEigensystemTest {
   void testNegative() {
     Tensor matrix = Tensors.fromString("{{-10[m^2], -2[m^2]}, {-2[m^2], 4[m^2]}}");
     MatrixSqrt matrixSqrt = new MatrixSqrtEigensystem(Eigensystem.ofSymmetric(matrix));
-    assertTrue(Scalars.lessThan(Quantity.of(2, "m"), Matrix2Norm.bound(matrixSqrt.sqrt().map(Imag.FUNCTION))));
+    assertTrue(Scalars.lessThan(Quantity.of(2, "m"), Matrix2Norm.bound(matrixSqrt.sqrt().map(Im.FUNCTION))));
     Tensor eye = Dot.of(matrixSqrt.sqrt(), matrixSqrt.sqrt_inverse());
     Tolerance.CHOP.requireClose(eye, IdentityMatrix.of(2));
   }

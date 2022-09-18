@@ -48,12 +48,11 @@ class RootsTest {
     assertEquals(roots, Array.zeros(2));
   }
 
-  @Test
-  void testUnitVector() {
-    for (int length = 1; length < 10; ++length) {
-      Tensor coeffs = UnitVector.of(length, length - 1);
-      assertEquals(Roots.of(coeffs), Array.zeros(length - 1));
-    }
+  @RepeatedTest(9)
+  void testUnitVector(RepetitionInfo repetitionInfo) {
+    int length = repetitionInfo.getCurrentRepetition();
+    Tensor coeffs = UnitVector.of(length, length - 1);
+    assertEquals(Roots.of(coeffs), Array.zeros(length - 1));
   }
 
   @RepeatedTest(9)

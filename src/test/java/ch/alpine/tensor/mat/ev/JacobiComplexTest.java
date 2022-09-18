@@ -31,7 +31,7 @@ import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 
 class JacobiComplexTest {
   private static void _check(Tensor matrix, Eigensystem eigensystem) {
@@ -54,7 +54,7 @@ class JacobiComplexTest {
     HermitianMatrixQ.require(matrix);
     JacobiComplex jacobiComplex = new JacobiComplex(matrix);
     jacobiComplex.solve();
-    Chop.NONE.requireAllZero(Imag.of(jacobiComplex.values()));
+    Chop.NONE.requireAllZero(Im.of(jacobiComplex.values()));
     Tensor h = Tensors.matrix(jacobiComplex.H);
     Tolerance.CHOP.requireClose(DiagonalMatrix.with(Diagonal.of(h)), h);
     Tolerance.CHOP.requireClose( //

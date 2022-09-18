@@ -12,8 +12,8 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 
 /** Reference:
  * https://en.wikipedia.org/wiki/Discrete_cosine_transform
@@ -34,8 +34,8 @@ public enum FourierDCT {
       int n = vector.length();
       if (Integers.isPowerOf2(n)) {
         Tensor result = raw2(vector);
-        return Chop.NONE.allZero(Imag.of(vector)) //
-            ? Real.of(result)
+        return Chop.NONE.allZero(Im.of(vector)) //
+            ? Re.of(result)
             : result;
       }
       return VectorQ.require(vector).dot(FourierDCTMatrix._2.of(n));
@@ -47,8 +47,8 @@ public enum FourierDCT {
       int n = vector.length();
       if (Integers.isPowerOf2(n)) {
         Tensor result = raw3(vector);
-        return Chop.NONE.allZero(Imag.of(vector)) //
-            ? Real.of(result)
+        return Chop.NONE.allZero(Im.of(vector)) //
+            ? Re.of(result)
             : result;
       }
       return VectorQ.require(vector).dot(FourierDCTMatrix._3.of(n));

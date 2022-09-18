@@ -20,7 +20,7 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 
 class RootsDegree3Test {
   @Test
@@ -30,7 +30,7 @@ class RootsDegree3Test {
     Tensor coeffs = Tensors.of(RealScalar.ZERO, c, RealScalar.ZERO, a);
     ScalarUnaryOperator cubic = Polynomial.of(coeffs);
     Tensor roots = Roots.of(Tensors.of(RealScalar.ZERO, c, RealScalar.ZERO, a));
-    Chop.NONE.requireAllZero(Imag.of(roots));
+    Chop.NONE.requireAllZero(Im.of(roots));
     Chop._13.requireAllZero(roots.get(1));
     Chop._13.requireAllZero(roots.map(cubic));
   }

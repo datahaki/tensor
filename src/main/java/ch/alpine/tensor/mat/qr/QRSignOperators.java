@@ -4,7 +4,7 @@ package ch.alpine.tensor.mat.qr;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Sign;
 
 public enum QRSignOperators implements QRSignOperator {
@@ -33,7 +33,7 @@ public enum QRSignOperators implements QRSignOperator {
   ORIENTATION {
     @Override // from QRSignOperator
     public Scalar sign(Scalar xk) {
-      return Scalars.isZero(Imag.FUNCTION.apply(xk)) //
+      return Scalars.isZero(Im.FUNCTION.apply(xk)) //
           ? RealScalar.ONE
           : STABILITY.sign(xk).negate();
     }

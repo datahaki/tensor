@@ -26,8 +26,8 @@ import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -67,12 +67,12 @@ class ComplexScalarImplTest {
   @Test
   void testMultiply() {
     Scalar c = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
-    assertEquals(Real.of(c), RealScalar.of(2));
-    assertEquals(Imag.of(c), RationalScalar.of(5, 8));
+    assertEquals(Re.of(c), RealScalar.of(2));
+    assertEquals(Im.of(c), RationalScalar.of(5, 8));
     assertEquals(Abs.of(c), Vector2Norm.of(Tensors.of(RealScalar.of(2), RationalScalar.of(5, 8))));
     Scalar r = RealScalar.of(-6);
-    assertEquals(Real.of(r), r);
-    assertEquals(Imag.of(r), RealScalar.ZERO);
+    assertEquals(Re.of(r), r);
+    assertEquals(Im.of(r), RealScalar.ZERO);
     Scalar r2 = RealScalar.of(6);
     assertEquals(r.multiply(c).toString(), "-12-15/4*I");
     assertEquals(c.multiply(r).toString(), "-12-15/4*I");

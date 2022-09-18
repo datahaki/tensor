@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 
 /* package */ class SqrtUp extends PolarDecompositionSqrt {
   /** @param matrix
@@ -15,7 +15,7 @@ import ch.alpine.tensor.sca.Imag;
     Tensor square = ConjugateTranspose.of(matrix).dot(matrix);
     boolean isReal = square.flatten(-1) //
         .map(Scalar.class::cast) //
-        .map(Imag.FUNCTION) //
+        .map(Im.FUNCTION) //
         .allMatch(Scalars::isZero);
     MatrixSqrt matrixSqrt = isReal //
         ? MatrixSqrt.ofSymmetric(square)

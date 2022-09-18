@@ -22,9 +22,9 @@ import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -281,8 +281,8 @@ class DecimalScalarTest {
     Scalar sc1 = DecimalScalar.of(BigDecimal.ONE);
     DecimalScalar sc2 = (DecimalScalar) sc1.add(sc1).negate();
     Scalar root2 = Sqrt.FUNCTION.apply(sc2);
-    assertEquals(Real.of(root2), RealScalar.ZERO);
-    assertTrue(Imag.of(root2).toString().startsWith(expected));
+    assertEquals(Re.of(root2), RealScalar.ZERO);
+    assertTrue(Im.of(root2).toString().startsWith(expected));
   }
 
   @Test

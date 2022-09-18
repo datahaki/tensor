@@ -17,17 +17,17 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.StringScalar;
 
-class ImagTest {
+class ImTest {
   @Test
   void testExact() {
-    Scalar scalar = Imag.FUNCTION.apply(Scalars.fromString("3+I*6/7"));
+    Scalar scalar = Im.FUNCTION.apply(Scalars.fromString("3+I*6/7"));
     assertEquals(scalar, RationalScalar.of(6, 7));
     ExactScalarQ.require(scalar);
   }
 
   @Test
   void testTensorExact() {
-    Tensor tensor = Imag.of(Tensors.fromString("{{3+I*6/7, 5*I}, 2, {}}"));
+    Tensor tensor = Im.of(Tensors.fromString("{{3+I*6/7, 5*I}, 2, {}}"));
     assertEquals(tensor, Tensors.fromString("{{6/7, 5}, 0, {}}"));
     ExactTensorQ.require(tensor);
   }
@@ -53,6 +53,6 @@ class ImagTest {
   @Test
   void testFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(Throw.class, () -> Imag.of(scalar));
+    assertThrows(Throw.class, () -> Im.of(scalar));
   }
 }

@@ -15,8 +15,8 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -112,12 +112,12 @@ import ch.alpine.tensor.sca.pow.Sqrt;
         R1_2.multiply(s2).add(_1_3.multiply(s3)), //
         R2_2.multiply(s2).add(R2_3.multiply(s3)), //
         R3_2.multiply(s2).add(R3_3.multiply(s3)));
-    boolean isReal = Stream.of(d, c, a).map(Imag.FUNCTION).allMatch(Scalars::isZero);
+    boolean isReal = Stream.of(d, c, a).map(Im.FUNCTION).allMatch(Scalars::isZero);
     if (isReal) {
       if (Sign.isNegativeOrZero(Dn)) { // discriminant
         // positive: the equation has three distinct real roots
         // zero: the equation has a multiple root and all of its roots are real
-        return Real.of(roots);
+        return Re.of(roots);
       }
       // the equation has one real root and two non-real complex conjugate roots
     }

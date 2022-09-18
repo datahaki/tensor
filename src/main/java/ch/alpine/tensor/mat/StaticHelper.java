@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Re;
 
 /* package */ enum StaticHelper {
   ;
@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.Real;
     return SquareMatrixQ.of(tensor) //
         && CholeskyDecomposition.of(tensor).diagonal().stream() //
             .map(Scalar.class::cast) //
-            .map(Real.FUNCTION) //
+            .map(Re.FUNCTION) //
             .map(chop) //
             .allMatch(predicate);
   }

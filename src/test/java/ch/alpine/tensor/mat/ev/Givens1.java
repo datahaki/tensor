@@ -7,14 +7,14 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 record Givens1(int n, Scalar theta, int p, int q) {
 
   private static final Scalar SQRT2 = Sqrt.FUNCTION.apply(RealScalar.TWO);
   public Tensor matrix() {
-    Chop.NONE.requireZero(Imag.FUNCTION.apply(theta));
+    Chop.NONE.requireZero(Im.FUNCTION.apply(theta));
     Tensor tensor = IdentityMatrix.of(n);
     {
       Scalar t_n = ComplexScalar.unit(theta.negate()); // Exp[I*theta]

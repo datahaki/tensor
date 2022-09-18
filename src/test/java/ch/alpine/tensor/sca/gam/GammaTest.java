@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -14,7 +16,6 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -23,10 +24,10 @@ import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Chop;
 
 class GammaTest {
-  @Test
-  void testFactorial() {
-    for (int index = 0; index < 20; ++index)
-      assertEquals(Gamma.of(RealScalar.of(index + 1)), Factorial.of(RealScalar.of(index)));
+  @RepeatedTest(20)
+  void testFactorial(RepetitionInfo repetitionInfo) {
+    int index = repetitionInfo.getCurrentRepetition();
+    assertEquals(Gamma.of(RealScalar.of(index)), Factorial.of(RealScalar.of(index - 1)));
   }
 
   @Test
@@ -106,17 +107,18 @@ class GammaTest {
 
   @Test
   void testNest1() {
-    Scalar seed = Scalars.fromString("-1.0894117647058823-0.07745098039215685*I");
+    Scalar seed = ComplexScalar.of(-1.0894117647058823, -0.07745098039215685);
     seed = Nest.of(Gamma.FUNCTION, seed, 3);
     // Mathematica gives
     // -4.371039232490273`*^-18 + 1.9336913999047586`*^-17 I
+    // TODO TENSOR
     // System.out.println(seed);
     // assertTrue(Chop._50.allZero(seed));
   }
 
   @Test
   void testNest2() {
-    Scalar seed = Scalars.fromString("-1.0486274509803923-0.028431372549019604*I");
+    Scalar seed = ComplexScalar.of(-1.0486274509803923, -0.028431372549019604);
     seed = Gamma.of(seed);
     seed = Gamma.of(seed);
     seed = Gamma.of(seed);

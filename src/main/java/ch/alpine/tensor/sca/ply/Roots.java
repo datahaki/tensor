@@ -9,8 +9,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 
 /** Not entirely consistent with Mathematica for the case
  * Mathematica::Roots[a == 0, x] == false
@@ -73,9 +73,9 @@ public enum Roots {
 
     @Override // from Comparator
     public int compare(Scalar scalar1, Scalar scalar2) {
-      int cmp = Scalars.compare(Real.of(scalar1), Real.of(scalar2));
+      int cmp = Scalars.compare(Re.of(scalar1), Re.of(scalar2));
       return cmp == 0 //
-          ? Scalars.compare(Imag.of(scalar1), Imag.of(scalar2))
+          ? Scalars.compare(Im.of(scalar1), Im.of(scalar2))
           : cmp;
     }
   }

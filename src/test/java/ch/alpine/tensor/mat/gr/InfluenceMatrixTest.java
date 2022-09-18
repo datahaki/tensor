@@ -51,7 +51,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 
 class InfluenceMatrixTest {
   private static void _check(InfluenceMatrix influenceMatrix) throws ClassNotFoundException, IOException {
@@ -211,7 +211,7 @@ class InfluenceMatrixTest {
   void testComplex5x3() {
     Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 5, 3);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(5));
+    assertEquals(Im.of(influenceMatrix.leverages()), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();
     InfluenceMatrixQ.require(matrix);
     Eigensystem eigensystem = Eigensystem.ofHermitian(matrix);
@@ -225,7 +225,7 @@ class InfluenceMatrixTest {
     Tensor im = RandomVariate.of(distribution, 5, 3);
     Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im).map(Rationalize._5);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(5));
+    assertEquals(Im.of(influenceMatrix.leverages()), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();
     InfluenceMatrixQ.require(matrix);
     ExactTensorQ.require(matrix);
@@ -235,7 +235,7 @@ class InfluenceMatrixTest {
   void testComplex3x5() {
     Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 3, 5);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(3));
+    assertEquals(Im.of(influenceMatrix.leverages()), Array.zeros(3));
     Tensor matrix = influenceMatrix.matrix();
     assertTrue(HermitianMatrixQ.of(matrix));
     InfluenceMatrixQ.require(matrix);
@@ -245,7 +245,7 @@ class InfluenceMatrixTest {
   void testComplex3x5Exact() {
     Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 3, 5).map(Rationalize._5);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(3));
+    assertEquals(Im.of(influenceMatrix.leverages()), Array.zeros(3));
     Tensor matrix = influenceMatrix.matrix();
     InfluenceMatrixQ.require(matrix);
     ExactTensorQ.require(matrix);

@@ -16,7 +16,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 
 class FourierDCTTest {
   @Test
@@ -43,10 +43,10 @@ class FourierDCTTest {
     Tensor result = FourierDCT._2.of(vector);
     Tensor expect = Tensors.vector(1.1443215774096442, -0.2621599159963177, 0.04698862977522844, -0.3688153586988667);
     Tolerance.CHOP.requireClose(expect, result);
-    Chop.NONE.requireAllZero(Imag.of(result));
+    Chop.NONE.requireAllZero(Im.of(result));
     Tensor raw3 = FourierDCT._3.of(result);
     Tolerance.CHOP.requireClose(raw3, vector);
-    Chop.NONE.requireAllZero(Imag.of(raw3));
+    Chop.NONE.requireAllZero(Im.of(raw3));
   }
 
   @Test
@@ -63,7 +63,7 @@ class FourierDCTTest {
   void testRawRandom(RepetitionInfo repetitionInfo) {
     Tensor vector = RandomVariate.of(NormalDistribution.standard(), 1 << repetitionInfo.getCurrentRepetition());
     Tensor result = FourierDCT.raw2(vector);
-    Tolerance.CHOP.requireAllZero(Imag.of(result));
+    Tolerance.CHOP.requireAllZero(Im.of(result));
     Tensor backto = FourierDCT.raw3(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }
@@ -73,7 +73,7 @@ class FourierDCTTest {
     Distribution distribution = UniformDistribution.of(Clips.absolute(Quantity.of(3, "m")));
     Tensor vector = RandomVariate.of(distribution, repetitionInfo.getCurrentRepetition());
     Tensor result = FourierDCT._2.of(vector);
-    Tolerance.CHOP.requireAllZero(Imag.of(result));
+    Tolerance.CHOP.requireAllZero(Im.of(result));
     Tensor backto = FourierDCT._3.of(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }

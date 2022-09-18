@@ -8,7 +8,7 @@ import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 
 /** The tensor library provides two algorithms to compute the square root of a
  * matrix. The first algorithm is restricted to real symmetric matrices. The
@@ -27,7 +27,7 @@ public interface MatrixSqrt {
     if (SymmetricMatrixQ.of(matrix) && //
         matrix.flatten(1) //
             .map(Scalar.class::cast) //
-            .map(Imag.FUNCTION) //
+            .map(Im.FUNCTION) //
             .allMatch(Scalars::isZero))
       return ofSymmetric(matrix);
     // TODO TENSOR ALG faster check if symmetric, check if hermitian

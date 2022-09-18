@@ -6,12 +6,12 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.ev.JacobiComplex.GivensComplex;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 
 record Givens2(int n, Scalar theta1, Scalar theta2, int p, int q) {
   public Tensor matrix() {
-    Chop.NONE.requireZero(Imag.FUNCTION.apply(theta1));
-    Chop.NONE.requireZero(Imag.FUNCTION.apply(theta2));
+    Chop.NONE.requireZero(Im.FUNCTION.apply(theta1));
+    Chop.NONE.requireZero(Im.FUNCTION.apply(theta2));
     Tensor tensor = IdentityMatrix.of(n);
     GivensComplex givensComplex = new JacobiComplex(tensor).new GivensComplex(theta1, theta2);
     tensor.set(givensComplex.rpp, p, p);
@@ -22,8 +22,8 @@ record Givens2(int n, Scalar theta1, Scalar theta2, int p, int q) {
   }
 
   public Tensor inverse() {
-    Chop.NONE.requireZero(Imag.FUNCTION.apply(theta1));
-    Chop.NONE.requireZero(Imag.FUNCTION.apply(theta2));
+    Chop.NONE.requireZero(Im.FUNCTION.apply(theta1));
+    Chop.NONE.requireZero(Im.FUNCTION.apply(theta2));
     Tensor tensor = IdentityMatrix.of(n);
     GivensComplexInv givensComplex = new GivensComplexInv(theta1, theta2);
     tensor.set(givensComplex.rpp, p, p);

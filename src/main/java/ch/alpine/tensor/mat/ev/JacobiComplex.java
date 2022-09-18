@@ -10,8 +10,8 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Sin;
@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.tri.Sin;
     super(matrix);
     // remove any imaginary part on diagonal after check that hermitian numerical
     for (int p = 0; p < n; ++p)
-      H[p][p] = Real.FUNCTION.apply(H[p][p]);
+      H[p][p] = Re.FUNCTION.apply(H[p][p]);
   }
 
   @Override // from JacobiMethod
@@ -59,8 +59,8 @@ import ch.alpine.tensor.sca.tri.Sin;
     /** @param theta1
      * @param theta2 */
     GivensComplex(Scalar theta1, Scalar theta2) {
-      Chop.NONE.requireZero(Imag.FUNCTION.apply(theta1));
-      Chop.NONE.requireZero(Imag.FUNCTION.apply(theta2));
+      Chop.NONE.requireZero(Im.FUNCTION.apply(theta1));
+      Chop.NONE.requireZero(Im.FUNCTION.apply(theta2));
       Scalar cos = Cos.FUNCTION.apply(theta2);
       Scalar sin = Sin.FUNCTION.apply(theta2);
       rpp = ComplexScalar.unit(theta1.negate()).multiply(ComplexScalar.I).negate().multiply(sin);
@@ -94,8 +94,8 @@ import ch.alpine.tensor.sca.tri.Sin;
       H[q][p] = H[q][p].zero();
       // Tolerance.CHOP.requireZero(Imag.FUNCTION.apply(H[p][p])); // dev check
       // Tolerance.CHOP.requireZero(Imag.FUNCTION.apply(H[q][q])); // dev check
-      H[p][p] = Real.FUNCTION.apply(H[p][p]);
-      H[q][q] = Real.FUNCTION.apply(H[q][q]);
+      H[p][p] = Re.FUNCTION.apply(H[p][p]);
+      H[q][q] = Re.FUNCTION.apply(H[q][q]);
     }
 
     @Override // from GivensRotation

@@ -60,7 +60,7 @@ class ScalarUnaryOperatorsTest {
       Fresnel.FUNCTION, //
       Gamma.FUNCTION, //
       Gudermannian.FUNCTION, //
-      Imag.FUNCTION, //
+      Im.FUNCTION, //
       RealScalar.ONE::add, //
       InvertUnlessZero.FUNCTION, //
       Log.FUNCTION, //
@@ -73,7 +73,7 @@ class ScalarUnaryOperatorsTest {
       N.DECIMAL64, //
       Power.function(3), //
       Ramp.FUNCTION, //
-      Real.FUNCTION, //
+      Re.FUNCTION, //
       Round.FUNCTION, //
       Sign.FUNCTION, //
       Sin.FUNCTION, //

@@ -5,8 +5,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 
 /** <pre>
  * Erfi[z] == -I * Erf[I z]
@@ -21,8 +21,8 @@ public enum Erfi implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar z) {
-    Scalar re = Real.FUNCTION.apply(z);
-    Scalar im = Imag.FUNCTION.apply(z);
+    Scalar re = Re.FUNCTION.apply(z);
+    Scalar im = Im.FUNCTION.apply(z);
     return I_NEGATE.multiply(Erf.FUNCTION.apply(ComplexScalar.of(im.negate(), re)));
   }
 
