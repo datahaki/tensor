@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -44,6 +45,14 @@ class FourierDCTMatrixTest {
   void testSpecific() {
     Scalar scalar = FourierDCTMatrix._2.of(7).Get(5, 6);
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(-0.2356569943861637));
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testFromResource(FourierDCTMatrix fourierDCTMatrix) {
+    Tensor expect = ResourceData.of("/ch/alpine/tensor/fft/dctmatrix" + fourierDCTMatrix + ".csv");
+    Tensor actual = fourierDCTMatrix.of(5);
+    Tolerance.CHOP.requireClose(expect, actual);
   }
 
   @ParameterizedTest

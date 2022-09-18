@@ -23,8 +23,7 @@ class ArcCosTest {
   void testRealOutside() {
     Scalar s = RealScalar.of(3);
     Scalar r = ArcCos.of(s);
-    // 1.7627471740390860505 I
-    assertEquals(r, Scalars.fromString("0+1.7627471740390872*I"));
+    assertEquals(r, ComplexScalar.of(0, +1.7627471740390872));
   }
 
   @Test
@@ -32,8 +31,7 @@ class ArcCosTest {
     Scalar s = RealScalar.of(-3);
     Scalar r = ArcCos.of(s);
     assertEquals(r, ArcCos.of(s));
-    // 3.1415926535897932385 - 1.7627471740390860505 I
-    Chop._14.requireClose(r, Scalars.fromString("3.141592653589793-1.762747174039086*I"));
+    Chop._14.requireClose(r, ComplexScalar.of(3.141592653589793, -1.762747174039086));
   }
 
   @Test
@@ -50,6 +48,6 @@ class ArcCosTest {
     // _14 is insufficient on aarch64
     // aarch64: 0.9537320301188748+2.8462888282083836*I
     // x86_64 : 0.9537320301188659+2.846288828208396*I
-    Tolerance.CHOP.requireClose(r, Scalars.fromString("0.9537320301188659+2.846288828208396*I"));
+    Tolerance.CHOP.requireClose(r, ComplexScalar.of(0.9537320301188659, +2.846288828208396));
   }
 }

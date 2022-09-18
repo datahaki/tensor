@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -54,152 +56,151 @@ class RootsTest {
     }
   }
 
-  @Test
-  void testUnitVectorPlus() {
-    for (int length = 1; length < 10; ++length) {
-      Tensor coeffs = UnitVector.of(length + 3, length - 1);
-      assertEquals(Roots.of(coeffs), Array.zeros(length - 1));
+  @RepeatedTest(9)
+  void testUnitVectorPlus(RepetitionInfo repetitionInfo) {
+    int length = repetitionInfo.getCurrentRepetition();
+    Tensor coeffs = UnitVector.of(length + 3, length - 1);
+    assertEquals(Roots.of(coeffs), Array.zeros(length - 1));
+  }
+
+  @RepeatedTest(4)
+  void testUniform5(RepetitionInfo repetitionInfo) {
+    Distribution distribution = UniformDistribution.of(-5, 5);
+    int length = repetitionInfo.getCurrentRepetition();
+    for (int index = 0; index < LIMIT; ++index) {
+      Tensor coeffs = RandomVariate.of(distribution, length);
+      if (Scalars.nonZero(Last.of(coeffs))) {
+        Tensor roots = Roots.of(coeffs);
+        VectorQ.requireLength(roots, length - 1);
+        Tensor check = roots.map(Polynomial.of(coeffs));
+        if (!Chop._03.allZero(check)) {
+          System.err.println("uni5 " + coeffs);
+          System.err.println(check);
+          fail();
+        }
+      } else
+        System.out.println("skip " + coeffs);
     }
   }
 
-  @Test
-  void testUniform5() {
-    Distribution distribution = UniformDistribution.of(-5, 5);
-    for (int length = 1; length <= 4; ++length)
-      for (int index = 0; index < LIMIT; ++index) {
-        Tensor coeffs = RandomVariate.of(distribution, length);
-        if (Scalars.nonZero(Last.of(coeffs))) {
-          Tensor roots = Roots.of(coeffs);
-          VectorQ.requireLength(roots, length - 1);
-          Tensor check = roots.map(Polynomial.of(coeffs));
-          if (!Chop._03.allZero(check)) {
-            System.err.println("uni5 " + coeffs);
-            System.err.println(check);
-            fail();
-          }
-        } else
-          System.out.println("skip " + coeffs);
-      }
-  }
-
-  @Test
-  void testUniform10() {
+  @RepeatedTest(4)
+  void testUniform10(RepetitionInfo repetitionInfo) {
     Distribution distribution = UniformDistribution.of(-10, 10);
-    for (int length = 1; length <= 4; ++length)
-      for (int index = 0; index < LIMIT; ++index) {
-        Tensor coeffs = RandomVariate.of(distribution, length);
-        if (Scalars.nonZero(Last.of(coeffs))) {
-          Tensor roots = Roots.of(coeffs);
-          VectorQ.requireLength(roots, length - 1);
-          Tensor check = roots.map(Polynomial.of(coeffs));
-          if (!Chop._03.allZero(check)) {
-            System.err.println("uniT " + coeffs);
-            System.err.println(check);
-            fail();
-          }
-        } else
-          System.out.println("skip " + coeffs);
-      }
-  }
-
-  @Test
-  void testNormal() {
-    Distribution distribution = NormalDistribution.of(0, 0.3);
-    for (int length = 1; length <= 4; ++length)
-      for (int index = 0; index < LIMIT; ++index) {
-        Tensor coeffs = RandomVariate.of(distribution, length);
+    int length = repetitionInfo.getCurrentRepetition();
+    for (int index = 0; index < LIMIT; ++index) {
+      Tensor coeffs = RandomVariate.of(distribution, length);
+      if (Scalars.nonZero(Last.of(coeffs))) {
         Tensor roots = Roots.of(coeffs);
+        VectorQ.requireLength(roots, length - 1);
         Tensor check = roots.map(Polynomial.of(coeffs));
-        Chop._04.requireAllZero(check);
-      }
-  }
-
-  @Test
-  void testRandomReal() {
-    Distribution distribution = NormalDistribution.standard();
-    for (int length = 1; length <= 4; ++length)
-      for (int index = 0; index < LIMIT; ++index) {
-        Tensor coeffs = RandomVariate.of(distribution, length);
-        Tensor roots = Roots.of(coeffs);
-        ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
-        Tensor tensor = roots.map(scalarUnaryOperator);
-        boolean allZero = Chop._04.allZero(tensor);
-        if (!allZero) {
-          System.err.println(coeffs);
-          System.err.println(tensor);
-        }
-        assertTrue(allZero);
-      }
-  }
-
-  @Test
-  void testRandomRealQuantity() {
-    Distribution distribution = NormalDistribution.standard();
-    for (int length = 1; length <= 4; ++length)
-      for (int index = 0; index < LIMIT; ++index) {
-        Tensor coeffs = Array.of(list -> Quantity.of(RandomVariate.of(distribution), "m^-" + list.get(0)), length);
-        Tensor roots = Roots.of(coeffs);
-        ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
-        Tensor tensor = roots.map(scalarUnaryOperator);
-        boolean allZero = Chop._04.allZero(tensor);
-        if (!allZero) {
-          System.err.println(coeffs);
-          System.err.println(tensor);
-        }
-        assertTrue(allZero);
-      }
-  }
-
-  @Test
-  void testRandomComplex() {
-    for (int length = 1; length <= 4; ++length)
-      for (int index = 0; index < LIMIT; ++index) {
-        Tensor coeffs = RandomVariate.of(ComplexNormalDistribution.STANDARD, length);
-        Tensor roots = Roots.of(coeffs);
-        ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
-        Tensor tensor = roots.map(scalarUnaryOperator);
-        boolean allZero = Chop._04.allZero(tensor);
-        if (!allZero) {
-          System.err.println(coeffs);
-          System.err.println(tensor);
-        }
-        assertTrue(allZero);
-      }
-  }
-
-  @Test
-  void testRandomComplexQuantity() {
-    Distribution distribution = NormalDistribution.standard();
-    for (int length = 1; length <= 4; ++length)
-      for (int index = 0; index < LIMIT; ++index) {
-        Tensor coeffs = Array.of(list -> Quantity.of(ComplexScalar.of( //
-            RandomVariate.of(distribution), RandomVariate.of(distribution)), "m^-" + list.get(0)), length);
-        Tensor roots = Roots.of(coeffs);
-        ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
-        Tensor tensor = roots.map(scalarUnaryOperator);
-        boolean allZero = Chop._04.allZero(tensor);
-        if (!allZero) {
-          System.err.println(coeffs);
-          System.err.println(tensor);
-        }
-        assertTrue(allZero);
-      }
-  }
-
-  @Test
-  void testRealUniqueRoots() {
-    Distribution distribution = NormalDistribution.standard();
-    for (int length = 1; length <= 3; ++length)
-      for (int index = 0; index < LIMIT; ++index) {
-        Tensor roots = Sort.of(RandomVariate.of(distribution, length));
-        Tensor solve = Roots.of(CoefficientList.of(roots));
-        if (!Chop._03.isClose(roots, solve)) {
-          System.err.println("real unique");
-          System.err.println(roots);
-          System.err.println(solve);
+        if (!Chop._03.allZero(check)) {
+          System.err.println("uniT " + coeffs);
+          System.err.println(check);
           fail();
         }
+      } else
+        System.out.println("skip " + coeffs);
+    }
+  }
+
+  @RepeatedTest(4)
+  void testNormal(RepetitionInfo repetitionInfo) {
+    Distribution distribution = NormalDistribution.of(0, 0.3);
+    int length = repetitionInfo.getCurrentRepetition();
+    for (int index = 0; index < LIMIT; ++index) {
+      Tensor coeffs = RandomVariate.of(distribution, length);
+      Tensor roots = Roots.of(coeffs);
+      Tensor check = roots.map(Polynomial.of(coeffs));
+      Chop._04.requireAllZero(check);
+    }
+  }
+
+  @RepeatedTest(4)
+  void testRandomReal(RepetitionInfo repetitionInfo) {
+    Distribution distribution = NormalDistribution.standard();
+    int length = repetitionInfo.getCurrentRepetition();
+    for (int index = 0; index < LIMIT; ++index) {
+      Tensor coeffs = RandomVariate.of(distribution, length);
+      Tensor roots = Roots.of(coeffs);
+      ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
+      Tensor tensor = roots.map(scalarUnaryOperator);
+      boolean allZero = Chop._04.allZero(tensor);
+      if (!allZero) {
+        System.err.println(coeffs);
+        System.err.println(tensor);
       }
+      assertTrue(allZero);
+    }
+  }
+
+  @RepeatedTest(4)
+  void testRandomRealQuantity(RepetitionInfo repetitionInfo) {
+    Distribution distribution = NormalDistribution.standard();
+    int length = repetitionInfo.getCurrentRepetition();
+    for (int index = 0; index < LIMIT; ++index) {
+      Tensor coeffs = Array.of(list -> Quantity.of(RandomVariate.of(distribution), "m^-" + list.get(0)), length);
+      Tensor roots = Roots.of(coeffs);
+      ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
+      Tensor tensor = roots.map(scalarUnaryOperator);
+      boolean allZero = Chop._04.allZero(tensor);
+      if (!allZero) {
+        System.err.println(coeffs);
+        System.err.println(tensor);
+      }
+      assertTrue(allZero);
+    }
+  }
+
+  @RepeatedTest(4)
+  void testRandomComplex(RepetitionInfo repetitionInfo) {
+    int length = repetitionInfo.getCurrentRepetition();
+    for (int index = 0; index < LIMIT; ++index) {
+      Tensor coeffs = RandomVariate.of(ComplexNormalDistribution.STANDARD, length);
+      Tensor roots = Roots.of(coeffs);
+      ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
+      Tensor tensor = roots.map(scalarUnaryOperator);
+      boolean allZero = Chop._04.allZero(tensor);
+      if (!allZero) {
+        System.err.println(coeffs);
+        System.err.println(tensor);
+      }
+      assertTrue(allZero);
+    }
+  }
+
+  @RepeatedTest(4)
+  void testRandomComplexQuantity(RepetitionInfo repetitionInfo) {
+    Distribution distribution = NormalDistribution.standard();
+    int length = repetitionInfo.getCurrentRepetition();
+    for (int index = 0; index < LIMIT; ++index) {
+      Tensor coeffs = Array.of(list -> Quantity.of(ComplexScalar.of( //
+          RandomVariate.of(distribution), RandomVariate.of(distribution)), "m^-" + list.get(0)), length);
+      Tensor roots = Roots.of(coeffs);
+      ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
+      Tensor tensor = roots.map(scalarUnaryOperator);
+      boolean allZero = Chop._04.allZero(tensor);
+      if (!allZero) {
+        System.err.println(coeffs);
+        System.err.println(tensor);
+      }
+      assertTrue(allZero);
+    }
+  }
+
+  @RepeatedTest(3)
+  void testRealUniqueRoots(RepetitionInfo repetitionInfo) {
+    Distribution distribution = NormalDistribution.standard();
+    int length = repetitionInfo.getCurrentRepetition();
+    for (int index = 0; index < LIMIT; ++index) {
+      Tensor roots = Sort.of(RandomVariate.of(distribution, length));
+      Tensor solve = Roots.of(CoefficientList.of(roots));
+      if (!Chop._03.isClose(roots, solve)) {
+        System.err.println("real unique");
+        System.err.println(roots);
+        System.err.println(solve);
+        fail();
+      }
+    }
   }
 
   @Test

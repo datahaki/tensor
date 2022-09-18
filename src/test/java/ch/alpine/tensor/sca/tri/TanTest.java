@@ -10,7 +10,6 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.sca.Chop;
@@ -28,7 +27,7 @@ class TanTest {
   @Test
   void testComplex() {
     Scalar c = Tan.of(ComplexScalar.of(2, 3.));
-    Scalar s = Scalars.fromString("-0.0037640256415042484 + 1.0032386273536098*I"); // Mathematica
+    Scalar s = ComplexScalar.of(-0.0037640256415042484, 1.0032386273536098);
     Chop._15.requireClose(s, c);
   }
 

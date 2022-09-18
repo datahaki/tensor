@@ -7,6 +7,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.fft.FourierDCT;
+import ch.alpine.tensor.fft.FourierDCTMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.tri.Cos;
 
@@ -14,7 +16,10 @@ import ch.alpine.tensor.sca.tri.Cos;
 public enum ChebyshevNodes {
   /** k/n */
   _0,
-  /** (2k+1)/(2n) */
+  /** (2k+1)/(2n)
+   * 
+   * @see FourierDCTMatrix#_2
+   * @see FourierDCT#_2 */
   _1;
 
   public Scalar of(int n, int k) {

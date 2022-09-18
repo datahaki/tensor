@@ -26,4 +26,21 @@ class ChebyshevInterpolationTest {
     Tensor p2 = domain.map(apx2);
     Tolerance.CHOP.requireClose(p1, p2);
   }
+  // @RepeatedTest(1)
+  // void testSimple(RepetitionInfo repetitionInfo) {
+  // ScalarUnaryOperator suo = Exp.FUNCTION;
+  // int n = 3 + repetitionInfo.getCurrentRepetition();
+  // // ScalarUnaryOperator apx1 = ChebyshevInterpolation.of(suo, chebyshevNodes, n);
+  // ChebyshevNodes chebyshevNodes = ChebyshevNodes._1;
+  // Tensor f = chebyshevNodes.of(n).map(suo);
+  // Tensor coeffs1 = LinearSolve.of(chebyshevNodes.matrix(n), f);
+  // Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+  // // .divide(scalar);
+  // Tensor coeffs2 = FourierDCT._3.of(f.multiply(scalar));
+  // // Tensor matr = FourierDCTMatrix._2.of(8);
+  // // System.out.println(Pretty.of(matr.subtract(Transpose.of(matr)).map(Round._3)));
+  // // Tolerance.CHOP.requireClose(p1, p2);
+  // // System.out.println(coeffs1);
+  // // System.out.println(coeffs2);
+  // }
 }

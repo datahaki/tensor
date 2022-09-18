@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -353,14 +351,6 @@ class SparseArrayTest {
     assertEquals(tensor.toString(), string);
     Tensor dot = sparseArray.dot(HilbertMatrix.of(3));
     assertInstanceOf(SparseArray.class, dot);
-  }
-
-  @Test
-  void testKeyCollision() {
-    Map<Integer, Integer> map = new HashMap<>();
-    map.put(3, 5);
-    // Stream.concat(map.entrySet().stream(), map.entrySet().stream()) //
-    // .collect(SparseArray._map(Entry::getKey, i -> Tensors.empty()));
   }
 
   @Test

@@ -30,6 +30,9 @@ import ch.alpine.tensor.sca.exp.Log;
  * ArcTan[NaN] == NaN
  * </pre>
  * 
+ * Mathematica doesn't resolve the ArcTan of two quantity with the same unit, e.g.
+ * ArcTan[Quantity[12, "Meters"], Quantity[4, "Meters"]] is not evaluated
+ * 
  * <p>Reference:
  * <a href="http://www.milefoot.com/math/complex/functionsofi.htm">functions of i</a>
  * 

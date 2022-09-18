@@ -15,7 +15,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -39,7 +38,7 @@ class ClenshawChebyshevTest {
     Scalar result = RealScalar.ZERO;
     for (int k = 0; k < coeffs.length(); ++k)
       result = result.add(coeffs.Get(k).multiply(Chebyshev.T.of(k).apply(x)));
-    Tolerance.CHOP.requireClose(expect, result);
+    Chop._08.requireClose(expect, result);
   }
 
   @RepeatedTest(8)

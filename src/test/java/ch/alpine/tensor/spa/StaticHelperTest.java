@@ -93,13 +93,15 @@ class StaticHelperTest {
   @Test
   void testPMulFullSparse() {
     Tensor tensor = Times.of(HilbertMatrix.of(3), LeviCivitaTensor.of(3));
-    tensor.toString();
+    assertFalse(tensor instanceof SparseArray);
+    assertTrue(tensor.toString().contains("SparseArray"));
   }
 
   @Test
   void testPMulSparseFull() {
     Tensor tensor = Times.of(IdentityMatrix.sparse(3), HilbertMatrix.of(3));
-    tensor.toString();
+    assertFalse(tensor instanceof SparseArray);
+    assertFalse(tensor.toString().contains("SparseArray"));
   }
 
   private final Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(10, 1, 0, 1, 1));

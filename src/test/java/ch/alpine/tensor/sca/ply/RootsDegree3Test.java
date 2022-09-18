@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
@@ -86,7 +85,6 @@ class RootsDegree3Test {
 
   @Test
   void testTriple1() {
-    // {0.22765732048577852, 0.22765732048577852, 0.22765732048577852}
     Tensor roots = Tensors.vector(2.146361758590232, 2.146361758590232, 2.146361758590232);
     Tensor coeffs = CoefficientList.of(roots);
     Tensor r2 = RootsDegree3.of(coeffs);
@@ -193,12 +191,11 @@ class RootsDegree3Test {
   void testCubicChallenge() {
     Tensor coeffs = Tensors.vector(1.8850384838238452, -0.07845356111460325, -0.6128180724984655, -1.5845220466594934);
     Tensor roots = Roots.of(coeffs);
-    Scalar m0 = Scalars.fromString("-0.6590816994450482 - 0.9180824258012533 * I");
-    Scalar m1 = Scalars.fromString("-0.6590816994450482 + 0.9180824258012533 * I");
+    Scalar m0 = ComplexScalar.of(-0.6590816994450482, -0.9180824258012533);
+    Scalar m1 = ComplexScalar.of(-0.6590816994450482, +0.9180824258012533);
     Scalar m2 = RealScalar.of(0.9314107665802999);
     assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m0)));
     assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m1)));
     assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m2)));
   }
-  // {4.403491745360149, -3.6065243114260417, -4.588031155616683, -4.8648946627594114E-4}
 }
