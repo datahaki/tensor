@@ -9,6 +9,7 @@ import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.VarianceInterface;
 
+/** CDF requires MarcumQ */
 class HoytDistribution implements Distribution, //
     PDF, MeanInterface, VarianceInterface, Serializable {
   @Override

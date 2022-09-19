@@ -9,6 +9,7 @@ import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.VarianceInterface;
 
+/** CDF requires BetaRegularized */
 class FRatioDistribution implements Distribution, //
     PDF, MeanInterface, VarianceInterface, Serializable {
   @Override
@@ -19,13 +20,13 @@ class FRatioDistribution implements Distribution, //
 
   @Override
   public Scalar mean() {
-    // TODO Auto-generated method stub
+    // TODO TENSOR EASY Auto-generated method stub
     return null;
   }
 
   @Override
   public Scalar variance() {
-    // TODO Auto-generated method stub
+    // TODO TENSOR EASY Auto-generated method stub
     return null;
   }
 

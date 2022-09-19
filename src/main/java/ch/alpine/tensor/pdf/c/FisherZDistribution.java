@@ -9,6 +9,8 @@ import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.VarianceInterface;
 
+/** CDF requires BetaRegularized
+ * Mean requires HypergeometricPFQ */
 class FisherZDistribution implements Distribution, //
     PDF, MeanInterface, VarianceInterface, Serializable {
   @Override

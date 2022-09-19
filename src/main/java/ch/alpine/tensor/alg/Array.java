@@ -87,6 +87,21 @@ public enum Array {
   }
 
   // ---
+  /** @param supplier
+   * @param dimensions
+   * @return */
+  public static Tensor fill(Scalar scalar, int... dimensions) {
+    return fill(() -> scalar, Integers.asList(dimensions));
+  }
+
+  /** @param supplier
+   * @param dimensions
+   * @return */
+  public static Tensor fill(Scalar scalar, List<Integer> dimensions) {
+    return fill(() -> scalar, dimensions);
+  }
+  // ---
+
   /** Careful:
    * {@link #zeros(int...)} is not consistent with MATLAB::zeros.
    * In the tensor library, the number of integer parameters equals the rank

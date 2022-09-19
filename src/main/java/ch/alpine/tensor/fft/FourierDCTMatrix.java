@@ -19,6 +19,7 @@ import ch.alpine.tensor.sca.tri.Cos;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FourierDCTMatrix.html">FourierDCTMatrix</a> */
 public enum FourierDCTMatrix {
+  /** involutory matrix */
   _1 {
     @Override
     public Tensor of(int n) {
@@ -55,6 +56,7 @@ public enum FourierDCTMatrix {
       i == 0 ? s1 : Cos.FUNCTION.apply(RealScalar.of(i * (j + j + 1)).multiply(factor)).multiply(s2), n, n);
     }
   },
+  /** involutory matrix */
   _4 {
     @Override
     public Tensor of(int n) {

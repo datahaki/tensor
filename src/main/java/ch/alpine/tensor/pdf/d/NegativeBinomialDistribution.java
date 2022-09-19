@@ -5,9 +5,9 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
@@ -22,8 +22,6 @@ import ch.alpine.tensor.sca.pow.Power;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/NegativeBinomialDistribution.html">NegativeBinomialDistribution</a> */
 public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution {
-  private static final Chop TOLERANCE = Chop._12;
-
   /** @param n non-negative
    * @param p in the interval (0, 1]
    * @return */
@@ -51,7 +49,7 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
     this.p = Sign.requirePositive(p);
     _1_p = RealScalar.ONE.subtract(p);
     pn = Power.of(p, n);
-    build(TOLERANCE);
+    build(Tolerance.CHOP);
   }
 
   @Override // from DiscreteDistribution
