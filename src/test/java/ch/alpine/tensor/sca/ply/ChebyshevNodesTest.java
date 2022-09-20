@@ -8,7 +8,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.fft.FourierDCTMatrix;
+import ch.alpine.tensor.fft.FourierDCT;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -24,7 +24,7 @@ class ChebyshevNodesTest {
   void testDCT2(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor m1 = ChebyshevNodes._1.matrix(n);
-    Tensor m2 = FourierDCTMatrix._2.of(n);
+    Tensor m2 = FourierDCT._2.matrix(n);
     Scalar ratio = m1.Get(0, 0).divide(m2.Get(0, 0));
     Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
     Tolerance.CHOP.requireClose(ratio, scalar.reciprocal());
