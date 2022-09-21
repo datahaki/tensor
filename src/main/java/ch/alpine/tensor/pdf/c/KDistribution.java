@@ -8,12 +8,12 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.FindRoot;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.bes.BesselK;
@@ -25,6 +25,9 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/KDistribution.html">KDistribution</a> */
 public class KDistribution extends AbstractContinuousDistribution implements Serializable {
+  private static final Scalar EXTENT = RealScalar.of(10.0);
+  private static final Scalar _4 = RealScalar.of(4.0);
+
   /** @param v positive
    * @param w positive
    * @return K distribution with shape parameters v and w */
@@ -41,14 +44,26 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
     return of(RealScalar.of(v), RealScalar.of(w));
   }
 
+  // ---
   private final Scalar v;
   private final Scalar w;
   private final Scalar v_w;
+  private final Scalar mean;
+  private final Scalar variance;
+  private final Clip support;
 
-  public KDistribution(Scalar v, Scalar w) {
+  private KDistribution(Scalar v, Scalar w) {
     this.v = v;
     this.w = w;
     v_w = v.divide(w);
+    Scalar p = Pochhammer.of(v, RationalScalar.HALF);
+    mean = Times.of( //
+        RationalScalar.HALF, //
+        Sqrt.FUNCTION.apply(Pi.VALUE), //
+        Sqrt.FUNCTION.apply(v_w.reciprocal()), //
+        p);
+    variance = RealScalar.ONE.subtract(p.multiply(p).multiply(Pi.VALUE).divide(_4.multiply(v))).multiply(w);
+    support = Clips.positive(mean.add(variance.multiply(EXTENT)));
   }
 
   @Override
@@ -56,8 +71,10 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
     if (Scalars.lessThan(RealScalar.ZERO, x)) {
       Scalar f1 = Power.of(v_w, v.add(RealScalar.ONE).multiply(RationalScalar.HALF));
       Scalar f2 = Power.of(x, v);
-      Scalar f3 = BesselK.of(v.subtract(RealScalar.ONE), Sqrt.FUNCTION.apply(v_w).multiply(x).multiply(RealScalar.TWO));
-      return Times.of(RealScalar.of(4), f1, f2, f3).divide(Gamma.FUNCTION.apply(v));
+      Scalar f3 = BesselK.of( //
+          v.subtract(RealScalar.ONE), //
+          Sqrt.FUNCTION.apply(v_w).multiply(x).multiply(RealScalar.TWO));
+      return Times.of(_4, f1, f2, f3).divide(Gamma.FUNCTION.apply(v));
     }
     return RealScalar.ZERO;
   }
@@ -68,7 +85,7 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
       Scalar f1 = Power.of(v_w, v.multiply(RationalScalar.HALF));
       Scalar f2 = Power.of(x, v);
       Scalar f3 = BesselK.of(v, Sqrt.FUNCTION.apply(v_w).multiply(x).multiply(RealScalar.TWO));
-      return RealScalar.ONE.subtract(Times.of(RealScalar.of(2), f1, f2, f3).divide(Gamma.FUNCTION.apply(v)));
+      return RealScalar.ONE.subtract(Times.of(RealScalar.TWO, f1, f2, f3).divide(Gamma.FUNCTION.apply(v)));
     }
     return RealScalar.ZERO;
   }
@@ -77,28 +94,20 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
   protected Scalar protected_quantile(Scalar p) {
     if (p.equals(RealScalar.ONE))
       return DoubleScalar.POSITIVE_INFINITY;
-    ScalarUnaryOperator suo = x -> p_lessEquals(x).subtract(p);
-    // TODO TENSOR justify magic const
-    return FindRoot.of(suo).inside(Clips.interval(0.0, 500.0));
+    return FindRoot.of(x -> p_lessThan(x).subtract(p)).inside(support);
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return Times.of( //
-        RationalScalar.HALF, //
-        Sqrt.FUNCTION.apply(Pi.VALUE), //
-        Sqrt.FUNCTION.apply(v_w.reciprocal()), //
-        Pochhammer.of(v, RationalScalar.HALF));
+    return mean;
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    Scalar p = Pochhammer.of(v, RationalScalar.HALF);
-    Scalar r = p.multiply(p).multiply(Pi.VALUE).divide(RealScalar.of(4).multiply(v));
-    return RealScalar.ONE.subtract(r).multiply(w);
+    return variance;
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return MathematicaFormat.concise("KDistribution", v, w);
   }

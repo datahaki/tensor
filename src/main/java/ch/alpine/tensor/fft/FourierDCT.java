@@ -30,7 +30,7 @@ import ch.alpine.tensor.sca.tri.Cos;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FourierDCTMatrix.html">FourierDCTMatrix</a> */
-public enum FourierDCT {
+public enum FourierDCT implements DiscreteFourierTransform {
   /** involutory matrix */
   _1 {
     @Override
@@ -114,16 +114,6 @@ public enum FourierDCT {
       Cos.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + j + 1)).multiply(factor)).multiply(scalar), n, n);
     }
   };
-
-  /** function evaluates fast for input of length equal to a power of 2
-   * 
-   * @param vector
-   * @return */
-  public abstract Tensor of(Tensor vector);
-
-  /** @param n positive
-   * @return square matrix of dimensions n x n */
-  public abstract Tensor matrix(int n);
 
   @PackageTestAccess
   static Tensor raw2(Tensor vector) {

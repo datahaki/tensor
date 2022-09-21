@@ -71,7 +71,13 @@ class KDistributionTest {
   }
 
   @Test
-  void testFails() {
+  void testSignFails() {
+    assertThrows(Exception.class, () -> KDistribution.of(0, 3));
+    assertThrows(Exception.class, () -> KDistribution.of(2, 0));
+  }
+
+  @Test
+  void testNullFails() {
     assertThrows(Exception.class, () -> KDistribution.of(null, 3));
     assertThrows(Exception.class, () -> KDistribution.of(2, null));
     assertThrows(Exception.class, () -> KDistribution.of(null, Pi.VALUE));

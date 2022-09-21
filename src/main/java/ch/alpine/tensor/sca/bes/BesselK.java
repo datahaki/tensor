@@ -17,6 +17,7 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.gam.Gamma;
 import ch.alpine.tensor.sca.ply.ClenshawChebyshev;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
@@ -183,8 +184,9 @@ public enum BesselK {
     return _1(RealScalar.of(x));
   }
 
-  protected static final double MACHEP = 1.11022302462515654042E-16;
-  protected static final double MAXLOG = 7.09782712893383996732E2;
+  /** 1.11022302462515654042E-16; */
+  private static final double EPS = (Math.nextUp(1.0) - 1.0) * 0.5;
+  protected static final double MAXLOG = 700.09782712893383996732;
 
   /** Returns the modified Bessel function of the third kind
    * of order <tt>nn</tt> of the argument.
@@ -195,6 +197,7 @@ public enum BesselK {
    *
    * @param nn the order of the Bessel function.
    * @param x the value to compute the bessel function of. */
+  // TODO TENSOR IMPL ensure test coverage, investigate corner cases, use Scalar
   public static double kn(int nn, double x) {
     /* Algorithm for Kn.
      * n-1
@@ -227,7 +230,7 @@ public enum BesselK {
      * 
      * 2
      * u = 4 v . */
-    final double EUL = 5.772156649015328606065e-1;
+    final double EUL = Gamma.EULER.number().doubleValue(); // 0.5772156649015328606065;
     final double MAXNUM = Double.MAX_VALUE;
     final int MAXFAC = 31;
     double k, kf, nk1f, nkf, zn, t, s, z0, z;
@@ -304,7 +307,7 @@ public enum BesselK {
         pn += 1.0 / (k + n);
         s += (pk + pn - tlg) * t;
         k += 1.0;
-      } while (Math.abs(t / s) > MACHEP);
+      } while (Math.abs(t / s) > EPS);
       s = 0.5 * s / zmn;
       if ((n & 1) > 0)
         s = -s;
@@ -314,7 +317,7 @@ public enum BesselK {
     /* Asymptotic expansion for Kn(x) */
     /* Converges to 1.4e-17 for x > 18.4 */
     if (x > MAXLOG)
-      throw new ArithmeticException("Underflow");
+      return 0;
     k = n;
     pn = 4.0 * k * k;
     pk = 1.0;
@@ -337,7 +340,7 @@ public enum BesselK {
       fn += 1.0;
       pk += 2.0;
       i += 1;
-    } while (Math.abs(t / s) > MACHEP);
+    } while (Math.abs(t / s) > EPS);
     return Math.exp(-x) * Math.sqrt(Math.PI / (2.0 * x)) * s;
   }
 }

@@ -7,40 +7,65 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.num.FindInteger;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Ceiling;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.gam.Beta;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.gam.LogGamma;
 
-class WaringYuleDistribution extends AbstractDiscreteDistribution implements Serializable {
-  public static Distribution of(Scalar alpha) {
-    return new WaringYuleDistribution(alpha);
+/** The cdf grows very slowly.
+ * 
+ * <p>inspired by
+ * <a href="https://reference.wolfram.com/language/ref/WaringYuleDistribution.html">WaringYuleDistribution</a> */
+public class WaringYuleDistribution extends AbstractDiscreteDistribution implements Serializable {
+  /** @param alpha positive
+   * @param beta positive
+   * @return */
+  public static Distribution of(Scalar alpha, Scalar beta) {
+    if (Scalars.lessThan(RealScalar.ZERO, alpha) && //
+        Scalars.lessThan(RealScalar.ZERO, beta))
+      return new WaringYuleDistribution(alpha, beta);
+    throw new Throw(alpha, beta);
   }
 
-  public static Distribution of(Number alpha) {
-    return of(RealScalar.of(alpha));
+  /** @param alpha positive
+   * @param beta positive
+   * @return */
+  public static Distribution of(Number alpha, Number beta) {
+    return of(RealScalar.of(alpha), RealScalar.of(beta));
   }
 
   // ---
   private final Scalar alpha;
+  private final Scalar beta;
+  private final Scalar lgp;
 
-  private WaringYuleDistribution(Scalar alpha) {
+  private WaringYuleDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;
+    this.beta = beta;
+    lgp = LogGamma.FUNCTION.apply(alpha.add(beta)).subtract(LogGamma.FUNCTION.apply(beta));
   }
 
-  @Override
+  @Override // from DiscreteDistribution
   public int lowerBound() {
     return 0;
   }
 
-  @Override
+  @Override // from AbstractDiscreteDistribution
   protected Scalar protected_p_equals(int x) {
-    return Beta.of(alpha.add(RealScalar.ONE), RealScalar.of(x + 1)).multiply(alpha);
+    Scalar sum = beta.add(RealScalar.of(x));
+    Scalar t1 = LogGamma.FUNCTION.apply(sum);
+    Scalar t2 = LogGamma.FUNCTION.apply(alpha.add(sum).add(RealScalar.ONE));
+    return Exp.FUNCTION.apply(lgp.add(t1).subtract(t2)).multiply(alpha);
   }
 
   @Override
   public Scalar p_lessThan(Scalar x) {
+    // TODO TENSOR REFACTOR pattern exist somewhere else!?
     return Scalars.lessThan(RealScalar.ZERO, x) //
         ? private_cdf(Ceiling.FUNCTION.apply(x.subtract(RealScalar.ONE)))
         : RealScalar.ZERO;
@@ -54,19 +79,23 @@ class WaringYuleDistribution extends AbstractDiscreteDistribution implements Ser
   }
 
   private Scalar private_cdf(Scalar x) {
-    return RealScalar.ONE.subtract(Beta.of(alpha, x.add(RealScalar.TWO)).multiply(alpha));
+    Scalar sum = beta.add(x).add(RealScalar.ONE);
+    Scalar t1 = LogGamma.FUNCTION.apply(sum);
+    Scalar t2 = LogGamma.FUNCTION.apply(alpha.add(sum));
+    return RealScalar.ONE.subtract(Exp.FUNCTION.apply(lgp.add(t1).subtract(t2)));
   }
 
   @Override
   public Scalar quantile(Scalar p) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
+    if (p.equals(RealScalar.ONE))
+      return DoubleScalar.POSITIVE_INFINITY;
+    return protected_quantile(p);
   }
 
   @Override
   protected Scalar protected_quantile(Scalar p) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
+    // "For a discrete distribution dist the inverse CDF at p is the smallest integer x such that CDF[dist,x] >= p."
+    return FindInteger.min(x -> Scalars.lessEquals(p, p_lessEquals(x)), Clips.interval(lowerBound(), Integer.MAX_VALUE));
   }
 
   @Override
@@ -78,11 +107,12 @@ class WaringYuleDistribution extends AbstractDiscreteDistribution implements Ser
 
   @Override
   public Scalar variance() {
+    // requires Hypergeometric2F1Regularized
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("WaringYuleDistribution", alpha);
+    return MathematicaFormat.concise("WaringYuleDistribution", alpha, beta);
   }
 }

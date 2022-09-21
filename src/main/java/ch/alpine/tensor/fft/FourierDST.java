@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.tri.Sin;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FourierDSTMatrix.html">FourierDSTMatrix</a> */
-public enum FourierDST {
+public enum FourierDST implements DiscreteFourierTransform {
   _1 {
     @Override
     public Tensor of(Tensor vector) {
@@ -36,9 +36,9 @@ public enum FourierDST {
             Tensors.vector(0), //
             Reverse.of(vector.negate()));
         return Fourier.of(r).extract(1, 1 + n) //
-            .divide(ComplexScalar.I).map(Tolerance.CHOP);
+            .divide(ComplexScalar.I).map(Tolerance.CHOP); // FIXME
       }
-      return VectorQ.require(vector).dot(FourierDCT._1.matrix(n)); // FIXME
+      return VectorQ.require(vector).dot(matrix(n)); // FIXME not value for complex?
     }
 
     @Override
@@ -85,11 +85,8 @@ public enum FourierDST {
    * 
    * @param vector
    * @return */
+  @Override
   public Tensor of(Tensor vector) {
     return matrix(vector.length()).dot(vector);
   }
-
-  /** @param n positive
-   * @return square matrix of dimensions n x n */
-  public abstract Tensor matrix(int n);
 }

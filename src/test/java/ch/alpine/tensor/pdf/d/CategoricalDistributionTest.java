@@ -13,11 +13,13 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.num.FindInteger;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
@@ -28,6 +30,7 @@ import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clips;
 
 class CategoricalDistributionTest {
   @Test
@@ -112,6 +115,12 @@ class CategoricalDistributionTest {
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(0.5))), RealScalar.of(2));
     assertEquals(distribution.quantile(RationalScalar.of(1, 2)), RealScalar.of(2));
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(1.0))), RealScalar.of(4));
+    assertEquals(distribution.quantile(RealScalar.of(1)), RealScalar.of(4));
+    CDF cdf = CDF.of(distribution);
+    Scalar q = RealScalar.of(0.2);
+    Scalar res = FindInteger.min(x -> Scalars.lessEquals(q, cdf.p_lessEquals(x)), Clips.interval(0, 5));
+    assertEquals(res, RealScalar.of(2));
+    assertEquals(distribution.quantile(q), RealScalar.TWO);
   }
 
   @Test
