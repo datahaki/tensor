@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import java.math.BigInteger;
 import java.util.Optional;
+import java.util.Random;
 
 /** implementation is standalone */
 /* package */ enum BigIntegerMath {
@@ -31,5 +32,16 @@ import java.util.Optional;
         a = mid.add(BigInteger.ONE);
     }
     return a.subtract(BigInteger.ONE);
+  }
+
+  /** @param limit
+   * @param random
+   * @return random number between 0, 1, ..., limit - 1 */
+  public static BigInteger random(BigInteger limit, Random random) {
+    BigInteger bigInteger;
+    do {
+      bigInteger = new BigInteger(limit.bitLength(), random);
+    } while (0 <= bigInteger.compareTo(limit));
+    return bigInteger;
   }
 }

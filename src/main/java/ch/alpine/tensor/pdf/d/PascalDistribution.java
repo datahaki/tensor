@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import java.math.BigInteger;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Integers;
@@ -46,8 +48,8 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return n;
+  public BigInteger lowerBound() {
+    return BigInteger.valueOf(n);
   }
 
   @Override // from MeanInterface

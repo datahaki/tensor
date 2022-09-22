@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.alpine.tensor.RealScalar;
@@ -78,8 +79,8 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return 0;
+  public BigInteger lowerBound() {
+    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution

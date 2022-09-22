@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import java.math.BigInteger;
 import java.util.OptionalInt;
 import java.util.Random;
 
@@ -26,9 +27,9 @@ public abstract class AbstractDiscreteDistribution implements DiscreteDistributi
   }
 
   @Override // from DiscreteDistribution
-  public final Scalar p_equals(int n) {
-    return lowerBound() <= n //
-        ? protected_p_equals(n)
+  public final Scalar p_equals(BigInteger n) {
+    return lowerBound().compareTo(n) <= 0 //
+        ? protected_p_equals(n.intValueExact())
         : RealScalar.ZERO;
   }
 

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -66,8 +67,8 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return min;
+  public BigInteger lowerBound() {
+    return BigInteger.valueOf(min);
   }
 
   @Override // from InverseCDF

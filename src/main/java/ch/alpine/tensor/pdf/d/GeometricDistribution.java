@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -58,8 +59,8 @@ public class GeometricDistribution extends AbstractDiscreteDistribution implemen
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return 0;
+  public BigInteger lowerBound() {
+    return BigInteger.ZERO;
   }
 
   @Override // from InverseCDF

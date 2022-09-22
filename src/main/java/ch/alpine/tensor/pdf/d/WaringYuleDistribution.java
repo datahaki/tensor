@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -51,8 +52,8 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return 0;
+  public BigInteger lowerBound() {
+    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution
