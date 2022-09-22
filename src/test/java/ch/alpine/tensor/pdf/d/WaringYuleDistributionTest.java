@@ -36,6 +36,8 @@ class WaringYuleDistributionTest {
     Tolerance.CHOP.requireClose(mean, RealScalar.of(2.5));
     assertTrue(distribution.toString().startsWith("WaringYuleDistribution["));
     Tolerance.CHOP.requireZero(pdf.at(RealScalar.ONE.negate()));
+    // Scalar x = RealScalar.of(Long.MAX_VALUE);
+    // System.out.println(pdf.at(x)); // FIXME TENSOR
   }
 
   @Test
@@ -50,6 +52,10 @@ class WaringYuleDistributionTest {
     assertEquals(inverseCDF.quantile(RealScalar.of(0.99)), RealScalar.of(74152));
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
     RandomVariate.of(distribution, 100);
+    // FIXME TENSOR
+    // Scalar q = inverseCDF.quantile(RealScalar.of(Math.nextDown(1.0)));
+    // System.out.println(q);
+    // assertEquals(, RealScalar.of(74152));
     assertThrows(Exception.class, () -> Variance.of(distribution));
   }
 

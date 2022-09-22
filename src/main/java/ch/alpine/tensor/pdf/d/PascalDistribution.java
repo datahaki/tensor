@@ -63,7 +63,8 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) { // lowerBound() <= x
+  protected Scalar protected_p_equals(BigInteger _x) { // lowerBound() <= x
+    int x = _x.intValueExact();
     return Power.of(o_p, x - n).multiply(Power.of(p, n)).multiply(Binomial.of(x - 1, n - 1));
   }
 

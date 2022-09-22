@@ -57,7 +57,7 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
+  protected Scalar protected_p_equals(BigInteger x) {
     Scalar sum = beta.add(RealScalar.of(x));
     Scalar t1 = LogGamma.FUNCTION.apply(sum);
     Scalar t2 = LogGamma.FUNCTION.apply(alpha.add(sum).add(RealScalar.ONE));
@@ -96,6 +96,7 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
   @Override
   protected Scalar protected_quantile(Scalar p) {
     // "For a discrete distribution dist the inverse CDF at p is the smallest integer x such that CDF[dist,x] >= p."
+    // FIXME
     return FindInteger.min(x -> Scalars.lessEquals(p, p_lessEquals(x)), Clips.interval(lowerBound(), Integer.MAX_VALUE));
   }
 

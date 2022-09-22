@@ -84,9 +84,10 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
-    return x < pdf.length() //
-        ? pdf.Get(x)
+  protected Scalar protected_p_equals(BigInteger x) {
+    int index = x.intValueExact();
+    return index < pdf.length() //
+        ? pdf.Get(index)
         : RealScalar.ZERO;
   }
 

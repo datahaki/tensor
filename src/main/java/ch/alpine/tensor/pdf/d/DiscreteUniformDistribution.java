@@ -39,42 +39,46 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
    * @return distribution */
   public static Distribution of(int min, int max) {
     Integers.requireLessThan(min, max);
-    return new DiscreteUniformDistribution(min, max);
+    return new DiscreteUniformDistribution( //
+        BigInteger.valueOf(min), //
+        BigInteger.valueOf(max));
   }
 
   // ---
-  private final int min; // inclusive
+  private final BigInteger min; // inclusive
   private final Scalar _min;
-  private final int max; // exclusive
+  private final BigInteger max; // exclusive
+  private final BigInteger max_1; // exclusive
   private final Scalar p; // precomputed
 
-  private DiscreteUniformDistribution(int min, int max) {
+  private DiscreteUniformDistribution(BigInteger min, BigInteger max) {
     this.min = min;
     this._min = RealScalar.of(min);
     this.max = max;
-    p = RationalScalar.of(1, max - min);
+    max_1 = max.subtract(BigInteger.ONE);
+    p = RationalScalar.of(BigInteger.ONE, max.subtract(min));
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return RationalScalar.of(max - 1 + min, 2);
+    return RationalScalar.of(max_1.add(min), BigInteger.TWO);
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    Scalar width = RationalScalar.of(max - 1 - min, 1);
+    Scalar width = RealScalar.of(max_1.subtract(min));
     return RealScalar.TWO.add(width).multiply(width).divide(_12);
   }
 
   @Override // from DiscreteDistribution
   public BigInteger lowerBound() {
-    return BigInteger.valueOf(min);
+    return min;
   }
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
     return p.equals(RealScalar.ONE) //
-        ? RealScalar.of(max - 1) // consistent with Mathematica
+        ? RealScalar.of(max_1) // consistent with Mathematica
         : protected_quantile(Clips.unit().requireInside(p));
   }
 
@@ -84,8 +88,8 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
-    return x < max //
+  protected Scalar protected_p_equals(BigInteger x) {
+    return x.compareTo(max) < 0 // x < max //
         ? p
         : RealScalar.ZERO;
   }

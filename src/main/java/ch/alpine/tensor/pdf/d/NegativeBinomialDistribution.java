@@ -60,8 +60,8 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
-    return pn.multiply(Power.of(_1_p, x)).multiply(Binomial.of(n - 1 + x, n - 1));
+  protected Scalar protected_p_equals(BigInteger x) {
+    return pn.multiply(Power.of(_1_p, x)).multiply(Binomial.of(n - 1 + x.intValueExact(), n - 1));
   }
 
   @Override // from MeanInterface

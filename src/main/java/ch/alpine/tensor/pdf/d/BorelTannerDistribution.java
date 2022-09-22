@@ -67,7 +67,7 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int _x) {
+  protected Scalar protected_p_equals(BigInteger _x) {
     Scalar x = RealScalar.of(_x);
     Scalar x_n = x.subtract(n);
     Scalar s0 = LogGamma.FUNCTION.apply(x_n.add(RealScalar.ONE)).negate();

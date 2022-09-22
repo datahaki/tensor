@@ -29,7 +29,7 @@ public abstract class AbstractDiscreteDistribution implements DiscreteDistributi
   @Override // from DiscreteDistribution
   public final Scalar p_equals(BigInteger n) {
     return lowerBound().compareTo(n) <= 0 //
-        ? protected_p_equals(n.intValueExact())
+        ? protected_p_equals(n)
         : RealScalar.ZERO;
   }
 
@@ -39,5 +39,6 @@ public abstract class AbstractDiscreteDistribution implements DiscreteDistributi
 
   /** @param x with lowerBound() <= x
    * @return P(X == x), i.e. probability of random variable X == x */
-  protected abstract Scalar protected_p_equals(int x);
+  // TODO TENSOR check all implementation for unnecessary x.intValueExact()
+  protected abstract Scalar protected_p_equals(BigInteger x);
 }

@@ -73,7 +73,8 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
+  protected Scalar protected_p_equals(BigInteger __x) {
+    int x = __x.intValueExact();
     if (P_EQUALS_MAX < x)
       return RealScalar.ZERO;
     if (values.length() <= x) {
