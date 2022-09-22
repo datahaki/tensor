@@ -2,7 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import java.math.BigInteger;
-import java.util.OptionalInt;
+import java.util.Optional;
 import java.util.Random;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -20,9 +20,9 @@ public abstract class AbstractDiscreteDistribution implements DiscreteDistributi
 
   @Override // from PDF
   public final Scalar at(Scalar x) {
-    OptionalInt optionalInt = Scalars.optionalInt(x);
-    return optionalInt.isPresent() //
-        ? p_equals(optionalInt.getAsInt())
+    Optional<BigInteger> optional = Scalars.optionalBigInteger(x);
+    return optional.isPresent() //
+        ? p_equals(optional.orElseThrow())
         : RealScalar.ZERO;
   }
 

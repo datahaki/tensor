@@ -26,8 +26,4 @@ public interface DiscreteDistribution extends UnivariateDistribution {
   /** @param n
    * @return P(X == n), i.e. probability of random variable X == n */
   Scalar p_equals(BigInteger n);
-
-  default Scalar p_equals(int n) {
-    return p_equals(BigInteger.valueOf(n));
-  }
 }

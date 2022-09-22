@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
@@ -47,7 +48,7 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
   protected final void build(int upperBound) {
     Scalar cumprob = RealScalar.ZERO;
     for (int sample = lowerBound().intValueExact(); sample < upperBound; ++sample) {
-      Scalar prob = p_equals(sample);
+      Scalar prob = p_equals(BigInteger.valueOf(sample));
       if (Scalars.nonZero(prob)) {
         cumprob = cumprob.add(prob);
         Scalar x = RealScalar.of(sample);
@@ -66,7 +67,7 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
    * 
    * @param chop */
   protected final void build(Chop chop) {
-    int upperBound = lowerBound().intValueExact();
+    BigInteger upperBound = lowerBound();
     Scalar cumprob = RealScalar.ZERO;
     while (true) {
       Scalar prob = p_equals(upperBound);
@@ -78,7 +79,7 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
         if (chop.isClose(_1, cumprob))
           break;
       }
-      ++upperBound;
+      upperBound = upperBound.add(BigInteger.ONE);
     }
   }
 

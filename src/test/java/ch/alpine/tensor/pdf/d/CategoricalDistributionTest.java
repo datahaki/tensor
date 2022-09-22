@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -45,10 +46,10 @@ class CategoricalDistributionTest {
   @Test
   void testP_Equals() {
     CategoricalDistribution categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1, 5));
-    assertEquals(categoricalDistribution.p_equals(0), RationalScalar.of(0, 1));
-    assertEquals(categoricalDistribution.p_equals(1), RationalScalar.of(9, 15));
-    assertEquals(categoricalDistribution.p_equals(2), RationalScalar.of(1, 15));
-    assertEquals(categoricalDistribution.p_equals(3), RationalScalar.of(5, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(0)), RationalScalar.of(0, 1));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(1)), RationalScalar.of(9, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(2)), RationalScalar.of(1, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(3)), RationalScalar.of(5, 15));
   }
 
   @Test

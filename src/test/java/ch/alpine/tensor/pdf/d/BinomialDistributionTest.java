@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -277,9 +279,9 @@ class BinomialDistributionTest {
     CDF cdf = CDF.of(distribution);
     // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
     assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
-    assertEquals(cdf.p_lessEquals(RealScalar.of(0)), discreteDistribution.p_equals(0));
+    assertEquals(cdf.p_lessEquals(RealScalar.of(0)), discreteDistribution.p_equals(BigInteger.ZERO));
     assertEquals(cdf.p_lessEquals(RealScalar.of(1)), //
-        discreteDistribution.p_equals(0).add(discreteDistribution.p_equals(1)) //
+        discreteDistribution.p_equals(BigInteger.ZERO).add(discreteDistribution.p_equals(BigInteger.ONE)) //
     );
     // assertFalse(discreteCDF.cdf_finished());
     assertEquals(cdf.p_lessEquals(RealScalar.of(1000000000)), RealScalar.ONE);
@@ -294,10 +296,10 @@ class BinomialDistributionTest {
     // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
     assertEquals(cdf.p_lessThan(RealScalar.of(-10)), RealScalar.ZERO);
     assertEquals(cdf.p_lessThan(RealScalar.of(0)), RealScalar.ZERO);
-    assertEquals(cdf.p_lessThan(RealScalar.of(1e-8)), discreteDistribution.p_equals(0));
-    assertEquals(cdf.p_lessThan(RealScalar.of(1)), discreteDistribution.p_equals(0));
+    assertEquals(cdf.p_lessThan(RealScalar.of(1e-8)), discreteDistribution.p_equals(BigInteger.ZERO));
+    assertEquals(cdf.p_lessThan(RealScalar.of(1)), discreteDistribution.p_equals(BigInteger.ZERO));
     assertEquals(cdf.p_lessThan(RealScalar.of(2)), //
-        discreteDistribution.p_equals(0).add(discreteDistribution.p_equals(1)) //
+        discreteDistribution.p_equals(BigInteger.ZERO).add(discreteDistribution.p_equals(BigInteger.ONE)) //
     );
     // assertFalse(discreteCDF.cdf_finished());
     assertEquals(cdf.p_lessThan(RealScalar.of(1000000000)), RealScalar.ONE);

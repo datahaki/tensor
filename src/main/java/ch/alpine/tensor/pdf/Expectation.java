@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import java.math.BigInteger;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -56,7 +57,7 @@ public enum Expectation {
     int sample = discreteDistribution.lowerBound().intValueExact();
     while (!StaticHelper.isFinished(p_equals, cumprob)) {
       Scalar x = RealScalar.of(sample);
-      p_equals = discreteDistribution.p_equals(sample);
+      p_equals = discreteDistribution.p_equals(BigInteger.valueOf(sample));
       cumprob = cumprob.add(p_equals);
       T delta = (T) function.apply(x).multiply(p_equals);
       value = Objects.isNull(value) //

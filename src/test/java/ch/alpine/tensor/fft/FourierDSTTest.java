@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.fft;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.RepeatedTest;
@@ -33,6 +34,7 @@ class FourierDSTTest {
     Tensor vector = Tensors.of(ComplexScalar.of(1, 2), ComplexScalar.of(0, 0.3), RealScalar.ONE);
     Tensor r1 = FourierDST._1.of(vector);
     Tensor r2 = FourierDST._1.matrix(vector.length()).dot(vector);
+    assertEquals(r1.length(), r2.length());
     // System.out.println(r2);
     // Tolerance.CHOP.requireClose(r1, r2);
   }

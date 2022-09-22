@@ -47,7 +47,6 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
     this.n = RealScalar.of(n);
     o_alpha = RealScalar.ONE.subtract(alpha);
     logAlpha = Log.FUNCTION.apply(alpha);
-    
     _n = BigInteger.valueOf(n);
     build(Tolerance.CHOP);
   }

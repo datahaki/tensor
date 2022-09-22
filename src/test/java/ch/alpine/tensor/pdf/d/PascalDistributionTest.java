@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
@@ -90,9 +92,9 @@ class PascalDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(RealScalar.of(0.999));
     assertTrue(Scalars.lessThan(quantile, distribution.inverse_cdf().lastEntry().getValue()));
-    assertTrue(Scalars.isZero(distribution.p_equals(3)));
-    assertTrue(Scalars.isZero(distribution.p_equals(4)));
-    assertTrue(Scalars.nonZero(distribution.p_equals(5)));
+    assertTrue(Scalars.isZero(distribution.p_equals(BigInteger.valueOf(3))));
+    assertTrue(Scalars.isZero(distribution.p_equals(BigInteger.valueOf(4))));
+    assertTrue(Scalars.nonZero(distribution.p_equals(BigInteger.valueOf(5))));
   }
 
   @Test
