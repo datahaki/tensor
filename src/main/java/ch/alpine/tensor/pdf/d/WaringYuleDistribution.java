@@ -10,6 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.FindInteger;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Ceiling;
@@ -61,6 +62,9 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
     Scalar sum = beta.add(RealScalar.of(x));
     Scalar t1 = LogGamma.FUNCTION.apply(sum);
     Scalar t2 = LogGamma.FUNCTION.apply(alpha.add(sum).add(RealScalar.ONE));
+    Scalar ratio = lgp.add(t1).divide(t2);
+    if (Tolerance.CHOP.isClose(ratio, RealScalar.ONE))
+      return RealScalar.ZERO;
     return Exp.FUNCTION.apply(lgp.add(t1).subtract(t2)).multiply(alpha);
   }
 
@@ -83,6 +87,9 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
     Scalar sum = beta.add(x).add(RealScalar.ONE);
     Scalar t1 = LogGamma.FUNCTION.apply(sum);
     Scalar t2 = LogGamma.FUNCTION.apply(alpha.add(sum));
+    Scalar ratio = lgp.add(t1).divide(t2);
+    if (Tolerance.CHOP.isClose(ratio, RealScalar.ONE))
+      return RealScalar.ONE;
     return RealScalar.ONE.subtract(Exp.FUNCTION.apply(lgp.add(t1).subtract(t2)));
   }
 
@@ -96,8 +103,7 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
   @Override
   protected Scalar protected_quantile(Scalar p) {
     // "For a discrete distribution dist the inverse CDF at p is the smallest integer x such that CDF[dist,x] >= p."
-    // FIXME
-    return FindInteger.min(x -> Scalars.lessEquals(p, p_lessEquals(x)), Clips.interval(lowerBound(), Integer.MAX_VALUE));
+    return FindInteger.min(x -> Scalars.lessEquals(p, p_lessEquals(x)), Clips.interval(lowerBound(), Long.MAX_VALUE));
   }
 
   @Override

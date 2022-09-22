@@ -1,17 +1,23 @@
 // code by jph
 package ch.alpine.tensor.sca.gam;
 
+import java.util.stream.IntStream;
+
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.OrderedQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Power;
 
 class LogGammaTest {
   @RepeatedTest(10)
@@ -65,5 +71,14 @@ class LogGammaTest {
     Scalar gamma1 = Exp.FUNCTION.apply(LogGamma.FUNCTION.apply(x));
     Scalar gamma2 = Gamma.FUNCTION.apply(x);
     Tolerance.CHOP.requireClose(gamma1, gamma2);
+  }
+
+  @Test
+  void testMonotonous() {
+    Tensor tensor = Tensor.of(IntStream.range(2, 200) //
+        .mapToObj(RealScalar::of) //
+        .map(Power.function(10.0)) //
+        .map(LogGamma.FUNCTION));
+    OrderedQ.require(tensor);
   }
 }

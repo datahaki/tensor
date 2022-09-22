@@ -8,6 +8,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.FindRoot;
 import ch.alpine.tensor.num.Pi;
@@ -25,7 +26,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/KDistribution.html">KDistribution</a> */
 public class KDistribution extends AbstractContinuousDistribution implements Serializable {
-  private static final Scalar EXTENT = RealScalar.of(10.0);
+  private static final Scalar EXTENT = RealScalar.of(50.0); // at mean + EXTENT * variance -> cdf == 1.0 
   private static final Scalar _4 = RealScalar.of(4.0);
 
   /** @param v positive
@@ -48,15 +49,20 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
   private final Scalar v;
   private final Scalar w;
   private final Scalar v_w;
+  private final Scalar pow1;
+  private final Scalar pow2;
   private final Scalar mean;
   private final Scalar variance;
-  private final Clip support;
+  @PackageTestAccess
+  /* package */ final Clip support;
 
   private KDistribution(Scalar v, Scalar w) {
     this.v = v;
     this.w = w;
     v_w = v.divide(w);
     Scalar p = Pochhammer.of(v, RationalScalar.HALF);
+    pow1 = Power.of(v_w, v.add(RealScalar.ONE).multiply(RationalScalar.HALF)).multiply(_4);
+    pow2 = Power.of(v_w, v.multiply(RationalScalar.HALF)).multiply(RealScalar.TWO);
     mean = Times.of( //
         RationalScalar.HALF, //
         Sqrt.FUNCTION.apply(Pi.VALUE), //
@@ -69,12 +75,11 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
   @Override
   public Scalar at(Scalar x) {
     if (Scalars.lessThan(RealScalar.ZERO, x)) {
-      Scalar f1 = Power.of(v_w, v.add(RealScalar.ONE).multiply(RationalScalar.HALF));
-      Scalar f2 = Power.of(x, v);
-      Scalar f3 = BesselK.of( //
+      Scalar f1 = Power.of(x, v);
+      Scalar f2 = BesselK.of( //
           v.subtract(RealScalar.ONE), //
           Sqrt.FUNCTION.apply(v_w).multiply(x).multiply(RealScalar.TWO));
-      return Times.of(_4, f1, f2, f3).divide(Gamma.FUNCTION.apply(v));
+      return Times.of(pow1, f1, f2).divide(Gamma.FUNCTION.apply(v));
     }
     return RealScalar.ZERO;
   }
@@ -82,10 +87,9 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
   @Override
   public Scalar p_lessThan(Scalar x) {
     if (Scalars.lessThan(RealScalar.ZERO, x)) {
-      Scalar f1 = Power.of(v_w, v.multiply(RationalScalar.HALF));
-      Scalar f2 = Power.of(x, v);
-      Scalar f3 = BesselK.of(v, Sqrt.FUNCTION.apply(v_w).multiply(x).multiply(RealScalar.TWO));
-      return RealScalar.ONE.subtract(Times.of(RealScalar.TWO, f1, f2, f3).divide(Gamma.FUNCTION.apply(v)));
+      Scalar f1 = Power.of(x, v);
+      Scalar f2 = BesselK.of(v, Sqrt.FUNCTION.apply(v_w).multiply(x).multiply(RealScalar.TWO));
+      return RealScalar.ONE.subtract(Times.of(pow2, f1, f2).divide(Gamma.FUNCTION.apply(v)));
     }
     return RealScalar.ZERO;
   }

@@ -7,12 +7,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.OrderedQ;
+import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -24,6 +28,7 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.pow.Power;
 
 class WaringYuleDistributionTest {
   @Test
@@ -36,8 +41,19 @@ class WaringYuleDistributionTest {
     Tolerance.CHOP.requireClose(mean, RealScalar.of(2.5));
     assertTrue(distribution.toString().startsWith("WaringYuleDistribution["));
     Tolerance.CHOP.requireZero(pdf.at(RealScalar.ONE.negate()));
-    // Scalar x = RealScalar.of(Long.MAX_VALUE);
-    // System.out.println(pdf.at(x)); // FIXME TENSOR
+    Scalar x = RealScalar.of(Long.MAX_VALUE);
+    Tolerance.CHOP.requireClose(pdf.at(x), RealScalar.ZERO);
+  }
+
+  @Test
+  void testPdfMonotonous() {
+    Distribution distribution = WaringYuleDistribution.of(1.4, 1);
+    PDF cdf = PDF.of(distribution);
+    Tensor tensor = Reverse.of(Tensor.of(IntStream.range(5, 200) //
+        .mapToObj(RealScalar::of) //
+        .map(Power.function(5)) //
+        .map(cdf::at)));
+    OrderedQ.require(tensor);
   }
 
   @Test
@@ -52,10 +68,8 @@ class WaringYuleDistributionTest {
     assertEquals(inverseCDF.quantile(RealScalar.of(0.99)), RealScalar.of(74152));
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
     RandomVariate.of(distribution, 100);
-    // FIXME TENSOR
-    // Scalar q = inverseCDF.quantile(RealScalar.of(Math.nextDown(1.0)));
-    // System.out.println(q);
-    // assertEquals(, RealScalar.of(74152));
+    Scalar q = inverseCDF.quantile(RealScalar.of(Math.nextDown(1.0)));
+    FiniteScalarQ.require(q);
     assertThrows(Exception.class, () -> Variance.of(distribution));
   }
 
@@ -76,6 +90,26 @@ class WaringYuleDistributionTest {
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(0.9986681412708701));
     assertEquals(cdf.p_lessThan(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(cdf.p_lessEquals(RealScalar.of(-1e-100)), RealScalar.ZERO);
+  }
+
+  @Test
+  void testSpecific() {
+    Distribution distribution = WaringYuleDistribution.of(1.4, 1);
+    CDF cdf = CDF.of(distribution);
+    Scalar x = RealScalar.of(18014398509481984L);
+    Scalar p = cdf.p_lessEquals(x);
+    assertEquals(p, RealScalar.ONE);
+  }
+
+  @Test
+  void testCdfMonotonous() {
+    Distribution distribution = WaringYuleDistribution.of(1.4, 1);
+    CDF cdf = CDF.of(distribution);
+    Tensor tensor = Tensor.of(IntStream.range(2, 200) //
+        .mapToObj(RealScalar::of) //
+        .map(Power.function(2)) //
+        .map(cdf::p_lessEquals));
+    OrderedQ.require(tensor);
   }
 
   @Test

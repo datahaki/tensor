@@ -28,13 +28,17 @@ import ch.alpine.tensor.sca.Chop;
 class KDistributionTest {
   @Test
   void testSimple() throws ClassNotFoundException, IOException {
-    Distribution distribution = Serialization.copy(KDistribution.of(1, 2.3));
-    PDF pdf = PDF.of(distribution);
+    KDistribution kDistribution = (KDistribution) Serialization.copy(KDistribution.of(1, 2.3));
+    PDF pdf = PDF.of(kDistribution);
     Scalar p = pdf.at(RealScalar.of(0.2));
     Chop._08.requireClose(p, RealScalar.of(0.518777716548126));
-    CDF cdf = CDF.of(distribution);
+    CDF cdf = CDF.of(kDistribution);
     Scalar c = cdf.p_lessEquals(RealScalar.of(0.3));
     Chop._08.requireClose(c, RealScalar.of(0.1243115934496789));
+    Scalar max = kDistribution.support.max();
+    Scalar scalar = pdf.at(max);
+    Chop._20.requireZero(scalar);
+    assertEquals(cdf.p_lessEquals(max), RealScalar.ONE);
   }
 
   @Test
