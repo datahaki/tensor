@@ -14,7 +14,7 @@ import ch.alpine.tensor.pdf.DiscreteDistribution;
 /** functionality and suggested base class for a discrete probability distribution */
 public abstract class AbstractDiscreteDistribution implements DiscreteDistribution {
   @Override // from RandomVariateInterface
-  public final Scalar randomVariate(Random random) {
+  public Scalar randomVariate(Random random) {
     return protected_quantile(DoubleScalar.of(random.nextDouble()));
   }
 

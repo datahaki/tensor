@@ -3,12 +3,14 @@ package ch.alpine.tensor.pdf.d;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Random;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Ceiling;
@@ -31,17 +33,22 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
    * @param max exclusive and min < max
    * @return distribution */
   public static Distribution of(Scalar min, Scalar max) {
-    return of(Scalars.intValueExact(min), Scalars.intValueExact(max));
+    return of(Scalars.bigIntegerValueExact(min), Scalars.bigIntegerValueExact(max));
   }
 
   /** @param min inclusive
    * @param max exclusive and min < max
    * @return distribution */
   public static Distribution of(int min, int max) {
-    Integers.requireLessThan(min, max);
-    return new DiscreteUniformDistribution( //
+    return of( //
         BigInteger.valueOf(min), //
         BigInteger.valueOf(max));
+  }
+
+  public static Distribution of(BigInteger min, BigInteger max) {
+    if (min.compareTo(max) < 0)
+      return new DiscreteUniformDistribution(min, max);
+    throw new Throw(min, max);
   }
 
   // ---
@@ -75,6 +82,24 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
     return min;
   }
 
+  @Override // from RandomVariateInterface
+  public Scalar randomVariate(Random random) {
+    return RealScalar.of(min.add(random(max.subtract(min), random)));
+  }
+
+  /** @param limit
+   * @param random
+   * @return random BigInteger from 0, 1, ..., limit - 1 */
+  @PackageTestAccess
+  /* package */ static BigInteger random(BigInteger limit, Random random) {
+    BigInteger max = limit.subtract(BigInteger.ONE);
+    BigInteger bigInteger;
+    do {
+      bigInteger = new BigInteger(max.bitLength(), random);
+    } while (0 < bigInteger.compareTo(max));
+    return bigInteger;
+  }
+
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
     return p.equals(RealScalar.ONE) //
@@ -84,7 +109,7 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
 
   @Override // from InverseCDF
   protected Scalar protected_quantile(Scalar q) {
-    return _min.add(Floor.FUNCTION.apply(q.multiply(p.reciprocal())));
+    return _min.add(Floor.FUNCTION.apply(q.multiply(p.reciprocal()))); // do not simplify
   }
 
   @Override // from AbstractDiscreteDistribution

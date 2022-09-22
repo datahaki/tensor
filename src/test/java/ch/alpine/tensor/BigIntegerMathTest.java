@@ -5,18 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.Optional;
-import java.util.Random;
 
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.sca.Clips;
-
 class BigIntegerMathTest {
-  private static final Random RANDOM = new SecureRandom();
-
   @Test
   void testZeroOne() {
     assertEquals(BigIntegerMath.sqrt(BigInteger.ZERO).get(), BigInteger.ZERO);
@@ -39,11 +32,5 @@ class BigIntegerMathTest {
   void testNegativeFail() {
     Optional<BigInteger> optional = BigIntegerMath.sqrt(new BigInteger("-16"));
     assertFalse(optional.isPresent());
-  }
-
-  @RepeatedTest(5)
-  void testRandom() {
-    BigInteger bigInteger = BigIntegerMath.random(new BigInteger("11"), RANDOM);
-    Clips.interval(0, 10).requireInside(RealScalar.of(bigInteger));
   }
 }
