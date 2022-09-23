@@ -98,8 +98,7 @@ class DoubleScalarTest {
     assertTrue(Scalars.isZero(d2));
     assertEquals(d1.subtract(d2).toString(), "0.0");
     assertEquals(d2.subtract(d1).toString(), "-0.0"); // -0.0 is tolerated as value
-    assertTrue(Scalars.compare(d1, d2) == 0);
-    assertTrue(d1.hashCode() == d2.hashCode());
+    assertEquals(Scalars.compare(d1, d2), 0);
     assertEquals(d1.hashCode(), d2.hashCode());
     assertEquals(d1.negate().toString(), "-0.0");
     assertEquals(d2.negate().toString(), "0.0");

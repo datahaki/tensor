@@ -8,6 +8,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
@@ -20,12 +21,18 @@ import ch.alpine.tensor.sca.pow.Power;
 /** CDF requires BetaRegularized */
 public class FRatioDistribution implements Distribution, //
     PDF, MeanInterface, VarianceInterface, Serializable {
+  /** @param n strictly positive
+   * @param m strictly positive
+   * @return */
   public static Distribution of(Scalar n, Scalar m) {
-    return new FRatioDistribution(n, m);
+    if (Scalars.lessThan(RealScalar.ZERO, n) && //
+        Scalars.lessThan(RealScalar.ZERO, m))
+      return new FRatioDistribution(n, m);
+    throw new Throw(n, m);
   }
 
   public static Distribution of(Number n, Number m) {
-    return new FRatioDistribution(RealScalar.of(n), RealScalar.of(m));
+    return of(RealScalar.of(n), RealScalar.of(m));
   }
 
   // ---

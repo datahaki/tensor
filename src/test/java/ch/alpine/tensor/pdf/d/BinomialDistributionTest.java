@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf.d;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -242,9 +243,9 @@ class BinomialDistributionTest {
     Distribution d3 = BinomialDistribution.of(3, RationalScalar.of(1, 3));
     Distribution d4 = NormalDistribution.of(1, 2);
     assertFalse(d1.equals(d3));
-    assertFalse(d1.hashCode() == d3.hashCode());
-    assertFalse(d1.equals(d4));
-    assertFalse(d1.hashCode() == d4.hashCode());
+    assertNotEquals(d1.hashCode(), d3.hashCode());
+    assertNotEquals(d1, d4);
+    assertNotEquals(d1.hashCode(), d4.hashCode());
     byte[] b1 = Serialization.of(d1);
     byte[] b2 = Serialization.of(d2);
     assertArrayEquals(b1, b2);

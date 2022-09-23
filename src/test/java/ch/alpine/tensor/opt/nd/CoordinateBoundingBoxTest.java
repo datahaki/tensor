@@ -3,6 +3,8 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,7 +52,7 @@ class CoordinateBoundingBoxTest {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBoundingBox.of(clip, clip);
     CoordinateBoundingBox lo = coordinateBoundingBox.splitLo(1);
     assertEquals(lo.getClip(0), clip);
-    assertTrue(lo.getClip(0) == clip);
+    assertSame(lo.getClip(0), clip);
     assertEquals(lo.getClip(1), Clips.interval(-1, 0));
     Serialization.copy(coordinateBoundingBox);
   }
@@ -112,7 +114,7 @@ class CoordinateBoundingBoxTest {
         Tensors.fromString("{1[m], 2[m], 4[m]}"), //
         Tensors.fromString("{2[m], 3[m], 5[m]}"));
     assertFalse(box1.equals(box3));
-    assertFalse(box1.hashCode() == box3.hashCode());
+    assertNotEquals(box1.hashCode(), box3.hashCode());
     assertFalse(box1.toString().equals(box3.toString()));
     assertFalse(((Object) box1).equals(RealScalar.ONE));
     assertFalse(((Object) box1).equals("abc"));

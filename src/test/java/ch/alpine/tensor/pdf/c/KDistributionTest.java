@@ -32,6 +32,7 @@ class KDistributionTest {
     PDF pdf = PDF.of(kDistribution);
     Scalar p = pdf.at(RealScalar.of(0.2));
     Chop._08.requireClose(p, RealScalar.of(0.518777716548126));
+    assertEquals(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
     CDF cdf = CDF.of(kDistribution);
     Scalar c = cdf.p_lessEquals(RealScalar.of(0.3));
     Chop._08.requireClose(c, RealScalar.of(0.1243115934496789));

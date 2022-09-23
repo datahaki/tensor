@@ -3,6 +3,8 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -18,10 +20,10 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 class UnmodifiableTensorTest {
   @Test
   void testUnmodificableEmptyEquals() {
-    assertTrue(Tensors.unmodifiableEmpty() == Tensors.unmodifiableEmpty());
-    assertTrue(Tensors.unmodifiableEmpty() != Tensors.empty());
-    assertTrue(Tensors.unmodifiableEmpty() != Tensors.empty().unmodifiable());
-    assertTrue(Tensors.unmodifiableEmpty() == Tensors.unmodifiableEmpty().unmodifiable());
+    assertSame(Tensors.unmodifiableEmpty(), Tensors.unmodifiableEmpty());
+    assertNotSame(Tensors.unmodifiableEmpty(), Tensors.empty());
+    assertNotSame(Tensors.unmodifiableEmpty(), Tensors.empty().unmodifiable());
+    assertSame(Tensors.unmodifiableEmpty(), Tensors.unmodifiableEmpty().unmodifiable());
   }
 
   @Test
@@ -54,7 +56,7 @@ class UnmodifiableTensorTest {
     Tensor b = a.unmodifiable();
     assertEquals(a, b);
     assertEquals(a.hashCode(), b.hashCode());
-    assertTrue(b == b.unmodifiable());
+    assertSame(b, b.unmodifiable());
   }
 
   @Test
@@ -63,7 +65,7 @@ class UnmodifiableTensorTest {
     Tensor b = a.unmodifiable();
     assertEquals(a, b);
     assertEquals(a.hashCode(), b.hashCode());
-    assertTrue(b == b.unmodifiable());
+    assertSame(b, b.unmodifiable());
   }
 
   @Test
@@ -72,7 +74,7 @@ class UnmodifiableTensorTest {
     Tensor b = Tensors.empty().unmodifiable();
     assertEquals(a, b);
     assertEquals(a.hashCode(), b.hashCode());
-    assertTrue(b == b.unmodifiable());
+    assertSame(b, b.unmodifiable());
   }
 
   @Test

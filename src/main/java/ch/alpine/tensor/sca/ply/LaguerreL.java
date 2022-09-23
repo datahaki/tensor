@@ -22,6 +22,7 @@ public enum LaguerreL {
       Scalar s2 = x.subtract(RealScalar.ONE).multiply(BesselI._0(x2));
       return s1.subtract(s2).multiply(Exp.FUNCTION.apply(x2));
     }
+    // TODO TENSOR IMPL
     throw new Throw(n, x);
   }
 }

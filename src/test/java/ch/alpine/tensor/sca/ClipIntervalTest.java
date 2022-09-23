@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -44,7 +45,7 @@ class ClipIntervalTest {
   void testHash() {
     assertEquals(Clips.interval(7, 7).hashCode(), Clips.interval(7, 7).hashCode());
     assertEquals(Clips.interval(3, 7).hashCode(), Clips.interval(3, 7).hashCode());
-    assertFalse(Clips.interval(3, 7).hashCode() == Clips.interval(3, 8).hashCode());
+    assertNotEquals(Clips.interval(3, 7).hashCode(), Clips.interval(3, 8).hashCode());
   }
 
   @Test

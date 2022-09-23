@@ -36,6 +36,12 @@ class BesselKTest {
   }
 
   @Test
+  void testSome() {
+    Scalar result = BesselK.of(3, 0.2);
+    Tolerance.CHOP.requireClose(result, RealScalar.of(995.0245582978779));
+  }
+
+  @Test
   void testLimit() {
     Tolerance.CHOP.requireZero(RealScalar.of(BesselK.kn(0, 700)));
     assertEquals(BesselK.kn(0, 701), 0.0);

@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -164,7 +165,7 @@ class UnitSystemsTest {
   void testIdentity() throws ClassNotFoundException, IOException {
     UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/ch/alpine/tensor/qty/chf.properties"));
     UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "CHF");
-    assertTrue(unitSystem == baseSystem);
+    assertSame(baseSystem, unitSystem);
     assertFalse(unitSystem.map().containsKey("CHF"));
     UnitSystem joined = UnitSystems.join(baseSystem, UnitSystem.SI());
     Serialization.copy(joined);

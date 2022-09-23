@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,8 +20,8 @@ class DoubleTest {
     assertTrue(d1 >= d2);
     assertTrue(d2 >= d1);
     // the tensor library overrides this logic (see DoubleScalar)
-    assertTrue(Double.compare(d1, d2) == +1);
-    assertTrue(Double.compare(d2, d1) == -1);
+    assertEquals(Double.compare(d1, d2), +1);
+    assertEquals(Double.compare(d2, d1), -1);
   }
 
   @Test

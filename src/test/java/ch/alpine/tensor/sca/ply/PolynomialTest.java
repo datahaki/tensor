@@ -395,7 +395,7 @@ class PolynomialTest {
     assertFalse(c1.equals(c2));
     assertFalse(c1.equals(null));
     assertFalse(c1.equals((Object) Pi.VALUE));
-    assertFalse(c1.hashCode() == c2.hashCode());
+    assertNotEquals(c1.hashCode(), c2.hashCode());
     Polynomial pd = c1.times(c2);
     Polynomial al = c2.times(c1);
     assertEquals(pd.coeffs(), al.coeffs());

@@ -3,8 +3,9 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -47,20 +48,20 @@ class UnitImplTest {
     Unit unit1 = Unit.of("kg^2*m^-1*K*ABC");
     Unit unit2 = Serialization.copy(unit1);
     assertEquals(unit1, unit2);
-    assertFalse(unit1 == unit2);
+    assertNotSame(unit1, unit2);
     Unit unit1_negate = unit1.negate();
     Unit unit2_negate = unit2.negate();
-    assertTrue(unit1_negate == unit2_negate);
+    assertSame(unit1_negate, unit2_negate);
   }
 
   @Test
   void testCachedEquals() {
     Unit unit1 = Unit.of("kg^2/3*m^-3*K");
     Unit unit2 = Unit.of("kg^2/3*m^-3*K");
-    assertTrue(unit1 == unit2);
+    assertSame(unit1, unit2);
     Unit unit1_negate = unit1.negate();
     Unit unit2_negate = unit2.negate();
-    assertTrue(unit1_negate == unit2_negate);
+    assertSame(unit1_negate, unit2_negate);
   }
 
   @Test
@@ -77,12 +78,13 @@ class UnitImplTest {
     NavigableMap<String, Scalar> m2 = new TreeMap<>();
     m2.put("kgt", RealScalar.of(2).negate());
     m2.put("some", RealScalar.of(1));
-    assertTrue(UnitImpl.create(m1) == UnitImpl.create(m2));
+    assertSame(UnitImpl.create(m1), UnitImpl.create(m2));
   }
 
   @Test
   void testReference2() {
-    assertTrue(UnitImpl.create(Collections.emptyNavigableMap()) == //
+    assertSame( //
+        UnitImpl.create(Collections.emptyNavigableMap()), //
         UnitImpl.create(Collections.emptyNavigableMap()));
   }
 

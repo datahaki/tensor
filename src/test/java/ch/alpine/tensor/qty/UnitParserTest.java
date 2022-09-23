@@ -3,8 +3,9 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 
@@ -56,9 +57,9 @@ class UnitParserTest {
   @Test
   void testUnderscore() {
     Unit unit = UnitParser.of("V_AC");
-    assertTrue(unit == UnitParser.of("V_AC"));
-    assertTrue(UnitParser.of("____").equals(UnitParser.of("____")));
-    assertFalse(UnitParser.of("___").equals(UnitParser.of("____")));
+    assertSame(unit, UnitParser.of("V_AC"));
+    assertEquals(UnitParser.of("____"), UnitParser.of("____"));
+    assertNotEquals(UnitParser.of("___"), UnitParser.of("____"));
   }
 
   @Test

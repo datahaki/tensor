@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 public enum BesselK {
   ;
   public static Scalar of(Scalar n, Scalar x) {
-    return RealScalar.of(BesselK.kn(Scalars.intValueExact(n), x.number().doubleValue()));
+    return RealScalar.of(kn(Scalars.intValueExact(n), x.number().doubleValue()));
   }
 
   public static Scalar of(Number n, Number x) {

@@ -1,8 +1,11 @@
 // code by jph
 package ch.alpine.tensor.sca.ply;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
@@ -30,5 +33,12 @@ class ChebyshevNodesTest {
     Tolerance.CHOP.requireClose(ratio, scalar.reciprocal());
     m2 = m2.multiply(ratio);
     Tolerance.CHOP.requireClose(m1, m2);
+  }
+
+  @Test
+  void testFails() {
+    assertThrows(Exception.class, () -> ChebyshevNodes._1.of(0, 0));
+    assertThrows(Exception.class, () -> ChebyshevNodes._1.of(3, 4));
+    assertThrows(Exception.class, () -> ChebyshevNodes._1.of(3, -1));
   }
 }

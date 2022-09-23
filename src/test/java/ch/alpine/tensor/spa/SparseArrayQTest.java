@@ -3,6 +3,7 @@ package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -64,6 +65,7 @@ class SparseArrayQTest {
     Tensor result = tensor.map(s -> Tensors.of(Quantity.of(s, "m"), Quantity.of(s, "m")));
     SparseArray sparse = (SparseArray) result;
     assertEquals(sparse.fallback(), Quantity.of(0, "m"));
+    assertSame(SparseArrayQ.require(sparse), sparse);
   }
 
   @Test

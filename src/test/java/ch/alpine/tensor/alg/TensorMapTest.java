@@ -2,7 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -60,7 +60,7 @@ class TensorMapTest {
     }, matrix, 1);
     assertEquals(matrix, ConstantArray.of(RealScalar.ONE, 3, 1));
     assertEquals(matrix, blub);
-    assertFalse(matrix == blub);
+    assertNotSame(matrix, blub);
   }
 
   @Test

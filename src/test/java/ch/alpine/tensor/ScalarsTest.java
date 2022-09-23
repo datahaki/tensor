@@ -151,7 +151,7 @@ class ScalarsTest {
   void testStatic() {
     assertTrue(Scalars.compare(RealScalar.of(2), RealScalar.of(3)) < 0);
     assertTrue(Scalars.compare(RealScalar.of(5), RealScalar.of(1)) > 0);
-    assertTrue(Scalars.compare(RealScalar.of(8), RealScalar.of(8)) == 0);
+    assertEquals(Scalars.compare(RealScalar.of(8), RealScalar.of(8)), 0);
   }
 
   @Test

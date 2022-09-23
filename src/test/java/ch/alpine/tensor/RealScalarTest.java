@@ -2,10 +2,9 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -23,7 +22,7 @@ class RealScalarTest {
     Scalar a = RealScalar.ZERO;
     Scalar b = Serialization.parse(Serialization.of(a));
     assertEquals(a, b);
-    assertFalse(a == b);
+    assertNotSame(a, b);
   }
 
   @Test
@@ -89,12 +88,12 @@ class RealScalarTest {
 
   @Test
   void testNumberByte() {
-    assertTrue(RealScalar.of(-1).number().byteValue() == (byte) 255);
-    assertTrue(RealScalar.of(0).number().byteValue() == (byte) 0);
-    assertTrue(RealScalar.of(1).number().byteValue() == (byte) 1);
-    assertTrue(RealScalar.of(128).number().byteValue() == (byte) 128);
-    assertTrue(RealScalar.of(255).number().byteValue() == (byte) 255);
-    assertTrue(RealScalar.of(256).number().byteValue() == (byte) 0);
+    assertEquals(RealScalar.of(-1).number().byteValue(), (byte) 255);
+    assertEquals(RealScalar.of(0).number().byteValue(), (byte) 0);
+    assertEquals(RealScalar.of(1).number().byteValue(), (byte) 1);
+    assertEquals(RealScalar.of(128).number().byteValue(), (byte) 128);
+    assertEquals(RealScalar.of(255).number().byteValue(), (byte) 255);
+    assertEquals(RealScalar.of(256).number().byteValue(), (byte) 0);
   }
 
   @Test
