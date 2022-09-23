@@ -2,8 +2,8 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -48,7 +48,7 @@ class BooleanScalarTest {
   @Test
   void testReciprocal() {
     assertEquals(BooleanScalar.TRUE.reciprocal(), BooleanScalar.TRUE);
-    assertThrows(Throw.class, () -> BooleanScalar.FALSE.reciprocal());
+    assertThrows(Throw.class, BooleanScalar.FALSE::reciprocal);
   }
 
   @Test
@@ -68,7 +68,7 @@ class BooleanScalarTest {
 
   @Test
   void testEquals() {
-    assertFalse(BooleanScalar.TRUE.equals(null));
+    assertNotEquals(null, BooleanScalar.TRUE);
   }
 
   @Test

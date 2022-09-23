@@ -2,7 +2,7 @@
 package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -56,8 +56,8 @@ class DurationScalarTest {
     assertThrows(Throw.class, () -> ofs.add(RealScalar.TWO));
     assertThrows(Throw.class, () -> len.add(RealScalar.TWO));
     assertThrows(Throw.class, () -> len.compareTo(RealScalar.TWO));
-    assertThrows(Throw.class, () -> len.number());
-    assertThrows(Throw.class, () -> len.absSquared());
+    assertThrows(Throw.class, len::number);
+    assertThrows(Throw.class, len::absSquared);
     assertThrows(Throw.class, () -> len.divide(ComplexScalar.I));
     assertThrows(Throw.class, () -> len.under(ComplexScalar.I));
   }
@@ -87,7 +87,7 @@ class DurationScalarTest {
   @Test
   void testReciprocalFail() {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(0));
-    assertThrows(ArithmeticException.class, () -> d1.reciprocal());
+    assertThrows(ArithmeticException.class, d1::reciprocal);
   }
 
   @Test
@@ -215,7 +215,7 @@ class DurationScalarTest {
 
   @Test
   void testNEquals() {
-    assertFalse(DurationScalar.of(Duration.ofSeconds(100)).equals(RationalScalar.HALF));
+    assertNotEquals(DurationScalar.of(Duration.ofSeconds(100)), RationalScalar.HALF);
   }
 
   @Test

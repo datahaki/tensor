@@ -87,14 +87,15 @@ public enum Array {
   }
 
   // ---
-  /** @param supplier
+  /** @param scalar
    * @param dimensions
    * @return */
+  // TODO TENSOR API need decision
   public static Tensor fill(Scalar scalar, int... dimensions) {
     return fill(() -> scalar, Integers.asList(dimensions));
   }
 
-  /** @param supplier
+  /** @param scalar
    * @param dimensions
    * @return */
   public static Tensor fill(Scalar scalar, List<Integer> dimensions) {

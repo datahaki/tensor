@@ -2,8 +2,8 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -95,7 +95,7 @@ class TransposeTest {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 2 }, { 2, 4 } });
     Tensor mt = Transpose.of(m);
     mt.set(i -> RealScalar.ZERO, 1, 1);
-    assertFalse(m.equals(mt));
+    assertNotEquals(m, mt);
   }
 
   @Test

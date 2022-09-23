@@ -4,6 +4,7 @@ package ch.alpine.tensor.lie;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -53,8 +54,8 @@ class QuaternionTest {
     Quaternion actual = quaternion.reciprocal();
     Quaternion expect = Quaternion.of(Scalars.fromString("3/38[m^-1]"), Tensors.fromString("{-1/19[m^-1], -3/38[m^-1], -2/19[m^-1]}"));
     assertEquals(expect, actual);
-    assertThrows(Throw.class, () -> quaternion.exp());
-    assertThrows(Throw.class, () -> quaternion.log());
+    assertThrows(Throw.class, quaternion::exp);
+    assertThrows(Throw.class, quaternion::log);
   }
 
   @Test
@@ -94,7 +95,7 @@ class QuaternionTest {
     Scalar c1 = ComplexScalar.of(1, 3);
     Scalar q1 = Quaternion.of(1, 3, 0, 0);
     assertEquals(q1, q1);
-    assertFalse(c1.equals(Quaternion.of(1, 3, 1, 0)));
+    assertNotEquals(c1, Quaternion.of(1, 3, 1, 0));
   }
 
   @Test
@@ -278,8 +279,8 @@ class QuaternionTest {
       Quaternion q12 = q1.multiply(q2);
       assertEquals(q12.divide(q2), q1);
       assertEquals(q1.under(q12), q2);
-      assertFalse(q12.divide(q1).equals(q2));
-      assertFalse(q2.under(q12).equals(q1));
+      assertNotEquals(q12.divide(q1), q2);
+      assertNotEquals(q2.under(q12), q1);
     }
   }
 

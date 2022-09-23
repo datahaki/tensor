@@ -66,7 +66,7 @@ class DagumDistributionTest {
   @Test
   void testVarianceFail() {
     DagumDistribution distribution = (DagumDistribution) DagumDistribution.of(2.3, 1.2, 0.7);
-    assertThrows(UnsupportedOperationException.class, () -> distribution.variance());
+    assertThrows(UnsupportedOperationException.class, distribution::variance);
   }
 
   @Test

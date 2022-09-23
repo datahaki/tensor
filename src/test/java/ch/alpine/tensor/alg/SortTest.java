@@ -2,7 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
@@ -54,7 +54,7 @@ class SortTest {
 
   @Test
   void testStringScalar() {
-    Comparator<GaussScalar> comparator = (o1, o2) -> o1.prime().compareTo(o2.prime());
+    Comparator<GaussScalar> comparator = Comparator.comparing(GaussScalar::prime);
     Scalar qs1 = GaussScalar.of(-3, 7);
     Scalar qs2 = GaussScalar.of(-3, 17);
     Tensor vec = Tensors.of(qs2, qs1);
@@ -85,7 +85,7 @@ class SortTest {
     Tensor sorted = Sort.of(tensor);
     assertEquals(tensor, sorted);
     tensor.set(RealScalar.ONE::add, Tensor.ALL, Tensor.ALL);
-    assertFalse(tensor.equals(sorted));
+    assertNotEquals(tensor, sorted);
     assertEquals(sorted, Tensors.fromString("{{1, 2, 3}}"));
     assertEquals(tensor, Tensors.fromString("{{2, 3, 4}}"));
   }

@@ -36,8 +36,8 @@ class UnprotectTest {
   void testUsingEmpty() {
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.empty());
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.unmodifiableEmpty());
-    assertEquals(Unprotect.using(Arrays.asList()), Tensors.empty());
-    assertEquals(Unprotect.using(Arrays.asList()), Tensors.unmodifiableEmpty());
+    assertEquals(Unprotect.using(List.of()), Tensors.empty());
+    assertEquals(Unprotect.using(List.of()), Tensors.unmodifiableEmpty());
   }
 
   @Test

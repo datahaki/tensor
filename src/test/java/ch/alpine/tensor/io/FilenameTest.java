@@ -47,24 +47,24 @@ class FilenameTest {
   @Test
   void testFailSpacing() {
     Filename filename = new Filename("dir/title.bmp ");
-    assertThrows(IllegalArgumentException.class, () -> filename.extension());
+    assertThrows(IllegalArgumentException.class, filename::extension);
   }
 
   @Test
   void testFailExtension() {
     Filename filename = new Filename("dir/title.ext");
-    assertThrows(IllegalArgumentException.class, () -> filename.extension());
+    assertThrows(IllegalArgumentException.class, filename::extension);
   }
 
   @Test
   void testFailNoExt() {
     Filename filename = new Filename("dir/mybmp");
-    assertThrows(IllegalArgumentException.class, () -> filename.extension());
+    assertThrows(IllegalArgumentException.class, filename::extension);
   }
 
   @Test
   void testFailTruncate() {
     Filename filename = new Filename("dir/mybmp");
-    assertThrows(StringIndexOutOfBoundsException.class, () -> filename.truncate());
+    assertThrows(StringIndexOutOfBoundsException.class, filename::truncate);
   }
 }

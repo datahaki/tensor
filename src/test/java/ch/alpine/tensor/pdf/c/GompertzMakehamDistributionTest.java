@@ -100,7 +100,7 @@ class GompertzMakehamDistributionTest {
   void testVarianceFail() {
     GompertzMakehamDistribution distribution = //
         (GompertzMakehamDistribution) GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
-    assertThrows(UnsupportedOperationException.class, () -> distribution.variance());
+    assertThrows(UnsupportedOperationException.class, distribution::variance);
   }
 
   @Test

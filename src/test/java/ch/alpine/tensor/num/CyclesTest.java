@@ -2,7 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -106,7 +106,7 @@ class CyclesTest {
   @Test
   void testNonEquals() throws ClassNotFoundException, IOException {
     Object cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
-    assertFalse(cycles.equals(Pi.VALUE));
+    assertNotEquals(cycles, Pi.VALUE);
   }
 
   @Test

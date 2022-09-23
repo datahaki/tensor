@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +52,7 @@ class LanczosInterpolationTest {
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
     Interpolation interpolation = LanczosInterpolation.of(tensor, 2);
     Tensor result = interpolation.get(Tensors.vector(6.2));
-    assertEquals(Dimensions.of(result), Arrays.asList(15));
+    assertEquals(Dimensions.of(result), List.of(15));
     Scalar scalar = interpolation.Get(Tensors.vector(4.4, 7.2));
     Chop._14.requireClose(scalar, RealScalar.of(105.27240539882584));
   }
@@ -63,7 +64,7 @@ class LanczosInterpolationTest {
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
     Interpolation interpolation = LanczosInterpolation.of(tensor);
     Tensor result = interpolation.get(Tensors.vector(6.2));
-    assertEquals(Dimensions.of(result), Arrays.asList(15));
+    assertEquals(Dimensions.of(result), List.of(15));
     Scalar scalar = interpolation.Get(Tensors.vector(4.4, 7.2));
     Chop._14.requireClose(scalar, RealScalar.of(94.24810834850828));
   }

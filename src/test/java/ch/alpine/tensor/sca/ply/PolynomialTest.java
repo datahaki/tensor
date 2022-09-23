@@ -2,7 +2,6 @@
 package ch.alpine.tensor.sca.ply;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -264,7 +263,7 @@ class PolynomialTest {
     Scalar qs1 = Quaternion.of(1, 2, 3, 4);
     Scalar qs2 = Quaternion.of(2, 5, -1, 0);
     Scalar qs3 = Quaternion.of(-3, 7, 10, -11);
-    assertFalse(qs1.multiply(qs2).equals(qs2.multiply(qs1)));
+    assertNotEquals(qs1.multiply(qs2), qs2.multiply(qs1));
     Scalar val = Quaternion.of(-1, 7, 6, -8);
     Tensor coeffs = Tensors.of(qs1, qs2, qs3);
     ScalarUnaryOperator series = Polynomial.of(coeffs);
@@ -392,9 +391,9 @@ class PolynomialTest {
     assertEquals(c2.toString(), "Polynomial[{5, 7, 1}]");
     Tensor roots = c2.roots();
     Tolerance.CHOP.requireAllZero(roots.map(c2));
-    assertFalse(c1.equals(c2));
-    assertFalse(c1.equals(null));
-    assertFalse(c1.equals((Object) Pi.VALUE));
+    assertNotEquals(c1, c2);
+    assertNotEquals(null, c1);
+    assertNotEquals(c1, Pi.VALUE);
     assertNotEquals(c1.hashCode(), c2.hashCode());
     Polynomial pd = c1.times(c2);
     Polynomial al = c2.times(c1);

@@ -153,8 +153,8 @@ class RationalScalarTest {
   void testCompare() {
     assertTrue(Scalars.lessThan(RationalScalar.of(-3, 2), RealScalar.ZERO));
     assertFalse(Scalars.lessThan(RationalScalar.of(3, 2), RealScalar.ZERO));
-    assertTrue(!Scalars.lessThan(RealScalar.ZERO, RationalScalar.of(-3, 2)));
-    assertFalse(!Scalars.lessThan(RealScalar.ZERO, RationalScalar.of(3, 2)));
+    assertFalse(Scalars.lessThan(RealScalar.ZERO, RationalScalar.of(-3, 2)));
+    assertTrue(Scalars.lessThan(RealScalar.ZERO, RationalScalar.of(3, 2)));
     assertTrue(Scalars.lessThan(RationalScalar.of(-3, 2), RationalScalar.of(-3, 3)));
     assertTrue(Scalars.lessThan(RationalScalar.of(3, 20), RationalScalar.of(4, 2)));
     assertTrue(Scalars.lessThan(RationalScalar.of(-13, 20), RationalScalar.of(17, 2)));

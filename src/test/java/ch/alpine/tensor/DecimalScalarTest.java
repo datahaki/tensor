@@ -4,6 +4,7 @@ package ch.alpine.tensor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -253,13 +254,13 @@ class DecimalScalarTest {
   @Test
   void testDivideZero() {
     Scalar scalar = DecimalScalar.of(BigDecimal.ZERO);
-    assertThrows(ArithmeticException.class, () -> scalar.reciprocal());
+    assertThrows(ArithmeticException.class, scalar::reciprocal);
   }
 
   @Test
   void testDivideZero2() {
     Scalar scalar = DecimalScalar.of(new BigDecimal("0", MathContext.UNLIMITED));
-    assertThrows(ArithmeticException.class, () -> scalar.reciprocal());
+    assertThrows(ArithmeticException.class, scalar::reciprocal);
   }
 
   @Test
@@ -356,15 +357,15 @@ class DecimalScalarTest {
   void testEqualsSpecial() {
     Scalar ds1 = DecimalScalar.of(new BigDecimal("1.0234", MathContext.DECIMAL128));
     assertInstanceOf(DecimalScalar.class, ds1);
-    assertFalse(ds1.equals(null));
-    assertFalse(ds1.equals(ComplexScalar.of(1, 2)));
-    assertFalse(ds1.equals(GaussScalar.of(6, 7)));
+    assertNotEquals(null, ds1);
+    assertNotEquals(ds1, ComplexScalar.of(1, 2));
+    assertNotEquals(ds1, GaussScalar.of(6, 7));
   }
 
   @Test
   void testEqualsObject() {
     Object object = DecimalScalar.of(new BigDecimal("1.0234", MathContext.DECIMAL128));
-    assertFalse(object.equals("hello"));
+    assertNotEquals("hello", object);
   }
 
   private static final class ObjectExtension {
@@ -383,7 +384,7 @@ class DecimalScalarTest {
   void testEqualsTrue() {
     Object object = new ObjectExtension();
     final Scalar ds1 = DecimalScalar.of(new BigDecimal("1.0234", MathContext.DECIMAL128));
-    assertTrue(ds1.equals(object));
+    assertEquals(ds1, object);
   }
 
   @Test

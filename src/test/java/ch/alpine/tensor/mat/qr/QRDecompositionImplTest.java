@@ -102,7 +102,7 @@ class QRDecompositionImplTest {
       Tensor matrix = Dot.of(base, mult);
       QRDecompositionImpl qrDecompositionImpl = //
           new QRDecompositionImpl(matrix, IdentityMatrix.of(n), QRSignOperators.STABILITY);
-      assertThrows(Throw.class, () -> qrDecompositionImpl.pseudoInverse());
+      assertThrows(Throw.class, qrDecompositionImpl::pseudoInverse);
     }
   }
 
@@ -121,7 +121,7 @@ class QRDecompositionImplTest {
     double thres = max.number().doubleValue() * 1e-12;
     Chop chop = Chop.below(thres);
     chop.requireAllZero(rs.stream().reduce(Min::of).get());
-    assertThrows(Throw.class, () -> qrDecomposition.pseudoInverse());
+    assertThrows(Throw.class, qrDecomposition::pseudoInverse);
   }
 
   @Test

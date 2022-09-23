@@ -2,8 +2,8 @@
 package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,13 +38,12 @@ class DateTimeScalarTest {
     Scalar scalar2 = dt2.subtract(dt1);
     assertInstanceOf(Quantity.class, scalar2);
     assertEquals(dt1.add(scalar2), dt2);
-    assertThrows(Throw.class, () -> dt1.negate());
+    assertThrows(Throw.class, dt1::negate);
     assertThrows(Throw.class, () -> dt1.multiply(RealScalar.of(-1)));
     assertThrows(Throw.class, () -> dt1.subtract(RationalScalar.HALF));
     assertEquals(dt2.subtract(dt1.multiply(RealScalar.of(1))), scalar2);
   }
 
-  @SuppressWarnings("unlikely-arg-type")
   @Test
   void testSpecific() {
     LocalDateTime ldt1 = LocalDateTime.of(2020, 12, 20, 4, 30);
@@ -59,8 +58,8 @@ class DateTimeScalarTest {
     assertTrue(Sign.isPositive(oneDay));
     assertTrue(Sign.isPositiveOrZero(oneDay.zero()));
     assertTrue(Sign.isNegativeOrZero(oneDay.zero()));
-    assertFalse(oneDay.equals("asd"));
-    assertFalse(dt1.hashCode() == dt2.hashCode());
+    assertNotEquals("asd", oneDay);
+    assertNotEquals(dt1.hashCode(), dt2.hashCode());
   }
 
   @Test
@@ -188,15 +187,15 @@ class DateTimeScalarTest {
   void testAddFail1() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 21, 4, 30));
-    assertFalse(dt1.equals(RealScalar.ONE));
-    assertFalse(dt1.equals(dt2));
+    assertNotEquals(dt1, RealScalar.ONE);
+    assertNotEquals(dt1, dt2);
     assertEquals(dt1.compareTo(dt2), -1);
     assertEquals(dt2.compareTo(dt1), +1);
     assertThrows(Throw.class, () -> dt1.add(dt2));
     assertThrows(Throw.class, () -> dt1.negate().add(dt2.negate()));
     assertThrows(Throw.class, () -> dt1.multiply(Pi.TWO));
-    assertThrows(Throw.class, () -> dt1.reciprocal());
-    assertThrows(Throw.class, () -> dt1.number());
+    assertThrows(Throw.class, dt1::reciprocal);
+    assertThrows(Throw.class, dt1::number);
     assertEquals(dt1.zero(), Quantity.of(0, "s"));
     assertEquals(dt1.one(), RealScalar.ONE);
   }

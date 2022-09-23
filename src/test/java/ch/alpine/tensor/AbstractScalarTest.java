@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,9 +48,9 @@ class AbstractScalarTest {
   @Test
   void testGet1Fail() {
     assertEquals(Pi.VALUE.get(), Pi.VALUE);
-    assertThrows(Throw.class, () -> Pi.VALUE.get(Arrays.asList(0)));
+    assertThrows(Throw.class, () -> Pi.VALUE.get(List.of(0)));
     assertThrows(Throw.class, () -> Pi.VALUE.get(Arrays.asList(0, 0)));
-    assertThrows(Throw.class, () -> Pi.VALUE.get(Arrays.asList(-1)));
+    assertThrows(Throw.class, () -> Pi.VALUE.get(List.of(-1)));
     assertThrows(Throw.class, () -> Pi.VALUE.get(Arrays.asList(-1, 0)));
     assertThrows(Throw.class, () -> RealScalar.ONE.Get(1));
     assertThrows(Throw.class, () -> RealScalar.ONE.get(new int[] { 1 }));
@@ -87,11 +88,11 @@ class AbstractScalarTest {
 
   @Test
   void testBlockEmpty() {
-    assertEquals(Pi.VALUE.block(Arrays.asList(), Arrays.asList()), Pi.VALUE);
+    assertEquals(Pi.VALUE.block(List.of(), List.of()), Pi.VALUE);
   }
 
   @Test
   void testBlockFail() {
-    assertThrows(Throw.class, () -> RealScalar.ONE.block(Arrays.asList(1), Arrays.asList(1)));
+    assertThrows(Throw.class, () -> RealScalar.ONE.block(List.of(1), List.of(1)));
   }
 }

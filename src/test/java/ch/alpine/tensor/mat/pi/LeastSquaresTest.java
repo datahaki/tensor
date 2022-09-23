@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.pi;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -129,7 +130,7 @@ class LeastSquaresTest {
     Tensor x1 = PseudoInverse.usingCholesky(m).dot(b);
     Tensor x2 = LeastSquares.usingSvd(m, b);
     Tensor x3 = LeastSquares.usingQR(m, b);
-    assertEquals(Dimensions.of(x1), Arrays.asList(3));
+    assertEquals(Dimensions.of(x1), List.of(3));
     Chop._10.requireClose(x1, x2); // not below tolerance
     Chop._10.requireClose(x3, x2); // not below tolerance
   }

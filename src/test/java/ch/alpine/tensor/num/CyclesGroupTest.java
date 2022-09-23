@@ -2,7 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -72,7 +72,7 @@ class CyclesGroupTest {
       ite = ite.stream().flatMap(cycles -> gen.stream().map(cycles::combine)).collect(Collectors.toSet());
     for (Cycles cycles : all)
       for (Entry<Integer, Integer> entry : cycles.navigableMap().entrySet())
-        assertFalse(entry.getKey().equals(entry.getValue()));
+        assertNotEquals(entry.getKey(), entry.getValue());
     for (Cycles cycles : all) {
       Tensor result = Tensor.of(cycles.toTensor().stream().map(CyclesGroupTest::minFirst).sorted(COMPARATOR));
       assertEquals(cycles.toTensor(), result);

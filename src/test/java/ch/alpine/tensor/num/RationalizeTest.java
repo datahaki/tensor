@@ -2,7 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -97,11 +97,11 @@ class RationalizeTest {
       RationalScalar input = (RationalScalar) RationalScalar.of(num, 10000);
       final Scalar result = suo.apply(input);
       if (Scalars.lessThan(THND, RealScalar.of(input.denominator()))) {
-        assertFalse(input.equals(result));
+        assertNotEquals(input, result);
         Scalar residual = N.DOUBLE.apply(input.subtract(result));
         Chop._04.requireZero(residual);
       } else {
-        assertTrue(input.equals(result));
+        assertEquals(input, result);
       }
     }
   }

@@ -40,9 +40,6 @@ import ch.alpine.tensor.sca.Clip;
  * addition per loop than evaluating a nested polynomial of
  * the same degree.
  * 
- * @param coef the coefficients of the polynomial
- * @param x argument to the polynomial
- * 
  * Reference:
  * https://en.wikipedia.org/wiki/Clenshaw_algorithm */
 public class ClenshawChebyshev implements ScalarUnaryOperator {
@@ -53,7 +50,7 @@ public class ClenshawChebyshev implements ScalarUnaryOperator {
    * in the weighted combination as
    * p[x] == a T0[x] + b T1[x] + c T2[x] + ...
    * 
-   * @param coeffs vector
+   * @param coeffs vector coefficients of the polynomial
    * @return */
   public static ScalarUnaryOperator of(Tensor coeffs) {
     return new ClenshawChebyshev(ScalarUnaryOperator.IDENTITY, coeffs);

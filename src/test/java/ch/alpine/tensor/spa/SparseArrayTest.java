@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -106,7 +107,7 @@ class SparseArrayTest {
   @Test
   void testFails() {
     Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
-    assertThrows(UnsupportedOperationException.class, () -> sparse.unmodifiable());
+    assertThrows(UnsupportedOperationException.class, sparse::unmodifiable);
     assertThrows(UnsupportedOperationException.class, () -> sparse.append(Array.zeros(4, 8)));
     assertThrows(Throw.class, () -> sparse.map(RealScalar.ONE::add));
   }
@@ -186,15 +187,15 @@ class SparseArrayTest {
     Tensor sparse = TestHelper.of(tensor);
     Tensor result = sparse.block(Arrays.asList(1, 0), Arrays.asList(0, 0));
     assertEquals(result, Tensors.empty());
-    assertEquals(Dimensions.of(result), Arrays.asList(0));
+    assertEquals(Dimensions.of(result), List.of(0));
   }
 
   @Test
   void testBlock2() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     Tensor sparse = TestHelper.of(tensor);
-    Tensor result = sparse.block(Arrays.asList(2), Arrays.asList(1));
-    assertEquals(result, tensor.block(Arrays.asList(2), Arrays.asList(1)));
+    Tensor result = sparse.block(List.of(2), List.of(1));
+    assertEquals(result, tensor.block(List.of(2), List.of(1)));
     assertEquals(Dimensions.of(result), Arrays.asList(1, 5));
     MatrixQ.require(result);
   }

@@ -30,7 +30,7 @@ class TestHelperTest {
     int dimension1 = Unprotect.dimension1(tensor);
     for (int ofs0 = 0; ofs0 <= tensor.length(); ++ofs0)
       for (int len0 = 0; len0 <= tensor.length() - ofs0; ++len0) {
-        _checkBlock(Arrays.asList(ofs0), Arrays.asList(len0));
+        _checkBlock(List.of(ofs0), List.of(len0));
         for (int ofs1 = 0; ofs1 <= dimension1; ++ofs1)
           for (int len1 = 0; len1 <= dimension1 - ofs1; ++len1)
             _checkBlock(Arrays.asList(ofs0, ofs1), Arrays.asList(len0, len1));
@@ -44,8 +44,8 @@ class TestHelperTest {
 
   @Test
   void testBlockFail() {
-    _checkBlockFail(Arrays.asList(-1), Arrays.asList(0));
-    _checkBlockFail(Arrays.asList(6), Arrays.asList(0));
+    _checkBlockFail(List.of(-1), List.of(0));
+    _checkBlockFail(List.of(6), List.of(0));
     // _checkBlockFail(Arrays.asList(0, -1), Arrays.asList(0, 0));
     _checkBlockFail(Arrays.asList(0, 7), Arrays.asList(1, 0));
   }

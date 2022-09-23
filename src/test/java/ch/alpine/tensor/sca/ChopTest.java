@@ -4,6 +4,7 @@ package ch.alpine.tensor.sca;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -32,10 +33,10 @@ class ChopTest {
   void testChop() {
     Tensor v = Tensors.vectorDouble(1e-10, 1e-12, 1e-14, 1e-16);
     Tensor c = v.map(Chop._12);
-    assertFalse(c.get(0).equals(RealScalar.ZERO));
-    assertFalse(c.get(1).equals(RealScalar.ZERO));
-    assertTrue(c.get(2).equals(RealScalar.ZERO));
-    assertTrue(c.get(3).equals(RealScalar.ZERO));
+    assertNotEquals(c.get(0), RealScalar.ZERO);
+    assertNotEquals(c.get(1), RealScalar.ZERO);
+    assertEquals(c.get(2), RealScalar.ZERO);
+    assertEquals(c.get(3), RealScalar.ZERO);
   }
 
   @Test

@@ -35,7 +35,7 @@ class DirichletWindowTest {
   @Test
   void testWindow() {
     ScalarUnaryOperator suo = DirichletWindow.FUNCTION;
-    assertTrue(suo.equals(DirichletWindow.FUNCTION));
+    assertEquals(suo, DirichletWindow.FUNCTION);
     assertEquals(suo, DirichletWindow.FUNCTION);
   }
 

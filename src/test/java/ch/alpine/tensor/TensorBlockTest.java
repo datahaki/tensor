@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +16,8 @@ class TensorBlockTest {
   @Test
   void testBlock() {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
-    assertEquals(a.block(Arrays.asList(2), Arrays.asList(2)), Tensors.vector(3, 4));
-    assertThrows(IllegalArgumentException.class, () -> a.block(Arrays.asList(1), Arrays.asList(2, 1)));
+    assertEquals(a.block(List.of(2), List.of(2)), Tensors.vector(3, 4));
+    assertThrows(IllegalArgumentException.class, () -> a.block(List.of(1), Arrays.asList(2, 1)));
   }
 
   @Test
@@ -30,7 +31,7 @@ class TensorBlockTest {
   @Test
   void testNonRefs() {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
-    Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
+    Tensor b = a.block(List.of(2), List.of(3));
     b.set(Array.zeros(3), Tensor.ALL);
     assertEquals(a, Tensors.vector(1, 2, 0, 0, 0, 6));
   }

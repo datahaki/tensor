@@ -3,6 +3,7 @@ package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -55,7 +56,7 @@ class LinearInterpolationTest {
     Tensor res = interpolation.get(Tensors.empty());
     res.set(RealScalar.ONE::add, Tensor.ALL);
     assertEquals(tensor, ori);
-    assertFalse(tensor.equals(res));
+    assertNotEquals(tensor, res);
     assertEquals(interpolation.get(Tensors.empty()), ori);
   }
 

@@ -2,7 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class NestTest {
     Tensor in = Array.zeros(2);
     Tensor re = Nest.of(null, in, 0);
     re.set(RealScalar.ONE::add, Tensor.ALL);
-    assertFalse(in.equals(re));
+    assertNotEquals(in, re);
     assertEquals(in, Array.zeros(2));
   }
 

@@ -2,8 +2,8 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -75,12 +75,12 @@ class ScalarTest {
 
   @Test
   void testEquals() {
-    assertFalse(Tensors.empty().equals(null));
-    assertFalse(RealScalar.ZERO.equals(null));
-    assertFalse(DoubleScalar.of(0.3).equals(null));
-    assertFalse(RationalScalar.of(5, 3).equals(null));
-    assertFalse(ComplexScalar.of(RationalScalar.of(5, 3), RationalScalar.of(5, 3)).equals(null));
-    assertFalse(Integer.valueOf(1233).equals(null));
+    assertNotEquals(null, Tensors.empty());
+    assertNotEquals(null, RealScalar.ZERO);
+    assertNotEquals(null, DoubleScalar.of(0.3));
+    assertNotEquals(null, RationalScalar.of(5, 3));
+    assertNotEquals(null, ComplexScalar.of(RationalScalar.of(5, 3), RationalScalar.of(5, 3)));
+    assertNotEquals(null, Integer.valueOf(1233));
   }
 
   @Test

@@ -29,9 +29,9 @@ class DoubleScalarTest {
     RealScalar.ZERO.hashCode();
     Tensor a = DoubleScalar.of(1.23);
     Tensor b = DoubleScalar.of(2.3);
-    assertTrue(a.add(b).equals(b.add(a)));
+    assertEquals(a.add(b), b.add(a));
     Tensor c = DoubleScalar.of(1.23 + 2.3);
-    assertTrue(a.add(b).equals(c));
+    assertEquals(a.add(b), c);
   }
 
   @Test

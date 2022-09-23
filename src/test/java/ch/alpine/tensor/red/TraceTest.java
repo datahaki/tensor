@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -86,7 +86,7 @@ class TraceTest {
     Tensor tensor = SparseArray.of(Quantity.of(0, "m"), 3, 4, 3);
     Tensor traced = Trace.of(tensor, 0, 2);
     assertInstanceOf(SparseArray.class, traced);
-    assertEquals(Dimensions.of(traced), Arrays.asList(4));
+    assertEquals(Dimensions.of(traced), List.of(4));
   }
 
   @Test

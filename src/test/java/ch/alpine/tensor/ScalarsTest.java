@@ -4,6 +4,7 @@ package ch.alpine.tensor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -137,7 +138,7 @@ class ScalarsTest {
   void testNumber() {
     Number a = 123;
     Number b = 123.0;
-    assertFalse(a.equals(b));
+    assertNotEquals(a, b);
   }
 
   private static void checkCmp(double d1, double d2) {

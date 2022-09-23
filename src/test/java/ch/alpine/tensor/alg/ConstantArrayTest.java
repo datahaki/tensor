@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,7 @@ class ConstantArrayTest {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor repmat = ConstantArray.of(vector);
     assertTrue(Tensors.isUnmodifiable(repmat));
-    assertEquals(Dimensions.of(repmat), Arrays.asList(3));
+    assertEquals(Dimensions.of(repmat), List.of(3));
     assertEquals(repmat, Range.of(1, 4));
   }
 
@@ -49,7 +50,7 @@ class ConstantArrayTest {
 
   @Test
   void testScalar1() {
-    Tensor repmat = ConstantArray.of(Pi.VALUE, Arrays.asList());
+    Tensor repmat = ConstantArray.of(Pi.VALUE, List.of());
     assertInstanceOf(Scalar.class, repmat);
   }
 

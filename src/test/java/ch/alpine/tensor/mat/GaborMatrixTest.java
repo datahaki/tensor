@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ class GaborMatrixTest {
   @Test
   void testVector() {
     Tensor vector = GaborMatrix.of(3, Tensors.vector(1), RealScalar.of(0));
-    assertEquals(Dimensions.of(vector), Arrays.asList(7));
+    assertEquals(Dimensions.of(vector), List.of(7));
   }
 
   @Test

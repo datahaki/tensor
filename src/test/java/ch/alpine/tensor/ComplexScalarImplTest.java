@@ -2,8 +2,8 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -123,8 +123,8 @@ class ComplexScalarImplTest {
     Scalar c1 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
     Scalar c2 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
     Scalar s1 = RationalScalar.of(3, 2);
-    assertFalse(c1.equals(s1));
-    assertFalse(s1.equals(c1));
+    assertNotEquals(c1, s1);
+    assertNotEquals(s1, c1);
     assertEquals(c1.hashCode(), c2.hashCode());
   }
 
