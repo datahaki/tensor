@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/KDistribution.html">KDistribution</a> */
 public class KDistribution extends AbstractContinuousDistribution implements Serializable {
-  private static final Scalar EXTENT = RealScalar.of(50.0); // at mean + EXTENT * variance -> cdf == 1.0 
+  private static final Scalar EXTENT = RealScalar.of(50.0); // at mean + EXTENT * variance -> cdf == 1.0
   private static final Scalar _4 = RealScalar.of(4.0);
 
   /** @param v positive
