@@ -90,7 +90,7 @@ class UnmodifiableTensorTest {
     Tensor next = iterator.next();
     assertEquals(next, UnitVector.of(3, 0));
     assertThrows(UnsupportedOperationException.class, () -> next.set(RealScalar.ONE, 1));
-    assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
+    assertThrows(UnsupportedOperationException.class, iterator::remove);
   }
 
   @Test
@@ -109,7 +109,7 @@ class UnmodifiableTensorTest {
     Tensor tensor = IdentityMatrix.of(4).unmodifiable();
     for (Iterator<Tensor> iterator = tensor.iterator(); iterator.hasNext();) {
       iterator.next();
-      assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
+      assertThrows(UnsupportedOperationException.class, iterator::remove);
     }
     assertEquals(tensor, IdentityMatrix.of(4));
   }
@@ -118,7 +118,7 @@ class UnmodifiableTensorTest {
   void testIteratorNestRemove() {
     Tensor tensor = HilbertMatrix.of(4).unmodifiable();
     Iterator<Tensor> iterator = tensor.iterator().next().iterator();
-    assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
+    assertThrows(UnsupportedOperationException.class, iterator::remove);
   }
 
   @Test

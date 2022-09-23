@@ -8,11 +8,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
-import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.gam.Beta;
@@ -21,7 +20,7 @@ import ch.alpine.tensor.sca.pow.Power;
 /** CDF requires BetaRegularized
  * Mean requires HypergeometricPFQ */
 public class FisherZDistribution implements Distribution, //
-    PDF, MeanInterface, VarianceInterface, Serializable {
+    PDF, Serializable {
   /** @param n strictly positive
    * @param m strictly positive
    * @return */
@@ -40,32 +39,23 @@ public class FisherZDistribution implements Distribution, //
   private final Scalar n;
   private final Scalar m;
   private final Scalar scale;
+  private final ScalarUnaryOperator power;
 
   private FisherZDistribution(Scalar n, Scalar m) {
     this.n = n;
     this.m = m;
-    scale = Beta.of(n.multiply(RationalScalar.HALF), m.multiply(RationalScalar.HALF));
+    Scalar n_2 = n.multiply(RationalScalar.HALF);
+    Scalar m_2 = m.multiply(RationalScalar.HALF);
+    scale = Times.of(RealScalar.TWO, Power.of(n, n_2), Power.of(m, m_2)).divide(Beta.of(n_2, m_2));
+    power = Power.function(n_2.add(m_2).negate());
   }
 
   @Override
   public Scalar at(Scalar x) {
-    Scalar f1 = Exp.FUNCTION.apply(n.multiply(x));
-    Scalar f2 = Power.of(m, m.multiply(RationalScalar.HALF));
-    Scalar f3 = Power.of(n, n.multiply(RationalScalar.HALF));
-    Scalar f4 = Power.of(m.add(Exp.FUNCTION.apply(x.add(x)).multiply(n)), n.add(m).multiply(RationalScalar.HALF).negate());
-    return Times.of(RealScalar.TWO, f1, f2, f3, f4).divide(scale);
-  }
-
-  @Override
-  public Scalar mean() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Scalar variance() {
-    // TODO Auto-generated method stub
-    return null;
+    return Times.of( //
+        scale, //
+        Exp.FUNCTION.apply(n.multiply(x)), //
+        power.apply(m.add(Exp.FUNCTION.apply(x.add(x)).multiply(n))));
   }
 
   @Override // from Object

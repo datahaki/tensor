@@ -21,6 +21,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -192,12 +193,12 @@ class LinearInterpolationTest {
 
   @Test
   void testClip() throws ClassNotFoundException, IOException {
-    Interpolation interpolation = Serialization.copy(LinearInterpolation.of(Clips.interval(10, 14)));
-    assertEquals(ExactScalarQ.require(interpolation.At(RealScalar.ZERO)), RealScalar.of(10));
-    assertEquals(ExactScalarQ.require(interpolation.At(RationalScalar.of(1, 4))), RealScalar.of(11));
-    assertEquals(ExactScalarQ.require(interpolation.At(RealScalar.ONE)), RealScalar.of(14));
-    assertThrows(IndexOutOfBoundsException.class, () -> interpolation.At(RealScalar.of(-0.1)));
-    assertThrows(IndexOutOfBoundsException.class, () -> interpolation.At(RealScalar.of(1.1)));
+    ScalarUnaryOperator interpolation = Serialization.copy(LinearInterpolation.of(Clips.interval(10, 14)));
+    assertEquals(ExactScalarQ.require(interpolation.apply(RealScalar.ZERO)), RealScalar.of(10));
+    assertEquals(ExactScalarQ.require(interpolation.apply(RationalScalar.of(1, 4))), RealScalar.of(11));
+    assertEquals(ExactScalarQ.require(interpolation.apply(RealScalar.ONE)), RealScalar.of(14));
+    assertThrows(Exception.class, () -> interpolation.apply(RealScalar.of(-0.1)));
+    assertThrows(Exception.class, () -> interpolation.apply(RealScalar.of(1.1)));
   }
 
   @Test

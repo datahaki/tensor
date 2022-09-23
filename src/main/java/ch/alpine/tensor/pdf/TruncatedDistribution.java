@@ -75,7 +75,7 @@ public class TruncatedDistribution implements Distribution, //
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    return univariateDistribution.quantile(LinearInterpolation.of(clip_cdf).At(p));
+    return univariateDistribution.quantile(LinearInterpolation.of(clip_cdf).apply(p));
   }
 
   @Override // from RandomVariateInterface

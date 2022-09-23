@@ -10,10 +10,15 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.api.ScalarBinaryOperator;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.Primitives;
+import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
 /** multi-linear interpolation
@@ -31,10 +36,14 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
   }
 
   /** @param clip
-   * @return interpolation for evaluation over the unit interval with
+   * @return interpolation for evaluation over the unit interval [0, 1] with
    * values ranging linearly between given clip.min and clip.max */
-  public static Interpolation of(Clip clip) {
-    return of(Tensors.of(clip.min(), clip.max()));
+  public static ScalarUnaryOperator of(Clip clip) {
+    // return ratio -> interp(Clips.unit().requireInside(ratio)).apply(clip.min(),clip.max());
+    return ExactTensorQ.of(clip.min()) && ExactTensorQ.of(clip.max()) //
+        ? ratio -> clip.min().add(clip.width().multiply(Clips.unit().requireInside(ratio)))
+        : ratio -> clip.min().multiply(RealScalar.ONE.subtract(ratio)) //
+            .add(clip.max().multiply(Clips.unit().requireInside(ratio)));
   }
 
   // ---
@@ -54,13 +63,11 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     List<Integer> fromIndex = Primitives.toListInteger(floor);
     List<Integer> dimensions = Primitives.toListInteger(width);
     Tensor block = tensor.block(fromIndex, dimensions);
-    Tensor weights = Transpose.of(Tensors.of( //
-        above.subtract(index), //
-        index.subtract(floor)));
+    Tensor weights = index.subtract(floor);
     for (Tensor weight : weights)
       block = block.length() == 1 //
           ? block.get(0)
-          : weight.dot(block);
+          : Entrywise.with(interp((Scalar) weight)).apply(block.get(0), block.get(1));
     return block;
   }
 
@@ -69,9 +76,14 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     Scalar floor = Floor.FUNCTION.apply(index);
     Scalar remain = index.subtract(floor);
     int below = Scalars.intValueExact(floor);
-    if (Scalars.isZero(remain))
-      return tensor.get(below);
-    return Tensors.of(remain.one().subtract(remain), remain) //
-        .dot(tensor.block(List.of(below), List.of(2)));
+    return Scalars.isZero(remain) //
+        ? tensor.get(below)
+        : Entrywise.with(interp(remain)).apply(tensor.get(below), tensor.get(below + 1));
+  }
+
+  private static ScalarBinaryOperator interp(Scalar ratio) {
+    return (a, b) -> ExactScalarQ.of(a) && ExactScalarQ.of(b) //
+        ? a.add(b.subtract(a).multiply(ratio))
+        : a.multiply(RealScalar.ONE.subtract(ratio)).add(b.multiply(ratio));
   }
 }

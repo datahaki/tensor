@@ -127,8 +127,8 @@ class DoubleScalarTest {
   @Test
   void testNaN() {
     DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
-    assertThrows(Throw.class, () -> nan.isNonNegative());
-    assertThrows(Throw.class, () -> nan.signum());
+    assertThrows(Throw.class, nan::isNonNegative);
+    assertThrows(Throw.class, nan::signum);
   }
 
   @Test

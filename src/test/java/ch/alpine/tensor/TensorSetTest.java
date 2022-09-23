@@ -27,7 +27,7 @@ class TensorSetTest {
     assertEquals(eye, cpy);
     cpy.set(DoubleScalar.of(0.3), 1, 2);
     assertFalse(eye.equals(cpy));
-    cpy.set(s -> s.negate(), 2, 2);
+    cpy.set(Tensor::negate, 2, 2);
   }
 
   @Test

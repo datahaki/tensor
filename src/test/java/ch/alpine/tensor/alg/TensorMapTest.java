@@ -46,7 +46,7 @@ class TensorMapTest {
   @Test
   void testIrregular() {
     Tensor array = Tensors.fromString("{{1, 2, 3}, {8, 9}}");
-    Tensor result = TensorMap.of(row -> Total.of(row), array, 1);
+    Tensor result = TensorMap.of(Total::of, array, 1);
     assertEquals(array, Tensors.fromString("{{1, 2, 3}, {8, 9}}"));
     assertEquals(result, Tensors.vector(6, 17));
   }
