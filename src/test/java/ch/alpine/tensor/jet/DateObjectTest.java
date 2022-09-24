@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,6 +18,7 @@ import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,12 +30,14 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
@@ -359,10 +363,31 @@ class DateObjectTest {
   @Test
   void testMillis() {
     // Switzerland has +2 hours
-    DateObject dateObject = DateObject.ofEpoch(Quantity.of(System.currentTimeMillis(), "ms"), ZoneOffset.ofHours(2));
+    long millis = System.currentTimeMillis();
+    ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
+    DateObject dateObject = DateObject.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
     dateObject.format(dateTimeFormatter);
     dateObject.withoutNanos();
+  }
+
+  private static final ScalarUnaryOperator TO_MILLIS = QuantityMagnitude.SI().in("ms");
+
+  /** @param zoneOffset
+   * @return date instance */
+  public static Date toDate(DateObject dateObject, ZoneOffset zoneOffset) {
+    return new Date(Floor.longValueExact(TO_MILLIS.apply(dateObject.toEpoch(zoneOffset))));
+  }
+
+  @Test
+  void testDate() {
+    // Switzerland has +2 hours
+    long millis = System.currentTimeMillis();
+    ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
+    DateObject dateObject = DateObject.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
+    Date date = toDate(dateObject, zoneOffset);
+    assertNotNull(date);
+    // System.out.println(date);
     // System.out.println(dateTimeScalar);
   }
 
