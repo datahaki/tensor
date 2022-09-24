@@ -14,7 +14,6 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.FindInteger;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Ceiling;
-import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.gam.LogGamma;
@@ -103,8 +102,7 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
   @Override
   protected Scalar protected_quantile(Scalar p) {
     // "For a discrete distribution dist the inverse CDF at p is the smallest integer x such that CDF[dist,x] >= p."
-    // TODO TENSOR modify algorithm to find upper bound first, then refine
-    return FindInteger.min(x -> Scalars.lessEquals(p, p_lessEquals(x)), Clips.interval(lowerBound(), Long.MAX_VALUE));
+    return FindInteger.min(x -> Scalars.lessEquals(p, p_lessEquals(x)), BigInteger.ONE);
   }
 
   @Override

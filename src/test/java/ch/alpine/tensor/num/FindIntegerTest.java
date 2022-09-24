@@ -4,6 +4,7 @@ package ch.alpine.tensor.num;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.math.BigInteger;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,13 @@ class FindIntegerTest {
   void testMin1() {
     Predicate<Scalar> p = s -> Scalars.lessThan(RealScalar.of(4.5), s);
     Scalar scalar = FindInteger.min(p, Clips.interval(0, 15));
+    assertEquals(scalar, RealScalar.of(5));
+  }
+
+  @Test
+  void testMinFloating() {
+    Predicate<Scalar> p = s -> Scalars.lessThan(RealScalar.of(4.5), s);
+    Scalar scalar = FindInteger.min(p, BigInteger.ONE);
     assertEquals(scalar, RealScalar.of(5));
   }
 

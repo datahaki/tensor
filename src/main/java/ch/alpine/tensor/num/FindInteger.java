@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import java.math.BigInteger;
 import java.util.function.Predicate;
 
 import ch.alpine.tensor.IntegerQ;
@@ -8,12 +9,28 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
 public enum FindInteger {
   ;
   private static final int MAX_ITERATIONS = 128;
+  private static final BigInteger FACTOR = BigInteger.valueOf(8);
+
+  /** @param predicate
+   * @param lo strictly positive
+   * @return */
+  public static Scalar min(Predicate<Scalar> predicate, BigInteger lo) {
+    Integers.requirePositive(lo.signum());
+    BigInteger hi = lo;
+    while (!predicate.test(RealScalar.of(hi))) {
+      lo = hi;
+      hi = lo.multiply(FACTOR);
+    }
+    return min(predicate, Clips.interval(lo, hi));
+  }
 
   /** @param predicate should be monotonous, i.e. for increasing values
    * switch from false to true and subsequently never switch back to false
