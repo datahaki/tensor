@@ -13,7 +13,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.lie.LehmerTensor;
 import ch.alpine.tensor.mat.gr.IdempotentQ;
 import ch.alpine.tensor.qty.Quantity;
@@ -55,10 +55,10 @@ class IdentityMatrixTest {
 
   @Test
   void testDateTimeScalar() {
-    Scalar dts1 = DateTimeScalar.of(LocalDateTime.of(2000, 11, 3, 4, 5));
-    Scalar dts2 = DateTimeScalar.of(LocalDateTime.of(2001, 10, 5, 4, 8));
-    Scalar dts3 = DateTimeScalar.of(LocalDateTime.of(2002, 12, 7, 4, 11));
-    Scalar dts4 = DateTimeScalar.of(LocalDateTime.of(2003, 11, 9, 4, 14));
+    Scalar dts1 = DateObject.of(LocalDateTime.of(2000, 11, 3, 4, 5));
+    Scalar dts2 = DateObject.of(LocalDateTime.of(2001, 10, 5, 4, 8));
+    Scalar dts3 = DateObject.of(LocalDateTime.of(2002, 12, 7, 4, 11));
+    Scalar dts4 = DateObject.of(LocalDateTime.of(2003, 11, 9, 4, 14));
     Tensor matrix = Tensors.matrix(new Scalar[][] { { dts1, dts2 }, { dts3, dts4 } });
     Tensor eye = IdentityMatrix.of(matrix);
     assertThrows(Throw.class, () -> matrix.dot(eye));

@@ -57,7 +57,7 @@ public enum BesselY {
    * 
    * @param x the value to compute the bessel function of. */
   public static Scalar _0(Scalar x) {
-    // TODO TENSOR case x < 0 missing!
+    // TODO TENSOR IMPL case x < 0 missing!
     if (Scalars.lessThan(x, RealScalar.of(8))) {
       Scalar y = x.multiply(x);
       Scalar ans1 = _00num.apply(y);
@@ -90,7 +90,7 @@ public enum BesselY {
    * 
    * @param x the value to compute the bessel function of. */
   public static Scalar _1(Scalar x) {
-    // TODO TENSOR case x < 0 missing!
+    // TODO TENSOR IMPL case x < 0 missing!
     if (Scalars.lessThan(x, RealScalar.of(8))) {
       Scalar y = x.multiply(x);
       Scalar ans1 = _10num.apply(y).multiply(x);

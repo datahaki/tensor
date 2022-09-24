@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.qty.Quantity;
 
 class ClipIntervalTest {
@@ -56,8 +56,8 @@ class ClipIntervalTest {
 
   @Test
   void testDateTime() {
-    DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
-    DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 21, 4, 30));
+    DateObject dt1 = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateObject dt2 = DateObject.of(LocalDateTime.of(2020, 12, 21, 4, 30));
     Clip clip = Clips.interval(dt1, dt2);
     assertEquals(clip.width(), Quantity.of(86400, "s"));
   }

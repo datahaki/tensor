@@ -16,7 +16,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -59,15 +59,15 @@ class CauchyDistributionTest {
 
   @Test
   void testDateTimeScalar() {
-    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
+    DateObject dateTimeScalar = DateObject.of(LocalDateTime.now());
     Scalar durationScalar = Quantity.of(123, "s");
     Distribution distribution = CauchyDistribution.of(dateTimeScalar, durationScalar);
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateTimeScalar.class, scalar);
+    assertInstanceOf(DateObject.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTimeScalar.of(LocalDateTime.now()));
+    pdf.at(DateObject.of(LocalDateTime.now()));
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
+    Scalar p_lessEquals = cdf.p_lessEquals(DateObject.of(LocalDateTime.now()));
     Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
   }
 

@@ -111,7 +111,7 @@ class GammaTest {
     seed = Nest.of(Gamma.FUNCTION, seed, 3);
     // Mathematica gives
     // -4.371039232490273`*^-18 + 1.9336913999047586`*^-17 I
-    // TODO TENSOR
+    // TODO TENSOR MATH
     // System.out.println(seed);
     // assertTrue(Chop._50.allZero(seed));
   }

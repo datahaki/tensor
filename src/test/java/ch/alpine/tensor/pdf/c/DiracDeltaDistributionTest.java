@@ -15,7 +15,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -65,8 +65,8 @@ class DiracDeltaDistributionTest {
 
   @Test
   void testDateTime() {
-    Scalar d1 = DateTimeScalar.of(LocalDateTime.of(2022, 11, 13, 10, 12));
-    Scalar d2 = DateTimeScalar.of(LocalDateTime.of(2022, 11, 13, 10, 13));
+    Scalar d1 = DateObject.of(LocalDateTime.of(2022, 11, 13, 10, 12));
+    Scalar d2 = DateObject.of(LocalDateTime.of(2022, 11, 13, 10, 13));
     Distribution distribution = DiracDeltaDistribution.of(d1);
     PDF pdf = PDF.of(distribution);
     assertTrue(Scalars.isZero(pdf.at(d2)));

@@ -26,25 +26,25 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Floor;
 
-/** The purpose of {@link DateTimeScalar} is to allow the interoperation
+/** The purpose of {@link DateObject} is to allow the interoperation
  * between {@link LocalDateTime} and {@link Quantity} with temporal SI-unit,
  * for instance "s", "ms", "h", etc.
  * 
- * The difference between two {@link DateTimeScalar}s is a {@link Quantity} with
+ * The difference between two {@link DateObject}s is a {@link Quantity} with
  * unit "s" encoded as {@link RationalScalar}, i.e. in exact precision.
  * 
  * In particular, that makes the use of type {@link Duration} obsolete.
  * 
- * An {@link DateTimeScalar} encodes an absolute point in a local calendar by
+ * An {@link DateObject} encodes an absolute point in a local calendar by
  * wrapping an instance of {@link LocalDateTime}.
  * 
  * Addition and subtraction of a quantity with temporal SI unit is supported.
  * This includes the units "s", "ms", "h", "days", ...
- * The result of the sum is a new instance of {@link DateTimeScalar}.
+ * The result of the sum is a new instance of {@link DateObject}.
  * 
- * Addition of two instances of {@link DateTimeScalar} results in an exception.
- * Subtraction of two instances of {@link DateTimeScalar} results in a {@link Quantity}.
- * Negation of a {@link DateTimeScalar} results in an exception.
+ * Addition of two instances of {@link DateObject} results in an exception.
+ * Subtraction of two instances of {@link DateObject} results in a {@link Quantity}.
+ * Negation of a {@link DateObject} results in an exception.
  * 
  * The string expression is of a date time scalar adheres to the pattern
  * uuuu-MM-dd'T'HH:mm:ss.SSSSSSSSS
@@ -59,12 +59,12 @@ import ch.alpine.tensor.sca.Floor;
  * {@link LocalDateTime} offers getter methods for year, month, dayOfMonth.
  * Equivalent methods are available.
  * 
- * <p>similar to
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/DateObject.html">DateObject</a>
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class DateTimeScalar extends AbstractScalar implements //
+public class DateObject extends AbstractScalar implements //
     Comparable<Scalar>, QuantityCompatibleScalar, Serializable {
   private static final long NANOS_LONG = 1_000_000_000;
   private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
@@ -74,48 +74,48 @@ public class DateTimeScalar extends AbstractScalar implements //
   /** @param localDateTime
    * @return
    * @throws Exception if given localDateTime is null */
-  public static DateTimeScalar of(LocalDateTime localDateTime) {
-    return new DateTimeScalar(Objects.requireNonNull(localDateTime));
+  public static DateObject of(LocalDateTime localDateTime) {
+    return new DateObject(Objects.requireNonNull(localDateTime));
   }
 
-  public static DateTimeScalar of(int year, Month month, int dayOfMonth, int hour, int minute) {
-    return new DateTimeScalar(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
+  public static DateObject of(int year, Month month, int dayOfMonth, int hour, int minute) {
+    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
   }
 
-  public static DateTimeScalar of(int year, Month month, int dayOfMonth, int hour, int minute, int second) {
-    return new DateTimeScalar(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
+  public static DateObject of(int year, Month month, int dayOfMonth, int hour, int minute, int second) {
+    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
   }
 
-  public static DateTimeScalar of(int year, Month month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
-    return new DateTimeScalar(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
+  public static DateObject of(int year, Month month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
+    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
   }
 
-  public static DateTimeScalar of(int year, int month, int dayOfMonth, int hour, int minute) {
-    return new DateTimeScalar(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
+  public static DateObject of(int year, int month, int dayOfMonth, int hour, int minute) {
+    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
   }
 
-  public static DateTimeScalar of(int year, int month, int dayOfMonth, int hour, int minute, int second) {
-    return new DateTimeScalar(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
+  public static DateObject of(int year, int month, int dayOfMonth, int hour, int minute, int second) {
+    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
   }
 
-  public static DateTimeScalar of(int year, int month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
-    return new DateTimeScalar(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
+  public static DateObject of(int year, int month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
+    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
   }
 
   /** @return instance based on LocalDateTime.now() */
-  public static DateTimeScalar now() {
-    return new DateTimeScalar(LocalDateTime.now());
+  public static DateObject now() {
+    return new DateObject(LocalDateTime.now());
   }
 
   /** @param scalar with time based SI-unit, for instance "s", "h", "days", "wk", "mo", "yr", etc.
    * @param zoneOffset
    * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to
    * given zoneOffset */
-  public static DateTimeScalar ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
+  public static DateObject ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
     Scalar seconds = TO_SECONDS.apply(scalar);
     Scalar floor = Floor.FUNCTION.apply(seconds);
     Scalar nanos = seconds.subtract(floor).multiply(NANOS);
-    return new DateTimeScalar(LocalDateTime.ofEpochSecond( //
+    return new DateObject(LocalDateTime.ofEpochSecond( //
         floor.number().longValue(), //
         nanos.number().intValue(), //
         zoneOffset));
@@ -123,21 +123,21 @@ public class DateTimeScalar extends AbstractScalar implements //
 
   /** @param scalar with time based SI-unit, for instance "s", "h", "days", "wk", "mo", "yr", etc.
    * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to UTC */
-  public static DateTimeScalar ofEpoch(Scalar scalar) {
+  public static DateObject ofEpoch(Scalar scalar) {
     return ofEpoch(scalar, ZoneOffset.UTC);
   }
 
   /** parsing function
    * 
    * Examples:
-   * 2020-12-20T04:30:03.125239876 parses to {@link DateTimeScalar}
+   * 2020-12-20T04:30:03.125239876 parses to {@link DateObject}
    * 
    * @param string
    * @return
    * @throws java.time.format.DateTimeParseException if {@code string} cannot be parsed
    * @see LocalDateTime */
-  public static DateTimeScalar parse(String string) {
-    return new DateTimeScalar(LocalDateTime.parse(string));
+  public static DateObject parse(String string) {
+    return new DateObject(LocalDateTime.parse(string));
   }
 
   /** @param duration
@@ -161,11 +161,11 @@ public class DateTimeScalar extends AbstractScalar implements //
   // ---
   private final LocalDateTime localDateTime;
 
-  private DateTimeScalar(LocalDateTime localDateTime) {
+  private DateObject(LocalDateTime localDateTime) {
     this.localDateTime = localDateTime;
   }
 
-  /** @return instance of {@link LocalDateTime} backing this {@link DateTimeScalar} */
+  /** @return instance of {@link LocalDateTime} backing this {@link DateObject} */
   public LocalDateTime localDateTime() {
     return localDateTime;
   }
@@ -217,8 +217,8 @@ public class DateTimeScalar extends AbstractScalar implements //
    * @param years to add, may be negative
    * @return this date-time with the years added, not null
    * @throws DateTimeException if the result exceeds the supported date range */
-  public DateTimeScalar plusYears(int years) {
-    return new DateTimeScalar(localDateTime.plusYears(years));
+  public DateObject plusYears(int years) {
+    return new DateObject(localDateTime.plusYears(years));
   }
 
   /** Example:
@@ -227,8 +227,8 @@ public class DateTimeScalar extends AbstractScalar implements //
    * @param months to add, may be negative
    * @return this date-time with the months added, not null
    * @throws DateTimeException if the result exceeds the supported date range */
-  public DateTimeScalar plusMonths(long months) {
-    return new DateTimeScalar(localDateTime.plusMonths(months));
+  public DateObject plusMonths(long months) {
+    return new DateObject(localDateTime.plusMonths(months));
   }
 
   /** Example:
@@ -237,40 +237,24 @@ public class DateTimeScalar extends AbstractScalar implements //
    * @param days to add, may be negative
    * @return this date-time with the days added, not null
    * @throws DateTimeException if the result exceeds the supported date range */
-  public DateTimeScalar plusDays(long days) {
-    return new DateTimeScalar(localDateTime.plusDays(days));
-  }
-
-  /** @param hours
-   * @return */
-  public DateTimeScalar plusHours(long hours) {
-    return new DateTimeScalar(localDateTime.plusHours(hours));
-  }
-
-  /** @param minutes
-   * @return */
-  public DateTimeScalar plusMinutes(long minutes) {
-    return new DateTimeScalar(localDateTime.plusMinutes(minutes));
+  public DateObject plusDays(long days) {
+    return new DateObject(localDateTime.plusDays(days));
   }
 
   /** @return this date-time with fractional second part set back to 0,
    * i.e. time is truncated to seconds resolution */
-  public DateTimeScalar withoutNanos() {
-    return new DateTimeScalar(LocalDateTime.of( //
+  public DateObject withoutNanos() {
+    return new DateObject(LocalDateTime.of( //
         localDateTime.toLocalDate(), //
         localDateTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)));
   }
 
   @Override // from AbstractScalar
   public Scalar subtract(Tensor tensor) {
-    if (tensor instanceof DateTimeScalar) {
-      DateTimeScalar dateTimeScalar = (DateTimeScalar) tensor;
-      return seconds(Duration.between(dateTimeScalar.localDateTime, localDateTime));
-    }
-    if (tensor instanceof Scalar) {
-      Scalar scalar = (Scalar) tensor;
+    if (tensor instanceof DateObject dateObject)
+      return seconds(Duration.between(dateObject.localDateTime, localDateTime));
+    if (tensor instanceof Scalar scalar)
       return plus(scalar.negate());
-    }
     throw new Throw(this, tensor);
   }
 
@@ -306,17 +290,17 @@ public class DateTimeScalar extends AbstractScalar implements //
     return RealScalar.ONE;
   }
 
-  /* method is deliberately public, and return type augmented to DateTimeScalar
+  /* method is deliberately public, and return type augmented to DateObject
    * to make obsolete a cast when using the pattern dateTime.add(delta) */
   @Override // from Scalar
-  public DateTimeScalar plus(Scalar scalar) {
-    return new DateTimeScalar(localDateTime.plus(duration(scalar)));
+  public DateObject plus(Scalar scalar) {
+    return new DateObject(localDateTime.plus(duration(scalar)));
   }
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof DateTimeScalar)
-      return localDateTime.compareTo(((DateTimeScalar) scalar).localDateTime);
+    if (scalar instanceof DateObject)
+      return localDateTime.compareTo(((DateObject) scalar).localDateTime);
     throw new Throw(this, scalar);
   }
 
@@ -327,8 +311,8 @@ public class DateTimeScalar extends AbstractScalar implements //
 
   @Override // from Object
   public boolean equals(Object object) {
-    return object instanceof DateTimeScalar //
-        && localDateTime.equals(((DateTimeScalar) object).localDateTime);
+    return object instanceof DateObject dateObject //
+        && localDateTime.equals(dateObject.localDateTime);
   }
 
   @Override // from Object

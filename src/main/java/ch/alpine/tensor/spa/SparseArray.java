@@ -55,14 +55,14 @@ public class SparseArray extends AbstractTensor implements Serializable {
   private final List<Integer> size;
   private final NavigableMap<Integer, Tensor> navigableMap;
 
-  private SparseArray(Scalar fallback, List<Integer> size) {
-    this(fallback, size, new TreeMap<>());
-  }
-
-  private SparseArray(Scalar fallback, List<Integer> size, NavigableMap<Integer, Tensor> navigableMap) {
+  /* package */ SparseArray(Scalar fallback, List<Integer> size, NavigableMap<Integer, Tensor> navigableMap) {
     this.fallback = fallback;
     this.size = size;
     this.navigableMap = navigableMap;
+  }
+
+  private SparseArray(Scalar fallback, List<Integer> size) {
+    this(fallback, size, new TreeMap<>());
   }
 
   /** @return fallback scalar */
@@ -72,8 +72,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor unmodifiable() {
-    // TODO TENSOR should be possible
-    throw new UnsupportedOperationException();
+    return new UnmodifiableSparseArray(fallback, size, navigableMap);
   }
 
   @Override // from Tensor

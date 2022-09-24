@@ -57,7 +57,7 @@ public enum Subdivide {
   public static Tensor of(Tensor startInclusive, Tensor endInclusive, int n) {
     Integers.requirePositive(n);
     if (ExactTensorQ.of(startInclusive) && ExactTensorQ.of(endInclusive)) {
-      // general implementation suitable for DateTimeScalar
+      // general implementation suitable for DateObject
       Tensor delta = endInclusive.subtract(startInclusive);
       return Tensor.of(IntStream.rangeClosed(0, n) //
           .mapToObj(count -> startInclusive.add(delta.multiply(RationalScalar.of(count, n)))));

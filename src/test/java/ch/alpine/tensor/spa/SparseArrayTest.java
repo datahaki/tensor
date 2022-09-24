@@ -107,7 +107,6 @@ class SparseArrayTest {
   @Test
   void testFails() {
     Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
-    assertThrows(UnsupportedOperationException.class, sparse::unmodifiable);
     assertThrows(UnsupportedOperationException.class, () -> sparse.append(Array.zeros(4, 8)));
     assertThrows(Throw.class, () -> sparse.map(RealScalar.ONE::add));
   }
