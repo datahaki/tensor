@@ -171,6 +171,7 @@ class HistogramDistributionTest {
     assertEquals(cdf.p_lessThan(RationalScalar.of(3, 2)), RationalScalar.of(1, 2));
     assertEquals(cdf.p_lessThan(RationalScalar.of(2, 1)), RationalScalar.of(3, 4));
     assertEquals(cdf.p_lessThan(RationalScalar.of(3, 1)), RationalScalar.of(1, 1));
+    TestMarkovChebyshev.markov(distribution);
   }
 
   @Test

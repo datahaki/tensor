@@ -21,6 +21,7 @@ import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Quantile;
@@ -79,5 +80,10 @@ class DiracDeltaDistributionTest {
     Distribution distribution = DiracDeltaDistribution.of(RealScalar.of(100));
     assertEquals(Mean.of(distribution), RealScalar.of(100));
     assertEquals(Variance.of(distribution), RealScalar.of(0));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(DiracDeltaDistribution.of(RealScalar.of(1)));
   }
 }

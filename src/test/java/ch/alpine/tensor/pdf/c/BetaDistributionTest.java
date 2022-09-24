@@ -13,6 +13,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
@@ -31,6 +32,11 @@ class BetaDistributionTest {
     Distribution distribution = BetaDistribution.of(5, 7.3);
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(0.4065040650406504));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(0.018139737604968197));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(BetaDistribution.of(3, 2));
   }
 
   @Test

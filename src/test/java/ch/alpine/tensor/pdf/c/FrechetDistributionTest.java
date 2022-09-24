@@ -133,6 +133,11 @@ class FrechetDistributionTest {
   }
 
   @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(FrechetDistribution.of(1.5, 1.3));
+  }
+
+  @Test
   void testInverseCDF_1() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.0)));

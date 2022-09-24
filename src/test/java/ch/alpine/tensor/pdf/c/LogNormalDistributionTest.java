@@ -117,6 +117,11 @@ class LogNormalDistributionTest {
   }
 
   @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(LogNormalDistribution.of(-1, 3));
+  }
+
+  @Test
   void testSigmaNonPositiveFail() {
     assertThrows(Throw.class, () -> LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3)));
   }

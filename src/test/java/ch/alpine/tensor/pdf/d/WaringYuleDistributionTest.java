@@ -26,6 +26,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.pow.Power;
@@ -102,14 +103,8 @@ class WaringYuleDistributionTest {
   }
 
   @Test
-  void testCdfMonotonous() {
-    Distribution distribution = WaringYuleDistribution.of(1.4, 1);
-    CDF cdf = CDF.of(distribution);
-    Tensor tensor = Tensor.of(IntStream.range(2, 200) //
-        .mapToObj(RealScalar::of) //
-        .map(Power.function(2)) //
-        .map(cdf::p_lessEquals));
-    OrderedQ.require(tensor);
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(WaringYuleDistribution.of(1.4, 1));
   }
 
   @Test

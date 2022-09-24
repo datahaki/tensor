@@ -50,12 +50,12 @@ public class FisherZDistribution implements Distribution, //
     power = Power.function(n_2.add(m_2).negate());
   }
 
-  @Override
+  @Override // from PDF
   public Scalar at(Scalar x) {
-    return Times.of( //
-        scale, //
-        Exp.FUNCTION.apply(n.multiply(x)), //
-        power.apply(m.add(Exp.FUNCTION.apply(x.add(x)).multiply(n))));
+    Scalar factor = power.apply(m.add(Exp.FUNCTION.apply(x.add(x)).multiply(n)));
+    return Scalars.isZero(factor) //
+        ? RealScalar.ZERO
+        : Times.of(scale, Exp.FUNCTION.apply(n.multiply(x)), factor);
   }
 
   @Override // from Object

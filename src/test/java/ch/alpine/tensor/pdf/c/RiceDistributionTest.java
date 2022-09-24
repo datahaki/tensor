@@ -12,6 +12,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
@@ -25,6 +26,11 @@ class RiceDistributionTest {
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(2.4238961767316614));
     assertEquals(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
     assertTrue(distribution.toString().startsWith("RiceDistribution["));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(RiceDistribution.of(1.2, 2.23));
   }
 
   @Test

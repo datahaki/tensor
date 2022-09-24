@@ -54,6 +54,11 @@ class MaxwellDistributionTest {
   }
 
   @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(MaxwellDistribution.of(1.5));
+  }
+
+  @Test
   void testSigmaFail() {
     assertThrows(Throw.class, () -> MaxwellDistribution.of(0));
     assertThrows(Throw.class, () -> MaxwellDistribution.of(-1));

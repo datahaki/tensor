@@ -38,7 +38,7 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
         Sign.requirePositive(w));
   }
 
-  /** @param v
+  /** @param v positive
    * @param w standard deviation
    * @return K distribution with shape parameters v and w */
   public static Distribution of(Number v, Number w) {
@@ -72,7 +72,7 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
     support = Clips.positive(mean.add(variance.multiply(EXTENT)));
   }
 
-  @Override
+  @Override // from PDF
   public Scalar at(Scalar x) {
     if (Scalars.lessThan(RealScalar.ZERO, x)) {
       Scalar f1 = Power.of(x, v);
@@ -84,7 +84,7 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
     return RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     if (Scalars.lessThan(RealScalar.ZERO, x)) {
       Scalar f1 = Power.of(x, v);

@@ -18,6 +18,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
@@ -40,6 +41,11 @@ class BirnbaumSaundersDistributionTest {
     Tolerance.CHOP.requireClose(quantile, RealScalar.of(1.5750493692432221));
     RandomVariate.of(distribution, 30);
     assertTrue(distribution.toString().startsWith("BirnbaumSaundersDistribution["));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(BirnbaumSaundersDistribution.of(0.3, 0.8));
   }
 
   @Test

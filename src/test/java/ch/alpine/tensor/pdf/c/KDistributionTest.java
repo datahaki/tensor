@@ -21,6 +21,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
@@ -73,6 +74,11 @@ class KDistributionTest {
     Distribution distribution = KDistribution.of(0.2, 1.3);
     Scalar mean = Mean.of(distribution);
     Tolerance.CHOP.requireClose(mean, RealScalar.of(0.6388550270417801));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(KDistribution.of(1, 1.3));
   }
 
   @Test

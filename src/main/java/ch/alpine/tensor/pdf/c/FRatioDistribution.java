@@ -9,6 +9,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
@@ -39,33 +40,39 @@ public class FRatioDistribution implements Distribution, //
   private final Scalar n;
   private final Scalar m;
   private final Scalar scale;
+  private final Scalar f1;
+  private final Scalar f2;
+  private final ScalarUnaryOperator power;
 
   private FRatioDistribution(Scalar n, Scalar m) {
     this.n = n;
     this.m = m;
-    scale = Beta.of(n.multiply(RationalScalar.HALF), m.multiply(RationalScalar.HALF));
+    Scalar n2 = n.multiply(RationalScalar.HALF);
+    Scalar m2 = m.multiply(RationalScalar.HALF);
+    scale = Beta.of(n2, m2);
+    f1 = Power.of(n, n2);
+    f2 = Power.of(m, m2);
+    power = Power.function(n2.add(m2).negate());
   }
 
-  @Override
+  @Override // from PDF
   public Scalar at(Scalar x) {
     if (Scalars.lessThan(RealScalar.ZERO, x)) {
-      Scalar f1 = Power.of(m, m.divide(RealScalar.TWO));
-      Scalar f2 = Power.of(n, n.divide(RealScalar.TWO));
       Scalar f3 = Power.of(x, n.divide(RealScalar.TWO).subtract(RealScalar.ONE));
-      Scalar f4 = Power.of(x.multiply(n).add(m), n.add(m).divide(RealScalar.TWO).negate());
+      Scalar f4 = power.apply(x.multiply(n).add(m));
       return Times.of(f1, f2, f3, f4).divide(scale);
     }
     return RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from MeanInterface
   public Scalar mean() {
     return Scalars.lessThan(RealScalar.TWO, m) //
         ? m.divide(m.subtract(RealScalar.TWO))
         : DoubleScalar.INDETERMINATE;
   }
 
-  @Override
+  @Override // from VarianceInterface
   public Scalar variance() {
     if (Scalars.lessThan(RealScalar.of(4), m)) {
       Scalar m_2 = m.subtract(RealScalar.TWO);

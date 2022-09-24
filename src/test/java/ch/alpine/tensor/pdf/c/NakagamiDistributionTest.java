@@ -11,6 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
@@ -31,6 +32,11 @@ class NakagamiDistributionTest {
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(1.1234378036814632));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(1.2378875012593704));
     assertEquals(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(NakagamiDistribution.of(0.3, 2.5));
   }
 
   @Test

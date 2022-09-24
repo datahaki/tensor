@@ -189,6 +189,11 @@ class UniformDistributionTest {
   }
 
   @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(UniformDistribution.of(-2, 10000));
+  }
+
+  @Test
   void testClipNullFail() {
     assertThrows(NullPointerException.class, () -> UniformDistribution.of(null));
   }

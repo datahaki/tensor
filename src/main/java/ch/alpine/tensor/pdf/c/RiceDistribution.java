@@ -56,16 +56,17 @@ public class RiceDistribution implements Distribution, //
     b2 = beta.multiply(beta);
   }
 
-  @Override
+  @Override // from PDF
   public Scalar at(Scalar x) {
     if (Scalars.lessThan(RealScalar.ZERO, x)) {
-      Scalar f1 = Exp.FUNCTION.apply(x.multiply(x).add(alpha.multiply(alpha)).divide(b2).multiply(RationalScalar.HALF).negate());
-      return Times.of(f1, x, BesselI._0(x.multiply(alpha).divide(b2))).divide(b2);
+      Scalar factor = Exp.FUNCTION.apply(x.multiply(x).add(alpha.multiply(alpha)).divide(b2).multiply(RationalScalar.HALF).negate());
+      if (Scalars.nonZero(factor))
+        return Times.of(factor, x, BesselI._0(x.multiply(alpha).divide(b2))).divide(b2);
     }
     return RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from MeanInterface
   public Scalar mean() {
     return Times.of( //
         Sqrt.FUNCTION.apply(Pi.HALF), //
@@ -73,17 +74,14 @@ public class RiceDistribution implements Distribution, //
         LaguerreL.of(RationalScalar.HALF, a2.divide(b2).multiply(RationalScalar.HALF).negate()));
   }
 
-  @Override
+  @Override // from VarianceInterface
   public Scalar variance() {
     Scalar g = LaguerreL.of(RationalScalar.HALF, a2.divide(b2).multiply(RationalScalar.HALF).negate());
-    Scalar f = Times.of( //
-        RationalScalar.HALF, Pi.VALUE, //
-        b2, //
-        g, g);
+    Scalar f = Times.of(Pi.HALF, b2, g, g);
     return a2.add(b2).add(b2).subtract(f);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return MathematicaFormat.concise("RiceDistribution", alpha, beta);
   }

@@ -10,6 +10,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 
 class FisherZDistributionTest {
   @Test
@@ -18,6 +19,7 @@ class FisherZDistributionTest {
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(0.3)), RealScalar.of(0.5125054381409268));
     assertTrue(distribution.toString().startsWith("FisherZDistribution["));
+    TestMarkovChebyshev.monotonous(distribution);
   }
 
   @Test

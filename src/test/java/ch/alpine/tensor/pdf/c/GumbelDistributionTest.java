@@ -25,6 +25,7 @@ import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
@@ -125,8 +126,7 @@ class GumbelDistributionTest {
   @Test
   void testDateTimeScalar() {
     DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
-    Scalar durationScalar = Quantity.of(123, "s");
-    Distribution distribution = GumbelDistribution.of(dateTimeScalar, durationScalar);
+    Distribution distribution = GumbelDistribution.of(dateTimeScalar, Quantity.of(123, "s"));
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTimeScalar.class, scalar);
     PDF pdf = PDF.of(distribution);
@@ -134,6 +134,12 @@ class GumbelDistributionTest {
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
     Clips.interval(0.5, 0.8).requireInside(p_lessEquals);
+    RandomVariate.of(distribution, 10);
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(GumbelDistribution.of(1.2, 2.2));
   }
 
   @Test

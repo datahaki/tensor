@@ -157,6 +157,11 @@ class NormalDistributionTest {
   }
 
   @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(NormalDistribution.of(-1, 3));
+  }
+
+  @Test
   void testComplexFail() {
     assertThrows(ClassCastException.class, () -> NormalDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> NormalDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));

@@ -21,6 +21,7 @@ import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
@@ -62,6 +63,11 @@ class StudentTDistributionTest {
     Sign.requirePositive(scalar);
     Unit unit = QuantityUnit.of(scalar);
     assertEquals(unit, Unit.of("s^-1"));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(StudentTDistribution.of(5, 4, 3));
   }
 
   @Test

@@ -79,6 +79,11 @@ class ParetoDistributionTest {
   }
 
   @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(ParetoDistribution.of(2.3, 1));
+  }
+
+  @Test
   void testNegativeFail() {
     assertThrows(Throw.class, () -> ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(0)));
     assertThrows(Throw.class, () -> ParetoDistribution.of(RealScalar.of(0), RealScalar.of(3)));

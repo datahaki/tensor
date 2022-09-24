@@ -20,6 +20,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -52,12 +53,17 @@ class RayleighDistributionTest {
 
   @Test
   void testRandom() {
-    RayleighDistribution distribution = (RayleighDistribution) RayleighDistribution.of(RealScalar.of(1.3));
+    RayleighDistribution distribution = (RayleighDistribution) RayleighDistribution.of(1.3);
     RandomVariate.of(distribution, 100);
     Scalar q0 = distribution.protected_quantile(RealScalar.ZERO);
     Scalar q1 = distribution.protected_quantile(RealScalar.of(Math.nextDown(1.0)));
     FiniteScalarQ.require(q0);
     FiniteScalarQ.require(q1);
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(RayleighDistribution.of(1.3));
   }
 
   @Test

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -52,6 +53,12 @@ class ExpTest {
     // mathematica gives -1.4189653368301074` + 2.3185326117622904` I
     Scalar m = Scalars.fromString("-1.4189653368301074 + 2.3185326117622904 * I");
     Chop._15.requireClose(scalar, m);
+  }
+
+  @Test
+  void testInfty() {
+    assertEquals(Exp.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
+    assertEquals(Exp.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), RealScalar.ZERO);
   }
 
   @Test

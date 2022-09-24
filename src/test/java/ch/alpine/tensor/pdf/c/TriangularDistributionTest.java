@@ -15,6 +15,7 @@ import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -170,6 +171,11 @@ class TriangularDistributionTest {
     assertEquals(Mean.of(distribution), Quantity.of(3, "m"));
     Scalar variance = Variance.of(distribution);
     Tolerance.CHOP.requireClose(variance, Quantity.of(4, "m^2"));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(TriangularDistribution.of(-2, 3, 6));
   }
 
   @Test

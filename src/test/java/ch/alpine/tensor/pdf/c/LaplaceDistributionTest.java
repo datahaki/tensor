@@ -24,6 +24,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -64,8 +65,7 @@ class LaplaceDistributionTest {
   @Test
   void testDateTimeScalar() {
     DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
-    Scalar durationScalar = Quantity.of(123, "s");
-    Distribution distribution = LaplaceDistribution.of(dateTimeScalar, durationScalar);
+    Distribution distribution = LaplaceDistribution.of(dateTimeScalar, Quantity.of(123, "s"));
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTimeScalar.class, scalar);
     PDF pdf = PDF.of(distribution);
@@ -73,6 +73,11 @@ class LaplaceDistributionTest {
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
     Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(LaplaceDistribution.of(3, 2));
   }
 
   @Test
