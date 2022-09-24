@@ -103,7 +103,9 @@ public class Polynomial extends HornerScheme {
     this.coeffs = coeffs;
   }
 
-  /** @return coefficients without tailing zeros */
+  /** Remark: consistent with Mathematica's CoefficientList
+   * 
+   * @return coefficients without tailing zeros */
   public Tensor coeffs() {
     return coeffs.copy();
   }
@@ -247,8 +249,16 @@ public class Polynomial extends HornerScheme {
     return of(FullConvolve.of(coeffs, polynomial.coeffs()));
   }
 
+  /** @param scalar
+   * @return polynomial this times given scalar */
   public Polynomial times(Scalar scalar) {
     return of(coeffs.multiply(scalar));
+  }
+
+  /** @param scalar
+   * @return polynomial this divided by given scalar */
+  public Polynomial divide(Scalar scalar) {
+    return of(coeffs.divide(scalar));
   }
 
   /** @param chop

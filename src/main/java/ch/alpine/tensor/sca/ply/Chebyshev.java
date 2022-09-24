@@ -29,7 +29,7 @@ public enum Chebyshev {
   }
 
   /** @param index non-negative
-   * @return chebyshev polynomial */
+   * @return Chebyshev polynomial */
   public Polynomial of(int index) {
     if (list.size() <= Integers.requirePositiveOrZero(index))
       synchronized (this) {

@@ -13,7 +13,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarBinaryOperator;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
-import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Ceiling;
@@ -37,10 +36,10 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
 
   /** @param clip
    * @return interpolation for evaluation over the unit interval [0, 1] with
-   * values ranging linearly between given clip.min and clip.max */
+   * values ranging linearly between given clip.min and clip.max. values
+   * outside [0, 1] cause an Exception to be thrown */
   public static ScalarUnaryOperator of(Clip clip) {
-    // return ratio -> interp(Clips.unit().requireInside(ratio)).apply(clip.min(),clip.max());
-    return ExactTensorQ.of(clip.min()) && ExactTensorQ.of(clip.max()) //
+    return ExactScalarQ.of(clip.min()) && ExactScalarQ.of(clip.max()) //
         ? ratio -> clip.min().add(clip.width().multiply(Clips.unit().requireInside(ratio)))
         : ratio -> clip.min().multiply(RealScalar.ONE.subtract(ratio)) //
             .add(clip.max().multiply(Clips.unit().requireInside(ratio)));
@@ -63,27 +62,29 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     List<Integer> fromIndex = Primitives.toListInteger(floor);
     List<Integer> dimensions = Primitives.toListInteger(width);
     Tensor block = tensor.block(fromIndex, dimensions);
-    Tensor weights = index.subtract(floor);
-    for (Tensor weight : weights)
+    for (Tensor weight : index.subtract(floor))
       block = block.length() == 1 //
           ? block.get(0)
-          : Entrywise.with(interp((Scalar) weight)).apply(block.get(0), block.get(1));
+          : Entrywise.with(interp(weight)).apply(block.get(0), block.get(1));
     return block;
   }
 
   @Override // from Interpolation
   public Tensor at(Scalar index) {
     Scalar floor = Floor.FUNCTION.apply(index);
-    Scalar remain = index.subtract(floor);
+    Scalar weight = index.subtract(floor);
     int below = Scalars.intValueExact(floor);
-    return Scalars.isZero(remain) //
+    return Scalars.isZero(weight) //
         ? tensor.get(below)
-        : Entrywise.with(interp(remain)).apply(tensor.get(below), tensor.get(below + 1));
+        : Entrywise.with(interp(weight)).apply(tensor.get(below), tensor.get(below + 1));
   }
 
-  private static ScalarBinaryOperator interp(Scalar ratio) {
+  /** @param ratio scalar
+   * @return
+   * @throws Exception if given ratio is not a {@link Scalar} */
+  private static ScalarBinaryOperator interp(Tensor ratio) {
     return (a, b) -> ExactScalarQ.of(a) && ExactScalarQ.of(b) //
-        ? a.add(b.subtract(a).multiply(ratio))
-        : a.multiply(RealScalar.ONE.subtract(ratio)).add(b.multiply(ratio));
+        ? a.add(ratio.multiply(b.subtract(a)))
+        : a.multiply(RealScalar.ONE.subtract(ratio)).add(ratio.multiply(b));
   }
 }
