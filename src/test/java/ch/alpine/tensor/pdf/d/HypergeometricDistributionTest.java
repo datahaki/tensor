@@ -17,6 +17,7 @@ import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
@@ -128,5 +129,10 @@ class HypergeometricDistributionTest {
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
       assertEquals(x, q);
     }
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(HypergeometricDistribution.of(10, 50, 100));
   }
 }

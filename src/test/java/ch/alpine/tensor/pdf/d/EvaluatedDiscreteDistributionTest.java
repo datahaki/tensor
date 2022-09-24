@@ -14,6 +14,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.InverseCDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
@@ -45,7 +46,7 @@ class EvaluatedDiscreteDistributionTest {
   @Test
   void testPoisson() {
     EvaluatedDiscreteDistribution evaluatedDiscreteDistribution = //
-        (EvaluatedDiscreteDistribution) PoissonDistribution.of(RealScalar.of(5.5));
+        (EvaluatedDiscreteDistribution) PoissonDistribution.of(5.5);
     NavigableMap<Scalar, Scalar> navigableMap = evaluatedDiscreteDistribution.inverse_cdf();
     assertTrue(34 < navigableMap.size());
     assertTrue(navigableMap.size() < 38);
@@ -53,5 +54,10 @@ class EvaluatedDiscreteDistributionTest {
     assertTrue(Clips.interval(24, 26).isInside(inverseCDF.quantile(RealScalar.of(0.9999999989237532))));
     assertTrue(Clips.interval(32, 34).isInside(inverseCDF.quantile(RealScalar.of(0.9999999999999985))));
     assertTrue(Clips.interval(1900, 2000).isInside(inverseCDF.quantile(RealScalar.ONE)));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(PoissonDistribution.of(5.5));
   }
 }

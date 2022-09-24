@@ -181,10 +181,15 @@ class PoissonDistributionTest {
 
   @Test
   void testNumericsPoisson() {
-    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(0.1)));
-    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(1.0)));
-    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(70)));
-    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(700.0)));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(0.1));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(1.0));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(70));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(700.0));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(PoissonDistribution.of(3.4));
   }
 
   @Test

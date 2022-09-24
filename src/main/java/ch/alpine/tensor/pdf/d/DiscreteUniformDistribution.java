@@ -39,16 +39,19 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
   /** @param min inclusive
    * @param max exclusive and min < max
    * @return distribution */
-  public static Distribution of(int min, int max) {
-    return of( //
-        BigInteger.valueOf(min), //
-        BigInteger.valueOf(max));
-  }
-
   public static Distribution of(BigInteger min, BigInteger max) {
     if (min.compareTo(max) < 0)
       return new DiscreteUniformDistribution(min, max);
     throw new Throw(min, max);
+  }
+
+  /** @param min inclusive
+   * @param max exclusive and min < max
+   * @return distribution */
+  public static Distribution of(int min, int max) {
+    return of( //
+        BigInteger.valueOf(min), //
+        BigInteger.valueOf(max));
   }
 
   // ---

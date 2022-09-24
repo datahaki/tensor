@@ -18,6 +18,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
@@ -50,6 +51,11 @@ class BorelTannerDistributionTest {
     Distribution distribution = Serialization.copy(BorelTannerDistribution.of(alpha, 7));
     CDF cdf = CDF.of(distribution);
     Tolerance.CHOP.requireClose(cdf.p_lessEquals(RealScalar.of(30)), RealScalar.of(0.8419882919812596));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(BorelTannerDistribution.of(0.3, 5));
   }
 
   @Test

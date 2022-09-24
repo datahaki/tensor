@@ -29,6 +29,7 @@ import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.CentralMoment;
@@ -305,6 +306,11 @@ class BinomialDistributionTest {
     // assertFalse(discreteCDF.cdf_finished());
     assertEquals(cdf.p_lessThan(RealScalar.of(1000000000)), RealScalar.ONE);
     // assertTrue(discreteCDF.cdf_finished());
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(BinomialDistribution.of(3, 0.2));
   }
 
   @Test

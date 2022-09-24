@@ -90,6 +90,11 @@ class BernoulliDistributionTest {
   }
 
   @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(BernoulliDistribution.of(0.2));
+  }
+
+  @Test
   void testFailP() {
     assertThrows(Throw.class, () -> BernoulliDistribution.of(RationalScalar.of(-1, 3)));
     assertThrows(Throw.class, () -> BernoulliDistribution.of(RationalScalar.of(4, 3)));

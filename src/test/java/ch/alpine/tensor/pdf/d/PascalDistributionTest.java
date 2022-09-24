@@ -24,6 +24,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
@@ -149,6 +150,11 @@ class PascalDistributionTest {
     Scalar expect = Scalars.fromString("96463967285551476768768/3219905755813179726837607"); // Mathematica
     Tolerance.CHOP.requireClose(scalar, expect);
     pdf.at(RealScalar.of(200000));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(PascalDistribution.of(5, 1.0 / 7));
   }
 
   @Test

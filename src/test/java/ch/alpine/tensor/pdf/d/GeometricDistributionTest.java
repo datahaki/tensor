@@ -23,6 +23,7 @@ import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
@@ -165,9 +166,14 @@ class GeometricDistributionTest {
 
   @Test
   void testNumericsGeometric() {
-    _checkCDFNumerics(GeometricDistribution.of(RealScalar.of(0.01)));
-    _checkCDFNumerics(GeometricDistribution.of(RealScalar.of(0.1)));
-    _checkCDFNumerics(GeometricDistribution.of(RealScalar.of(0.9)));
-    _checkCDFNumerics(GeometricDistribution.of(RealScalar.of(0.99)));
+    _checkCDFNumerics(GeometricDistribution.of(0.01));
+    _checkCDFNumerics(GeometricDistribution.of(0.1));
+    _checkCDFNumerics(GeometricDistribution.of(0.9));
+    _checkCDFNumerics(GeometricDistribution.of(0.99));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(GeometricDistribution.of(0.9));
   }
 }

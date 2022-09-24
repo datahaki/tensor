@@ -25,9 +25,11 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.ScalarSummaryStatistics;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Sign;
 
 class DiscreteUniformDistributionTest {
   private static final Random RANDOM = new SecureRandom();
@@ -122,6 +124,16 @@ class DiscreteUniformDistributionTest {
     clip.requireInside(scalarSummaryStatistics.getMin());
     clip.requireInside(scalarSummaryStatistics.getMax());
     assertEquals(scalarSummaryStatistics.getMax(), top);
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(DiscreteUniformDistribution.of(3, 10));
+    Distribution distribution = DiscreteUniformDistribution.of( //
+        new BigInteger("123491827364912736491234978").negate(), //
+        new BigInteger("123491827364912736491236789"));
+    TestMarkovChebyshev.monotonous(distribution);
+    Sign.requirePositive(PDF.of(distribution).at(RealScalar.ZERO));
   }
 
   @Test

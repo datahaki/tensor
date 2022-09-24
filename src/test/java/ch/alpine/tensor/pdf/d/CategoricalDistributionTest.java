@@ -193,6 +193,12 @@ class CategoricalDistributionTest {
   }
 
   @Test
+  void testMonotonous() {
+    Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(1, 2, 3, 2, 4, 0, 2));
+    TestMarkovChebyshev.monotonous(distribution);
+  }
+
+  @Test
   void testNegativeFail() {
     assertThrows(Throw.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
   }
