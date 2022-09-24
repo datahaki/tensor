@@ -39,6 +39,5 @@ public abstract class AbstractDiscreteDistribution implements DiscreteDistributi
 
   /** @param x with lowerBound() <= x
    * @return P(X == x), i.e. probability of random variable X == x */
-  // TODO TENSOR check all implementation for unnecessary x.intValueExact()
   protected abstract Scalar protected_p_equals(BigInteger x);
 }

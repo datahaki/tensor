@@ -19,6 +19,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -26,7 +27,9 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.ScalarSummaryStatistics;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
@@ -127,6 +130,18 @@ class DiscreteUniformDistributionTest {
   }
 
   @Test
+  void testBigSingle() {
+    BigInteger bigInteger = new BigInteger("123491827364912736491234978");
+    Distribution distribution = DiscreteUniformDistribution.of( //
+        bigInteger, //
+        bigInteger.add(BigInteger.ONE));
+    Scalar x = RealScalar.of(bigInteger);
+    assertEquals(Mean.of(distribution), x);
+    assertEquals(Variance.of(distribution), RealScalar.ZERO);
+    assertEquals(RandomVariate.of(distribution, 3), ConstantArray.of(x, 3));
+  }
+
+  @Test
   void testMonotonous() {
     TestMarkovChebyshev.monotonous(DiscreteUniformDistribution.of(3, 10));
     Distribution distribution = DiscreteUniformDistribution.of( //
@@ -134,6 +149,13 @@ class DiscreteUniformDistributionTest {
         new BigInteger("123491827364912736491236789"));
     TestMarkovChebyshev.monotonous(distribution);
     Sign.requirePositive(PDF.of(distribution).at(RealScalar.ZERO));
+  }
+
+  @Test
+  void testFailZero() {
+    assertThrows(Exception.class, () -> DiscreteUniformDistribution.of( //
+        new BigInteger("123491827364912736491234978"), //
+        new BigInteger("123491827364912736491234978")));
   }
 
   @Test

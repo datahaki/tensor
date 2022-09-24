@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -182,6 +183,22 @@ class RationalScalarTest {
     Scalar zero = RealScalar.ZERO;
     Scalar eps = DoubleScalar.of(Math.nextUp(0.0));
     assertEquals(zero.divide(eps), zero);
+  }
+
+  @Test
+  void testNumberInteger() {
+    assertInstanceOf(Integer.class, RationalScalar.of(Integer.MAX_VALUE, 1).number());
+    assertInstanceOf(Integer.class, RationalScalar.of(Integer.MIN_VALUE, 1).number());
+    assertInstanceOf(Long.class, RationalScalar.of(Math.addExact((long) Integer.MAX_VALUE, +1), 1).number());
+    assertInstanceOf(Long.class, RationalScalar.of(Math.addExact((long) Integer.MIN_VALUE, -1), 1).number());
+  }
+
+  @Test
+  void testNumberLong() {
+    assertInstanceOf(Long.class, RealScalar.of(BigInteger.valueOf(Long.MAX_VALUE)).number());
+    assertInstanceOf(Long.class, RealScalar.of(BigInteger.valueOf(Long.MIN_VALUE)).number());
+    assertInstanceOf(BigInteger.class, RealScalar.of(BigInteger.valueOf(Long.MAX_VALUE).add(BigInteger.ONE)).number());
+    assertInstanceOf(BigInteger.class, RealScalar.of(BigInteger.valueOf(Long.MIN_VALUE).subtract(BigInteger.ONE)).number());
   }
 
   @Test

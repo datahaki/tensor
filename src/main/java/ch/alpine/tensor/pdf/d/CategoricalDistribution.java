@@ -52,6 +52,7 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
 
   // ---
   private final Tensor pdf;
+  private final BigInteger pdf_length;
 
   private CategoricalDistribution(Tensor unscaledPDF) {
     unscaledPDF.stream() //
@@ -60,6 +61,7 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
     Tensor accumulate = Accumulate.of(unscaledPDF);
     Scalar scale = Last.of(accumulate);
     pdf = unscaledPDF.divide(scale);
+    pdf_length = BigInteger.valueOf(pdf.length());
     build(accumulate.length() - 1);
   }
 
@@ -73,7 +75,7 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
         .orElseThrow();
   }
 
-  @Override
+  @Override // from VarianceInterface
   public Scalar variance() {
     return centralMoment(2);
   }
@@ -85,9 +87,8 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from AbstractDiscreteDistribution
   protected Scalar protected_p_equals(BigInteger x) {
-    int index = x.intValueExact();
-    return index < pdf.length() //
-        ? pdf.Get(index)
+    return x.compareTo(pdf_length) < 0 //
+        ? pdf.Get(x.intValueExact())
         : RealScalar.ZERO;
   }
 

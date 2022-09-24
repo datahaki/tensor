@@ -5,6 +5,7 @@ import java.math.BigInteger;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Binomial;
@@ -38,12 +39,14 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution {
   // ---
   private final int n;
   private final Scalar p;
-  private final Scalar o_p;
+  private final Scalar _1_p;
+  private final Scalar pn;
 
   private PascalDistribution(int n, Scalar p) {
     this.n = n;
     this.p = p;
-    o_p = RealScalar.ONE.subtract(p);
+    _1_p = RealScalar.ONE.subtract(p);
+    pn = Power.of(p, n);
     build(Chop._14);
   }
 
@@ -59,13 +62,15 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return mean().multiply(o_p).divide(p);
+    return mean().multiply(_1_p).divide(p);
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(BigInteger _x) { // lowerBound() <= x
-    int x = _x.intValueExact();
-    return Power.of(o_p, x - n).multiply(Power.of(p, n)).multiply(Binomial.of(x - 1, n - 1));
+  protected Scalar protected_p_equals(BigInteger x) { // lowerBound() <= x
+    Scalar factor = Power.of(_1_p, RealScalar.of(x).add(RealScalar.of(-n)));
+    return Scalars.isZero(factor) //
+        ? RealScalar.ZERO
+        : factor.multiply(pn).multiply(Binomial.of(x.intValueExact() - 1, n - 1));
   }
 
   @Override // from Object

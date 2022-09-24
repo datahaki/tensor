@@ -108,16 +108,18 @@ public final class RationalScalar extends AbstractRealScalar implements //
   public Number number() {
     if (bigFraction.isInteger()) {
       BigInteger bigInteger = numerator();
-      try {
-        return bigInteger.intValueExact();
-      } catch (Exception exception) {
-        // ---
-      }
-      try {
-        return bigInteger.longValueExact();
-      } catch (Exception exception) {
-        // ---
-      }
+      if (bigInteger.bitLength() < 32) // quick hint
+        try {
+          return bigInteger.intValueExact();
+        } catch (Exception exception) {
+          // ---
+        }
+      if (bigInteger.bitLength() < 64) // quick hint
+        try {
+          return bigInteger.longValueExact();
+        } catch (Exception exception) {
+          // ---
+        }
       return bigInteger;
     }
     return toBigDecimal(MathContext.DECIMAL64).doubleValue();

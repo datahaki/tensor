@@ -5,6 +5,7 @@ import java.math.BigInteger;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.Tolerance;
@@ -61,7 +62,10 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
 
   @Override // from AbstractDiscreteDistribution
   protected Scalar protected_p_equals(BigInteger x) {
-    return pn.multiply(Power.of(_1_p, x)).multiply(Binomial.of(n - 1 + x.intValueExact(), n - 1));
+    Scalar factor = Power.of(_1_p, x);
+    return Scalars.isZero(factor) //
+        ? RealScalar.ZERO
+        : pn.multiply(factor).multiply(Binomial.of(n - 1 + x.intValueExact(), n - 1));
   }
 
   @Override // from MeanInterface

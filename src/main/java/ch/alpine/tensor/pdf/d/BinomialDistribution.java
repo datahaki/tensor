@@ -47,12 +47,12 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
   }
 
   // ---
-  private final int n;
+  private final BigInteger n;
   private final Scalar p;
   private final Tensor table;
 
   private BinomialDistribution(int n, Scalar p, Tensor table) {
-    this.n = n;
+    this.n = BigInteger.valueOf(n);
     this.p = p;
     this.table = table;
     build(n);
@@ -83,9 +83,8 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
 
   @Override // from AbstractDiscreteDistribution
   protected Scalar protected_p_equals(BigInteger x) {
-    int index = x.intValueExact();
-    return index <= n //
-        ? table.Get(index)
+    return x.compareTo(n) <= 0 //
+        ? table.Get(x.intValueExact())
         : RealScalar.ZERO;
   }
 

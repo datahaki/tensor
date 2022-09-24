@@ -54,16 +54,16 @@ public enum Expectation {
     T value = null;
     Scalar p_equals = RealScalar.ZERO;
     Scalar cumprob = RealScalar.ZERO;
-    int sample = discreteDistribution.lowerBound().intValueExact();
+    BigInteger sample = discreteDistribution.lowerBound();
     while (!StaticHelper.isFinished(p_equals, cumprob)) {
       Scalar x = RealScalar.of(sample);
-      p_equals = discreteDistribution.p_equals(BigInteger.valueOf(sample));
+      p_equals = discreteDistribution.p_equals(sample);
       cumprob = cumprob.add(p_equals);
       T delta = (T) function.apply(x).multiply(p_equals);
       value = Objects.isNull(value) //
           ? delta
           : (T) value.add(delta);
-      ++sample;
+      sample = sample.add(BigInteger.ONE);
     }
     return value;
   }
