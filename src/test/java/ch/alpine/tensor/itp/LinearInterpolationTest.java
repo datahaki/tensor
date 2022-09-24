@@ -3,6 +3,7 @@ package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -17,7 +18,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
@@ -25,6 +28,8 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -199,6 +204,15 @@ class LinearInterpolationTest {
     assertEquals(ExactScalarQ.require(interpolation.apply(RealScalar.ONE)), RealScalar.of(14));
     assertThrows(Exception.class, () -> interpolation.apply(RealScalar.of(-0.1)));
     assertThrows(Exception.class, () -> interpolation.apply(RealScalar.of(1.1)));
+  }
+
+  @Test
+  void testCsv() {
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/io/dateobject.csv");
+    assertInstanceOf(DateObject.class, tensor.Get(0, 0));
+    Tensor result = Subdivide.of(0, 2, 20).map(LinearInterpolation.of(tensor)::at);
+    assertEquals(result.get(0).toString(), tensor.get(0).toString());
+    assertEquals(Last.of(result).toString(), Last.of(tensor).toString());
   }
 
   @Test

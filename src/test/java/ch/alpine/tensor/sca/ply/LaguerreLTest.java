@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.ply;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,5 +32,11 @@ class LaguerreLTest {
     assertEquals(LaguerreL.of(3).coeffs(), Tensors.fromString("{1, -3, 3/2, -1/6}"));
     assertEquals(LaguerreL.of(4).coeffs(), Tensors.fromString("{1, -4, 3, -2/3, 1/24}"));
     assertEquals(LaguerreL.of(5).coeffs(), Tensors.fromString("{1, -5, 5, -(5/3), 5/24, -1/120}"));
+  }
+
+  @Test
+  void testNotSupported() {
+    assertThrows(Exception.class, () -> LaguerreL.of(RealScalar.ONE.negate(), RealScalar.of(0.2)));
+    assertThrows(Exception.class, () -> LaguerreL.of(Pi.VALUE, RealScalar.of(0.2)));
   }
 }

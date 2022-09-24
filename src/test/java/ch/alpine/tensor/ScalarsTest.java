@@ -289,6 +289,12 @@ class ScalarsTest {
   }
 
   @Test
+  void testToStringDateObject3() {
+    assertInstanceOf(StringScalar.class, Scalars.fromString("2020-12-20T04:30a"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("2020-12-20T04a30"));
+  }
+
+  @Test
   void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(6, "m");
     Scalar qs2 = Quantity.of(3, "s");

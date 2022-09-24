@@ -121,12 +121,6 @@ public class DateObject extends AbstractScalar implements //
         zoneOffset));
   }
 
-  /** @param scalar with time based SI-unit, for instance "s", "h", "days", "wk", "mo", "yr", etc.
-   * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to UTC */
-  public static DateObject ofEpoch(Scalar scalar) {
-    return ofEpoch(scalar, ZoneOffset.UTC);
-  }
-
   /** parsing function
    * 
    * Examples:
@@ -188,8 +182,7 @@ public class DateObject extends AbstractScalar implements //
   public Scalar toEpoch(ZoneOffset zoneOffset) {
     // function getNano() returns in the range 0 to 999,999,999
     Scalar nanos = RationalScalar.of(localDateTime.getNano(), NANOS_LONG);
-    return Quantity.of( //
-        RealScalar.of(localDateTime.toEpochSecond(zoneOffset)).add(nanos), UNIT_S);
+    return Quantity.of(RealScalar.of(localDateTime.toEpochSecond(zoneOffset)).add(nanos), UNIT_S);
   }
 
   /** @return the year, from MIN_YEAR to MAX_YEAR */
@@ -299,8 +292,8 @@ public class DateObject extends AbstractScalar implements //
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof DateObject)
-      return localDateTime.compareTo(((DateObject) scalar).localDateTime);
+    if (scalar instanceof DateObject dateObject)
+      return localDateTime.compareTo(dateObject.localDateTime);
     throw new Throw(this, scalar);
   }
 

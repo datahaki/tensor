@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -25,5 +26,11 @@ class HoytDistributionTest {
   @Test
   void testMonotonous() {
     TestMarkovChebyshev.monotonous(HoytDistribution.of(0.7, 2.3));
+  }
+
+  @Test
+  void testFail() {
+    assertThrows(Exception.class, () -> HoytDistribution.of(1.7, 2.3));
+    assertThrows(Exception.class, () -> HoytDistribution.of(0.7, -2.3));
   }
 }

@@ -6,13 +6,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.num.Divisible;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Sign;
 
 /** collection of useful static functions related to {@link Scalar} */
@@ -121,15 +118,6 @@ public enum Scalars {
    * @see Divisible */
   public static boolean divides(Scalar m, Scalar n) {
     return Divisible.of(n, m);
-  }
-
-  /** @param unit non-null
-   * @return operator that maps a scalar to the quantity with value
-   * of given scalar and given unit
-   * @throws Exception if given unit is null */
-  public static ScalarUnaryOperator attach(Unit unit) {
-    Objects.requireNonNull(unit);
-    return scalar -> Quantity.of(scalar, unit);
   }
 
   // ---

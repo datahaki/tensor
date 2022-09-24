@@ -59,7 +59,7 @@ public class TruncatedDistribution implements Distribution, //
   public Scalar at(Scalar x) {
     Scalar p = univariateDistribution.at(x);
     return clip.isInside(x) //
-        ? p.divide(clip_cdf.width())
+        ? p.divide(clip_cdf.width()) // TODO TENSOR test with quantity?
         : p.zero();
   }
 
