@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 
 class UnmodifiableSparseArrayTest {
@@ -26,5 +27,6 @@ class UnmodifiableSparseArrayTest {
     for (Tensor x : sparseArray)
       assertInstanceOf(UnmodifiableSparseArray.class, x);
     assertInstanceOf(UnmodifiableSparseArray.class, sparseArray.block(List.of(0), List.of(1)));
+    assertTrue(Tensors.isUnmodifiable(sparseArray));
   }
 }

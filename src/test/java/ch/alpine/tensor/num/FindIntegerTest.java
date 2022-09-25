@@ -12,7 +12,9 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.pow.Power;
 
 class FindIntegerTest {
   @Test
@@ -37,7 +39,19 @@ class FindIntegerTest {
   }
 
   @Test
-  void testMinFail() {
+  void testMinFail1() {
+    assertThrows(Exception.class, () -> FindInteger.min(s -> false, BigInteger.ONE));
+  }
+
+  @Test
+  void testMinFail2() {
     assertThrows(Exception.class, () -> FindInteger.min(s -> false, Clips.interval(0, 15)));
+  }
+
+  @Test
+  void testMinFail3() {
+    Scalar hi = Power.of(2, (256 + 2) * 3);
+    Clip clip = Clips.positive(hi);
+    assertThrows(Exception.class, () -> FindInteger.min(s -> Scalars.lessEquals(hi, s), clip));
   }
 }

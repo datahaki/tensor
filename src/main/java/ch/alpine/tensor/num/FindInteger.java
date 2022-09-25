@@ -16,8 +16,9 @@ import ch.alpine.tensor.sca.Floor;
 
 public enum FindInteger {
   ;
-  private static final int MAX_ITERATIONS = 128;
-  private static final BigInteger FACTOR = BigInteger.valueOf(8);
+  private static final int MAX_ITERATIONS_A = 256;
+  private static final int MAX_ITERATIONS_B = 256 * 3; // 3 == 2^8
+  private static final BigInteger FACTOR = BigInteger.valueOf(8); 
 
   /** @param predicate
    * @param lo strictly positive
@@ -25,11 +26,13 @@ public enum FindInteger {
   public static Scalar min(Predicate<Scalar> predicate, BigInteger lo) {
     Integers.requirePositive(lo.signum());
     BigInteger hi = lo;
-    while (!predicate.test(RealScalar.of(hi))) {
+    for (int index = 0; index < MAX_ITERATIONS_A; ++index) {
+      if (predicate.test(RealScalar.of(hi)))
+        return min(predicate, Clips.interval(lo, hi));
       lo = hi;
       hi = lo.multiply(FACTOR);
     }
-    return min(predicate, Clips.interval(lo, hi));
+    throw new Throw(lo);
   }
 
   /** @param predicate should be monotonous, i.e. for increasing values
@@ -45,7 +48,7 @@ public enum FindInteger {
     if (predicate.test(lo))
       return lo;
     // ---
-    for (int index = 0; index < MAX_ITERATIONS; ++index) {
+    for (int index = 0; index < MAX_ITERATIONS_B; ++index) {
       Scalar width = hi.subtract(lo);
       if (width.equals(RealScalar.ONE))
         return hi;

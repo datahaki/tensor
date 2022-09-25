@@ -8,8 +8,10 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Outer;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.spa.SparseArray;
 
 /** utility class that provides constructors of tensors for convenience.
  * 
@@ -179,10 +181,24 @@ public enum Tensors {
     return tensor.length() != 0;
   }
 
-  /** @param tensor
-   * @return true if tensor is not modifiable */
+  /** Examples:
+   * A tensor returned by the method {@link Tensor#unmodifiable()},
+   * in particular {@link SparseArray#unmodifiable()}
+   * is not modifiable.
+   * 
+   * Also, any {@link Scalar} is by specification immutable
+   * and therefore unmodifiable.
+   * 
+   * Careful:
+   * Some instances of tensor not modifiable for which this method
+   * returns false. For instance, tensors returned by {@link ConstantArray},
+   * or {@link Unprotect#using(List)} with unmodifiable lists.
+   * 
+   * @param tensor
+   * @return true if given tensor is guaranteed to be unmodifiable,
+   * and false if given tensor may be modifiable. */
   public static boolean isUnmodifiable(Tensor tensor) {
-    return tensor instanceof UnmodifiableTensor;
+    return tensor.unmodifiable() == tensor;
   }
 
   // ---

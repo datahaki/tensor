@@ -63,13 +63,13 @@ class ArrayTest {
 
   @Test
   void testFillEmpty() {
-    Tensor tensor = Array.fill(() -> Pi.VALUE, List.of());
+    Tensor tensor = Array.same(Pi.VALUE, List.of());
     assertEquals(tensor, Pi.VALUE);
   }
 
   @Test
   void testFillIntegers() {
-    Tensor tensor = Array.fill(() -> Pi.VALUE, 1, 2);
+    Tensor tensor = Array.same(Pi.VALUE, 1, 2);
     assertEquals(Dimensions.of(tensor), Arrays.asList(1, 2));
   }
 

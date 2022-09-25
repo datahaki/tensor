@@ -119,8 +119,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
   static Tensor raw2(Tensor vector) {
     int n = vector.length();
     int tail = n * 4;
-    Scalar zero = vector.Get(0).zero();
-    Tensor tensor = Array.fill(() -> zero, tail);
+    Tensor tensor = Array.same(vector.Get(0).zero(), tail);
     int head = -1;
     ++tail;
     for (Tensor scalar : vector) {
@@ -135,8 +134,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
   @PackageTestAccess
   static Tensor raw3(Tensor vector) {
     int n = vector.length();
-    Scalar zero = vector.Get(0).zero();
-    Tensor tensor = Join.of(vector, Array.fill(() -> zero, 1), Reverse.of(Drop.head(vector, 1).negate()));
+    Tensor tensor = Join.of(vector, Array.same(vector.Get(0).zero(), 1), Reverse.of(Drop.head(vector, 1).negate()));
     Tensor result = InverseFourier.of(Join.of(tensor, tensor.negate()));
     return Tensors.vector(i -> result.Get(i + i + 1), n);
   }

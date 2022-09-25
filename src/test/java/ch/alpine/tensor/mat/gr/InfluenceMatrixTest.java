@@ -174,7 +174,7 @@ class InfluenceMatrixTest {
       assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
       Tensor zeros = Dot.of(influenceMatrix.residualMaker(), matrix);
       Chop.NONE.requireAllZero(zeros);
-      assertEquals(zeros, Array.fill(() -> GaussScalar.of(0, prime), n, n));
+      assertEquals(zeros, Array.same(GaussScalar.of(0, prime), n, n));
     }
   }
 
@@ -196,7 +196,7 @@ class InfluenceMatrixTest {
       assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
       Tensor zeros = Dot.of(influenceMatrix.residualMaker(), matrix);
       Chop.NONE.requireAllZero(zeros);
-      assertEquals(zeros, Array.fill(() -> GaussScalar.of(0, prime), n, n));
+      assertEquals(zeros, Array.same(GaussScalar.of(0, prime), n, n));
     }
   }
 

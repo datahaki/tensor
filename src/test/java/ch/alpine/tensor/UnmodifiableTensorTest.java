@@ -2,7 +2,6 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,7 +35,7 @@ class UnmodifiableTensorTest {
     assertThrows(UnsupportedOperationException.class, () -> unmodi.append(Tensors.empty()));
     assertThrows(UnsupportedOperationException.class, () -> unmodi.set(t -> t.append(RealScalar.ZERO)));
     Tensor dot = unmodi.dot(unmodi);
-    assertFalse(Tensors.isUnmodifiable(dot));
+    assertTrue(Tensors.isUnmodifiable(dot));
     assertEquals(dot, DoubleScalar.of(65.09));
     assertEquals(DoubleScalar.of(65.09), dot);
   }
