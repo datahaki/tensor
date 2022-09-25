@@ -5,8 +5,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.ply.Polynomial;
 
 /** https://en.wikipedia.org/wiki/Newton%27s_method */
 /* package */ class NewtonScalarMethod implements ScalarUnaryOperator {

@@ -53,7 +53,7 @@ class ArcTanTest {
   void testComplexReal() {
     Scalar r = ArcTan.of(ComplexScalar.of(2, 3), RealScalar.of(12));
     // 1.39519 - 0.247768 I
-    assertEquals(r, Scalars.fromString("1.3951860877095887-0.24776768676598088*I"));
+    assertEquals(r, ComplexScalar.of(1.3951860877095887, -0.24776768676598088));
   }
 
   @Test
@@ -61,8 +61,7 @@ class ArcTanTest {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcTan.FUNCTION.apply(s);
     assertEquals(r, ArcTan.of(s));
-    // 1.50273 - 0.0944406 I
-    assertEquals(r, Scalars.fromString("1.502726846368326-0.09444062638970714*I"));
+    assertEquals(r, ComplexScalar.of(1.502726846368326, -0.09444062638970714));
   }
 
   @Test
@@ -70,8 +69,7 @@ class ArcTanTest {
     Scalar x = ComplexScalar.of(4, -1);
     Scalar y = ComplexScalar.of(1, 2);
     Scalar r = ArcTan.of(x, y);
-    // 0.160875 + 0.575646 I
-    assertEquals(r, Scalars.fromString("0.1608752771983211+0.5756462732485114*I"));
+    assertEquals(r, ComplexScalar.of(0.1608752771983211, +0.5756462732485114));
   }
 
   @Test
@@ -96,8 +94,6 @@ class ArcTanTest {
     assertEquals(ArcTan.of(RealScalar.ZERO, RealScalar.ZERO), RealScalar.ZERO);
   }
 
-  // Mathematica doesn't do this:
-  // ArcTan[Quantity[12, "Meters"], Quantity[4, "Meters"]] is not evaluated
   @Test
   void testQuantity() {
     Scalar qs1 = Quantity.of(12, "m");

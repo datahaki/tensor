@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ class AbstractTensorTest {
   void testHashDifferent() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(722, 18275);
-    assertFalse(a.hashCode() == b.hashCode());
+    assertNotEquals(a.hashCode(), b.hashCode());
   }
 
   @Test

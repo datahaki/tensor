@@ -2,7 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
@@ -41,7 +41,7 @@ class BigDecimalMathTest {
   void testSqrtExact() {
     BigDecimal bd1 = new BigDecimal(BigInteger.valueOf(25 * 25));
     Object object = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL32);
-    assertFalse(object.equals(RationalScalar.of(25, 1))); // gives false
+    assertNotEquals(object, RationalScalar.of(25, 1)); // gives false
   }
 
   @Test

@@ -16,7 +16,7 @@ class TimingTest {
     Timing timing = Timing.stopped();
     assertEquals(timing.nanoSeconds(), 0);
     assertEquals(timing.seconds(), 0.0);
-    assertThrows(NullPointerException.class, () -> timing.stop());
+    assertThrows(NullPointerException.class, timing::stop);
     timing.start();
     Math.sin(1);
     assertTrue(0 < timing.nanoSeconds());
@@ -34,7 +34,7 @@ class TimingTest {
   @Test
   void testStartedFail() {
     Timing timing = Timing.started();
-    assertThrows(IllegalStateException.class, () -> timing.start());
+    assertThrows(IllegalStateException.class, timing::start);
     assertTrue(0 < timing.nanoSeconds());
   }
 
@@ -44,6 +44,6 @@ class TimingTest {
     Math.sin(1);
     assertTrue(0 < timing.nanoSeconds());
     timing.stop();
-    assertThrows(NullPointerException.class, () -> timing.stop());
+    assertThrows(NullPointerException.class, timing::stop);
   }
 }

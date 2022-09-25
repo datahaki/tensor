@@ -19,7 +19,6 @@ class GeometricMeanTest {
   void testGeo1() {
     assertEquals(GeometricMean.of(Tensors.vectorDouble(4, 9)), RealScalar.of(6));
     Tensor a = GeometricMean.of(Tensors.vectorDouble(8, 27, 525));
-    // 48.4029
     Tolerance.CHOP.requireClose(a, RealScalar.of(48.4028593807363));
   }
 
@@ -27,7 +26,6 @@ class GeometricMeanTest {
   void testGeo2() {
     Tensor a = Tensors.matrixDouble(new double[][] { { 5, 10 }, { 2, 1 }, { 4, 3 }, { 12, 15 } });
     Tensor b = GeometricMean.of(a);
-    // {4.68069, 4.60578}
     Tensor r = Tensors.vector(4.680694638641432, 4.605779351596907);
     Tolerance.CHOP.requireClose(b, r);
   }

@@ -10,41 +10,32 @@ public enum BoundedLinkedListDemo {
     double timeout = 3;
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(12);
     Random random = new Random();
-    new Thread() {
-      @Override
-      public void run() {
-        System.out.println("runA1");
-        while (timing.seconds() < timeout)
-          synchronized (boundedLinkedList) {
-            boundedLinkedList.add(random.nextInt());
-          }
-      }
-    }.start();
-    new Thread() {
-      @Override
-      public void run() {
-        System.out.println("runA2");
-        while (timing.seconds() < timeout) {
-          synchronized (boundedLinkedList) {
-            boundedLinkedList.add(random.nextInt());
-          }
+    new Thread(() -> {
+      System.out.println("runA1");
+      while (timing.seconds() < timeout)
+        synchronized (boundedLinkedList) {
+          boundedLinkedList.add(random.nextInt());
+        }
+    }).start();
+    new Thread(() -> {
+      System.out.println("runA2");
+      while (timing.seconds() < timeout) {
+        synchronized (boundedLinkedList) {
+          boundedLinkedList.add(random.nextInt());
         }
       }
-    }.start();
-    new Thread() {
-      @Override
-      public void run() {
-        System.out.println("runR");
-        while (timing.seconds() < timeout) {
-          if (!boundedLinkedList.isEmpty()) {
-            int poll;
-            synchronized (boundedLinkedList) {
-              poll = boundedLinkedList.poll();
-            }
-            System.out.println(poll);
+    }).start();
+    new Thread(() -> {
+      System.out.println("runR");
+      while (timing.seconds() < timeout) {
+        if (!boundedLinkedList.isEmpty()) {
+          int poll;
+          synchronized (boundedLinkedList) {
+            poll = boundedLinkedList.poll();
           }
+          System.out.println(poll);
         }
       }
-    }.start();
+    }).start();
   }
 }

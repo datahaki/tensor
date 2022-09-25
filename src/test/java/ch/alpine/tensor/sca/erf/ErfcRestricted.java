@@ -7,8 +7,8 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.ply.Polynomial;
 
 /** IMPLEMENTATION IS BASED ON THE TAYLOR SERIES
  * RESTRICTED TO A BOUNDED INTERVAL AROUND ZERO

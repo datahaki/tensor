@@ -4,6 +4,7 @@ package ch.alpine.tensor.jet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -161,11 +162,11 @@ class AroundTest {
     Scalar b = Around.of( //
         Quantity.of(3, "m"), //
         Quantity.of(3, "m"));
-    assertFalse(scalar.equals(b));
+    assertNotEquals(scalar, b);
     Scalar a = Around.of( //
         Quantity.of(2, "m"), //
         Quantity.of(2, "m"));
-    assertFalse(scalar.equals(a));
+    assertNotEquals(scalar, a);
   }
 
   @Test
@@ -176,7 +177,7 @@ class AroundTest {
     assertEquals(scalar, Around.of( //
         Quantity.of(RationalScalar.of(-1, 3), "s^-1"), //
         Quantity.of(RationalScalar.of(7, 9), "s^-1")));
-    assertFalse(scalar.equals(Pi.VALUE));
+    assertNotEquals(scalar, Pi.VALUE);
     N.DOUBLE.of(scalar);
     N.DECIMAL64.of(scalar);
   }
@@ -221,7 +222,7 @@ class AroundTest {
   void testNumberFail() {
     Scalar scalar = Around.of(2, 3);
     assertEquals(scalar.toString(), "2\u00B13");
-    assertThrows(Throw.class, () -> scalar.number());
+    assertThrows(Throw.class, scalar::number);
   }
 
   @Test

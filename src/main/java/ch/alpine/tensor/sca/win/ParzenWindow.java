@@ -7,8 +7,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.ply.Polynomial;
 
 /** ParzenWindow[1/2]=0
  * 

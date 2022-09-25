@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -31,8 +31,8 @@ class ColorDataGradientsTest {
   @ParameterizedTest
   @EnumSource(ColorDataGradients.class)
   void testDimensions(ColorDataGradient colorDataGradient) {
-    assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ZERO)), Arrays.asList(4));
-    assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ONE)), Arrays.asList(4));
+    assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ZERO)), List.of(4));
+    assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ONE)), List.of(4));
   }
 
   @ParameterizedTest

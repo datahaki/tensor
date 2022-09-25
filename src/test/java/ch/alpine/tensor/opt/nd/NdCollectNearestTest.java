@@ -46,13 +46,13 @@ class NdCollectNearestTest {
       Tensor center = Tensors.vector(0, 0);
       NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
       Collection<NdMatch<String>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 1);
-      assertTrue(cluster.iterator().next().value().equals("d5"));
+      assertEquals("d5", cluster.iterator().next().value());
     }
     {
       Tensor center = Tensors.vector(5, 5);
       NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
       Collection<NdMatch<String>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 1);
-      assertTrue(cluster.iterator().next().value().equals("d6"));
+      assertEquals("d6", cluster.iterator().next().value());
     }
     {
       Tensor center = Tensors.vector(1.1, 0.9);

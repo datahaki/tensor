@@ -4,6 +4,7 @@ package ch.alpine.tensor.qty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Modifier;
@@ -55,24 +56,24 @@ class QuantityImplTest {
   @Test
   void testNumberFail() {
     Scalar scalar = Quantity.of(11, "m*s");
-    assertThrows(Throw.class, () -> scalar.number());
+    assertThrows(Throw.class, scalar::number);
   }
 
   @Test
   void testEquals() {
-    assertFalse(Quantity.of(10, "m").equals(Quantity.of(2, "m")));
-    assertFalse(Quantity.of(10, "m").equals(Quantity.of(10, "kg")));
+    assertNotEquals(Quantity.of(10, "m"), Quantity.of(2, "m"));
+    assertNotEquals(Quantity.of(10, "m"), Quantity.of(10, "kg"));
   }
 
   @Test
   void testEqualsObject() {
     Object object = Quantity.of(10, "m");
-    assertFalse(object.equals("s"));
+    assertNotEquals("s", object);
   }
 
   @Test
   void testEqualsZero() {
-    assertFalse(Quantity.of(0, "m").equals(RealScalar.ZERO));
+    assertNotEquals(Quantity.of(0, "m"), RealScalar.ZERO);
   }
 
   @Test

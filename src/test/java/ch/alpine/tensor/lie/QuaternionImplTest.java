@@ -3,8 +3,8 @@ package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -151,8 +151,8 @@ class QuaternionImplTest {
   void testMultiplyFail() {
     Scalar quaternion = Quaternion.of(1, 3, -2, 2);
     Scalar gaussScalar = GaussScalar.of(3, 11);
-    assertFalse(quaternion.equals(gaussScalar));
-    assertFalse(gaussScalar.equals(quaternion));
+    assertNotEquals(quaternion, gaussScalar);
+    assertNotEquals(gaussScalar, quaternion);
     assertThrows(Throw.class, () -> quaternion.multiply(gaussScalar));
     assertThrows(Throw.class, () -> gaussScalar.multiply(quaternion));
   }
@@ -172,7 +172,7 @@ class QuaternionImplTest {
   @Test
   void testNumberFail() {
     Quaternion quaternion = Quaternion.of(1, 3, -2, 2);
-    assertThrows(Throw.class, () -> quaternion.number());
+    assertThrows(Throw.class, quaternion::number);
   }
 
   @Test
@@ -189,24 +189,24 @@ class QuaternionImplTest {
     Quaternion q0 = Quaternion.of(1, 3, -2, 2);
     Quaternion q1 = Quaternion.of(1, 3, -2, 2);
     Quaternion q2 = Quaternion.of(1, 3, -2, 4);
-    assertTrue(q0.equals(q1));
-    assertFalse(q1.equals(q2));
+    assertEquals(q0, q1);
+    assertNotEquals(q1, q2);
   }
 
   @Test
   void testEqualsQR() {
     Quaternion q0 = Quaternion.of(3, 0, 0, 0);
     Scalar q1 = RealScalar.of(3);
-    assertTrue(q0.equals(q1));
-    assertTrue(q1.equals(q0));
+    assertEquals(q0, q1);
+    assertEquals(q1, q0);
   }
 
   @Test
   void testEqualsQRFalse() {
     Quaternion q0 = Quaternion.of(3, 0, 1, 0);
     Scalar q1 = RealScalar.of(3);
-    assertFalse(q0.equals(q1));
-    assertFalse(q1.equals(q0));
+    assertNotEquals(q0, q1);
+    assertNotEquals(q1, q0);
   }
 
   @Test

@@ -110,9 +110,9 @@ class TensorTest {
   void testAdd() {
     Tensor c = Tensors.vectorLong(1, 2, 6);
     Tensor d = Tensors.vectorLong(3, 4, 5);
-    assertTrue(c.add(d).equals(d.add(c)));
+    assertEquals(c.add(d), d.add(c));
     Tensor e = Tensors.vectorLong(4, 6, 11);
-    assertTrue(c.add(d).equals(e));
+    assertEquals(c.add(d), e);
   }
 
   @Test
@@ -133,7 +133,7 @@ class TensorTest {
 
   @Test
   void testBlockSerFail() {
-    Tensor tensor = Tensors.vectorLong(1, 2, 6).block(Arrays.asList(0), Arrays.asList(3));
+    Tensor tensor = Tensors.vectorLong(1, 2, 6).block(List.of(0), List.of(3));
     assertThrows(Exception.class, () -> Serialization.copy(tensor));
   }
 

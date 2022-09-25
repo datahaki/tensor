@@ -2,8 +2,8 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -40,7 +40,7 @@ class FrechetDistributionTest {
     PDF pdf = PDF.of(distribution);
     Scalar prob = pdf.at(RealScalar.of(2.9));
     Chop._13.requireClose(prob, RealScalar.of(0.10362186999648638));
-    assertFalse(pdf.at(RealScalar.of(20000)).equals(RealScalar.ZERO));
+    assertNotEquals(pdf.at(RealScalar.of(20000)), RealScalar.ZERO);
   }
 
   @Test
@@ -130,6 +130,11 @@ class FrechetDistributionTest {
     Distribution distribution = FrechetDistribution.of(1.1 + random.nextDouble(), 0.1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(FrechetDistribution.of(1.5, 1.3));
   }
 
   @Test

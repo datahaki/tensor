@@ -14,8 +14,8 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Conjugate;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
@@ -205,12 +205,12 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 
   @Override // from ComplexEmbedding
   public Scalar real() {
-    return ofUnit(Real.FUNCTION.apply(value));
+    return ofUnit(Re.FUNCTION.apply(value));
   }
 
   @Override // from ComplexEmbedding
   public Scalar imag() {
-    return ofUnit(Imag.FUNCTION.apply(value));
+    return ofUnit(Im.FUNCTION.apply(value));
   }
 
   @Override // from PowerInterface

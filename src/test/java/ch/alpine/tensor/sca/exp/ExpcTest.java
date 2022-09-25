@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.exp;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -24,15 +25,13 @@ class ExpcTest {
     Tolerance.CHOP.requireClose(scalar, RealScalar.ONE);
   }
 
-  @Test
+  @RepeatedTest(10)
   void testRandom() {
     Distribution distribution = UniformDistribution.of(0, 2e-12);
-    for (int count = 0; count < 100; ++count) {
-      Scalar mu = RandomVariate.of(distribution);
-      Chop._10.requireClose( //
-          Expc.FUNCTION.apply(mu), //
-          RealScalar.ONE);
-    }
+    Scalar mu = RandomVariate.of(distribution);
+    Chop._10.requireClose( //
+        Expc.FUNCTION.apply(mu), //
+        RealScalar.ONE);
   }
 
   @Test

@@ -15,7 +15,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -105,7 +105,7 @@ class LogNormalDistributionTest {
 
   @Test
   void testDateTime() {
-    DateTimeScalar mu = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateObject mu = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     assertThrows(Throw.class, () -> LogNormalDistribution.of(mu, Quantity.of(3, "s")));
   }
 
@@ -114,6 +114,11 @@ class LogNormalDistributionTest {
     Distribution distribution = LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO);
     assertEquals(Mean.of(distribution), Exp.FUNCTION.apply(RationalScalar.HALF));
     assertEquals(distribution.toString(), "LogDiracDeltaDistribution[1/2]");
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(LogNormalDistribution.of(-1, 3));
   }
 
   @Test

@@ -7,8 +7,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.ply.Polynomial;
 import ch.alpine.tensor.sca.tri.Sinc;
 
 /** Logc [Lambda] := Log [ Lambda ] / ( Lambda - 1 )

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
@@ -25,7 +24,7 @@ class CotTest {
   void testComplex() {
     Scalar scalar = ComplexScalar.of(-1.23, 3);
     Scalar res = Cot.FUNCTION.apply(scalar);
-    Tolerance.CHOP.requireClose(res, Scalars.fromString("-0.003111382117752743` - 0.9961526961973638` *I"));
+    Tolerance.CHOP.requireClose(res, ComplexScalar.of(-0.003111382117752743, -0.9961526961973638));
   }
 
   @Test

@@ -4,6 +4,7 @@ package ch.alpine.tensor.sca;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -13,12 +14,12 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -32,10 +33,10 @@ class ChopTest {
   void testChop() {
     Tensor v = Tensors.vectorDouble(1e-10, 1e-12, 1e-14, 1e-16);
     Tensor c = v.map(Chop._12);
-    assertFalse(c.get(0).equals(RealScalar.ZERO));
-    assertFalse(c.get(1).equals(RealScalar.ZERO));
-    assertTrue(c.get(2).equals(RealScalar.ZERO));
-    assertTrue(c.get(3).equals(RealScalar.ZERO));
+    assertNotEquals(c.get(0), RealScalar.ZERO);
+    assertNotEquals(c.get(1), RealScalar.ZERO);
+    assertEquals(c.get(2), RealScalar.ZERO);
+    assertEquals(c.get(3), RealScalar.ZERO);
   }
 
   @Test
@@ -77,8 +78,8 @@ class ChopTest {
   @Test
   void testComplex() {
     assertTrue(Chop._05.isClose( //
-        Scalars.fromString("1.2+3.1*I"), //
-        Scalars.fromString("1.2+3.1000006*I")));
+        ComplexScalar.of(1.2, 3.1), //
+        ComplexScalar.of(1.2, 3.1000006)));
   }
 
   @Test

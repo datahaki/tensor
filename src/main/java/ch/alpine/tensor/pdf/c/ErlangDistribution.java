@@ -5,6 +5,8 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
@@ -12,6 +14,7 @@ import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.gam.Factorial;
@@ -34,23 +37,34 @@ public class ErlangDistribution implements Distribution, MeanInterface, PDF, Var
     return new ErlangDistribution(Integers.requirePositive(k), lambda);
   }
 
+  /** @param k positive integer
+   * @param lambda
+   * @return */
+  public static Distribution of(int k, Number lambda) {
+    return of(k, RealScalar.of(lambda));
+  }
+
   // ---
   private final Scalar k;
   private final Scalar lambda;
   private final Scalar factor;
+  private final ScalarUnaryOperator power;
 
   private ErlangDistribution(int k, Scalar lambda) {
     this.k = RealScalar.of(k);
     this.lambda = lambda;
     factor = Power.of(lambda, k).divide(Factorial.of(k - 1));
+    power = Power.function(k - 1);
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
     if (Sign.isNegativeOrZero(x))
       return lambda.zero();
-    return Exp.FUNCTION.apply(x.negate().multiply(lambda)) //
-        .multiply(Power.of(x, k.subtract(RealScalar.ONE))).multiply(factor);
+    Scalar exp = Exp.FUNCTION.apply(x.negate().multiply(lambda));
+    return Scalars.isZero(exp) //
+        ? RealScalar.ZERO
+        : Times.of(exp, power.apply(x), factor);
   }
 
   // CDF requires GammaRegularized

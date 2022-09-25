@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -42,7 +43,7 @@ class ClipPointTest {
     Clip clip = Clips.interval(value, value);
     assertEquals(clip.apply(Quantity.of(2, "s")), value);
     assertEquals(clip.width(), Quantity.of(0, "s"));
-    assertFalse(clip.width().equals(RealScalar.ZERO));
+    assertNotEquals(clip.width(), RealScalar.ZERO);
     assertEquals(clip.requireInside(value), value);
   }
 

@@ -26,7 +26,7 @@ class Log10Test {
   @Test
   void testLog() {
     Scalar s = DoubleScalar.of(-3);
-    Scalar r = Scalars.fromString("0.4771212547196624 + 1.3643763538418412* I");
+    Scalar r = ComplexScalar.of(0.4771212547196624, 1.3643763538418412);
     Tolerance.CHOP.requireClose(Log10.of(s), r);
     assertEquals(Log10.of(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
   }
@@ -34,7 +34,7 @@ class Log10Test {
   @Test
   void testComplex() {
     Scalar s = ComplexScalar.of(-2, 1);
-    Scalar r = Scalars.fromString("0.3494850021680094 + 1.1630167557051545* I ");
+    Scalar r = ComplexScalar.of(0.3494850021680094, 1.1630167557051545);
     Tolerance.CHOP.requireClose(Log10.of(s), r);
   }
 

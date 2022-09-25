@@ -4,6 +4,7 @@ package ch.alpine.tensor.qty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -53,7 +54,7 @@ class QuantityCompareTest {
   void testCompareEquals() {
     Scalar q1 = Quantity.of(0, "s");
     Scalar q2 = Quantity.of(0, "rad");
-    assertFalse(q1.equals(q2));
+    assertNotEquals(q1, q2);
     assertThrows(Throw.class, () -> Scalars.compare(q1, q2));
     assertThrows(Throw.class, () -> Scalars.compare(RealScalar.ZERO, q2));
   }

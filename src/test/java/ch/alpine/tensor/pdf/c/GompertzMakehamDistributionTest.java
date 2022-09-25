@@ -24,6 +24,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
@@ -100,7 +101,12 @@ class GompertzMakehamDistributionTest {
   void testVarianceFail() {
     GompertzMakehamDistribution distribution = //
         (GompertzMakehamDistribution) GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
-    assertThrows(UnsupportedOperationException.class, () -> distribution.variance());
+    assertThrows(UnsupportedOperationException.class, distribution::variance);
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(GompertzMakehamDistribution.of(3, 0.2));
   }
 
   @Test

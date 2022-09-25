@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
@@ -46,7 +47,7 @@ public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterfac
 
   private Scalar dot(Function<Distribution, Scalar> function) {
     return IntStream.range(0, list.size()) //
-        .mapToObj(i -> function.apply(list.get(i)).multiply(categoricalDistribution.p_equals(i))) //
+        .mapToObj(i -> function.apply(list.get(i)).multiply(categoricalDistribution.p_equals(BigInteger.valueOf(i)))) //
         .reduce(Scalar::add) //
         .orElseThrow();
   }

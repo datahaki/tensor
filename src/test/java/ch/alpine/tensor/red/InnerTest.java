@@ -15,12 +15,4 @@ class InnerTest {
     BiFunction<Scalar, Tensor, Scalar> ex = (s, ar) -> Pi.VALUE;
     Inner.with(ex);
   }
-  // public void testSimple2() {
-  // BiFunction<Scalar, Scalar, Scalar> ex = (s, ar) -> Pi.VALUE;
-  // Inner.with(ex);
-  // }
-  // public void testSimple3() {
-  // BiFunction<Scalar, SparseArray, Scalar> ex = (s, ar) -> Pi.VALUE;
-  // Inner.with(ex);
-  // }
 }

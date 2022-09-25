@@ -112,6 +112,12 @@ class ExponentialDistributionTest {
   }
 
   @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(ExponentialDistribution.of(1E-100));
+    TestMarkovChebyshev.monotonous(ExponentialDistribution.of(10));
+  }
+
+  @Test
   void testFailL() {
     assertThrows(Throw.class, () -> ExponentialDistribution.of(RealScalar.ZERO));
     assertThrows(Throw.class, () -> ExponentialDistribution.of(RealScalar.of(-0.1)));

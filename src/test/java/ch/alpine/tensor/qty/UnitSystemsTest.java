@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -148,12 +149,6 @@ class UnitSystemsTest {
     assertEquals(scalar, Scalars.fromString("1000[W^1/2*kg^-1/2*s^3/2]"));
     assertEquals(UnitSystem.SI().apply(scalar), Quantity.of(1000, "m"));
   }
-  // public void testSubstituteM_kW() {
-  // UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "kW"); // W = m^2*kg*s^-3
-  // Scalar scalar = unitSystem.apply(Quantity.of(1, "km"));
-  // Tolerance.CHOP.requireClose(scalar, Scalars.fromString("31.622776601683793[kW^1/2*kg^-1/2*s^3/2]"));
-  // Tolerance.CHOP.requireClose(UnitSystem.SI().apply(scalar), Quantity.of(1000, "m"));
-  // }
 
   @Test
   void testCurrency() {
@@ -170,7 +165,7 @@ class UnitSystemsTest {
   void testIdentity() throws ClassNotFoundException, IOException {
     UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/ch/alpine/tensor/qty/chf.properties"));
     UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "CHF");
-    assertTrue(unitSystem == baseSystem);
+    assertSame(baseSystem, unitSystem);
     assertFalse(unitSystem.map().containsKey("CHF"));
     UnitSystem joined = UnitSystems.join(baseSystem, UnitSystem.SI());
     Serialization.copy(joined);

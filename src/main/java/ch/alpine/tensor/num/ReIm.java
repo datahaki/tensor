@@ -4,8 +4,8 @@ package ch.alpine.tensor.num;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ReIm.html">ReIm</a> */
@@ -15,7 +15,7 @@ public enum ReIm {
    * @return vector {Real[z], Imag[z]} */
   public static Tensor of(Scalar z) {
     return Tensors.of( //
-        Real.FUNCTION.apply(z), //
-        Imag.FUNCTION.apply(z));
+        Re.FUNCTION.apply(z), //
+        Im.FUNCTION.apply(z));
   }
 }

@@ -2,10 +2,11 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -55,7 +56,7 @@ class DotTest {
     Tensor in = Array.zeros(2);
     Tensor re = Dot.of(in);
     re.set(RealScalar.ONE::add, Tensor.ALL);
-    assertFalse(in.equals(re));
+    assertNotEquals(in, re);
     assertEquals(in, Array.zeros(2));
   }
 
@@ -179,8 +180,8 @@ class DotTest {
 
   @Test
   void testCombine() {
-    assertEquals(Dot.combine(Arrays.asList(2), Arrays.asList(2, 3, 4, 5)), Arrays.asList(3, 4, 5));
-    assertEquals(Dot.combine(Arrays.asList(3), Arrays.asList(3)), Arrays.asList());
+    assertEquals(Dot.combine(List.of(2), Arrays.asList(2, 3, 4, 5)), Arrays.asList(3, 4, 5));
+    assertEquals(Dot.combine(List.of(3), List.of(3)), List.of());
     assertEquals(Dot.combine(Arrays.asList(1, 2, 3), Arrays.asList(3, 4, 5)), Arrays.asList(1, 2, 4, 5));
   }
 
@@ -202,6 +203,6 @@ class DotTest {
 
   @Test
   void testDot0Fail() {
-    assertThrows(ArrayIndexOutOfBoundsException.class, () -> Dot.of());
+    assertThrows(ArrayIndexOutOfBoundsException.class, Dot::of);
   }
 }

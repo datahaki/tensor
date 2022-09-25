@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class ListConvolveTest {
   void testVector1() {
     Tensor kernel = Tensors.vector(0, -1, 3);
     Tensor tensor = ArrayPad.of(Tensors.vector(1, 6, 0, 0, -1), //
-        Arrays.asList(kernel.length() - 1), Arrays.asList(kernel.length() - 1));
+        List.of(kernel.length() - 1), List.of(kernel.length() - 1));
     Tensor result = ListConvolve.of(kernel, tensor);
     Tensor actual = Tensors.vector(0, -1, -3, 18, 0, 1, -3);
     assertEquals(result, actual);

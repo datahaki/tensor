@@ -14,7 +14,9 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.ply.Polynomial;
+import ch.alpine.tensor.sca.ply.Roots;
 
 class InverseSteerCubicTest {
   @Test
@@ -26,7 +28,7 @@ class InverseSteerCubicTest {
     for (Tensor t : Subdivide.of(-0.75, 0.75, 1230)) {
       Scalar d = cubic.apply((Scalar) t);
       Tensor roots = Roots.of(Tensors.of(d.negate(), c, RealScalar.ZERO, a));
-      assertEquals(ExactTensorQ.require(Imag.of(roots)), Array.zeros(3));
+      assertEquals(ExactTensorQ.require(Im.of(roots)), Array.zeros(3));
       Chop._13.requireClose(roots.Get(1), t);
     }
   }

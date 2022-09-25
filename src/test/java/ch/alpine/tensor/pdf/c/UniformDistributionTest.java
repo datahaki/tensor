@@ -19,7 +19,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
@@ -35,6 +34,7 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.ply.Polynomial;
 
 class UniformDistributionTest {
   @Test
@@ -186,6 +186,11 @@ class UniformDistributionTest {
       Scalar cm2 = CentralMoment.of(distribution, order);
       assertEquals(cm1, cm2);
     }
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(UniformDistribution.of(-2, 10000));
   }
 
   @Test

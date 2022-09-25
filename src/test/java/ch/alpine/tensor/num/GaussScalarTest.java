@@ -4,6 +4,7 @@ package ch.alpine.tensor.num;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -272,9 +273,9 @@ class GaussScalarTest {
 
   @Test
   void testHash2() {
-    assertFalse(GaussScalar.of(3, 7).hashCode() == GaussScalar.of(7, 3).hashCode());
-    assertFalse(GaussScalar.of(1, 7).hashCode() == GaussScalar.of(2, 7).hashCode());
-    assertFalse(GaussScalar.of(1, 7).hashCode() == GaussScalar.of(1, 11).hashCode());
+    assertNotEquals(GaussScalar.of(3, 7).hashCode(), GaussScalar.of(7, 3).hashCode());
+    assertNotEquals(GaussScalar.of(1, 7).hashCode(), GaussScalar.of(2, 7).hashCode());
+    assertNotEquals(GaussScalar.of(1, 7).hashCode(), GaussScalar.of(1, 11).hashCode());
   }
 
   @Test

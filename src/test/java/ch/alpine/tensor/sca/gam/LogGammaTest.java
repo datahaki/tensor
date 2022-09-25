@@ -1,27 +1,32 @@
 // code by jph
 package ch.alpine.tensor.sca.gam;
 
+import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.OrderedQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Power;
 
 class LogGammaTest {
-  @Test
+  @RepeatedTest(10)
   void testSimple() {
     Distribution distribution = UniformDistribution.of(0.2, 4.5);
-    for (int count = 0; count < 10; ++count) {
-      Scalar x = RandomVariate.of(distribution);
-      Scalar logGamma1 = LogGamma.FUNCTION.apply(x);
-      Scalar logGamma2 = Log.FUNCTION.apply(Gamma.FUNCTION.apply(x));
-      Tolerance.CHOP.requireClose(logGamma1, logGamma2);
-    }
+    Scalar x = RandomVariate.of(distribution);
+    Scalar logGamma1 = LogGamma.FUNCTION.apply(x);
+    Scalar logGamma2 = Log.FUNCTION.apply(Gamma.FUNCTION.apply(x));
+    Tolerance.CHOP.requireClose(logGamma1, logGamma2);
   }
 
   private static void _check(Scalar z, Scalar expect) {
@@ -57,16 +62,23 @@ class LogGammaTest {
     // _check(ComplexScalar.of(-1.2, 2.3), ComplexScalar.of(-4.235543307932702, -3.623795254074647)); // mathematica
   }
 
-  @Test
+  @RepeatedTest(10)
   void testComplex() {
     Distribution distribution = UniformDistribution.of(0.2, 3.5);
-    for (int count = 0; count < 10; ++count) {
-      Scalar re = RandomVariate.of(distribution);
-      Scalar im = RandomVariate.of(distribution);
-      Scalar x = ComplexScalar.of(re, im);
-      Scalar gamma1 = Exp.FUNCTION.apply(LogGamma.FUNCTION.apply(x));
-      Scalar gamma2 = Gamma.FUNCTION.apply(x);
-      Tolerance.CHOP.requireClose(gamma1, gamma2);
-    }
+    Scalar re = RandomVariate.of(distribution);
+    Scalar im = RandomVariate.of(distribution);
+    Scalar x = ComplexScalar.of(re, im);
+    Scalar gamma1 = Exp.FUNCTION.apply(LogGamma.FUNCTION.apply(x));
+    Scalar gamma2 = Gamma.FUNCTION.apply(x);
+    Tolerance.CHOP.requireClose(gamma1, gamma2);
+  }
+
+  @Test
+  void testMonotonous() {
+    Tensor tensor = Tensor.of(IntStream.range(2, 200) //
+        .mapToObj(RealScalar::of) //
+        .map(Power.function(10.0)) //
+        .map(LogGamma.FUNCTION));
+    OrderedQ.require(tensor);
   }
 }

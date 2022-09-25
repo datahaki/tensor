@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -67,19 +68,19 @@ class SiUnitSystemTest {
 
   @Test
   void testMilli() {
-    int checked = _check(Arrays.asList("min"), "m", RationalScalar.of(1, 1000));
+    int checked = _check(List.of("min"), "m", RationalScalar.of(1, 1000));
     assertTrue(10 <= checked);
   }
 
   @Test
   void testMicro() {
-    int checked = _check(Arrays.asList(), "u", RationalScalar.of(1, 1000000));
+    int checked = _check(List.of(), "u", RationalScalar.of(1, 1000000));
     assertTrue(4 <= checked);
   }
 
   @Test
   void testNano() {
-    int checked = _check(Arrays.asList("nmi"), "n", RationalScalar.of(1, 1000000000));
+    int checked = _check(List.of("nmi"), "n", RationalScalar.of(1, 1000000000));
     assertTrue(3 <= checked);
   }
 
@@ -97,19 +98,19 @@ class SiUnitSystemTest {
 
   @Test
   void testMega() {
-    int checked = _check(Arrays.asList(), "M", RealScalar.of(1000000));
+    int checked = _check(List.of(), "M", RealScalar.of(1000000));
     assertTrue(6 <= checked);
   }
 
   @Test
   void testGiga() {
-    int checked = _check(Arrays.asList("Ga"), "G", RealScalar.of(1000000000));
+    int checked = _check(List.of("Ga"), "G", RealScalar.of(1000000000));
     assertTrue(3 <= checked);
   }
 
   @Test
   void testTera() {
-    int checked = _check(Arrays.asList(), "T", RealScalar.of(1000000000000L));
+    int checked = _check(List.of(), "T", RealScalar.of(1000000000000L));
     assertTrue(1 <= checked);
   }
 

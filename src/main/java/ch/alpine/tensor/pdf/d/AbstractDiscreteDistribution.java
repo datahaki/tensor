@@ -1,7 +1,8 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
-import java.util.OptionalInt;
+import java.math.BigInteger;
+import java.util.Optional;
 import java.util.Random;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -13,21 +14,21 @@ import ch.alpine.tensor.pdf.DiscreteDistribution;
 /** functionality and suggested base class for a discrete probability distribution */
 public abstract class AbstractDiscreteDistribution implements DiscreteDistribution {
   @Override // from RandomVariateInterface
-  public final Scalar randomVariate(Random random) {
+  public Scalar randomVariate(Random random) {
     return protected_quantile(DoubleScalar.of(random.nextDouble()));
   }
 
   @Override // from PDF
   public final Scalar at(Scalar x) {
-    OptionalInt optionalInt = Scalars.optionalInt(x);
-    return optionalInt.isPresent() //
-        ? p_equals(optionalInt.getAsInt())
+    Optional<BigInteger> optional = Scalars.optionalBigInteger(x);
+    return optional.isPresent() //
+        ? p_equals(optional.orElseThrow())
         : RealScalar.ZERO;
   }
 
   @Override // from DiscreteDistribution
-  public final Scalar p_equals(int n) {
-    return lowerBound() <= n //
+  public final Scalar p_equals(BigInteger n) {
+    return lowerBound().compareTo(n) <= 0 //
         ? protected_p_equals(n)
         : RealScalar.ZERO;
   }
@@ -38,5 +39,5 @@ public abstract class AbstractDiscreteDistribution implements DiscreteDistributi
 
   /** @param x with lowerBound() <= x
    * @return P(X == x), i.e. probability of random variable X == x */
-  protected abstract Scalar protected_p_equals(int x);
+  protected abstract Scalar protected_p_equals(BigInteger x);
 }

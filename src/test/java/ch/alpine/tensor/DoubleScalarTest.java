@@ -29,9 +29,9 @@ class DoubleScalarTest {
     RealScalar.ZERO.hashCode();
     Tensor a = DoubleScalar.of(1.23);
     Tensor b = DoubleScalar.of(2.3);
-    assertTrue(a.add(b).equals(b.add(a)));
+    assertEquals(a.add(b), b.add(a));
     Tensor c = DoubleScalar.of(1.23 + 2.3);
-    assertTrue(a.add(b).equals(c));
+    assertEquals(a.add(b), c);
   }
 
   @Test
@@ -98,8 +98,7 @@ class DoubleScalarTest {
     assertTrue(Scalars.isZero(d2));
     assertEquals(d1.subtract(d2).toString(), "0.0");
     assertEquals(d2.subtract(d1).toString(), "-0.0"); // -0.0 is tolerated as value
-    assertTrue(Scalars.compare(d1, d2) == 0);
-    assertTrue(d1.hashCode() == d2.hashCode());
+    assertEquals(Scalars.compare(d1, d2), 0);
     assertEquals(d1.hashCode(), d2.hashCode());
     assertEquals(d1.negate().toString(), "-0.0");
     assertEquals(d2.negate().toString(), "0.0");
@@ -128,8 +127,8 @@ class DoubleScalarTest {
   @Test
   void testNaN() {
     DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
-    assertThrows(Throw.class, () -> nan.isNonNegative());
-    assertThrows(Throw.class, () -> nan.signum());
+    assertThrows(Throw.class, nan::isNonNegative);
+    assertThrows(Throw.class, nan::signum);
   }
 
   @Test

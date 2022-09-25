@@ -13,7 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 
 class LinearBinaryAverageTest {
   @Test
@@ -24,9 +24,9 @@ class LinearBinaryAverageTest {
 
   @Test
   void testDTS() {
-    DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
-    DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 21, 4, 30));
+    DateObject dt1 = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateObject dt2 = DateObject.of(LocalDateTime.of(2020, 12, 21, 4, 30));
     Tensor split = LinearBinaryAverage.INSTANCE.split(dt1, dt2, RationalScalar.of(1, 3));
-    assertInstanceOf(DateTimeScalar.class, split);
+    assertInstanceOf(DateObject.class, split);
   }
 }

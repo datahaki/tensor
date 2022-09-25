@@ -10,11 +10,11 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -54,9 +54,9 @@ class CeilingTest {
 
   @Test
   void testComplex() {
-    Scalar c = Scalars.fromString("7-2*I");
+    Scalar c = ComplexScalar.of(7, -2);
     assertEquals(Ceiling.of(c), c);
-    Scalar d = Scalars.fromString("6.1-2.1*I");
+    Scalar d = ComplexScalar.of(6.1, -2.1);
     assertEquals(Ceiling.of(d), c);
   }
 

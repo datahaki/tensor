@@ -59,19 +59,19 @@ class LeftNullSpaceTest {
   void testMaxRankTranspose() {
     Tensor matrix = Tensors.fromString("{{0, 2, 0, 0}, {1, 1, 1, 1}}");
     Tensor nullsp = LeftNullSpace.of(matrix);
-    assertEquals(Dimensions.of(nullsp), Arrays.asList(0));
+    assertEquals(Dimensions.of(nullsp), List.of(0));
   }
 
   private static void _matrix(Tensor A) {
-    assertTrue(NullSpace.of(A).stream().map(vector -> A.dot(vector)).allMatch(Chop.NONE::allZero));
+    assertTrue(NullSpace.of(A).stream().map(A::dot).allMatch(Chop.NONE::allZero));
     assertTrue(LeftNullSpace.of(A).stream().map(vector -> vector.dot(A)).allMatch(Chop.NONE::allZero));
     _matrixNumeric(A);
   }
 
   private static void _matrixNumeric(Tensor A) {
-    assertTrue(NullSpace.of(A.map(N.DOUBLE)).stream().map(vector -> A.dot(vector)).allMatch(Chop._12::allZero));
+    assertTrue(NullSpace.of(A.map(N.DOUBLE)).stream().map(A::dot).allMatch(Chop._12::allZero));
     assertTrue(LeftNullSpace.of(A.map(N.DOUBLE)).stream().map(vector -> vector.dot(A)).allMatch(Chop._12::allZero));
-    assertTrue(NullSpace.usingQR(A.map(N.DOUBLE)).stream().map(vector -> A.dot(vector)).allMatch(Chop._12::allZero));
+    assertTrue(NullSpace.usingQR(A.map(N.DOUBLE)).stream().map(A::dot).allMatch(Chop._12::allZero));
   }
 
   private static void _check(Tensor A) {

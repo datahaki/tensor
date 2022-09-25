@@ -34,7 +34,7 @@ class SizeTest {
 
   @Test
   void testEmptyFail() {
-    assertThrows(ArrayIndexOutOfBoundsException.class, () -> Size.of(Arrays.asList()));
+    assertThrows(ArrayIndexOutOfBoundsException.class, () -> Size.of(List.of()));
   }
 
   @Test

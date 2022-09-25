@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import java.math.BigInteger;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -38,19 +40,19 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
   private final Scalar n;
   private final Scalar o_alpha;
   private final Scalar logAlpha;
-  private final int _n;
+  private final BigInteger _n;
 
   private BorelTannerDistribution(Scalar alpha, int n) {
     this.alpha = alpha;
     this.n = RealScalar.of(n);
     o_alpha = RealScalar.ONE.subtract(alpha);
     logAlpha = Log.FUNCTION.apply(alpha);
-    _n = n;
+    _n = BigInteger.valueOf(n);
     build(Tolerance.CHOP);
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
+  public BigInteger lowerBound() {
     return _n;
   }
 
@@ -65,7 +67,7 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int _x) {
+  protected Scalar protected_p_equals(BigInteger _x) {
     Scalar x = RealScalar.of(_x);
     Scalar x_n = x.subtract(n);
     Scalar s0 = LogGamma.FUNCTION.apply(x_n.add(RealScalar.ONE)).negate();

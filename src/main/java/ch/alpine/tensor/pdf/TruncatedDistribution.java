@@ -60,7 +60,7 @@ public class TruncatedDistribution implements Distribution, //
   public Scalar at(Scalar x) {
     Scalar p = univariateDistribution.at(x);
     return clip.isInside(x) //
-        ? p.divide(clip_cdf.width())
+        ? p.divide(clip_cdf.width()) // TODO TENSOR test with quantity?
         : p.zero();
   }
 
@@ -76,7 +76,7 @@ public class TruncatedDistribution implements Distribution, //
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    return univariateDistribution.quantile(LinearInterpolation.of(clip_cdf).At(p));
+    return univariateDistribution.quantile(LinearInterpolation.of(clip_cdf).apply(p));
   }
 
   @Override // from RandomVariateInterface

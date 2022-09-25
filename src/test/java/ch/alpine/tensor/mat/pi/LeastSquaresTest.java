@@ -4,6 +4,8 @@ package ch.alpine.tensor.mat.pi;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,6 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
@@ -21,6 +22,7 @@ import ch.alpine.tensor.alg.NestList;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -35,6 +37,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -129,7 +132,7 @@ class LeastSquaresTest {
     Tensor x1 = PseudoInverse.usingCholesky(m).dot(b);
     Tensor x2 = LeastSquares.usingSvd(m, b);
     Tensor x3 = LeastSquares.usingQR(m, b);
-    assertEquals(Dimensions.of(x1), Arrays.asList(3));
+    assertEquals(Dimensions.of(x1), List.of(3));
     Chop._10.requireClose(x1, x2); // not below tolerance
     Chop._10.requireClose(x3, x2); // not below tolerance
   }
@@ -269,10 +272,19 @@ class LeastSquaresTest {
     Tolerance.CHOP.requireClose(r1, r4);
   }
 
+  /** @param unit non-null
+   * @return operator that maps a scalar to the quantity with value
+   * of given scalar and given unit
+   * @throws Exception if given unit is null */
+  public static ScalarUnaryOperator attach(Unit unit) {
+    Objects.requireNonNull(unit);
+    return scalar -> Quantity.of(scalar, unit);
+  }
+
   @Test
   void testComplexExactQuantity() {
-    Tensor m = Tensors.fromString("{{1, 1/2 - I}, {1/2 + I, 1/3 + 3*I}, {1/3, 1/4}}").map(Scalars.attach(Unit.of("A")));
-    Tensor b = Tensors.fromString("{{2, 8 + I}, {3*I, -2}, {4 - I, 3}}").map(Scalars.attach(Unit.of("s")));
+    Tensor m = Tensors.fromString("{{1, 1/2 - I}, {1/2 + I, 1/3 + 3*I}, {1/3, 1/4}}").map(attach(Unit.of("A")));
+    Tensor b = Tensors.fromString("{{2, 8 + I}, {3*I, -2}, {4 - I, 3}}").map(attach(Unit.of("s")));
     Tensor pinv = PseudoInverse.of(m);
     ExactTensorQ.require(pinv);
     Tensor r1 = pinv.dot(b);
@@ -280,10 +292,10 @@ class LeastSquaresTest {
     ExactTensorQ.require(r2);
     assertEquals(r1, r2);
     Tensor row0 = Tensors.fromString("{130764/54541 + (78*I)/54541, 384876/54541 - (122436*I)/54541}") //
-        .map(Scalars.attach(Unit.of("s*A^-1")));
+        .map(attach(Unit.of("s*A^-1")));
     assertEquals(r1.get(0), row0);
     Tensor row1 = Tensors.fromString("{10512/54541 + (16452*I)/54541, -(120372/54541) + (126072*I)/54541}") //
-        .map(Scalars.attach(Unit.of("s*A^-1")));
+        .map(attach(Unit.of("s*A^-1")));
     assertEquals(r1.get(1), row1);
     Tensor r3 = LeastSquares.usingQR(m, b);
     Tolerance.CHOP.requireClose(r1, r3);
@@ -315,8 +327,8 @@ class LeastSquaresTest {
 
   @Test
   void testComplexSmallBigQuantity() {
-    Tensor m = Tensors.fromString("{{1, 1/2 + I, 1/3}, {1/2 - I, 1/3 + 3*I, 1/4}}").map(Scalars.attach(Unit.of("kg^-1")));
-    Tensor b = Tensors.fromString("{{2, 3*I, 4 - I}, {8 + I, -2, 3}}").map(Scalars.attach(Unit.of("m")));
+    Tensor m = Tensors.fromString("{{1, 1/2 + I, 1/3}, {1/2 - I, 1/3 + 3*I, 1/4}}").map(attach(Unit.of("kg^-1")));
+    Tensor b = Tensors.fromString("{{2, 3*I, 4 - I}, {8 + I, -2, 3}}").map(attach(Unit.of("m")));
     Tensor pinv = PseudoInverse.of(m);
     ExactTensorQ.require(pinv);
     Tensor r1 = pinv.dot(b);
@@ -324,11 +336,11 @@ class LeastSquaresTest {
     ExactTensorQ.require(r2);
     assertEquals(r1, r2);
     Tensor row0 = Tensors.fromString("{-(29304/54541) + (51768*I)/54541, 86256/54541 + (109332*I)/54541, 120888/54541 - (85356*I)/54541}");
-    assertEquals(r1.get(0), row0.map(Scalars.attach(Unit.of("kg*m"))));
+    assertEquals(r1.get(0), row0.map(attach(Unit.of("kg*m"))));
     Tensor row1 = Tensors.fromString("{14532/54541 - (131568*I)/54541, -(2436/54541) + (87534*I)/54541, 61452/54541 - (52506*I)/54541}");
-    assertEquals(r1.get(1), row1.map(Scalars.attach(Unit.of("kg*m"))));
+    assertEquals(r1.get(1), row1.map(attach(Unit.of("kg*m"))));
     Tensor row2 = Tensors.fromString("{-(1344/54541) - (1548*I)/54541, 7488/54541 + (38880*I)/54541, 42132/54541 - (13152*I)/54541}");
-    assertEquals(r1.get(2), row2.map(Scalars.attach(Unit.of("kg*m"))));
+    assertEquals(r1.get(2), row2.map(attach(Unit.of("kg*m"))));
     Tensor r3 = LeastSquares.usingQR(m, b);
     Tolerance.CHOP.requireClose(r1, r3);
     Tensor r4 = PseudoInverse.usingQR(m).dot(b);

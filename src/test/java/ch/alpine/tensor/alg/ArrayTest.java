@@ -49,7 +49,7 @@ class ArrayTest {
   @Test
   void testVectorBlock() {
     Tensor tensor = Tensors.vector(0, 1, 2, 3, 4, 5);
-    assertEquals(tensor.block(Arrays.asList(2), Arrays.asList(2)), tensor.extract(2, 4));
+    assertEquals(tensor.block(List.of(2), List.of(2)), tensor.extract(2, 4));
   }
 
   private static void checkDims(Tensor tensor, List<Integer> fromIndex, List<Integer> dims) {
@@ -63,21 +63,21 @@ class ArrayTest {
 
   @Test
   void testFillEmpty() {
-    Tensor tensor = Array.fill(() -> Pi.VALUE, Arrays.asList());
+    Tensor tensor = Array.same(Pi.VALUE, List.of());
     assertEquals(tensor, Pi.VALUE);
   }
 
   @Test
   void testFillIntegers() {
-    Tensor tensor = Array.fill(() -> Pi.VALUE, 1, 2);
+    Tensor tensor = Array.same(Pi.VALUE, 1, 2);
     assertEquals(Dimensions.of(tensor), Arrays.asList(1, 2));
   }
 
   @Test
   void testBlock() {
     Tensor table = Array.of(l -> Tensors.vector(l.get(0), l.get(1), l.get(2)), 3, 2, 4);
-    checkDims(table, Arrays.asList(), Arrays.asList());
-    checkDims(table, Arrays.asList(0), Arrays.asList(3));
+    checkDims(table, List.of(), List.of());
+    checkDims(table, List.of(0), List.of(3));
     checkDims(table, Arrays.asList(2, 1), Arrays.asList(1, 1));
     checkDims(table, Arrays.asList(1, 1, 1), Arrays.asList(2, 1, 1));
     checkDims(table, Arrays.asList(2, 1, 0, 1), Arrays.asList(1, 1, 2, 1));

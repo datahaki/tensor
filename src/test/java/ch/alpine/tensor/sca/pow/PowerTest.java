@@ -108,14 +108,14 @@ class PowerTest {
   @Test
   void testNegativeFractional() {
     Scalar result = Power.of(-2.2, 1.3);
-    Scalar gndtru = Scalars.fromString("-1.6382047104755275 - 2.254795345529229* I");
+    Scalar gndtru = ComplexScalar.of(-1.6382047104755275, -2.254795345529229);
     assertEquals(result, gndtru);
   }
 
   @Test
   void testNegativeFractionalNeg() {
     Scalar result = Power.of(-2.2, -1.3);
-    Scalar gndtru = Scalars.fromString("-0.21089641642663778` + 0.290274014661784` *I ");
+    Scalar gndtru = ComplexScalar.of(-0.21089641642663778, 0.290274014661784);
     assertEquals(result, gndtru);
   }
 
@@ -125,7 +125,7 @@ class PowerTest {
     Scalar b = ComplexScalar.of(4, -2);
     Scalar c = Power.of(a, b);
     // Mathematica: 245.099 + 1181.35 I
-    assertEquals(c, Scalars.fromString("245.09854196562927+1181.3509801973048*I"));
+    assertEquals(c, ComplexScalar.of(245.09854196562927, 1181.3509801973048));
   }
 
   @Test

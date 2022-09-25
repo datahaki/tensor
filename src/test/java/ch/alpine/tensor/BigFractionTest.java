@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,9 +29,9 @@ class BigFractionTest {
 
   @Test
   void testHash() {
-    assertFalse(BigFraction.of(7, 3).hashCode() == BigFraction.of(3, 7).hashCode());
-    assertFalse(BigFraction.of(1, 2).hashCode() == BigFraction.of(1, 3).hashCode());
-    assertFalse(BigFraction.of(3, 1).hashCode() == BigFraction.of(4, 1).hashCode());
+    assertNotEquals(BigFraction.of(7, 3).hashCode(), BigFraction.of(3, 7).hashCode());
+    assertNotEquals(BigFraction.of(1, 2).hashCode(), BigFraction.of(1, 3).hashCode());
+    assertNotEquals(BigFraction.of(3, 1).hashCode(), BigFraction.of(4, 1).hashCode());
   }
 
   @Test

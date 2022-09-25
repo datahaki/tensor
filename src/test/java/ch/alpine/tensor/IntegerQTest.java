@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,7 +26,7 @@ class IntegerQTest {
   @Test
   void testRequire() {
     Scalar scalar = RealScalar.of(2);
-    assertTrue(IntegerQ.require(scalar) == scalar);
+    assertSame(IntegerQ.require(scalar), scalar);
   }
 
   @Test

@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.tri.Sinc;
@@ -27,7 +27,7 @@ public enum LogGamma implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar z) {
-    if (Sign.isPositive(Real.FUNCTION.apply(z)))
+    if (Sign.isPositive(Re.FUNCTION.apply(z)))
       return LogGammaRestricted.FUNCTION.apply(z);
     Scalar zp = RealScalar.ONE.subtract(z);
     return Log.FUNCTION.apply(Sinc.FUNCTION.apply(Pi.VALUE.multiply(zp))).add(LogGammaRestricted.FUNCTION.apply(RealScalar.ONE.add(zp))).negate();

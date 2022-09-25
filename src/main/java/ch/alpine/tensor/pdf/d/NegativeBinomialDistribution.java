@@ -1,13 +1,16 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import java.math.BigInteger;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
@@ -22,8 +25,6 @@ import ch.alpine.tensor.sca.pow.Power;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/NegativeBinomialDistribution.html">NegativeBinomialDistribution</a> */
 public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution {
-  private static final Chop TOLERANCE = Chop._12;
-
   /** @param n non-negative
    * @param p in the interval (0, 1]
    * @return */
@@ -51,17 +52,20 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
     this.p = Sign.requirePositive(p);
     _1_p = RealScalar.ONE.subtract(p);
     pn = Power.of(p, n);
-    build(TOLERANCE);
+    build(Tolerance.CHOP);
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return 0;
+  public BigInteger lowerBound() {
+    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
-    return pn.multiply(Power.of(_1_p, x)).multiply(Binomial.of(n - 1 + x, n - 1));
+  protected Scalar protected_p_equals(BigInteger x) {
+    Scalar factor = Power.of(_1_p, x);
+    return Scalars.isZero(factor) //
+        ? RealScalar.ZERO
+        : pn.multiply(factor).multiply(Binomial.of(n - 1 + x.intValueExact(), n - 1));
   }
 
   @Override // from MeanInterface

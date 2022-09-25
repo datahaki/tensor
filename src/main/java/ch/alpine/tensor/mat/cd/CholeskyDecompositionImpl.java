@@ -28,8 +28,7 @@ import ch.alpine.tensor.sca.Conjugate;
     this.chop = chop;
     int n = matrix.length();
     l = IdentityMatrix.of(matrix);
-    Scalar zero = matrix.Get(0, 0).one().zero();
-    d = Array.fill(() -> zero, n);
+    d = Array.same(matrix.Get(0, 0).one().zero(), n);
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < i; ++j) {
         Scalar mij = matrix.Get(i, j);

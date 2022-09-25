@@ -27,10 +27,10 @@ public enum Dbscan {
   public static final int NOISE = -1;
 
   /** @param points
-   * @param function
+   * @param function for instance NdCenters.VECTOR_2_NORM
    * @param radius non-negative
    * @param minPts positive
-   * @return array of labels for each point, or -1 to indicate that respective point is noise */
+   * @return array of labels for each point, or Dbscan.NOISE == -1 to indicate that respective point is noise */
   public static Integer[] of(Tensor points, Function<Tensor, NdCenterInterface> function, Scalar radius, int minPts) {
     Integers.requirePositive(minPts);
     NdMap<Integer> ndMap = NdTreeMap.of(CoordinateBounds.of(points));

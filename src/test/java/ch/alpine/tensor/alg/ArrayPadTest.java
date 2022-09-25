@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ class ArrayPadTest {
   @Test
   void testVector() {
     Tensor vec = Tensors.vector(2, 3, -3, 1);
-    Tensor pad = ArrayPad.of(vec, Arrays.asList(3), Arrays.asList(4));
+    Tensor pad = ArrayPad.of(vec, List.of(3), List.of(4));
     Tensor actual = Tensors.vector(0, 0, 0, 2, 3, -3, 1, 0, 0, 0, 0);
     assertEquals(pad, actual);
   }
@@ -41,7 +42,7 @@ class ArrayPadTest {
   @Test
   void testNonArray() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
-    Tensor vector = ArrayPad.of(tensor, Arrays.asList(2), Arrays.asList(3));
+    Tensor vector = ArrayPad.of(tensor, List.of(2), List.of(3));
     assertEquals(vector.length(), 2 + 2 + 3);
   }
 
@@ -55,7 +56,7 @@ class ArrayPadTest {
   @Test
   void testFail() {
     Tensor vector = Tensors.vector(2, 3, -3, 1);
-    assertThrows(IllegalArgumentException.class, () -> ArrayPad.of(vector, Arrays.asList(1), Arrays.asList(-2)));
-    assertThrows(IllegalArgumentException.class, () -> ArrayPad.of(vector, Arrays.asList(-1), Arrays.asList(2)));
+    assertThrows(IllegalArgumentException.class, () -> ArrayPad.of(vector, List.of(1), List.of(-2)));
+    assertThrows(IllegalArgumentException.class, () -> ArrayPad.of(vector, List.of(-1), List.of(2)));
   }
 }

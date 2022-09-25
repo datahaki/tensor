@@ -19,7 +19,6 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
@@ -32,6 +31,7 @@ import ch.alpine.tensor.red.Quantile;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.ply.Polynomial;
 
 class PoissonDistributionTest {
   static Tensor values(PDF pdf, int length) {
@@ -181,10 +181,15 @@ class PoissonDistributionTest {
 
   @Test
   void testNumericsPoisson() {
-    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(0.1)));
-    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(1.0)));
-    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(70)));
-    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(700.0)));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(0.1));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(1.0));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(70));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(700.0));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(PoissonDistribution.of(3.4));
   }
 
   @Test

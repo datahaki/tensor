@@ -9,7 +9,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.sca.tri.Sin;
 
@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.tri.Sin;
   @Override
   public Scalar apply(Scalar re, Scalar im) {
     Scalar seed = ComplexScalar.of(re, im);
-    return Real.of(ArcTan.of(Nest.of(Sin.FUNCTION, seed, 2)));
+    return Re.of(ArcTan.of(Nest.of(Sin.FUNCTION, seed, 2)));
   }
 
   @Override

@@ -19,6 +19,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
@@ -66,7 +67,7 @@ class DagumDistributionTest {
   @Test
   void testVarianceFail() {
     DagumDistribution distribution = (DagumDistribution) DagumDistribution.of(2.3, 1.2, 0.7);
-    assertThrows(UnsupportedOperationException.class, () -> distribution.variance());
+    assertThrows(UnsupportedOperationException.class, distribution::variance);
   }
 
   @Test
@@ -81,6 +82,11 @@ class DagumDistributionTest {
     Distribution distribution = DagumDistribution.of(0.2, 0.3, 0.6);
     Scalar mean = Mean.ofVector(RandomVariate.of(distribution, 100));
     Sign.requirePositive(mean);
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(DagumDistribution.of(0.2, 0.3, 0.6));
   }
 
   @Test

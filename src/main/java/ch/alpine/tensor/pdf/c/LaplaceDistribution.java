@@ -42,7 +42,7 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
   }
 
   @Override // from PDF
-  public Scalar at(Scalar x) {
+  public Scalar at(Scalar x) { // x is the same type of mean
     return Exp.FUNCTION.apply(Abs.between(x, mean).negate().divide(beta)).divide(beta.add(beta));
   }
 

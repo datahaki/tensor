@@ -17,6 +17,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
@@ -194,6 +195,11 @@ class TensorsTest {
     Function<Tensor[], Tensor> ftensors = Tensors::of;
     assertEquals(ftensors.apply(new Tensor[] {}), Tensors.empty());
     assertEquals(ftensors.apply(new Scalar[] {}), Tensors.empty());
+  }
+
+  @Test
+  void testUnmodifiable() {
+    assertTrue(Tensors.isUnmodifiable(Pi.VALUE));
   }
 
   @Test

@@ -5,10 +5,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.gam.Factorial;
+import ch.alpine.tensor.sca.ply.Polynomial;
 
 /** ( Exp [ Mu ] - 1 ) / Mu
  * 

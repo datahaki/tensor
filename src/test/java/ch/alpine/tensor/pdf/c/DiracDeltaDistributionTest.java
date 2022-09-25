@@ -15,12 +15,13 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Quantile;
@@ -64,8 +65,8 @@ class DiracDeltaDistributionTest {
 
   @Test
   void testDateTime() {
-    Scalar d1 = DateTimeScalar.of(LocalDateTime.of(2022, 11, 13, 10, 12));
-    Scalar d2 = DateTimeScalar.of(LocalDateTime.of(2022, 11, 13, 10, 13));
+    Scalar d1 = DateObject.of(LocalDateTime.of(2022, 11, 13, 10, 12));
+    Scalar d2 = DateObject.of(LocalDateTime.of(2022, 11, 13, 10, 13));
     Distribution distribution = DiracDeltaDistribution.of(d1);
     PDF pdf = PDF.of(distribution);
     assertTrue(Scalars.isZero(pdf.at(d2)));
@@ -79,5 +80,10 @@ class DiracDeltaDistributionTest {
     Distribution distribution = DiracDeltaDistribution.of(RealScalar.of(100));
     assertEquals(Mean.of(distribution), RealScalar.of(100));
     assertEquals(Variance.of(distribution), RealScalar.of(0));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(DiracDeltaDistribution.of(RealScalar.of(1)));
   }
 }

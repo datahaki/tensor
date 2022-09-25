@@ -16,6 +16,7 @@ import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
@@ -41,6 +42,11 @@ class WeibullDistributionTest {
     assertTrue(distribution.toString().startsWith("WeibullDistribution["));
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(2.1635084739905746));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(3.2784354158217064));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(WeibullDistribution.of(1, 2));
   }
 
   @Test

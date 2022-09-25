@@ -21,7 +21,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 
 /** The pseudo inverse is the least squares solution x to
  * <pre>
@@ -61,7 +61,7 @@ public enum PseudoInverse {
       }
     boolean complex = matrix.flatten(1) //
         .map(Scalar.class::cast) //
-        .map(Imag.FUNCTION) //
+        .map(Im.FUNCTION) //
         .anyMatch(Scalars::nonZero);
     if (complex)
       return BenIsraelCohen.of(matrix);

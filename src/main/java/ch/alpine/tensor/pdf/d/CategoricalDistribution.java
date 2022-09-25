@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.alpine.tensor.RealScalar;
@@ -51,6 +52,7 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
 
   // ---
   private final Tensor pdf;
+  private final BigInteger pdf_length;
 
   private CategoricalDistribution(Tensor unscaledPDF) {
     unscaledPDF.stream() //
@@ -59,6 +61,7 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
     Tensor accumulate = Accumulate.of(unscaledPDF);
     Scalar scale = Last.of(accumulate);
     pdf = unscaledPDF.divide(scale);
+    pdf_length = BigInteger.valueOf(pdf.length());
     build(accumulate.length() - 1);
   }
 
@@ -72,20 +75,20 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
         .orElseThrow();
   }
 
-  @Override
+  @Override // from VarianceInterface
   public Scalar variance() {
     return centralMoment(2);
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return 0;
+  public BigInteger lowerBound() {
+    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
-    return x < pdf.length() //
-        ? pdf.Get(x)
+  protected Scalar protected_p_equals(BigInteger x) {
+    return x.compareTo(pdf_length) < 0 //
+        ? pdf.Get(x.intValueExact())
         : RealScalar.ZERO;
   }
 

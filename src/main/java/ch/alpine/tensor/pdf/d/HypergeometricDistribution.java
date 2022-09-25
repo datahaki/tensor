@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import java.math.BigInteger;
+
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -67,15 +69,18 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return 0;
+  public BigInteger lowerBound() {
+    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
-    return x <= N && x <= n //
-        ? binomial_n.over(x).multiply(binomial_m.over(N - x)).divide(binomial_m_n.over(N))
-        : RealScalar.ZERO;
+  protected Scalar protected_p_equals(BigInteger x) {
+    if (x.compareTo(BigInteger.valueOf(N)) <= 0 && //
+        x.compareTo(BigInteger.valueOf(n)) <= 0) {
+      int index = x.intValueExact();
+      return binomial_n.over(index).multiply(binomial_m.over(N - index)).divide(binomial_m_n.over(N));
+    }
+    return RealScalar.ZERO;
   }
 
   @Override // from Object

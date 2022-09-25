@@ -36,8 +36,8 @@ class UnprotectTest {
   void testUsingEmpty() {
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.empty());
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.unmodifiableEmpty());
-    assertEquals(Unprotect.using(Arrays.asList()), Tensors.empty());
-    assertEquals(Unprotect.using(Arrays.asList()), Tensors.unmodifiableEmpty());
+    assertEquals(Unprotect.using(List.of()), Tensors.empty());
+    assertEquals(Unprotect.using(List.of()), Tensors.unmodifiableEmpty());
   }
 
   @Test
@@ -89,9 +89,9 @@ class UnprotectTest {
 
   @Test
   void testDimension1() {
-    assertTrue(Unprotect.dimension1(Tensors.vector(1, 2, 3)) == Scalar.LENGTH);
-    assertTrue(Unprotect.dimension1(HilbertMatrix.of(2, 4)) == 4);
-    assertTrue(Unprotect.dimension1(Array.zeros(2, 3, 4)) == 3);
+    assertEquals(Unprotect.dimension1(Tensors.vector(1, 2, 3)), Scalar.LENGTH);
+    assertEquals(Unprotect.dimension1(HilbertMatrix.of(2, 4)), 4);
+    assertEquals(Unprotect.dimension1(Array.zeros(2, 3, 4)), 3);
   }
 
   @Test

@@ -18,6 +18,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -34,6 +35,11 @@ class ChiSquareDistributionTest {
     assertEquals(Variance.of(distribution), RealScalar.of(2.3 + 2.3));
     assertEquals(pdf.at(RealScalar.of(-1.4)), RealScalar.ZERO);
     assertThrows(Throw.class, () -> pdf.at(Quantity.of(2, "m")));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(ChiSquareDistribution.of(1.3));
   }
 
   @Test

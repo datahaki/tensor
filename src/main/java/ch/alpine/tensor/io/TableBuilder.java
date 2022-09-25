@@ -49,7 +49,7 @@ public final class TableBuilder implements Serializable {
    * which is appended as a row to the table.
    * 
    * @param tensors */
-  public final void appendRow(Tensor... tensors) {
+  public void appendRow(Tensor... tensors) {
     tensor.append(Flatten.of(tensors));
   }
 

@@ -6,21 +6,37 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.ScalarSummaryStatistics;
+import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Sign;
 
 class DiscreteUniformDistributionTest {
+  private static final Random RANDOM = new SecureRandom();
+
   @Test
   void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = //
@@ -84,6 +100,65 @@ class DiscreteUniformDistributionTest {
   }
 
   @Test
+  void testBigInteger() {
+    Scalar min = RealScalar.of(new BigInteger("12323746283746283746283746284"));
+    Scalar max = RealScalar.of(new BigInteger("12323746283746283746283746294"));
+    Distribution distribution = DiscreteUniformDistribution.of(min, max);
+    Tensor tensor = RandomVariate.of(distribution, 100);
+    ScalarSummaryStatistics scalarSummaryStatistics = tensor.stream() //
+        .map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
+    scalarSummaryStatistics.toString();
+    Clip clip = Clips.interval(min, max.subtract(RealScalar.ONE));
+    clip.requireInside(scalarSummaryStatistics.getMin());
+    clip.requireInside(scalarSummaryStatistics.getMax());
+  }
+
+  @RepeatedTest(6)
+  void testBigInteger2(RepetitionInfo repetitionInfo) {
+    Scalar min = RealScalar.of(new BigInteger("12323746283746283746283746284"));
+    Scalar max = min.add(RealScalar.of(repetitionInfo.getCurrentRepetition()));
+    Distribution distribution = DiscreteUniformDistribution.of(min, max);
+    Tensor tensor = RandomVariate.of(distribution, 100);
+    ScalarSummaryStatistics scalarSummaryStatistics = tensor.stream() //
+        .map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
+    scalarSummaryStatistics.toString();
+    Scalar top = max.subtract(RealScalar.ONE);
+    Clip clip = Clips.interval(min, top);
+    clip.requireInside(scalarSummaryStatistics.getMin());
+    clip.requireInside(scalarSummaryStatistics.getMax());
+    assertEquals(scalarSummaryStatistics.getMax(), top);
+  }
+
+  @Test
+  void testBigSingle() {
+    BigInteger bigInteger = new BigInteger("123491827364912736491234978");
+    Distribution distribution = DiscreteUniformDistribution.of( //
+        bigInteger, //
+        bigInteger.add(BigInteger.ONE));
+    Scalar x = RealScalar.of(bigInteger);
+    assertEquals(Mean.of(distribution), x);
+    assertEquals(Variance.of(distribution), RealScalar.ZERO);
+    assertEquals(RandomVariate.of(distribution, 3), ConstantArray.of(x, 3));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(DiscreteUniformDistribution.of(3, 10));
+    Distribution distribution = DiscreteUniformDistribution.of( //
+        new BigInteger("123491827364912736491234978").negate(), //
+        new BigInteger("123491827364912736491236789"));
+    TestMarkovChebyshev.monotonous(distribution);
+    Sign.requirePositive(PDF.of(distribution).at(RealScalar.ZERO));
+  }
+
+  @Test
+  void testFailZero() {
+    assertThrows(Exception.class, () -> DiscreteUniformDistribution.of( //
+        new BigInteger("123491827364912736491234978"), //
+        new BigInteger("123491827364912736491234978")));
+  }
+
+  @Test
   void testFailQuantile() {
     Distribution distribution = DiscreteUniformDistribution.of(3, 10);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -93,9 +168,9 @@ class DiscreteUniformDistributionTest {
 
   @Test
   void testFailsOrder() {
-    assertThrows(IllegalArgumentException.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(2)));
-    assertThrows(IllegalArgumentException.class, () -> DiscreteUniformDistribution.of(3, 2));
-    assertThrows(IllegalArgumentException.class, () -> DiscreteUniformDistribution.of(3, 3));
+    assertThrows(Exception.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(2)));
+    assertThrows(Exception.class, () -> DiscreteUniformDistribution.of(3, 2));
+    assertThrows(Exception.class, () -> DiscreteUniformDistribution.of(3, 3));
   }
 
   @Test
@@ -109,5 +184,11 @@ class DiscreteUniformDistributionTest {
         (AbstractDiscreteDistribution) DiscreteUniformDistribution.of(10, 100);
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(1.0))), RealScalar.of(99));
     assertEquals(distribution.quantile(RealScalar.of(0)), RealScalar.of(10));
+  }
+
+  @RepeatedTest(5)
+  void testRandom() {
+    BigInteger bigInteger = DiscreteUniformDistribution.random(new BigInteger("11"), RANDOM);
+    Clips.interval(0, 10).requireInside(RealScalar.of(bigInteger));
   }
 }

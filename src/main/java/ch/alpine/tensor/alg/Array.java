@@ -87,6 +87,23 @@ public enum Array {
   }
 
   // ---
+  /** @param scalar
+   * @param dimensions
+   * @return ConstantArray[scalar, dimensions].copy()
+   * @see ConstantArray */
+  public static Tensor same(Scalar scalar, int... dimensions) {
+    return fill(() -> scalar, Integers.asList(dimensions));
+  }
+
+  /** @param scalar
+   * @param dimensions
+   * @return ConstantArray[scalar, dimensions].copy()
+   * @see ConstantArray */
+  public static Tensor same(Scalar scalar, List<Integer> dimensions) {
+    return fill(() -> scalar, dimensions);
+  }
+  // ---
+
   /** Careful:
    * {@link #zeros(int...)} is not consistent with MATLAB::zeros.
    * In the tensor library, the number of integer parameters equals the rank
@@ -109,10 +126,7 @@ public enum Array {
    * @return tensor of {@link RealScalar#ZERO} with given dimensions
    * @throws Exception if any of the integer parameters is negative */
   public static Tensor zeros(List<Integer> dimensions) {
-    if (dimensions.isEmpty())
-      return RealScalar.ZERO;
-    dimensions.forEach(Integers::requirePositiveOrZero);
-    return fill(() -> RealScalar.ZERO, 0, dimensions);
+    return same(RealScalar.ZERO, dimensions);
   }
 
   /** @param dimensions

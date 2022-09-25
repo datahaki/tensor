@@ -20,7 +20,7 @@ class ReadLineTest {
       assertEquals(count, 4);
       assertEquals(inputStream.available(), 0);
       inputStream.close();
-      assertThrows(Exception.class, () -> inputStream.available());
+      assertThrows(Exception.class, inputStream::available);
     }
   }
 
@@ -32,7 +32,7 @@ class ReadLineTest {
       assertEquals(count, 4);
       assertEquals(inputStream.available(), 0);
       inputStream.close();
-      assertThrows(Exception.class, () -> inputStream.available());
+      assertThrows(Exception.class, inputStream::available);
     }
   }
 

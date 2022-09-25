@@ -17,10 +17,11 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
@@ -54,14 +55,19 @@ class StudentTDistributionTest {
 
   @Test
   void testDateTime() {
-    DateTimeScalar mu = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateObject mu = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     Distribution distribution = StudentTDistribution.of(mu, Quantity.of(100_000, "s"), RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
-    Scalar x = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 33));
+    Scalar x = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 33));
     Scalar scalar = pdf.at(x);
     Sign.requirePositive(scalar);
     Unit unit = QuantityUnit.of(scalar);
     assertEquals(unit, Unit.of("s^-1"));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(StudentTDistribution.of(5, 4, 3));
   }
 
   @Test

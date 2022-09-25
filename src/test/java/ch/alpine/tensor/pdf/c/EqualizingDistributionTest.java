@@ -29,6 +29,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
@@ -77,6 +78,12 @@ class EqualizingDistributionTest {
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
       Tolerance.CHOP.requireClose(x, q);
     }
+  }
+
+  @Test
+  void testMonotonous() {
+    Distribution distribution = EqualizingDistribution.fromUnscaledPDF(Tensors.vector(3, 2, 1));
+    TestMarkovChebyshev.monotonous(distribution);
   }
 
   @Test

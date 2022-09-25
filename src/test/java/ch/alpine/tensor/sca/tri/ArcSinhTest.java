@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.sca.Chop;
 
 class ArcSinhTest {
@@ -23,7 +22,6 @@ class ArcSinhTest {
   @Test
   void testComplex() {
     Scalar r = ArcSinh.FUNCTION.apply(ComplexScalar.of(5, -7));
-    // 2.8440976626506525285 - 0.9473406443130488244 I
     Chop._12.requireClose(r, ComplexScalar.of(2.8440976626506525285, -0.9473406443130488244));
   }
 
@@ -31,8 +29,7 @@ class ArcSinhTest {
   void testArcSinh() {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcSinh.of(s);
-    // 2.8441 - 0.947341 I
-    Scalar a = Scalars.fromString("2.8440976626506527-0.9473406443130489*I");
+    Scalar a = ComplexScalar.of(2.8440976626506527, -0.9473406443130489);
     Chop._14.requireClose(a, r);
     assertEquals(a, ArcSinh.of(s));
   }

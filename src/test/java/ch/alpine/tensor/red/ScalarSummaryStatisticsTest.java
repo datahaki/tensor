@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
@@ -74,13 +75,13 @@ class ScalarSummaryStatisticsTest {
   void testEmpty() {
     ScalarSummaryStatistics stats = Tensors.empty().stream() //
         .parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
-    assertEquals(stats.getSum(), null);
-    assertEquals(stats.getMin(), null);
-    assertEquals(stats.getMax(), null);
-    assertEquals(stats.getAverage(), null);
+    assertNull(stats.getSum());
+    assertNull(stats.getMin());
+    assertNull(stats.getMax());
+    assertNull(stats.getAverage());
     assertEquals(stats.getCount(), 0);
     stats.toString();
-    assertEquals(stats.getClip(), null);
+    assertNull(stats.getClip());
   }
 
   @Test
@@ -128,6 +129,6 @@ class ScalarSummaryStatisticsTest {
     Scalar sum = sss1.getSum();
     assertEquals(sum, GaussScalar.of(4, 7));
     assertEquals(sss1.getCount(), 4);
-    assertThrows(Throw.class, () -> sss1.getAverage());
+    assertThrows(Throw.class, sss1::getAverage);
   }
 }

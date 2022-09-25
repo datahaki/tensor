@@ -2,7 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -37,15 +37,15 @@ class StringScalarTest {
   @Test
   void testEquals() {
     assertEquals(StringScalar.of("3.14"), StringScalar.of("3.14"));
-    assertFalse(StringScalar.of("3.14").equals(null));
-    assertFalse(StringScalar.of("3.14").equals(StringScalar.of("3.141")));
-    assertFalse(StringScalar.of("3.14").equals(DoubleScalar.of(3.14)));
+    assertNotEquals(null, StringScalar.of("3.14"));
+    assertNotEquals(StringScalar.of("3.14"), StringScalar.of("3.141"));
+    assertNotEquals(StringScalar.of("3.14"), DoubleScalar.of(3.14));
   }
 
   @Test
   void testCurrentStandard() {
     String string = "{Hello, World}";
-    assertTrue(string.equals(Tensors.fromString(string).toString()));
+    assertEquals(string, Tensors.fromString(string).toString());
   }
 
   @Test
@@ -70,12 +70,12 @@ class StringScalarTest {
   @Test
   void testOneFail() {
     Scalar scalar = StringScalar.of("abc");
-    assertThrows(Throw.class, () -> scalar.zero());
-    assertThrows(Throw.class, () -> scalar.one());
+    assertThrows(Throw.class, scalar::zero);
+    assertThrows(Throw.class, scalar::one);
   }
 
   @Test
-  void testNonExact() {
+  void testExact() {
     assertTrue(ExactScalarQ.of(StringScalar.of("abc")));
   }
 }

@@ -15,7 +15,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -135,15 +135,15 @@ class NormalDistributionTest {
 
   @Test
   void testDateTimeScalar() {
-    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
+    DateObject dateTimeScalar = DateObject.of(LocalDateTime.now());
     Scalar durationScalar = Quantity.of(123, "s");
     Distribution distribution = NormalDistribution.of(dateTimeScalar, durationScalar);
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateTimeScalar.class, scalar);
+    assertInstanceOf(DateObject.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTimeScalar.of(LocalDateTime.now()));
+    pdf.at(DateObject.of(LocalDateTime.now()));
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
+    Scalar p_lessEquals = cdf.p_lessEquals(DateObject.of(LocalDateTime.now()));
     Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
     assertEquals(Mean.of(distribution), dateTimeScalar);
     assertEquals(StandardDeviation.of(distribution), durationScalar);
@@ -154,6 +154,11 @@ class NormalDistributionTest {
     Distribution distribution = NormalDistribution.of(3, 0);
     assertEquals(Mean.of(distribution), RealScalar.of(3));
     assertEquals(RandomVariate.of(distribution), RealScalar.of(3));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(NormalDistribution.of(-1, 3));
   }
 
   @Test

@@ -19,6 +19,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.sca.Chop;
 
 class GammaDistributionTest {
@@ -43,6 +44,11 @@ class GammaDistributionTest {
     Distribution distribution = GammaDistribution.of(a, b);
     assertEquals(Expectation.mean(distribution), a.multiply(b));
     assertEquals(Expectation.variance(distribution), a.multiply(b).multiply(b));
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(GammaDistribution.of(1.5, 1.3));
   }
 
   @Test

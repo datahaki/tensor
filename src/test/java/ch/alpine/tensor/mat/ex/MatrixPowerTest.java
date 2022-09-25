@@ -38,8 +38,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 
 class MatrixPowerTest {
   private static boolean trunc(Tensor m, Tensor r) {
@@ -160,8 +160,8 @@ class MatrixPowerTest {
     Tensor tensor = MatrixPower.ofSymmetric(Tensors.fromString("{{3, 4}, {4, -5.}}"), RealScalar.of(0.345));
     Tensor re = Tensors.fromString("{{1.58297621781119750, +0.28292717088123903}, {+0.2829271708812389, 1.0171218760487195}}");
     Tensor im = Tensors.fromString("{{0.24891109223875751, -0.60092453470790870}, {-0.6009245347079087, 1.4507601616545749}}");
-    Tolerance.CHOP.requireClose(Real.of(tensor), re);
-    Tolerance.CHOP.requireClose(Imag.of(tensor), im);
+    Tolerance.CHOP.requireClose(Re.of(tensor), re);
+    Tolerance.CHOP.requireClose(Im.of(tensor), im);
   }
 
   @ParameterizedTest

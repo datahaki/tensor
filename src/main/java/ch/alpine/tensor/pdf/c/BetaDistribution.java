@@ -16,21 +16,19 @@ import ch.alpine.tensor.sca.gam.Beta;
 import ch.alpine.tensor.sca.pow.Power;
 
 /** inspired by
- * <a href="https://reference.wolfram.com/language/ref/BetaDistribution.html">BetaDistribution</a>
- * 
- * @see DirichletDistribution */
+ * <a href="https://reference.wolfram.com/language/ref/BetaDistribution.html">BetaDistribution</a> */
 public class BetaDistribution implements Distribution, MeanInterface, PDF, VarianceInterface, Serializable {
   /** Remark:
    * for a1 == 1 OR a2 == 1 the distribution does not require the beta function
    * 
-   * @param a1 positive
-   * @param a2 positive
+   * @param a1 strictly positive
+   * @param a2 strictly positive
    * @return */
   public static Distribution of(Scalar a1, Scalar a2) {
-    if (Scalars.lessEquals(a1, RealScalar.ZERO) || //
-        Scalars.lessEquals(a2, RealScalar.ZERO))
-      throw new Throw(a1, a2);
-    return new BetaDistribution(a1, a2);
+    if (Scalars.lessThan(RealScalar.ZERO, a1) && //
+        Scalars.lessThan(RealScalar.ZERO, a2))
+      return new BetaDistribution(a1, a2);
+    throw new Throw(a1, a2);
   }
 
   /** @param a1 positive

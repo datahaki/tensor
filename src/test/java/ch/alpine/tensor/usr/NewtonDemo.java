@@ -7,11 +7,11 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.img.ColorDataGradients;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.ply.Polynomial;
 
 /** inspired by Mathematica's documentation of Gamma */
 /* package */ class NewtonDemo implements BivariateEvaluation {

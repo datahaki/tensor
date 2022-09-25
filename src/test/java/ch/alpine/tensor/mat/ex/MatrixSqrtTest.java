@@ -118,7 +118,7 @@ class MatrixSqrtTest {
     Tensor matrix = Array.zeros(2, 2);
     MatrixSqrt matrixSqrt = MatrixSqrt.of(matrix);
     assertEquals(matrixSqrt.sqrt(), Array.zeros(2, 2));
-    assertThrows(ArithmeticException.class, () -> matrixSqrt.sqrt_inverse());
+    assertThrows(ArithmeticException.class, matrixSqrt::sqrt_inverse);
   }
 
   @Test

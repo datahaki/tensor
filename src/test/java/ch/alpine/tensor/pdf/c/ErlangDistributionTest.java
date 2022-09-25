@@ -16,6 +16,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
@@ -24,7 +25,7 @@ import ch.alpine.tensor.sca.Chop;
 class ErlangDistributionTest {
   @Test
   void testPdf() throws ClassNotFoundException, IOException {
-    Distribution distribution = Serialization.copy(ErlangDistribution.of(3, RealScalar.of(1.8)));
+    Distribution distribution = Serialization.copy(ErlangDistribution.of(3, 1.8));
     PDF pdf = PDF.of(distribution);
     Scalar p = pdf.at(RealScalar.of(3.2));
     Chop._06.requireClose(p, RealScalar.of(0.0940917));
@@ -59,6 +60,12 @@ class ErlangDistributionTest {
       assertInstanceOf(Quantity.class, prob);
       assertEquals(QuantityUnit.of(prob), Unit.of("m"));
     }
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(ErlangDistribution.of(100, 1.8));
+    // TestMarkovChebyshev.monotonous(ErlangDistribution.of(100, 1E-100)); // does not work
   }
 
   @Test

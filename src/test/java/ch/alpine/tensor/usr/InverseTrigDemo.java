@@ -9,7 +9,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcCosh;
 import ch.alpine.tensor.sca.tri.ArcSinh;
@@ -30,7 +30,7 @@ import ch.alpine.tensor.sca.tri.ArcTanh;
     Scalar seed = Power.of(ComplexScalar.of(re, im), EXPONENT);
     return Stream.of(scalarUnaryOperators) //
         .map(scalarUnaryOperator -> scalarUnaryOperator.apply(seed)) //
-        .map(Imag.FUNCTION) //
+        .map(Im.FUNCTION) //
         .reduce(Scalar::add) //
         .get();
   }

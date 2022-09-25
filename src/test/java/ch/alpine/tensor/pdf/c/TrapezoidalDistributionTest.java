@@ -25,7 +25,7 @@ import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.itp.BSplineFunctionString;
-import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -290,20 +290,25 @@ class TrapezoidalDistributionTest {
   @Test
   @Disabled
   void testDateTimeScalar() {
-    DateTimeScalar a = DateTimeScalar.of(LocalDateTime.of(2022, 1, 2, 12, 2));
-    DateTimeScalar b = DateTimeScalar.of(LocalDateTime.of(2022, 1, 4, 11, 5));
-    DateTimeScalar c = DateTimeScalar.of(LocalDateTime.of(2022, 1, 7, 19, 6));
-    DateTimeScalar d = DateTimeScalar.of(LocalDateTime.of(2022, 1, 8, 5, 7));
+    DateObject a = DateObject.of(LocalDateTime.of(2022, 1, 2, 12, 2));
+    DateObject b = DateObject.of(LocalDateTime.of(2022, 1, 4, 11, 5));
+    DateObject c = DateObject.of(LocalDateTime.of(2022, 1, 7, 19, 6));
+    DateObject d = DateObject.of(LocalDateTime.of(2022, 1, 8, 5, 7));
     Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateTimeScalar.class, scalar);
+    assertInstanceOf(DateObject.class, scalar);
     PDF pdf = PDF.of(distribution);
-    Scalar t = DateTimeScalar.of(LocalDateTime.of(2022, 1, 6, 8, 6));
+    Scalar t = DateObject.of(LocalDateTime.of(2022, 1, 6, 8, 6));
     pdf.at(t);
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(t);
     System.out.println(p_lessEquals);
     // Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(TrapezoidalDistribution.of(0.2, 3, 4, 6));
   }
 
   @Test

@@ -59,7 +59,7 @@ class RandomVariateTest {
   void testFormatList1() {
     Distribution distribution = BinomialDistribution.of(3, RationalScalar.of(1, 2));
     Tensor array = RandomVariate.of(distribution, 1);
-    assertEquals(Dimensions.of(array), Arrays.asList(1));
+    assertEquals(Dimensions.of(array), List.of(1));
     assertFalse(array instanceof Scalar);
   }
 }

@@ -4,6 +4,7 @@ package ch.alpine.tensor.ext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -103,12 +104,12 @@ class IntListTest {
   void testEquals() {
     List<Integer> intList = IntList.wrap(new int[] { 2, 3, 4 });
     assertEquals(intList, Arrays.asList(2, 3, 4));
-    assertTrue(Arrays.asList(2, 3, 4).equals(intList));
-    assertFalse(intList.equals(Arrays.asList(2, 3)));
-    assertFalse(intList.equals(Arrays.asList(2, 3, 5)));
-    assertFalse(intList.equals(null));
-    assertFalse(Arrays.asList(2, 3).equals(intList));
-    assertFalse(Arrays.asList(2, 3, 5).equals(intList));
+    assertEquals(Arrays.asList(2, 3, 4), intList);
+    assertNotEquals(intList, Arrays.asList(2, 3));
+    assertNotEquals(intList, Arrays.asList(2, 3, 5));
+    assertNotEquals(null, intList);
+    assertNotEquals(Arrays.asList(2, 3), intList);
+    assertNotEquals(Arrays.asList(2, 3, 5), intList);
   }
 
   @Test
@@ -176,7 +177,7 @@ class IntListTest {
     assertThrows(UnsupportedOperationException.class, () -> intList.addAll(0, Arrays.asList(2, 3, 4)));
     assertThrows(UnsupportedOperationException.class, () -> intList.removeAll(Arrays.asList(2, 3, 4)));
     assertThrows(UnsupportedOperationException.class, () -> intList.retainAll(Arrays.asList(2, 3, 4)));
-    assertThrows(UnsupportedOperationException.class, () -> intList.clear());
+    assertThrows(UnsupportedOperationException.class, intList::clear);
     assertThrows(UnsupportedOperationException.class, () -> intList.set(0, 0));
     assertThrows(UnsupportedOperationException.class, () -> intList.toArray(new Integer[10]));
   }
@@ -185,7 +186,7 @@ class IntListTest {
   void testHashCode() {
     List<Integer> intList = IntList.wrap(new int[] { 2, 3, 4 });
     assertEquals(intList.hashCode(), Arrays.asList(2, 3, 4).hashCode());
-    assertEquals(IntList.wrap(new int[] {}).hashCode(), Arrays.asList().hashCode());
+    assertEquals(IntList.wrap(new int[] {}).hashCode(), List.of().hashCode());
   }
 
   @Test
@@ -200,14 +201,14 @@ class IntListTest {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     Iterator<Integer> iterator = intList.iterator();
     assertTrue(iterator.hasNext());
-    assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
+    assertThrows(UnsupportedOperationException.class, iterator::remove);
     assertEquals(iterator.next().intValue(), 2);
     assertTrue(iterator.hasNext());
     assertEquals(iterator.next().intValue(), 3);
     assertTrue(iterator.hasNext());
     assertEquals(iterator.next().intValue(), 4);
     assertFalse(iterator.hasNext());
-    assertThrows(NoSuchElementException.class, () -> iterator.next());
+    assertThrows(NoSuchElementException.class, iterator::next);
   }
 
   @Test
@@ -231,7 +232,7 @@ class IntListTest {
     assertTrue(listIterator.hasPrevious());
     assertEquals(listIterator.previous().intValue(), 2);
     assertFalse(listIterator.hasPrevious());
-    assertThrows(NoSuchElementException.class, () -> listIterator.previous());
+    assertThrows(NoSuchElementException.class, listIterator::previous);
     assertFalse(listIterator.hasPrevious());
     listIterator.next();
     assertTrue(listIterator.hasPrevious());

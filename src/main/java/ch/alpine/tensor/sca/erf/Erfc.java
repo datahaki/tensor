@@ -7,7 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 
@@ -50,7 +50,7 @@ public enum Erfc implements ScalarUnaryOperator {
   // ---
   @Override
   public Scalar apply(Scalar z) {
-    Scalar re = Real.FUNCTION.apply(z);
+    Scalar re = Re.FUNCTION.apply(z);
     return Sign.isPositiveOrZero(re) //
         ? evaluate(z)
         : TWO.subtract(evaluate(z.negate()));

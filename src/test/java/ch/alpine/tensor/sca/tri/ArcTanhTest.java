@@ -22,7 +22,6 @@ class ArcTanhTest {
   @Test
   void testComplex() {
     Scalar scalar = ArcTanh.of(ComplexScalar.of(5, -9));
-    // 0.0468657 - 1.48591 I
     assertEquals(scalar, ComplexScalar.of(0.04686573907359337, -1.4859071898107274));
   }
 

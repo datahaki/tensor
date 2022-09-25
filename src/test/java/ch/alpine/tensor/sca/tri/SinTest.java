@@ -10,7 +10,6 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -28,8 +27,7 @@ class SinTest {
   @Test
   void testComplex() {
     Scalar c = Sin.FUNCTION.apply(ComplexScalar.of(2, 3.));
-    // 9.1544991469114295735 - 4.1689069599665643508 I
-    Scalar s = Scalars.fromString("9.15449914691143-4.168906959966565*I");
+    Scalar s = ComplexScalar.of(9.15449914691143, -4.168906959966565);
     assertEquals(c, s);
   }
 

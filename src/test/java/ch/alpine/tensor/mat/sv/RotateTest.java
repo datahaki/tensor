@@ -9,16 +9,16 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.chq.ExactScalarQ;
-import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 
 class RotateTest {
   @Test
   void testSimple() {
     Rotate rotate = new Rotate(RealScalar.of(3), RealScalar.of(4), RealScalar.of(7), RealScalar.of(11));
     Scalar scalar = Scalars.fromString("(3+4*I)*(7+11*I)");
-    assertEquals(rotate.re(), Real.FUNCTION.apply(scalar));
-    assertEquals(rotate.im(), Imag.FUNCTION.apply(scalar));
+    assertEquals(rotate.re(), Re.FUNCTION.apply(scalar));
+    assertEquals(rotate.im(), Im.FUNCTION.apply(scalar));
     ExactScalarQ.require(rotate.re());
     ExactScalarQ.require(rotate.im());
   }

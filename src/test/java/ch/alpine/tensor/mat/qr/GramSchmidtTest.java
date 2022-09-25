@@ -68,7 +68,7 @@ class GramSchmidtTest {
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor rhs = qrDecomposition.getQConjugateTranspose().dot(b);
     assertEquals(rhs.length(), 4);
-    assertThrows(ArrayIndexOutOfBoundsException.class, () -> qrDecomposition.pseudoInverse());
+    assertThrows(ArrayIndexOutOfBoundsException.class, qrDecomposition::pseudoInverse);
   }
 
   @Test

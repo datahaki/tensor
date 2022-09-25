@@ -4,7 +4,6 @@ package ch.alpine.tensor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +27,7 @@ class TensorSetTest {
     assertEquals(eye, cpy);
     cpy.set(DoubleScalar.of(0.3), 1, 2);
     assertFalse(eye.equals(cpy));
-    cpy.set(s -> s.negate(), 2, 2);
+    cpy.set(Tensor::negate, 2, 2);
   }
 
   @Test
@@ -131,17 +130,17 @@ class TensorSetTest {
   @Test
   void testSetSelf() {
     Tensor a = Tensors.vector(1); // 1
-    assertTrue(TensorRank.of(a) == 1);
+    assertEquals(TensorRank.of(a), 1);
     a.set(a, 0);
-    assertTrue(TensorRank.of(a) == 2);
+    assertEquals(TensorRank.of(a), 2);
     a.set(a, Tensor.ALL);
-    assertTrue(TensorRank.of(a) == 2);
+    assertEquals(TensorRank.of(a), 2);
     a.set(a, 0);
-    assertTrue(TensorRank.of(a) == 3);
+    assertEquals(TensorRank.of(a), 3);
     a.set(a, Tensor.ALL);
     a.set(a, 0);
     a.set(a, 0);
-    assertTrue(TensorRank.of(a) == 5);
+    assertEquals(TensorRank.of(a), 5);
   }
 
   @Test

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.io.TempDir;
@@ -51,10 +53,10 @@ class NnzTest {
     sparse.toString();
   }
 
-  @Test
+  @RepeatedTest(5)
   @Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
-  void testLarge() {
-    int size = 1000000;
+  void testLarge(RepetitionInfo repetitionInfo) {
+    int size = 1000000 + repetitionInfo.getCurrentRepetition();
     Tensor tensor = SparseArray.of(RealScalar.ZERO, size, size, size);
     tensor.set(RealScalar.ONE, size - 2, size - 3, size - 4);
     int nnz = Nnz.of((SparseArray) tensor);

@@ -7,6 +7,7 @@ import java.util.Objects;
 import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.ExactScalarQ;
 
 /** StringScalar represents a string.
  * 
@@ -25,7 +26,11 @@ import ch.alpine.tensor.Throw;
  * In Mathematica string expressions begin and terminate with quotes.
  * For example, Mathematica::{"Hello", "World"}.
  * Whether this convention will adopted in the tensor library at some point
- * in the future is open for discussion. */
+ * in the future is open for discussion.
+ * 
+ * Any instance of StringScalar satisfies the predicate {@link ExactScalarQ}.
+ * 
+ * @see ExactScalarQ */
 public class StringScalar extends AbstractScalar implements //
     Comparable<Scalar>, Serializable {
   /** instance of string scalar with empty string "" as value */

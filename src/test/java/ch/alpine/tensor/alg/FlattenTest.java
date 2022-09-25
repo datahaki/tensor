@@ -4,6 +4,7 @@ package ch.alpine.tensor.alg;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,9 +31,9 @@ class FlattenTest {
     Tensor ad = Array.zeros(3, 3, 3);
     assertEquals(Flatten.of(ad, 0), ad);
     assertEquals(Dimensions.of(Flatten.of(ad, 1)), Arrays.asList(9, 3));
-    assertEquals(Dimensions.of(Flatten.of(ad, 2)), Arrays.asList(27));
-    assertEquals(Dimensions.of(Flatten.of(ad, 3)), Arrays.asList(27));
-    assertEquals(Dimensions.of(Flatten.of(ad)), Arrays.asList(27));
+    assertEquals(Dimensions.of(Flatten.of(ad, 2)), List.of(27));
+    assertEquals(Dimensions.of(Flatten.of(ad, 3)), List.of(27));
+    assertEquals(Dimensions.of(Flatten.of(ad)), List.of(27));
   }
 
   @Test

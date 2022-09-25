@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import java.math.BigInteger;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -20,7 +22,7 @@ import ch.alpine.tensor.sca.exp.Exp;
  * <a href="https://reference.wolfram.com/language/ref/PoissonDistribution.html">PoissonDistribution</a> */
 public class PoissonDistribution extends EvaluatedDiscreteDistribution {
   /** probabilities are zero beyond P_EQUALS_MAX */
-  private static final int P_EQUALS_MAX = 1950;
+  private static final BigInteger P_EQUALS_MAX = BigInteger.valueOf(1950);
   /** lambda above max leads to incorrect results due to numerics */
   private static final Scalar LAMBDA_MAX = RealScalar.of(700);
 
@@ -52,7 +54,7 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
   private PoissonDistribution(Scalar lambda) {
     this.lambda = lambda;
     values.append(Exp.FUNCTION.apply(lambda.negate()));
-    build(P_EQUALS_MAX);
+    build(P_EQUALS_MAX.intValueExact());
   }
 
   @Override // from MeanInterface
@@ -66,22 +68,24 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return 0;
+  public BigInteger lowerBound() {
+    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
-    if (P_EQUALS_MAX < x)
+  protected Scalar protected_p_equals(BigInteger x) {
+    if (P_EQUALS_MAX.compareTo(x) < 0)
       return RealScalar.ZERO;
-    if (values.length() <= x) {
-      Scalar _x = Last.of(values);
-      while (values.length() <= x) {
-        Scalar factor = lambda.divide(RealScalar.of(values.length()));
-        values.append(_x = _x.multiply(factor));
+    int index = x.intValueExact();
+    if (values.length() <= index)
+      synchronized (values) {
+        Scalar p = Last.of(values);
+        while (values.length() <= index) {
+          Scalar factor = lambda.divide(RealScalar.of(values.length()));
+          values.append(p = p.multiply(factor));
+        }
       }
-    }
-    return values.Get(x);
+    return values.Get(index);
   }
 
   @Override // from Object

@@ -15,7 +15,6 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
@@ -34,8 +33,7 @@ class SinhTest {
   @Test
   void testComplex() {
     Scalar c = Sinh.of(ComplexScalar.of(2, 3.));
-    // -3.59056 + 0.530921 I
-    Scalar s = Scalars.fromString("-3.59056458998578+0.5309210862485197*I");
+    Scalar s = ComplexScalar.of(-3.59056458998578, 0.5309210862485197);
     assertEquals(c, s);
   }
 

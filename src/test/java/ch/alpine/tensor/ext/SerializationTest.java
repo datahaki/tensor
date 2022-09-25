@@ -2,7 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ class SerializationTest {
     String s1 = "abc";
     String s2 = Serialization.copy(s1);
     assertEquals(s1, s2);
-    assertFalse(s1 == s2);
+    assertNotSame(s1, s2);
   }
 
   @Test
@@ -31,7 +31,7 @@ class SerializationTest {
     Tensor t1 = Tensors.vector(2, 3, 4, 5);
     Tensor t2 = Serialization.copy(t1);
     assertEquals(t1, t2);
-    assertFalse(t1 == t2);
+    assertNotSame(t1, t2);
   }
 
   @Test

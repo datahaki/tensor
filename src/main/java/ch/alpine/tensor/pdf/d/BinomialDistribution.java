@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import java.math.BigInteger;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -45,12 +47,12 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
   }
 
   // ---
-  private final int n;
+  private final BigInteger n;
   private final Scalar p;
   private final Tensor table;
 
   private BinomialDistribution(int n, Scalar p, Tensor table) {
-    this.n = n;
+    this.n = BigInteger.valueOf(n);
     this.p = p;
     this.table = table;
     build(n);
@@ -75,14 +77,14 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
   }
 
   @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return 0;
+  public BigInteger lowerBound() {
+    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int x) {
-    return x <= n //
-        ? table.Get(x)
+  protected Scalar protected_p_equals(BigInteger x) {
+    return x.compareTo(n) <= 0 //
+        ? table.Get(x.intValueExact())
         : RealScalar.ZERO;
   }
 

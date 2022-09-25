@@ -48,10 +48,16 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
     this.beta = beta;
   }
 
+  @Override // from PDF
+  public Scalar at(Scalar x) {
+    Scalar ratio = x.subtract(alpha).divide(beta);
+    return Exp.FUNCTION.apply(ratio.subtract(Exp.FUNCTION.apply(ratio))).divide(beta);
+  }
+
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    return RealScalar.ONE.subtract(Exp.FUNCTION.apply( //
-        Exp.FUNCTION.apply(x.subtract(alpha).divide(beta)).negate()));
+    Scalar ratio = x.subtract(alpha).divide(beta);
+    return RealScalar.ONE.subtract(Exp.FUNCTION.apply(Exp.FUNCTION.apply(ratio).negate()));
   }
 
   @Override // from AbstractContinuousDistribution
@@ -67,12 +73,6 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
   @Override // from VarianceInterface
   public Scalar variance() {
     return PISQUARED_6.multiply(beta).multiply(beta);
-  }
-
-  @Override // from PDF
-  public Scalar at(Scalar x) {
-    Scalar map = x.subtract(alpha).divide(beta);
-    return Exp.FUNCTION.apply(map.subtract(Exp.FUNCTION.apply(map))).divide(beta);
   }
 
   @Override // from Object

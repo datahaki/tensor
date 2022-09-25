@@ -29,7 +29,7 @@ public class GammaDistribution implements Distribution, //
     MeanInterface, PDF, VarianceInterface, Serializable {
   /** @param alpha positive real
    * @param beta positive real
-   * @return */
+   * @return GammaDistribution[alpha, beta] */
   public static Distribution of(Scalar alpha, Scalar beta) {
     if (Scalars.lessEquals(alpha, RealScalar.ZERO) || //
         Scalars.lessEquals(beta, RealScalar.ZERO))
@@ -37,6 +37,13 @@ public class GammaDistribution implements Distribution, //
     if (alpha.equals(RealScalar.ONE))
       return ExponentialDistribution.of(beta.reciprocal());
     return new GammaDistribution(alpha, beta);
+  }
+
+  /** @param alpha positive
+   * @param beta positive
+   * @return GammaDistribution[alpha, beta] */
+  public static Distribution of(Number alpha, Number beta) {
+    return of(RealScalar.of(alpha), RealScalar.of(beta));
   }
 
   // ---

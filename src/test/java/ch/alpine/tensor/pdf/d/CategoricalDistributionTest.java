@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -13,11 +14,13 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.num.FindInteger;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
@@ -28,6 +31,7 @@ import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clips;
 
 class CategoricalDistributionTest {
   @Test
@@ -42,10 +46,10 @@ class CategoricalDistributionTest {
   @Test
   void testP_Equals() {
     CategoricalDistribution categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1, 5));
-    assertEquals(categoricalDistribution.p_equals(0), RationalScalar.of(0, 1));
-    assertEquals(categoricalDistribution.p_equals(1), RationalScalar.of(9, 15));
-    assertEquals(categoricalDistribution.p_equals(2), RationalScalar.of(1, 15));
-    assertEquals(categoricalDistribution.p_equals(3), RationalScalar.of(5, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(0)), RationalScalar.of(0, 1));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(1)), RationalScalar.of(9, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(2)), RationalScalar.of(1, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(3)), RationalScalar.of(5, 15));
   }
 
   @Test
@@ -112,6 +116,12 @@ class CategoricalDistributionTest {
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(0.5))), RealScalar.of(2));
     assertEquals(distribution.quantile(RationalScalar.of(1, 2)), RealScalar.of(2));
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(1.0))), RealScalar.of(4));
+    assertEquals(distribution.quantile(RealScalar.of(1)), RealScalar.of(4));
+    CDF cdf = CDF.of(distribution);
+    Scalar q = RealScalar.of(0.2);
+    Scalar res = FindInteger.min(x -> Scalars.lessEquals(q, cdf.p_lessEquals(x)), Clips.interval(0, 5));
+    assertEquals(res, RealScalar.of(2));
+    assertEquals(distribution.quantile(q), RealScalar.TWO);
   }
 
   @Test
@@ -180,6 +190,12 @@ class CategoricalDistributionTest {
     AbstractDiscreteDistribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
     assertThrows(Throw.class, () -> distribution.quantile(RealScalar.of(Math.nextDown(0.0))));
+  }
+
+  @Test
+  void testMonotonous() {
+    Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(1, 2, 3, 2, 4, 0, 2));
+    TestMarkovChebyshev.monotonous(distribution);
   }
 
   @Test

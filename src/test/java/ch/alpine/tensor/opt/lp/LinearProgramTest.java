@@ -43,7 +43,7 @@ class LinearProgramTest {
         Variables.UNRESTRICTED);
     Tensor sol1 = SimplexCorners.of(linearProgram);
     assertEquals(sol1, Tensors.fromString("{{650/3, 0}}"));
-    assertThrows(RuntimeException.class, () -> linearProgram.toggle());
+    assertThrows(RuntimeException.class, linearProgram::toggle);
   }
 
   @Test
@@ -104,6 +104,6 @@ class LinearProgramTest {
   void testConstraint() {
     assertEquals(ConstraintType.LESS_EQUALS.flipInequality(), ConstraintType.GREATER_EQUALS);
     assertEquals(ConstraintType.GREATER_EQUALS.flipInequality(), ConstraintType.LESS_EQUALS);
-    assertThrows(RuntimeException.class, () -> ConstraintType.EQUALS.flipInequality());
+    assertThrows(RuntimeException.class, ConstraintType.EQUALS::flipInequality);
   }
 }

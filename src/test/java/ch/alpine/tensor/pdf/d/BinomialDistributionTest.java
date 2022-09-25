@@ -4,8 +4,11 @@ package ch.alpine.tensor.pdf.d;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +29,7 @@ import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.CentralMoment;
@@ -240,9 +244,9 @@ class BinomialDistributionTest {
     Distribution d3 = BinomialDistribution.of(3, RationalScalar.of(1, 3));
     Distribution d4 = NormalDistribution.of(1, 2);
     assertFalse(d1.equals(d3));
-    assertFalse(d1.hashCode() == d3.hashCode());
-    assertFalse(d1.equals(d4));
-    assertFalse(d1.hashCode() == d4.hashCode());
+    assertNotEquals(d1.hashCode(), d3.hashCode());
+    assertNotEquals(d1, d4);
+    assertNotEquals(d1.hashCode(), d4.hashCode());
     byte[] b1 = Serialization.of(d1);
     byte[] b2 = Serialization.of(d2);
     assertArrayEquals(b1, b2);
@@ -277,9 +281,9 @@ class BinomialDistributionTest {
     CDF cdf = CDF.of(distribution);
     // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
     assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
-    assertEquals(cdf.p_lessEquals(RealScalar.of(0)), discreteDistribution.p_equals(0));
+    assertEquals(cdf.p_lessEquals(RealScalar.of(0)), discreteDistribution.p_equals(BigInteger.ZERO));
     assertEquals(cdf.p_lessEquals(RealScalar.of(1)), //
-        discreteDistribution.p_equals(0).add(discreteDistribution.p_equals(1)) //
+        discreteDistribution.p_equals(BigInteger.ZERO).add(discreteDistribution.p_equals(BigInteger.ONE)) //
     );
     // assertFalse(discreteCDF.cdf_finished());
     assertEquals(cdf.p_lessEquals(RealScalar.of(1000000000)), RealScalar.ONE);
@@ -294,14 +298,19 @@ class BinomialDistributionTest {
     // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
     assertEquals(cdf.p_lessThan(RealScalar.of(-10)), RealScalar.ZERO);
     assertEquals(cdf.p_lessThan(RealScalar.of(0)), RealScalar.ZERO);
-    assertEquals(cdf.p_lessThan(RealScalar.of(1e-8)), discreteDistribution.p_equals(0));
-    assertEquals(cdf.p_lessThan(RealScalar.of(1)), discreteDistribution.p_equals(0));
+    assertEquals(cdf.p_lessThan(RealScalar.of(1e-8)), discreteDistribution.p_equals(BigInteger.ZERO));
+    assertEquals(cdf.p_lessThan(RealScalar.of(1)), discreteDistribution.p_equals(BigInteger.ZERO));
     assertEquals(cdf.p_lessThan(RealScalar.of(2)), //
-        discreteDistribution.p_equals(0).add(discreteDistribution.p_equals(1)) //
+        discreteDistribution.p_equals(BigInteger.ZERO).add(discreteDistribution.p_equals(BigInteger.ONE)) //
     );
     // assertFalse(discreteCDF.cdf_finished());
     assertEquals(cdf.p_lessThan(RealScalar.of(1000000000)), RealScalar.ONE);
     // assertTrue(discreteCDF.cdf_finished());
+  }
+
+  @Test
+  void testMonotonous() {
+    TestMarkovChebyshev.monotonous(BinomialDistribution.of(3, 0.2));
   }
 
   @Test

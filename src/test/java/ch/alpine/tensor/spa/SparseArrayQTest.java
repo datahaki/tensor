@@ -3,10 +3,13 @@ package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
@@ -62,6 +65,7 @@ class SparseArrayQTest {
     Tensor result = tensor.map(s -> Tensors.of(Quantity.of(s, "m"), Quantity.of(s, "m")));
     SparseArray sparse = (SparseArray) result;
     assertEquals(sparse.fallback(), Quantity.of(0, "m"));
+    assertSame(SparseArrayQ.require(sparse), sparse);
   }
 
   @Test
@@ -71,9 +75,9 @@ class SparseArrayQTest {
     assertEquals(t1.dot(t2), Tensors.fromString("{9[m*s^-1], 30[m*s^-1], 29[m*s^-1]}"));
   }
 
-  @Test
-  void testId() {
-    int n = 3;
+  @RepeatedTest(4)
+  void testId(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
     Tensor t1 = IdentityMatrix.sparse(n).map(s -> Quantity.of(s, "m"));
     Tensor t2 = IdentityMatrix.sparse(n).map(s -> Quantity.of(s, "kg"));
     Tensor t3 = t1.dot(t2);

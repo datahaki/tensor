@@ -29,7 +29,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Im;
 
 class Matrix2NormTest {
   @Test
@@ -93,7 +93,7 @@ class Matrix2NormTest {
     Tensor im = RandomVariate.of(distribution, 5, 3);
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
     Scalar norm2bound1 = Matrix2Norm.bound(matrix);
-    assertEquals(Imag.FUNCTION.apply(norm2bound1), RealScalar.ZERO);
+    assertEquals(Im.FUNCTION.apply(norm2bound1), RealScalar.ZERO);
     Scalar norm2bound2 = Matrix2Norm.bound(Transpose.of(matrix));
     Tolerance.CHOP.requireClose(norm2bound1, norm2bound2);
   }
