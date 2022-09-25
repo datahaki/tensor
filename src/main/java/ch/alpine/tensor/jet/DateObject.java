@@ -168,18 +168,6 @@ public class DateObject extends AbstractScalar implements //
     return localDateTime;
   }
 
-  /** Careful: the below-second part is not considered for the output
-   * 
-   * function exists because the return type of
-   * localDateTime.toEpochSecond(...) is long, i.e. without unit.
-   * 
-   * @param zoneOffset
-   * @return the number of seconds from the epoch of 1970-01-01T00:00:00Z with unit "s"
-   * which is negative for dates before that threshold */
-  public Scalar toEpochWithoutNanos(ZoneOffset zoneOffset) {
-    return Quantity.of(localDateTime.toEpochSecond(zoneOffset), UNIT_S);
-  }
-
   /** @param zoneOffset
    * @return seconds from the epoch of 1970-01-01T00:00:00Z with unit "s"
    * which is negative for dates before that threshold in exact precision */
@@ -240,8 +228,7 @@ public class DateObject extends AbstractScalar implements //
 
   @Override // from RoundingInterface
   public DateObject ceiling() {
-    int nano = localDateTime.getNano();
-    return 0 == nano //
+    return 0 == localDateTime.getNano() //
         ? this
         : new DateObject(localDateTime.withNano(0).plusSeconds(1));
   }

@@ -210,7 +210,7 @@ class DateObjectTest {
   @Test
   void testDTSHi() {
     DateObject dts1 = DateObject.of(2013, 11, 30, 4, 54, 0, 123_213_678);
-    Scalar scalar1 = dts1.toEpochWithoutNanos(ZoneOffset.MIN);
+    Scalar scalar1 = dts1.floor().toEpoch(ZoneOffset.MIN);
     Scalar scalar2 = dts1.toEpoch(ZoneOffset.MIN);
     Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
     assertEquals(scalar1, scalar3);
@@ -222,7 +222,7 @@ class DateObjectTest {
   @Test
   void testDTSLo() {
     DateObject dts1 = DateObject.of(1965, 11, 30, 4, 54, 0, 123_213_678);
-    Scalar scalar1 = dts1.toEpochWithoutNanos(ZoneOffset.MAX);
+    Scalar scalar1 = dts1.floor().toEpoch(ZoneOffset.MAX);
     Scalar scalar2 = dts1.toEpoch(ZoneOffset.MAX);
     Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
     assertEquals(scalar1, scalar3);
