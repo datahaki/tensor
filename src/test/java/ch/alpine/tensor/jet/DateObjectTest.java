@@ -39,9 +39,11 @@ import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
+import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
+import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 
 class DateObjectTest {
@@ -291,7 +293,7 @@ class DateObjectTest {
   @Test
   void testAddFail2() {
     DateObject dt1 = DateObject.of(2020, 12, 20, 4, 30);
-    assertEquals(dt1, dt1.withoutNanos());
+    assertEquals(dt1, dt1.floor());
     assertNotEquals(dt1, "asd");
     assertThrows(Throw.class, () -> dt1.add(RealScalar.of(3)));
     assertThrows(Throw.class, () -> dt1.add(ComplexScalar.I));
@@ -323,7 +325,7 @@ class DateObjectTest {
   @Test
   void testWithoutNanos() {
     DateObject now = DateObject.now();
-    DateObject trc = now.withoutNanos();
+    DateObject trc = now.floor();
     assertTrue(now.toString().startsWith(trc.toString()));
     assertTrue(trc.toString().length() <= 19); // may also be 16 if seconds part == 0
   }
@@ -389,7 +391,7 @@ class DateObjectTest {
     DateObject dateObject = DateObject.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
     dateObject.format(dateTimeFormatter);
-    dateObject.withoutNanos();
+    dateObject.floor();
   }
 
   private static final ScalarUnaryOperator TO_MILLIS = QuantityMagnitude.SI().in("ms");
@@ -410,6 +412,35 @@ class DateObjectTest {
     assertNotNull(date);
     // System.out.println(date);
     // System.out.println(dateTimeScalar);
+  }
+
+  @Test
+  void testRoundingDown() {
+    DateObject dateObject = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59, 499_999_999);
+    DateObject lo = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59);
+    DateObject hi = DateObject.of(1982, Month.APRIL, 4, 0, 0);
+    assertEquals(Ceiling.FUNCTION.apply(dateObject), hi);
+    assertEquals(Floor.FUNCTION.apply(dateObject), lo);
+    assertEquals(Round.FUNCTION.apply(dateObject), lo);
+  }
+
+  @Test
+  void testRoundingUp() {
+    DateObject dateObject = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59, 500_000_000);
+    DateObject lo = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59);
+    DateObject hi = DateObject.of(1982, Month.APRIL, 4, 0, 0);
+    assertEquals(Ceiling.FUNCTION.apply(dateObject), hi);
+    assertEquals(Floor.FUNCTION.apply(dateObject), lo);
+    assertEquals(Round.FUNCTION.apply(dateObject), hi);
+  }
+
+  @Test
+  void testRoundingInvariant() {
+    DateObject dateObject = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59, 0);
+    DateObject lo = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59);
+    assertEquals(Ceiling.FUNCTION.apply(dateObject), lo);
+    assertEquals(Floor.FUNCTION.apply(dateObject), lo);
+    assertEquals(Round.FUNCTION.apply(dateObject), lo);
   }
 
   @Test

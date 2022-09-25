@@ -18,7 +18,7 @@ public enum FindInteger {
   ;
   private static final int MAX_ITERATIONS_A = 256;
   private static final int MAX_ITERATIONS_B = 256 * 3; // 3 == 2^8
-  private static final BigInteger FACTOR = BigInteger.valueOf(8); 
+  private static final BigInteger FACTOR = BigInteger.valueOf(8);
 
   /** @param predicate
    * @param lo strictly positive

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
@@ -19,6 +18,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityCompatibleScalar;
@@ -59,13 +59,17 @@ import ch.alpine.tensor.sca.Floor;
  * {@link LocalDateTime} offers getter methods for year, month, dayOfMonth.
  * Equivalent methods are available.
  * 
+ * {@link RoundingInterface} rounds to the nearest seconds, which is decided
+ * based on the nano part of the {@link DateObject}. A nano part equal or
+ * above 500_000_000 is rounded up, otherwise down.
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/DateObject.html">DateObject</a>
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
 public class DateObject extends AbstractScalar implements //
-    Comparable<Scalar>, QuantityCompatibleScalar, Serializable {
+    Comparable<Scalar>, QuantityCompatibleScalar, RoundingInterface, Serializable {
   private static final long NANOS_LONG = 1_000_000_000;
   private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
   private static final Unit UNIT_S = Unit.of("s");
@@ -234,12 +238,27 @@ public class DateObject extends AbstractScalar implements //
     return new DateObject(localDateTime.plusDays(days));
   }
 
+  @Override // from RoundingInterface
+  public DateObject ceiling() {
+    int nano = localDateTime.getNano();
+    return 0 == nano //
+        ? this
+        : new DateObject(localDateTime.withNano(0).plusSeconds(1));
+  }
+
   /** @return this date-time with fractional second part set back to 0,
    * i.e. time is truncated to seconds resolution */
-  public DateObject withoutNanos() {
-    return new DateObject(LocalDateTime.of( //
-        localDateTime.toLocalDate(), //
-        localDateTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)));
+  @Override // from RoundingInterface
+  public DateObject floor() {
+    return new DateObject(localDateTime.withNano(0));
+  }
+
+  @Override // from RoundingInterface
+  public DateObject round() {
+    int nano = localDateTime.getNano();
+    return nano < 500_000_000 //
+        ? new DateObject(localDateTime.withNano(0))
+        : new DateObject(localDateTime.withNano(0).plusSeconds(1));
   }
 
   @Override // from AbstractScalar

@@ -89,7 +89,7 @@ public enum Array {
   // ---
   /** @param scalar
    * @param dimensions
-   * @return ConstantArray[scalar, dimensions].copy() 
+   * @return ConstantArray[scalar, dimensions].copy()
    * @see ConstantArray */
   public static Tensor same(Scalar scalar, int... dimensions) {
     return fill(() -> scalar, Integers.asList(dimensions));
@@ -97,7 +97,7 @@ public enum Array {
 
   /** @param scalar
    * @param dimensions
-   * @return ConstantArray[scalar, dimensions].copy() 
+   * @return ConstantArray[scalar, dimensions].copy()
    * @see ConstantArray */
   public static Tensor same(Scalar scalar, List<Integer> dimensions) {
     return fill(() -> scalar, dimensions);
