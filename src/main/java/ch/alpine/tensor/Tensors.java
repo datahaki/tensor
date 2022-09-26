@@ -183,22 +183,22 @@ public enum Tensors {
 
   /** Examples:
    * A tensor returned by the method {@link Tensor#unmodifiable()},
-   * in particular {@link SparseArray#unmodifiable()}
-   * is not modifiable.
+   * in particular {@link SparseArray#unmodifiable()} and
+   * {@link ConstantArray} are not modifiable.
    * 
    * Also, any {@link Scalar} is by specification immutable
    * and therefore unmodifiable.
    * 
    * Careful:
    * Some instances of tensor not modifiable for which this method
-   * returns false. For instance, tensors returned by {@link ConstantArray},
-   * or {@link Unprotect#using(List)} with unmodifiable lists.
+   * returns false. For instance, {@link Unprotect#using(List)}
+   * with unmodifiable lists.
    * 
    * @param tensor
    * @return true if given tensor is guaranteed to be unmodifiable,
    * and false if given tensor may be modifiable. */
   public static boolean isUnmodifiable(Tensor tensor) {
-    return tensor.unmodifiable() == tensor;
+    return tensor.unmodifiable() == tensor; // equal by reference intended
   }
 
   // ---

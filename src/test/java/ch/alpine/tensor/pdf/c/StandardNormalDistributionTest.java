@@ -64,12 +64,17 @@ class StandardNormalDistributionTest {
     Distribution distribution = NormalDistribution.standard();
     assertEquals(Mean.of(distribution), RealScalar.ZERO);
     assertEquals(Variance.of(distribution), RealScalar.ONE);
-    assertEquals(distribution.toString(), "StandardNormalDistribution");
     assertEquals(CentralMoment.of(distribution, 0), RealScalar.ONE);
     assertEquals(CentralMoment.of(distribution, 1), RealScalar.ZERO);
     assertEquals(CentralMoment.of(distribution, 2), RealScalar.ONE);
     assertEquals(CentralMoment.of(distribution, 3), RealScalar.ZERO);
     assertEquals(CentralMoment.of(distribution, 4), RealScalar.of(3));
+  }
+
+  @Test
+  void testToString() {
+    assertEquals(NormalDistribution.standard().toString(), NormalDistribution.of(0, 1).toString());
+    assertEquals(NormalDistribution.standard().toString(), "NormalDistribution[0, 1]");
   }
 
   @Test

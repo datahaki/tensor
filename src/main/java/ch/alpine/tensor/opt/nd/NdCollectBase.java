@@ -10,7 +10,7 @@ public abstract class NdCollectBase<V> implements NdVisitor<V> {
   protected final NdCenterInterface ndCenterInterface;
   protected final Scalar radius;
 
-  public NdCollectBase(NdCenterInterface ndCenterInterface, Scalar radius) {
+  protected NdCollectBase(NdCenterInterface ndCenterInterface, Scalar radius) {
     this.ndCenterInterface = Objects.requireNonNull(ndCenterInterface);
     this.radius = Sign.requirePositiveOrZero(radius);
   }

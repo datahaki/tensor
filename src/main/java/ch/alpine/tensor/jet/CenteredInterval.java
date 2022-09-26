@@ -1,5 +1,4 @@
-// concept by njw
-// adapted by jph
+// code by jph
 package ch.alpine.tensor.jet;
 
 import java.io.Serializable;
@@ -16,7 +15,6 @@ import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
-import ch.alpine.tensor.pdf.StandardDeviationInterface;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
@@ -32,26 +30,14 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
 
 /** API EXPERIMENTAL
  * 
- * "Around[mean, sigma] represents an approximate number or quantity with a value around
- * mean and an uncertainty sigma."
- * 
- * The implementation of Around attempts to be consistent with Mathematica::Around.
- * 
- * However, Mathematica uses a first order approximation of the function that is applied
- * to Around in order to map mean and sigma. This results in seemingly inconsistent choices:
- * Example: Let a = Around[3, 4], then a a != a ^ 2.
- * 
- * Remark:
- * Around[0, 1] Around[0, 1] == 0
- * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/Around.html">Around</a>
+ * <a href="https://reference.wolfram.com/language/ref/CenteredInterval.html">CenteredInterval</a>
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class Around extends MultiplexScalar implements //
-    AbsInterface, ExpInterface, LogInterface, MeanInterface, PowerInterface, //
-    SqrtInterface, StandardDeviationInterface, Serializable {
+/* package */ class CenteredInterval extends MultiplexScalar implements //
+    AbsInterface, ExpInterface, LogInterface, MeanInterface, //
+    PowerInterface, SqrtInterface, Serializable {
   private static final String SEPARATOR = "\u00B1";
 
   /** Mathematica allows
@@ -66,7 +52,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
     mean.add(sigma);
     if (Scalars.isZero(sigma))
       return mean;
-    return new Around(mean, Sign.requirePositiveOrZero(sigma));
+    return new CenteredInterval(mean, Sign.requirePositiveOrZero(sigma));
   }
 
   /** @param mean
@@ -81,15 +67,16 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
   private final Scalar mean;
   private final Scalar sigma;
 
-  private Around(Scalar mean, Scalar sigma) {
+  private CenteredInterval(Scalar mean, Scalar sigma) {
     this.mean = mean;
     this.sigma = sigma;
   }
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    return scalar instanceof Around around //
-        ? of(mean.multiply(around.mean), Hypot.of(mean.multiply(around.sigma), around.mean.multiply(sigma)))
+    return scalar instanceof CenteredInterval centeredInterval //
+        // FIXME TENSOR next line
+        ? of(mean.multiply(centeredInterval.mean), Hypot.of(mean.multiply(centeredInterval.sigma), centeredInterval.mean.multiply(sigma)))
         : of(mean.multiply(scalar), sigma.multiply(Abs.FUNCTION.apply(scalar)));
   }
 
@@ -115,14 +102,15 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
 
   @Override // from Scalar
   protected Scalar plus(Scalar scalar) {
-    return scalar instanceof Around around //
-        ? of(mean.add(around.mean), Hypot.of(sigma, around.sigma))
+    return scalar instanceof CenteredInterval centeredInterval //
+        ? of(mean.add(centeredInterval.mean), sigma.add(centeredInterval.sigma))
         : of(mean.add(scalar), sigma);
   }
 
   // ---
   @Override // from AbsInterface
   public Scalar abs() {
+    // TODO TENSOR
     return of(Abs.FUNCTION.apply(mean), sigma);
   }
 
@@ -145,7 +133,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
 
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
-    if (exponent instanceof Around)
+    if (exponent instanceof CenteredInterval)
       throw new Throw(this, exponent);
     Scalar scalar = Power.of(mean, exponent);
     return of(scalar, Abs.FUNCTION.apply(scalar.divide(mean).multiply(sigma).multiply(exponent)));
@@ -165,8 +153,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
   /** Around[mean, sigma]["Uncertainty"] == sigma
    * 
    * @return sigma */
-  @Override
-  public Scalar standardDeviation() {
+  public Scalar uncertainty() {
     return sigma;
   }
 
@@ -195,9 +182,10 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
 
   @Override // from Object
   public boolean equals(Object object) {
-    return object instanceof Around around //
-        && mean.equals(around.mean) //
-        && sigma.equals(around.sigma);
+    // in Mathematica CI1 == CI2 never returns true ?
+    return object instanceof CenteredInterval centeredInterval //
+        && mean.equals(centeredInterval.mean) //
+        && sigma.equals(centeredInterval.sigma);
   }
 
   @Override // from Object
