@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.red;
 
-import java.math.BigInteger;
 import java.util.IntSummaryStatistics;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -9,7 +8,6 @@ import java.util.stream.Collector;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
@@ -42,25 +40,25 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
   }
 
   // ---
-  private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(AdditionGroup.INSTANCE);
-  // ---
+  private long count = 0;
+  private Scalar cnt = null;
   private Scalar avg = null;
   private Scalar min = null;
   private Scalar max = null;
-  private long count = 0;
 
   @Override // from Consumer
   public void accept(Scalar scalar) {
     ++count;
     if (Objects.isNull(min)) {
+      cnt = scalar.one();
       avg = scalar;
       min = scalar;
       max = scalar;
     } else {
+      cnt = cnt.add(scalar.one());
+      avg = avg.add(scalar.subtract(avg).divide(cnt));
       min = Min.of(min, scalar);
       max = Max.of(max, scalar);
-      Scalar factor = BINARY_POWER.raise(avg.one(), BigInteger.valueOf(count));
-      avg = avg.add(scalar.subtract(avg).divide(factor));
     }
   }
 
@@ -75,11 +73,10 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
     if (0 == count)
       return other;
     count += other.count;
+    cnt = cnt.add(other.cnt);
+    avg = avg.add(other.avg.subtract(avg).multiply(other.cnt).divide(cnt));
     min = Min.of(min, other.min);
     max = Max.of(max, other.max);
-    Scalar num = BINARY_POWER.raise(avg.one(), BigInteger.valueOf(other.count));
-    Scalar den = BINARY_POWER.raise(avg.one(), BigInteger.valueOf(count));
-    avg = avg.add(other.avg.subtract(avg).multiply(num).divide(den));
     return this;
   }
 
@@ -87,7 +84,7 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
   public Scalar getSum() {
     return Objects.isNull(avg) //
         ? null
-        : avg.multiply(BINARY_POWER.raise(avg.one(), BigInteger.valueOf(count)));
+        : avg.multiply(cnt);
   }
 
   /** @return min of scalars in stream or null if stream is empty */

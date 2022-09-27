@@ -10,7 +10,8 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.red.ScalarSummaryStatistics;
+import ch.alpine.tensor.red.MinMax;
+import ch.alpine.tensor.sca.Clip;
 
 /** Rescale so that all the list elements run from 0 to 1
  * 
@@ -45,34 +46,34 @@ public class Rescale {
   }
 
   // helper function
-  private static Tensor _result(Tensor tensor, ScalarSummaryStatistics scalarSummaryStatistics) {
-    if (0 < scalarSummaryStatistics.getCount()) {
-      Scalar min = scalarSummaryStatistics.getMin();
-      Scalar max = scalarSummaryStatistics.getMax();
-      Scalar width = max.subtract(min);
-      if (Scalars.nonZero(width)) // operation is not identical to Clip#rescale
-        return tensor.map(scalar -> scalar.subtract(min).divide(width));
+  private static Tensor _result(Tensor tensor, MinMax minMax) {
+    if (0 < minMax.getCount()) {
+      Clip clip = minMax.getClip();
+      if (Scalars.nonZero(clip.width()))
+        // operation is not identical to Clip#rescale for non-finite values
+        return tensor.map(scalar -> scalar.subtract(clip.min()).divide(clip.width()));
     }
-    return tensor.map(FINITE_NUMBER_ZERO); // set all finite number entries to 0
+    // set all finite number entries to 0, but keep non-finite values
+    return tensor.map(FINITE_NUMBER_ZERO);
   }
 
   // ---
-  private final ScalarSummaryStatistics scalarSummaryStatistics;
+  private final MinMax minMax;
   private final Tensor result;
 
   /** @param tensor of rank at least 1
    * @throws Exception if given tensor is a scalar */
   public Rescale(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
-    scalarSummaryStatistics = tensor.flatten(-1) //
+    minMax = tensor.flatten(-1) //
         .map(Scalar.class::cast) //
         .filter(FiniteScalarQ::of) //
-        .collect(ScalarSummaryStatistics.collector());
-    result = _result(tensor, scalarSummaryStatistics);
+        .collect(MinMax.collector());
+    result = _result(tensor, minMax);
   }
 
-  public ScalarSummaryStatistics scalarSummaryStatistics() {
-    return scalarSummaryStatistics;
+  public MinMax minMax() {
+    return minMax;
   }
 
   public Tensor result() {
