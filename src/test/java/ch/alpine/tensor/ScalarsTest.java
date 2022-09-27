@@ -16,7 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.jet.DateObject;
+import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 
 class ScalarsTest {
@@ -275,17 +275,17 @@ class ScalarsTest {
   @Test
   void testToStringDateObject1() {
     // System.out.println("2020-12-20T04:30".length());
-    DateObject dateObject = DateObject.of(2020, 12, 20, 4, 30);
+    DateTime dateTime = DateTime.of(2020, 12, 20, 4, 30);
     Scalar scalar = Scalars.fromString("2020-12-20T04:30");
-    assertEquals(scalar, dateObject);
+    assertEquals(scalar, dateTime);
   }
 
   @Test
   void testToStringDateObject2() {
     // System.out.println("2020-12-20T04:30".length());
-    DateObject dateObject = DateObject.of(2020, 12, 20, 4, 30, 3, 125_239_876);
+    DateTime dateTime = DateTime.of(2020, 12, 20, 4, 30, 3, 125_239_876);
     Scalar scalar = Scalars.fromString("2020-12-20T04:30:03.125239876");
-    assertEquals(scalar, dateObject);
+    assertEquals(scalar, dateTime);
   }
 
   @Test

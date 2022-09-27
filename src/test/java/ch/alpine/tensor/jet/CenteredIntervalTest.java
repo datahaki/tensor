@@ -22,7 +22,7 @@ class CenteredIntervalTest {
 
   @Test
   void testDateObject() {
-    Scalar do1 = CenteredInterval.of(DateObject.now(), Quantity.of(3, "s"));
+    Scalar do1 = CenteredInterval.of(DateTime.now(), Quantity.of(3, "s"));
     Scalar do2 = CenteredInterval.of(Quantity.of(9, "s"), Quantity.of(1, "s"));
     assertEquals(do1.zero(), Quantity.of(0, "s"));
     assertEquals(do1.one(), RealScalar.ONE);

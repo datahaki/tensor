@@ -25,7 +25,7 @@ import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.itp.BSplineFunctionString;
-import ch.alpine.tensor.jet.DateObject;
+import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -290,15 +290,15 @@ class TrapezoidalDistributionTest {
   @Test
   @Disabled
   void testDateTimeScalar() {
-    DateObject a = DateObject.of(LocalDateTime.of(2022, 1, 2, 12, 2));
-    DateObject b = DateObject.of(LocalDateTime.of(2022, 1, 4, 11, 5));
-    DateObject c = DateObject.of(LocalDateTime.of(2022, 1, 7, 19, 6));
-    DateObject d = DateObject.of(LocalDateTime.of(2022, 1, 8, 5, 7));
+    DateTime a = DateTime.of(LocalDateTime.of(2022, 1, 2, 12, 2));
+    DateTime b = DateTime.of(LocalDateTime.of(2022, 1, 4, 11, 5));
+    DateTime c = DateTime.of(LocalDateTime.of(2022, 1, 7, 19, 6));
+    DateTime d = DateTime.of(LocalDateTime.of(2022, 1, 8, 5, 7));
     Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateObject.class, scalar);
+    assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    Scalar t = DateObject.of(LocalDateTime.of(2022, 1, 6, 8, 6));
+    Scalar t = DateTime.of(LocalDateTime.of(2022, 1, 6, 8, 6));
     pdf.at(t);
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(t);

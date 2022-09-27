@@ -17,7 +17,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateObject;
+import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -64,14 +64,14 @@ class LaplaceDistributionTest {
 
   @Test
   void testDateTimeScalar() {
-    DateObject dateTimeScalar = DateObject.of(LocalDateTime.now());
+    DateTime dateTimeScalar = DateTime.of(LocalDateTime.now());
     Distribution distribution = LaplaceDistribution.of(dateTimeScalar, Quantity.of(123, "s"));
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateObject.class, scalar);
+    assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateObject.of(LocalDateTime.now()));
+    pdf.at(DateTime.of(LocalDateTime.now()));
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateObject.of(LocalDateTime.now()));
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.of(LocalDateTime.now()));
     Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
   }
 

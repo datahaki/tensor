@@ -46,12 +46,12 @@ import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 
-class DateObjectTest {
+class DateTimeTest {
   @Test
   void test1() throws ClassNotFoundException, IOException {
-    Scalar dt1 = DateObject.of(2020, 12, 20, 4, 30);
+    Scalar dt1 = DateTime.of(2020, 12, 20, 4, 30);
     ExactScalarQ.require(dt1);
-    Scalar dt2 = DateObject.of(2021, 1, 10, 6, 30);
+    Scalar dt2 = DateTime.of(2021, 1, 10, 6, 30);
     Serialization.copy(dt1);
     Scalar scalar2 = dt2.subtract(dt1);
     assertInstanceOf(Quantity.class, scalar2);
@@ -61,7 +61,7 @@ class DateObjectTest {
     assertThrows(Throw.class, () -> dt1.subtract(RationalScalar.HALF));
     assertEquals(dt2.subtract(dt1.multiply(RealScalar.of(1))), scalar2);
     Clip clip = Clips.interval(dt1, dt2);
-    DateObject dt3 = DateObject.of(2021, 1, 3, 2, 12);
+    DateTime dt3 = DateTime.of(2021, 1, 3, 2, 12);
     Scalar scalar = clip.rescale(dt3);
     ExactScalarQ.require(scalar);
     assertEquals(scalar, RationalScalar.of(3337, 5060));
@@ -71,8 +71,8 @@ class DateObjectTest {
 
   @Test
   void testSpecific() {
-    Scalar dt1 = DateObject.of(2020, 12, 20, 4, 30);
-    Scalar dt2 = DateObject.of(2020, 12, 21, 4, 30);
+    Scalar dt1 = DateTime.of(2020, 12, 20, 4, 30);
+    Scalar dt2 = DateTime.of(2020, 12, 21, 4, 30);
     assertEquals(Scalars.compare(dt1, dt2), Integer.compare(1, 2));
     assertEquals(Scalars.compare(dt1, dt1), Integer.compare(1, 1));
     Scalar oneDay = dt2.subtract(dt1);
@@ -82,19 +82,20 @@ class DateObjectTest {
     assertTrue(Sign.isPositiveOrZero(oneDay.zero()));
     assertTrue(Sign.isNegativeOrZero(oneDay.zero()));
     assertNotEquals("asd", oneDay);
+    assertNotEquals(oneDay, "asd");
     assertNotEquals(dt1.hashCode(), dt2.hashCode());
   }
 
   @Test
   void testSubdivide() {
-    Scalar dt1 = DateObject.of(2020, 12, 20, 4, 30);
-    Scalar dt2 = DateObject.of(2020, 12, 21, 4, 30);
+    Scalar dt1 = DateTime.of(2020, 12, 20, 4, 30);
+    Scalar dt2 = DateTime.of(2020, 12, 21, 4, 30);
     Subdivide.of(dt1, dt2, 73);
   }
 
   @Test
   void testPlus() {
-    Scalar dt1 = DateObject.now();
+    Scalar dt1 = DateTime.now();
     assertThrows(Exception.class, () -> dt1.add(Quantity.of(3, "m")));
     Scalar delta = Quantity.of(3, "s");
     Scalar res = dt1.add(delta);
@@ -105,8 +106,8 @@ class DateObjectTest {
 
   @Test
   void test2() {
-    Scalar dt1 = DateObject.of(2020, 12, 20, 4, 30);
-    Scalar dt2 = DateObject.of(2021, 1, 10, 6, 30);
+    Scalar dt1 = DateTime.of(2020, 12, 20, 4, 30);
+    Scalar dt2 = DateTime.of(2021, 1, 10, 6, 30);
     Scalar scalar1 = dt2.subtract(dt1);
     Scalar scalar3 = dt1.subtract(dt2);
     assertInstanceOf(Quantity.class, scalar3);
@@ -118,20 +119,20 @@ class DateObjectTest {
 
   @Test
   void testToStringParse() {
-    Scalar dts = DateObject.of(2020, 12, 20, 4, 30, 3, 125_239_876);
+    Scalar dts = DateTime.of(2020, 12, 20, 4, 30, 3, 125_239_876);
     String string = dts.toString();
     assertEquals(string, "2020-12-20T04:30:03.125239876");
-    Scalar scalar = DateObject.parse(string);
+    Scalar scalar = DateTime.parse(string);
     assertEquals(scalar, dts);
-    assertThrows(DateTimeParseException.class, () -> DateObject.parse("2020-12-20"));
+    assertThrows(DateTimeParseException.class, () -> DateTime.parse("2020-12-20"));
   }
 
   @Test
   void testPlusDays() {
-    Scalar dts = DateObject.parse("2004-02-28T00:00").plusDays(1);
+    Scalar dts = DateTime.parse("2004-02-28T00:00").plusDays(1);
     String string = dts.toString();
     assertEquals(string, "2004-02-29T00:00");
-    Scalar scalar = DateObject.parse(string);
+    Scalar scalar = DateTime.parse(string);
     assertEquals(scalar, dts);
   }
 
@@ -143,23 +144,23 @@ class DateObjectTest {
 
   @Test
   void testClip() {
-    DateObject dt1 = DateObject.of(2017, 12, 20, 4, 30);
+    DateTime dt1 = DateTime.of(2017, 12, 20, 4, 30);
     assertEquals(dt1.year(), 2017);
     assertEquals(dt1.month(), Month.DECEMBER);
     assertEquals(dt1.dayOfMonth(), 20);
-    DateObject dt2 = DateObject.of(2020, 12, 21, 4, 30);
+    DateTime dt2 = DateTime.of(2020, 12, 21, 4, 30);
     Clip clip = Clips.interval(dt1, dt2);
-    DateObject dt3 = DateObject.of(2020, 9, 21, 0, 0, 0);
+    DateTime dt3 = DateTime.of(2020, 9, 21, 0, 0, 0);
     clip.requireInside(dt3);
-    DateObject dt4 = DateObject.of(2021, 1, 21, 0, 0, 0);
+    DateTime dt4 = DateTime.of(2021, 1, 21, 0, 0, 0);
     assertTrue(clip.isOutside(dt4));
   }
 
   @Test
   void testClip2() {
     int year = 2022;
-    Scalar ldtStart = DateObject.of(year, 1, 1, 0, 0);
-    Scalar ldtEnd = DateObject.of(year, 12, 31, 0, 0);
+    Scalar ldtStart = DateTime.of(year, 1, 1, 0, 0);
+    Scalar ldtEnd = DateTime.of(year, 12, 31, 0, 0);
     Clip clip = Clips.interval(ldtStart, ldtEnd);
     assertEquals(clip.width(), Quantity.of(31449600, "s"));
     Clips.positive(ldtEnd.subtract(ldtStart)).requireInside(Quantity.of(234445, "s"));
@@ -167,116 +168,116 @@ class DateObjectTest {
 
   @Test
   void testPlusYears() {
-    DateObject dt1 = DateObject.of(2004, 2, 29, 0, 0);
+    DateTime dt1 = DateTime.of(2004, 2, 29, 0, 0);
     assertEquals(dt1.dayOfWeek(), DayOfWeek.SUNDAY);
-    DateObject dt2 = dt1.plusYears(1);
+    DateTime dt2 = dt1.plusYears(1);
     assertEquals(dt2.toString(), "2005-02-28T00:00");
   }
 
   @Test
   void testPlusMonths() {
-    DateObject dt1 = DateObject.of(2004, 1, 31, 0, 0);
-    DateObject dt2 = dt1.plusMonths(1);
+    DateTime dt1 = DateTime.of(2004, 1, 31, 0, 0);
+    DateTime dt2 = dt1.plusMonths(1);
     assertEquals(dt2.toString(), "2004-02-29T00:00");
   }
 
   @Test
   void testPlusHours() {
-    Scalar dt1 = DateObject.of(2004, 2, 28, 0, 0);
+    Scalar dt1 = DateTime.of(2004, 2, 28, 0, 0);
     Scalar dt2 = dt1.add(Quantity.of(24 + 25, "h"));
     assertEquals(dt2.toString(), "2004-03-01T01:00");
   }
 
   @Test
   void testExact() {
-    Scalar dt1 = DateObject.of(2017, 12, 20, 4, 30);
+    Scalar dt1 = DateTime.of(2017, 12, 20, 4, 30);
     ExactScalarQ.require(dt1);
     Scalar ds = Quantity.of(3, "days");
     Scalar scalar = dt1.subtract(ds);
-    assertInstanceOf(DateObject.class, scalar);
+    assertInstanceOf(DateTime.class, scalar);
     assertEquals(scalar.toString(), "2017-12-17T04:30");
   }
 
   @Test
   void testPiSeconds() {
-    Scalar dateObject = DateObject.of(2013, 11, 30, 4, 54, 0);
+    Scalar dateTime = DateTime.of(2013, 11, 30, 4, 54, 0);
     Scalar scalar = Quantity.of(Pi.in(30), "s");
-    Scalar result = dateObject.add(scalar);
+    Scalar result = dateTime.add(scalar);
     assertEquals(result.toString(), "2013-11-30T04:54:03.141592653");
-    Scalar swapin = scalar.add(dateObject);
+    Scalar swapin = scalar.add(dateTime);
     assertEquals(swapin.toString(), "2013-11-30T04:54:03.141592653");
   }
 
   @Test
   void testDTSHi() {
-    DateObject dts1 = DateObject.of(2013, 11, 30, 4, 54, 0, 123_213_678);
+    DateTime dts1 = DateTime.of(2013, 11, 30, 4, 54, 0, 123_213_678);
     Scalar scalar1 = dts1.floor().toEpoch(ZoneOffset.MIN);
     Scalar scalar2 = dts1.toEpoch(ZoneOffset.MIN);
     Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
     assertEquals(scalar1, scalar3);
     Sign.requirePositive(scalar1);
-    DateObject dts2 = DateObject.ofEpoch(scalar2, ZoneOffset.MIN);
+    DateTime dts2 = DateTime.ofEpoch(scalar2, ZoneOffset.MIN);
     assertEquals(dts1, dts2);
   }
 
   @Test
   void testDTSLo() {
-    DateObject dts1 = DateObject.of(1965, 11, 30, 4, 54, 0, 123_213_678);
+    DateTime dts1 = DateTime.of(1965, 11, 30, 4, 54, 0, 123_213_678);
     Scalar scalar1 = dts1.floor().toEpoch(ZoneOffset.MAX);
     Scalar scalar2 = dts1.toEpoch(ZoneOffset.MAX);
     Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
     assertEquals(scalar1, scalar3);
     Sign.requirePositive(scalar1.negate());
-    DateObject dts2 = DateObject.ofEpoch(scalar2, ZoneOffset.MAX);
+    DateTime dts2 = DateTime.ofEpoch(scalar2, ZoneOffset.MAX);
     assertEquals(dts1, dts2);
   }
 
   @Test
   void testPiHours() {
-    DateObject dateObject = DateObject.of(2013, 11, 30, 4, 54, 0);
-    LocalDateTime localDateTime = dateObject.localDateTime();
+    DateTime dateTime = DateTime.of(2013, 11, 30, 4, 54, 0);
+    LocalDateTime localDateTime = dateTime.localDateTime();
     assertEquals(localDateTime, LocalDateTime.of(2013, 11, 30, 4, 54, 0));
     Scalar scalar = Quantity.of(Pi.in(30), "h");
-    Scalar result = dateObject.add(scalar);
+    Scalar result = dateTime.add(scalar);
     assertEquals(result.toString(), "2013-11-30T08:02:29.733552923");
-    Scalar swapin = scalar.add(dateObject);
+    Scalar swapin = scalar.add(dateTime);
     assertEquals(swapin.toString(), "2013-11-30T08:02:29.733552923");
   }
 
   @Test
   void testPiDays() {
-    DateObject dateObject = DateObject.of(2013, 11, 30, 4, 54, 0);
+    DateTime dateTime = DateTime.of(2013, 11, 30, 4, 54, 0);
     Scalar scalar = Quantity.of(Pi.in(30), "days");
-    Scalar result = dateObject.add(scalar);
+    Scalar result = dateTime.add(scalar);
     assertEquals(result.toString(), "2013-12-03T08:17:53.605270158");
-    Scalar swapin = scalar.add(dateObject);
+    Scalar swapin = scalar.add(dateTime);
     assertEquals(swapin.toString(), "2013-12-03T08:17:53.605270158");
   }
 
   @Test
   void testAdd() {
     final Scalar delta = Quantity.of(3, "s");
-    DateObject dateObject1 = DateObject.of(2000, 1, 30, 4, 54, 0);
-    Scalar scalar1 = dateObject1.add(delta);
-    DateObject dateObject2 = DateObject.of(2000, 1, 30, 4, 54, 3);
-    assertEquals(scalar1, dateObject2);
-    Scalar scalar2 = dateObject2.subtract(delta);
-    assertEquals(scalar2, dateObject1);
-    Scalar scalar3 = delta.add(dateObject1);
-    assertEquals(scalar3, dateObject2);
+    DateTime dateTime1 = DateTime.of(2000, 1, 30, 4, 54, 0);
+    Scalar scalar1 = dateTime1.add(delta);
+    DateTime dateTime2 = DateTime.of(2000, 1, 30, 4, 54, 3);
+    assertEquals(scalar1, dateTime2);
+    Scalar scalar2 = dateTime2.subtract(delta);
+    assertEquals(scalar2, dateTime1);
+    Scalar scalar3 = delta.add(dateTime1);
+    assertEquals(scalar3, dateTime2);
   }
 
   @Test
   void testStaticConstructors() {
-    assertEquals(DateObject.of(2000, 1, 30, 4, 54), DateObject.of(2000, Month.JANUARY, 30, 4, 54));
-    assertEquals(DateObject.of(2001, 2, 28, 4, 54, 6), DateObject.of(2001, Month.FEBRUARY, 28, 4, 54, 6));
-    assertEquals(DateObject.of(2002, 3, 31, 4, 54, 6, 123), DateObject.of(2002, Month.MARCH, 31, 4, 54, 6, 123));
+    assertEquals(DateTime.of(2000, 1, 30, 4, 54), DateTime.of(2000, Month.JANUARY, 30, 4, 54));
+    assertEquals(DateTime.of(2001, 2, 28, 4, 54, 6), DateTime.of(2001, Month.FEBRUARY, 28, 4, 54, 6));
+    assertEquals(DateTime.of(2002, 3, 31, 4, 54, 6, 123), DateTime.of(2002, Month.MARCH, 31, 4, 54, 6, 123));
   }
 
   @Test
   void testAddFail1() {
-    DateObject dt1 = DateObject.of(2020, 12, 20, 4, 30);
-    DateObject dt2 = DateObject.of(2020, 12, 21, 4, 30);
+    DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30);
+    DateTime dt2 = DateTime.of(2020, 12, 21, 4, 30);
     assertFalse(dt1.equals(RealScalar.ONE));
     assertFalse(dt1.equals(dt2));
     assertEquals(dt1.compareTo(dt2), -1);
@@ -292,7 +293,7 @@ class DateObjectTest {
 
   @Test
   void testAddFail2() {
-    DateObject dt1 = DateObject.of(2020, 12, 20, 4, 30);
+    DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30);
     assertEquals(dt1, dt1.floor());
     assertNotEquals(dt1, "asd");
     assertThrows(Throw.class, () -> dt1.add(RealScalar.of(3)));
@@ -302,30 +303,30 @@ class DateObjectTest {
 
   @Test
   void testAddSubtractFail1() {
-    DateObject dt1 = DateObject.of(2020, 12, 20, 4, 30);
+    DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30);
     assertThrows(Throw.class, () -> dt1.subtract(Pi.VALUE));
     assertThrows(Throw.class, () -> dt1.subtract(Tensors.vector(1, 2, 3)));
   }
 
   @Test
   void testNow() {
-    assertTrue(DateObject.now().toString().compareTo("2022") > 0);
+    assertTrue(DateTime.now().toString().compareTo("2022") > 0);
   }
 
   @Test
   void testFromTo() {
     String input = "2020-02-29T02:33:09.530";
-    DateObject ldt1 = DateObject.parse(input);
+    DateTime ldt1 = DateTime.parse(input);
     assertEquals(ldt1.toString(), input);
-    DateObject ldt2 = ldt1.plusYears(1);
+    DateTime ldt2 = ldt1.plusYears(1);
     Scalar fromTo = ldt2.subtract(ldt1);
     assertEquals(fromTo, Quantity.of(3.1536E7, "s"));
   }
 
   @Test
   void testWithoutNanos() {
-    DateObject now = DateObject.now();
-    DateObject trc = now.floor();
+    DateTime now = DateTime.now();
+    DateTime trc = now.floor();
     assertTrue(now.toString().startsWith(trc.toString()));
     assertTrue(trc.toString().length() <= 19); // may also be 16 if seconds part == 0
   }
@@ -333,12 +334,12 @@ class DateObjectTest {
   @Test
   void testSimple1() {
     Tensor a = Tensors.of( //
-        DateObject.of(1657, 11, 10, 4, 8), //
-        DateObject.of(1857, 10, 5, 7, 18), //
+        DateTime.of(1657, 11, 10, 4, 8), //
+        DateTime.of(1857, 10, 5, 7, 18), //
         RationalScalar.HALF);
     Tensor b = Tensors.of( //
-        DateObject.of(2021, 7, 3, 14, 48), //
-        DateObject.of(1976, 4, 1, 17, 28), //
+        DateTime.of(2021, 7, 3, 14, 48), //
+        DateTime.of(1976, 4, 1, 17, 28), //
         RealScalar.TWO);
     Tensor diff = a.subtract(b);
     Tensor recv = Tensors.fromString(diff.toString());
@@ -355,32 +356,32 @@ class DateObjectTest {
   @Test
   void testParsing2() {
     Tensor a = Tensors.of( //
-        DateObject.of(1657, 11, 10, 4, 8), //
-        DateObject.of(1857, 10, 5, 7, 18));
-    Tensor recv = Tensors.fromString(a.toString(), DateObject::parse);
+        DateTime.of(1657, 11, 10, 4, 8), //
+        DateTime.of(1857, 10, 5, 7, 18));
+    Tensor recv = Tensors.fromString(a.toString(), DateTime::parse);
     assertEquals(a, recv);
     ExactTensorQ.require(a);
   }
 
   @Test
   void testParse3() {
-    assertThrows(Exception.class, () -> DateObject.parse("2022-09-20"));
+    assertThrows(Exception.class, () -> DateTime.parse("2022-09-20"));
   }
 
   @Test
   void testDuration4() {
-    Scalar scalar = DateObject.seconds(Duration.ofDays(3));
-    Duration duration = DateObject.duration(scalar);
+    Scalar scalar = DateTime.seconds(Duration.ofDays(3));
+    Duration duration = DateTime.duration(scalar);
     assertEquals(duration, Duration.ofDays(3));
   }
 
   @Test
   void testNow2() {
-    DateObject dateObject1 = DateObject.now();
-    LocalDateTime localDateTime = dateObject1.localDateTime();
-    DateObject dateObject2 = DateObject.of(localDateTime);
-    assertEquals(dateObject1, dateObject2);
-    assertEquals(dateObject1.subtract(dateObject2), Quantity.of(0, "s"));
+    DateTime dateTime1 = DateTime.now();
+    LocalDateTime localDateTime = dateTime1.localDateTime();
+    DateTime dateTime2 = DateTime.of(localDateTime);
+    assertEquals(dateTime1, dateTime2);
+    assertEquals(dateTime1.subtract(dateTime2), Quantity.of(0, "s"));
   }
 
   @Test
@@ -388,18 +389,18 @@ class DateObjectTest {
     // Switzerland has +2 hours
     long millis = System.currentTimeMillis();
     ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
-    DateObject dateObject = DateObject.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
+    DateTime dateTime = DateTime.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
-    dateObject.format(dateTimeFormatter);
-    dateObject.floor();
+    dateTime.format(dateTimeFormatter);
+    dateTime.floor();
   }
 
   private static final ScalarUnaryOperator TO_MILLIS = QuantityMagnitude.SI().in("ms");
 
   /** @param zoneOffset
    * @return date instance */
-  public static Date toDate(DateObject dateObject, ZoneOffset zoneOffset) {
-    return new Date(Floor.longValueExact(TO_MILLIS.apply(dateObject.toEpoch(zoneOffset))));
+  public static Date toDate(DateTime dateTime, ZoneOffset zoneOffset) {
+    return new Date(Floor.longValueExact(TO_MILLIS.apply(dateTime.toEpoch(zoneOffset))));
   }
 
   @Test
@@ -407,8 +408,8 @@ class DateObjectTest {
     // Switzerland has +2 hours
     long millis = System.currentTimeMillis();
     ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
-    DateObject dateObject = DateObject.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
-    Date date = toDate(dateObject, zoneOffset);
+    DateTime dateTime = DateTime.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
+    Date date = toDate(dateTime, zoneOffset);
     assertNotNull(date);
     // System.out.println(date);
     // System.out.println(dateTimeScalar);
@@ -416,44 +417,43 @@ class DateObjectTest {
 
   @Test
   void testRoundingDown() {
-    DateObject dateObject = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59, 499_999_999);
-    DateObject lo = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59);
-    DateObject hi = DateObject.of(1982, Month.APRIL, 4, 0, 0);
-    assertEquals(Ceiling.FUNCTION.apply(dateObject), hi);
-    assertEquals(Floor.FUNCTION.apply(dateObject), lo);
-    assertEquals(Round.FUNCTION.apply(dateObject), lo);
+    DateTime dateTime = DateTime.of(1982, Month.APRIL, 3, 23, 59, 59, 499_999_999);
+    DateTime lo = DateTime.of(1982, Month.APRIL, 3, 23, 59, 59);
+    DateTime hi = DateTime.of(1982, Month.APRIL, 4, 0, 0);
+    assertEquals(Ceiling.FUNCTION.apply(dateTime), hi);
+    assertEquals(Floor.FUNCTION.apply(dateTime), lo);
+    assertEquals(Round.FUNCTION.apply(dateTime), lo);
   }
 
   @Test
   void testRoundingUp() {
-    DateObject dateObject = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59, 500_000_000);
-    DateObject lo = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59);
-    DateObject hi = DateObject.of(1982, Month.APRIL, 4, 0, 0);
-    assertEquals(Ceiling.FUNCTION.apply(dateObject), hi);
-    assertEquals(Floor.FUNCTION.apply(dateObject), lo);
-    assertEquals(Round.FUNCTION.apply(dateObject), hi);
+    DateTime dateTime = DateTime.of(1982, Month.APRIL, 3, 23, 59, 59, 500_000_000);
+    DateTime lo = DateTime.of(1982, Month.APRIL, 3, 23, 59, 59);
+    DateTime hi = DateTime.of(1982, Month.APRIL, 4, 0, 0);
+    assertEquals(Ceiling.FUNCTION.apply(dateTime), hi);
+    assertEquals(Floor.FUNCTION.apply(dateTime), lo);
+    assertEquals(Round.FUNCTION.apply(dateTime), hi);
   }
 
   @Test
   void testRoundingInvariant() {
-    DateObject dateObject = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59, 0);
-    DateObject lo = DateObject.of(1982, Month.APRIL, 3, 23, 59, 59);
-    assertEquals(Ceiling.FUNCTION.apply(dateObject), lo);
-    assertEquals(Floor.FUNCTION.apply(dateObject), lo);
-    assertEquals(Round.FUNCTION.apply(dateObject), lo);
+    DateTime dateTime = DateTime.of(1982, Month.APRIL, 3, 23, 59, 59, 0);
+    DateTime lo = DateTime.of(1982, Month.APRIL, 3, 23, 59, 59);
+    assertEquals(Ceiling.FUNCTION.apply(dateTime), lo);
+    assertEquals(Floor.FUNCTION.apply(dateTime), lo);
+    assertEquals(Round.FUNCTION.apply(dateTime), lo);
   }
 
   @Test
   void testQuantityFail() {
-    DateObject dateObject = DateObject.now();
-    // assertThrows(Exception.class, () -> Quantity.of(dateObject, "s"));
+    DateTime dateTime = DateTime.now();
     {
-      Scalar dom = Quantity.of(dateObject, "m");
-      Scalar dor = Quantity.of(dateObject.plus(Quantity.of(3, "s")), "r");
+      Scalar dom = Quantity.of(dateTime, "m");
+      Scalar dor = Quantity.of(dateTime.plus(Quantity.of(3, "s")), "r");
       assertThrows(Exception.class, () -> dom.add(dor));
     }
     {
-      Scalar dom = Quantity.of(dateObject, "m");
+      Scalar dom = Quantity.of(dateTime, "m");
       Scalar dor = Quantity.of(3, "m");
       assertThrows(Exception.class, () -> dom.add(dor));
     }
@@ -461,6 +461,6 @@ class DateObjectTest {
 
   @Test
   void testNullFail() {
-    assertThrows(NullPointerException.class, () -> DateObject.of(null));
+    assertThrows(NullPointerException.class, () -> DateTime.of(null));
   }
 }

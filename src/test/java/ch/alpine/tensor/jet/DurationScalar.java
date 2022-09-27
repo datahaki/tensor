@@ -123,7 +123,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof DurationScalar durationScalar)
       return new DurationScalar(duration.plus(durationScalar.duration));
-    if (scalar instanceof DateObject)
+    if (scalar instanceof DateTime)
       return scalar.add(this);
     throw new Throw(this, scalar);
   }

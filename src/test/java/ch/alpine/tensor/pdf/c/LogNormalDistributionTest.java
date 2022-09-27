@@ -15,7 +15,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateObject;
+import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -105,7 +105,7 @@ class LogNormalDistributionTest {
 
   @Test
   void testDateTime() {
-    DateObject mu = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateTime mu = DateTime.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     assertThrows(Throw.class, () -> LogNormalDistribution.of(mu, Quantity.of(3, "s")));
   }
 

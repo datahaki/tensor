@@ -17,7 +17,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
-import ch.alpine.tensor.jet.DateObject;
+import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -125,14 +125,14 @@ class GumbelDistributionTest {
 
   @Test
   void testDateTimeScalar() {
-    DateObject dateTimeScalar = DateObject.of(LocalDateTime.now());
+    DateTime dateTimeScalar = DateTime.of(LocalDateTime.now());
     Distribution distribution = GumbelDistribution.of(dateTimeScalar, Quantity.of(123, "s"));
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateObject.class, scalar);
+    assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateObject.of(LocalDateTime.now()));
+    pdf.at(DateTime.of(LocalDateTime.now()));
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateObject.of(LocalDateTime.now()));
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.of(LocalDateTime.now()));
     Clips.interval(0.5, 0.8).requireInside(p_lessEquals);
     RandomVariate.of(distribution, 10);
   }

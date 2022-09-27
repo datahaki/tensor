@@ -26,25 +26,25 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Floor;
 
-/** The purpose of {@link DateObject} is to allow the interoperation
+/** The purpose of {@link DateTime} is to allow the interoperation
  * between {@link LocalDateTime} and {@link Quantity} with temporal SI-unit,
  * for instance "s", "ms", "h", etc.
  * 
- * The difference between two {@link DateObject}s is a {@link Quantity} with
+ * The difference between two {@link DateTime}s is a {@link Quantity} with
  * unit "s" encoded as {@link RationalScalar}, i.e. in exact precision.
  * 
  * In particular, that makes the use of type {@link Duration} obsolete.
  * 
- * An {@link DateObject} encodes an absolute point in a local calendar by
+ * An {@link DateTime} encodes an absolute point in a local calendar by
  * wrapping an instance of {@link LocalDateTime}.
  * 
  * Addition and subtraction of a quantity with temporal SI unit is supported.
  * This includes the units "s", "ms", "h", "days", ...
- * The result of the sum is a new instance of {@link DateObject}.
+ * The result of the sum is a new instance of {@link DateTime}.
  * 
- * Addition of two instances of {@link DateObject} results in an exception.
- * Subtraction of two instances of {@link DateObject} results in a {@link Quantity}.
- * Negation of a {@link DateObject} results in an exception.
+ * Addition of two instances of {@link DateTime} results in an exception.
+ * Subtraction of two instances of {@link DateTime} results in a {@link Quantity}.
+ * Negation of a {@link DateTime} results in an exception.
  * 
  * The string expression is of a date time scalar adheres to the pattern
  * uuuu-MM-dd'T'HH:mm:ss.SSSSSSSSS
@@ -60,15 +60,21 @@ import ch.alpine.tensor.sca.Floor;
  * Equivalent methods are available.
  * 
  * {@link RoundingInterface} rounds to the nearest seconds, which is decided
- * based on the nano part of the {@link DateObject}. A nano part equal or
+ * based on the nano part of the {@link DateTime}. A nano part equal or
  * above 500_000_000 is rounded up, otherwise down.
  * 
- * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/DateObject.html">DateObject</a>
+ * A similar functionality is provided by Mathematica as
+ * <a href="https://reference.wolfram.com/language/ref/DateObject.html">DateObject</a>.
+ * 
+ * However, we deviate from the name, because DateObject allows a single year
+ * DateObject[{2000}] == Year: 2000
+ * whereas DateTime/LocalDateTime requires everything from year down to a minute,
+ * while seconds and nano-seconds are optional.
+ * Also, the term "Object" does not add meaning in Java.
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class DateObject extends AbstractScalar implements //
+public class DateTime extends AbstractScalar implements //
     Comparable<Scalar>, QuantityCompatibleScalar, RoundingInterface, Serializable {
   private static final long NANOS_LONG = 1_000_000_000;
   private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
@@ -78,48 +84,48 @@ public class DateObject extends AbstractScalar implements //
   /** @param localDateTime
    * @return
    * @throws Exception if given localDateTime is null */
-  public static DateObject of(LocalDateTime localDateTime) {
-    return new DateObject(Objects.requireNonNull(localDateTime));
+  public static DateTime of(LocalDateTime localDateTime) {
+    return new DateTime(Objects.requireNonNull(localDateTime));
   }
 
-  public static DateObject of(int year, Month month, int dayOfMonth, int hour, int minute) {
-    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
+  public static DateTime of(int year, Month month, int dayOfMonth, int hour, int minute) {
+    return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
   }
 
-  public static DateObject of(int year, Month month, int dayOfMonth, int hour, int minute, int second) {
-    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
+  public static DateTime of(int year, Month month, int dayOfMonth, int hour, int minute, int second) {
+    return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
   }
 
-  public static DateObject of(int year, Month month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
-    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
+  public static DateTime of(int year, Month month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
+    return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
   }
 
-  public static DateObject of(int year, int month, int dayOfMonth, int hour, int minute) {
-    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
+  public static DateTime of(int year, int month, int dayOfMonth, int hour, int minute) {
+    return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
   }
 
-  public static DateObject of(int year, int month, int dayOfMonth, int hour, int minute, int second) {
-    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
+  public static DateTime of(int year, int month, int dayOfMonth, int hour, int minute, int second) {
+    return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
   }
 
-  public static DateObject of(int year, int month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
-    return new DateObject(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
+  public static DateTime of(int year, int month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
+    return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
   }
 
   /** @return instance based on LocalDateTime.now() */
-  public static DateObject now() {
-    return new DateObject(LocalDateTime.now());
+  public static DateTime now() {
+    return new DateTime(LocalDateTime.now());
   }
 
   /** @param scalar with time based SI-unit, for instance "s", "h", "days", "wk", "mo", "yr", etc.
    * @param zoneOffset
    * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to
    * given zoneOffset */
-  public static DateObject ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
+  public static DateTime ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
     Scalar seconds = TO_SECONDS.apply(scalar);
     Scalar floor = Floor.FUNCTION.apply(seconds);
     Scalar nanos = seconds.subtract(floor).multiply(NANOS);
-    return new DateObject(LocalDateTime.ofEpochSecond( //
+    return new DateTime(LocalDateTime.ofEpochSecond( //
         floor.number().longValue(), //
         nanos.number().intValue(), //
         zoneOffset));
@@ -128,14 +134,14 @@ public class DateObject extends AbstractScalar implements //
   /** parsing function
    * 
    * Examples:
-   * 2020-12-20T04:30:03.125239876 parses to {@link DateObject}
+   * 2020-12-20T04:30:03.125239876 parses to {@link DateTime}
    * 
    * @param string
    * @return
    * @throws java.time.format.DateTimeParseException if {@code string} cannot be parsed
    * @see LocalDateTime */
-  public static DateObject parse(String string) {
-    return new DateObject(LocalDateTime.parse(string));
+  public static DateTime parse(String string) {
+    return new DateTime(LocalDateTime.parse(string));
   }
 
   /** @param duration
@@ -159,11 +165,11 @@ public class DateObject extends AbstractScalar implements //
   // ---
   private final LocalDateTime localDateTime;
 
-  private DateObject(LocalDateTime localDateTime) {
+  private DateTime(LocalDateTime localDateTime) {
     this.localDateTime = localDateTime;
   }
 
-  /** @return instance of {@link LocalDateTime} backing this {@link DateObject} */
+  /** @return instance of {@link LocalDateTime} backing this {@link DateTime} */
   public LocalDateTime localDateTime() {
     return localDateTime;
   }
@@ -202,8 +208,8 @@ public class DateObject extends AbstractScalar implements //
    * @param years to add, may be negative
    * @return this date-time with the years added, not null
    * @throws DateTimeException if the result exceeds the supported date range */
-  public DateObject plusYears(int years) {
-    return new DateObject(localDateTime.plusYears(years));
+  public DateTime plusYears(int years) {
+    return new DateTime(localDateTime.plusYears(years));
   }
 
   /** Example:
@@ -212,8 +218,8 @@ public class DateObject extends AbstractScalar implements //
    * @param months to add, may be negative
    * @return this date-time with the months added, not null
    * @throws DateTimeException if the result exceeds the supported date range */
-  public DateObject plusMonths(long months) {
-    return new DateObject(localDateTime.plusMonths(months));
+  public DateTime plusMonths(long months) {
+    return new DateTime(localDateTime.plusMonths(months));
   }
 
   /** Example:
@@ -222,36 +228,36 @@ public class DateObject extends AbstractScalar implements //
    * @param days to add, may be negative
    * @return this date-time with the days added, not null
    * @throws DateTimeException if the result exceeds the supported date range */
-  public DateObject plusDays(long days) {
-    return new DateObject(localDateTime.plusDays(days));
+  public DateTime plusDays(long days) {
+    return new DateTime(localDateTime.plusDays(days));
   }
 
   @Override // from RoundingInterface
-  public DateObject ceiling() {
+  public DateTime ceiling() {
     return 0 == localDateTime.getNano() //
         ? this
-        : new DateObject(localDateTime.withNano(0).plusSeconds(1));
+        : new DateTime(localDateTime.withNano(0).plusSeconds(1));
   }
 
   /** @return this date-time with fractional second part set back to 0,
    * i.e. time is truncated to seconds resolution */
   @Override // from RoundingInterface
-  public DateObject floor() {
-    return new DateObject(localDateTime.withNano(0));
+  public DateTime floor() {
+    return new DateTime(localDateTime.withNano(0));
   }
 
   @Override // from RoundingInterface
-  public DateObject round() {
+  public DateTime round() {
     int nano = localDateTime.getNano();
     return nano < 500_000_000 //
-        ? new DateObject(localDateTime.withNano(0))
-        : new DateObject(localDateTime.withNano(0).plusSeconds(1));
+        ? new DateTime(localDateTime.withNano(0))
+        : new DateTime(localDateTime.withNano(0).plusSeconds(1));
   }
 
   @Override // from AbstractScalar
   public Scalar subtract(Tensor tensor) {
-    if (tensor instanceof DateObject dateObject)
-      return seconds(Duration.between(dateObject.localDateTime, localDateTime));
+    if (tensor instanceof DateTime dateTime)
+      return seconds(Duration.between(dateTime.localDateTime, localDateTime));
     if (tensor instanceof Scalar scalar)
       return plus(scalar.negate());
     throw new Throw(this, tensor);
@@ -292,14 +298,14 @@ public class DateObject extends AbstractScalar implements //
   /* method is deliberately public, and return type augmented to DateObject
    * to make obsolete a cast when using the pattern dateTime.add(delta) */
   @Override // from Scalar
-  public DateObject plus(Scalar scalar) {
-    return new DateObject(localDateTime.plus(duration(scalar)));
+  public DateTime plus(Scalar scalar) {
+    return new DateTime(localDateTime.plus(duration(scalar)));
   }
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof DateObject dateObject)
-      return localDateTime.compareTo(dateObject.localDateTime);
+    if (scalar instanceof DateTime dateTime)
+      return localDateTime.compareTo(dateTime.localDateTime);
     throw new Throw(this, scalar);
   }
 
@@ -310,8 +316,8 @@ public class DateObject extends AbstractScalar implements //
 
   @Override // from Object
   public boolean equals(Object object) {
-    return object instanceof DateObject dateObject //
-        && localDateTime.equals(dateObject.localDateTime);
+    return object instanceof DateTime dateTime //
+        && localDateTime.equals(dateTime.localDateTime);
   }
 
   @Override // from Object

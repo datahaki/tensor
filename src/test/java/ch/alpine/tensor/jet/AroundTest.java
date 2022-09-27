@@ -268,7 +268,7 @@ class AroundTest {
 
   @Test
   void testDateObject() {
-    Scalar do1 = Around.of(DateObject.now(), Quantity.of(3, "s"));
+    Scalar do1 = Around.of(DateTime.now(), Quantity.of(3, "s"));
     Scalar do2 = Around.of(Quantity.of(9, "s"), Quantity.of(1, "s"));
     do1.add(do2);
     do1.add(Quantity.of(4, "s"));

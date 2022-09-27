@@ -51,7 +51,7 @@ class DurationScalarTest {
 
   @Test
   void testAdd() {
-    DateObject ofs = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateTime ofs = DateTime.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DurationScalar len = DurationScalar.of(Duration.ofDays(100));
     assertThrows(Throw.class, () -> ofs.add(RealScalar.TWO));
     assertThrows(Throw.class, () -> len.add(RealScalar.TWO));
