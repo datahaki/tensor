@@ -7,10 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -91,6 +93,15 @@ class DateTimeTest {
     Scalar dt1 = DateTime.of(2020, 12, 20, 4, 30);
     Scalar dt2 = DateTime.of(2020, 12, 21, 4, 30);
     Subdivide.of(dt1, dt2, 73);
+  }
+
+  @Test
+  void testDateAndTime() {
+    DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30, 23, 234_345_123);
+    DateTime dt2 = DateTime.of( //
+        dt1.localDateTime().toLocalDate(), //
+        dt1.localDateTime().toLocalTime());
+    assertEquals(dt1, dt2);
   }
 
   @Test
@@ -442,6 +453,18 @@ class DateTimeTest {
     assertEquals(Ceiling.FUNCTION.apply(dateTime), lo);
     assertEquals(Floor.FUNCTION.apply(dateTime), lo);
     assertEquals(Round.FUNCTION.apply(dateTime), lo);
+  }
+
+  @Test
+  void testZeroAndOneSame() {
+    assertSame(DateTime.now().zero(), DateTime.now().zero());
+    assertSame(DateTime.now().one(), DateTime.now().one());
+  }
+
+  @Test
+  void testLargeDurationFail() {
+    Scalar scalar = Quantity.of(new BigInteger("25782639457862394578623945786294578629378456"), "s");
+    assertThrows(ArithmeticException.class, () -> DateTime.duration(scalar));
   }
 
   @Test

@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -26,12 +28,17 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Floor;
 
-/** The purpose of {@link DateTime} is to allow the interoperation
+/** DateTime is a wrapper of {@link LocalDateTime}, i.e. encodes the same
+ * information as {@link LocalDateTime}, namely a date such as 2022-09-27
+ * and a time such as 12:34:56.123456789 without specification of a
+ * time-zone, {@link ZoneOffset}.
+ * 
+ * The purpose of {@link DateTime} is to allow the interoperation
  * between {@link LocalDateTime} and {@link Quantity} with temporal SI-unit,
  * for instance "s", "ms", "h", etc.
  * 
  * The difference between two {@link DateTime}s is a {@link Quantity} with
- * unit "s" encoded as {@link RationalScalar}, i.e. in exact precision.
+ * unit "s" and value as a rational scalar, i.e. in exact precision.
  * 
  * In particular, that makes the use of type {@link Duration} obsolete.
  * 
@@ -46,8 +53,8 @@ import ch.alpine.tensor.sca.Floor;
  * Subtraction of two instances of {@link DateTime} results in a {@link Quantity}.
  * Negation of a {@link DateTime} results in an exception.
  * 
- * The string expression is of a date time scalar adheres to the pattern
- * uuuu-MM-dd'T'HH:mm:ss.SSSSSSSSS
+ * The string expression is of a date time scalar adheres to the ISO-8601
+ * formats, i.e. the pattern uuuu-MM-dd'T'HH:mm:ss.SSSSSSSSS
  * resulting in strings of the form
  * 2022-09-16T10:42:13.724124032
  * but with seconds and nanos zero can be as truncated as
@@ -69,7 +76,7 @@ import ch.alpine.tensor.sca.Floor;
  * However, we deviate from the name, because DateObject allows a single year
  * DateObject[{2000}] == Year: 2000
  * whereas DateTime/LocalDateTime requires everything from year down to a minute,
- * while seconds and nano-seconds are optional.
+ * after which seconds and nano-seconds are assumed to be zero.
  * Also, the term "Object" does not add meaning in Java.
  * 
  * @implSpec
@@ -80,12 +87,20 @@ public class DateTime extends AbstractScalar implements //
   private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
   private static final Unit UNIT_S = Unit.of("s");
   private static final ScalarUnaryOperator TO_SECONDS = QuantityMagnitude.SI().in(UNIT_S);
+  private static final Scalar ZERO = Quantity.of(RealScalar.ZERO, UNIT_S);
 
-  /** @param localDateTime
+  /** @param localDateTime non-null
    * @return
    * @throws Exception if given localDateTime is null */
   public static DateTime of(LocalDateTime localDateTime) {
     return new DateTime(Objects.requireNonNull(localDateTime));
+  }
+
+  /** @param localDate non-null
+   * @param localTime non-null
+   * @return */
+  public static DateTime of(LocalDate localDate, LocalTime localTime) {
+    return new DateTime(LocalDateTime.of(localDate, localTime));
   }
 
   public static DateTime of(int year, Month month, int dayOfMonth, int hour, int minute) {
@@ -139,7 +154,7 @@ public class DateTime extends AbstractScalar implements //
    * @param string
    * @return
    * @throws java.time.format.DateTimeParseException if {@code string} cannot be parsed
-   * @see LocalDateTime */
+   * @see LocalDateTime#parse(CharSequence) */
   public static DateTime parse(String string) {
     return new DateTime(LocalDateTime.parse(string));
   }
@@ -240,7 +255,8 @@ public class DateTime extends AbstractScalar implements //
   }
 
   /** @return this date-time with fractional second part set back to 0,
-   * i.e. time is truncated to seconds resolution */
+   * i.e. time is truncated to seconds resolution
+   * @see Floor */
   @Override // from RoundingInterface
   public DateTime floor() {
     return new DateTime(localDateTime.withNano(0));
@@ -287,7 +303,7 @@ public class DateTime extends AbstractScalar implements //
 
   @Override // from Scalar
   public Scalar zero() {
-    return Quantity.of(0, UNIT_S);
+    return ZERO;
   }
 
   @Override // from Scalar
@@ -295,10 +311,8 @@ public class DateTime extends AbstractScalar implements //
     return RealScalar.ONE;
   }
 
-  /* method is deliberately public, and return type augmented to DateObject
-   * to make obsolete a cast when using the pattern dateTime.add(delta) */
   @Override // from Scalar
-  public DateTime plus(Scalar scalar) {
+  protected Scalar plus(Scalar scalar) {
     return new DateTime(localDateTime.plus(duration(scalar)));
   }
 
