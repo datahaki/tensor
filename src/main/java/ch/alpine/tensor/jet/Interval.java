@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.num;
+package ch.alpine.tensor.jet;
 
 import java.math.BigInteger;
 import java.util.Objects;
@@ -17,9 +17,11 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.lie.TensorProduct;
+import ch.alpine.tensor.num.BinaryPower;
+import ch.alpine.tensor.num.ScalarProduct;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
-import ch.alpine.tensor.red.ScalarSummaryStatistics;
+import ch.alpine.tensor.red.MinMax;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Clip;
@@ -92,12 +94,12 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
     if (scalar instanceof Interval interval) {
       Tensor va = Tensors.of(clip.min(), clip.max());
       Tensor vb = Tensors.of(interval.clip.min(), interval.clip.max());
-      ScalarSummaryStatistics scalarSummaryStatistics = TensorProduct.of(va, vb).flatten(1) //
+      MinMax minMax = TensorProduct.of(va, vb).flatten(1) //
           .map(Scalar.class::cast) //
-          .collect(ScalarSummaryStatistics.collector());
+          .collect(MinMax.collector());
       return of( //
-          scalarSummaryStatistics.getMin(), //
-          scalarSummaryStatistics.getMax());
+          minMax.getMin(), //
+          minMax.getMax());
     }
     Scalar pa = clip.min().multiply(scalar);
     Scalar pb = clip.max().multiply(scalar);

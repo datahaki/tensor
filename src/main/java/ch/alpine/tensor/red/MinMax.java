@@ -22,8 +22,12 @@ import ch.alpine.tensor.sca.Clips;
  * MinMax[min, max]
  * </pre>
  * 
+ * MinMax is a reduced version of {@link ScalarSummaryStatistics}.
+ * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/MinMax.html">MinMax</a> */
+ * <a href="https://reference.wolfram.com/language/ref/MinMax.html">MinMax</a>
+ * 
+ * @see ScalarSummaryStatistics */
 public class MinMax implements Consumer<Scalar> {
   /** Example:
    * <pre>
@@ -31,7 +35,6 @@ public class MinMax implements Consumer<Scalar> {
    * .stream().parallel().map(Scalar.class::cast).collect(MinMax.collector());
    * minMax.getMin() == 1
    * minMax.getMax() == 10
-   * minMax.getSum() == 28
    * </pre>
    * 
    * @return */

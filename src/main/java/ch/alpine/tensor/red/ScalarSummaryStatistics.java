@@ -23,7 +23,9 @@ import ch.alpine.tensor.sca.Clips;
  * ScalarSummaryStatistics{count=4, sum=24[s], min=3[s], average=6[s], max=11[s]}
  * </pre>
  * 
- * <p>inspired by {@link IntSummaryStatistics} */
+ * <p>inspired by {@link IntSummaryStatistics}
+ * 
+ * @see MinMax */
 public class ScalarSummaryStatistics implements Consumer<Scalar> {
   /** Example:
    * <pre>
