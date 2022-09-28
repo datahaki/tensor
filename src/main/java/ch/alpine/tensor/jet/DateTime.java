@@ -22,6 +22,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityCompatibleScalar;
 import ch.alpine.tensor.qty.QuantityMagnitude;
@@ -78,6 +80,9 @@ import ch.alpine.tensor.sca.Floor;
  * whereas DateTime/LocalDateTime requires everything from year down to a minute,
  * after which seconds and nano-seconds are assumed to be zero.
  * Also, the term "Object" does not add meaning in Java.
+ * 
+ * @see FiniteScalarQ
+ * @see ExactScalarQ
  * 
  * @implSpec
  * This class is immutable and thread-safe. */

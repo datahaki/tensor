@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Modifier;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
@@ -161,5 +163,10 @@ class ScalarSummaryStatisticsTest {
     sss1.toString();
     assertInstanceOf(DateTime.class, sss1.getAverage());
     assertThrows(Exception.class, () -> sss1.getSum());
+  }
+
+  @Test
+  void testFinal() {
+    assertTrue(Modifier.isFinal(ScalarSummaryStatistics.class.getModifiers()));
   }
 }

@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Modifier;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
@@ -144,5 +146,10 @@ class MinMaxTest {
     assertNotNull(minMax.clip());
     minMax.toString();
     assertInstanceOf(DateTime.class, minMax.clip().min());
+  }
+
+  @Test
+  void testFinal() {
+    assertTrue(Modifier.isFinal(MinMax.class.getModifiers()));
   }
 }

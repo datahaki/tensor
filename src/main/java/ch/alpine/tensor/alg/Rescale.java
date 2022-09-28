@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import java.util.Objects;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -45,37 +47,34 @@ public class Rescale {
     return new Rescale(tensor).result();
   }
 
-  // helper function
-  private static Tensor _result(Tensor tensor, MinMax minMax) {
-    if (0 < minMax.count()) {
-      Clip clip = minMax.clip();
-      if (Scalars.nonZero(clip.width()))
-        // operation is not identical to Clip#rescale for non-finite values
-        return tensor.map(scalar -> scalar.subtract(clip.min()).divide(clip.width()));
-    }
-    // set all finite number entries to 0, but keep non-finite values
-    return tensor.map(FINITE_NUMBER_ZERO);
-  }
-
   // ---
-  private final MinMax minMax;
+  private final Clip clip;
   private final Tensor result;
 
   /** @param tensor of rank at least 1
    * @throws Exception if given tensor is a scalar */
   public Rescale(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
-    minMax = tensor.flatten(-1) //
+    clip = tensor.flatten(-1) //
         .map(Scalar.class::cast) //
         .filter(FiniteScalarQ::of) //
-        .collect(MinMax.collector());
-    result = _result(tensor, minMax);
+        .collect(MinMax.toClip());
+    result = tensor.map(Objects.nonNull(clip) && Scalars.nonZero(clip.width()) //
+        // operation is not identical to Clip#rescale for non-finite values
+        ? scalar -> scalar.subtract(clip.min()).divide(clip.width())
+        // set all finite number entries to 0, but keep non-finite values
+        : FINITE_NUMBER_ZERO);
   }
 
-  public MinMax minMax() {
-    return minMax;
+  /** @return interval that tightly contains the finite scalars in the given tensor,
+   * i.e. that satisfy {@link FiniteScalarQ}, or null if given tensor contains none
+   * such scalars. */
+  public Clip clip() {
+    return clip;
   }
 
+  /** @return tensor with the same structure as given tensor but all finite scalar
+   * entries scaled to the unit interval, and non-finite scalar entries as-is. */
   public Tensor result() {
     return result;
   }
