@@ -102,9 +102,9 @@ class RescaleTest {
     Tensor result = Tensors.fromString("{1/4, Infinity, 1, 0}");
     Rescale rescale = new Rescale(vector);
     MinMax scalarSummaryStatistics = rescale.minMax();
-    assertEquals(scalarSummaryStatistics.getCount(), 3);
-    assertEquals(scalarSummaryStatistics.getMin(), Quantity.of(2, "s"));
-    assertEquals(scalarSummaryStatistics.getMax(), Quantity.of(6, "s"));
+    assertEquals(scalarSummaryStatistics.count(), 3);
+    assertEquals(scalarSummaryStatistics.min(), Quantity.of(2, "s"));
+    assertEquals(scalarSummaryStatistics.max(), Quantity.of(6, "s"));
     assertEquals(rescale.result(), result);
   }
 

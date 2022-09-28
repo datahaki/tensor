@@ -16,8 +16,12 @@ import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.red.Max;
+import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.ExpInterface;
@@ -110,8 +114,18 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
   // ---
   @Override // from AbsInterface
   public Scalar abs() {
-    // TODO TENSOR
-    return of(Abs.FUNCTION.apply(mean), sigma);
+    Scalar pa = Abs.FUNCTION.apply(clip().min());
+    Scalar pb = Abs.FUNCTION.apply(clip().max());
+    Scalar max = Max.of(pa, pb);
+    if (clip().isInside(zero())) {
+      Scalar hlf = max.multiply(RationalScalar.HALF);
+      return new CenteredInterval(hlf, hlf);
+    }
+    return of(Min.of(pa, pb), max);
+  }
+
+  private Clip clip() {
+    return Clips.interval(mean.subtract(sigma), mean.subtract(sigma));
   }
 
   @Override // from AbsInterface

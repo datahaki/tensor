@@ -26,10 +26,10 @@ import ch.alpine.tensor.sca.Clips;
  * <p>inspired by {@link IntSummaryStatistics}
  * 
  * @see MinMax */
-public class ScalarSummaryStatistics implements Consumer<Scalar> {
+public final class ScalarSummaryStatistics implements Consumer<Scalar> {
   /** Example:
    * <pre>
-   * ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(1, 4, 2, 8, 3, 10)
+   * ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(4, 2, 10, 8, 1, 3)
    * .stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
    * scalarSummaryStatistics.getMin() == 1
    * scalarSummaryStatistics.getMax() == 10

@@ -71,8 +71,7 @@ public enum BinningMethod implements TensorScalarFunction {
   private static Scalar width(Tensor tensor) {
     return tensor.stream() //
         .map(Scalar.class::cast) //
-        .collect(MinMax.collector()) //
-        .getClip() //
+        .collect(MinMax.toClip()) //
         .width();
   }
 }

@@ -4,6 +4,7 @@ package ch.alpine.tensor.red;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.io.MathematicaFormat;
@@ -28,18 +29,30 @@ import ch.alpine.tensor.sca.Clips;
  * <a href="https://reference.wolfram.com/language/ref/MinMax.html">MinMax</a>
  * 
  * @see ScalarSummaryStatistics */
-public class MinMax implements Consumer<Scalar> {
-  /** Example:
+public final class MinMax implements Consumer<Scalar> {
+  /** Examples:
    * <pre>
-   * MinMax minMax = Tensors.vector(1, 4, 2, 8, 3, 10)
+   * Clip clip = Tensors.vector(4, 2, 10, 8, 1, 3)
+   * .stream().map(Scalar.class::cast).collect(MinMax.toClip());
+   * clip == Clip[1, 10]
+   * </pre>
+   * 
+   * <pre>
+   * MinMax minMax = Tensors.vector(4, 2, 10, 8, 1, 3)
    * .stream().parallel().map(Scalar.class::cast).collect(MinMax.collector());
-   * minMax.getMin() == 1
-   * minMax.getMax() == 10
+   * minMax.min() == 1
+   * minMax.max() == 10
    * </pre>
    * 
    * @return */
-  public static Collector<Scalar, MinMax, MinMax> collector() {
+  public static Collector<Scalar, ?, MinMax> collector() {
     return MinMaxCollector.INSTANCE;
+  }
+
+  /** @return clip that contains min and max of scalars in a stream,
+   * or null is the stream has no elements. */
+  public static Collector<Scalar, ?, Clip> toClip() {
+    return Collectors.collectingAndThen(collector(), MinMax::clip);
   }
 
   // ---
@@ -75,30 +88,30 @@ public class MinMax implements Consumer<Scalar> {
     return this;
   }
 
+  /** @return number of scalars in stream */
+  public long count() {
+    return count;
+  }
+
   /** @return min of scalars in stream or null if stream is empty */
-  public Scalar getMin() {
+  public Scalar min() {
     return min;
   }
 
   /** @return max of scalars in stream or null if stream is empty */
-  public Scalar getMax() {
+  public Scalar max() {
     return max;
   }
 
-  /** @return number of scalars in stream */
-  public long getCount() {
-    return count;
-  }
-
   /** @return clip[min, max], or null if stream is empty */
-  public Clip getClip() {
+  public Clip clip() {
     return 0 < count //
-        ? Clips.interval(getMin(), getMax())
+        ? Clips.interval(min, max)
         : null;
   }
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("MinMax", min, max);
+    return MathematicaFormat.concise("MinMax", min, max, "#=" + count);
   }
 }

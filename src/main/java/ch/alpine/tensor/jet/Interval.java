@@ -94,12 +94,9 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
     if (scalar instanceof Interval interval) {
       Tensor va = Tensors.of(clip.min(), clip.max());
       Tensor vb = Tensors.of(interval.clip.min(), interval.clip.max());
-      MinMax minMax = TensorProduct.of(va, vb).flatten(1) //
+      return new Interval(TensorProduct.of(va, vb).flatten(1) //
           .map(Scalar.class::cast) //
-          .collect(MinMax.collector());
-      return of( //
-          minMax.getMin(), //
-          minMax.getMax());
+          .collect(MinMax.toClip()));
     }
     Scalar pa = clip.min().multiply(scalar);
     Scalar pb = clip.max().multiply(scalar);

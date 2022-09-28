@@ -22,6 +22,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
 class MinMaxTest {
@@ -29,38 +30,45 @@ class MinMaxTest {
   void testMembers() {
     MinMax minMax = Tensors.vector(1, 4, 2, 8, 3, 10).stream() //
         .map(Scalar.class::cast).collect(MinMax.collector());
-    assertEquals(minMax.getMin(), RealScalar.of(1));
-    assertEquals(minMax.getMax(), RealScalar.of(10));
-    assertEquals(minMax.getCount(), 6);
+    assertEquals(minMax.min(), RealScalar.of(1));
+    assertEquals(minMax.max(), RealScalar.of(10));
+    assertEquals(minMax.count(), 6);
   }
 
   @Test
   void testMembersParallel() {
     MinMax minMax = Tensors.vector(1, 4, 2, 8, 3, 10).stream() //
         .parallel().map(Scalar.class::cast).collect(MinMax.collector());
-    assertEquals(minMax.getMin(), RealScalar.of(1));
-    assertEquals(minMax.getMax(), RealScalar.of(10));
-    assertEquals(minMax.getCount(), 6);
+    assertEquals(minMax.min(), RealScalar.of(1));
+    assertEquals(minMax.max(), RealScalar.of(10));
+    assertEquals(minMax.count(), 6);
+  }
+
+  @Test
+  void testClip() {
+    Clip clip = Tensors.fromString("{3[s], 11[s], 6[s], 4[s]}").stream() //
+        .map(Scalar.class::cast).collect(MinMax.toClip());
+    assertEquals(clip, Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
   }
 
   @Test
   void testQuantity() {
     MinMax stats = Tensors.fromString("{3[s], 11[s], 6[s], 4[s]}").stream() //
         .parallel().map(Scalar.class::cast).collect(MinMax.collector());
-    assertEquals(stats.getMin(), Quantity.of(3, "s"));
-    assertEquals(stats.getMax(), Quantity.of(11, "s"));
-    assertEquals(stats.getCount(), 4);
-    assertEquals(stats.toString(), "MinMax[3[s], 11[s]]");
-    assertEquals(stats.getClip(), Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
+    assertEquals(stats.min(), Quantity.of(3, "s"));
+    assertEquals(stats.max(), Quantity.of(11, "s"));
+    assertEquals(stats.count(), 4);
+    assertEquals(stats.toString(), "MinMax[3[s], 11[s], #=4]");
+    assertEquals(stats.clip(), Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
   }
 
   @Test
   void testCollector() {
     MinMax stats = Tensors.vector(1, 4, 2, 8, 3, 10).stream() //
         .parallel().map(Scalar.class::cast).collect(MinMax.collector());
-    assertEquals(stats.getMin(), RealScalar.of(1));
-    assertEquals(stats.getMax(), RealScalar.of(10));
-    assertEquals(stats.getCount(), 6);
+    assertEquals(stats.min(), RealScalar.of(1));
+    assertEquals(stats.max(), RealScalar.of(10));
+    assertEquals(stats.count(), 6);
     stats.toString();
   }
 
@@ -68,11 +76,11 @@ class MinMaxTest {
   void testEmpty() {
     MinMax stats = Tensors.empty().stream() //
         .parallel().map(Scalar.class::cast).collect(MinMax.collector());
-    assertNull(stats.getMin());
-    assertNull(stats.getMax());
-    assertEquals(stats.getCount(), 0);
-    stats.toString();
-    assertNull(stats.getClip());
+    assertNull(stats.min());
+    assertNull(stats.max());
+    assertNull(stats.clip());
+    assertEquals(stats.count(), 0);
+    assertEquals(stats.toString(), "MinMax[null, null, #=0]");
   }
 
   @Test
@@ -107,9 +115,9 @@ class MinMaxTest {
         GaussScalar.of(1, 7));
     MinMax minMax = //
         vector.stream().parallel().map(Scalar.class::cast).collect(MinMax.collector());
-    assertEquals(minMax.getCount(), 4);
-    assertEquals(minMax.getMin(), GaussScalar.of(1, 7));
-    assertEquals(minMax.getMax(), GaussScalar.of(5, 7));
+    assertEquals(minMax.count(), 4);
+    assertEquals(minMax.min(), GaussScalar.of(1, 7));
+    assertEquals(minMax.max(), GaussScalar.of(5, 7));
   }
 
   @Test
@@ -120,9 +128,9 @@ class MinMaxTest {
         GaussScalar.of(1, 7));
     MinMax minMax = //
         vector.stream().parallel().map(Scalar.class::cast).collect(MinMax.collector());
-    assertEquals(minMax.getCount(), 3);
-    assertEquals(minMax.getMin(), GaussScalar.of(1, 7));
-    assertEquals(minMax.getMax(), GaussScalar.of(5, 7));
+    assertEquals(minMax.count(), 3);
+    assertEquals(minMax.min(), GaussScalar.of(1, 7));
+    assertEquals(minMax.max(), GaussScalar.of(5, 7));
     minMax.toString();
   }
 
@@ -133,8 +141,8 @@ class MinMaxTest {
         DateTime.of(2010, Month.SEPTEMBER, 9, 4, 12));
     Tensor vector = RandomVariate.of(distribution, 100);
     MinMax minMax = vector.stream().map(Scalar.class::cast).collect(MinMax.collector());
-    assertNotNull(minMax.getClip());
+    assertNotNull(minMax.clip());
     minMax.toString();
-    assertInstanceOf(DateTime.class, minMax.getClip().min());
+    assertInstanceOf(DateTime.class, minMax.clip().min());
   }
 }

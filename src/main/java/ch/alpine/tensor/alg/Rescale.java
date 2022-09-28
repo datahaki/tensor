@@ -47,8 +47,8 @@ public class Rescale {
 
   // helper function
   private static Tensor _result(Tensor tensor, MinMax minMax) {
-    if (0 < minMax.getCount()) {
-      Clip clip = minMax.getClip();
+    if (0 < minMax.count()) {
+      Clip clip = minMax.clip();
       if (Scalars.nonZero(clip.width()))
         // operation is not identical to Clip#rescale for non-finite values
         return tensor.map(scalar -> scalar.subtract(clip.min()).divide(clip.width()));
