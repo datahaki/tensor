@@ -1,30 +1,28 @@
 // code by jph
 package ch.alpine.tensor.jet;
 
+import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Objects;
 import java.util.Optional;
 
 import ch.alpine.tensor.AbstractScalar;
-import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Outer;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.chq.FiniteScalarQ;
-import ch.alpine.tensor.lie.TensorProduct;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.num.ScalarProduct;
 import ch.alpine.tensor.red.Max;
-import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.red.MinMax;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
@@ -34,57 +32,87 @@ import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.exp.LogInterface;
 import ch.alpine.tensor.sca.pow.PowerInterface;
 
-/** EXPERIMENTAL multiple clip
+/** API EXPERIMENTAL
+ * 
+ * Careful: our implementation of CenteredInterval deviates from Mathematica
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-// @Deprecated // since mathematica defines Interval as union of closed intervals
-// ... functionality here should be moved to CenteredInterval
-/* package */ class CenteredInterval extends AbstractScalar implements //
+public class CenteredInterval extends AbstractScalar implements //
     AbsInterface, ExpInterface, LogInterface, InexactScalarMarker, //
-    PowerInterface, SignInterface, Comparable<Scalar> {
+    PowerInterface, SignInterface, Comparable<Scalar>, Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
   private static final String SEPARATOR = "\u00B1";
 
-  /** @param clip
+  /** @param clip with [min, max]
    * @return */
   public static Scalar of(Clip clip) {
-    return new CenteredInterval(Objects.requireNonNull(clip));
+    return Scalars.isZero(clip.width()) //
+        ? clip.min()
+        : new CenteredInterval(clip);
   }
 
-  public static Scalar of(Scalar mean, Scalar sigma) {
-    return new CenteredInterval(mean, sigma);
+  /** @param center
+   * @param radius
+   * @return */
+  public static Scalar of(Scalar center, Scalar radius) {
+    return Scalars.isZero(radius) //
+        ? center.add(radius.zero())
+        : new CenteredInterval(center, radius);
   }
 
-  public static Scalar of(Number mean, Number sigma) {
-    return of(RealScalar.of(mean), RealScalar.of(sigma));
+  /** @param center
+   * @param radius
+   * @return */
+  public static Scalar of(Number center, Number radius) {
+    return of(RealScalar.of(center), RealScalar.of(radius));
   }
 
   // ---
   private final Clip clip;
-  private final Scalar mean;
-  private final Scalar sigma;
+  private final Scalar center;
+  private final Scalar radius;
 
   private CenteredInterval(Clip clip) {
     this.clip = clip;
-    sigma = clip.width().multiply(RationalScalar.HALF);
-    mean = clip.min().add(sigma);
+    Scalar one = clip.min().one();
+    radius = clip.width().divide(one.add(one));
+    center = clip.min().add(radius);
   }
 
-  private CenteredInterval(Scalar mean, Scalar sigma) {
-    this.mean = mean;
-    this.sigma = sigma;
-    clip = Clips.interval(mean.subtract(sigma), mean.add(sigma));
+  private CenteredInterval(Scalar center, Scalar radius) {
+    clip = Clips.interval(center.subtract(radius), center.add(radius));
+    this.center = center;
+    this.radius = radius;
   }
 
-  @Override
+  private CenteredInterval(Clip clip, Scalar mean, Scalar sigma) {
+    this.clip = clip;
+    this.center = mean;
+    this.radius = sigma;
+  }
+
+  public Clip clip() {
+    return clip;
+  }
+
+  public Scalar center() {
+    return center;
+  }
+
+  public Scalar radius() {
+    return radius;
+  }
+
+  @Override // from Scalar
   public Scalar negate() {
-    return new CenteredInterval(Clips.interval( //
-        clip.max().negate(), //
-        clip.min().negate()));
+    return new CenteredInterval( //
+        Clips.interval(clip.max().negate(), clip.min().negate()), //
+        center.negate(), //
+        radius);
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar reciprocal() {
     if (clip.isInside(zero()))
       throw new Throw(this);
@@ -94,81 +122,70 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
             clip.min().reciprocal()));
   }
 
-  @Override
+  @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    return scalar instanceof CenteredInterval interval //
-        ? of( //
-            clip.min().add(interval.clip.min()), //
-            clip.max().add(interval.clip.max()))
-        : of( //
-            clip.min().add(scalar), //
-            clip.max().add(scalar));
+    return scalar instanceof CenteredInterval centeredInterval //
+        ? new CenteredInterval( //
+            center.add(centeredInterval.center), //
+            radius.add(centeredInterval.radius))
+        : new CenteredInterval( //
+            center.add(scalar), //
+            radius);
   }
 
-  @Override
+  private Tensor flat() {
+    return Tensors.of(clip.min(), clip.max());
+  }
+
+  @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof CenteredInterval interval) {
-      Tensor va = Tensors.of(clip.min(), clip.max());
-      Tensor vb = Tensors.of(interval.clip.min(), interval.clip.max());
-      return new CenteredInterval(TensorProduct.of(va, vb).flatten(1) //
-          .map(Scalar.class::cast) //
-          .collect(MinMax.toClip()));
-    }
-    Scalar pa = clip.min().multiply(scalar);
-    Scalar pb = clip.max().multiply(scalar);
-    return of( //
-        Min.of(pa, pb), //
-        Max.of(pa, pb));
+    return scalar instanceof CenteredInterval centeredInterval //
+        ? new CenteredInterval(Outer.of(Scalar::multiply, flat(), centeredInterval.flat()).flatten(1).map(Scalar.class::cast).collect(MinMax.toClip()))
+        : of(flat().multiply(scalar).stream().map(Scalar.class::cast).collect(MinMax.toClip()));
   }
 
   @Override // from Scalar
   public Scalar zero() {
-    return mean.zero();
+    return center.zero();
   }
 
   @Override // from Scalar
   public Scalar one() {
-    return mean.one();
+    return center.one();
   }
 
   @Override // from Scalar
   public Number number() {
-    throw new Throw(mean, sigma);
+    throw new Throw(center, radius);
   }
 
   // ---
   @Override // from AbsInterface
   public Scalar abs() {
-    Scalar pa = Abs.FUNCTION.apply(clip.min());
-    Scalar pb = Abs.FUNCTION.apply(clip.max());
-    Scalar max = Max.of(pa, pb);
+    Tensor flat = flat().map(Abs.FUNCTION);
     if (clip.isInside(zero()))
-      return new CenteredInterval(Clips.positive(max));
-    return of(Min.of(pa, pb), max);
+      flat.append(zero());
+    return new CenteredInterval(flat.stream().map(Scalar.class::cast).collect(MinMax.toClip()));
   }
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    Scalar pa = AbsSquared.FUNCTION.apply(clip.min());
-    Scalar pb = AbsSquared.FUNCTION.apply(clip.max());
-    Scalar max = Max.of(pa, pb);
-    if (clip.isInside(zero()))
-      return new CenteredInterval(Clips.positive(max));
-    return of(Min.of(pa, pb), max);
+    Scalar abs = abs();
+    return abs.multiply(abs);
   }
 
   @Override // from ExpInterface
   public Scalar exp() {
-    return of( //
+    return new CenteredInterval(Clips.interval( //
         Exp.FUNCTION.apply(clip.min()), //
-        Exp.FUNCTION.apply(clip.max()));
+        Exp.FUNCTION.apply(clip.max())));
   }
 
   @Override // from LogInterface
   public Scalar log() {
-    return of( //
+    return new CenteredInterval(Clips.interval( //
         Log.FUNCTION.apply(clip.min()), //
-        Log.FUNCTION.apply(clip.max()));
+        Log.FUNCTION.apply(clip.max())));
   }
 
   @Override // from InexactScalarMarker
@@ -187,9 +204,9 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
 
   @Override // from SignInterface
   public Scalar sign() {
-    return of( //
+    return of(Clips.interval( //
         Sign.FUNCTION.apply(clip.min()), //
-        Sign.FUNCTION.apply(clip.max()));
+        Sign.FUNCTION.apply(clip.max())));
   }
 
   // ---
@@ -200,8 +217,8 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
 
   @Override // from Object
   public boolean equals(Object object) {
-    return object instanceof CenteredInterval interval //
-        && clip.equals(interval.clip);
+    return object instanceof CenteredInterval centeredInterval //
+        && clip.equals(centeredInterval.clip);
   }
 
   @Override // from Comparable
@@ -222,6 +239,13 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
 
   @Override // from Object
   public String toString() {
-    return mean + SEPARATOR + sigma + "=" + clip.toString().substring(4);
+    return center + SEPARATOR + radius; // + "=" + clip.toString().substring(4);
+  }
+
+  @PackageTestAccess
+  /* package */ static Scalar centerAround(Clip clip, Scalar center) {
+    return new CenteredInterval(center, Max.of( //
+        Abs.between(clip.max(), center), //
+        Abs.between(clip.min(), center)));
   }
 }
