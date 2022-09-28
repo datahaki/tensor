@@ -18,12 +18,12 @@ import ch.alpine.tensor.sca.exp.Log;
  * <a href="https://reference.wolfram.com/language/ref/GompertzMakehamDistribution.html">GompertzMakehamDistribution</a> */
 public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements Serializable {
   /** @param lambda positive scale parameter, may be instance of {@link Quantity}
-   * @param xi positive frailty parameter
+   * @param xi positive frailty parameter real scalar
    * @return */
   public static Distribution of(Scalar lambda, Scalar xi) {
-    if (Scalars.lessEquals(xi, RealScalar.ZERO))
-      throw new Throw(xi);
-    return new GompertzMakehamDistribution(Sign.requirePositive(lambda), xi);
+    if (Scalars.lessThan(RealScalar.ZERO, xi))
+      return new GompertzMakehamDistribution(Sign.requirePositive(lambda), xi);
+    throw new Throw(xi);
   }
 
   /** @param lambda positive scale parameter

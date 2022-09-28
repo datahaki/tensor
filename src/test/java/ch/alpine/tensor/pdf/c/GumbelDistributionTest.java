@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
+import java.time.Month;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +31,8 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.CentralMoment;
+import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
@@ -124,17 +126,28 @@ class GumbelDistributionTest {
   }
 
   @Test
-  void testDateTimeScalar() {
-    DateTime dateTimeScalar = DateTime.of(LocalDateTime.now());
-    Distribution distribution = GumbelDistribution.of(dateTimeScalar, Quantity.of(123, "s"));
+  void testDateTime() {
+    DateTime dateTime = DateTime.now();
+    Distribution distribution = GumbelDistribution.of(dateTime, Quantity.of(123, "s"));
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTime.of(LocalDateTime.now()));
+    pdf.at(DateTime.now());
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.of(LocalDateTime.now()));
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.now());
     Clips.interval(0.5, 0.8).requireInside(p_lessEquals);
     RandomVariate.of(distribution, 10);
+  }
+
+  @Test
+  void testDateTimeHour() {
+    Scalar sigma = Quantity.of(2, "h");
+    Distribution distribution = GumbelDistribution.of(DateTime.of(2020, Month.AUGUST, 19, 18, 17, 16), sigma);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, scalar);
+    assertEquals(Mean.of(distribution), DateTime.parse("2020-08-19T17:08:00.047212708"));
+    Tolerance.CHOP.requireClose(Variance.of(distribution), Quantity.of(6.579736267392906, "h^2"));
+    // PDF/CDF will fail because of units
   }
 
   @Test

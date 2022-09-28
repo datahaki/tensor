@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -56,8 +54,8 @@ class ClipIntervalTest {
 
   @Test
   void testDateTime() {
-    DateTime dt1 = DateTime.of(LocalDateTime.of(2020, 12, 20, 4, 30));
-    DateTime dt2 = DateTime.of(LocalDateTime.of(2020, 12, 21, 4, 30));
+    DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30);
+    DateTime dt2 = DateTime.of(2020, 12, 21, 4, 30);
     Clip clip = Clips.interval(dt1, dt2);
     assertEquals(clip.width(), Quantity.of(86400, "s"));
   }

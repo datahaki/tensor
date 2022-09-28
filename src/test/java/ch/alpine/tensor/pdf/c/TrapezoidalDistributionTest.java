@@ -7,10 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Random;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
@@ -39,8 +37,6 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Clip;
-import ch.alpine.tensor.sca.Clips;
 
 class TrapezoidalDistributionTest {
   final Random random = new Random();
@@ -185,7 +181,7 @@ class TrapezoidalDistributionTest {
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
     assertInstanceOf(RealScalar.class, apply);
-    assertTrue(distribution.toString().startsWith("TrapezoidalDistribution["));
+    // assertTrue(distribution.toString().startsWith("TrapezoidalDistribution["));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
@@ -193,12 +189,12 @@ class TrapezoidalDistributionTest {
 
   @Test
   void testCDFInverseCDF() {
-    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
+    Distribution distribution = TrapezoidalDistribution.of( //
         Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(7, "m"), Quantity.of(11, "m"));
-    Clip clip = Clips.interval(Quantity.of(1, "m"), Quantity.of(11, "m"));
-    assertEquals(distribution.support(), clip);
     CDF cdf = CDF.of(distribution);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
+    assertEquals(inverseCDF.quantile(RealScalar.ZERO), Quantity.of(1, "m"));
+    assertEquals(inverseCDF.quantile(RealScalar.ONE), Quantity.of(11, "m"));
     for (int count = 0; count < 10; ++count) {
       Scalar x = RandomVariate.of(distribution);
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
@@ -208,10 +204,8 @@ class TrapezoidalDistributionTest {
 
   @Test
   void testCDFInverseCDF2() {
-    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
+    Distribution distribution = TrapezoidalDistribution.of( //
         Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(5, "m"), Quantity.of(11, "m"));
-    Clip clip = Clips.interval(Quantity.of(1, "m"), Quantity.of(11, "m"));
-    assertEquals(distribution.support(), clip);
     CDF cdf = CDF.of(distribution);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     for (int count = 0; count < 10; ++count) {
@@ -288,21 +282,20 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  @Disabled
-  void testDateTimeScalar() {
-    DateTime a = DateTime.of(LocalDateTime.of(2022, 1, 2, 12, 2));
-    DateTime b = DateTime.of(LocalDateTime.of(2022, 1, 4, 11, 5));
-    DateTime c = DateTime.of(LocalDateTime.of(2022, 1, 7, 19, 6));
-    DateTime d = DateTime.of(LocalDateTime.of(2022, 1, 8, 5, 7));
+  void testDateTime() {
+    DateTime a = DateTime.of(2022, 1, 2, 12, 2);
+    DateTime b = DateTime.of(2022, 1, 4, 11, 5);
+    DateTime c = DateTime.of(2022, 1, 7, 19, 6);
+    DateTime d = DateTime.of(2022, 1, 8, 5, 7);
     Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    Scalar t = DateTime.of(LocalDateTime.of(2022, 1, 6, 8, 6));
+    Scalar t = DateTime.of(2022, 1, 6, 8, 6);
     pdf.at(t);
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(t);
-    System.out.println(p_lessEquals);
+    assertEquals(p_lessEquals, RationalScalar.of(8225, 13026));
     // Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
   }
 

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -65,8 +64,8 @@ class DiracDeltaDistributionTest {
 
   @Test
   void testDateTime() {
-    Scalar d1 = DateTime.of(LocalDateTime.of(2022, 11, 13, 10, 12));
-    Scalar d2 = DateTime.of(LocalDateTime.of(2022, 11, 13, 10, 13));
+    Scalar d1 = DateTime.of(2022, 11, 13, 10, 12);
+    Scalar d2 = DateTime.of(2022, 11, 13, 10, 13);
     Distribution distribution = DiracDeltaDistribution.of(d1);
     PDF pdf = PDF.of(distribution);
     assertTrue(Scalars.isZero(pdf.at(d2)));

@@ -12,7 +12,6 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.bes.BesselI;
 import ch.alpine.tensor.sca.exp.Exp;
 
@@ -20,13 +19,19 @@ import ch.alpine.tensor.sca.exp.Exp;
  * Mean requires EllipticE */
 public class HoytDistribution implements Distribution, //
     PDF, Serializable {
+  /** @param q in the semi-open interval (0, 1]
+   * @param w positive real scalar
+   * @return */
   public static Distribution of(Scalar q, Scalar w) {
-    Sign.requirePositive(q);
-    if (Scalars.lessThan(RealScalar.ZERO, w))
+    if (Scalars.lessThan(RealScalar.ZERO, q) && //
+        Scalars.lessThan(RealScalar.ZERO, w))
       return new HoytDistribution(Clips.unit().requireInside(q), w);
     throw new Throw(q, w);
   }
 
+  /** @param q in the semi-open interval (0, 1]
+   * @param w positive real scalar
+   * @return */
   public static Distribution of(Number q, Number w) {
     return of(RealScalar.of(q), RealScalar.of(w));
   }

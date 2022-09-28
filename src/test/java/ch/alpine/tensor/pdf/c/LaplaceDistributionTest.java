@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -63,16 +62,26 @@ class LaplaceDistributionTest {
   }
 
   @Test
-  void testDateTimeScalar() {
-    DateTime dateTimeScalar = DateTime.of(LocalDateTime.now());
-    Distribution distribution = LaplaceDistribution.of(dateTimeScalar, Quantity.of(123, "s"));
+  void testDateTime() {
+    // DateTime dateTime = ;
+    Distribution distribution = LaplaceDistribution.of(DateTime.now(), Quantity.of(123, "s"));
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTime.of(LocalDateTime.now()));
+    pdf.at(DateTime.now());
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.of(LocalDateTime.now()));
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.now());
     Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+  }
+
+  @Test
+  void testDateTimeHour() {
+    Scalar sigma = Quantity.of(2, "h");
+    Distribution distribution = LaplaceDistribution.of(DateTime.now(), sigma);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, scalar);
+    assertEquals(Variance.of(distribution), Quantity.of(8, "h^2"));
+    // PDF/CDF will fail because of units
   }
 
   @Test

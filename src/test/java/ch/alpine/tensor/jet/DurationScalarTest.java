@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ class DurationScalarTest {
 
   @Test
   void testAdd() {
-    DateTime ofs = DateTime.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateTime ofs = DateTime.of(2020, 12, 20, 4, 30);
     DurationScalar len = DurationScalar.of(Duration.ofDays(100));
     assertThrows(Throw.class, () -> ofs.add(RealScalar.TWO));
     assertThrows(Throw.class, () -> len.add(RealScalar.TWO));

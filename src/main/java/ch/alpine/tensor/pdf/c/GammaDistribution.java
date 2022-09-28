@@ -31,12 +31,13 @@ public class GammaDistribution implements Distribution, //
    * @param beta positive real
    * @return GammaDistribution[alpha, beta] */
   public static Distribution of(Scalar alpha, Scalar beta) {
-    if (Scalars.lessEquals(alpha, RealScalar.ZERO) || //
-        Scalars.lessEquals(beta, RealScalar.ZERO))
-      throw new Throw(alpha, beta);
-    if (alpha.equals(RealScalar.ONE))
-      return ExponentialDistribution.of(beta.reciprocal());
-    return new GammaDistribution(alpha, beta);
+    if (Scalars.lessThan(RealScalar.ZERO, alpha) && //
+        Scalars.lessThan(RealScalar.ZERO, beta)) {
+      if (alpha.equals(RealScalar.ONE))
+        return ExponentialDistribution.of(beta.reciprocal());
+      return new GammaDistribution(alpha, beta);
+    }
+    throw new Throw(alpha, beta);
   }
 
   /** @param alpha positive

@@ -21,8 +21,8 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
   /** Remark:
    * for a1 == 1 OR a2 == 1 the distribution does not require the beta function
    * 
-   * @param a1 strictly positive
-   * @param a2 strictly positive
+   * @param a1 strictly positive real scalar
+   * @param a2 strictly positive real scalar
    * @return */
   public static Distribution of(Scalar a1, Scalar a2) {
     if (Scalars.lessThan(RealScalar.ZERO, a1) && //

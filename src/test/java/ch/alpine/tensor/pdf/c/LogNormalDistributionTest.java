@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -49,10 +48,12 @@ class LogNormalDistributionTest {
     {
       Scalar cdf = distribution.p_lessEquals(RealScalar.of(0.7));
       Tolerance.CHOP.requireClose(cdf, RealScalar.of(0.09939397268253057)); // confirmed with Mathematica
+      assertThrows(Exception.class, () -> distribution.p_lessEquals(Quantity.of(-0.7, "s")));
     }
     {
       Scalar pdf = distribution.at(RealScalar.of(0.7));
       Tolerance.CHOP.requireClose(pdf, RealScalar.of(0.37440134735643077)); // confirmed with Mathematica
+      assertThrows(Exception.class, () -> distribution.at(Quantity.of(-0.7, "s")));
     }
     {
       Scalar pdf = distribution.at(RealScalar.of(-0.7));
@@ -105,7 +106,7 @@ class LogNormalDistributionTest {
 
   @Test
   void testDateTime() {
-    DateTime mu = DateTime.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateTime mu = DateTime.of(2020, 12, 20, 4, 30);
     assertThrows(Throw.class, () -> LogNormalDistribution.of(mu, Quantity.of(3, "s")));
   }
 

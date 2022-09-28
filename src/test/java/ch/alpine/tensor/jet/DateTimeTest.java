@@ -422,8 +422,6 @@ class DateTimeTest {
     DateTime dateTime = DateTime.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
     Date date = toDate(dateTime, zoneOffset);
     assertNotNull(date);
-    // System.out.println(date);
-    // System.out.println(dateTimeScalar);
   }
 
   @Test

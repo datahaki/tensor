@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -32,6 +30,7 @@ import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.StandardDeviation;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 
 class NormalDistributionTest {
@@ -134,19 +133,30 @@ class NormalDistributionTest {
   }
 
   @Test
-  void testDateTimeScalar() {
-    DateTime dateTimeScalar = DateTime.of(LocalDateTime.now());
-    Scalar durationScalar = Quantity.of(123, "s");
-    Distribution distribution = NormalDistribution.of(dateTimeScalar, durationScalar);
+  void testDateTime() {
+    DateTime dateTime = DateTime.now();
+    Scalar sigma = Quantity.of(123, "s");
+    Distribution distribution = NormalDistribution.of(dateTime, sigma);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTime.of(LocalDateTime.now()));
+    pdf.at(DateTime.now());
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.of(LocalDateTime.now()));
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.now());
     Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
-    assertEquals(Mean.of(distribution), dateTimeScalar);
-    assertEquals(StandardDeviation.of(distribution), durationScalar);
+    assertEquals(Mean.of(distribution), dateTime);
+    assertEquals(StandardDeviation.of(distribution), sigma);
+  }
+
+  @Test
+  void testDateTimeHour() {
+    DateTime dateTime = DateTime.now();
+    Scalar sigma = Quantity.of(123, "h");
+    Distribution distribution = NormalDistribution.of(dateTime, sigma);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, scalar);
+    assertEquals(Variance.of(distribution), Quantity.of(15129, "h^2"));
+    // PDF/CDF will fail because of units
   }
 
   @Test

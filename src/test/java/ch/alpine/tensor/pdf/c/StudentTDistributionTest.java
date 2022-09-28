@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -55,10 +54,10 @@ class StudentTDistributionTest {
 
   @Test
   void testDateTime() {
-    DateTime mu = DateTime.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateTime mu = DateTime.of(2020, 12, 20, 4, 30);
     Distribution distribution = StudentTDistribution.of(mu, Quantity.of(100_000, "s"), RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
-    Scalar x = DateTime.of(LocalDateTime.of(2020, 12, 20, 4, 33));
+    Scalar x = DateTime.of(2020, 12, 20, 4, 33);
     Scalar scalar = pdf.at(x);
     Sign.requirePositive(scalar);
     Unit unit = QuantityUnit.of(scalar);

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -58,22 +57,27 @@ class CauchyDistributionTest {
   }
 
   @Test
-  void testDateTimeScalar() {
-    DateTime dateTimeScalar = DateTime.of(LocalDateTime.now());
+  void testDateTime() {
+    DateTime dateTime = DateTime.now();
     Scalar durationScalar = Quantity.of(123, "s");
-    Distribution distribution = CauchyDistribution.of(dateTimeScalar, durationScalar);
+    Distribution distribution = CauchyDistribution.of(dateTime, durationScalar);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTime.of(LocalDateTime.now()));
+    pdf.at(DateTime.now());
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.of(LocalDateTime.now()));
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.now());
     Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
   }
 
   @Test
   void testMonotonous() {
     TestMarkovChebyshev.monotonous(CauchyDistribution.of(0.3, 0.8));
+  }
+
+  @Test
+  void testUnitFail() {
+    assertThrows(Exception.class, () -> CauchyDistribution.of(Quantity.of(3, "s"), Quantity.of(3, "m")));
   }
 
   @Test

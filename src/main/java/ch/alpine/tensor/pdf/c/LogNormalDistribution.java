@@ -7,6 +7,7 @@ import java.util.Random;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -15,7 +16,6 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.KurtosisInterface;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 
@@ -33,19 +33,18 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
   private static final Distribution STANDARD = LogNormalDistribution.of(RealScalar.ZERO, RealScalar.ONE);
 
   /** @param mu any real number
-   * @param sigma any positive real number
+   * @param sigma any non-negative real number
    * @return instance of LogNormalDistribution
-   * @throws Exception if sigma is zero or negative
+   * @throws Exception if sigma is negative
    * @throws Exception if either parameter is of type {@link Quantity} */
   public static Distribution of(Scalar mu, Scalar sigma) {
-    if (mu instanceof RealScalar && //
-        sigma instanceof RealScalar)
+    if (Scalars.lessEquals(RealScalar.ZERO, sigma))
       return new LogNormalDistribution(mu, sigma);
     throw new Throw(mu, sigma);
   }
 
-  /** @param mu any real number
-   * @param sigma any positive real number
+  /** @param mu
+   * @param sigma non-negative
    * @return
    * @throws Exception if sigma is zero or negative */
   public static Distribution of(Number mu, Number sigma) {
@@ -70,7 +69,7 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    return Sign.isPositive(x) //
+    return Scalars.lessThan(RealScalar.ZERO, x) //
         ? univariateDistribution.p_lessThan(Log.FUNCTION.apply(x))
         : RealScalar.ZERO;
   }
@@ -82,7 +81,7 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    return Sign.isPositive(x) //
+    return Scalars.lessThan(RealScalar.ZERO, x) //
         ? univariateDistribution.at(Log.FUNCTION.apply(x)).divide(x)
         : RealScalar.ZERO;
   }
@@ -116,6 +115,6 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
 
   @Override // from Object
   public String toString() {
-    return "Log" + univariateDistribution.toString();
+    return "Log" + univariateDistribution;
   }
 }

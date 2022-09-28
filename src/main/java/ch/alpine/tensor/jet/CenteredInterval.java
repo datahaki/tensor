@@ -36,6 +36,9 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
  * 
  * Careful: our implementation of CenteredInterval deviates from Mathematica
  * 
+ * <p>inspired by
+ * <a href="https://reference.wolfram.com/language/ref/CenteredInterval.html">CenteredInterval</a>
+ * 
  * @implSpec
  * This class is immutable and thread-safe. */
 public class CenteredInterval extends AbstractScalar implements //

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -267,12 +266,12 @@ class HistogramDistributionTest {
 
   @Test
   void testDateTime() {
-    Scalar d1 = DateTime.of(LocalDateTime.of(2022, 11, 13, 10, 12));
-    Scalar d2 = DateTime.of(LocalDateTime.of(2022, 11, 13, 10, 13));
-    Scalar d3 = DateTime.of(LocalDateTime.of(2022, 11, 13, 10, 16));
-    Scalar d4 = DateTime.of(LocalDateTime.of(2022, 11, 13, 10, 19));
-    Scalar d5 = DateTime.of(LocalDateTime.of(2022, 11, 13, 10, 20));
-    Scalar d6 = DateTime.of(LocalDateTime.of(2022, 11, 13, 10, 21));
+    Scalar d1 = DateTime.of(2022, 11, 13, 10, 12);
+    Scalar d2 = DateTime.of(2022, 11, 13, 10, 13);
+    Scalar d3 = DateTime.of(2022, 11, 13, 10, 16);
+    Scalar d4 = DateTime.of(2022, 11, 13, 10, 19);
+    Scalar d5 = DateTime.of(2022, 11, 13, 10, 20);
+    Scalar d6 = DateTime.of(2022, 11, 13, 10, 21);
     Tensor samples = Tensors.of(d1, d2, d3, d4, d5, d6);
     assertThrows(Throw.class, () -> HistogramDistribution.of(samples, Quantity.of(2, "s")));
   }

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -68,17 +67,28 @@ class LogisticDistributionTest {
   }
 
   @Test
-  void testDateTimeScalar() {
-    DateTime dateTimeScalar = DateTime.of(LocalDateTime.now());
-    Scalar durationScalar = Quantity.of(123, "s");
-    Distribution distribution = LogisticDistribution.of(dateTimeScalar, durationScalar);
+  void testDateTime() {
+    DateTime dateTime = DateTime.now();
+    Scalar sigma = Quantity.of(123, "s");
+    Distribution distribution = LogisticDistribution.of(dateTime, sigma);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTime.of(LocalDateTime.now()));
+    pdf.at(DateTime.now());
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.of(LocalDateTime.now()));
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.now());
     Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+  }
+
+  @Test
+  void testDateTimeHour() {
+    DateTime dateTime = DateTime.now();
+    Scalar sigma = Quantity.of(2, "h");
+    Distribution distribution = LogisticDistribution.of(dateTime, sigma);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, scalar);
+    Tolerance.CHOP.requireClose(Variance.of(distribution), Quantity.of(13.159472534785811, "h^2"));
+    // PDF/CDF will fail because of units
   }
 
   @Test
