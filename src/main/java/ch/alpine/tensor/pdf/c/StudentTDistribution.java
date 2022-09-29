@@ -31,7 +31,7 @@ public class StudentTDistribution implements Distribution, //
     Scalars.compare(mu, mu.add(sigma));
     return new StudentTDistribution( //
         mu, //
-        Sign.requirePositive(sigma), //
+        Sign.requirePositive(StaticHelper.normal(mu, sigma)), //
         Sign.requirePositive(v));
   }
 

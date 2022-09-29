@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -26,6 +28,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
@@ -176,21 +179,32 @@ class UniformDistributionTest {
     assertEquals(variance, CentralMoment.of(d2, 2));
   }
 
-  @Test
-  void testMoment() {
+  @RepeatedTest(10)
+  void testMoment(RepetitionInfo repetitionInfo) {
     Clip clip = Clips.absoluteOne();
     Polynomial polynomial = Polynomial.of(Tensors.fromString("{1/2, 0}"));
     Distribution distribution = UniformDistribution.of(clip);
-    for (int order = 0; order < 10; ++order) {
-      Scalar cm1 = polynomial.moment(order, clip);
-      Scalar cm2 = CentralMoment.of(distribution, order);
-      assertEquals(cm1, cm2);
-    }
+    int order = repetitionInfo.getCurrentRepetition() - 1;
+    Scalar cm1 = polynomial.moment(order, clip);
+    Scalar cm2 = CentralMoment.of(distribution, order);
+    assertEquals(cm1, cm2);
   }
 
   @Test
   void testMonotonous() {
     TestMarkovChebyshev.monotonous(UniformDistribution.of(-2, 10000));
+  }
+
+  @Test
+  void testDateTime() {
+    Distribution distribution = UniformDistribution.of(Clips.interval(DateTime.of(1960, 1, 1, 0, 0), DateTime.of(1980, 1, 1, 0, 0)));
+    RandomVariate.of(distribution, 10);
+    PDF pdf = PDF.of(distribution);
+    Scalar x = DateTime.of(1970, 1, 1, 0, 0);
+    assertEquals(pdf.at(x), Scalars.fromString("1/631152000[s^-1]"));
+    CDF cdf = CDF.of(distribution);
+    assertEquals(cdf.p_lessThan(x), RationalScalar.of(3653, 7305));
+    assertEquals(Variance.of(distribution), CentralMoment.of(distribution, 2));
   }
 
   @Test

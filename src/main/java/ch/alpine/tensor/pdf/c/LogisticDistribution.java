@@ -26,7 +26,9 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
    * @return */
   public static Distribution of(Scalar a, Scalar b) {
     Scalars.compare(a, a.add(b));
-    return new LogisticDistribution(Objects.requireNonNull(a), Sign.requirePositive(b));
+    return new LogisticDistribution( //
+        Objects.requireNonNull(a), //
+        Sign.requirePositive(StaticHelper.normal(a, b)));
   }
 
   /** @param a

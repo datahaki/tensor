@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.jet;
+package ch.alpine.tensor.qty;
 
 import java.io.Serializable;
 import java.time.DateTimeException;
@@ -24,10 +24,12 @@ import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
-import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.qty.QuantityCompatibleScalar;
-import ch.alpine.tensor.qty.QuantityMagnitude;
-import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.pdf.c.CauchyDistribution;
+import ch.alpine.tensor.pdf.c.LaplaceDistribution;
+import ch.alpine.tensor.pdf.c.LogisticDistribution;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Floor;
 
 /** DateTime is a wrapper of {@link LocalDateTime}, i.e. encodes the same
@@ -72,6 +74,12 @@ import ch.alpine.tensor.sca.Floor;
  * based on the nano part of the {@link DateTime}. A nano part equal or
  * above 500_000_000 is rounded up, otherwise down.
  * 
+ * Several continuous distributions accept DateTime as input parameter:
+ * {@link NormalDistribution}, {@link UniformDistribution},
+ * {@link TrapezoidalDistribution}, {@link LaplaceDistribution},
+ * {@link CauchyDistribution}, {@link LogisticDistribution}, etc.
+ * 
+ * Remark:
  * A similar functionality is provided by Mathematica as
  * <a href="https://reference.wolfram.com/language/ref/DateObject.html">DateObject</a>.
  * 
@@ -91,7 +99,7 @@ public class DateTime extends AbstractScalar implements //
   private static final long NANOS_LONG = 1_000_000_000;
   private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
   private static final Unit UNIT_S = Unit.of("s");
-  private static final ScalarUnaryOperator TO_SECONDS = QuantityMagnitude.SI().in(UNIT_S);
+  private static final ScalarUnaryOperator MAGNITUDE_S = QuantityMagnitude.SI().in(UNIT_S);
   private static final Scalar ZERO = Quantity.of(RealScalar.ZERO, UNIT_S);
 
   /** @param localDateTime non-null
@@ -142,7 +150,7 @@ public class DateTime extends AbstractScalar implements //
    * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to
    * given zoneOffset */
   public static DateTime ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
-    Scalar seconds = TO_SECONDS.apply(scalar);
+    Scalar seconds = MAGNITUDE_S.apply(scalar);
     Scalar floor = Floor.FUNCTION.apply(seconds);
     Scalar nanos = seconds.subtract(floor).multiply(NANOS);
     return new DateTime(LocalDateTime.ofEpochSecond( //
@@ -175,7 +183,7 @@ public class DateTime extends AbstractScalar implements //
   /** @param scalar with unit "s" or compatible
    * @return */
   public static Duration duration(Scalar scalar) {
-    scalar = TO_SECONDS.apply(scalar);
+    scalar = MAGNITUDE_S.apply(scalar);
     Scalar integral = Floor.FUNCTION.apply(scalar);
     return Duration.ofSeconds( //
         Scalars.longValueExact(integral), //

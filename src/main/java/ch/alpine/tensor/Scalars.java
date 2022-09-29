@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.num.Divisible;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.sca.Sign;
 
 /** collection of useful static functions related to {@link Scalar} */

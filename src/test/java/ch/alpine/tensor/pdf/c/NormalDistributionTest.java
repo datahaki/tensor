@@ -13,7 +13,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.jet.DateTime;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -23,15 +23,18 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Sign;
 
 class NormalDistributionTest {
   @Test
@@ -134,29 +137,33 @@ class NormalDistributionTest {
 
   @Test
   void testDateTime() {
-    DateTime dateTime = DateTime.now();
+    DateTime mean = DateTime.of(2001, 9, 11, 3, 2, 3);
     Scalar sigma = Quantity.of(123, "s");
-    Distribution distribution = NormalDistribution.of(dateTime, sigma);
+    Distribution distribution = NormalDistribution.of(mean, sigma);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTime.now());
+    Scalar p = pdf.at(mean.add(Quantity.of(3, "min")));
+    Tolerance.CHOP.requireClose(p, Quantity.of(0.0011116453273056258, "s^-1"));
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.now());
-    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
-    assertEquals(Mean.of(distribution), dateTime);
+    Scalar p_lessEquals = cdf.p_lessEquals(mean);
+    Tolerance.CHOP.requireClose(RationalScalar.HALF, p_lessEquals);
+    assertEquals(Mean.of(distribution), mean);
     assertEquals(StandardDeviation.of(distribution), sigma);
   }
 
   @Test
   void testDateTimeHour() {
-    DateTime dateTime = DateTime.now();
+    DateTime dateTime = DateTime.of(1090, 2, 3, 4, 5);
     Scalar sigma = Quantity.of(123, "h");
     Distribution distribution = NormalDistribution.of(dateTime, sigma);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
-    assertEquals(Variance.of(distribution), Quantity.of(15129, "h^2"));
-    // PDF/CDF will fail because of units
+    ScalarUnaryOperator suo = UnitConvert.SI().to("h^2");
+    assertEquals(suo.apply(Variance.of(distribution)), Quantity.of(15129, "h^2"));
+    PDF pdf = PDF.of(distribution);
+    Scalar p = pdf.at(dateTime.add(Quantity.of(3, "h")));
+    Sign.requirePositive(p);
   }
 
   @Test

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
@@ -18,11 +19,11 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -34,7 +35,7 @@ class MinMaxTest {
         .map(Scalar.class::cast).collect(MinMax.collector());
     assertEquals(minMax.min(), RealScalar.of(1));
     assertEquals(minMax.max(), RealScalar.of(10));
-    assertEquals(minMax.count(), 6);
+    // assertEquals(minMax.count(), 6);
   }
 
   @Test
@@ -43,7 +44,7 @@ class MinMaxTest {
         .parallel().map(Scalar.class::cast).collect(MinMax.collector());
     assertEquals(minMax.min(), RealScalar.of(1));
     assertEquals(minMax.max(), RealScalar.of(10));
-    assertEquals(minMax.count(), 6);
+    // assertEquals(minMax.count(), 6);
   }
 
   @Test
@@ -59,8 +60,8 @@ class MinMaxTest {
         .parallel().map(Scalar.class::cast).collect(MinMax.collector());
     assertEquals(stats.min(), Quantity.of(3, "s"));
     assertEquals(stats.max(), Quantity.of(11, "s"));
-    assertEquals(stats.count(), 4);
-    assertEquals(stats.toString(), "MinMax[3[s], 11[s], #=4]");
+    // assertEquals(stats.count(), 4);
+    assertEquals(stats.toString(), "MinMax[3[s], 11[s]]");
     assertEquals(stats.clip(), Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
   }
 
@@ -70,7 +71,7 @@ class MinMaxTest {
         .parallel().map(Scalar.class::cast).collect(MinMax.collector());
     assertEquals(stats.min(), RealScalar.of(1));
     assertEquals(stats.max(), RealScalar.of(10));
-    assertEquals(stats.count(), 6);
+    // assertEquals(stats.count(), 6);
     stats.toString();
   }
 
@@ -81,18 +82,24 @@ class MinMaxTest {
     assertNull(stats.min());
     assertNull(stats.max());
     assertNull(stats.clip());
-    assertEquals(stats.count(), 0);
-    assertEquals(stats.toString(), "MinMax[null, null, #=0]");
+    // assertEquals(stats.count(), 0);
+    assertEquals(stats.toString(), "MinMax[null, null]");
   }
 
   @Test
-  void testEmptyCombine() {
+  void testEmptyCombineInt() {
     IntSummaryStatistics iss1 = new IntSummaryStatistics();
     IntSummaryStatistics iss2 = new IntSummaryStatistics();
     iss1.combine(iss2);
     ScalarSummaryStatistics sss1 = new ScalarSummaryStatistics();
     ScalarSummaryStatistics sss2 = new ScalarSummaryStatistics();
     sss1.combine(sss2);
+  }
+
+  @Test
+  void testEmptyCombineMinMax() {
+    MinMax x = new MinMax();
+    assertSame(x.combine(new MinMax()), x);
   }
 
   @Test
@@ -117,7 +124,7 @@ class MinMaxTest {
         GaussScalar.of(1, 7));
     MinMax minMax = //
         vector.stream().parallel().map(Scalar.class::cast).collect(MinMax.collector());
-    assertEquals(minMax.count(), 4);
+    // assertEquals(minMax.count(), 4);
     assertEquals(minMax.min(), GaussScalar.of(1, 7));
     assertEquals(minMax.max(), GaussScalar.of(5, 7));
   }
@@ -130,7 +137,7 @@ class MinMaxTest {
         GaussScalar.of(1, 7));
     MinMax minMax = //
         vector.stream().parallel().map(Scalar.class::cast).collect(MinMax.collector());
-    assertEquals(minMax.count(), 3);
+    // assertEquals(minMax.count(), 3);
     assertEquals(minMax.min(), GaussScalar.of(1, 7));
     assertEquals(minMax.max(), GaussScalar.of(5, 7));
     minMax.toString();

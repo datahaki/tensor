@@ -22,7 +22,7 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
    * @return */
   public static Distribution of(Scalar mean, Scalar beta) {
     Scalars.compare(mean, mean.add(beta));
-    return new LaplaceDistribution(mean, Sign.requirePositive(beta));
+    return new LaplaceDistribution(mean, Sign.requirePositive(StaticHelper.normal(mean, beta)));
   }
 
   /** @param mean

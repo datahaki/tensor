@@ -15,9 +15,9 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -25,11 +25,13 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
+import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Sign;
 
 class LogisticDistributionTest {
   @Test
@@ -68,27 +70,29 @@ class LogisticDistributionTest {
 
   @Test
   void testDateTime() {
-    DateTime dateTime = DateTime.now();
-    Scalar sigma = Quantity.of(123, "s");
-    Distribution distribution = LogisticDistribution.of(dateTime, sigma);
-    Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateTime.class, scalar);
+    DateTime a = DateTime.of(1980, 3, 13, 17, 5, 3);
+    Scalar b = Quantity.of(123, "s");
+    Distribution distribution = LogisticDistribution.of(a, b);
+    assertInstanceOf(DateTime.class, RandomVariate.of(distribution));
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTime.now());
+    assertEquals(pdf.at(a), Quantity.of(0.0020325203252032522, "s^-1"));
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.now());
-    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+    Scalar p_lessEquals = cdf.p_lessEquals(a);
+    Tolerance.CHOP.requireClose(RationalScalar.HALF, p_lessEquals);
   }
 
   @Test
   void testDateTimeHour() {
-    DateTime dateTime = DateTime.now();
+    DateTime dateTime = DateTime.of(2050, 2, 3, 4, 5);
     Scalar sigma = Quantity.of(2, "h");
     Distribution distribution = LogisticDistribution.of(dateTime, sigma);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
-    Tolerance.CHOP.requireClose(Variance.of(distribution), Quantity.of(13.159472534785811, "h^2"));
-    // PDF/CDF will fail because of units
+    ScalarUnaryOperator suo = UnitConvert.SI().to("h^2");
+    Tolerance.CHOP.requireClose(suo.apply(Variance.of(distribution)), Quantity.of(13.159472534785811, "h^2"));
+    PDF pdf = PDF.of(distribution);
+    Scalar p = pdf.at(dateTime.add(Quantity.of(1, "days")));
+    Sign.requirePositive(p);
   }
 
   @Test

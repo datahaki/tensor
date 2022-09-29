@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.jet;
+package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,8 +39,6 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;

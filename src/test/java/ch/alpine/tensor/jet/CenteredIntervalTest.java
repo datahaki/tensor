@@ -26,6 +26,7 @@ import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
@@ -47,9 +48,11 @@ class CenteredIntervalTest {
 
   @Test
   void testPlus() {
-    Scalar x = CenteredInterval.of(20, 1);
+    CenteredInterval x = (CenteredInterval) CenteredInterval.of(20, 1);
     Scalar y = CenteredInterval.of(10, 2);
     assertEquals(x.add(y), CenteredInterval.of(30, 3));
+    assertEquals(x.center(), RealScalar.of(20));
+    assertEquals(x.radius(), RealScalar.of(1));
   }
 
   @Test

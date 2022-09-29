@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
-import ch.alpine.tensor.jet.DateTime;
+import ch.alpine.tensor.qty.DateTime;
 
 class LinearBinaryAverageTest {
   @Test

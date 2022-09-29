@@ -14,9 +14,9 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -24,10 +24,12 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Sign;
 
 class LaplaceDistributionTest {
   @Test
@@ -63,25 +65,28 @@ class LaplaceDistributionTest {
 
   @Test
   void testDateTime() {
-    // DateTime dateTime = ;
-    Distribution distribution = LaplaceDistribution.of(DateTime.now(), Quantity.of(123, "s"));
+    DateTime mean = DateTime.of(2000, 1, 1, 1, 1);
+    Distribution distribution = LaplaceDistribution.of(mean, Quantity.of(123, "s"));
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTime.now());
+    pdf.at(mean);
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.now());
-    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+    // TODO TENSOR EASY test generally CDF[MEAN] == 1/2
+    assertEquals(RationalScalar.HALF, cdf.p_lessEquals(mean));
   }
 
   @Test
   void testDateTimeHour() {
+    DateTime mean = DateTime.of(2000, 1, 1, 1, 1);
     Scalar sigma = Quantity.of(2, "h");
-    Distribution distribution = LaplaceDistribution.of(DateTime.now(), sigma);
+    Distribution distribution = LaplaceDistribution.of(mean, sigma);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
-    assertEquals(Variance.of(distribution), Quantity.of(8, "h^2"));
-    // PDF/CDF will fail because of units
+    ScalarUnaryOperator suo = UnitConvert.SI().to("h^2");
+    assertEquals(suo.apply(Variance.of(distribution)), Quantity.of(8, "h^2"));
+    PDF pdf = PDF.of(distribution);
+    Sign.requirePositive(pdf.at(mean));
   }
 
   @Test

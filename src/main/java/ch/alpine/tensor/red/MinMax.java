@@ -11,12 +11,12 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-/** minMax tracks the minimum, maximum, as well as the number of elements in a single
- * pass over a stream of {@link Scalar}s. The stream may be processed in parallel.
+/** minMax tracks the minimum, and the maximum of elements in a single
+ * pass over a stream of {@link Scalar}s.
  * 
  * <p>The scalars are required to be comparable. For instance, complex numbers do
  * not have a natural ordering, therefore the minimum/maximum are not well defined.
- * MinMax does not operate on complex numbers or quaterions.
+ * MinMax does not operate on complex numbers, or quaternions.
  * 
  * <p>The string expression of an instance of MinMax is of the form
  * <pre>
@@ -56,13 +56,15 @@ public final class MinMax implements Consumer<Scalar> {
   }
 
   // ---
-  private long count = 0;
   private Scalar min = null;
   private Scalar max = null;
 
+  /* package */ MinMax() {
+    // ---
+  }
+
   @Override // from Consumer
   public void accept(Scalar scalar) {
-    ++count;
     if (Objects.isNull(min)) {
       min = scalar;
       max = scalar;
@@ -78,19 +80,13 @@ public final class MinMax implements Consumer<Scalar> {
    * @param other
    * @return */
   public MinMax combine(MinMax other) {
-    if (0 == other.count)
+    if (Objects.isNull(other.min))
       return this;
-    if (0 == count)
+    if (Objects.isNull(min))
       return other;
-    count += other.count;
     min = Min.of(min, other.min);
     max = Max.of(max, other.max);
     return this;
-  }
-
-  /** @return number of scalars in stream */
-  public long count() {
-    return count;
   }
 
   /** @return min of scalars in stream or null if stream is empty */
@@ -105,13 +101,13 @@ public final class MinMax implements Consumer<Scalar> {
 
   /** @return clip[min, max], or null if stream is empty */
   public Clip clip() {
-    return 0 < count //
-        ? Clips.interval(min, max)
-        : null;
+    return Objects.isNull(min) //
+        ? null
+        : Clips.interval(min, max);
   }
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("MinMax", min, max, "#=" + count);
+    return MathematicaFormat.concise("MinMax", min, max);
   }
 }

@@ -15,7 +15,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateTime;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -23,12 +22,13 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Sign;
 
 class CauchyDistributionTest {
   @Test
@@ -58,16 +58,31 @@ class CauchyDistributionTest {
 
   @Test
   void testDateTime() {
-    DateTime dateTime = DateTime.now();
-    Scalar durationScalar = Quantity.of(123, "s");
-    Distribution distribution = CauchyDistribution.of(dateTime, durationScalar);
+    Scalar a = DateTime.of(3000, 3, 4, 5, 6);
+    Scalar b = Quantity.of(123, "s");
+    Distribution distribution = CauchyDistribution.of(a, b);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateTime.now());
+    pdf.at(a);
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateTime.now());
-    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+    Scalar p_lessEquals = cdf.p_lessEquals(a);
+    assertEquals(RationalScalar.HALF, p_lessEquals);
+  }
+
+  @Test
+  void testDateTimeHour() {
+    Scalar a = DateTime.of(2020, 1, 1, 1, 1);
+    Scalar b = Quantity.of(123, "h");
+    Distribution distribution = CauchyDistribution.of(a, b);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, scalar);
+    PDF pdf = PDF.of(distribution);
+    Scalar at = pdf.at(DateTime.of(2030, 1, 1, 1, 1));
+    Sign.requirePositive(at);
+    CDF cdf = CDF.of(distribution);
+    Scalar p_lessEquals = cdf.p_lessEquals(a);
+    assertEquals(RationalScalar.HALF, p_lessEquals);
   }
 
   @Test
