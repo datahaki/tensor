@@ -44,6 +44,7 @@ class CauchyDistributionTest {
     Scalar quantile = inverseCDF.quantile(p_lessEquals);
     Tolerance.CHOP.requireClose(quantile, x);
     assertEquals(distribution.toString(), "CauchyDistribution[2, 3]");
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test

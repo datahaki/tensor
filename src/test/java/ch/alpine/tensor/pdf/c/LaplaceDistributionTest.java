@@ -45,6 +45,7 @@ class LaplaceDistributionTest {
     Tolerance.CHOP.requireClose(inverseCdf.quantile(RealScalar.of(0.1)), RealScalar.of(-6.047189562170502));
     Tolerance.CHOP.requireClose(inverseCdf.quantile(RealScalar.of(0.9)), RealScalar.of(10.047189562170502));
     assertEquals(distribution.toString(), "LaplaceDistribution[2, 5]");
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -61,6 +62,7 @@ class LaplaceDistributionTest {
     RandomVariate.of(distribution, 100);
     assertEquals(ExactScalarQ.require(Mean.of(distribution)), Quantity.of(3, "kg"));
     assertEquals(ExactScalarQ.require(Variance.of(distribution)), Quantity.of(8, "kg^2"));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test

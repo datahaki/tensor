@@ -12,7 +12,11 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.OrderedQ;
 import ch.alpine.tensor.alg.Reverse;
+import ch.alpine.tensor.alg.Subdivide;
+import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
@@ -58,5 +62,42 @@ public enum TestMarkovChebyshev {
     OrderedQ.require(Reverse.of(NUMER.map(PDF.of(distribution)::at)));
     if (distribution instanceof CDF)
       OrderedQ.require(NUMER.map(CDF.of(distribution)::p_lessEquals));
+  }
+
+  public static void symmetricAroundMean(Distribution distribution) {
+    if (distribution instanceof MeanInterface) {
+      final Scalar mean = Mean.of(distribution);
+      if (FiniteScalarQ.of(mean)) {
+        Scalar sigma = StandardDeviation.of(distribution);
+        if (FiniteScalarQ.of(sigma)) {
+          Scalar delta = sigma.add(sigma).add(sigma);
+          {
+            Tensor x = Subdivide.of(mean.subtract(delta), mean.add(delta), 13);
+            {
+              PDF pdf = PDF.of(distribution);
+              Tensor ref = x.map(pdf::at);
+              Tolerance.CHOP.requireClose(ref, Reverse.of(ref));
+            }
+            if (distribution instanceof CDF) {
+              CDF cdf = CDF.of(distribution);
+              Tensor ref = x.map(cdf::p_lessThan);
+              Tolerance.CHOP.requireClose(ref, Reverse.of(ref.map(r -> RealScalar.ONE.subtract(r))));
+            }
+          }
+          if (distribution instanceof InverseCDF) {
+            Scalar two = mean.one().add(mean.one());
+            InverseCDF inverseCDF = InverseCDF.of(distribution);
+            for (Tensor _p : Subdivide.of(0, 0.5, 13)) {
+              Scalar p = (Scalar) _p;
+              Scalar q_lo = inverseCDF.quantile(p);
+              if (FiniteScalarQ.of(q_lo)) {
+                Scalar q_hi = inverseCDF.quantile(RealScalar.ONE.subtract(p));
+                Tolerance.CHOP.requireClose(q_lo.add(q_hi).divide(two), mean);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

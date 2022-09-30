@@ -46,6 +46,7 @@ class LogisticDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(p_lessEquals);
     Tolerance.CHOP.requireClose(quantile, x);
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
@@ -66,6 +67,7 @@ class LogisticDistributionTest {
     QuantityMagnitude.singleton("m^2").apply(scalar);
     Scalar lo = InverseCDF.of(distribution).quantile(RealScalar.ZERO);
     assertEquals(lo, Quantity.of(DoubleScalar.NEGATIVE_INFINITY, "m"));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test

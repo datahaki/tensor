@@ -39,6 +39,7 @@ class StudentTDistributionTest {
         pdf.at(RealScalar.of(1.75)), //
         RealScalar.of(0.1260097929094335));
     assertEquals(distribution.toString(), "StudentTDistribution[2, 3, 5]");
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test

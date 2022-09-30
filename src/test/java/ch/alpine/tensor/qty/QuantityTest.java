@@ -61,7 +61,7 @@ class QuantityTest {
   @Test
   void testPercent() {
     Scalar of = Quantity.of(50, "%");
-    FiniteScalarQ.require(of);
+    assertTrue(FiniteScalarQ.of(of));
     Scalar pr = Scalars.fromString("50[%]");
     assertEquals(of, pr);
     Scalar n1 = UnitSystem.SI().apply(pr);

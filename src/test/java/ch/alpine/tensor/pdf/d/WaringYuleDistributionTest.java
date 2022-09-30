@@ -70,7 +70,7 @@ class WaringYuleDistributionTest {
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
     RandomVariate.of(distribution, 100);
     Scalar q = inverseCDF.quantile(RealScalar.of(Math.nextDown(1.0)));
-    FiniteScalarQ.require(q);
+    assertTrue(FiniteScalarQ.of(q));
     assertThrows(Exception.class, () -> Variance.of(distribution));
   }
 

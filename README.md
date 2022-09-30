@@ -195,7 +195,26 @@ System.out.println(force_N);
 2943/1000[N]
 ```
 
-The arithmetic for the scalar type `Quantity` was developed in collaboration with the project `SwissTrolley+`.
+The scalar type `Quantity` was developed in collaboration with `SwissTrolley+`.
+
+### Date and Time
+
+The tensor library implements `DateTime` for calendar arithmetic and data sets with calendar entries.
+The arithmetic and string expressions are identical to those of the java class `LocalDateTime`.
+
+```java
+Scalar mean = DateTime.of(2022, Month.FEBRUARY, 28, 12, 00);
+Scalar sigma = Quantity.of(30, "h");
+Distribution distribution = NormalDistribution.of(mean, sigma);
+Scalar guess = RandomVariate.of(distribution);
+System.out.println(mean.add(sigma));
+System.out.println(guess);
+
+2022-03-01T18:00
+2022-03-02T10:12:06.641540174
+```
+
+The scalar type `DateTime` was developed in collaboration with `GRZ Technologies`.
 
 ### Miscellaneous
 

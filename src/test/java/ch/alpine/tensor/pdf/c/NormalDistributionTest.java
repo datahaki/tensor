@@ -55,6 +55,7 @@ class NormalDistributionTest {
     assertEquals(pdf.at(mean.subtract(delta)), pdf.at(mean.add(delta)));
     // 0.8976201309032235253648786348523592040707
     assertTrue(pdf.at(mean).toString().startsWith("0.89762013090322"));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -90,6 +91,7 @@ class NormalDistributionTest {
     Chop._07.requireClose( //
         CDF.of(distribution).p_lessEquals(mean), //
         RationalScalar.of(1, 2));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -97,6 +99,7 @@ class NormalDistributionTest {
     Distribution distribution = NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m"));
     String string = distribution.toString();
     assertEquals(string, "NormalDistribution[3[m], 2[m]]");
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test

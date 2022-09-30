@@ -112,6 +112,11 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
+  void testSymmetry() {
+    TestMarkovChebyshev.symmetricAroundMean(TrapezoidalDistribution.of(1, 2, 5, 6));
+  }
+
+  @Test
   void testQuantity() {
     Distribution distribution = //
         TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(5, "m"));
@@ -186,6 +191,7 @@ class TrapezoidalDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test

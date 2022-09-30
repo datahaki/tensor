@@ -111,7 +111,8 @@ public class DateTime extends AbstractScalar implements //
 
   /** @param localDate non-null
    * @param localTime non-null
-   * @return */
+   * @return
+   * @throws Exception if either parameter is null */
   public static DateTime of(LocalDate localDate, LocalTime localTime) {
     return new DateTime(LocalDateTime.of(localDate, localTime));
   }
@@ -352,7 +353,10 @@ public class DateTime extends AbstractScalar implements //
     return localDateTime.toString();
   }
 
-  /** @param dateTimeFormatter
+  /** The parameter can be of the form:
+   * DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSSSSS")
+   * 
+   * @param dateTimeFormatter
    * @return localDateTime().format(dateTimeFormatter) */
   public String format(DateTimeFormatter dateTimeFormatter) {
     return localDateTime.format(dateTimeFormatter);

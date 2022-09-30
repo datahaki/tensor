@@ -36,6 +36,7 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.num.Pi;
@@ -181,6 +182,7 @@ class DateTimeTest {
     assertEquals(dt1.dayOfWeek(), DayOfWeek.SUNDAY);
     DateTime dt2 = dt1.plusYears(1);
     assertEquals(dt2.toString(), "2005-02-28T00:00");
+    assertTrue(FiniteScalarQ.of(dt1));
   }
 
   @Test
@@ -461,6 +463,13 @@ class DateTimeTest {
   void testLargeDurationFail() {
     Scalar scalar = Quantity.of(new BigInteger("25782639457862394578623945786294578629378456"), "s");
     assertThrows(ArithmeticException.class, () -> DateTime.duration(scalar));
+  }
+
+  @Test
+  void testFormat() {
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+    String string = DateTime.of(1998, Month.FEBRUARY, 3, 14, 48, 38, 234_876_128).format(dateTimeFormatter);
+    assertEquals(string.length(), 29);
   }
 
   @Test

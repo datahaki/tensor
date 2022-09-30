@@ -17,6 +17,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -32,8 +33,10 @@ import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -91,6 +94,7 @@ class UniformDistributionTest {
     // ---
     assertEquals(CentralMoment.of(distribution, 4), RationalScalar.of(1, 5));
     assertEquals(CentralMoment.of(distribution, 6), RationalScalar.of(1, 7));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -197,7 +201,9 @@ class UniformDistributionTest {
 
   @Test
   void testDateTime() {
-    Distribution distribution = UniformDistribution.of(Clips.interval(DateTime.of(1960, 1, 1, 0, 0), DateTime.of(1980, 1, 1, 0, 0)));
+    Distribution distribution = UniformDistribution.of( //
+        DateTime.of(1960, 1, 1, 0, 0), //
+        DateTime.of(1980, 1, 1, 0, 0));
     RandomVariate.of(distribution, 10);
     PDF pdf = PDF.of(distribution);
     Scalar x = DateTime.of(1970, 1, 1, 0, 0);
@@ -205,6 +211,37 @@ class UniformDistributionTest {
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessThan(x), RationalScalar.of(3653, 7305));
     assertEquals(Variance.of(distribution), CentralMoment.of(distribution, 2));
+  }
+
+  @Test
+  void testDateTimeSmall() {
+    Scalar lo = DateTime.of(1960, 12, 3, 10, 10, 50, 500_000_000);
+    Scalar hi = DateTime.of(1960, 12, 3, 10, 10, 50, 500_000_003);
+    Distribution distribution = UniformDistribution.of( //
+        lo, hi);
+    PDF pdf = PDF.of(distribution);
+    Scalar x0 = lo;
+    Scalar p = pdf.at(x0);
+    assertEquals(p, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+    CDF cdf = CDF.of(distribution);
+    assertEquals(cdf.p_lessEquals(hi), RealScalar.ONE);
+    assertEquals(InverseCDF.of(distribution).quantile(RealScalar.ONE), hi);
+    {
+      Scalar dt = Quantity.of(1, "ns");
+      Scalar p0 = pdf.at(x0);
+      Scalar p1 = pdf.at(x0.add(dt));
+      Scalar p2 = pdf.at(x0.add(Quantity.of(2, "ns")));
+      assertEquals(p0, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+      assertEquals(p1, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+      assertEquals(p2, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+      Tensor vector = Tensors.of( //
+          p0.multiply(dt), //
+          p1.multiply(dt), //
+          p2.multiply(dt));
+      assertEquals(UnitSystem.SI().apply(Total.ofVector(vector)), RealScalar.ONE);
+      // TODO
+      // System.out.println(cdf.p_lessEquals(x0));
+    }
   }
 
   @Test

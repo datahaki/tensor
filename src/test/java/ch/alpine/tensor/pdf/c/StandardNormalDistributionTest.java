@@ -14,6 +14,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
+import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
@@ -24,6 +25,7 @@ class StandardNormalDistributionTest {
   void testPdfZero() {
     Scalar x = StandardNormalDistribution.INSTANCE.at(RealScalar.ZERO);
     assertTrue(x.toString().startsWith("0.398942280"));
+    TestMarkovChebyshev.symmetricAroundMean(StandardNormalDistribution.INSTANCE);
   }
 
   @Test
