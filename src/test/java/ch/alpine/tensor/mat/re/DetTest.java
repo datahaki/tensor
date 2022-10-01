@@ -54,6 +54,7 @@ class DetTest {
         { +0, 0, 1 }, //
         { -5, 3, 4 } });
     assertEquals(Det.of(m), RealScalar.of(-21));
+    assertEquals(Det.withoutDivision(m), RealScalar.of(-21));
   }
 
   @Test

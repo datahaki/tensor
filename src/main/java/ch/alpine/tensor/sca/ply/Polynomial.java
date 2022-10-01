@@ -119,13 +119,13 @@ public class Polynomial extends HornerScheme {
   /** @return unit of domain
    * @throws Exception if {@link #coeffs} has length 1 */
   public Unit getUnitDomain() {
-    Scalar a = coeffs.Get(0);
+    Scalar a = coeffs.Get(0).zero(); // zero() is required for DateTime
     Scalar b = coeffs.Get(1);
     return QuantityUnit.of(a).add(QuantityUnit.of(b).negate()); // of domain
   }
 
   /** @return unit of values */
-  public Unit getUnitValue() {
+  public Unit getUnitValues() {
     return QuantityUnit.of(coeffs.Get(0));
   }
 
@@ -199,6 +199,13 @@ public class Polynomial extends HornerScheme {
     return of(_coeffs);
   }
 
+  /** @param scalar
+   * @param unit
+   * @return scalar.zero() * Quantity(scalar.one(), unit) */
+  private static Scalar zero(Scalar scalar, Unit unit) {
+    return Quantity.of(scalar.one().zero(), QuantityUnit.of(scalar).add(unit));
+  }
+
   /** @param order non-negative
    * @param x_lo
    * @param x_hi
@@ -215,13 +222,6 @@ public class Polynomial extends HornerScheme {
     return moment(order, clip.min(), clip.max());
   }
 
-  /** @param scalar
-   * @param unit
-   * @return scalar.zero() * Quantity(scalar.one(), unit) */
-  private static Scalar zero(Scalar scalar, Unit unit) {
-    return Quantity.of(scalar.one().zero(), QuantityUnit.of(scalar).add(unit));
-  }
-
   /** @param polynomial
    * @return sum of this and given polynomial */
   public Polynomial plus(Polynomial polynomial) {
@@ -232,6 +232,14 @@ public class Polynomial extends HornerScheme {
         : of(Join.of(polynomial.coeffs.add(coeffs.extract(0, n2)), coeffs.extract(n2, n1)));
   }
 
+  /** @param scalar
+   * @return polynomial with scalar added to constant coefficient */
+  public Polynomial plus(Scalar scalar) {
+    Tensor coeffs = coeffs();
+    coeffs.set(scalar::add, 0);
+    return of(coeffs);
+  }
+
   /** @param polynomial
    * @return this minus given polynomial */
   public Polynomial minus(Polynomial polynomial) {
@@ -240,7 +248,15 @@ public class Polynomial extends HornerScheme {
 
   /** @return negative of this polynomial */
   public Polynomial negate() {
-    return Polynomial.of(coeffs.negate());
+    return new Polynomial(coeffs.negate());
+  }
+
+  public Polynomial zero() {
+    return of(coeffs.map(Scalar::zero));
+  }
+
+  public Scalar one() {
+    return coeffs.Get(0).one();
   }
 
   /** @param polynomial

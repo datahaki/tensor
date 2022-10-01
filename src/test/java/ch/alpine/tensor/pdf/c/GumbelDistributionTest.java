@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
+import java.time.Month;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,8 +16,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
-import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -26,19 +26,20 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.CentralMoment;
+import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Clips;
 
 class GumbelDistributionTest {
   @Test
   void testPDF() {
-    Distribution distribution = //
-        GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
+    Distribution distribution = GumbelDistribution.of(3, 0.2);
     PDF pdf = PDF.of(distribution);
     Scalar prob = pdf.at(RealScalar.of(2.9));
     Chop._13.requireClose(prob, RealScalar.of(1.65352149445209));
@@ -68,7 +69,7 @@ class GumbelDistributionTest {
     assertEquals(inverseCDF.quantile(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
     // System.out.println(gmd.randomVariate(0.0));
-    FiniteScalarQ.require(gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0))));
+    assertTrue(FiniteScalarQ.of(gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0)))));
   }
 
   @Test
@@ -124,17 +125,53 @@ class GumbelDistributionTest {
   }
 
   @Test
-  void testDateTimeScalar() {
-    DateObject dateTimeScalar = DateObject.of(LocalDateTime.now());
-    Distribution distribution = GumbelDistribution.of(dateTimeScalar, Quantity.of(123, "s"));
+  void testDateTime() {
+    DateTime alpha = DateTime.of(1978, 4, 5, 6, 7);
+    Distribution distribution = GumbelDistribution.of(alpha, Quantity.of(123, "s"));
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateObject.class, scalar);
+    assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateObject.of(LocalDateTime.now()));
+    Scalar p_at = pdf.at(alpha);
+    Tolerance.CHOP.requireClose(p_at, Quantity.of(0.0029908897656214825, "s^-1"));
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateObject.of(LocalDateTime.now()));
-    Clips.interval(0.5, 0.8).requireInside(p_lessEquals);
-    RandomVariate.of(distribution, 10);
+    Scalar p_lessEquals = cdf.p_lessEquals(alpha);
+    Tolerance.CHOP.requireClose(p_lessEquals, RealScalar.of(0.6321205588285577));
+  }
+
+  @Test
+  void testDateTimeHour() {
+    DateTime alpha = DateTime.of(2020, Month.AUGUST, 19, 18, 17, 16);
+    Scalar sigma = Quantity.of(2, "h");
+    Distribution distribution = GumbelDistribution.of(alpha, sigma);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, scalar);
+    assertEquals(Mean.of(distribution), DateTime.parse("2020-08-19T17:08:00.047212708"));
+    ScalarUnaryOperator suo = UnitConvert.SI().to("h^2");
+    Tolerance.CHOP.requireClose(suo.apply(Variance.of(distribution)), Quantity.of(6.579736267392906, "h^2"));
+    PDF pdf = PDF.of(distribution);
+    Scalar p = pdf.at(DateTime.of(2020, Month.AUGUST, 19, 18, 27, 17));
+    Tolerance.CHOP.requireClose(p, Quantity.of(5.0911633644993024E-5, "s^-1"));
+    CDF cdf = CDF.of(distribution);
+    DateTime x = DateTime.of(2020, Month.SEPTEMBER, 01, 0, 0, 0);
+    Scalar p_lessEquals = cdf.p_lessEquals(x);
+    Tolerance.CHOP.requireClose(p_lessEquals, RealScalar.ONE);
+  }
+
+  @Test
+  void testDateTimeDays() {
+    DateTime alpha = DateTime.of(2020, Month.AUGUST, 19, 18, 17, 16);
+    Scalar sigma = Quantity.of(20, "days");
+    Distribution distribution = GumbelDistribution.of(alpha, sigma);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, scalar);
+    assertEquals(Mean.of(distribution), DateTime.parse("2020-08-08T05:13:27.331050151"));
+    PDF pdf = PDF.of(distribution);
+    Scalar p = pdf.at(DateTime.of(2020, Month.AUGUST, 19, 18, 27, 17));
+    Tolerance.CHOP.requireClose(p, Quantity.of(2.128931822445057E-7, "s^-1"));
+    CDF cdf = CDF.of(distribution);
+    DateTime x = DateTime.of(2020, Month.SEPTEMBER, 03, 5, 6, 7);
+    Scalar p_lessEquals = cdf.p_lessEquals(x);
+    Tolerance.CHOP.requireClose(p_lessEquals, RealScalar.of(0.8724996929452071));
   }
 
   @Test

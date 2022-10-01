@@ -15,7 +15,7 @@ import ch.alpine.tensor.chq.FiniteScalarQ;
   private final Tensor tensor;
   protected final Color[] colors;
 
-  public BaseColorDataIndexed(Tensor tensor) {
+  protected BaseColorDataIndexed(Tensor tensor) {
     this.tensor = tensor;
     colors = tensor.stream() //
         .map(ColorFormat::toColor) //

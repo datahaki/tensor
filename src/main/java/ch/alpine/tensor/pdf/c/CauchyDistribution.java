@@ -24,7 +24,10 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
    * @param b positive
    * @return */
   public static Distribution of(Scalar a, Scalar b) {
-    return new CauchyDistribution(Objects.requireNonNull(a), Sign.requirePositive(b));
+    a.add(b.multiply(RationalScalar.HALF));
+    return new CauchyDistribution( //
+        Objects.requireNonNull(a), //
+        Sign.requirePositive(StaticHelper.normal(a, b)));
   }
 
   /** @param a

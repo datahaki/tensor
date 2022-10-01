@@ -26,7 +26,7 @@ Mobility-on-Demand
 
 ![usecase_swisstrolley](https://user-images.githubusercontent.com/4012178/35968228-88547e90-0cc3-11e8-978d-4f822515156f.png)
 
-SwissTrolley plus
+*SwissTrolley+*
 
 <td>
 
@@ -195,7 +195,26 @@ System.out.println(force_N);
 2943/1000[N]
 ```
 
-The arithmetic for the scalar type `Quantity` was developed in collaboration with the project `SwissTrolley+`.
+The scalar type `Quantity` was developed in collaboration with *SwissTrolley+*.
+
+### Date and Time
+
+The tensor library implements `DateTime` for calendar arithmetic and data sets with calendar entries.
+The arithmetic and string expressions are identical to those of the java class `LocalDateTime`.
+
+```java
+Scalar mean = DateTime.of(2022, Month.FEBRUARY, 28, 12, 00);
+Scalar sigma = Quantity.of(30, "h");
+Distribution distribution = NormalDistribution.of(mean, sigma);
+Scalar guess = RandomVariate.of(distribution);
+System.out.println(mean.add(sigma));
+System.out.println(guess);
+
+2022-03-01T18:00
+2022-03-02T10:12:06.641540174
+```
+
+The scalar type `DateTime` was developed in collaboration with *GRZ Technologies*.
 
 ### Miscellaneous
 
@@ -310,7 +329,7 @@ From time to time, a version is deployed and made available for maven integratio
 
 For Java 17, for `version` use `1.0.6` .
 
-For Java 11, for `version` use `1.0.9-jdk-11`.
+For Java 11, for `version` use `1.1.1-jdk-11`.
 
 The source code is attached to every release.
 

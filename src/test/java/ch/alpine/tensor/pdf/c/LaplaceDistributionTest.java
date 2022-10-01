@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +14,9 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -25,10 +24,12 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Sign;
 
 class LaplaceDistributionTest {
   @Test
@@ -44,6 +45,7 @@ class LaplaceDistributionTest {
     Tolerance.CHOP.requireClose(inverseCdf.quantile(RealScalar.of(0.1)), RealScalar.of(-6.047189562170502));
     Tolerance.CHOP.requireClose(inverseCdf.quantile(RealScalar.of(0.9)), RealScalar.of(10.047189562170502));
     assertEquals(distribution.toString(), "LaplaceDistribution[2, 5]");
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -60,19 +62,33 @@ class LaplaceDistributionTest {
     RandomVariate.of(distribution, 100);
     assertEquals(ExactScalarQ.require(Mean.of(distribution)), Quantity.of(3, "kg"));
     assertEquals(ExactScalarQ.require(Variance.of(distribution)), Quantity.of(8, "kg^2"));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
-  void testDateTimeScalar() {
-    DateObject dateTimeScalar = DateObject.of(LocalDateTime.now());
-    Distribution distribution = LaplaceDistribution.of(dateTimeScalar, Quantity.of(123, "s"));
+  void testDateTime() {
+    DateTime mean = DateTime.of(2000, 1, 1, 1, 1);
+    Distribution distribution = LaplaceDistribution.of(mean, Quantity.of(123, "s"));
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateObject.class, scalar);
+    assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateObject.of(LocalDateTime.now()));
+    pdf.at(mean);
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateObject.of(LocalDateTime.now()));
-    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+    // TODO TENSOR EASY test generally CDF[MEAN] == 1/2
+    assertEquals(RationalScalar.HALF, cdf.p_lessEquals(mean));
+  }
+
+  @Test
+  void testDateTimeHour() {
+    DateTime mean = DateTime.of(2000, 1, 1, 1, 1);
+    Scalar sigma = Quantity.of(2, "h");
+    Distribution distribution = LaplaceDistribution.of(mean, sigma);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, scalar);
+    ScalarUnaryOperator suo = UnitConvert.SI().to("h^2");
+    assertEquals(suo.apply(Variance.of(distribution)), Quantity.of(8, "h^2"));
+    PDF pdf = PDF.of(distribution);
+    Sign.requirePositive(pdf.at(mean));
   }
 
   @Test

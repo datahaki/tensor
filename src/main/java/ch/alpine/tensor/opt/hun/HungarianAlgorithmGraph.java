@@ -23,7 +23,7 @@ import ch.alpine.tensor.io.ScalarArray;
   protected int matchCount = 0;
 
   /** @param _matrix with entries of unique unit */
-  public HungarianAlgorithmGraph(Tensor _matrix) {
+  protected HungarianAlgorithmGraph(Tensor _matrix) {
     Unprotect.getUnitUnique(_matrix);
     rows = _matrix.length();
     cols = Unprotect.dimension1(_matrix);

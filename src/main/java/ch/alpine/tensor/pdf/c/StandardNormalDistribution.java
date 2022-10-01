@@ -74,6 +74,6 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
   @Override // from Object
   public String toString() {
-    return "StandardNormalDistribution";
+    return "NormalDistribution[0, 1]";
   }
 }

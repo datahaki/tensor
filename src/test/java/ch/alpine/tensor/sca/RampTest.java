@@ -2,14 +2,12 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.jet.Around;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -40,11 +38,5 @@ class RampTest {
       Scalar qs1 = GaussScalar.of(index, 13);
       assertEquals(Ramp.of(qs1), qs1);
     }
-  }
-
-  @Test
-  void testFail() {
-    Scalar scalar = Around.of(2, 3);
-    assertThrows(ClassCastException.class, () -> Ramp.FUNCTION.apply(scalar));
   }
 }

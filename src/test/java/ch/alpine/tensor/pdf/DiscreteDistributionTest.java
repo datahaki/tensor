@@ -55,12 +55,12 @@ class DiscreteDistributionTest {
     if (distribution instanceof InverseCDF) {
       InverseCDF inverseCDF = InverseCDF.of(distribution);
       Scalar scalar = Median.of(distribution);
-      FiniteScalarQ.require(scalar);
+      assertTrue(FiniteScalarQ.of(scalar));
       IntegerQ.require(scalar);
       assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
       assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
-      FiniteScalarQ.require(inverseCDF.quantile(RealScalar.ZERO));
-      FiniteScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
+      assertTrue(FiniteScalarQ.of(inverseCDF.quantile(RealScalar.ZERO)));
+      assertTrue(FiniteScalarQ.of(inverseCDF.quantile(RealScalar.of(Math.nextDown(1)))));
     }
   }
 
@@ -81,13 +81,13 @@ class DiscreteDistributionTest {
   void testMean(Distribution distribution) {
     RandomVariate.of(distribution);
     Scalar scalar = Mean.of(distribution);
-    FiniteScalarQ.require(scalar);
+    assertTrue(FiniteScalarQ.of(scalar));
   }
 
   @MethodSource("distributions")
   @ParameterizedTest
   void testVariance(Distribution distribution) {
     Scalar scalar = Variance.of(distribution);
-    FiniteScalarQ.require(scalar);
+    assertTrue(FiniteScalarQ.of(scalar));
   }
 }

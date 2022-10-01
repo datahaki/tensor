@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.TreeMap;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -17,6 +19,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 
 class ClipsTest {
@@ -142,6 +145,38 @@ class ClipsTest {
   @Test
   void testIntersectionFail() {
     assertThrows(Throw.class, () -> Clips.intersection(Clips.interval(2, 3), Clips.interval(5, 10)));
+  }
+
+  @Test
+  void testCentered() {
+    Clip clip = Clips.centered(10, 1);
+    assertEquals(clip.min(), RealScalar.of(9));
+    assertEquals(clip.max(), RealScalar.of(11));
+  }
+
+  @Test
+  void testCenteredDT() {
+    Clip clip = Clips.centered(DateTime.now(), Quantity.of(3, "h"));
+    assertEquals(clip.width(), Quantity.of(21600, "s"));
+    assertInstanceOf(DateTime.class, clip.min());
+    assertInstanceOf(DateTime.class, clip.max());
+  }
+
+  @Test
+  void testKeycover() {
+    TreeMap<DateTime, Object> treeMap = new TreeMap<>();
+    treeMap.put(DateTime.of(2022, 3, 4, 5, 6), null);
+    treeMap.put(DateTime.of(2021, 6, 4, 0, 0), null);
+    {
+      Clip clip = Clips.keycover(treeMap);
+      assertEquals(clip.min(), DateTime.of(2021, 6, 4, 0, 0));
+      assertEquals(clip.max(), DateTime.of(2022, 3, 4, 5, 6));
+    }
+    {
+      Clip clip = Clips.setcover(treeMap.navigableKeySet());
+      assertEquals(clip.min(), DateTime.of(2021, 6, 4, 0, 0));
+      assertEquals(clip.max(), DateTime.of(2022, 3, 4, 5, 6));
+    }
   }
 
   @Test

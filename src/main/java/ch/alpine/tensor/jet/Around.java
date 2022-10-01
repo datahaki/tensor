@@ -16,6 +16,7 @@ import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
+import ch.alpine.tensor.pdf.StandardDeviationInterface;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
@@ -29,7 +30,9 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.pow.SqrtInterface;
 
-/** "Around[mean, sigma] represents an approximate number or quantity with a value around
+/** API EXPERIMENTAL
+ * 
+ * "Around[mean, sigma] represents an approximate number or quantity with a value around
  * mean and an uncertainty sigma."
  * 
  * The implementation of Around attempts to be consistent with Mathematica::Around.
@@ -46,9 +49,9 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class Around extends MultiplexScalar implements //
-    AbsInterface, ExpInterface, LogInterface, MeanInterface, //
-    PowerInterface, SqrtInterface, Serializable {
+/* package */ class Around extends MultiplexScalar implements //
+    AbsInterface, ExpInterface, LogInterface, MeanInterface, PowerInterface, //
+    SqrtInterface, StandardDeviationInterface, Serializable {
   private static final String SEPARATOR = "\u00B1";
 
   /** Mathematica allows
@@ -109,7 +112,7 @@ public class Around extends MultiplexScalar implements //
 
   @Override // from Scalar
   public Scalar one() {
-    return mean.zero().one();
+    return mean.one();
   }
 
   @Override // from Scalar
@@ -166,7 +169,8 @@ public class Around extends MultiplexScalar implements //
   /** Around[mean, sigma]["Uncertainty"] == sigma
    * 
    * @return sigma */
-  public Scalar uncertainty() {
+  @Override
+  public Scalar standardDeviation() {
     return sigma;
   }
 

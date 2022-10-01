@@ -23,6 +23,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.PoissonDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Quantile;
 import ch.alpine.tensor.sca.Chop;
@@ -66,7 +67,6 @@ class TruncatedDistributionTest {
     Clip clip = Clips.interval(Quantity.of(RationalScalar.of(95, 10), "m"), Quantity.of(12, "m"));
     TruncatedDistribution cut = (TruncatedDistribution) TruncatedDistribution.of(all, clip);
     Clip clip_cdf = cut.clip_cdf();
-    clip_cdf.width();
     {
       Scalar x = Quantity.of(RationalScalar.of(0, 10), "m");
       Scalar p1 = PDF.of(all).at(x);
@@ -93,6 +93,21 @@ class TruncatedDistributionTest {
     Scalar r = RandomVariate.of(cut);
     Sign.requirePositiveOrZero(r);
     clip.requireInside(r);
+  }
+
+  @Test
+  void testDateTime() {
+    DateTime mean = DateTime.now();
+    Distribution all = NormalDistribution.of(mean, Quantity.of(2, "h"));
+    Clip clip = Clips.centered(mean, Quantity.of(1, "h"));
+    TruncatedDistribution cut = (TruncatedDistribution) TruncatedDistribution.of(all, clip);
+    {
+      Scalar x = mean.add(Quantity.of(0.5, "h"));
+      Scalar p1 = PDF.of(all).at(x);
+      Scalar p2 = PDF.of(cut).at(x);
+      assertTrue(Scalars.lessThan(p1, p2));
+    }
+    assertInstanceOf(DateTime.class, RandomVariate.of(cut));
   }
 
   @Test

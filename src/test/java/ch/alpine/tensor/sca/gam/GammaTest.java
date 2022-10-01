@@ -108,12 +108,9 @@ class GammaTest {
   @Test
   void testNest1() {
     Scalar seed = ComplexScalar.of(-1.0894117647058823, -0.07745098039215685);
-    seed = Nest.of(Gamma.FUNCTION, seed, 3);
-    // Mathematica gives
-    // -4.371039232490273`*^-18 + 1.9336913999047586`*^-17 I
-    // TODO TENSOR MATH
-    // System.out.println(seed);
-    // assertTrue(Chop._50.allZero(seed));
+    Scalar expect = ComplexScalar.of(-4.371039232490273e-18, 1.9336913999047586e-17); // Mathematica
+    Scalar result = Nest.of(Gamma.FUNCTION, seed, 3);
+    Chop._25.requireClose(expect, result);
   }
 
   @Test

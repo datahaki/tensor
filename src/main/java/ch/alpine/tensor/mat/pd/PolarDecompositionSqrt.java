@@ -10,7 +10,7 @@ import ch.alpine.tensor.mat.ex.MatrixSqrt;
   final Tensor matrix;
   final MatrixSqrt matrixSqrt;
 
-  public PolarDecompositionSqrt(Tensor matrix, MatrixSqrt matrixSqrt) {
+  protected PolarDecompositionSqrt(Tensor matrix, MatrixSqrt matrixSqrt) {
     this.matrix = matrix;
     this.matrixSqrt = matrixSqrt;
   }

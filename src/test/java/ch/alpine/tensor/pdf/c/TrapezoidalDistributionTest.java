@@ -7,10 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Random;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
@@ -25,7 +23,6 @@ import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.itp.BSplineFunctionString;
-import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -34,13 +31,12 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Clip;
-import ch.alpine.tensor.sca.Clips;
 
 class TrapezoidalDistributionTest {
   final Random random = new Random();
@@ -83,6 +79,7 @@ class TrapezoidalDistributionTest {
     Scalar c = RealScalar.of(3);
     Scalar d = RealScalar.of(4);
     Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
+    assertEquals(distribution.toString(), "TrapezoidalDistribution[1, 2, 3, 4]");
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessEquals(RealScalar.of(-1)), RealScalar.ZERO);
     assertEquals(cdf.p_lessEquals(RealScalar.of(1.5)), RationalScalar.of(1, 16));
@@ -112,6 +109,11 @@ class TrapezoidalDistributionTest {
     assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 4, 7)), RationalScalar.of(251, 144));
     assertEquals(Variance.of(TrapezoidalDistribution.of(2, 2, 4, 13)), RationalScalar.of(6719, 1014));
     assertEquals(Variance.of(TrapezoidalDistribution.of(-1, -1, 1, 1)), RationalScalar.of(1, 3));
+  }
+
+  @Test
+  void testSymmetry() {
+    TestMarkovChebyshev.symmetricAroundMean(TrapezoidalDistribution.of(1, 2, 5, 6));
   }
 
   @Test
@@ -189,16 +191,17 @@ class TrapezoidalDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
   void testCDFInverseCDF() {
-    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
+    Distribution distribution = TrapezoidalDistribution.of( //
         Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(7, "m"), Quantity.of(11, "m"));
-    Clip clip = Clips.interval(Quantity.of(1, "m"), Quantity.of(11, "m"));
-    assertEquals(distribution.support(), clip);
     CDF cdf = CDF.of(distribution);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
+    assertEquals(inverseCDF.quantile(RealScalar.ZERO), Quantity.of(1, "m"));
+    assertEquals(inverseCDF.quantile(RealScalar.ONE), Quantity.of(11, "m"));
     for (int count = 0; count < 10; ++count) {
       Scalar x = RandomVariate.of(distribution);
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
@@ -208,10 +211,8 @@ class TrapezoidalDistributionTest {
 
   @Test
   void testCDFInverseCDF2() {
-    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
+    Distribution distribution = TrapezoidalDistribution.of( //
         Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(5, "m"), Quantity.of(11, "m"));
-    Clip clip = Clips.interval(Quantity.of(1, "m"), Quantity.of(11, "m"));
-    assertEquals(distribution.support(), clip);
     CDF cdf = CDF.of(distribution);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     for (int count = 0; count < 10; ++count) {
@@ -288,21 +289,20 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  @Disabled
-  void testDateTimeScalar() {
-    DateObject a = DateObject.of(LocalDateTime.of(2022, 1, 2, 12, 2));
-    DateObject b = DateObject.of(LocalDateTime.of(2022, 1, 4, 11, 5));
-    DateObject c = DateObject.of(LocalDateTime.of(2022, 1, 7, 19, 6));
-    DateObject d = DateObject.of(LocalDateTime.of(2022, 1, 8, 5, 7));
+  void testDateTime() {
+    DateTime a = DateTime.of(2022, 1, 2, 12, 2);
+    DateTime b = DateTime.of(2022, 1, 4, 11, 5);
+    DateTime c = DateTime.of(2022, 1, 7, 19, 6);
+    DateTime d = DateTime.of(2022, 1, 8, 5, 7);
     Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateObject.class, scalar);
+    assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    Scalar t = DateObject.of(LocalDateTime.of(2022, 1, 6, 8, 6));
+    Scalar t = DateTime.of(2022, 1, 6, 8, 6);
     pdf.at(t);
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(t);
-    System.out.println(p_lessEquals);
+    assertEquals(p_lessEquals, RationalScalar.of(8225, 13026));
     // Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
   }
 

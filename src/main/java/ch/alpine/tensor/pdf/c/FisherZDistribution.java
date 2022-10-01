@@ -21,8 +21,8 @@ import ch.alpine.tensor.sca.pow.Power;
  * Mean requires HypergeometricPFQ */
 public class FisherZDistribution implements Distribution, //
     PDF, Serializable {
-  /** @param n strictly positive
-   * @param m strictly positive
+  /** @param n strictly positive real scalar
+   * @param m strictly positive real scalar
    * @return */
   public static Distribution of(Scalar n, Scalar m) {
     if (Scalars.lessThan(RealScalar.ZERO, n) && //
@@ -31,6 +31,9 @@ public class FisherZDistribution implements Distribution, //
     throw new Throw(n, m);
   }
 
+  /** @param n strictly positive
+   * @param m strictly positive
+   * @return */
   public static Distribution of(Number n, Number m) {
     return of(RealScalar.of(n), RealScalar.of(m));
   }

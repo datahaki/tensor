@@ -23,11 +23,13 @@ import ch.alpine.tensor.sca.Clips;
  * ScalarSummaryStatistics{count=4, sum=24[s], min=3[s], average=6[s], max=11[s]}
  * </pre>
  * 
- * <p>inspired by {@link IntSummaryStatistics} */
-public class ScalarSummaryStatistics implements Consumer<Scalar> {
+ * <p>inspired by {@link IntSummaryStatistics}
+ * 
+ * @see MinMax */
+public final class ScalarSummaryStatistics implements Consumer<Scalar> {
   /** Example:
    * <pre>
-   * ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(1, 4, 2, 8, 3, 10)
+   * ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(4, 2, 10, 8, 1, 3)
    * .stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
    * scalarSummaryStatistics.getMin() == 1
    * scalarSummaryStatistics.getMax() == 10
@@ -40,23 +42,26 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
   }
 
   // ---
-  private Scalar sum = null;
+  private long count = 0;
+  private Scalar cnt = null;
+  private Scalar avg = null;
   private Scalar min = null;
   private Scalar max = null;
-  private long count = 0;
 
   @Override // from Consumer
   public void accept(Scalar scalar) {
-    if (Objects.isNull(sum)) {
-      sum = scalar;
+    ++count;
+    if (Objects.isNull(min)) {
+      cnt = scalar.one();
+      avg = scalar;
       min = scalar;
       max = scalar;
     } else {
-      sum = sum.add(scalar);
+      cnt = cnt.add(scalar.one());
+      avg = avg.add(scalar.subtract(avg).divide(cnt));
       min = Min.of(min, scalar);
       max = Max.of(max, scalar);
     }
-    ++count;
   }
 
   /** Quote from {@link Collector}:
@@ -69,16 +74,19 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
       return this;
     if (0 == count)
       return other;
-    sum = sum.add(other.sum);
+    count += other.count;
+    cnt = cnt.add(other.cnt);
+    avg = avg.add(other.avg.subtract(avg).multiply(other.cnt).divide(cnt));
     min = Min.of(min, other.min);
     max = Max.of(max, other.max);
-    count += other.count;
     return this;
   }
 
   /** @return sum of scalars in stream or null if stream is empty */
   public Scalar getSum() {
-    return sum;
+    return Objects.isNull(avg) //
+        ? null
+        : avg.multiply(cnt);
   }
 
   /** @return min of scalars in stream or null if stream is empty */
@@ -94,9 +102,7 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
   /** @return average of scalars in stream or null if stream is empty
    * @throws Exception if scalar type does not support division by {@link RealScalar} */
   public Scalar getAverage() {
-    return 0 < count //
-        ? getSum().divide(RealScalar.of(getCount()))
-        : null;
+    return avg;
   }
 
   /** @return number of scalars in stream */
@@ -115,7 +121,6 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
   public String toString() {
     return "ScalarSummaryStatistics" + //
         "{count=" + getCount() + //
-        ", sum=" + getSum() + //
         ", min=" + getMin() + //
         ", average=" + getAverage() + //
         ", max=" + getMax() + "}";

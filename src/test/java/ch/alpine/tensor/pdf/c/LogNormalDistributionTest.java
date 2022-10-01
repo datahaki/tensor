@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -15,13 +14,13 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
@@ -49,10 +48,12 @@ class LogNormalDistributionTest {
     {
       Scalar cdf = distribution.p_lessEquals(RealScalar.of(0.7));
       Tolerance.CHOP.requireClose(cdf, RealScalar.of(0.09939397268253057)); // confirmed with Mathematica
+      assertThrows(Exception.class, () -> distribution.p_lessEquals(Quantity.of(-0.7, "s")));
     }
     {
       Scalar pdf = distribution.at(RealScalar.of(0.7));
       Tolerance.CHOP.requireClose(pdf, RealScalar.of(0.37440134735643077)); // confirmed with Mathematica
+      assertThrows(Exception.class, () -> distribution.at(Quantity.of(-0.7, "s")));
     }
     {
       Scalar pdf = distribution.at(RealScalar.of(-0.7));
@@ -105,7 +106,7 @@ class LogNormalDistributionTest {
 
   @Test
   void testDateTime() {
-    DateObject mu = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateTime mu = DateTime.of(2020, 12, 20, 4, 30);
     assertThrows(Throw.class, () -> LogNormalDistribution.of(mu, Quantity.of(3, "s")));
   }
 

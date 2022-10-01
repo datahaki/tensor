@@ -38,7 +38,8 @@ public enum Mean {
    * @param vector
    * @return scalar that is the arithmetic mean of the entries in given vector
    * @see Total#ofVector(Tensor)
-   * @see Variance#ofVector(Tensor) */
+   * @see Variance#ofVector(Tensor)
+   * @see ScalarSummaryStatistics */
   public static Scalar ofVector(Tensor vector) {
     return (Scalar) of(vector);
   }

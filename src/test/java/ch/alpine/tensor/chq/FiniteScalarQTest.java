@@ -23,6 +23,7 @@ import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Round;
 
@@ -130,6 +131,12 @@ class FiniteScalarQTest {
     assertEquals(scalar.toString(), "NaN+2*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
     assertThrows(Throw.class, () -> FiniteScalarQ.require(scalar));
+  }
+
+  @Test
+  void testDateTime() {
+    assertTrue(ExactScalarQ.of(DateTime.now()));
+    assertTrue(FiniteScalarQ.of(DateTime.now()));
   }
 
   @Test

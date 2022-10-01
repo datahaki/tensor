@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,17 +13,19 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Sign;
@@ -38,6 +39,7 @@ class StudentTDistributionTest {
         pdf.at(RealScalar.of(1.75)), //
         RealScalar.of(0.1260097929094335));
     assertEquals(distribution.toString(), "StudentTDistribution[2, 3, 5]");
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -55,14 +57,27 @@ class StudentTDistributionTest {
 
   @Test
   void testDateTime() {
-    DateObject mu = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    DateTime mu = DateTime.of(2020, 12, 20, 4, 30);
     Distribution distribution = StudentTDistribution.of(mu, Quantity.of(100_000, "s"), RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
-    Scalar x = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 33));
+    Scalar x = DateTime.of(2020, 12, 20, 4, 33);
     Scalar scalar = pdf.at(x);
     Sign.requirePositive(scalar);
     Unit unit = QuantityUnit.of(scalar);
     assertEquals(unit, Unit.of("s^-1"));
+  }
+
+  @Test
+  void testDateTimeHour() {
+    DateTime mu = DateTime.of(2020, 12, 20, 4, 30);
+    Distribution distribution = StudentTDistribution.of(mu, Quantity.of(10, "h"), RealScalar.of(2.3));
+    PDF pdf = PDF.of(distribution);
+    Scalar x = DateTime.of(2020, 12, 20, 4, 33);
+    Scalar p = pdf.at(x);
+    Sign.requirePositive(p);
+    assertEquals(QuantityUnit.of(p), Unit.of("s^-1"));
+    ScalarUnaryOperator suo = UnitConvert.SI().to("h^2");
+    Tolerance.CHOP.requireClose(suo.apply(Variance.of(distribution)), Quantity.of(766.6666666666666, "h^2"));
   }
 
   @Test

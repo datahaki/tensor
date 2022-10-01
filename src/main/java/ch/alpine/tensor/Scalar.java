@@ -14,7 +14,8 @@ import ch.alpine.tensor.qty.SimpleUnitSystem;
 /** on top of the capabilities of a {@link Tensor} a scalar can be inverted
  * 
  * <p>The scalar 0 in any field cannot be inverted.
- * Zero is supplied by {@link #zero()}.
+ * The neutral element of addition is supplied by {@link #zero()}.
+ * The neutral element of multiplication is supplied by {@link #one()}.
  * 
  * <p>When invoking {@link #get(int...)}, {@link #get(java.util.List)},
  * on {@link Scalar} the list of arguments has to be empty.

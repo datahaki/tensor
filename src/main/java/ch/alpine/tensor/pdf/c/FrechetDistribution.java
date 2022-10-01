@@ -34,9 +34,9 @@ public class FrechetDistribution implements UnivariateDistribution, Serializable
    * @param beta positive, may be instance of {@link Quantity}
    * @return */
   public static Distribution of(Scalar alpha, Scalar beta) {
-    if (Scalars.lessEquals(alpha, RealScalar.ZERO))
-      throw new Throw(alpha);
-    return new FrechetDistribution(alpha, Sign.requirePositive(beta));
+    if (Scalars.lessThan(RealScalar.ZERO, alpha))
+      return new FrechetDistribution(alpha, Sign.requirePositive(beta));
+    throw new Throw(alpha);
   }
 
   /** @param alpha positive

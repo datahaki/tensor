@@ -24,15 +24,17 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
 
   /** parameters may be instance of {@link Quantity} with identical units
    * 
-   * @param alpha any real number
-   * @param beta positive
+   * @param alpha
+   * @param beta strictly positive
    * @return */
   public static Distribution of(Scalar alpha, Scalar beta) {
     Scalars.compare(alpha, alpha.add(beta)); // assert that parameters have identical unit
-    return new GumbelDistribution(alpha, Sign.requirePositive(beta));
+    return new GumbelDistribution( //
+        alpha, //
+        Sign.requirePositive(StaticHelper.normal(alpha, beta)));
   }
 
-  /** @param alpha any real number
+  /** @param alpha
    * @param beta positive
    * @return */
   public static Distribution of(Number alpha, Number beta) {

@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import java.util.Objects;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -10,7 +12,8 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.red.ScalarSummaryStatistics;
+import ch.alpine.tensor.red.MinMax;
+import ch.alpine.tensor.sca.Clip;
 
 /** Rescale so that all the list elements run from 0 to 1
  * 
@@ -44,37 +47,34 @@ public class Rescale {
     return new Rescale(tensor).result();
   }
 
-  // helper function
-  private static Tensor _result(Tensor tensor, ScalarSummaryStatistics scalarSummaryStatistics) {
-    if (0 < scalarSummaryStatistics.getCount()) {
-      Scalar min = scalarSummaryStatistics.getMin();
-      Scalar max = scalarSummaryStatistics.getMax();
-      Scalar width = max.subtract(min);
-      if (Scalars.nonZero(width)) // operation is not identical to Clip#rescale
-        return tensor.map(scalar -> scalar.subtract(min).divide(width));
-    }
-    return tensor.map(FINITE_NUMBER_ZERO); // set all finite number entries to 0
-  }
-
   // ---
-  private final ScalarSummaryStatistics scalarSummaryStatistics;
+  private final Clip clip;
   private final Tensor result;
 
   /** @param tensor of rank at least 1
    * @throws Exception if given tensor is a scalar */
   public Rescale(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
-    scalarSummaryStatistics = tensor.flatten(-1) //
+    clip = tensor.flatten(-1) //
         .map(Scalar.class::cast) //
         .filter(FiniteScalarQ::of) //
-        .collect(ScalarSummaryStatistics.collector());
-    result = _result(tensor, scalarSummaryStatistics);
+        .collect(MinMax.toClip());
+    result = tensor.map(Objects.nonNull(clip) && Scalars.nonZero(clip.width()) //
+        // operation is not identical to Clip#rescale for non-finite values
+        ? scalar -> scalar.subtract(clip.min()).divide(clip.width())
+        // set all finite number entries to 0, but keep non-finite values
+        : FINITE_NUMBER_ZERO);
   }
 
-  public ScalarSummaryStatistics scalarSummaryStatistics() {
-    return scalarSummaryStatistics;
+  /** @return interval that tightly contains the finite scalars in the given tensor,
+   * i.e. that satisfy {@link FiniteScalarQ}, or null if given tensor contains none
+   * such scalars. */
+  public Clip clip() {
+    return clip;
   }
 
+  /** @return tensor with the same structure as given tensor but all finite scalar
+   * entries scaled to the unit interval, and non-finite scalar entries as-is. */
   public Tensor result() {
     return result;
   }

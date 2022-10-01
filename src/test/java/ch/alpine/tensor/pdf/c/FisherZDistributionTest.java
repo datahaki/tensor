@@ -20,6 +20,7 @@ class FisherZDistributionTest {
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(0.3)), RealScalar.of(0.5125054381409268));
     assertTrue(distribution.toString().startsWith("FisherZDistribution["));
     TestMarkovChebyshev.monotonous(distribution);
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test

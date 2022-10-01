@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.InterquartileRange;
-import ch.alpine.tensor.red.ScalarSummaryStatistics;
+import ch.alpine.tensor.red.MinMax;
 import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.pow.CubeRoot;
@@ -71,8 +71,7 @@ public enum BinningMethod implements TensorScalarFunction {
   private static Scalar width(Tensor tensor) {
     return tensor.stream() //
         .map(Scalar.class::cast) //
-        .collect(ScalarSummaryStatistics.collector()) //
-        .getClip() //
+        .collect(MinMax.toClip()) //
         .width();
   }
 }

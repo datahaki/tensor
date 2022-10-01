@@ -5,6 +5,7 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 
 /** a {@link Scalar} may implement the interface to signal that the value is not an exact encoding.
  * 
@@ -14,6 +15,14 @@ import ch.alpine.tensor.chq.ExactScalarQ;
  * @see DoubleScalar
  * @see DecimalScalar */
 public interface InexactScalarMarker {
-  /** @return */
+  /** Examples:
+   * FiniteScalarQ[Pi.VALUE] == true
+   * 
+   * FiniteScalarQ[DoubleScalar.POSITIVE_INFINITY] == false
+   * FiniteScalarQ[DoubleScalar.NEGATIVE_INFINITY] == false
+   * FiniteScalarQ[NaN] == false
+   * 
+   * @return whether this scalar is finite
+   * @see FiniteScalarQ */
   boolean isFinite();
 }

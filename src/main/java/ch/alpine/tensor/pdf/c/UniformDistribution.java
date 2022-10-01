@@ -21,7 +21,7 @@ import ch.alpine.tensor.sca.pow.Power;
  * 
  * <p>InverseCDF is defined over interval [0, 1]
  * 
- * UniformDistribution is a special {@link TrapezoidalDistribution}.
+ * UniformDistribution is a special {@link TrapezoidalDistribution0}.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UniformDistribution.html">UniformDistribution</a> */

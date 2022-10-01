@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/** The triangular distribution is a special case of a {@link TrapezoidalDistribution}
+/** The triangular distribution is a special case of a {@link TrapezoidalDistribution0}
  * 
  * <p>inspired by
  * <a href="https://en.wikipedia.org/wiki/Triangular_distribution">Triangular_distribution</a> */

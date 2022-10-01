@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.num.Divisible;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.sca.Sign;
 
 /** collection of useful static functions related to {@link Scalar} */
@@ -24,8 +24,8 @@ public enum Scalars {
    * "1E-20" -> DoubleScalar.of(1E-20)
    * "(3+2)*I/(-1+4)+8-I" -> ComplexScalar.of(8, 2/3) == "8+2/3*I"
    * "9.81[m*s^-2]" -> Quantity.of(9.81, "m*s^-2")
-   * "2020-12-20T04:30" -> DateObject
-   * "2020-12-20T04:30:03.125239876" -> DateObject...
+   * "2020-12-20T04:30" -> DateTime
+   * "2020-12-20T04:30:03.125239876" -> DateTime...
    * </pre>
    * 
    * If the parsing logic encounters an inconsistency, the return type
@@ -45,7 +45,7 @@ public enum Scalars {
         string.charAt(10) == 'T' && //
         string.charAt(13) == ':')
       try {
-        return DateObject.parse(string);
+        return DateTime.parse(string);
       } catch (Exception exception) {
         // ---
       }

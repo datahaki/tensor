@@ -18,6 +18,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 
 class ClipTest {
@@ -46,6 +47,13 @@ class ClipTest {
     assertEquals(Clips.unit().apply(RealScalar.of(-0.1)), RealScalar.ZERO);
     assertEquals(Clips.unit().apply(RealScalar.of(0.1)), RealScalar.of(0.1));
     assertEquals(Clips.unit().apply(RealScalar.of(1.1)), RealScalar.ONE);
+  }
+
+  @Test
+  void testRescaleDateTime() {
+    Clip clip = Clips.interval(DateTime.of(2020, 1, 2, 3, 4), DateTime.of(2023, 6, 2, 13, 24));
+    Scalar rescale = clip.rescale(DateTime.of(2021, 7, 8, 2, 7));
+    assertEquals(rescale, RationalScalar.of(796263, 1796300));
   }
 
   @Test

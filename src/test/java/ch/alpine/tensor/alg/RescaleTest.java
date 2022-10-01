@@ -14,9 +14,9 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.qty.Unit;
-import ch.alpine.tensor.red.ScalarSummaryStatistics;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clip;
 
 class RescaleTest {
   @Test
@@ -101,10 +101,10 @@ class RescaleTest {
     Tensor vector = Tensors.fromString("{3[s], Infinity[s], 6[s], 2[s]}");
     Tensor result = Tensors.fromString("{1/4, Infinity, 1, 0}");
     Rescale rescale = new Rescale(vector);
-    ScalarSummaryStatistics scalarSummaryStatistics = rescale.scalarSummaryStatistics();
-    assertEquals(scalarSummaryStatistics.getCount(), 3);
-    assertEquals(scalarSummaryStatistics.getMin(), Quantity.of(2, "s"));
-    assertEquals(scalarSummaryStatistics.getMax(), Quantity.of(6, "s"));
+    Clip scalarSummaryStatistics = rescale.clip();
+    // assertEquals(scalarSummaryStatistics.count(), 3);
+    assertEquals(scalarSummaryStatistics.min(), Quantity.of(2, "s"));
+    assertEquals(scalarSummaryStatistics.max(), Quantity.of(6, "s"));
     assertEquals(rescale.result(), result);
   }
 

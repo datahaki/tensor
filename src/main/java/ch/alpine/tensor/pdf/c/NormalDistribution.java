@@ -38,7 +38,7 @@ public class NormalDistribution implements UnivariateDistribution, //
     Scalars.compare(mean, mean.add(sigma)); // assert that parameters are non-complex with identical units
     return Scalars.isZero(sigma) //
         ? DiracDeltaDistribution.of(mean)
-        : new NormalDistribution(mean, sigma);
+        : new NormalDistribution(mean, StaticHelper.normal(mean, sigma));
   }
 
   /** @param mean

@@ -31,16 +31,19 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
+import ch.alpine.tensor.sca.Ramp;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
+import ch.alpine.tensor.sca.tri.ArcTanh;
 
 class AroundTest {
   @Test
@@ -78,7 +81,7 @@ class AroundTest {
     Scalar b = Around.of(-4, 3);
     Around c = (Around) a.multiply(b);
     Chop._06.requireClose(c.mean(), RealScalar.of(-28));
-    Chop._06.requireClose(c.uncertainty(), RealScalar.of(22.472205054));
+    Chop._06.requireClose(c.standardDeviation(), RealScalar.of(22.472205054));
   }
 
   @Test
@@ -241,7 +244,7 @@ class AroundTest {
   void testSqrt() {
     Around around = (Around) Sqrt.FUNCTION.apply(Around.of(30, 40));
     Chop._12.requireClose(around.mean(), RealScalar.of(5.477225575051661));
-    Chop._12.requireClose(around.uncertainty(), RealScalar.of(3.6514837167011076));
+    Chop._12.requireClose(around.standardDeviation(), RealScalar.of(3.6514837167011076));
   }
 
   @Test
@@ -254,14 +257,22 @@ class AroundTest {
   void testExp() {
     Around around = (Around) Exp.FUNCTION.apply(Around.of(2, 3));
     Chop._12.requireClose(around.mean(), RealScalar.of(7.38905609893065));
-    Chop._12.requireClose(around.uncertainty(), RealScalar.of(22.16716829679195));
+    Chop._12.requireClose(around.standardDeviation(), RealScalar.of(22.16716829679195));
   }
 
   @Test
   void testLog() {
     Around around = (Around) Log.FUNCTION.apply(Around.of(2, 3));
     Chop._12.requireClose(around.mean(), RealScalar.of(0.6931471805599453));
-    assertEquals(around.uncertainty(), RationalScalar.of(3, 2));
+    assertEquals(around.standardDeviation(), RationalScalar.of(3, 2));
+  }
+
+  @Test
+  void testDateObject() {
+    Scalar do1 = Around.of(DateTime.now(), Quantity.of(3, "s"));
+    Scalar do2 = Around.of(Quantity.of(9, "s"), Quantity.of(1, "s"));
+    do1.add(do2);
+    do1.add(Quantity.of(4, "s"));
   }
 
   @Test
@@ -287,5 +298,17 @@ class AroundTest {
     assertThrows(NullPointerException.class, () -> Around.of(2, null));
     assertThrows(NullPointerException.class, () -> Around.of(Pi.VALUE, null));
     assertThrows(NullPointerException.class, () -> Around.of(null, Pi.VALUE));
+  }
+
+  @Test
+  void testArcTanhFail() {
+    Scalar scalar = Around.of(2, 3);
+    assertThrows(Throw.class, () -> ArcTanh.FUNCTION.apply(scalar));
+  }
+
+  @Test
+  void testRampFail() {
+    Scalar scalar = Around.of(2, 3);
+    assertThrows(ClassCastException.class, () -> Ramp.FUNCTION.apply(scalar));
   }
 }

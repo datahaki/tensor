@@ -37,6 +37,9 @@ import ch.alpine.tensor.Scalar;
 
   @Override // from Collector
   public Set<Characteristics> characteristics() {
-    return EnumSet.of(Characteristics.CONCURRENT, Characteristics.IDENTITY_FINISH);
+    return EnumSet.of(
+        // Characteristics.CONCURRENT, // we don't understand the specs
+        Characteristics.UNORDERED, //
+        Characteristics.IDENTITY_FINISH);
   }
 }

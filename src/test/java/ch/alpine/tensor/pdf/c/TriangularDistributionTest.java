@@ -33,6 +33,7 @@ class TriangularDistributionTest {
     assertEquals(PDF.of(distribution).at(RationalScalar.of(5, 2)), RationalScalar.HALF);
     assertEquals(PDF.of(distribution).at(b), RealScalar.ONE);
     assertEquals(PDF.of(distribution).at(RealScalar.of(100)), RealScalar.ZERO);
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test

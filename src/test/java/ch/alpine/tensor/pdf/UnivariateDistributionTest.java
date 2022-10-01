@@ -57,12 +57,12 @@ class UnivariateDistributionTest {
       RandomVariate.of(distribution);
       InverseCDF inverseCDF = InverseCDF.of(distribution);
       Scalar scalar = Median.of(distribution);
-      FiniteScalarQ.require(scalar);
+      assertTrue(FiniteScalarQ.of(scalar));
       assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
       assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
       inverseCDF.quantile(RealScalar.ZERO);
       inverseCDF.quantile(RealScalar.of(Math.nextUp(0)));
-      FiniteScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
+      assertTrue(FiniteScalarQ.of(inverseCDF.quantile(RealScalar.of(Math.nextDown(1)))));
     }
   }
 

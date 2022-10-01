@@ -69,7 +69,7 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
 
   @Override
   public Scalar p_lessThan(Scalar x) {
-    // TODO TENSOR REFACTOR pattern exist somewhere else!?
+    // TODO TENSOR IMPL pattern exist somewhere else!?
     return Scalars.lessThan(RealScalar.ZERO, x) //
         ? private_cdf(Ceiling.FUNCTION.apply(x.subtract(RealScalar.ONE)))
         : RealScalar.ZERO;

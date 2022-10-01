@@ -22,8 +22,8 @@ import ch.alpine.tensor.sca.pow.Power;
 /** CDF requires BetaRegularized */
 public class FRatioDistribution implements Distribution, //
     PDF, MeanInterface, VarianceInterface, Serializable {
-  /** @param n strictly positive
-   * @param m strictly positive
+  /** @param n strictly positive real scalar
+   * @param m strictly positive real scalar
    * @return */
   public static Distribution of(Scalar n, Scalar m) {
     if (Scalars.lessThan(RealScalar.ZERO, n) && //

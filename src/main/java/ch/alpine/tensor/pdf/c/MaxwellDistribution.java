@@ -27,7 +27,7 @@ public class MaxwellDistribution implements Distribution, CDF, PDF, MeanInterfac
   private static final Scalar SQRT_2 = Sqrt.FUNCTION.apply(RealScalar.TWO);
   private static final Scalar SQRT_PI_2 = Sqrt.FUNCTION.apply(Pi.HALF);
 
-  /** @param sigma positive
+  /** @param sigma positive real scalar
    * @return */
   public static Distribution of(Scalar sigma) {
     if (Scalars.lessThan(RealScalar.ZERO, sigma))

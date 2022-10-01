@@ -5,17 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.lie.LehmerTensor;
 import ch.alpine.tensor.mat.gr.IdempotentQ;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
 
@@ -55,10 +53,10 @@ class IdentityMatrixTest {
 
   @Test
   void testDateTimeScalar() {
-    Scalar dts1 = DateObject.of(LocalDateTime.of(2000, 11, 3, 4, 5));
-    Scalar dts2 = DateObject.of(LocalDateTime.of(2001, 10, 5, 4, 8));
-    Scalar dts3 = DateObject.of(LocalDateTime.of(2002, 12, 7, 4, 11));
-    Scalar dts4 = DateObject.of(LocalDateTime.of(2003, 11, 9, 4, 14));
+    Scalar dts1 = DateTime.of(2000, 11, 3, 4, 5);
+    Scalar dts2 = DateTime.of(2001, 10, 5, 4, 8);
+    Scalar dts3 = DateTime.of(2002, 12, 7, 4, 11);
+    Scalar dts4 = DateTime.of(2003, 11, 9, 4, 14);
     Tensor matrix = Tensors.matrix(new Scalar[][] { { dts1, dts2 }, { dts3, dts4 } });
     Tensor eye = IdentityMatrix.of(matrix);
     assertThrows(Throw.class, () -> matrix.dot(eye));

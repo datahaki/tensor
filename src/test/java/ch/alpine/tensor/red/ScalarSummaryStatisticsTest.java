@@ -2,9 +2,13 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Modifier;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
 
@@ -15,10 +19,11 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
@@ -55,7 +60,7 @@ class ScalarSummaryStatisticsTest {
     assertEquals(stats.getMax(), Quantity.of(11, "s"));
     assertEquals(stats.getAverage(), Quantity.of(6, "s"));
     assertEquals(stats.getCount(), 4);
-    assertEquals(stats.toString(), "ScalarSummaryStatistics{count=4, sum=24[s], min=3[s], average=6[s], max=11[s]}");
+    assertEquals(stats.toString(), "ScalarSummaryStatistics{count=4, min=3[s], average=6[s], max=11[s]}");
     assertEquals(stats.getClip(), Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
   }
 
@@ -68,7 +73,7 @@ class ScalarSummaryStatisticsTest {
     assertEquals(stats.getMax(), RealScalar.of(10));
     assertEquals(stats.getAverage(), RationalScalar.of(14, 3));
     assertEquals(stats.getCount(), 6);
-    assertEquals(stats.toString(), "ScalarSummaryStatistics{count=6, sum=28, min=1, average=14/3, max=10}");
+    assertEquals(stats.toString(), "ScalarSummaryStatistics{count=6, min=1, average=14/3, max=10}");
   }
 
   @Test
@@ -129,6 +134,39 @@ class ScalarSummaryStatisticsTest {
     Scalar sum = sss1.getSum();
     assertEquals(sum, GaussScalar.of(4, 7));
     assertEquals(sss1.getCount(), 4);
-    assertThrows(Throw.class, sss1::getAverage);
+    assertEquals(sss1.getAverage(), GaussScalar.of(1, 7));
+  }
+
+  @Test
+  void testGaussian2() {
+    Tensor vector = Tensors.of( //
+        GaussScalar.of(3, 7), //
+        GaussScalar.of(5, 7), //
+        GaussScalar.of(1, 7));
+    ScalarSummaryStatistics sss1 = //
+        vector.stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
+    Scalar sum = sss1.getSum();
+    assertEquals(sum, GaussScalar.of(2, 7));
+    assertEquals(sss1.getCount(), 3);
+    assertEquals(sss1.getAverage(), GaussScalar.of(3, 7));
+    sss1.toString();
+  }
+
+  @Test
+  void testDateTime() {
+    Distribution distribution = UniformDistribution.of( //
+        DateTime.of(1980, Month.APRIL, 3, 4, 12), //
+        DateTime.of(2010, Month.SEPTEMBER, 9, 4, 12));
+    Tensor vector = RandomVariate.of(distribution, 100);
+    ScalarSummaryStatistics sss1 = vector.stream().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
+    sss1.getClip();
+    sss1.toString();
+    assertInstanceOf(DateTime.class, sss1.getAverage());
+    assertThrows(Exception.class, () -> sss1.getSum());
+  }
+
+  @Test
+  void testFinal() {
+    assertTrue(Modifier.isFinal(ScalarSummaryStatistics.class.getModifiers()));
   }
 }

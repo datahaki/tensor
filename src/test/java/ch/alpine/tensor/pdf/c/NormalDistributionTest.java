@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -15,7 +13,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.jet.DateObject;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -25,14 +23,18 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.StandardDeviation;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Sign;
 
 class NormalDistributionTest {
   @Test
@@ -53,6 +55,7 @@ class NormalDistributionTest {
     assertEquals(pdf.at(mean.subtract(delta)), pdf.at(mean.add(delta)));
     // 0.8976201309032235253648786348523592040707
     assertTrue(pdf.at(mean).toString().startsWith("0.89762013090322"));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -88,6 +91,7 @@ class NormalDistributionTest {
     Chop._07.requireClose( //
         CDF.of(distribution).p_lessEquals(mean), //
         RationalScalar.of(1, 2));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -95,6 +99,7 @@ class NormalDistributionTest {
     Distribution distribution = NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m"));
     String string = distribution.toString();
     assertEquals(string, "NormalDistribution[3[m], 2[m]]");
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -134,19 +139,34 @@ class NormalDistributionTest {
   }
 
   @Test
-  void testDateTimeScalar() {
-    DateObject dateTimeScalar = DateObject.of(LocalDateTime.now());
-    Scalar durationScalar = Quantity.of(123, "s");
-    Distribution distribution = NormalDistribution.of(dateTimeScalar, durationScalar);
+  void testDateTime() {
+    DateTime mean = DateTime.of(2001, 9, 11, 3, 2, 3);
+    Scalar sigma = Quantity.of(123, "s");
+    Distribution distribution = NormalDistribution.of(mean, sigma);
     Scalar scalar = RandomVariate.of(distribution);
-    assertInstanceOf(DateObject.class, scalar);
+    assertInstanceOf(DateTime.class, scalar);
     PDF pdf = PDF.of(distribution);
-    pdf.at(DateObject.of(LocalDateTime.now()));
+    Scalar p = pdf.at(mean.add(Quantity.of(3, "min")));
+    Tolerance.CHOP.requireClose(p, Quantity.of(0.0011116453273056258, "s^-1"));
     CDF cdf = CDF.of(distribution);
-    Scalar p_lessEquals = cdf.p_lessEquals(DateObject.of(LocalDateTime.now()));
-    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
-    assertEquals(Mean.of(distribution), dateTimeScalar);
-    assertEquals(StandardDeviation.of(distribution), durationScalar);
+    Scalar p_lessEquals = cdf.p_lessEquals(mean);
+    Tolerance.CHOP.requireClose(RationalScalar.HALF, p_lessEquals);
+    assertEquals(Mean.of(distribution), mean);
+    assertEquals(StandardDeviation.of(distribution), sigma);
+  }
+
+  @Test
+  void testDateTimeHour() {
+    DateTime dateTime = DateTime.of(1090, 2, 3, 4, 5);
+    Scalar sigma = Quantity.of(123, "h");
+    Distribution distribution = NormalDistribution.of(dateTime, sigma);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, scalar);
+    ScalarUnaryOperator suo = UnitConvert.SI().to("h^2");
+    assertEquals(suo.apply(Variance.of(distribution)), Quantity.of(15129, "h^2"));
+    PDF pdf = PDF.of(distribution);
+    Scalar p = pdf.at(dateTime.add(Quantity.of(3, "h")));
+    Sign.requirePositive(p);
   }
 
   @Test

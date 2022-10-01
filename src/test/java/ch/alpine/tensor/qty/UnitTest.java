@@ -137,6 +137,7 @@ class UnitTest {
   @Test
   void testReference() {
     assertSame(Unit.of("m*s*"), Unit.of("s*m"));
+    assertSame(Unit.of("m^2*s*"), Unit.of("s*m*m"));
   }
 
   @Test

@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Abs;
   protected final Scalar[][] H;
   protected final Tensor[] V;
 
-  public JacobiMethod(Tensor matrix) {
+  protected JacobiMethod(Tensor matrix) {
     n = matrix.length();
     H = ScalarArray.ofMatrix(matrix);
     V = IntStream.range(0, n) //

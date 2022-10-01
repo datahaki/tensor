@@ -10,7 +10,6 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.erf.Erfc;
 import ch.alpine.tensor.sca.erf.InverseErfc;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -21,10 +20,8 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
   private static final Scalar _4 = RealScalar.of(4);
   private static final Scalar _5 = RealScalar.of(5);
 
-  /** parameters may be instance of {@link Quantity} with identical units
-   * 
-   * @param alpha positive
-   * @param lambda positive
+  /** @param alpha positive real scalar
+   * @param lambda positive real scalar
    * @return */
   public static Distribution of(Scalar alpha, Scalar lambda) {
     if (Scalars.lessThan(RealScalar.ZERO, alpha) && //

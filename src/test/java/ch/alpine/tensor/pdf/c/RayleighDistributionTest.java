@@ -57,8 +57,8 @@ class RayleighDistributionTest {
     RandomVariate.of(distribution, 100);
     Scalar q0 = distribution.protected_quantile(RealScalar.ZERO);
     Scalar q1 = distribution.protected_quantile(RealScalar.of(Math.nextDown(1.0)));
-    FiniteScalarQ.require(q0);
-    FiniteScalarQ.require(q1);
+    assertTrue(FiniteScalarQ.of(q0));
+    assertTrue(FiniteScalarQ.of(q1));
   }
 
   @Test

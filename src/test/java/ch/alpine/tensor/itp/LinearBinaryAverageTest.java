@@ -4,8 +4,6 @@ package ch.alpine.tensor.itp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
@@ -13,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
-import ch.alpine.tensor.jet.DateObject;
+import ch.alpine.tensor.qty.DateTime;
 
 class LinearBinaryAverageTest {
   @Test
@@ -24,9 +22,9 @@ class LinearBinaryAverageTest {
 
   @Test
   void testDTS() {
-    DateObject dt1 = DateObject.of(LocalDateTime.of(2020, 12, 20, 4, 30));
-    DateObject dt2 = DateObject.of(LocalDateTime.of(2020, 12, 21, 4, 30));
+    DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30);
+    DateTime dt2 = DateTime.of(2020, 12, 21, 4, 30);
     Tensor split = LinearBinaryAverage.INSTANCE.split(dt1, dt2, RationalScalar.of(1, 3));
-    assertInstanceOf(DateObject.class, split);
+    assertInstanceOf(DateTime.class, split);
   }
 }

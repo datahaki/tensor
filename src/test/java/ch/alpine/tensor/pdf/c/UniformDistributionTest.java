@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -15,6 +17,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -26,11 +29,14 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -88,6 +94,7 @@ class UniformDistributionTest {
     // ---
     assertEquals(CentralMoment.of(distribution, 4), RationalScalar.of(1, 5));
     assertEquals(CentralMoment.of(distribution, 6), RationalScalar.of(1, 7));
+    TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
   @Test
@@ -176,21 +183,62 @@ class UniformDistributionTest {
     assertEquals(variance, CentralMoment.of(d2, 2));
   }
 
-  @Test
-  void testMoment() {
+  @RepeatedTest(10)
+  void testMoment(RepetitionInfo repetitionInfo) {
     Clip clip = Clips.absoluteOne();
     Polynomial polynomial = Polynomial.of(Tensors.fromString("{1/2, 0}"));
     Distribution distribution = UniformDistribution.of(clip);
-    for (int order = 0; order < 10; ++order) {
-      Scalar cm1 = polynomial.moment(order, clip);
-      Scalar cm2 = CentralMoment.of(distribution, order);
-      assertEquals(cm1, cm2);
-    }
+    int order = repetitionInfo.getCurrentRepetition() - 1;
+    Scalar cm1 = polynomial.moment(order, clip);
+    Scalar cm2 = CentralMoment.of(distribution, order);
+    assertEquals(cm1, cm2);
   }
 
   @Test
   void testMonotonous() {
     TestMarkovChebyshev.monotonous(UniformDistribution.of(-2, 10000));
+  }
+
+  @Test
+  void testDateTime() {
+    Distribution distribution = UniformDistribution.of( //
+        DateTime.of(1960, 1, 1, 0, 0), //
+        DateTime.of(1980, 1, 1, 0, 0));
+    RandomVariate.of(distribution, 10);
+    PDF pdf = PDF.of(distribution);
+    Scalar x = DateTime.of(1970, 1, 1, 0, 0);
+    assertEquals(pdf.at(x), Scalars.fromString("1/631152000[s^-1]"));
+    CDF cdf = CDF.of(distribution);
+    assertEquals(cdf.p_lessThan(x), RationalScalar.of(3653, 7305));
+    assertEquals(Variance.of(distribution), CentralMoment.of(distribution, 2));
+  }
+
+  @Test
+  void testDateTimeSmall() {
+    Scalar lo = DateTime.of(1960, 12, 3, 10, 10, 50, 500_000_000);
+    Scalar hi = DateTime.of(1960, 12, 3, 10, 10, 50, 500_000_003);
+    Distribution distribution = UniformDistribution.of(lo, hi);
+    PDF pdf = PDF.of(distribution);
+    Scalar x0 = lo;
+    Scalar p = pdf.at(x0);
+    assertEquals(p, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+    CDF cdf = CDF.of(distribution);
+    assertEquals(cdf.p_lessEquals(hi), RealScalar.ONE);
+    assertEquals(InverseCDF.of(distribution).quantile(RealScalar.ONE), hi);
+    {
+      Scalar dt = Quantity.of(1, "ns");
+      Scalar p0 = pdf.at(x0);
+      Scalar p1 = pdf.at(x0.add(dt));
+      Scalar p2 = pdf.at(x0.add(Quantity.of(2, "ns")));
+      assertEquals(p0, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+      assertEquals(p1, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+      assertEquals(p2, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+      Tensor vector = Tensors.of( //
+          p0.multiply(dt), //
+          p1.multiply(dt), //
+          p2.multiply(dt));
+      assertEquals(UnitSystem.SI().apply(Total.ofVector(vector)), RealScalar.ONE);
+    }
   }
 
   @Test

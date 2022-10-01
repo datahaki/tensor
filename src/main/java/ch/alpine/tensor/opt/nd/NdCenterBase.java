@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 public abstract class NdCenterBase implements NdCenterInterface, Serializable {
   private final Tensor center;
 
-  public NdCenterBase(Tensor center) {
+  protected NdCenterBase(Tensor center) {
     this.center = Objects.requireNonNull(center);
   }
 

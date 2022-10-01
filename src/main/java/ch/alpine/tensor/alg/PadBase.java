@@ -13,7 +13,7 @@ import ch.alpine.tensor.ext.Lists;
   private final Tensor element;
   private final List<Integer> dimensions;
 
-  public PadBase(Tensor element, List<Integer> dimensions) {
+  protected PadBase(Tensor element, List<Integer> dimensions) {
     this.element = element;
     this.dimensions = dimensions;
   }

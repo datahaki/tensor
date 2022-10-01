@@ -44,6 +44,14 @@ public enum Roots {
     return roots;
   }
 
+  /** attempts to find all roots of given polynomial
+   * 
+   * @param polynomial
+   * @return roots of given polynomial */
+  public static Tensor of(Polynomial polynomial) {
+    return of(polynomial.coeffs());
+  }
+
   /** @param coeffs of polynomial
    * @return roots of polynomial as vector with length of that of coeffs minus one */
   private static Tensor unsorted(Tensor coeffs) {

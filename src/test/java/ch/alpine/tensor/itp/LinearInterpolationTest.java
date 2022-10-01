@@ -29,12 +29,12 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
-import ch.alpine.tensor.jet.DateObject;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.d.GeometricDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -209,7 +209,7 @@ class LinearInterpolationTest {
   @Test
   void testCsv() {
     Tensor tensor = ResourceData.of("/ch/alpine/tensor/io/dateobject.csv");
-    assertInstanceOf(DateObject.class, tensor.Get(0, 0));
+    assertInstanceOf(DateTime.class, tensor.Get(0, 0));
     Tensor result = Subdivide.of(0, 2, 20).map(LinearInterpolation.of(tensor)::at);
     assertEquals(result.get(0).toString(), tensor.get(0).toString());
     assertEquals(Last.of(result).toString(), Last.of(tensor).toString());
