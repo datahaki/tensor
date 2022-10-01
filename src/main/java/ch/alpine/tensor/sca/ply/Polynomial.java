@@ -119,7 +119,7 @@ public class Polynomial extends HornerScheme {
   /** @return unit of domain
    * @throws Exception if {@link #coeffs} has length 1 */
   public Unit getUnitDomain() {
-    Scalar a = coeffs.Get(0);
+    Scalar a = coeffs.Get(0).zero(); // zero() is required for DateTime
     Scalar b = coeffs.Get(1);
     return QuantityUnit.of(a).add(QuantityUnit.of(b).negate()); // of domain
   }

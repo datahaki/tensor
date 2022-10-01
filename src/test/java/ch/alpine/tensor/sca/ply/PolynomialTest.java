@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.ply;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,6 +36,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -529,6 +531,28 @@ class PolynomialTest {
       Polynomial fit = Polynomial.fit(xdata, ydata, 4);
       assertEquals(fit.degree(), polynomial.degree());
     }
+  }
+
+  @Test
+  void testDateTimeLinear() {
+    Scalar a = DateTime.now();
+    Tensor coeffs = Tensors.of(a, RealScalar.of(3));
+    Polynomial polynomial = Polynomial.of(coeffs);
+    Scalar scalar = polynomial.apply(Quantity.of(4, "h"));
+    assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
+    assertEquals(polynomial.getUnitValues(), Unit.ONE);
+    assertInstanceOf(DateTime.class, scalar);
+  }
+
+  @Test
+  void testDateTimeQuadratic() {
+    Tensor coeffs = Tensors.of(DateTime.now(), Quantity.of(4, "s"), Quantity.of(5, "s"));
+    Polynomial polynomial = Polynomial.of(coeffs);
+    Unit unit = polynomial.getUnitDomain();
+    assertEquals(unit, Unit.ONE);
+    assertEquals(polynomial.getUnitValues(), Unit.ONE);
+    Scalar scalar = polynomial.apply(RealScalar.of(3));
+    assertInstanceOf(DateTime.class, scalar);
   }
 
   @Test
