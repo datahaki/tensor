@@ -12,10 +12,6 @@ The tensor library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
 * API and string expressions inspired by `Mathematica`
 
-|--------------|-----------|------------|
-| Juicy Apples | 1.99      | *7*        |
-| Bananas      | **1.89**  | 5234       |
-
 Diverse projects rely on the tensor library:
 
 <table>
