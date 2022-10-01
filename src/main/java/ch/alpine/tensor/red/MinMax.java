@@ -49,7 +49,9 @@ public final class MinMax implements Consumer<Scalar> {
     return MinMaxCollector.INSTANCE;
   }
 
-  /** @return clip that contains min and max of scalars in a stream,
+  /** function name is chosen analogous to {@link Collectors#toList()}
+   * 
+   * @return clip that contains min and max of scalars in a stream,
    * or null is the stream has no elements. */
   public static Collector<Scalar, ?, Clip> toClip() {
     return Collectors.collectingAndThen(collector(), MinMax::clip);

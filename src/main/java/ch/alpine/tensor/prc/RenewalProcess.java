@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensor;
 class RenewalProcess implements RandomProcess, Serializable {
   @Override
   public Tensor path() {
-    // TODO Auto-generated method stub
+    // TODO TENSOR IMPL Auto-generated method stub
     return null;
   }
 }

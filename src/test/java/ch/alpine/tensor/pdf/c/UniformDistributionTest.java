@@ -217,8 +217,7 @@ class UniformDistributionTest {
   void testDateTimeSmall() {
     Scalar lo = DateTime.of(1960, 12, 3, 10, 10, 50, 500_000_000);
     Scalar hi = DateTime.of(1960, 12, 3, 10, 10, 50, 500_000_003);
-    Distribution distribution = UniformDistribution.of( //
-        lo, hi);
+    Distribution distribution = UniformDistribution.of(lo, hi);
     PDF pdf = PDF.of(distribution);
     Scalar x0 = lo;
     Scalar p = pdf.at(x0);
@@ -239,8 +238,6 @@ class UniformDistributionTest {
           p1.multiply(dt), //
           p2.multiply(dt));
       assertEquals(UnitSystem.SI().apply(Total.ofVector(vector)), RealScalar.ONE);
-      // TODO
-      // System.out.println(cdf.p_lessEquals(x0));
     }
   }
 

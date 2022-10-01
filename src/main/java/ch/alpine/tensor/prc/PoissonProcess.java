@@ -19,7 +19,7 @@ import ch.alpine.tensor.pdf.c.ExponentialDistribution;
   private int count = -1;
 
   public PoissonProcess(Scalar lambda) {
-    // TODO is RenewalProcess with ExponentialDistribution.of(lambda)
+    // TODO TENSOR IMPL is RenewalProcess with ExponentialDistribution.of(lambda)
     distribution = ExponentialDistribution.of(lambda);
   }
 

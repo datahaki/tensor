@@ -1,21 +1,34 @@
 // code by jph
 package ch.alpine.tensor.jet;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.MultiplexScalar;
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.sca.ply.Polynomial;
 
 /** API EXPERIMENTAL */
 class Rapoly extends MultiplexScalar {
+  /** @param polynomial
+   * @return */
+  public static Rapoly of(Polynomial polynomial) {
+    return new Rapoly(Objects.requireNonNull(polynomial));
+  }
+
+  /** @param coeffs of polynomial
+   * @return */
+  public static Rapoly of(Tensor coeffs) {
+    return new Rapoly(Polynomial.of(coeffs));
+  }
+
+  // ---
   private final Polynomial polynomial;
 
-  public Rapoly(Polynomial polynomial) {
+  private Rapoly(Polynomial polynomial) {
     this.polynomial = polynomial;
   }
 
@@ -42,13 +55,12 @@ class Rapoly extends MultiplexScalar {
 
   @Override
   public Scalar zero() {
-    // TODO test where same as multiply by 0?
-    return new Rapoly(polynomial.minus(polynomial));
+    return new Rapoly(polynomial.zero());
   }
 
   @Override
   public Scalar one() {
-    return RealScalar.ONE; // TODO
+    return polynomial.one();
   }
 
   @Override
@@ -65,7 +77,7 @@ class Rapoly extends MultiplexScalar {
   protected Scalar plus(Scalar scalar) {
     return scalar instanceof Rapoly rapoly //
         ? new Rapoly(polynomial.plus(rapoly.polynomial))
-        : new Rapoly(polynomial.plus(Polynomial.of(Tensors.of(scalar))));
+        : new Rapoly(polynomial.plus(scalar));
   }
 
   @Override

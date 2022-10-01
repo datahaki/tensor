@@ -13,6 +13,7 @@ import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
+import ch.alpine.tensor.red.MinMax;
 
 /** factory for the creation of {@link Clip}
  * 
@@ -95,23 +96,29 @@ public enum Clips {
 
   // ---
   /** Careful:
-   * only use on maps that are sorted according to
-   * {@link Scalars#compare(Scalar, Scalar)}
-   * 
-   * @param sortedMap with canonic comparator, i.e. {@link Scalars#compare(Scalar, Scalar)}
-   * @return */
-  public static <K extends Scalar> Clip keycover(SortedMap<K, ?> sortedMap) {
-    return interval(sortedMap.firstKey(), sortedMap.lastKey());
-  }
-
-  /** Careful:
    * only use on sets that are sorted according to
    * {@link Scalars#compare(Scalar, Scalar)}
    * 
    * @param sortedSet with canonic comparator, i.e. {@link Scalars#compare(Scalar, Scalar)}
-   * @return */
-  public static <K extends Scalar> Clip keycover(SortedSet<K> sortedSet) {
-    return interval(sortedSet.first(), sortedSet.last());
+   * @return
+   * @see MinMax#toClip() */
+  public static <K extends Scalar> Clip setcover(SortedSet<K> sortedSet) {
+    return interval( //
+        sortedSet.first(), //
+        sortedSet.last());
+  }
+
+  /** Careful:
+   * only use on maps that are sorted according to
+   * {@link Scalars#compare(Scalar, Scalar)}
+   * 
+   * @param sortedMap with canonic comparator, i.e. {@link Scalars#compare(Scalar, Scalar)}
+   * @return
+   * @see MinMax#toClip() */
+  public static <K extends Scalar> Clip keycover(SortedMap<K, ?> sortedMap) {
+    return interval( //
+        sortedMap.firstKey(), //
+        sortedMap.lastKey());
   }
 
   // ---

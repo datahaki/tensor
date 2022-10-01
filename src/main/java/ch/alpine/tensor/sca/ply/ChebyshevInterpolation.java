@@ -22,7 +22,7 @@ public class ChebyshevInterpolation implements ScalarUnaryOperator {
     return new ChebyshevInterpolation(function, chebyshevNodes, n);
   }
 
-  // TODO TENSOR REMOVE when methods coincide
+  // TODO TENSOR MAT remove when methods coincide
   public static ScalarUnaryOperator alt(ScalarUnaryOperator function, ChebyshevNodes chebyshevNodes, int n) {
     Tensor coeffs = LinearSolve.of(chebyshevNodes.matrix(n), chebyshevNodes.of(n).map(function));
     return ClenshawChebyshev.of(coeffs);

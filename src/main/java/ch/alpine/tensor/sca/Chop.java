@@ -67,6 +67,7 @@ public class Chop implements ScalarUnaryOperator {
   public static final Chop _18 = below(1e-18);
   public static final Chop _19 = below(1e-19);
   public static final Chop _20 = below(1e-20);
+  public static final Chop _25 = below(1e-25);
   public static final Chop _30 = below(1e-30);
   public static final Chop _40 = below(1e-40);
   public static final Chop _50 = below(1e-50);

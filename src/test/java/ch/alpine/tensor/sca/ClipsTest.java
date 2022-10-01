@@ -173,7 +173,7 @@ class ClipsTest {
       assertEquals(clip.max(), DateTime.of(2022, 3, 4, 5, 6));
     }
     {
-      Clip clip = Clips.keycover(treeMap.navigableKeySet());
+      Clip clip = Clips.setcover(treeMap.navigableKeySet());
       assertEquals(clip.min(), DateTime.of(2021, 6, 4, 0, 0));
       assertEquals(clip.max(), DateTime.of(2022, 3, 4, 5, 6));
     }
