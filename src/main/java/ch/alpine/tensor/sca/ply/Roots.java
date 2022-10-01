@@ -7,7 +7,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Re;
@@ -72,7 +71,7 @@ public enum Roots {
     return switch (degree) {
     case 2 -> RootsDegree2.of(coeffs); // a + b*x + c*x^2 == 0
     case 3 -> RootsDegree3.of(coeffs); // a + b*x + c*x^2 + d*x^3 == 0
-    default -> throw new Throw(coeffs);
+    default -> AberthEhrlich.of(Polynomial.of(coeffs));
     };
   }
 
