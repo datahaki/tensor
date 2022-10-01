@@ -1,9 +1,16 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.io.Primitives;
+import ch.alpine.tensor.lie.Permutations;
+import ch.alpine.tensor.lie.Signature;
 import ch.alpine.tensor.mat.SquareMatrixQ;
 
 /** implementation is consistent with Mathematica
@@ -27,6 +34,24 @@ public class Det extends AbstractReduce {
    * @throws Exception if matrix is not square */
   public static Scalar of(Tensor matrix, Pivot pivot) {
     return new Det(SquareMatrixQ.require(matrix), pivot).override_det();
+  }
+
+  /** Careful: do not call function for large matrix
+   * Hint: function is exists for testing on small matrices
+   * 
+   * @param matrix
+   * @return */
+  public static Scalar withoutDivision(Tensor matrix) {
+    int n = SquareMatrixQ.require(matrix).length();
+    return Permutations.stream(Range.of(0, n)).map(sigma -> {
+      AtomicInteger atomicInteger = new AtomicInteger();
+      int[] index = Primitives.toIntArray(sigma);
+      return matrix.stream() //
+          .map(row -> row.Get(index[atomicInteger.getAndIncrement()])) //
+          .reduce(Scalar::multiply) //
+          .map(Signature.of(sigma)::multiply) //
+          .orElseThrow();
+    }).reduce(Scalar::add).orElse(RealScalar.ZERO);
   }
 
   // ---
