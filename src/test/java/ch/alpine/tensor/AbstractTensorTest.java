@@ -47,7 +47,7 @@ class AbstractTensorTest {
   void testEquals() {
     Tensor a = DoubleScalar.of(1.23);
     assertEquals(a, DoubleScalar.of(1.23));
-    assertTrue(!a.equals(DoubleScalar.of(-1.23)));
+    assertNotEquals(a, DoubleScalar.of(-1.23));
     Tensor b = Tensors.vectorLong(3, 4, 5);
     assertFalse(a.equals(b));
     assertFalse(b.equals(a));

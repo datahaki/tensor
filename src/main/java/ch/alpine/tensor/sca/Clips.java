@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import java.util.SortedMap;
+import java.util.SortedSet;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.jet.CenteredInterval;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
@@ -70,6 +74,44 @@ public enum Clips {
    * @throws Exception if max is negative */
   public static Clip absolute(Number max) {
     return absolute(RealScalar.of(max));
+  }
+
+  // ---
+  /** @param center
+   * @param radius non-negative
+   * @return clip over the interval [center-radius, ..., center+radius]
+   * @see CenteredInterval */
+  public static Clip centered(Scalar center, Scalar radius) {
+    return create(center.subtract(radius), center.add(radius));
+  }
+
+  /** @param center
+   * @param radius non-negative
+   * @return clip over the interval [center-radius, ..., center+radius]
+   * @see CenteredInterval */
+  public static Clip centered(Number center, Number radius) {
+    return centered(RealScalar.of(center), RealScalar.of(radius));
+  }
+
+  // ---
+  /** Careful:
+   * only use on maps that are sorted according to
+   * {@link Scalars#compare(Scalar, Scalar)}
+   * 
+   * @param sortedMap with canonic comparator, i.e. {@link Scalars#compare(Scalar, Scalar)}
+   * @return */
+  public static <K extends Scalar> Clip keycover(SortedMap<K, ?> sortedMap) {
+    return interval(sortedMap.firstKey(), sortedMap.lastKey());
+  }
+
+  /** Careful:
+   * only use on sets that are sorted according to
+   * {@link Scalars#compare(Scalar, Scalar)}
+   * 
+   * @param sortedSet with canonic comparator, i.e. {@link Scalars#compare(Scalar, Scalar)}
+   * @return */
+  public static <K extends Scalar> Clip keycover(SortedSet<K> sortedSet) {
+    return interval(sortedSet.first(), sortedSet.last());
   }
 
   // ---

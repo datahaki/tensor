@@ -64,6 +64,12 @@ import ch.alpine.tensor.sca.Floor;
  * but with seconds and nanos zero can be as truncated as
  * 2022-09-16T10:42
  * 
+ * Quote from LocalDate:
+ * "The output will be in the ISO-8601 format {@code uuuu-MM-dd}."
+ * Quote from LocalTime:
+ * The output will be one of the following ISO-8601 formats:
+ * [...] {@code HH:mm:ss.SSSSSSSSS}
+ * 
  * {@link LocalDateTime} offers methods to perform calendar arithmetic such as
  * increasing the year, or month. Equivalent methods are available.
  * 
@@ -88,6 +94,9 @@ import ch.alpine.tensor.sca.Floor;
  * whereas DateTime/LocalDateTime requires everything from year down to a minute,
  * after which seconds and nano-seconds are assumed to be zero.
  * Also, the term "Object" does not add meaning in Java.
+ * 
+ * Remark:
+ * The .net framework has a class/struct called "DateTime".
  * 
  * @see FiniteScalarQ
  * @see ExactScalarQ
@@ -146,7 +155,11 @@ public class DateTime extends AbstractScalar implements //
     return new DateTime(LocalDateTime.now());
   }
 
-  /** @param scalar with time based SI-unit, for instance "s", "h", "days", "wk", "mo", "yr", etc.
+  /** When applications log timestamps as epoch long either in milli-seconds, or micro-seconds
+   * resolution, this function transforms the time stamp to a human-readable date-time stamp
+   * based on the given time zone.
+   * 
+   * @param scalar with time based SI-unit, for instance "s", "h", "days", "wk", "mo", "yr", etc.
    * @param zoneOffset
    * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to
    * given zoneOffset */
@@ -160,10 +173,26 @@ public class DateTime extends AbstractScalar implements //
         zoneOffset));
   }
 
+  public static Month month(Scalar scalar) {
+    DateTime dateTime = (DateTime) scalar;
+    return dateTime.month();
+  }
+
+  public static DayOfWeek dayOfWeek(Scalar scalar) {
+    DateTime dateTime = (DateTime) scalar;
+    return dateTime.dayOfWeek();
+  }
+
   /** parsing function
    * 
-   * Examples:
-   * 2020-12-20T04:30:03.125239876 parses to {@link DateTime}
+   * Examples that parse to valid {@link DateTime}s:
+   * <pre>
+   * 2020-12-20T04:30
+   * 2020-12-20T04:30:03
+   * 2020-12-20T04:30:03.125
+   * 2020-12-20T04:30:03.125239
+   * 2020-12-20T04:30:03.125239876
+   * </pre>
    * 
    * @param string
    * @return
@@ -353,7 +382,7 @@ public class DateTime extends AbstractScalar implements //
     return localDateTime.toString();
   }
 
-  /** The parameter can be of the form:
+  /** Example: The parameter can be of the form:
    * DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSSSSS")
    * 
    * @param dateTimeFormatter

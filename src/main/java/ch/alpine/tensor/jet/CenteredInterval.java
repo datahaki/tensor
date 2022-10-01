@@ -84,7 +84,7 @@ public class CenteredInterval extends AbstractScalar implements //
   }
 
   private CenteredInterval(Scalar center, Scalar radius) {
-    clip = Clips.interval(center.subtract(radius), center.add(radius));
+    clip = Clips.centered(center, radius);
     this.center = center;
     this.radius = radius;
   }

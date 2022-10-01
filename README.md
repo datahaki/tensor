@@ -12,6 +12,10 @@ The tensor library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
 * API and string expressions inspired by `Mathematica`
 
+|--------------|-----------|------------|
+| Juicy Apples | 1.99      | *7*        |
+| Bananas      | **1.89**  | 5234       |
+
 Diverse projects rely on the tensor library:
 
 <table>
@@ -26,7 +30,7 @@ Mobility-on-Demand
 
 ![usecase_swisstrolley](https://user-images.githubusercontent.com/4012178/35968228-88547e90-0cc3-11e8-978d-4f822515156f.png)
 
-SwissTrolley plus
+*SwissTrolley+*
 
 <td>
 
@@ -195,7 +199,7 @@ System.out.println(force_N);
 2943/1000[N]
 ```
 
-The scalar type `Quantity` was developed in collaboration with `SwissTrolley+`.
+The scalar type `Quantity` was developed in collaboration with *SwissTrolley+*.
 
 ### Date and Time
 
@@ -214,7 +218,7 @@ System.out.println(guess);
 2022-03-02T10:12:06.641540174
 ```
 
-The scalar type `DateTime` was developed in collaboration with `GRZ Technologies`.
+The scalar type `DateTime` was developed in collaboration with *GRZ Technologies*.
 
 ### Miscellaneous
 
