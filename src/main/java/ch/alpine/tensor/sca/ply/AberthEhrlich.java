@@ -10,11 +10,14 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.FiniteTensorQ;
 import ch.alpine.tensor.itp.FindRoot;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Abs;
 
@@ -26,13 +29,31 @@ import ch.alpine.tensor.sca.Abs;
   private static final Random RANDOM = new SecureRandom();
 
   /** @param polynomial of degree at least 2
-   * @return unsored roots of polynomial
+   * @return unsorted roots of polynomial
    * @throws Exception if convergence fail */
   public static Tensor of(Polynomial polynomial) {
-    AberthEhrlich aberthEhrlich = new AberthEhrlich(polynomial);
+    return of(polynomial, RANDOM);
+  }
+
+  /** @param polynomial of degree at least 2
+   * @param random to generate seeds
+   * @return unsorted roots of polynomial
+   * @throws Exception if convergence fail */
+  public static Tensor of(Polynomial polynomial, Random random) {
+    Polynomial derivative = polynomial.derivative();
+    Unit unit = polynomial.getUnitDomain();
+    // TODO TENSOR IMPL initialize according to theoretical bounds
+    Distribution distribution = NormalDistribution.standard();
+    Tensor vector = Tensors.vector(i -> Quantity.of(ComplexScalar.of( //
+        RandomVariate.of(distribution, random), //
+        RandomVariate.of(distribution, random)), unit), polynomial.degree());
+    AberthEhrlich aberthEhrlich = new AberthEhrlich(polynomial, derivative, vector);
     for (int index = 0; index < MAX_ITERATIONS; ++index) {
       Tensor tensor = aberthEhrlich.iterate();
-      Scalar err = Total.ofVector(tensor.map(polynomial).map(Abs.FUNCTION));
+      FiniteTensorQ.require(tensor);
+      Tensor eval = tensor.map(polynomial);
+      FiniteTensorQ.require(eval);
+      Scalar err = Total.ofVector(eval.map(Abs.FUNCTION));
       if (Tolerance.CHOP.isZero(err))
         return aberthEhrlich.vector;
     }
@@ -44,16 +65,13 @@ import ch.alpine.tensor.sca.Abs;
   private final Polynomial derivative;
   private Tensor vector;
 
-  private AberthEhrlich(Polynomial polynomial) {
+  private AberthEhrlich(Polynomial polynomial, Polynomial derivative, Tensor vector) {
     this.polynomial = polynomial;
-    derivative = polynomial.derivative();
-    Distribution distribution = NormalDistribution.standard();
-    vector = Tensors.vector(i -> ComplexScalar.of( //
-        RandomVariate.of(distribution, RANDOM), //
-        RandomVariate.of(distribution, RANDOM)), polynomial.degree());
+    this.derivative = derivative;
+    this.vector = vector;
   }
 
-  Tensor iterate() {
+  private Tensor iterate() {
     Tensor result = vector.copy();
     for (int k = 0; k < vector.length(); ++k) {
       final int fi = k;
@@ -66,6 +84,7 @@ import ch.alpine.tensor.sca.Abs;
           // .filter(s -> !Tolerance.CHOP.isZero(s)) //
           .filter(scalar -> atomicInteger.getAndIncrement() != fi) //
           .map(Scalar::reciprocal) //
+          // .filter(FiniteScalarQ::of) //
           .reduce(Scalar::add) //
           .orElseThrow();
       result.set(p1.divide(p0).subtract(push).reciprocal().negate()::add, k);

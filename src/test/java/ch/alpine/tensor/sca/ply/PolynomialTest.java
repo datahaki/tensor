@@ -311,7 +311,6 @@ class PolynomialTest {
 
   @Test
   void testDerLinEx() {
-    // Tensor coeffs = ;
     Polynomial polynomial = Polynomial.of(Tensors.fromString("{-13[bar], 0.27[K^-1*bar]}"));
     assertEquals(QuantityUnit.of(polynomial.apply(Quantity.of(3, "K"))), Unit.of("bar"));
     Polynomial derivative = polynomial.derivative();
@@ -319,6 +318,8 @@ class PolynomialTest {
     // ScalarUnaryOperator derivative = Polynomial.of(coeffs_d1);
     assertEquals(QuantityUnit.of(derivative.apply(Quantity.of(3, "K"))), Unit.of("bar*K^-1"));
     assertThrows(Throw.class, () -> derivative.apply(Quantity.of(3, "bar")));
+    // System.out.println(polynomial);
+    // System.out.println(polynomial.withLeadingCoefficientOne());
   }
 
   @Test
@@ -401,7 +402,7 @@ class PolynomialTest {
     assertEquals(c1.getUnitDomain(), Unit.ONE);
     assertEquals(c1.getUnitValues(), Unit.ONE);
     Polynomial c2 = Polynomial.of(Tensors.vector(5, 7, 1));
-    assertEquals(c2.toString(), "Polynomial[{5, 7, 1}]");
+    assertEquals(c2.toString(), "Polynomial[{5, 7, 1}, , ]");
     Tensor roots = c2.roots();
     Tolerance.CHOP.requireAllZero(roots.map(c2));
     assertNotEquals(c1, c2);
@@ -553,6 +554,9 @@ class PolynomialTest {
     assertEquals(polynomial.getUnitValues(), Unit.ONE);
     Scalar scalar = polynomial.apply(RealScalar.of(3));
     assertInstanceOf(DateTime.class, scalar);
+    Polynomial derivative = polynomial.derivative();
+    assertEquals(derivative, Polynomial.of(Tensors.of(Quantity.of(4, "s"), Quantity.of(10, "s"))));
+    assertThrows(Exception.class, () -> polynomial.antiderivative());
   }
 
   @Test

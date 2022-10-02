@@ -1,4 +1,4 @@
-// code by clruch
+// code by clruch, jph
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
