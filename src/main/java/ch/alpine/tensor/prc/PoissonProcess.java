@@ -37,14 +37,7 @@ import ch.alpine.tensor.pdf.c.ExponentialDistribution;
   }
 
   @Override
-  public Tensor path() {
-    // TODO TENSOR PRC Auto-generated method stub
-    return null;
-  }
-  
-  @Override
   public String toString() {
     return MathematicaFormat.concise("PoissonProcess");
   }
-
 }

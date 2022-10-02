@@ -6,7 +6,6 @@ import java.io.Serializable;
 import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -14,17 +13,15 @@ import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Sign;
 
-/** <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/BinomialProcess.html">BinomialProcess</a> */
-/* package */ class BinomialProcess implements RandomProcess, Serializable {
+public class BernoulliProcess implements RandomProcess, Serializable {
   public static RandomProcess of(Scalar p) {
-    return new BinomialProcess(p);
+    return new BernoulliProcess(p);
   }
 
   private final Scalar p;
   private Distribution distribution;
 
-  private BinomialProcess(Scalar p) {
+  private BernoulliProcess(Scalar p) {
     this.p = p;
     distribution = BernoulliDistribution.of(p);
   }
@@ -40,16 +37,14 @@ import ch.alpine.tensor.sca.Sign;
       return (Scalar) timeSeries.step(x);
     Scalar ofs = timeSeries.support().max();
     while (!ofs.equals(x)) {
-      Tensor last = timeSeries.step(ofs);
-      Scalar delta = RandomVariate.of(distribution);
       ofs = ofs.add(RealScalar.ONE);
-      timeSeries.insert(ofs, last.add(delta));
+      timeSeries.insert(ofs, RandomVariate.of(distribution));
     }
     return (Scalar) timeSeries.step(x);
   }
 
   @Override
   public String toString() {
-    return MathematicaFormat.concise("BinomialProcess", p);
+    return MathematicaFormat.concise("BernoulliProcess", p);
   }
 }

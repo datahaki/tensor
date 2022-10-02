@@ -4,7 +4,6 @@ package ch.alpine.tensor.prc;
 import java.io.Serializable;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.MathematicaFormat;
 
 /** <p>inspired by
@@ -19,6 +18,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
     this.mu = mu;
     this.sigma = sigma;
   }
+
   @Override
   public Scalar eval(TimeSeries timeSeries, Scalar x) {
     // TODO Auto-generated method stub
@@ -26,14 +26,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
   }
 
   @Override
-  public Tensor path() {
-    // TODO TENSOR PRC Auto-generated method stub
-    return null;
-  }
-
-  @Override
   public String toString() {
     return MathematicaFormat.concise("WienerProcess", mu, sigma);
   }
-
 }
