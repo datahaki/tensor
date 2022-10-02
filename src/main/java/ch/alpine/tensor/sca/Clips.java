@@ -114,6 +114,7 @@ public enum Clips {
    * 
    * @param sortedMap with canonic comparator, i.e. {@link Scalars#compare(Scalar, Scalar)}
    * @return
+   * @throws Exception if given sortedMap is empty
    * @see MinMax#toClip() */
   public static <K extends Scalar> Clip keycover(SortedMap<K, ?> sortedMap) {
     return interval( //

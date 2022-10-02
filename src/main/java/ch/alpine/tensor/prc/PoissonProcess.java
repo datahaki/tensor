@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
@@ -30,8 +31,20 @@ import ch.alpine.tensor.pdf.c.ExponentialDistribution;
   }
 
   @Override
+  public Scalar eval(TimeSeries timeSeries, Scalar x) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
   public Tensor path() {
     // TODO TENSOR PRC Auto-generated method stub
     return null;
   }
+  
+  @Override
+  public String toString() {
+    return MathematicaFormat.concise("PoissonProcess");
+  }
+
 }

@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.ext.Integers;
 
 public abstract class AbstractTensor implements Tensor {
-  /** @param i
+  /** @param i in the range 0, 1, ..., length() - 1
    * @return reference to i-th element */
   protected abstract Tensor byRef(int i);
 

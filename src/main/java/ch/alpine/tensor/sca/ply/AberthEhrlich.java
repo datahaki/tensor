@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.Abs;
 /** https://en.wikipedia.org/wiki/Aberth_method
  * 
  * @see FindRoot */
-/* package */ class AberthEhrlich {
+public class AberthEhrlich {
   private static final int MAX_ITERATIONS = 128;
   private static final Random RANDOM = new SecureRandom();
 
@@ -40,14 +40,15 @@ import ch.alpine.tensor.sca.Abs;
    * @return unsorted roots of polynomial
    * @throws Exception if convergence fail */
   public static Tensor of(Polynomial polynomial, Random random) {
-    Polynomial derivative = polynomial.derivative();
+    // polynomial = polynomial.withLeadingCoefficientOne();
+    // Polynomial derivative =
     Unit unit = polynomial.getUnitDomain();
     // TODO TENSOR IMPL initialize according to theoretical bounds
     Distribution distribution = NormalDistribution.standard();
     Tensor vector = Tensors.vector(i -> Quantity.of(ComplexScalar.of( //
         RandomVariate.of(distribution, random), //
         RandomVariate.of(distribution, random)), unit), polynomial.degree());
-    AberthEhrlich aberthEhrlich = new AberthEhrlich(polynomial, derivative, vector);
+    AberthEhrlich aberthEhrlich = new AberthEhrlich(polynomial, vector);
     for (int index = 0; index < MAX_ITERATIONS; ++index) {
       Tensor tensor = aberthEhrlich.iterate();
       FiniteTensorQ.require(tensor);
@@ -65,13 +66,15 @@ import ch.alpine.tensor.sca.Abs;
   private final Polynomial derivative;
   private Tensor vector;
 
-  private AberthEhrlich(Polynomial polynomial, Polynomial derivative, Tensor vector) {
+  /** @param polynomial
+   * @param vector initial guess */
+  public AberthEhrlich(Polynomial polynomial, Tensor vector) {
     this.polynomial = polynomial;
-    this.derivative = derivative;
+    this.derivative = polynomial.derivative();
     this.vector = vector;
   }
 
-  private Tensor iterate() {
+  public Tensor iterate() {
     Tensor result = vector.copy();
     for (int k = 0; k < vector.length(); ++k) {
       final int fi = k;

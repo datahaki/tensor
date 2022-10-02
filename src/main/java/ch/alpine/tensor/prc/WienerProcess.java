@@ -19,6 +19,11 @@ import ch.alpine.tensor.io.MathematicaFormat;
     this.mu = mu;
     this.sigma = sigma;
   }
+  @Override
+  public Scalar eval(TimeSeries timeSeries, Scalar x) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
   @Override
   public Tensor path() {
@@ -30,4 +35,5 @@ import ch.alpine.tensor.io.MathematicaFormat;
   public String toString() {
     return MathematicaFormat.concise("WienerProcess", mu, sigma);
   }
+
 }

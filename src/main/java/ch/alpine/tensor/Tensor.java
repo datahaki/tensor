@@ -110,9 +110,7 @@ public interface Tensor extends Iterable<Tensor> {
    * </pre>
    * 
    * Consequently, an exception is thrown, if there is no Scalar at the specified entry.
-   * 
-   * Remark: The function was introduced to facilitate the extraction of entries
-   * from vectors.
+   * The function facilitates the extraction of scalars entries from vectors.
    * 
    * @param i in the range 0, 1, ..., length() - 1
    * @return (Scalar) get(i)

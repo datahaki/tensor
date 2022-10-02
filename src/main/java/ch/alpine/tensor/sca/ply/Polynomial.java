@@ -186,6 +186,9 @@ public class Polynomial extends HornerScheme {
     return of(tensor);
   }
 
+  /** Careful: changes unit of values
+   * 
+   * @return */
   public Polynomial withLeadingCoefficientOne() {
     return of(coeffs.divide(Last.of(coeffs)));
   }
