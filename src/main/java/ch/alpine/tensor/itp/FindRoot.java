@@ -9,6 +9,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.num.FindInteger;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -19,7 +20,9 @@ import ch.alpine.tensor.sca.Sign;
  * approximately function(x) == 0.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/FindRoot.html">FindRoot</a> */
+ * <a href="https://reference.wolfram.com/language/ref/FindRoot.html">FindRoot</a>
+ * 
+ * @see FindInteger */
 public class FindRoot implements Serializable {
   /** the max iterations was chosen with the following consideration:
    * 

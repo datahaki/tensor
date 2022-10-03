@@ -14,17 +14,6 @@ import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.sca.Clips;
 
 public enum ResamplingMethods implements ResamplingMethod {
-  EXACT {
-    @Override
-    public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
-      navigableMap.put(key, value.copy());
-    }
-
-    @Override
-    public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
-      return Objects.requireNonNull(navigableMap.get(x));
-    }
-  },
   /** linear interpolation
    * default in Mathematica as {Interpolation, 1} */
   INTERPOLATION_1 {
@@ -81,4 +70,16 @@ public enum ResamplingMethods implements ResamplingMethod {
       throw new Throw(x);
     }
   },
+  NONE {
+    @Override // from ResamplingMethod
+    public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
+      navigableMap.put(key, value.copy());
+    }
+
+    @Override // from ResamplingMethod
+    public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
+      return Objects.requireNonNull(navigableMap.get(x));
+    }
+  },
+
 }

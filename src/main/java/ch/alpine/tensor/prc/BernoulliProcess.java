@@ -1,49 +1,37 @@
 // code by jph
 package ch.alpine.tensor.prc;
 
-import java.io.Serializable;
-import java.util.Random;
-
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.io.MathematicaFormat;
-import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
-import ch.alpine.tensor.sca.Clip;
-import ch.alpine.tensor.sca.Sign;
 
-/** inspired by
+/** Quote from Mathematica:
+ * <blockquote>
+ * BernoulliProcess at a fixed instant of time is a Bernoulli random variate with parameter p.
+ * </blockquote>
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BernoulliProcess.html">BernoulliProcess</a> */
-public class BernoulliProcess implements RandomProcess, Serializable {
+public class BernoulliProcess extends DiscreteProcess {
+  /** @param p in the interval [0, 1]
+   * @return */
   public static RandomProcess of(Scalar p) {
     return new BernoulliProcess(p);
   }
 
-  private final Scalar p;
-  private Distribution distribution;
-
-  private BernoulliProcess(Scalar p) {
-    this.p = p;
-    distribution = BernoulliDistribution.of(p);
+  /** @param p in the interval [0, 1]
+   * @return */
+  public static RandomProcess of(Number p) {
+    return of(RealScalar.of(p));
   }
 
-  @Override
-  public Scalar eval(TimeSeries timeSeries, Random random, Scalar x) {
-    IntegerQ.require(x);
-    Sign.requirePositiveOrZero(x);
-    if (timeSeries.isEmpty())
-      timeSeries.insert(RealScalar.ZERO, RandomVariate.of(distribution, random));
-    Clip clip = timeSeries.support();
-    if (clip.isInside(x))
-      return (Scalar) timeSeries.eval(x);
-    Scalar ofs = timeSeries.support().max();
-    while (!ofs.equals(x)) {
-      ofs = ofs.add(RealScalar.ONE);
-      timeSeries.insert(ofs, RandomVariate.of(distribution, random));
-    }
-    return (Scalar) timeSeries.eval(x);
+  // ---
+  private final Scalar p;
+
+  private BernoulliProcess(Scalar p) {
+    super(BernoulliDistribution.of(p));
+    this.p = p;
   }
 
   @Override

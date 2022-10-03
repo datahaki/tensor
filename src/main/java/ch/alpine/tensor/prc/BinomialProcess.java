@@ -1,7 +1,9 @@
 // code by jph
 package ch.alpine.tensor.prc;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.pdf.TransformedDistribution;
 import ch.alpine.tensor.pdf.d.GeometricDistribution;
 
 /** Quote from Mathematica:
@@ -16,8 +18,15 @@ import ch.alpine.tensor.pdf.d.GeometricDistribution;
  * <a href="https://reference.wolfram.com/language/ref/BinomialProcess.html">BinomialProcess</a> */
 public enum BinomialProcess {
   ;
+  /** @param p with 0 < p <= 1
+   * @return */
   public static RandomProcess of(Scalar p) {
-    // FIXME TENSOR need to add one!
-    return RenewalProcess.of(GeometricDistribution.of(p));
+    return RenewalProcess.of(TransformedDistribution.shift(GeometricDistribution.of(p), RealScalar.ONE));
+  }
+
+  /** @param p with 0 < p <= 1
+   * @return */
+  public static RandomProcess of(Number p) {
+    return of(RealScalar.of(p));
   }
 }

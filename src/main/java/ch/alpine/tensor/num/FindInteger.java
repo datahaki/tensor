@@ -10,10 +10,12 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.itp.FindRoot;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
+/** @see FindRoot */
 public enum FindInteger {
   ;
   private static final int MAX_ITERATIONS_A = 256;

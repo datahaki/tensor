@@ -19,11 +19,12 @@ public class RandomFunction implements ScalarUnaryOperator {
   }
 
   // ---
-  private final TimeSeries timeSeries = TimeSeries.empty();
   private final RandomProcess randomProcess;
+  private final TimeSeries timeSeries;
 
   private RandomFunction(RandomProcess randomProcess) {
     this.randomProcess = randomProcess;
+    this.timeSeries = randomProcess.spawn();
   }
 
   @Override

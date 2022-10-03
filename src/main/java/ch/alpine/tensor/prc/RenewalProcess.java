@@ -14,8 +14,15 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
 
-/** inspired by
- * <a href="https://reference.wolfram.com/language/ref/RenewalProcess.html">RenewalProcess</a> */
+/** Quote from Mathematica:
+ * <blockquote>
+ * The state x(t) is the number of events in the interval 0 to t and x(0)==0.
+ * </blockquote>
+ * 
+ * <p>inspired by
+ * <a href="https://reference.wolfram.com/language/ref/RenewalProcess.html">RenewalProcess</a>
+ * 
+ * @see BinomialProcess */
 public class RenewalProcess implements RandomProcess, Serializable {
   /** @param distribution
    * @return */
@@ -26,20 +33,22 @@ public class RenewalProcess implements RandomProcess, Serializable {
   // ---
   private final Distribution distribution;
 
-  public RenewalProcess(Distribution distribution) {
+  private RenewalProcess(Distribution distribution) {
     this.distribution = distribution;
+  }
+
+  @Override
+  public TimeSeries spawn() {
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_LO);
+    timeSeries.insert(RealScalar.ZERO, RealScalar.ZERO);
+    return timeSeries;
   }
 
   @Override
   public Scalar eval(TimeSeries timeSeries, Random random, Scalar x) {
     Sign.requirePositiveOrZero(x);
-    if (timeSeries.isEmpty()) {
-      Scalar dt = RandomVariate.of(distribution, random);
-      timeSeries.insert(dt.zero(), RealScalar.ZERO);
-      timeSeries.insert(dt, RealScalar.ONE);
-    }
-    while (Scalars.lessEquals(timeSeries.support().max(), x)) {
-      Scalar dt = RandomVariate.of(distribution, random);
+    while (Scalars.lessThan(timeSeries.support().max(), x)) {
+      Scalar dt = Sign.requirePositive(RandomVariate.of(distribution, random));
       Scalar max = timeSeries.support().max();
       Tensor val = timeSeries.eval(max);
       timeSeries.insert(max.add(dt), val.add(RealScalar.ONE));
