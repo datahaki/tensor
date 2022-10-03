@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.DateTime;
@@ -40,6 +41,8 @@ class TimeSeriesImplTest {
     assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(-1, "h"))));
     assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
+    Tensor integral = TimeSeriesOp.integrate(timeSeries);
+    assertEquals(integral, Tensors.fromString("{162000[s], 248400[s], 32400[s]}"));
   }
 
   @Test

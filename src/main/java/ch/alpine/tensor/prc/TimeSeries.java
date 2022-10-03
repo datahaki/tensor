@@ -30,6 +30,11 @@ public interface TimeSeries {
   static TimeSeries of(Tensor path) {
     return of(path.stream());
   }
+  
+  static TimeSeries of(Tensor path, ResamplingMethod resamplingMethod) {
+    return of(path.stream(), resamplingMethod);
+  }
+
 
   /** @param stream of tensors, where each is of the form {key, value}
    * @return
@@ -43,6 +48,7 @@ public interface TimeSeries {
    * @return
    * @throws Exception if any tensor in the stream does not have length 2 */
   static TimeSeries of(Stream<Tensor> stream, ResamplingMethod resamplingMethod) {
+    // TODO TENSOR use resampling method insert to compress!?
     return new TimeSeriesImpl(stream.map(tensor -> {
       Integers.requireEquals(tensor.length(), 2);
       return tensor;
