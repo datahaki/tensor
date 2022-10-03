@@ -47,7 +47,7 @@ class TimeSeriesImplTest {
 
   @Test
   void testInterp1() throws ClassNotFoundException, IOException {
-    TimeSeries timeSeries = TimeSeries.empty();
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.INTERPOLATION_1);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
     DateTime dateTime = DateTime.of(1993, 4, 5, 4, 5);

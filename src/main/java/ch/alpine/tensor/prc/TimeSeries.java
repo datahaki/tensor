@@ -13,33 +13,25 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.sca.Clip;
 
-/** inspired by
+/** A time series hosts a discrete set of (key, value)-pairs, i.e.
+ * (Scalar, Tensor)-pairs, and uses a {@link ResamplingMethod} to
+ * map {@link Scalar} within the {@link #support()} to a
+ * {@link Tensor}.
+ * 
+ * <p>In Mathematica, the default resampling method is linear
+ * interpolation.
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/TimeSeries.html">TimeSeries</a> */
 public interface TimeSeries {
-  /** @param resamplingMethod
+  /** @param resamplingMethod non-null
    * @return empty time series with given resampling method */
   static TimeSeries empty(ResamplingMethod resamplingMethod) {
     return new TimeSeriesImpl(new TreeMap<>(), Objects.requireNonNull(resamplingMethod));
   }
 
-  /** @return empty time series with linear interpolation as resampling method */
-  static TimeSeries empty() {
-    return empty(ResamplingMethods.INTERPOLATION_1);
-  }
-
   static TimeSeries of(Tensor path, ResamplingMethod resamplingMethod) {
     return of(path.stream(), resamplingMethod);
-  }
-
-  static TimeSeries of(Tensor path) {
-    return of(path.stream());
-  }
-
-  /** @param stream of tensors, where each is of the form {key, value}
-   * @return
-   * @throws Exception if any tensor in the stream does not have length 2 */
-  static TimeSeries of(Stream<Tensor> stream) {
-    return of(stream, ResamplingMethods.INTERPOLATION_1);
   }
 
   /** @param stream of tensors, where each is of the form {key, value}

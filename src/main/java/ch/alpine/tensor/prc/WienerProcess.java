@@ -43,7 +43,7 @@ public class WienerProcess implements RandomProcess, Serializable {
 
   @Override
   public TimeSeries spawn() {
-    TimeSeries timeSeries = TimeSeries.empty();
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.INTERPOLATION_1);
     // TODO TENSOR MATH is this general !? quantity?
     timeSeries.insert(RealScalar.ZERO, RealScalar.ZERO);
     return timeSeries;

@@ -16,7 +16,7 @@ import ch.alpine.tensor.qty.Quantity;
 class PoissonProcessTest {
   @Test
   void testSimple() throws ClassNotFoundException, IOException {
-    RandomProcess randomProcess = PoissonProcess.of(RealScalar.of(2));
+    RandomProcess randomProcess = PoissonProcess.of(2);
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
     randomFunction.apply(RealScalar.of(30));
     int length = randomFunction.path().length();

@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Serialization;
@@ -16,7 +15,7 @@ import ch.alpine.tensor.ext.Serialization;
 class BernoulliProcessTest {
   @Test
   void testRandomFunction() throws ClassNotFoundException, IOException {
-    RandomProcess randomProcess = BernoulliProcess.of(RationalScalar.HALF);
+    RandomProcess randomProcess = BernoulliProcess.of(0.5);
     assertTrue(randomProcess.toString().startsWith("BernoulliProcess"));
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
     randomFunction.apply(RealScalar.of(30));

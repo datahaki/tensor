@@ -38,14 +38,18 @@ public enum TimeSeriesOp {
       TimeSeries timeSeries1, //
       TimeSeries timeSeries2, //
       BinaryOperator<Tensor> binaryOperator) {
-    Clip clip = Clips.intersection(timeSeries1.support(), timeSeries2.support());
-    TimeSeries timeSeries = TimeSeries.empty();
-    Set<Scalar> set = new HashSet<>();
-    set.addAll(timeSeries1.keySet(clip));
-    set.addAll(timeSeries2.keySet(clip));
-    for (Scalar key : set)
-      timeSeries.insert(key, binaryOperator.apply(timeSeries1.eval(key), timeSeries2.eval(key)));
-    return timeSeries;
+    if (timeSeries1.resamplingMethod().equals(timeSeries2.resamplingMethod())) {
+      Clip clip = Clips.intersection(timeSeries1.support(), timeSeries2.support());
+      // TODO TENSOR SYNC with mathematica: what happens if clip is empty
+      TimeSeries timeSeries = TimeSeries.empty(timeSeries1.resamplingMethod());
+      Set<Scalar> set = new HashSet<>();
+      set.addAll(timeSeries1.keySet(clip));
+      set.addAll(timeSeries2.keySet(clip));
+      for (Scalar key : set)
+        timeSeries.insert(key, binaryOperator.apply(timeSeries1.eval(key), timeSeries2.eval(key)));
+      return timeSeries;
+    }
+    throw new Throw(timeSeries1, timeSeries2);
   }
 
   public static Tensor integrate(TimeSeries timeSeries) {

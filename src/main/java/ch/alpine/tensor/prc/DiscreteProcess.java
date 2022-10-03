@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.prc;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
 
+/** API EXPERIMENTAL */
 public abstract class DiscreteProcess implements RandomProcess, Serializable {
   private final Distribution distribution;
 

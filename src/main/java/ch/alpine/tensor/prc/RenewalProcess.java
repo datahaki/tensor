@@ -40,7 +40,7 @@ public class RenewalProcess implements RandomProcess, Serializable {
   @Override
   public TimeSeries spawn() {
     TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_LO);
-    timeSeries.insert(RealScalar.ZERO, RealScalar.ZERO);
+    timeSeries.insert(RandomVariate.of(distribution).zero(), RealScalar.ZERO);
     return timeSeries;
   }
 

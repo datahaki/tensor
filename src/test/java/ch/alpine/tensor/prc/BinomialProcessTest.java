@@ -27,7 +27,7 @@ class BinomialProcessTest {
 
   @Test
   void testMax() throws ClassNotFoundException, IOException {
-    RandomProcess randomProcess = BinomialProcess.of(RationalScalar.of(1, 4));
+    RandomProcess randomProcess = BinomialProcess.of(0.25);
     assertTrue(randomProcess.toString().startsWith("RenewalProcess"));
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
     randomFunction.apply(RealScalar.of(30));

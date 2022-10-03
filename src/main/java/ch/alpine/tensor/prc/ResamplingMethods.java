@@ -13,6 +13,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.sca.Clips;
 
+/** @see TimeSeries */
 public enum ResamplingMethods implements ResamplingMethod {
   /** linear interpolation
    * default in Mathematica as {Interpolation, 1} */
@@ -81,5 +82,5 @@ public enum ResamplingMethods implements ResamplingMethod {
       return Objects.requireNonNull(navigableMap.get(x));
     }
   },
-
+  // TODO TENSOR IMPL NEAREST
 }
