@@ -64,8 +64,8 @@ class TimeSeriesImpl implements TimeSeries, Serializable {
   }
 
   @Override
-  public NavigableSet<Scalar> keySet() {
-    return navigableMap.navigableKeySet();
+  public NavigableSet<Scalar> keySet(Clip clip) {
+    return navigableMap.subMap(clip.min(), true, clip.max(), true).navigableKeySet();
   }
 
   @Override // from TimeSeries
@@ -117,5 +117,10 @@ class TimeSeriesImpl implements TimeSeries, Serializable {
   @Override
   public Tensor times() {
     return Tensor.of(navigableMap.keySet().stream());
+  }
+
+  @Override
+  public int hashCode() {
+    return navigableMap.hashCode();
   }
 }

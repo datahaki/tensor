@@ -2,6 +2,7 @@
 package ch.alpine.tensor.prc;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RealScalar;
@@ -27,18 +28,18 @@ public class BernoulliProcess implements RandomProcess, Serializable {
   }
 
   @Override
-  public Scalar eval(TimeSeries timeSeries, Scalar x) {
+  public Scalar eval(TimeSeries timeSeries, Random random, Scalar x) {
     IntegerQ.require(x);
     Sign.requirePositiveOrZero(x);
     if (timeSeries.isEmpty())
-      timeSeries.insert(RealScalar.ZERO, RandomVariate.of(distribution));
+      timeSeries.insert(RealScalar.ZERO, RandomVariate.of(distribution, random));
     Clip clip = timeSeries.support();
     if (clip.isInside(x))
       return (Scalar) timeSeries.step(x);
     Scalar ofs = timeSeries.support().max();
     while (!ofs.equals(x)) {
       ofs = ofs.add(RealScalar.ONE);
-      timeSeries.insert(ofs, RandomVariate.of(distribution));
+      timeSeries.insert(ofs, RandomVariate.of(distribution, random));
     }
     return (Scalar) timeSeries.step(x);
   }

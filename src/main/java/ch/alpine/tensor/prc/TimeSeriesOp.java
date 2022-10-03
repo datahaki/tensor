@@ -14,8 +14,8 @@ public enum TimeSeriesOp {
     Clip clip = Clips.intersection(ts1.support(), ts2.support());
     TimeSeries timeSeries = TimeSeries.empty();
     Set<Scalar> set = new HashSet<>();
-    set.addAll(ts1.keySet().subSet(clip.min(), true, clip.max(), true));
-    set.addAll(ts2.keySet().subSet(clip.min(), true, clip.max(), true));
+    set.addAll(ts1.keySet(clip));
+    set.addAll(ts2.keySet(clip));
     for (Scalar key : set)
       timeSeries.insert(key, ts1.lerp(key).add(ts2.lerp(key)));
     return timeSeries;

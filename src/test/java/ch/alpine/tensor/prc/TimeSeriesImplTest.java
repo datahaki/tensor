@@ -23,6 +23,7 @@ class TimeSeriesImplTest {
     DateTime dateTime = DateTime.of(1993, 4, 5, 4, 5);
     assertThrows(Exception.class, () -> timeSeries.insert(dateTime, null));
     timeSeries.insert(dateTime, Tensors.vector(1, 2, 3));
+    TimeSeries copy = timeSeries.copy();
     timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(24, "h")), Tensors.vector(0, 0, 6));
     assertEquals(timeSeries.size(), 3);
@@ -39,5 +40,6 @@ class TimeSeriesImplTest {
     assertEquals(timeSeries.lerp(dateTime.add(Quantity.of(24, "h"))), Tensors.vector(0, 0, 6));
     assertThrows(Exception.class, () -> timeSeries.lerp(dateTime.add(Quantity.of(-1, "h"))));
     assertThrows(Exception.class, () -> timeSeries.lerp(dateTime.add(Quantity.of(25, "h"))));
+    assertEquals(copy.size(), 1);
   }
 }

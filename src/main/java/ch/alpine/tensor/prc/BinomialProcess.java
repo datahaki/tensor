@@ -1,55 +1,23 @@
 // code by jph
 package ch.alpine.tensor.prc;
 
-import java.io.Serializable;
-
-import ch.alpine.tensor.IntegerQ;
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.io.MathematicaFormat;
-import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.d.BernoulliDistribution;
-import ch.alpine.tensor.sca.Clip;
-import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.pdf.d.GeometricDistribution;
 
-/** <p>inspired by
+/** Quote from Mathematica:
+ * <blockquote>
+ * BinomialProcess is a discrete-time and discrete-state process.
+ * BinomialProcess at time n is the number of events in the interval 0 to n.
+ * The number of events in the interval 0 to n follows BinomialDistribution[n, p].
+ * The times between events are independent and follow GeometricDistribution[p].
+ * </blockquote>
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BinomialProcess.html">BinomialProcess</a> */
-/* package */ class BinomialProcess implements RandomProcess, Serializable {
+public enum BinomialProcess {
+  ;
   public static RandomProcess of(Scalar p) {
-    return new BinomialProcess(p);
-  }
-
-  private final Scalar p;
-  private Distribution distribution;
-
-  private BinomialProcess(Scalar p) {
-    this.p = p;
-    distribution = BernoulliDistribution.of(p);
-  }
-
-  @Override
-  public Scalar eval(TimeSeries timeSeries, Scalar x) {
-    IntegerQ.require(x);
-    Sign.requirePositiveOrZero(x);
-    if (timeSeries.isEmpty())
-      timeSeries.insert(RealScalar.ZERO, RandomVariate.of(distribution));
-    Clip clip = timeSeries.support();
-    if (clip.isInside(x))
-      return (Scalar) timeSeries.step(x);
-    Scalar ofs = timeSeries.support().max();
-    while (!ofs.equals(x)) {
-      Tensor last = timeSeries.step(ofs);
-      Scalar delta = RandomVariate.of(distribution);
-      ofs = ofs.add(RealScalar.ONE);
-      timeSeries.insert(ofs, last.add(delta));
-    }
-    return (Scalar) timeSeries.step(x);
-  }
-
-  @Override
-  public String toString() {
-    return MathematicaFormat.concise("BinomialProcess", p);
+    // FIXME TENSOR need to add one!
+    return RenewalProcess.of(GeometricDistribution.of(p));
   }
 }

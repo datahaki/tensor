@@ -2,6 +2,7 @@
 package ch.alpine.tensor.prc;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.io.MathematicaFormat;
@@ -20,7 +21,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
   }
 
   @Override
-  public Scalar eval(TimeSeries timeSeries, Scalar x) {
+  public Scalar eval(TimeSeries timeSeries, Random random, Scalar x) {
     // TODO Auto-generated method stub
     return null;
   }

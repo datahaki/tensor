@@ -54,9 +54,11 @@ public interface TimeSeries {
 
   TimeSeries extract(Clip clip);
 
+  /** @param clip
+   * @return view on submap */
   TimeSeries block(Clip clip);
 
-  NavigableSet<Scalar> keySet();
+  NavigableSet<Scalar> keySet(Clip clip);
 
   /** Mathematica convention
    * 
