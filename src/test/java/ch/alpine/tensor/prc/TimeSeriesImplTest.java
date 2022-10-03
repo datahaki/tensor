@@ -46,7 +46,7 @@ class TimeSeriesImplTest {
   }
 
   @Test
-  void testInterp1() {
+  void testInterp1() throws ClassNotFoundException, IOException {
     TimeSeries timeSeries = TimeSeries.empty();
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
@@ -65,5 +65,7 @@ class TimeSeriesImplTest {
     assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
     assertTrue(timeSeries.toString().startsWith("TimeSeries["));
+    TimeSeries copy_unmodif = Serialization.copy(timeSeries.unmodifiable());
+    assertThrows(Exception.class, () -> copy_unmodif.insert(dateTime, Tensors.vector(0, 0, 6)));
   }
 }

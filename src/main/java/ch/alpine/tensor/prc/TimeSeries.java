@@ -16,25 +16,24 @@ import ch.alpine.tensor.sca.Clip;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TimeSeries.html">TimeSeries</a> */
 public interface TimeSeries {
-  /** @return empty time series with linear interpolation as resampling method */
-  static TimeSeries empty() {
-    return empty(ResamplingMethods.INTERPOLATION_1);
-  }
-
   /** @param resamplingMethod
    * @return empty time series with given resampling method */
   static TimeSeries empty(ResamplingMethod resamplingMethod) {
     return new TimeSeriesImpl(new TreeMap<>(), Objects.requireNonNull(resamplingMethod));
   }
 
-  static TimeSeries of(Tensor path) {
-    return of(path.stream());
+  /** @return empty time series with linear interpolation as resampling method */
+  static TimeSeries empty() {
+    return empty(ResamplingMethods.INTERPOLATION_1);
   }
-  
+
   static TimeSeries of(Tensor path, ResamplingMethod resamplingMethod) {
     return of(path.stream(), resamplingMethod);
   }
 
+  static TimeSeries of(Tensor path) {
+    return of(path.stream());
+  }
 
   /** @param stream of tensors, where each is of the form {key, value}
    * @return
@@ -104,11 +103,6 @@ public interface TimeSeries {
   /** @param clip
    * @return */
   NavigableSet<Scalar> keySet(Clip clip);
-
-  /** Mathematica convention
-   * 
-   * @return */
-  Tensor times();
 
   /** Mathematica convention
    * 

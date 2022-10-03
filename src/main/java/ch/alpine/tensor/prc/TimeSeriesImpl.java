@@ -103,12 +103,7 @@ import ch.alpine.tensor.sca.Clips;
   @Override // from TimeSeries
   public Tensor path() {
     return Tensor.of(navigableMap.entrySet().stream() //
-        .map(entry -> Tensors.of(entry.getKey(), entry.getValue())));
-  }
-
-  @Override // from TimeSeries
-  public Tensor times() {
-    return Tensor.of(navigableMap.keySet().stream());
+        .map(entry -> Tensors.of(entry.getKey(), entry.getValue()))); // value is copied
   }
 
   @Override // from Object
