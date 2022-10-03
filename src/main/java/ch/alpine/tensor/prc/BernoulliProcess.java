@@ -14,6 +14,8 @@ import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Sign;
 
+/** inspired by
+ * <a href="https://reference.wolfram.com/language/ref/BernoulliProcess.html">BernoulliProcess</a> */
 public class BernoulliProcess implements RandomProcess, Serializable {
   public static RandomProcess of(Scalar p) {
     return new BernoulliProcess(p);
@@ -35,13 +37,13 @@ public class BernoulliProcess implements RandomProcess, Serializable {
       timeSeries.insert(RealScalar.ZERO, RandomVariate.of(distribution, random));
     Clip clip = timeSeries.support();
     if (clip.isInside(x))
-      return (Scalar) timeSeries.step(x);
+      return (Scalar) timeSeries.eval(x);
     Scalar ofs = timeSeries.support().max();
     while (!ofs.equals(x)) {
       ofs = ofs.add(RealScalar.ONE);
       timeSeries.insert(ofs, RandomVariate.of(distribution, random));
     }
-    return (Scalar) timeSeries.step(x);
+    return (Scalar) timeSeries.eval(x);
   }
 
   @Override

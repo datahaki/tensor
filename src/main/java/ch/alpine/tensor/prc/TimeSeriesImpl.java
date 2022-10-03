@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
-import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -16,20 +15,32 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.MergeIllegal;
-import ch.alpine.tensor.itp.LinearInterpolation;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-class TimeSeriesImpl implements TimeSeries, Serializable {
+/* package */ class TimeSeriesImpl implements TimeSeries, Serializable {
   private final NavigableMap<Scalar, Tensor> navigableMap;
+  private final ResamplingMethod resamplingMethod;
 
-  public TimeSeriesImpl(NavigableMap<Scalar, Tensor> navigableMap) {
+  public TimeSeriesImpl(NavigableMap<Scalar, Tensor> navigableMap, ResamplingMethod resamplingMethod) {
     this.navigableMap = navigableMap;
+    this.resamplingMethod = resamplingMethod;
   }
 
   @Override // from TimeSeries
-  public Tensor insert(Scalar key, Tensor value) {
-    return navigableMap.put(key, Objects.requireNonNull(value));
+  public ResamplingMethod resamplingMethod() {
+    return resamplingMethod;
+  }
+
+  @Override // from TimeSeries
+  public void insert(Scalar key, Tensor value) {
+    resamplingMethod.insert(navigableMap, key, value);
+  }
+
+  @Override // from TimeSeries
+  public Tensor eval(Scalar x) {
+    return resamplingMethod.evaluate(navigableMap, x);
   }
 
   @Override // from TimeSeries
@@ -44,26 +55,6 @@ class TimeSeriesImpl implements TimeSeries, Serializable {
   }
 
   @Override // from TimeSeries
-  public Tensor step(Scalar x) {
-    if (Scalars.lessEquals(x, navigableMap.lastKey()))
-      return navigableMap.floorEntry(x).getValue().copy();
-    throw new Throw(x);
-  }
-
-  @Override // from TimeSeries
-  public Tensor lerp(Scalar x) {
-    Entry<Scalar, Tensor> lo = navigableMap.floorEntry(x);
-    Entry<Scalar, Tensor> hi = navigableMap.ceilingEntry(x);
-    return LinearInterpolation.of(Tensors.of( //
-        lo.getValue(), //
-        hi.getValue())).at(Clips
-            .interval( //
-                lo.getKey(), //
-                hi.getKey())
-            .rescale(x));
-  }
-
-  @Override
   public NavigableSet<Scalar> keySet(Clip clip) {
     return navigableMap.subMap(clip.min(), true, clip.max(), true).navigableKeySet();
   }
@@ -83,29 +74,30 @@ class TimeSeriesImpl implements TimeSeries, Serializable {
     return navigableMap.isEmpty();
   }
 
-  @Override
+  @Override // from TimeSeries
   public TimeSeries copy() {
     return new TimeSeriesImpl(navigableMap.entrySet().stream() //
         .collect(Collectors.toMap( //
             Entry::getKey, //
             entry -> entry.getValue().copy(), //
             MergeIllegal.operator(), //
-            TreeMap::new)));
+            TreeMap::new)),
+        resamplingMethod);
   }
 
-  @Override
+  @Override // from TimeSeries
   public TimeSeries unmodifiable() {
-    return new TimeSeriesImpl(Collections.unmodifiableNavigableMap(navigableMap));
+    return new TimeSeriesImpl(Collections.unmodifiableNavigableMap(navigableMap), resamplingMethod);
   }
 
-  @Override
+  @Override // from TimeSeries
   public TimeSeries extract(Clip clip) {
     return block(clip).copy();
   }
 
-  @Override
+  @Override // from TimeSeries
   public TimeSeries block(Clip clip) {
-    return new TimeSeriesImpl(navigableMap.subMap(clip.min(), true, clip.max(), true));
+    return new TimeSeriesImpl(navigableMap.subMap(clip.min(), true, clip.max(), true), resamplingMethod);
   }
 
   @Override // from TimeSeries
@@ -114,13 +106,13 @@ class TimeSeriesImpl implements TimeSeries, Serializable {
         .map(entry -> Tensors.of(entry.getKey(), entry.getValue())));
   }
 
-  @Override
+  @Override // from TimeSeries
   public Tensor times() {
     return Tensor.of(navigableMap.keySet().stream());
   }
 
-  @Override
-  public int hashCode() {
-    return navigableMap.hashCode();
+  @Override // from Object
+  public String toString() {
+    return MathematicaFormat.concise("TimeSeries", size(), resamplingMethod());
   }
 }

@@ -14,6 +14,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
 
+/** inspired by
+ * <a href="https://reference.wolfram.com/language/ref/RenewalProcess.html">RenewalProcess</a> */
 public class RenewalProcess implements RandomProcess, Serializable {
   /** @param distribution
    * @return */
@@ -39,10 +41,10 @@ public class RenewalProcess implements RandomProcess, Serializable {
     while (Scalars.lessEquals(timeSeries.support().max(), x)) {
       Scalar dt = RandomVariate.of(distribution, random);
       Scalar max = timeSeries.support().max();
-      Tensor val = timeSeries.step(max);
+      Tensor val = timeSeries.eval(max);
       timeSeries.insert(max.add(dt), val.add(RealScalar.ONE));
     }
-    return (Scalar) timeSeries.step(x);
+    return (Scalar) timeSeries.eval(x);
   }
 
   @Override

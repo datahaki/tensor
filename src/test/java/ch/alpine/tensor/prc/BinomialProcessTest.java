@@ -24,7 +24,7 @@ class BinomialProcessTest {
     randomFunction.apply(RealScalar.of(30));
     assertEquals(path.length(), randomFunction.path().length());
   }
-  
+
   @Test
   void testMax() throws ClassNotFoundException, IOException {
     RandomProcess randomProcess = BinomialProcess.of(RationalScalar.of(1, 4));
@@ -35,5 +35,4 @@ class BinomialProcessTest {
     randomFunction.apply(RealScalar.of(30));
     assertEquals(path.length(), randomFunction.path().length());
   }
-
 }
