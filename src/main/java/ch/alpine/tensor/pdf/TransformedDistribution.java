@@ -24,8 +24,8 @@ public enum TransformedDistribution {
         Objects.requireNonNull(offset));
   }
 
-  private static class Shifted implements Distribution, //
-      PDF, CDF, InverseCDF, RandomVariateInterface, MeanInterface, VarianceInterface, CentralMomentInterface, Serializable {
+  private static class Shifted implements UnivariateDistribution, //
+      CentralMomentInterface, Serializable {
     private final Distribution distribution;
     private final Scalar offset;
 
