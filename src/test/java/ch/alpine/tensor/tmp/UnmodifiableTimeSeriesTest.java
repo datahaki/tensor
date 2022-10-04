@@ -3,11 +3,13 @@ package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.sca.Clips;
 
 class UnmodifiableTimeSeriesTest {
   @Test
@@ -21,6 +23,8 @@ class UnmodifiableTimeSeriesTest {
     TimeSeries ts1 = timeSeries.unmodifiable();
     assertSame(ts1, ts1.unmodifiable());
     assertThrows(Exception.class, () -> ts1.insert(RealScalar.of(6), Tensors.vector(5, 2, 3)));
-    // ts1.
+    assertTrue(ts1.stream(Clips.interval(-10, 50), true) //
+        .map(TsEntry::value) //
+        .allMatch(Tensors::isUnmodifiable));
   }
 }

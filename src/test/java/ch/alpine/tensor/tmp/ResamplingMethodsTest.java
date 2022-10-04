@@ -2,6 +2,7 @@
 package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.NavigableMap;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.num.Pi;
 
 class ResamplingMethodsTest {
   @ParameterizedTest
@@ -34,8 +36,11 @@ class ResamplingMethodsTest {
   @EnumSource
   void testFails(ResamplingMethods resamplingMethods) {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
+    assertSame(resamplingMethods.pack(navigableMap), navigableMap);
     assertThrows(Exception.class, () -> resamplingMethods.insert(navigableMap, null, RealScalar.ONE));
     assertEquals(navigableMap.size(), 0);
+    resamplingMethods.insert(navigableMap, Pi.VALUE, RealScalar.ONE);
+    assertEquals(resamplingMethods.evaluate(navigableMap, Pi.VALUE), RealScalar.ONE);
   }
 
   @Test

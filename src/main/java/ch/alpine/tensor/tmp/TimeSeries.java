@@ -110,6 +110,7 @@ public interface TimeSeries {
   boolean isEmpty();
 
   /** @param clip
+   * @param whether a key of value clip.max() should be included in the set
    * @return */
   NavigableSet<Scalar> keySet(Clip clip, boolean maxInclusive);
 
@@ -123,20 +124,8 @@ public interface TimeSeries {
    * @return stream of (key, value)-pairs */
   Stream<TsEntry> stream(Clip clip, boolean maxInclusive);
 
-  /** Mathematica convention
+  /** corresponds to TimeSeries[...]["Path"] in Mathematica
    * 
-   * @return */
+   * @return tensor with dimensions size() x 2 */
   Tensor path();
-
-  /** API EXPERIMENTAL
-   * 
-   * @param clip
-   * @return copy of submap */
-  TimeSeries extract(Clip clip);
-
-  /** API EXPERIMENTAL
-   * 
-   * @param clip
-   * @return view on submap */
-  TimeSeries block(Clip clip);
 }

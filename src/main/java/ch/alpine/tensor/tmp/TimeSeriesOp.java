@@ -7,6 +7,7 @@ import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Clip;
@@ -36,8 +37,18 @@ public enum TimeSeriesOp {
 
   public static void extend(TimeSeries timeSeries, Scalar key) {
     Clip clip = timeSeries.domain();
-    if (clip.isOutside(key))
+    if (Scalars.lessThan(key, clip.min()))
+      timeSeries.insert(key, timeSeries.eval(clip.min()));
+    if (Scalars.lessThan(clip.max(), key))
       timeSeries.insert(key, timeSeries.eval(clip.max()));
+  }
+
+  public static void extend(TimeSeries timeSeries, Clip domain) {
+    Clip clip = timeSeries.domain();
+    if (Scalars.lessThan(domain.min(), clip.min()))
+      timeSeries.insert(domain.min(), timeSeries.eval(clip.min()));
+    if (Scalars.lessThan(clip.max(), domain.max()))
+      timeSeries.insert(domain.max(), timeSeries.eval(clip.max()));
   }
 
   public static TimeSeries indicator(NavigableSet<Scalar> navigableSet) {

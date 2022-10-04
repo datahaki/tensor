@@ -94,16 +94,6 @@ import ch.alpine.tensor.sca.Clips;
         .map(entry -> Tensors.of(entry.getKey(), entry.getValue()))); // value is copied
   }
 
-  @Override // from TimeSeries
-  public TimeSeries extract(Clip clip) {
-    return block(clip).copy();
-  }
-
-  @Override // from TimeSeries
-  public TimeSeries block(Clip clip) {
-    return new TimeSeriesImpl(navigableMap.subMap(clip.min(), true, clip.max(), true), resamplingMethod);
-  }
-
   @Override // from Object
   public final String toString() {
     return MathematicaFormat.concise("TimeSeries", size(), resamplingMethod());

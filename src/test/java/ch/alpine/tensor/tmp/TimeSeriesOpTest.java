@@ -36,7 +36,18 @@ class TimeSeriesOpTest {
   }
 
   @Test
-  void testExtend() {
+  void testExtendLo() {
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_LO_SPARSE);
+    timeSeries.insert(RealScalar.of(3), RealScalar.ZERO);
+    timeSeries.insert(RealScalar.of(6), RealScalar.ZERO);
+    timeSeries.insert(RealScalar.of(8), RealScalar.ZERO);
+    assertEquals(timeSeries.size(), 2);
+    TimeSeriesOp.extend(timeSeries, RealScalar.of(0));
+    assertEquals(timeSeries.path(), Tensors.fromString("{{0, 0}, {3, 0}, {8, 0}}"));
+  }
+
+  @Test
+  void testExtendHi() {
     TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_LO_SPARSE);
     timeSeries.insert(RealScalar.of(3), RealScalar.ZERO);
     timeSeries.insert(RealScalar.of(6), RealScalar.ZERO);
@@ -44,5 +55,20 @@ class TimeSeriesOpTest {
     assertEquals(timeSeries.size(), 2);
     TimeSeriesOp.extend(timeSeries, RealScalar.of(10));
     assertEquals(timeSeries.path(), Tensors.fromString("{{3, 0}, {10, 0}}"));
+  }
+
+  @Test
+  void testExtendClip() {
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_LO_SPARSE);
+    timeSeries.insert(RealScalar.of(3), RealScalar.ZERO);
+    timeSeries.insert(RealScalar.of(6), RealScalar.ZERO);
+    timeSeries.insert(RealScalar.of(8), RealScalar.ZERO);
+    assertEquals(timeSeries.size(), 2);
+    TimeSeriesOp.extend(timeSeries, Clips.interval(3, 7));
+    assertEquals(timeSeries.path(), Tensors.fromString("{{3, 0}, {8, 0}}"));
+    TimeSeriesOp.extend(timeSeries, Clips.interval(3, 9));
+    assertEquals(timeSeries.path(), Tensors.fromString("{{3, 0}, {9, 0}}"));
+    TimeSeriesOp.extend(timeSeries, Clips.interval(1, 10));
+    assertEquals(timeSeries.path(), Tensors.fromString("{{1, 0}, {3, 0}, {10, 0}}"));
   }
 }

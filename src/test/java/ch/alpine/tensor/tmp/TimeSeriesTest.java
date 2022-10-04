@@ -3,6 +3,7 @@ package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.sca.Clips;
 
 class TimeSeriesTest {
   @Test
@@ -22,6 +24,8 @@ class TimeSeriesTest {
         Tensors.vector(1, 2, 3))).limit(11), //
         ResamplingMethods.HOLD_LO_SPARSE);
     assertEquals(timeSeries.path(), Tensors.fromString("{{0, {1, 2, 3}}, {10, {1, 2, 3}}}"));
+    assertTrue(timeSeries.keySet(Clips.interval(30, 40), false).isEmpty());
+    assertTrue(timeSeries.keySet(Clips.interval(30, 40), true).isEmpty());
   }
 
   @Test
