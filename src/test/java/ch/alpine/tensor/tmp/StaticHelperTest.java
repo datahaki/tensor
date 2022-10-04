@@ -16,12 +16,12 @@ import ch.alpine.tensor.num.Pi;
 class StaticHelperTest {
   @Test
   void testScalar() {
-    assertEquals(StaticHelper.SECOND.apply(Pi.VALUE, RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(StaticHelper.COPY_SECOND.apply(Pi.VALUE, RealScalar.ZERO), RealScalar.ZERO);
   }
 
   @Test
   void testFail() {
-    assertThrows(Exception.class, () -> StaticHelper.SECOND.apply(Tensors.vector(1, 2), Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> StaticHelper.COPY_SECOND.apply(Tensors.vector(1, 2), Tensors.vector(1, 2, 3)));
   }
 
   @Test

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.tmp;
 
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Objects;
@@ -83,6 +84,22 @@ public enum ResamplingMethods implements ResamplingMethod {
       if (Scalars.lessEquals(x, navigableMap.lastKey()))
         return navigableMap.floorEntry(x).getValue().copy();
       throw new Throw(x);
+    }
+
+    @Override // from ResamplingMethod
+    public NavigableMap<Scalar, Tensor> pack(NavigableMap<Scalar, Tensor> navigableMap) {
+      Entry<Scalar, Tensor> prev = navigableMap.firstEntry();
+      if (Objects.nonNull(prev)) {
+        Iterator<Entry<Scalar, Tensor>> iterator = //
+            navigableMap.subMap(prev.getKey(), false, navigableMap.lastKey(), false) //
+                .entrySet().iterator();
+        while (iterator.hasNext()) {
+          Entry<Scalar, Tensor> next = iterator.next();
+          if (prev.getValue().equals(next.getValue()))
+            iterator.remove();
+        }
+      }
+      return navigableMap;
     }
   },
   /** in Mathematica: HoldValueFromRight */

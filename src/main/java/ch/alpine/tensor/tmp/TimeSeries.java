@@ -35,18 +35,27 @@ public interface TimeSeries {
     return new TimeSeriesImpl(new TreeMap<>(), Objects.requireNonNull(resamplingMethod));
   }
 
+  static TimeSeries of(Stream<TsEntry> stream, ResamplingMethod resamplingMethod) {
+    return new TimeSeriesImpl(resamplingMethod.pack(stream.collect(Collectors.toMap( //
+        TsEntry::key, //
+        TsEntry::value, //
+        MergeIllegal.operator(), //
+        TreeMap::new))), //
+        resamplingMethod);
+  }
+
   /** @param path with entries of the form {key, value}
    * @param resamplingMethod
    * @return */
   static TimeSeries of(Tensor path, ResamplingMethod resamplingMethod) {
-    return of(path.stream(), resamplingMethod);
+    return path(path.stream(), resamplingMethod);
   }
 
   /** @param stream of tensors, where each is of the form {key, value}
    * @param resamplingMethod
    * @return
    * @throws Exception if any tensor in the stream does not have length 2 */
-  static TimeSeries of(Stream<Tensor> stream, ResamplingMethod resamplingMethod) {
+  static TimeSeries path(Stream<Tensor> stream, ResamplingMethod resamplingMethod) {
     return new TimeSeriesImpl(stream.map(tensor -> {
       Integers.requireEquals(tensor.length(), 2);
       return tensor;

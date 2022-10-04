@@ -23,4 +23,10 @@ public interface ResamplingMethod {
    * and their corresponding values
    * @throws Exception if parameter x is is outside the interval [firstKey(), lastKey()] */
   Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x);
+
+  /** @param navigableMap
+   * @return given navigableMap but potentially with some entries removed */
+  default NavigableMap<Scalar, Tensor> pack(NavigableMap<Scalar, Tensor> navigableMap) {
+    return navigableMap;
+  }
 }

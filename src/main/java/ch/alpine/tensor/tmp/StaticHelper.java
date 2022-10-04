@@ -5,5 +5,5 @@ import ch.alpine.tensor.red.Entrywise;
 
 /* package */ enum StaticHelper {
   ;
-  public static final Entrywise SECOND = Entrywise.with((s1, s2) -> s2);
+  public static final Entrywise COPY_SECOND = Entrywise.with((s1, s2) -> s2);
 }

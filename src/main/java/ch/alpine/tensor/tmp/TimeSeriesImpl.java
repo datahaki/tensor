@@ -54,7 +54,7 @@ import ch.alpine.tensor.sca.Clips;
     Entry<Scalar, Tensor> entry = navigableMap.firstEntry();
     resamplingMethod.insert(navigableMap, key, Objects.isNull(entry) //
         ? value.copy()
-        : StaticHelper.SECOND.apply(entry.getValue(), value));
+        : StaticHelper.COPY_SECOND.apply(entry.getValue(), value));
   }
 
   @Override // from TimeSeries
