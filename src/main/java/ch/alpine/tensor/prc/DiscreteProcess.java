@@ -14,7 +14,7 @@ import ch.alpine.tensor.tmp.ResamplingMethods;
 import ch.alpine.tensor.tmp.TimeSeries;
 
 /** API EXPERIMENTAL */
-public abstract class DiscreteProcess implements RandomProcess, Serializable {
+public class DiscreteProcess implements RandomProcess, Serializable {
   private final Distribution distribution;
 
   protected DiscreteProcess(Distribution distribution) {

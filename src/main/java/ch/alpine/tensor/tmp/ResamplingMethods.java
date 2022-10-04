@@ -99,9 +99,7 @@ public enum ResamplingMethods implements ResamplingMethod {
       throw new Throw(x);
     }
   },
-  /**
-   * 
-   */
+  /** in Mathematica: None */
   NONE {
     @Override // from ResamplingMethod
     public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
@@ -113,5 +111,4 @@ public enum ResamplingMethods implements ResamplingMethod {
       return Objects.requireNonNull(navigableMap.get(x));
     }
   },
-  // TODO TENSOR IMPL NEAREST
 }

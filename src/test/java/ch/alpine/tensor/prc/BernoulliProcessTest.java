@@ -18,9 +18,9 @@ class BernoulliProcessTest {
     RandomProcess randomProcess = BernoulliProcess.of(0.5);
     assertTrue(randomProcess.toString().startsWith("BernoulliProcess"));
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
-    randomFunction.apply(RealScalar.of(30));
+    randomFunction.eval(RealScalar.of(30));
     Tensor path = randomFunction.path();
-    assertEquals(path.Get(5, 1), randomFunction.apply(RealScalar.of(5)));
+    assertEquals(path.Get(5, 1), randomFunction.eval(RealScalar.of(5)));
     assertEquals(path.length(), 31);
   }
 }

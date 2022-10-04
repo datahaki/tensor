@@ -17,6 +17,6 @@ class WienerProcessTest {
     RandomFunction randomFunction = RandomFunction.of(randomProcess);
     RandomVariate.of(UniformDistribution.of(0, 10), 100).stream() //
         .map(Scalar.class::cast) //
-        .forEach(randomFunction::apply);
+        .forEach(randomFunction::eval);
   }
 }
