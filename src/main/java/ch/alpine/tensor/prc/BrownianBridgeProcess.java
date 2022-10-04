@@ -3,13 +3,13 @@ package ch.alpine.tensor.prc;
 
 import java.io.Serializable;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
-import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -17,19 +17,23 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BrownianBridgeProcess.html">BrownianBridgeProcess</a> */
 public class BrownianBridgeProcess implements Serializable {
-  /** @param volatility positive
+  /** @param sigma volatility positive
    * @return */
-  public static BrownianBridgeProcess of(Scalar volatility) {
-    return new BrownianBridgeProcess(Sign.requirePositive(volatility));
+  public static BrownianBridgeProcess of(Scalar sigma) {
+    return new BrownianBridgeProcess(Sign.requirePositive(sigma));
+  }
+
+  /** @param sigma volatility positive
+   * @return */
+  public static BrownianBridgeProcess of(Number sigma) {
+    return of(RealScalar.of(sigma));
   }
 
   // ---
-  private final Scalar volatility;
-  private final Scalar volatility_squared;
+  private final Scalar sigma;
 
-  private BrownianBridgeProcess(Scalar volatility) {
-    this.volatility = volatility;
-    volatility_squared = volatility.multiply(volatility);
+  private BrownianBridgeProcess(Scalar sigma) {
+    this.sigma = sigma;
   }
 
   /** @param clip
@@ -42,11 +46,11 @@ public class BrownianBridgeProcess implements Serializable {
     Scalar ratio = t.subtract(clip.min()).divide(clip.width());
     return NormalDistribution.of( //
         LinearInterpolation.of(Tensors.of(y0, y1)).At(ratio), //
-        Sqrt.FUNCTION.apply(Times.of(volatility_squared, ratio, clip.max().subtract(t))));
+        Sqrt.FUNCTION.apply(clip.max().subtract(t).multiply(ratio)).multiply(sigma));
   }
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("BrownianBridgeProcess", volatility);
+    return MathematicaFormat.concise("BrownianBridgeProcess", sigma);
   }
 }

@@ -39,11 +39,17 @@ class BrownianBridgeProcessTest {
         Quantity.of(2, "s"));
     assertEquals(Mean.of(distribution), Quantity.of(0, "m"));
     assertEquals(StandardDeviation.of(distribution), Quantity.of(1, "m"));
+    assertEquals(distribution.toString(), "NormalDistribution[0[m], 1[m]]");
+    assertThrows(Exception.class, () -> brownianBridgeProcess.at( //
+        Clips.positive(Quantity.of(0.0, "s")), //
+        Quantity.of(0, "m"), //
+        Quantity.of(0, "m"), //
+        Quantity.of(2, "s")));
   }
 
   @Test
   void testInvalid() {
-    BrownianBridgeProcess brownianBridgeProcess = BrownianBridgeProcess.of(RealScalar.ONE);
+    BrownianBridgeProcess brownianBridgeProcess = BrownianBridgeProcess.of(1);
     assertThrows(Exception.class, () -> brownianBridgeProcess.at( //
         Clips.unit(), //
         RealScalar.ZERO, //

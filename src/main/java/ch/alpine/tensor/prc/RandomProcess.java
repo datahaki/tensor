@@ -14,7 +14,7 @@ public interface RandomProcess {
 
   /** @param timeSeries
    * @param random
-   * @param x
-   * @return value of random process at x */
-  Scalar eval(TimeSeries timeSeries, Random random, Scalar x);
+   * @param time
+   * @return value of random process at given time */
+  Scalar eval(TimeSeries timeSeries, Random random, Scalar time);
 }

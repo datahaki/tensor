@@ -15,12 +15,12 @@ class TimeSeriesOpTest {
   @Test
   void test() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.of(p1, ResamplingMethods.INTERPOLATION_1);
-    assertEquals(ts1.resamplingMethod(), ResamplingMethods.INTERPOLATION_1);
+    TimeSeries ts1 = TimeSeries.of(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    assertEquals(ts1.resamplingMethod(), ResamplingMethods.LINEAR_INTERPOLATION);
     assertEquals(ts1.path(), p1);
     TimeSeries ts2 = TimeSeries.of( //
         Tensors.fromString("{{2, 1}, {3, 2}, {6, 3}, {8, 2}, {10, 4}, {11, 3}}"), //
-        ResamplingMethods.INTERPOLATION_1);
+        ResamplingMethods.LINEAR_INTERPOLATION);
     Clip clip = Clips.intersection(ts1.support(), ts2.support());
     assertEquals(clip, Clips.interval(2, 10));
     {

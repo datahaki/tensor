@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Serialization;
@@ -18,7 +19,8 @@ class WhiteNoiseProcessTest {
   void testSimple() throws ClassNotFoundException, IOException {
     RandomFunction randomFunction = RandomFunction.of(Serialization.copy(WhiteNoiseProcess.instance()));
     assertEquals(randomFunction.path(), Tensors.empty());
-    randomFunction.eval(RealScalar.of(10));
+    Scalar t = RealScalar.of(10);
+    assertEquals(randomFunction.eval(t), randomFunction.eval(t));
     assertEquals(Dimensions.of(randomFunction.path()), List.of(11, 2));
     Serialization.copy(randomFunction);
   }

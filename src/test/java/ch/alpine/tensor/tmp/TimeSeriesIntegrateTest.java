@@ -34,7 +34,7 @@ class TimeSeriesIntegrateTest {
   @Test
   void testIntegrateLinear() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.of(p1, ResamplingMethods.INTERPOLATION_1);
+    TimeSeries ts1 = TimeSeries.of(p1, ResamplingMethods.LINEAR_INTERPOLATION);
     Tensor value1 = TimeSeriesIntegrate.of(ts1, ts1.support());
     Tolerance.CHOP.requireClose(value1, RealScalar.of(3 * 3 + 4.5 + 2 * 5.5 + 3 * 3.5));
     Tensor value2 = TimeSeriesIntegrate.of(ts1, Clips.interval(2, 8));

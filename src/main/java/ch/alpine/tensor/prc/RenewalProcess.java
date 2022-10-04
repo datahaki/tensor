@@ -39,14 +39,14 @@ public class RenewalProcess implements RandomProcess, Serializable {
     this.distribution = distribution;
   }
 
-  @Override
+  @Override // from RandomProcess
   public TimeSeries spawn() {
     TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_LO);
     timeSeries.insert(RandomVariate.of(distribution).zero(), RealScalar.ZERO);
     return timeSeries;
   }
 
-  @Override
+  @Override // from RandomProcess
   public Scalar eval(TimeSeries timeSeries, Random random, Scalar x) {
     Sign.requirePositiveOrZero(x);
     while (Scalars.lessThan(timeSeries.support().max(), x)) {
@@ -58,7 +58,7 @@ public class RenewalProcess implements RandomProcess, Serializable {
     return (Scalar) timeSeries.eval(x);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return MathematicaFormat.concise("RenewalProcess", distribution);
   }

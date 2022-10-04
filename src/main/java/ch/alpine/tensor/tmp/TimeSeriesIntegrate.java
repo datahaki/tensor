@@ -21,7 +21,7 @@ public enum TimeSeriesIntegrate {
    * @return new instance of time series with identical keys of given timeSeries
    * and values that are the accumulated integration */
   public static TimeSeries of(TimeSeries timeSeries) {
-    TimeSeries result = TimeSeries.empty(ResamplingMethods.INTERPOLATION_1);
+    TimeSeries result = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
     Clip clip = timeSeries.support();
     Scalar prev = clip.min();
     Tensor sum = timeSeries.eval(prev).multiply(clip.width().zero());
@@ -42,7 +42,7 @@ public enum TimeSeriesIntegrate {
 
   /** Remark: implementation uses Euler-method for integration
    * which is exact for the resampling methods:
-   * {@link ResamplingMethods#INTERPOLATION_1},
+   * {@link ResamplingMethods#LINEAR_INTERPOLATION},
    * {@link ResamplingMethods#HOLD_LO}, etc.
    * 
    * @param timeSeries
