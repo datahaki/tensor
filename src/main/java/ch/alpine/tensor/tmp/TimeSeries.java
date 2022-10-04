@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.prc;
+package ch.alpine.tensor.tmp;
 
 import java.util.NavigableSet;
 import java.util.Objects;
@@ -66,9 +66,10 @@ public interface TimeSeries {
    * @throws Exception if time series is empty */
   Tensor eval(Scalar x);
 
-  Tensor extend(Scalar key);
-
-  /** @return interval [firstKey(), lastKey()]
+  /** the support is always the min/max interval of all the keys
+   * that were inserted via {@link #insert(Scalar, Tensor)}
+   * 
+   * @return interval [firstKey(), lastKey()]
    * @throws Exception if time series is empty */
   Clip support();
 

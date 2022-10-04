@@ -16,6 +16,8 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
+import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.TimeSeries;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/WienerProcess.html">WienerProcess</a> */

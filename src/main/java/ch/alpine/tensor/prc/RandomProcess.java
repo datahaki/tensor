@@ -4,6 +4,8 @@ package ch.alpine.tensor.prc;
 import java.util.Random;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.tmp.ResamplingMethod;
+import ch.alpine.tensor.tmp.TimeSeries;
 
 public interface RandomProcess {
   /** @return a new instance of {@link TimeSeries} with a {@link ResamplingMethod}

@@ -180,6 +180,12 @@ class TimesTest {
   }
 
   @Test
+  void testBiOperator() {
+    // TODO TENSOR API not serializable
+    // Serialization.copy(Times.operator());
+  }
+
+  @Test
   void testFail() {
     assertThrows(IllegalArgumentException.class, () -> Times.of(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3, 4)));
   }

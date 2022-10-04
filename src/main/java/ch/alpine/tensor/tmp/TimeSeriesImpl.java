@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.prc;
+package ch.alpine.tensor.tmp;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -10,10 +10,8 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Clip;
@@ -41,17 +39,6 @@ import ch.alpine.tensor.sca.Clips;
   @Override // from TimeSeries
   public Tensor eval(Scalar x) {
     return resamplingMethod.evaluate(navigableMap, x);
-  }
-
-  @Override // from TimeSeries
-  public Tensor extend(Scalar key) {
-    Entry<Scalar, Tensor> entry = navigableMap.lastEntry();
-    if (Scalars.lessEquals(entry.getKey(), key)) {
-      if (!entry.getKey().equals(key))
-        navigableMap.put(key, entry.getValue());
-      return entry.getValue();
-    }
-    throw new Throw(key);
   }
 
   @Override // from TimeSeries

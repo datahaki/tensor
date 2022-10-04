@@ -53,7 +53,7 @@ class DiscreteUniformDistributionTest {
 
   @Test
   void testLessThan() {
-    Distribution distribution = DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(11));
+    Distribution distribution = DiscreteUniformDistribution.of(3, 11);
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessThan(RealScalar.of(2)), RationalScalar.of(0, 10 - 3 + 1));
     assertEquals(cdf.p_lessThan(RealScalar.of(3)), RationalScalar.of(0, 10 - 3 + 1));

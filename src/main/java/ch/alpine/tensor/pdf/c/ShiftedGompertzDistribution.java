@@ -6,14 +6,11 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.FindRoot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
-import ch.alpine.tensor.sca.Clip;
-import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 
@@ -39,19 +36,17 @@ public class ShiftedGompertzDistribution extends AbstractContinuousDistribution 
   // ---
   private final Scalar lambda;
   private final Scalar xi;
-  @PackageTestAccess
-  /* package */ final Clip support;
+  private final Scalar dl;
 
   private ShiftedGompertzDistribution(Scalar lambda, Scalar xi) {
     this.lambda = lambda;
     this.xi = xi;
-    // TODO TENSOR MATH find better guess, or find interval in a smart way
-    support = Clips.positive(1000);
+    dl = lambda.reciprocal();
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    if (Scalars.lessEquals(RealScalar.ZERO, x)) {
+    if (Sign.isPositiveOrZero(x)) {
       Scalar xln = x.multiply(lambda).negate();
       Scalar exp = Exp.FUNCTION.apply(xln);
       return Times.of( //
@@ -64,7 +59,7 @@ public class ShiftedGompertzDistribution extends AbstractContinuousDistribution 
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    if (Scalars.lessEquals(RealScalar.ZERO, x)) {
+    if (Sign.isPositiveOrZero(x)) {
       Scalar xln = x.multiply(lambda).negate();
       Scalar exp = Exp.FUNCTION.apply(xln);
       return Exp.FUNCTION.apply(exp.multiply(xi).negate()).multiply(RealScalar.ONE.subtract(exp));
@@ -72,11 +67,11 @@ public class ShiftedGompertzDistribution extends AbstractContinuousDistribution 
     return RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     if (p.equals(RealScalar.ONE))
       return DoubleScalar.POSITIVE_INFINITY;
-    return FindRoot.of(x -> p_lessThan(x).subtract(p)).inside(support);
+    return FindRoot.of(x -> p_lessThan(x).subtract(p)).above(dl.zero(), dl);
   }
 
   @Override

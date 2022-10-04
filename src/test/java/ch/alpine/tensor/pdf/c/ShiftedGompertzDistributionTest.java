@@ -13,10 +13,11 @@ import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.qty.Quantity;
 
 class ShiftedGompertzDistributionTest {
   @Test
-  void test() {
+  void testSimple() {
     Distribution distribution = ShiftedGompertzDistribution.of(2, 3);
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(0.3)), RealScalar.of(0.49789976922337764));
@@ -28,5 +29,17 @@ class ShiftedGompertzDistributionTest {
     Scalar quantile = inverseCDF.quantile(RealScalar.of(0.6));
     Tolerance.CHOP.requireClose(quantile, RealScalar.of(1.037510735992861));
     assertTrue(distribution.toString().startsWith("ShiftedGompertzDistribution["));
+  }
+
+  @Test
+  void testQuantity() {
+    Distribution distribution = ShiftedGompertzDistribution.of(Quantity.of(2, "s^-1"), RealScalar.of(3));
+    PDF pdf = PDF.of(distribution);
+    Tolerance.CHOP.requireClose(pdf.at(Quantity.of(0.3, "s")), Quantity.of(0.49789976922337764, "s^-1"));
+    CDF cdf = CDF.of(distribution);
+    Tolerance.CHOP.requireClose(cdf.p_lessThan(Quantity.of(1.3, "s")), RealScalar.of(0.7408202479584333));
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Scalar quantile = inverseCDF.quantile(RealScalar.of(0.6));
+    Tolerance.CHOP.requireClose(quantile, Quantity.of(1.037510735992861, "s"));
   }
 }

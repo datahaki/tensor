@@ -46,7 +46,7 @@ class AberthEhrlichTest {
     Distribution distribution = ComplexNormalDistribution.STANDARD;
     Polynomial polynomial = RandomVariate.of(distribution, random, degree).stream() //
         .map(Scalar.class::cast) //
-        .map(s -> Tensors.of(s.negate(), s.one())) //
+        .map(zero -> Tensors.of(zero.negate(), zero.one())) //
         .map(Polynomial::of) //
         .reduce(Polynomial::times) //
         .orElseThrow();

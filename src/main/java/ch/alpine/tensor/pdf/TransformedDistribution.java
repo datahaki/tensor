@@ -7,6 +7,7 @@ import java.util.Random;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -17,7 +18,9 @@ public enum TransformedDistribution {
   ;
   /** @param distribution
    * @param offset
-   * @return */
+   * @return given distribution shifted by offset along the domain
+   * @throws Exception if either parameter is null
+   * @see TrapezoidalDistribution */
   public static Distribution shift(Distribution distribution, Scalar offset) {
     return new Shifted( //
         Objects.requireNonNull(distribution), //
@@ -39,42 +42,42 @@ public enum TransformedDistribution {
       return PDF.of(distribution).at(x.subtract(offset));
     }
 
-    @Override
+    @Override // from CDF
     public Scalar p_lessThan(Scalar x) {
       return CDF.of(distribution).p_lessThan(x.subtract(offset));
     }
 
-    @Override
+    @Override // from CDF
     public Scalar p_lessEquals(Scalar x) {
       return CDF.of(distribution).p_lessEquals(x.subtract(offset));
     }
 
-    @Override
+    @Override // from InverseCDF
     public Scalar quantile(Scalar p) {
       return InverseCDF.of(distribution).quantile(p).add(offset);
     }
 
-    @Override
+    @Override // from RandomVariateInterface
     public Scalar randomVariate(Random random) {
       return RandomVariate.of(distribution, random).add(offset);
     }
 
-    @Override
+    @Override // from MeanInterface
     public Scalar mean() {
       return Mean.of(distribution).add(offset);
     }
 
-    @Override
+    @Override // from VarianceInterface
     public Scalar variance() {
       return Variance.of(distribution);
     }
 
-    @Override
+    @Override // from CentralMomentInterface
     public Scalar centralMoment(int order) {
       return CentralMoment.of(distribution, order);
     }
 
-    @Override
+    @Override // from Object
     public String toString() {
       return MathematicaFormat.concise("TransformedDistribution", distribution, offset);
     }

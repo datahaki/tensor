@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.prc;
+package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -13,6 +13,8 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.TimeSeries;
 
 /** Quote from Mathematica:
  * <blockquote>

@@ -10,6 +10,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.TimeSeries;
 
 /** API EXPERIMENTAL */
 public abstract class DiscreteProcess implements RandomProcess, Serializable {

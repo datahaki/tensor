@@ -8,6 +8,7 @@ import java.util.Random;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.tmp.TimeSeries;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/RandomFunction.html">RandomFunction</a> */
