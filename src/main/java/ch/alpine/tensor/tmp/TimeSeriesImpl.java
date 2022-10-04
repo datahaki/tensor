@@ -63,7 +63,7 @@ import ch.alpine.tensor.sca.Clips;
   }
 
   @Override // from TimeSeries
-  public final Clip support() {
+  public final Clip domain() {
     return Clips.keycover(navigableMap);
   }
 

@@ -41,10 +41,10 @@ class TimeSeriesImplTest {
     assertTrue(timeSeries.toString().startsWith("TimeSeries["));
     TimeSeries copy_unmodif = Serialization.copy(timeSeries.unmodifiable());
     assertThrows(Exception.class, () -> copy_unmodif.insert(dateTime, Tensors.vector(0, 0, 6)));
-    Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.support());
+    Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(integral, Tensors.fromString("{91800[s], 140400[s], 243000[s]}"));
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
-    assertEquals(integrate.eval(timeSeries.support().max()), integral);
+    assertEquals(integrate.eval(timeSeries.domain().max()), integral);
   }
 
   @Test
@@ -62,17 +62,17 @@ class TimeSeriesImplTest {
     Serialization.copy(timeSeries);
     assertEquals(timeSeries.size(), 4);
     assertFalse(timeSeries.isEmpty());
-    Clip clip = timeSeries.support();
+    Clip clip = timeSeries.domain();
     assertEquals(clip.width(), UnitSystem.SI().apply(Quantity.of(24, "h")));
     assertEquals(timeSeries.eval(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
     assertEquals(timeSeries.eval(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(1, 2, 3));
     assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(-1, "h"))));
     assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
-    Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.support());
+    Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(integral, Tensors.fromString("{162000[s], 248400[s], 32400[s]}"));
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
-    assertEquals(integrate.eval(timeSeries.support().max()), integral);
+    assertEquals(integrate.eval(timeSeries.domain().max()), integral);
   }
 
   @Test
@@ -90,17 +90,17 @@ class TimeSeriesImplTest {
     Serialization.copy(timeSeries);
     assertEquals(timeSeries.size(), 3);
     assertFalse(timeSeries.isEmpty());
-    Clip clip = timeSeries.support();
+    Clip clip = timeSeries.domain();
     assertEquals(clip.width(), UnitSystem.SI().apply(Quantity.of(24, "h")));
     assertEquals(timeSeries.eval(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
     assertEquals(timeSeries.eval(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(1, 2, 3));
     assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(-1, "h"))));
     assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
-    Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.support());
+    Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(integral, Tensors.fromString("{162000[s], 248400[s], 32400[s]}"));
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
-    assertEquals(integrate.eval(timeSeries.support().max()), integral);
+    assertEquals(integrate.eval(timeSeries.domain().max()), integral);
   }
 
   @Test
@@ -119,16 +119,16 @@ class TimeSeriesImplTest {
     Serialization.copy(timeSeries);
     assertEquals(timeSeries.size(), 3);
     assertFalse(timeSeries.isEmpty());
-    Clip clip = timeSeries.support();
+    Clip clip = timeSeries.domain();
     assertEquals(clip.width(), UnitSystem.SI().apply(Quantity.of(24, "h")));
     assertEquals(timeSeries.eval(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
     assertEquals(timeSeries.eval(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(2, 3, 0));
     assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(-1, "h"))));
     assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
-    Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.support());
+    Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(integral, Tensors.fromString("{28800[s], 43200[s], 432000[s]}"));
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
-    assertEquals(integrate.eval(timeSeries.support().max()), integral);
+    assertEquals(integrate.eval(timeSeries.domain().max()), integral);
   }
 }

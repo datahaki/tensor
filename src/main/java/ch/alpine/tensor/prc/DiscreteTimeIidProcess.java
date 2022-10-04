@@ -46,8 +46,8 @@ public class DiscreteTimeIidProcess implements RandomProcess, Serializable {
     Sign.requirePositiveOrZero(x);
     if (timeSeries.isEmpty())
       timeSeries.insert(RealScalar.ZERO, RandomVariate.of(distribution, random));
-    while (timeSeries.support().isOutside(x)) {
-      Scalar ofs = timeSeries.support().max().add(RealScalar.ONE);
+    while (timeSeries.domain().isOutside(x)) {
+      Scalar ofs = timeSeries.domain().max().add(RealScalar.ONE);
       timeSeries.insert(ofs, RandomVariate.of(distribution, random));
     }
     return (Scalar) timeSeries.eval(x);

@@ -45,4 +45,9 @@ public class RandomFunction implements Serializable {
   public Tensor path() {
     return timeSeries.path();
   }
+
+  /** @return unmodifiable view on the time series underlying this random function */
+  public TimeSeries timeSeries() {
+    return timeSeries.unmodifiable();
+  }
 }

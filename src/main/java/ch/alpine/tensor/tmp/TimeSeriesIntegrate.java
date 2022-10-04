@@ -15,14 +15,14 @@ public enum TimeSeriesIntegrate {
   ;
   /** Remark: the returned time series evaluates at the highest key
    * the same as the methods {@link #of(TimeSeries, Clip)} when the full
-   * support is provided as clip.
+   * domain is provided as clip.
    * 
    * @param timeSeries
    * @return new instance of time series with identical keys of given timeSeries
    * and values that are the accumulated integration */
   public static TimeSeries of(TimeSeries timeSeries) {
     TimeSeries result = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
-    Clip clip = timeSeries.support();
+    Clip clip = timeSeries.domain();
     Scalar prev = clip.min();
     Tensor sum = timeSeries.eval(prev).multiply(clip.width().zero());
     result.insert(prev, sum);
@@ -46,11 +46,11 @@ public enum TimeSeriesIntegrate {
    * {@link ResamplingMethods#HOLD_LO}, etc.
    * 
    * @param timeSeries
-   * @param clip must be subset of support of given time series
+   * @param clip must be subset of domain of given time series
    * @return integral value
-   * @throws Exception if clip is not a subset of support of given time series */
+   * @throws Exception if clip is not a subset of domain of given time series */
   public static Tensor of(TimeSeries timeSeries, Clip clip) {
-    if (clip.equals(Clips.intersection(timeSeries.support(), clip))) {
+    if (clip.equals(Clips.intersection(timeSeries.domain(), clip))) {
       Scalar prev = clip.min();
       Tensor sum = timeSeries.eval(prev).multiply(clip.width().zero());
       for (Scalar next : timeSeries.keySet(clip, true)) {

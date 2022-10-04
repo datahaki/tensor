@@ -16,26 +16,26 @@ class TimeSeriesIntegrateTest {
   @Test
   void testIntegrateBlocks() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.of(p1, ResamplingMethods.HOLD_LO);
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.HOLD_LO);
     assertEquals(ts1.resamplingMethod(), ResamplingMethods.HOLD_LO);
     assertThrows(Exception.class, () -> TimeSeriesIntegrate.of(ts1, Clips.interval(0, 3)));
     assertThrows(Exception.class, () -> TimeSeriesIntegrate.of(ts1, Clips.interval(2, 11)));
     assertThrows(Exception.class, () -> TimeSeriesIntegrate.of(ts1, Clips.interval(0, 11)));
-    Tensor value1 = TimeSeriesIntegrate.of(ts1, ts1.support());
+    Tensor value1 = TimeSeriesIntegrate.of(ts1, ts1.domain());
     assertEquals(value1, RealScalar.of(3 * 3 + 3 + 2 * 6 + 3 * 5));
     Tensor value2 = TimeSeriesIntegrate.of(ts1, Clips.interval(2, 8));
     assertEquals(value2, RealScalar.of(2 * 3 + 3 + 2 * 6 + 1 * 5));
     TimeSeries integrate = TimeSeriesIntegrate.of(ts1);
-    assertEquals(integrate.support(), ts1.support());
-    assertEquals(ts1.keySet(ts1.support(), true), integrate.keySet(ts1.support(), true));
+    assertEquals(integrate.domain(), ts1.domain());
+    assertEquals(ts1.keySet(ts1.domain(), true), integrate.keySet(ts1.domain(), true));
     assertEquals(integrate.eval(RealScalar.of(10)), RealScalar.of(39));
   }
 
   @Test
   void testIntegrateLinear() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.of(p1, ResamplingMethods.LINEAR_INTERPOLATION);
-    Tensor value1 = TimeSeriesIntegrate.of(ts1, ts1.support());
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    Tensor value1 = TimeSeriesIntegrate.of(ts1, ts1.domain());
     Tolerance.CHOP.requireClose(value1, RealScalar.of(3 * 3 + 4.5 + 2 * 5.5 + 3 * 3.5));
     Tensor value2 = TimeSeriesIntegrate.of(ts1, Clips.interval(2, 8));
     Tensor eval = ts1.eval(RealScalar.of(7.5));

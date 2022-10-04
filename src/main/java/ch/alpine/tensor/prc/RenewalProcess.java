@@ -49,9 +49,9 @@ public class RenewalProcess implements RandomProcess, Serializable {
   @Override // from RandomProcess
   public Scalar eval(TimeSeries timeSeries, Random random, Scalar x) {
     Sign.requirePositiveOrZero(x);
-    while (Scalars.lessThan(timeSeries.support().max(), x)) {
+    while (Scalars.lessThan(timeSeries.domain().max(), x)) {
       Scalar dt = Sign.requirePositive(RandomVariate.of(distribution, random));
-      Scalar max = timeSeries.support().max();
+      Scalar max = timeSeries.domain().max();
       Tensor val = timeSeries.eval(max);
       timeSeries.insert(max.add(dt), val.add(RealScalar.ONE));
     }

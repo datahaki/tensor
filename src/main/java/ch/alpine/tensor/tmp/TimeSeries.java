@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.Clip;
 
 /** A time series hosts a discrete set of (key, value)-pairs, i.e.
  * (Scalar, Tensor)-pairs, and uses a {@link ResamplingMethod} to
- * map {@link Scalar} within the {@link #support()} to a
+ * map {@link Scalar} within the {@link #domain()} to a
  * {@link Tensor}.
  * 
  * <p>In Mathematica, the default resampling method is linear
@@ -35,6 +35,10 @@ public interface TimeSeries {
     return new TimeSeriesImpl(new TreeMap<>(), Objects.requireNonNull(resamplingMethod));
   }
 
+  /** @param stream
+   * @param resamplingMethod
+   * @return
+   * @throws Exception in case of duplicate keys */
   static TimeSeries of(Stream<TsEntry> stream, ResamplingMethod resamplingMethod) {
     return new TimeSeriesImpl(resamplingMethod.pack(stream.collect(Collectors.toMap( //
         TsEntry::key, //
@@ -46,28 +50,30 @@ public interface TimeSeries {
 
   /** @param path with entries of the form {key, value}
    * @param resamplingMethod
-   * @return */
-  static TimeSeries of(Tensor path, ResamplingMethod resamplingMethod) {
+   * @return
+   * @throws Exception in case of duplicate keys */
+  static TimeSeries path(Tensor path, ResamplingMethod resamplingMethod) {
     return path(path.stream(), resamplingMethod);
   }
 
   /** @param stream of tensors, where each is of the form {key, value}
    * @param resamplingMethod
    * @return
-   * @throws Exception if any tensor in the stream does not have length 2 */
+   * @throws Exception if any tensor in the stream does not have length 2
+   * @throws Exception in case of duplicate keys */
   static TimeSeries path(Stream<Tensor> stream, ResamplingMethod resamplingMethod) {
-    return new TimeSeriesImpl(stream.map(tensor -> {
+    return new TimeSeriesImpl(resamplingMethod.pack(stream.map(tensor -> {
       Integers.requireEquals(tensor.length(), 2);
       return tensor;
     }).collect(Collectors.toMap( //
         tensor -> tensor.Get(0), //
         tensor -> tensor.get(1), //
         MergeIllegal.operator(), //
-        TreeMap::new)), Objects.requireNonNull(resamplingMethod));
+        TreeMap::new))), resamplingMethod);
   }
 
   // ---
-  /** @return method for computation of values inside {@link #support()} */
+  /** @return method for computation of values inside {@link #domain()} */
   ResamplingMethod resamplingMethod();
 
   /** @return unmodifiable view of this time series */
@@ -85,17 +91,17 @@ public interface TimeSeries {
    * @throws Exception if either parameter is null */
   void insert(Scalar key, Tensor value);
 
-  /** @param x inside {@link #support()}
+  /** @param x inside {@link #domain()}
    * @return
    * @throws Exception if time series is empty */
   Tensor eval(Scalar x);
 
-  /** the support is always the min/max interval of all the keys
+  /** the domain is always the min/max interval of all the keys
    * that were inserted via {@link #insert(Scalar, Tensor)}
    * 
    * @return interval [firstKey(), lastKey()]
    * @throws Exception if time series is empty */
-  Clip support();
+  Clip domain();
 
   /** @return number of (key, value)-pairs */
   int size();
