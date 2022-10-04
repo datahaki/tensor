@@ -27,7 +27,7 @@ class TimeSeriesIntegrateTest {
     assertEquals(value2, RealScalar.of(2 * 3 + 3 + 2 * 6 + 1 * 5));
     TimeSeries integrate = TimeSeriesIntegrate.of(ts1);
     assertEquals(integrate.support(), ts1.support());
-    assertEquals(ts1.keySet(ts1.support()), integrate.keySet(ts1.support()));
+    assertEquals(ts1.keySet(ts1.support(), true), integrate.keySet(ts1.support(), true));
     assertEquals(integrate.eval(RealScalar.of(10)), RealScalar.of(39));
   }
 

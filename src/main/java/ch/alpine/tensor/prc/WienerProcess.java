@@ -66,7 +66,7 @@ public class WienerProcess implements RandomProcess, Serializable {
     Clip clip = timeSeries.support();
     Distribution distribution = null;
     if (clip.isInside(x)) {
-      NavigableSet<Scalar> navigableSet = timeSeries.keySet(clip);
+      NavigableSet<Scalar> navigableSet = timeSeries.keySet(clip, true);
       Clip interval = Clips.interval( //
           navigableSet.floor(x), //
           navigableSet.ceiling(x));

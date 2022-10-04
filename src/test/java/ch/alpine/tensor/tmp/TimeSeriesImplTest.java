@@ -113,6 +113,7 @@ class TimeSeriesImplTest {
     timeSeries.insert(dateTime, Tensors.vector(1, 2, 3));
     TimeSeries copy = timeSeries.copy();
     timeSeries.insert(dateTime.add(Quantity.of(4, "h")), Tensors.vector(2, 3, 0));
+    assertThrows(Exception.class, () -> timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0, 2)));
     timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(24, "h")), Tensors.vector(0, 0, 6));
     Serialization.copy(timeSeries);

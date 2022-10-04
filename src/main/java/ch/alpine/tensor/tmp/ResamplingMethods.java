@@ -20,7 +20,7 @@ public enum ResamplingMethods implements ResamplingMethod {
   LINEAR_INTERPOLATION {
     @Override // from ResamplingMethod
     public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
-      navigableMap.put(key, value.copy());
+      navigableMap.put(key, value);
     }
 
     @Override // from ResamplingMethod
@@ -40,7 +40,7 @@ public enum ResamplingMethods implements ResamplingMethod {
   HOLD_LO {
     @Override // from ResamplingMethod
     public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
-      navigableMap.put(key, value.copy());
+      navigableMap.put(key, value);
     }
 
     @Override // from ResamplingMethod
@@ -54,8 +54,10 @@ public enum ResamplingMethods implements ResamplingMethod {
   HOLD_LO_SPARSE {
     @Override // from ResamplingMethod
     public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
+      // if given key is higher than existing max key, or map is empty
       if (Objects.isNull(navigableMap.higherKey(key))) {
-        // compression depends only on key (not on value):
+        // compression operates on the "tail" key lower than the given key,
+        // compression does not depend on given value
         Entry<Scalar, Tensor> tail = navigableMap.lowerEntry(key);
         if (Objects.nonNull(tail)) {
           Scalar tail_key = tail.getKey();
@@ -63,16 +65,16 @@ public enum ResamplingMethods implements ResamplingMethod {
           if (Objects.nonNull(head) && head.getValue().equals(tail.getValue()))
             navigableMap.remove(tail_key);
         }
-        // insertion:
-        navigableMap.put(key, value.copy());
-      } else {
+        // insertion of given (key, value)-pair
+        navigableMap.put(key, value);
+      } else { // key is smaller, or equal to existing highest key
         Entry<Scalar, Tensor> tail = navigableMap.floorEntry(key);
+        // insert only if no floor element exist, or floor value is not equal to given value
         if (Objects.isNull(tail) || !tail.getValue().equals(value))
-          navigableMap.put(key, value.copy());
-        // TODO compression higher is also possible
-        /* otherwise dismiss given key value pair
-         * since map is not empty and
-         * floor entry has value identical to given value */
+          navigableMap.put(key, value);
+        /* otherwise dismiss given (key, value)-pair, since key is not maximal, and
+         * floor entry has value identical to given value
+         * Remark: more compression by inspecting higher than key entries would be possible */
       }
     }
 
@@ -89,7 +91,7 @@ public enum ResamplingMethods implements ResamplingMethod {
     public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
       Entry<Scalar, Tensor> entry = navigableMap.ceilingEntry(key);
       if (Objects.isNull(entry) || !entry.getValue().equals(value))
-        navigableMap.put(key, value.copy());
+        navigableMap.put(key, value);
     }
 
     @Override // from ResamplingMethod
@@ -103,7 +105,7 @@ public enum ResamplingMethods implements ResamplingMethod {
   NONE {
     @Override // from ResamplingMethod
     public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
-      navigableMap.put(key, value.copy());
+      navigableMap.put(key, value);
     }
 
     @Override // from ResamplingMethod

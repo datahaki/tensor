@@ -34,7 +34,6 @@ class ResamplingMethodsTest {
   @EnumSource
   void testFails(ResamplingMethods resamplingMethods) {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
-    assertThrows(Exception.class, () -> resamplingMethods.insert(navigableMap, RealScalar.ONE, null));
     assertThrows(Exception.class, () -> resamplingMethods.insert(navigableMap, null, RealScalar.ONE));
     assertEquals(navigableMap.size(), 0);
   }

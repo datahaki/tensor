@@ -7,7 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
 public interface ResamplingMethod {
-  /** inserts copy of value in given map at key
+  /** inserts value in given map at key
    * 
    * the resampling methods may determine that the insertion of
    * the given (key, value)-pair is redundant and not alter the map

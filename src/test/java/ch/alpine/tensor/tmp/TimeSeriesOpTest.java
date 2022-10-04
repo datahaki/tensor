@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.red.Entrywise;
@@ -13,7 +14,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class TimeSeriesOpTest {
   @Test
-  void test() {
+  void testMathematica() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
     TimeSeries ts1 = TimeSeries.of(p1, ResamplingMethods.LINEAR_INTERPOLATION);
     assertEquals(ts1.resamplingMethod(), ResamplingMethods.LINEAR_INTERPOLATION);
@@ -38,5 +39,16 @@ class TimeSeriesOpTest {
       assertEquals(timeSeries.path(), Tensors.fromString( //
           "{{2, 3}, {3, 3}, {4, 3}, {5, 6}, {6, 11/2}, {7, 5}, {8, 4}, {10, 4}}"));
     }
+  }
+
+  @Test
+  void testExtend() {
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_LO_SPARSE);
+    timeSeries.insert(RealScalar.of(3), RealScalar.ZERO);
+    timeSeries.insert(RealScalar.of(6), RealScalar.ZERO);
+    timeSeries.insert(RealScalar.of(8), RealScalar.ZERO);
+    assertEquals(timeSeries.size(), 2);
+    TimeSeriesOp.extend(timeSeries, RealScalar.of(10));
+    assertEquals(timeSeries.path(), Tensors.fromString("{{3, 0}, {10, 0}}"));
   }
 }

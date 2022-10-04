@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.tmp;
 
+import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -21,6 +22,10 @@ import ch.alpine.tensor.sca.Clip;
  * <p>In Mathematica, the default resampling method is linear
  * interpolation.
  * 
+ * <p>All values in the time series must have the same tensor structure.
+ * {@link #insert(Scalar, Tensor)} throws an exception if the value
+ * to be inserted has a different structure.
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/TimeSeries.html">TimeSeries</a> */
 public interface TimeSeries {
@@ -30,6 +35,9 @@ public interface TimeSeries {
     return new TimeSeriesImpl(new TreeMap<>(), Objects.requireNonNull(resamplingMethod));
   }
 
+  /** @param path with entries of the form {key, value}
+   * @param resamplingMethod
+   * @return */
   static TimeSeries of(Tensor path, ResamplingMethod resamplingMethod) {
     return of(path.stream(), resamplingMethod);
   }
@@ -39,7 +47,6 @@ public interface TimeSeries {
    * @return
    * @throws Exception if any tensor in the stream does not have length 2 */
   static TimeSeries of(Stream<Tensor> stream, ResamplingMethod resamplingMethod) {
-    // TODO TENSOR use resampling method insert to compress!?
     return new TimeSeriesImpl(stream.map(tensor -> {
       Integers.requireEquals(tensor.length(), 2);
       return tensor;
@@ -54,10 +61,18 @@ public interface TimeSeries {
   /** @return method for computation of values inside {@link #support()} */
   ResamplingMethod resamplingMethod();
 
+  /** @return unmodifiable view of this time series */
+  TimeSeries unmodifiable();
+
+  /** @return duplicate of this time series */
+  TimeSeries copy();
+
   /** associates a copy of given value with key
    * 
    * @param key
    * @param value
+   * @throws Exception if the tensor structure of given value are not
+   * the same as the structure of the other values in the map
    * @throws Exception if either parameter is null */
   void insert(Scalar key, Tensor value);
 
@@ -79,26 +94,34 @@ public interface TimeSeries {
   /** @return whether time series is without (key, value)-pairs */
   boolean isEmpty();
 
-  /** @return duplicate of this time series */
-  TimeSeries copy();
-
-  /** @return unmodifiable view of this time series */
-  TimeSeries unmodifiable();
-
-  /** @param clip
-   * @return copy of submap */
-  TimeSeries extract(Clip clip);
-
-  /** @param clip
-   * @return view on submap */
-  TimeSeries block(Clip clip);
-
   /** @param clip
    * @return */
-  NavigableSet<Scalar> keySet(Clip clip);
+  NavigableSet<Scalar> keySet(Clip clip, boolean maxInclusive);
+
+  /** Careful: The values of this time series are provided by reference
+   * in {@link TsEntry#value()}. Modifications to a value alters this time series.
+   * This design choice is in the same spirit as {@link NavigableMap} and
+   * {@link Tensor#stream()}.
+   * 
+   * @param clip
+   * @param maxInclusive
+   * @return stream of (key, value)-pairs */
+  Stream<TsEntry> stream(Clip clip, boolean maxInclusive);
 
   /** Mathematica convention
    * 
    * @return */
   Tensor path();
+
+  /** API EXPERIMENTAL
+   * 
+   * @param clip
+   * @return copy of submap */
+  TimeSeries extract(Clip clip);
+
+  /** API EXPERIMENTAL
+   * 
+   * @param clip
+   * @return view on submap */
+  TimeSeries block(Clip clip);
 }

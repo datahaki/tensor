@@ -41,8 +41,8 @@ public enum TimeSeriesOp {
       // TODO TENSOR SYNC with mathematica: what happens if clip is empty
       TimeSeries timeSeries = TimeSeries.empty(timeSeries1.resamplingMethod());
       Set<Scalar> set = new HashSet<>();
-      set.addAll(timeSeries1.keySet(clip));
-      set.addAll(timeSeries2.keySet(clip));
+      set.addAll(timeSeries1.keySet(clip, true));
+      set.addAll(timeSeries2.keySet(clip, true));
       for (Scalar key : set)
         timeSeries.insert(key, binaryOperator.apply(timeSeries1.eval(key), timeSeries2.eval(key)));
       return timeSeries;

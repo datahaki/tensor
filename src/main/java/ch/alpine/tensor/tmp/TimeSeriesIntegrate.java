@@ -26,7 +26,7 @@ public enum TimeSeriesIntegrate {
     Scalar prev = clip.min();
     Tensor sum = timeSeries.eval(prev).multiply(clip.width().zero());
     result.insert(prev, sum);
-    for (Scalar next : timeSeries.keySet(clip)) {
+    for (Scalar next : timeSeries.keySet(clip, true)) {
       Clip interval = Clips.interval(prev, next);
       Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
       sum = sum.add(timeSeries.eval(x).multiply(interval.width()));
@@ -53,7 +53,7 @@ public enum TimeSeriesIntegrate {
     if (clip.equals(Clips.intersection(timeSeries.support(), clip))) {
       Scalar prev = clip.min();
       Tensor sum = timeSeries.eval(prev).multiply(clip.width().zero());
-      for (Scalar next : timeSeries.keySet(clip)) {
+      for (Scalar next : timeSeries.keySet(clip, true)) {
         Clip interval = Clips.interval(prev, next);
         Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
         sum = sum.add(timeSeries.eval(x).multiply(interval.width()));
