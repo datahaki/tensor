@@ -24,58 +24,63 @@ class TimeSeriesWrap implements TimeSeries {
     this.resamplingMethod = resamplingMethod;
   }
 
-  @Override
+  @Override // from TimeSeries
   public ResamplingMethod resamplingMethod() {
     return resamplingMethod;
   }
 
-  @Override
+  @Override // from TimeSeries
   public TimeSeries unmodifiable() {
     return this;
   }
 
-  @Override
+  @Override // from TimeSeries
   public TimeSeries copy() {
     return this; // TODO TENSOR consider
   }
 
-  @Override
+  @Override // from TimeSeries
   public void insert(Scalar key, Tensor value) {
     throw new Throw(this);
   }
 
-  @Override
+  @Override // from TimeSeries
   public Tensor evaluate(Scalar x) {
     return resamplingMethod.evaluate(navigableSet, function, x);
   }
 
-  @Override
+  @Override // from TimeSeries
   public Clip domain() {
     return Clips.setcover(navigableSet);
   }
 
-  @Override
+  @Override // from TimeSeries
+  public final boolean containsKey(Scalar key) {
+    return navigableSet.contains(key);
+  }
+
+  @Override // from TimeSeries
   public int size() {
     return navigableSet.size();
   }
 
-  @Override
+  @Override // from TimeSeries
   public boolean isEmpty() {
     return navigableSet.isEmpty();
   }
 
-  @Override
+  @Override // from TimeSeries
   public NavigableSet<Scalar> keySet(Clip clip, boolean maxInclusive) {
     return navigableSet.subSet(clip.min(), true, clip.max(), maxInclusive);
   }
 
-  @Override
+  @Override // from TimeSeries
   public Stream<TsEntry> stream() {
     return navigableSet.stream() //
         .map(key -> new TsEntry(key, function.apply(key)));
   }
 
-  @Override
+  @Override // from TimeSeries
   public TimeSeries block(Clip clip, boolean maxInclusive) {
     return new TimeSeriesWrap(navigableSet.subSet(clip.min(), true, clip.max(), maxInclusive), function, resamplingMethod);
   }

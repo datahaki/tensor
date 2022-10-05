@@ -25,6 +25,7 @@ import java.util.Date;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -463,6 +464,11 @@ class DateTimeTest {
   void testLargeDurationFail() {
     Scalar scalar = Quantity.of(new BigInteger("25782639457862394578623945786294578629378456"), "s");
     assertThrows(ArithmeticException.class, () -> DateTime.duration(scalar));
+  }
+
+  @Test
+  void testDateTimeIndeterminate() {
+    assertThrows(Exception.class, () -> DateTime.now().multiply(DoubleScalar.INDETERMINATE));
   }
 
   @Test

@@ -21,7 +21,7 @@ class WienerProcessTest {
     RandomFunction randomFunction = RandomFunction.of(randomProcess);
     RandomVariate.of(UniformDistribution.of(0, 10), 100).stream() //
         .map(Scalar.class::cast) //
-        .forEach(randomFunction::eval);
+        .forEach(randomFunction::evaluate);
   }
 
   @Test
@@ -32,26 +32,26 @@ class WienerProcessTest {
     RandomFunction randomFunction = RandomFunction.of(randomProcess);
     {
       Scalar x1 = Quantity.of(4, "s");
-      Scalar val = randomFunction.eval(x1);
+      Scalar val = randomFunction.evaluate(x1);
       assertEquals(QuantityUnit.of(val), Unit.of("m"));
-      assertEquals(val, randomFunction.eval(x1));
+      assertEquals(val, randomFunction.evaluate(x1));
     }
     {
       Scalar xm = Quantity.of(2.4, "s");
-      Scalar val = randomFunction.eval(xm);
+      Scalar val = randomFunction.evaluate(xm);
       assertEquals(QuantityUnit.of(val), Unit.of("m"));
-      assertEquals(val, randomFunction.eval(xm));
+      assertEquals(val, randomFunction.evaluate(xm));
     }
     {
       Scalar x0 = Quantity.of(0.0, "s");
-      Scalar val = randomFunction.eval(x0);
+      Scalar val = randomFunction.evaluate(x0);
       assertEquals(val, Quantity.of(0, "m"));
       assertEquals(QuantityUnit.of(val), Unit.of("m"));
-      assertEquals(val, randomFunction.eval(x0));
+      assertEquals(val, randomFunction.evaluate(x0));
     }
     RandomVariate.of(UniformDistribution.of(Clips.positive(Quantity.of(10, "s"))), 100).stream() //
         .map(Scalar.class::cast) //
-        .forEach(randomFunction::eval);
+        .forEach(randomFunction::evaluate);
   }
 
   @Test
@@ -62,25 +62,25 @@ class WienerProcessTest {
     RandomFunction randomFunction = RandomFunction.of(randomProcess);
     {
       Scalar x1 = Quantity.of(4, "s");
-      Scalar val = randomFunction.eval(x1);
+      Scalar val = randomFunction.evaluate(x1);
       assertEquals(QuantityUnit.of(val), Unit.of("m"));
-      assertEquals(val, randomFunction.eval(x1));
+      assertEquals(val, randomFunction.evaluate(x1));
     }
     {
       Scalar xm = Quantity.of(2.4, "s");
-      Scalar val = randomFunction.eval(xm);
+      Scalar val = randomFunction.evaluate(xm);
       assertEquals(QuantityUnit.of(val), Unit.of("m"));
-      assertEquals(val, randomFunction.eval(xm));
+      assertEquals(val, randomFunction.evaluate(xm));
     }
     {
       Scalar x0 = Quantity.of(0.0, "s");
-      Scalar val = randomFunction.eval(x0);
+      Scalar val = randomFunction.evaluate(x0);
       assertEquals(val, Quantity.of(0, "m"));
       assertEquals(QuantityUnit.of(val), Unit.of("m"));
-      assertEquals(val, randomFunction.eval(x0));
+      assertEquals(val, randomFunction.evaluate(x0));
     }
     RandomVariate.of(UniformDistribution.of(Clips.positive(Quantity.of(10, "s"))), 100).stream() //
         .map(Scalar.class::cast) //
-        .forEach(randomFunction::eval);
+        .forEach(randomFunction::evaluate);
   }
 }

@@ -127,12 +127,6 @@ public interface TimeSeries {
    * @throws Exception if x is not inside {@link #domain()}, for instance
    * when this time series is empty */
   Tensor evaluate(Scalar x);
-  /** @param x inside {@link #domain()}
-   * @return
-   * @throws Exception if time series is empty */
-  // default Scalar Evaluate(Scalar x) {
-  // return (Scalar) evaluate(x);
-  // }
 
   /** the domain is always the min/max interval of all the keys
    * that were inserted via {@link #insert(Scalar, Tensor)}
@@ -140,6 +134,14 @@ public interface TimeSeries {
    * @return interval [firstKey(), lastKey()]
    * @throws Exception if time series is empty */
   Clip domain();
+
+  /** Remark: method is useful in order to prevent the invocation of
+   * {@link #insert(Scalar, Tensor)} with a key that already has an
+   * associated value.
+   * 
+   * @param key
+   * @return whether a value is associated to the exact key */
+  boolean containsKey(Scalar key);
 
   /** @return number of (key, value)-pairs */
   int size();

@@ -25,6 +25,8 @@ import ch.alpine.tensor.tmp.TimeSeries;
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/WienerProcess.html">WienerProcess</a> */
 public class WienerProcess implements RandomProcess, Serializable {
+  private static final RandomProcess STANDARD = of(0, 1);
+
   /** input parameters may be of type {@link Quantity}, for instance
    * <pre>
    * WienerProcess[mu = 1[m*s^-1], sigma=2[m*s^-1/2]]
@@ -43,6 +45,11 @@ public class WienerProcess implements RandomProcess, Serializable {
    * @return */
   public static RandomProcess of(Number mu, Number sigma) {
     return of(RealScalar.of(mu), RealScalar.of(sigma));
+  }
+
+  /** @return wiener process with drift 0, and volatility 1 */
+  public static RandomProcess standard() {
+    return STANDARD;
   }
 
   // ---

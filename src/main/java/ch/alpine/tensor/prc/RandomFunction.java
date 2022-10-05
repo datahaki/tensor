@@ -10,11 +10,20 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.tmp.TimeSeries;
 
-/** <p>inspired by
+/** a random function is a realization of a random process.
+ * 
+ * <p>The value of the random function at location x is "discovered" once,
+ * no later that the first query via {@link #evaluate(Scalar)}, or
+ * {@link #evaluate(Random, Scalar)}.
+ * After that, the function evaluates to the same value at x of course.
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/RandomFunction.html">RandomFunction</a> */
 public class RandomFunction implements Serializable {
   private static final Random RANDOM = new SecureRandom();
 
+  /** @param randomProcess non null
+   * @return */
   public static RandomFunction of(RandomProcess randomProcess) {
     return new RandomFunction(Objects.requireNonNull(randomProcess));
   }
@@ -30,14 +39,14 @@ public class RandomFunction implements Serializable {
 
   /** @param time
    * @return */
-  public Scalar eval(Scalar time) {
-    return eval(RANDOM, time);
+  public Scalar evaluate(Scalar time) {
+    return evaluate(RANDOM, time);
   }
 
   /** @param random
    * @param time
    * @return */
-  public Scalar eval(Random random, Scalar time) {
+  public Scalar evaluate(Random random, Scalar time) {
     return randomProcess.evaluate(timeSeries, random, time);
   }
 

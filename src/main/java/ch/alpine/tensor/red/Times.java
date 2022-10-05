@@ -54,11 +54,6 @@ public enum Times {
     return BINARY_OPERATOR.apply(a, b);
   }
 
-  /** @return binary operator for pointwise multiplication */
-  public static BinaryOperator<Tensor> operator() {
-    return BINARY_OPERATOR;
-  }
-
   /** @param tensors
    * @return */
   public static Tensor of(Tensor... tensors) {

@@ -20,7 +20,7 @@ class WhiteNoiseProcessTest {
     RandomFunction randomFunction = RandomFunction.of(Serialization.copy(WhiteNoiseProcess.instance()));
     assertEquals(randomFunction.path(), Tensors.empty());
     Scalar t = RealScalar.of(10);
-    assertEquals(randomFunction.eval(t), randomFunction.eval(t));
+    assertEquals(randomFunction.evaluate(t), randomFunction.evaluate(t));
     assertEquals(Dimensions.of(randomFunction.path()), List.of(11, 2));
     Serialization.copy(randomFunction);
   }

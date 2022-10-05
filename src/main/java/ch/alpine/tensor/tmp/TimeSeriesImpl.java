@@ -68,6 +68,11 @@ import ch.alpine.tensor.sca.Clips;
   }
 
   @Override // from TimeSeries
+  public final boolean containsKey(Scalar key) {
+    return navigableMap.containsKey(key);
+  }
+
+  @Override // from TimeSeries
   public final int size() {
     return navigableMap.size();
   }

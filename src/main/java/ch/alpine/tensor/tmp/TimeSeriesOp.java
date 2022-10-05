@@ -13,8 +13,10 @@ import ch.alpine.tensor.red.Inner;
 
 public enum TimeSeriesOp {
   ;
-  private static final BinaryOperator<TimeSeries> PLUS = TimeSeriesBinaryOperator.of(Tensor::add, null);
-  private static final BinaryOperator<TimeSeries> TIMES = TimeSeriesBinaryOperator.of(Inner.with((s, t) -> t.multiply(s)), null);
+  private static final BinaryOperator<TimeSeries> PLUS = TimeSeriesBinaryOperator.of( //
+      Tensor::add, ResamplingMethods.LINEAR_INTERPOLATION);
+  private static final BinaryOperator<TimeSeries> TIMES = TimeSeriesBinaryOperator.of( //
+      Inner.with((s, t) -> t.multiply(s)), ResamplingMethods.LINEAR_INTERPOLATION);
 
   /** consistent with Mathematica
    * 

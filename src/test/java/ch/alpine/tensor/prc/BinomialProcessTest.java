@@ -19,9 +19,9 @@ class BinomialProcessTest {
     RandomProcess randomProcess = BinomialProcess.of(RationalScalar.of(1, 4));
     assertTrue(randomProcess.toString().startsWith("RenewalProcess"));
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
-    randomFunction.eval(RealScalar.of(30));
+    randomFunction.evaluate(RealScalar.of(30));
     Tensor path = randomFunction.path();
-    randomFunction.eval(RealScalar.of(30));
+    randomFunction.evaluate(RealScalar.of(30));
     assertEquals(path.length(), randomFunction.path().length());
   }
 
@@ -30,9 +30,9 @@ class BinomialProcessTest {
     RandomProcess randomProcess = BinomialProcess.of(0.25);
     assertTrue(randomProcess.toString().startsWith("RenewalProcess"));
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
-    randomFunction.eval(RealScalar.of(30));
+    randomFunction.evaluate(RealScalar.of(30));
     Tensor path = randomFunction.path();
-    randomFunction.eval(RealScalar.of(30));
+    randomFunction.evaluate(RealScalar.of(30));
     assertEquals(path.length(), randomFunction.path().length());
   }
 }

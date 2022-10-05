@@ -16,9 +16,9 @@ class BernoulliProcessTest {
   void testRandomFunction() throws ClassNotFoundException, IOException {
     RandomProcess randomProcess = BernoulliProcess.of(0.5);
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
-    assertEquals(randomFunction.eval(RealScalar.of(30)), randomFunction.eval(RealScalar.of(30)));
+    assertEquals(randomFunction.evaluate(RealScalar.of(30)), randomFunction.evaluate(RealScalar.of(30)));
     Tensor path = randomFunction.path();
-    assertEquals(path.Get(5, 1), randomFunction.eval(RealScalar.of(5)));
+    assertEquals(path.Get(5, 1), randomFunction.evaluate(RealScalar.of(5)));
     assertEquals(path.length(), 31);
   }
 }

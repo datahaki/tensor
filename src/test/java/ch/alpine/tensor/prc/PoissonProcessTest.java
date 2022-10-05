@@ -18,9 +18,9 @@ class PoissonProcessTest {
   void testSimple() throws ClassNotFoundException, IOException {
     RandomProcess randomProcess = PoissonProcess.of(2);
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
-    randomFunction.eval(RealScalar.of(30));
+    randomFunction.evaluate(RealScalar.of(30));
     int length = randomFunction.path().length();
-    randomFunction.eval(RealScalar.of(20));
+    randomFunction.evaluate(RealScalar.of(20));
     assertEquals(length, randomFunction.path().length());
     assertTrue(randomProcess.toString().startsWith("RenewalProcess"));
   }
@@ -29,10 +29,10 @@ class PoissonProcessTest {
   void testQuantity() throws ClassNotFoundException, IOException {
     RandomProcess randomProcess = PoissonProcess.of(Quantity.of(0.2, "s^-1"));
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
-    randomFunction.eval(Quantity.of(30, "s"));
+    randomFunction.evaluate(Quantity.of(30, "s"));
     int length = randomFunction.path().length();
-    assertThrows(Exception.class, () -> randomFunction.eval(RealScalar.of(20)));
-    randomFunction.eval(Quantity.of(30, "s"));
+    assertThrows(Exception.class, () -> randomFunction.evaluate(RealScalar.of(20)));
+    randomFunction.evaluate(Quantity.of(30, "s"));
     assertEquals(length, randomFunction.path().length());
   }
 }
