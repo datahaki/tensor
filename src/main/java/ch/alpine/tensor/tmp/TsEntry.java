@@ -35,9 +35,12 @@ public final class TsEntry implements Serializable {
 
   @Override
   public boolean equals(Object object) {
-    return object instanceof TsEntry tsEntry //
-        && tsEntry.key.equals(key) //
-        && tsEntry.value.equals(value);
+    if (object instanceof TsEntry) {
+      TsEntry tsEntry = (TsEntry) object;
+      return tsEntry.key.equals(key) //
+          && tsEntry.value.equals(value);
+    }
+    return false;
   }
 
   @Override

@@ -10,6 +10,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
+/** Remark:
+ * Mathematica does not permit the addition/multiplication of time series
+ * with non-overlapping domains. */
 public class TimeSeriesBinaryOperator implements BinaryOperator<TimeSeries>, Serializable {
   /** @param binaryOperator
    * @param resamplingMethod fallback may be null */

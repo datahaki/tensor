@@ -89,6 +89,11 @@ import ch.alpine.tensor.sca.Clips;
   }
 
   @Override // from TimeSeries
+  public TimeSeries block(Clip clip, boolean maxInclusive) {
+    return new TimeSeriesImpl(navigableMap.subMap(clip.min(), true, clip.max(), maxInclusive), resamplingMethod);
+  }
+
+  @Override // from TimeSeries
   public final Tensor path() {
     return Tensor.of(navigableMap.entrySet().stream() //
         .map(entry -> Tensors.of(entry.getKey(), entry.getValue()))); // value is copied

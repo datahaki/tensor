@@ -53,7 +53,7 @@ class ParetoDistributionTest {
     Tensor tensor = RandomVariate.of(distribution, 1000);
     Scalar empiricalMean = Mean.ofVector(tensor);
     Scalar empiricalVarc = Variance.ofVector(tensor);
-    Chop chop = Chop.below(0.3);
+    Chop chop = Chop.below(0.4);
     chop.requireClose(mean, empiricalMean);
     chop.requireClose(varc, empiricalVarc);
     InverseCDF inverseCDF = InverseCDF.of(distribution);

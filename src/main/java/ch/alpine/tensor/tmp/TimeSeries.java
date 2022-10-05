@@ -124,6 +124,11 @@ public interface TimeSeries {
    * @return stream of (key, value)-pairs */
   Stream<TsEntry> stream(Clip clip, boolean maxInclusive);
 
+  /** @param clip
+   * @param maxInclusive
+   * @return view on part of this time series in the given clip range */
+  TimeSeries block(Clip clip, boolean maxInclusive);
+
   /** corresponds to TimeSeries[...]["Path"] in Mathematica
    * 
    * @return tensor with dimensions size() x 2 */
