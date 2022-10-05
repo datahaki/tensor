@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.sca.Clip;
@@ -30,7 +31,7 @@ import ch.alpine.tensor.sca.Clip;
  * are unmodifiable. In that case, {@link #insert(Scalar, Tensor)}
  * throws an Exception, and the values provided to the "outside"
  * are unmodifiable tensors, or copied of the values stored in the
- * time series. 
+ * time series.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/TimeSeries.html">TimeSeries</a> */
@@ -78,6 +79,30 @@ public interface TimeSeries {
         TreeMap::new))), resamplingMethod);
   }
 
+  /** TODO TEST
+   * 
+   * @param stream
+   * @param resamplingMethod
+   * @return */
+  static TimeSeries table(Stream<Tensor> stream, ResamplingMethod resamplingMethod) {
+    return new TimeSeriesImpl(resamplingMethod.pack(stream.collect(Collectors.toMap( //
+        tensor -> tensor.Get(0), //
+        tensor -> tensor.extract(1, tensor.length()), //
+        MergeIllegal.operator(), //
+        TreeMap::new))), resamplingMethod);
+  }
+
+  /** @param navigableSet
+   * @param function to which the time series only supplies values from given navigable set
+   * @param resamplingMethod
+   * @return view on an external data-set for the purpose of interpolation, read only */
+  static TimeSeries wrap(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, ResamplingMethod resamplingMethod) {
+    return new TimeSeriesWrap( //
+        Objects.requireNonNull(navigableSet), //
+        Objects.requireNonNull(function), //
+        Objects.requireNonNull(resamplingMethod));
+  }
+
   // ---
   /** @return method for computation of values inside {@link #domain()} */
   ResamplingMethod resamplingMethod();
@@ -99,8 +124,15 @@ public interface TimeSeries {
 
   /** @param x inside {@link #domain()}
    * @return
-   * @throws Exception if time series is empty */
+   * @throws Exception if x is not inside {@link #domain()}, for instance
+   * when this time series is empty */
   Tensor evaluate(Scalar x);
+  /** @param x inside {@link #domain()}
+   * @return
+   * @throws Exception if time series is empty */
+  // default Scalar Evaluate(Scalar x) {
+  // return (Scalar) evaluate(x);
+  // }
 
   /** the domain is always the min/max interval of all the keys
    * that were inserted via {@link #insert(Scalar, Tensor)}
@@ -120,20 +152,25 @@ public interface TimeSeries {
    * @return */
   NavigableSet<Scalar> keySet(Clip clip, boolean maxInclusive);
 
+  /** @param clip
+   * @param maxInclusive
+   * @return view on part of this time series in the given clip range */
+  TimeSeries block(Clip clip, boolean maxInclusive);
+
   /** Careful: The values of this time series are provided by reference
    * in {@link TsEntry#value()}. Modifications to a value alters this time series.
    * This design choice is in the same spirit as {@link NavigableMap} and
    * {@link Tensor#stream()}.
    * 
-   * @param clip
-   * @param maxInclusive
-   * @return stream of (key, value)-pairs */
-  Stream<TsEntry> stream(Clip clip, boolean maxInclusive);
-
-  /** @param clip
-   * @param maxInclusive
-   * @return view on part of this time series in the given clip range */
-  TimeSeries block(Clip clip, boolean maxInclusive);
+   * Hint: in order to obtain a stream over a subset of this time
+   * series prepend {@link #block(Clip, boolean)} before invoking
+   * {@link #stream()}, i.e.
+   * <pre>
+   * timeSeries.block(clip, true). stream()
+   * </pre>
+   * 
+   * @return stream over all (key, value)-pairs in this time series */
+  Stream<TsEntry> stream();
 
   /** corresponds to TimeSeries[...]["Path"] in Mathematica
    * 

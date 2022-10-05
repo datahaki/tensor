@@ -22,7 +22,7 @@ public enum TimeSeriesRegion {
     Clip domain = series.domain();
     List<Clip> list = new ArrayList<>();
     AtomicReference<Scalar> min = new AtomicReference<>();
-    series.stream(domain, true).forEach(entry -> {
+    series.stream().forEach(entry -> {
       if (predicate.test(function.apply(entry.value()))) {
         if (Objects.isNull(min.get()))
           min.set(entry.key());

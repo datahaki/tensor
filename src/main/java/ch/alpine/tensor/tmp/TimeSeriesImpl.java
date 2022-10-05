@@ -82,9 +82,9 @@ import ch.alpine.tensor.sca.Clips;
     return navigableMap.subMap(clip.min(), true, clip.max(), maxInclusive).navigableKeySet();
   }
 
-  @Override // from TimeSeries
-  public Stream<TsEntry> stream(Clip clip, boolean maxInclusive) {
-    return navigableMap.subMap(clip.min(), true, clip.max(), maxInclusive).entrySet().stream() //
+  @Override
+  public Stream<TsEntry> stream() {
+    return navigableMap.entrySet().stream() //
         .map(entry -> new TsEntry(entry.getKey(), entry.getValue()));
   }
 

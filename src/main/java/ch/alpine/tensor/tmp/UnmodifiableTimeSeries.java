@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.sca.Clip;
 
 /* package */ class UnmodifiableTimeSeries extends TimeSeriesImpl {
   public UnmodifiableTimeSeries(NavigableMap<Scalar, Tensor> navigableMap, ResamplingMethod resamplingMethod) {
@@ -24,8 +23,8 @@ import ch.alpine.tensor.sca.Clip;
   }
 
   @Override // from TimeSeriesImpl
-  public Stream<TsEntry> stream(Clip clip, boolean maxInclusive) {
-    return navigableMap.subMap(clip.min(), true, clip.max(), maxInclusive).entrySet().stream() //
+  public Stream<TsEntry> stream() {
+    return navigableMap.entrySet().stream() //
         .map(entry -> new TsEntry(entry.getKey(), entry.getValue().unmodifiable()));
   }
 }

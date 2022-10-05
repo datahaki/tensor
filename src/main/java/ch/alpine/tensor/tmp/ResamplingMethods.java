@@ -28,24 +28,24 @@ public enum ResamplingMethods implements ResamplingMethod {
 
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
-      Entry<Scalar, Tensor> lo = navigableMap.floorEntry(x);
-      Entry<Scalar, Tensor> hi = navigableMap.ceilingEntry(x);
+      Entry<Scalar, Tensor> e_lo = navigableMap.floorEntry(x);
+      Scalar lo = e_lo.getKey();
+      if (lo.equals(x))
+        return e_lo.getValue().copy();
+      Entry<Scalar, Tensor> e_hi = navigableMap.ceilingEntry(x);
       return LinearInterpolation.of(Tensors.of( //
-          lo.getValue(), //
-          hi.getValue())).at(Clips
-              .interval( //
-                  lo.getKey(), //
-                  hi.getKey())
-              .rescale(x));
+          e_lo.getValue(), //
+          e_hi.getValue())).at(Clips.interval(lo, e_hi.getKey()).rescale(x));
     }
 
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x) {
       Scalar lo = navigableSet.floor(x);
+      Tensor f_lo = function.apply(lo);
+      if (lo.equals(x))
+        return f_lo;
       Scalar hi = navigableSet.ceiling(x);
-      return LinearInterpolation.of(Tensors.of( //
-          function.apply(lo), //
-          function.apply(hi))).at(Clips.interval(lo, hi).rescale(x));
+      return LinearInterpolation.of(Tensors.of(f_lo, function.apply(hi))).at(Clips.interval(lo, hi).rescale(x));
     }
   },
   /** in Mathematica: HoldValueFromLeft */
@@ -57,16 +57,18 @@ public enum ResamplingMethods implements ResamplingMethod {
 
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
-      if (Scalars.lessEquals(x, navigableMap.lastKey()))
+      Scalar last = navigableMap.lastKey();
+      if (Scalars.lessEquals(x, last))
         return navigableMap.floorEntry(x).getValue().copy();
-      throw new Throw(x);
+      throw new Throw(last, x);
     }
 
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x) {
-      if (Scalars.lessEquals(x, navigableSet.last()))
+      Scalar last = navigableSet.last();
+      if (Scalars.lessEquals(x, last))
         return function.apply(navigableSet.floor(x)).copy();
-      throw new Throw(x);
+      throw new Throw(last, x);
     }
   },
   /** suitable for exact precision data sets */
@@ -99,16 +101,18 @@ public enum ResamplingMethods implements ResamplingMethod {
 
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
-      if (Scalars.lessEquals(x, navigableMap.lastKey()))
+      Scalar last = navigableMap.lastKey();
+      if (Scalars.lessEquals(x, last))
         return navigableMap.floorEntry(x).getValue().copy();
-      throw new Throw(x);
+      throw new Throw(last, x);
     }
 
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x) {
-      if (Scalars.lessEquals(x, navigableSet.last()))
+      Scalar last = navigableSet.last();
+      if (Scalars.lessEquals(x, last))
         return function.apply(navigableSet.floor(x)).copy();
-      throw new Throw(x);
+      throw new Throw(last, x);
     }
 
     @Override // from ResamplingMethod
@@ -138,9 +142,10 @@ public enum ResamplingMethods implements ResamplingMethod {
 
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
-      if (Scalars.lessEquals(navigableMap.firstKey(), x))
+      Scalar first = navigableMap.firstKey();
+      if (Scalars.lessEquals(first, x))
         return navigableMap.ceilingEntry(x).getValue().copy();
-      throw new Throw(x);
+      throw new Throw(first, x);
     }
 
     @Override // from ResamplingMethod
@@ -164,7 +169,9 @@ public enum ResamplingMethods implements ResamplingMethod {
 
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x) {
-      return Objects.requireNonNull(function.apply(x));
+      if (navigableSet.contains(x))
+        return Objects.requireNonNull(function.apply(x));
+      throw new Throw(x);
     }
   },
 }

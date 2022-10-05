@@ -2,20 +2,19 @@
 package ch.alpine.tensor.tmp;
 
 import java.util.NavigableSet;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.red.Times;
-import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.red.Inner;
 
 public enum TimeSeriesOp {
   ;
   private static final BinaryOperator<TimeSeries> PLUS = TimeSeriesBinaryOperator.of(Tensor::add, null);
-  private static final BinaryOperator<TimeSeries> TIMES = TimeSeriesBinaryOperator.of(Times.operator(), null);
+  private static final BinaryOperator<TimeSeries> TIMES = TimeSeriesBinaryOperator.of(Inner.with((s, t) -> t.multiply(s)), null);
 
   /** consistent with Mathematica
    * 
@@ -35,20 +34,8 @@ public enum TimeSeriesOp {
     return TIMES.apply(timeSeries1, timeSeries2);
   }
 
-  public static void extend(TimeSeries timeSeries, Scalar key) {
-    Clip clip = timeSeries.domain();
-    if (Scalars.lessThan(key, clip.min()))
-      timeSeries.insert(key, timeSeries.evaluate(clip.min()));
-    if (Scalars.lessThan(clip.max(), key))
-      timeSeries.insert(key, timeSeries.evaluate(clip.max()));
-  }
-
-  public static void extend(TimeSeries timeSeries, Clip domain) {
-    Clip clip = timeSeries.domain();
-    if (Scalars.lessThan(domain.min(), clip.min()))
-      timeSeries.insert(domain.min(), timeSeries.evaluate(clip.min()));
-    if (Scalars.lessThan(clip.max(), domain.max()))
-      timeSeries.insert(domain.max(), timeSeries.evaluate(clip.max()));
+  public static Optional<Tensor> reduce(TimeSeries timeSeries, BinaryOperator<Tensor> binaryOperator) {
+    return timeSeries.stream().map(TsEntry::value).reduce(binaryOperator);
   }
 
   public static TimeSeries indicator(NavigableSet<Scalar> navigableSet) {
@@ -56,5 +43,19 @@ public enum TimeSeriesOp {
     return TimeSeries.of(navigableSet.stream() //
         .map(key -> new TsEntry(key, RealScalar.of(atomicInteger.getAndIncrement()))), //
         ResamplingMethods.HOLD_LO);
+  }
+
+  /** @param timeSeries
+   * @return
+   * @throws Exception if time series is empty */
+  public static Tensor firstValue(TimeSeries timeSeries) {
+    return timeSeries.evaluate(timeSeries.domain().min());
+  }
+
+  /** @param timeSeries
+   * @return
+   * @throws Exception if time series is empty */
+  public static Tensor lastValue(TimeSeries timeSeries) {
+    return timeSeries.evaluate(timeSeries.domain().max());
   }
 }
