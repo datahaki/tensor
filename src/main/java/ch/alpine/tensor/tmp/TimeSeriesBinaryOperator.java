@@ -44,7 +44,7 @@ public class TimeSeriesBinaryOperator implements BinaryOperator<TimeSeries>, Ser
     return TimeSeries.of(Stream.concat( //
         timeSeries1.keySet(clip, true).stream(), //
         timeSeries2.keySet(clip, true).stream()).distinct() //
-        .map(key -> new TsEntry(key, binaryOperator.apply(timeSeries1.eval(key), timeSeries2.eval(key)))), //
+        .map(key -> new TsEntry(key, binaryOperator.apply(timeSeries1.evaluate(key), timeSeries2.evaluate(key)))), //
         resamplingMethod);
   }
 }

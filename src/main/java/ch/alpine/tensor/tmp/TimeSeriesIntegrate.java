@@ -24,18 +24,18 @@ public enum TimeSeriesIntegrate {
     TimeSeries result = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
     Clip clip = timeSeries.domain();
     Scalar prev = clip.min();
-    Tensor sum = timeSeries.eval(prev).multiply(clip.width().zero());
+    Tensor sum = timeSeries.evaluate(prev).multiply(clip.width().zero());
     result.insert(prev, sum);
     for (Scalar next : timeSeries.keySet(clip, true)) {
       Clip interval = Clips.interval(prev, next);
       Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
-      sum = sum.add(timeSeries.eval(x).multiply(interval.width()));
+      sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
       result.insert(next, sum);
       prev = next;
     }
     Clip interval = Clips.interval(prev, clip.max());
     Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
-    sum = sum.add(timeSeries.eval(x).multiply(interval.width()));
+    sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
     result.insert(prev, sum);
     return result;
   }
@@ -52,16 +52,16 @@ public enum TimeSeriesIntegrate {
   public static Tensor of(TimeSeries timeSeries, Clip clip) {
     if (clip.equals(Clips.intersection(timeSeries.domain(), clip))) {
       Scalar prev = clip.min();
-      Tensor sum = timeSeries.eval(prev).multiply(clip.width().zero());
+      Tensor sum = timeSeries.evaluate(prev).multiply(clip.width().zero());
       for (Scalar next : timeSeries.keySet(clip, true)) {
         Clip interval = Clips.interval(prev, next);
         Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
-        sum = sum.add(timeSeries.eval(x).multiply(interval.width()));
+        sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
         prev = next;
       }
       Clip interval = Clips.interval(prev, clip.max());
       Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
-      sum = sum.add(timeSeries.eval(x).multiply(interval.width()));
+      sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
       return sum;
     }
     throw new Throw(clip);

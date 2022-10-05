@@ -38,7 +38,7 @@ public class RandomFunction implements Serializable {
    * @param time
    * @return */
   public Scalar eval(Random random, Scalar time) {
-    return randomProcess.eval(timeSeries, random, time);
+    return randomProcess.evaluate(timeSeries, random, time);
   }
 
   /** @return matrix with dimensions n x 2 */

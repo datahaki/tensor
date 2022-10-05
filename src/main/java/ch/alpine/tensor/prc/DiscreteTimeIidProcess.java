@@ -41,7 +41,7 @@ public class DiscreteTimeIidProcess implements RandomProcess, Serializable {
   }
 
   @Override // from RandomProcess
-  public final Scalar eval(TimeSeries timeSeries, Random random, Scalar x) {
+  public final Scalar evaluate(TimeSeries timeSeries, Random random, Scalar x) {
     IntegerQ.require(x);
     Sign.requirePositiveOrZero(x);
     if (timeSeries.isEmpty())
@@ -50,7 +50,7 @@ public class DiscreteTimeIidProcess implements RandomProcess, Serializable {
       Scalar ofs = timeSeries.domain().max().add(RealScalar.ONE);
       timeSeries.insert(ofs, RandomVariate.of(distribution, random));
     }
-    return (Scalar) timeSeries.eval(x);
+    return (Scalar) timeSeries.evaluate(x);
   }
 
   @Override // from Object

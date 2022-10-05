@@ -2,7 +2,6 @@
 package ch.alpine.tensor.prc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +17,7 @@ class WienerProcessTest {
   @Test
   void test() {
     RandomProcess randomProcess = WienerProcess.of(0, 1);
-    assertTrue(randomProcess.toString().startsWith("WienerProcess["));
+    assertEquals(randomProcess.toString(), "WienerProcess[0, 1]");
     RandomFunction randomFunction = RandomFunction.of(randomProcess);
     RandomVariate.of(UniformDistribution.of(0, 10), 100).stream() //
         .map(Scalar.class::cast) //

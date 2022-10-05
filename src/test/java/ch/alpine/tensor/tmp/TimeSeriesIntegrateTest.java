@@ -28,7 +28,7 @@ class TimeSeriesIntegrateTest {
     TimeSeries integrate = TimeSeriesIntegrate.of(ts1);
     assertEquals(integrate.domain(), ts1.domain());
     assertEquals(ts1.keySet(ts1.domain(), true), integrate.keySet(ts1.domain(), true));
-    assertEquals(integrate.eval(RealScalar.of(10)), RealScalar.of(39));
+    assertEquals(integrate.evaluate(RealScalar.of(10)), RealScalar.of(39));
   }
 
   @Test
@@ -38,7 +38,7 @@ class TimeSeriesIntegrateTest {
     Tensor value1 = TimeSeriesIntegrate.of(ts1, ts1.domain());
     Tolerance.CHOP.requireClose(value1, RealScalar.of(3 * 3 + 4.5 + 2 * 5.5 + 3 * 3.5));
     Tensor value2 = TimeSeriesIntegrate.of(ts1, Clips.interval(2, 8));
-    Tensor eval = ts1.eval(RealScalar.of(7.5));
+    Tensor eval = ts1.evaluate(RealScalar.of(7.5));
     assertEquals(eval, RealScalar.of(4.5));
     Tolerance.CHOP.requireClose(value2, RealScalar.of(2 * 3 + 4.5 + 2 * 5.5 + 1 * 4.5));
   }

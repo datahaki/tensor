@@ -58,7 +58,7 @@ import ch.alpine.tensor.sca.Clips;
   }
 
   @Override // from TimeSeries
-  public Tensor eval(Scalar x) {
+  public Tensor evaluate(Scalar x) {
     return resamplingMethod.evaluate(navigableMap, x);
   }
 

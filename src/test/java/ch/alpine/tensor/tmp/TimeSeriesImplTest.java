@@ -31,12 +31,12 @@ class TimeSeriesImplTest {
     timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(24, "h")), Tensors.vector(0, 0, 6));
     assertEquals(timeSeries.size(), 3);
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(1, "h"))), Tensors.fromString("{4/3, 7/3, 2}"));
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(3, "h"))), Tensors.vector(2, 3, 0));
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(24, "h"))), Tensors.vector(0, 0, 6));
-    assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(-1, "h"))));
-    assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(25, "h"))));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(1, "h"))), Tensors.fromString("{4/3, 7/3, 2}"));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(3, "h"))), Tensors.vector(2, 3, 0));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(24, "h"))), Tensors.vector(0, 0, 6));
+    assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(-1, "h"))));
+    assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
     assertTrue(timeSeries.toString().startsWith("TimeSeries["));
     TimeSeries copy_unmodif = Serialization.copy(timeSeries.unmodifiable());
@@ -44,7 +44,7 @@ class TimeSeriesImplTest {
     Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(integral, Tensors.fromString("{91800[s], 140400[s], 243000[s]}"));
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
-    assertEquals(integrate.eval(timeSeries.domain().max()), integral);
+    assertEquals(integrate.evaluate(timeSeries.domain().max()), integral);
   }
 
   @Test
@@ -64,15 +64,15 @@ class TimeSeriesImplTest {
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();
     assertEquals(clip.width(), UnitSystem.SI().apply(Quantity.of(24, "h")));
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(1, 2, 3));
-    assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(-1, "h"))));
-    assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(25, "h"))));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(1, 2, 3));
+    assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(-1, "h"))));
+    assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
     Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(integral, Tensors.fromString("{162000[s], 248400[s], 32400[s]}"));
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
-    assertEquals(integrate.eval(timeSeries.domain().max()), integral);
+    assertEquals(integrate.evaluate(timeSeries.domain().max()), integral);
   }
 
   @Test
@@ -92,15 +92,15 @@ class TimeSeriesImplTest {
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();
     assertEquals(clip.width(), UnitSystem.SI().apply(Quantity.of(24, "h")));
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(1, 2, 3));
-    assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(-1, "h"))));
-    assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(25, "h"))));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(1, 2, 3));
+    assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(-1, "h"))));
+    assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
     Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(integral, Tensors.fromString("{162000[s], 248400[s], 32400[s]}"));
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
-    assertEquals(integrate.eval(timeSeries.domain().max()), integral);
+    assertEquals(integrate.evaluate(timeSeries.domain().max()), integral);
   }
 
   @Test
@@ -121,14 +121,14 @@ class TimeSeriesImplTest {
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();
     assertEquals(clip.width(), UnitSystem.SI().apply(Quantity.of(24, "h")));
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
-    assertEquals(timeSeries.eval(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(2, 3, 0));
-    assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(-1, "h"))));
-    assertThrows(Exception.class, () -> timeSeries.eval(dateTime.add(Quantity.of(25, "h"))));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
+    assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(2, 3, 0));
+    assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(-1, "h"))));
+    assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
     Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(integral, Tensors.fromString("{28800[s], 43200[s], 432000[s]}"));
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
-    assertEquals(integrate.eval(timeSeries.domain().max()), integral);
+    assertEquals(integrate.evaluate(timeSeries.domain().max()), integral);
   }
 }

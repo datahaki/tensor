@@ -38,17 +38,17 @@ public enum TimeSeriesOp {
   public static void extend(TimeSeries timeSeries, Scalar key) {
     Clip clip = timeSeries.domain();
     if (Scalars.lessThan(key, clip.min()))
-      timeSeries.insert(key, timeSeries.eval(clip.min()));
+      timeSeries.insert(key, timeSeries.evaluate(clip.min()));
     if (Scalars.lessThan(clip.max(), key))
-      timeSeries.insert(key, timeSeries.eval(clip.max()));
+      timeSeries.insert(key, timeSeries.evaluate(clip.max()));
   }
 
   public static void extend(TimeSeries timeSeries, Clip domain) {
     Clip clip = timeSeries.domain();
     if (Scalars.lessThan(domain.min(), clip.min()))
-      timeSeries.insert(domain.min(), timeSeries.eval(clip.min()));
+      timeSeries.insert(domain.min(), timeSeries.evaluate(clip.min()));
     if (Scalars.lessThan(clip.max(), domain.max()))
-      timeSeries.insert(domain.max(), timeSeries.eval(clip.max()));
+      timeSeries.insert(domain.max(), timeSeries.evaluate(clip.max()));
   }
 
   public static TimeSeries indicator(NavigableSet<Scalar> navigableSet) {

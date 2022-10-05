@@ -100,7 +100,7 @@ public interface TimeSeries {
   /** @param x inside {@link #domain()}
    * @return
    * @throws Exception if time series is empty */
-  Tensor eval(Scalar x);
+  Tensor evaluate(Scalar x);
 
   /** the domain is always the min/max interval of all the keys
    * that were inserted via {@link #insert(Scalar, Tensor)}
