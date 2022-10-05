@@ -164,7 +164,7 @@ public enum ResamplingMethods implements ResamplingMethod {
 
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x) {
-      return function.apply(x);
+      return Objects.requireNonNull(function.apply(x));
     }
   },
 }

@@ -26,6 +26,12 @@ import ch.alpine.tensor.sca.Clip;
  * {@link #insert(Scalar, Tensor)} throws an exception if the value
  * to be inserted has a different structure.
  * 
+ * <p>Some implementations of the interface {@link TimeSeries}
+ * are unmodifiable. In that case, {@link #insert(Scalar, Tensor)}
+ * throws an Exception, and the values provided to the "outside"
+ * are unmodifiable tensors, or copied of the values stored in the
+ * time series. 
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/TimeSeries.html">TimeSeries</a> */
 public interface TimeSeries {
