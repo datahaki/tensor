@@ -21,7 +21,8 @@ import ch.alpine.tensor.sca.Clip;
  * {@link Tensor}.
  * 
  * <p>In Mathematica, the default resampling method is linear
- * interpolation.
+ * interpolation, which is available here as
+ * {@link ResamplingMethods#LINEAR_INTERPOLATION}.
  * 
  * <p>All values in the time series must have the same tensor structure.
  * {@link #insert(Scalar, Tensor)} throws an exception if the value
@@ -79,9 +80,7 @@ public interface TimeSeries {
         TreeMap::new))), resamplingMethod);
   }
 
-  /** TODO TEST
-   * 
-   * @param stream
+  /** @param stream
    * @param resamplingMethod
    * @return */
   static TimeSeries table(Stream<Tensor> stream, ResamplingMethod resamplingMethod) {

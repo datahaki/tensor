@@ -2,10 +2,12 @@
 package ch.alpine.tensor.tmp;
 
 import java.io.Serializable;
+import java.util.NavigableSet;
 import java.util.Objects;
+import java.util.TreeSet;
 import java.util.function.BinaryOperator;
-import java.util.stream.Stream;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -54,10 +56,13 @@ public class TimeSeriesBinaryOperator implements BinaryOperator<TimeSeries>, Ser
       Clip clip2 = timeSeries2.domain();
       if (Clips.nonEmptyIntersection(clip1, clip2)) {
         Clip clip = Clips.intersection(clip1, clip2);
-        return TimeSeries.of(Stream.concat( //
-            timeSeries1.keySet(clip, true).stream(), //
-            timeSeries2.keySet(clip, true).stream()).distinct() //
-            .map(key -> new TsEntry(key, binaryOperator.apply(timeSeries1.evaluate(key), timeSeries2.evaluate(key)))), //
+        NavigableSet<Scalar> navigableSet = new TreeSet<>();
+        navigableSet.addAll(timeSeries1.keySet(clip, true));
+        navigableSet.addAll(timeSeries2.keySet(clip, true));
+        return TimeSeries.of(navigableSet.stream() //
+            .map(key -> new TsEntry(key, binaryOperator.apply( //
+                timeSeries1.evaluate(key), //
+                timeSeries2.evaluate(key)))), //
             resamplingMethod);
       }
     }

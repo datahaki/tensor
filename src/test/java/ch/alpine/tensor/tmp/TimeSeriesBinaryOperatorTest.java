@@ -1,16 +1,20 @@
 package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.function.BinaryOperator;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.N;
 
 class TimeSeriesBinaryOperatorTest {
   @Test
@@ -30,5 +34,38 @@ class TimeSeriesBinaryOperatorTest {
       assertEquals(timeSeries.path(), Tensors.fromString( //
           "{{2, 3}, {3, 3}, {4, 3}, {5, 6}, {6, 11/2}, {7, 5}, {8, 4}, {10, 4}}"));
     }
+  }
+
+  @Test
+  void testExactAndInexact() {
+    Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries ts2 = TimeSeries.path(p1.map(N.DOUBLE), ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeriesOp.add(ts1, ts2);
+    assertEquals(timeSeries.size(), 5);
+  }
+
+  @Test
+  void testEmpty() {
+    Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    assertTrue(ts1.containsKey(RealScalar.ONE));
+    assertFalse(ts1.containsKey(RealScalar.of(2)));
+    TimeSeries ts2 = TimeSeries.empty(ResamplingMethods.HOLD_LO);
+    assertTrue(TimeSeriesOp.add(ts1, ts2).isEmpty());
+    assertTrue(TimeSeriesOp.add(ts2, ts1).isEmpty());
+    assertTrue(TimeSeriesOp.add(ts2, ts2).isEmpty());
+    TimeSeries timeSeries = ts1.block(Clips.interval(2, 7), true);
+    assertEquals(timeSeries.size(), 3);
+  }
+
+  @Test
+  void testNonOverlap() {
+    Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}}");
+    Tensor p2 = Tensors.fromString("{{7, 5}, {10, 2}}");
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries ts2 = TimeSeries.path(p2, ResamplingMethods.HOLD_LO);
+    assertTrue(TimeSeriesOp.add(ts1, ts2).isEmpty());
+    assertTrue(TimeSeriesOp.add(ts2, ts1).isEmpty());
   }
 }
