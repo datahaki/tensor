@@ -134,11 +134,7 @@ public interface TimeSeries {
    * @throws Exception if time series is empty */
   Clip domain();
 
-  /** Remark: method is useful in order to prevent the invocation of
-   * {@link #insert(Scalar, Tensor)} with a key that already has an
-   * associated value.
-   * 
-   * @param key
+  /** @param key
    * @return whether a value is associated to the exact key */
   boolean containsKey(Scalar key);
 

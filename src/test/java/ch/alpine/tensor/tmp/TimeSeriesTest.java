@@ -18,6 +18,15 @@ import ch.alpine.tensor.sca.Clips;
 
 class TimeSeriesTest {
   @Test
+  void testMultiInsertion() {
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_HI);
+    timeSeries.insert(RealScalar.ONE, Tensors.empty());
+    timeSeries.insert(RealScalar.ONE, Tensors.empty());
+    timeSeries.insert(RealScalar.ONE, Tensors.empty());
+    assertEquals(timeSeries.size(), 1);
+  }
+
+  @Test
   void testPack() {
     AtomicInteger atomicInteger = new AtomicInteger();
     TimeSeries timeSeries = TimeSeries.of(Stream.generate(() -> new TsEntry( //

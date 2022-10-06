@@ -40,6 +40,7 @@ public class FindRoot implements Serializable {
    * 1E-16 for instance, so we add a few iterations more. */
   private static final int MAX_ITERATIONS_B = 128;
   private static final int MAX_ITERATIONS_A = 256;
+  // TODO TENSOR IMPL investigate and justify magic constants
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Scalar FACTOR = RealScalar.of(256);
 

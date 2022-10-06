@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.qty.Quantity;
 
 class IndeterminateQTest {
   @Test
@@ -21,5 +22,13 @@ class IndeterminateQTest {
   void testComplex() {
     assertFalse(IndeterminateQ.of(ComplexScalar.of(3, Double.POSITIVE_INFINITY)));
     assertTrue(IndeterminateQ.of(ComplexScalar.of(3, Double.NaN)));
+  }
+
+  @Test
+  void testQuantity() {
+    assertFalse(IndeterminateQ.of(Quantity.of(Double.POSITIVE_INFINITY, "m")));
+    assertTrue(IndeterminateQ.of(Quantity.of(Double.NaN, "m")));
+    assertFalse(IndeterminateQ.of(Quantity.of(ComplexScalar.of(3, Double.POSITIVE_INFINITY), "m")));
+    assertTrue(IndeterminateQ.of(Quantity.of(ComplexScalar.of(3, Double.NaN), "m")));
   }
 }
