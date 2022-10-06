@@ -39,6 +39,20 @@ class TimeSeriesTest {
   }
 
   @Test
+  void testHoldLoPack1() {
+    Tensor tensor = Tensors.fromString("{{1,3},{2,3},{3,3},{4,4},{5,4},{6,2},{7,2}}");
+    Tensor path = TimeSeries.path(tensor, ResamplingMethods.HOLD_LO_SPARSE).path();
+    assertEquals(path, Tensors.fromString("{{1, 3}, {4, 4}, {6, 2}, {7, 2}}"));
+  }
+
+  @Test
+  void testHoldLoPack2() {
+    Tensor tensor = Tensors.fromString("{{1,3},{2,4},{3,3},{4,4},{5,4},{6,2},{7,2},{8,3}}");
+    Tensor path = TimeSeries.path(tensor, ResamplingMethods.HOLD_LO_SPARSE).path();
+    assertEquals(path, Tensors.fromString("{{1, 3},{2,4},{3,3}, {4, 4}, {6, 2}, {8, 3}}"));
+  }
+
+  @Test
   void testNoPack() {
     AtomicInteger atomicInteger = new AtomicInteger();
     TimeSeries timeSeries = TimeSeries.of(Stream.generate(() -> new TsEntry( //
