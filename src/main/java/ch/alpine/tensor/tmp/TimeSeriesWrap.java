@@ -37,7 +37,7 @@ import ch.alpine.tensor.sca.Clips;
 
   @Override // from TimeSeries
   public TimeSeries copy() {
-    return this; // TODO TENSOR consider
+    return TimeSeries.of(stream(), resamplingMethod);
   }
 
   @Override // from TimeSeries
