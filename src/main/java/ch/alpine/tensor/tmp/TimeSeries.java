@@ -70,14 +70,13 @@ public interface TimeSeries {
    * @throws Exception if any tensor in the stream does not have length 2
    * @throws Exception in case of duplicate keys */
   static TimeSeries path(Stream<Tensor> stream, ResamplingMethod resamplingMethod) {
-    return new TimeSeriesImpl(resamplingMethod.pack(stream.map(tensor -> {
-      Integers.requireEquals(tensor.length(), 2);
-      return tensor;
-    }).collect(Collectors.toMap( //
-        tensor -> tensor.Get(0), //
-        tensor -> tensor.get(1), //
-        MergeIllegal.operator(), //
-        TreeMap::new))), resamplingMethod);
+    return new TimeSeriesImpl(resamplingMethod.pack(stream
+        .peek(tensor -> Integers.requireEquals(tensor.length(), 2)) //
+        .collect(Collectors.toMap( //
+            tensor -> tensor.Get(0), //
+            tensor -> tensor.get(1), //
+            MergeIllegal.operator(), //
+            TreeMap::new))), resamplingMethod);
   }
 
   /** @param stream
@@ -145,7 +144,7 @@ public interface TimeSeries {
   boolean isEmpty();
 
   /** @param clip
-   * @param whether a key of value clip.max() should be included in the set
+   * @param maxInclusive whether a key of value clip.max() should be included in the set
    * @return */
   NavigableSet<Scalar> keySet(Clip clip, boolean maxInclusive);
 

@@ -117,15 +117,16 @@ public enum ResamplingMethods implements ResamplingMethod {
 
     @Override // from ResamplingMethod
     public NavigableMap<Scalar, Tensor> pack(NavigableMap<Scalar, Tensor> navigableMap) {
-      Entry<Scalar, Tensor> head = navigableMap.firstEntry();
-      if (Objects.nonNull(head)) {
+      Entry<Scalar, Tensor> first = navigableMap.firstEntry();
+      if (Objects.nonNull(first)) {
         // first and last element are never to be removed
         Iterator<Entry<Scalar, Tensor>> iterator = //
-            navigableMap.subMap(head.getKey(), false, navigableMap.lastKey(), false) //
+            navigableMap.subMap(first.getKey(), false, navigableMap.lastKey(), false) //
                 .entrySet().iterator();
+        Tensor head = first.getValue();
         while (iterator.hasNext()) {
-          Entry<Scalar, Tensor> tail = iterator.next();
-          if (head.getValue().equals(tail.getValue()))
+          Tensor tail = iterator.next().getValue();
+          if (head.equals(tail))
             iterator.remove();
           else
             head = tail; // new reference for comparison
