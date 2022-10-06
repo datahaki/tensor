@@ -3,12 +3,16 @@ package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Clips;
 
@@ -41,5 +45,20 @@ class TimeSeriesIntegrateTest {
     Tensor eval = ts1.evaluate(RealScalar.of(7.5));
     assertEquals(eval, RealScalar.of(4.5));
     Tolerance.CHOP.requireClose(value2, RealScalar.of(2 * 3 + 4.5 + 2 * 5.5 + 1 * 4.5));
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testIntegrateEmpty(ResamplingMethods resamplingMethods) {
+    TimeSeries timeSeries = TimeSeries.empty(resamplingMethods);
+    TimeSeries result = TimeSeriesIntegrate.of(timeSeries);
+    assertTrue(result.isEmpty());
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testException(ResamplingMethods resamplingMethods) {
+    TimeSeries timeSeries = TimeSeries.empty(resamplingMethods);
+    assertThrows(Throw.class, () -> TimeSeriesIntegrate.of(timeSeries, Clips.interval(0, 1)));
   }
 }

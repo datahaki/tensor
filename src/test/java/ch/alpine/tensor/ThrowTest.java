@@ -57,4 +57,19 @@ class ThrowTest {
     Exception exception = new Throw(Tensors.vector(4, 7, 1, 1), null, RealScalar.ONE);
     assertEquals(exception.getMessage(), "Throw[{4, 7, 1, 1}, null, 1]");
   }
+
+  @Test
+  void testNull2() {
+    Exception exception = new Throw(null, Tensors.vector(4, 7, 1, 1), null, RealScalar.ONE);
+    assertEquals(exception.getMessage(), "Throw[null, {4, 7, 1, 1}, null, 1]");
+  }
+
+  @Test
+  void testNull3() {
+    try {
+      throw new Throw(null, Tensors.vector(4, 7, 1, 1), null, RealScalar.ONE);
+    } catch (Exception exception) {
+      assertEquals(exception.getMessage(), "Throw[null, {4, 7, 1, 1}, null, 1]");
+    }
+  }
 }
