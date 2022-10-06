@@ -33,7 +33,7 @@ class TimeSeriesWrapTest {
         ResamplingMethods.LINEAR_INTERPOLATION);
     assertEquals(timeSeries.domain(), Clips.interval(0, 9));
     RandomVariate.of(UniformDistribution.of(timeSeries.domain()), 20).stream() //
-        .map(Scalar.class::cast).forEach(x -> timeSeries.evaluate(x));
+        .map(Scalar.class::cast).forEach(timeSeries::evaluate);
     assertTrue(timeSeries.toString().startsWith("TimeSeries["));
     assertEquals(timeSeries.resamplingMethod(), ResamplingMethods.LINEAR_INTERPOLATION);
     assertFalse(timeSeries.isEmpty());

@@ -70,13 +70,13 @@ public interface TimeSeries {
    * @throws Exception if any tensor in the stream does not have length 2
    * @throws Exception in case of duplicate keys */
   static TimeSeries path(Stream<Tensor> stream, ResamplingMethod resamplingMethod) {
-    return new TimeSeriesImpl(resamplingMethod.pack(stream
-        .peek(tensor -> Integers.requireEquals(tensor.length(), 2)) //
+    return new TimeSeriesImpl(resamplingMethod.pack(stream.peek(tensor -> Integers.requireEquals(tensor.length(), 2)) //
         .collect(Collectors.toMap( //
             tensor -> tensor.Get(0), //
             tensor -> tensor.get(1), //
             MergeIllegal.operator(), //
-            TreeMap::new))), resamplingMethod);
+            TreeMap::new))),
+        resamplingMethod);
   }
 
   /** @param stream

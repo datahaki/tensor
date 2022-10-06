@@ -2,14 +2,17 @@
 package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Sign;
 
 class TimeSeriesOpTest {
   @Test
@@ -27,6 +30,11 @@ class TimeSeriesOpTest {
       TimeSeries timeSeries = TimeSeriesOp.add(ts1, ts2);
       assertEquals(timeSeries.path(), Tensors.fromString( // consistent with mathematica:
           "{{2, 4}, {3, 5}, {4, 16/3}, {5, 26/3}, {6, 17/2}, {7, 15/2}, {8, 6}, {10, 6}}"));
+    }
+    {
+      TimeSeries timeSeries = TimeSeriesOp.subtract(ts1, ts2);
+      assertEquals(timeSeries.path(), Tensors.fromString( // consistent with mathematica:
+          "{{2, 2}, {3, 1}, {4, 2/3}, {5, 10/3}, {6, 5/2}, {7, 5/2}, {8, 2}, {10, -2}}"));
     }
     {
       TimeSeries timeSeries = TimeSeriesOp.times(ts1, ts2);
@@ -70,5 +78,15 @@ class TimeSeriesOpTest {
     // assertEquals(timeSeries.path(), Tensors.fromString("{{3, 0}, {9, 0}}"));
     // TimeSeriesOp.extend(timeSeries, Clips.interval(1, 10));
     // assertEquals(timeSeries.path(), Tensors.fromString("{{1, 0}, {3, 0}, {10, 0}}"));
+  }
+
+  @Test
+  void testIndicator() {
+    Tensor p1 = Tensors.fromString("{{1, 3}, {4, 0}, {5, 6}, {7, 0}, {8, 6}, {10, 2}}");
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeriesOp.indicator(ts1, Sign::isPositive);
+    Tensor tensor = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
+    assertEquals(tensor, RealScalar.of(3 + 2 + 2));
+    assertTrue(ExactTensorQ.of(tensor));
   }
 }
