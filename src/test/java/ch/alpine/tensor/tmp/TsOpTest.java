@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
-class TimeSeriesOpTest {
+class TsOpTest {
   @Test
   void testMathematica() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
@@ -27,17 +27,17 @@ class TimeSeriesOpTest {
     Clip clip = Clips.intersection(ts1.domain(), ts2.domain());
     assertEquals(clip, Clips.interval(2, 10));
     {
-      TimeSeries timeSeries = TimeSeriesOp.add(ts1, ts2);
+      TimeSeries timeSeries = TsKeywise.plus(ts1, ts2);
       assertEquals(timeSeries.path(), Tensors.fromString( // consistent with mathematica:
           "{{2, 4}, {3, 5}, {4, 16/3}, {5, 26/3}, {6, 17/2}, {7, 15/2}, {8, 6}, {10, 6}}"));
     }
     {
-      TimeSeries timeSeries = TimeSeriesOp.subtract(ts1, ts2);
+      TimeSeries timeSeries = TsKeywise.minus(ts1, ts2);
       assertEquals(timeSeries.path(), Tensors.fromString( // consistent with mathematica:
           "{{2, 2}, {3, 1}, {4, 2/3}, {5, 10/3}, {6, 5/2}, {7, 5/2}, {8, 2}, {10, -2}}"));
     }
     {
-      TimeSeries timeSeries = TimeSeriesOp.times(ts1, ts2);
+      TimeSeries timeSeries = TsKeywise.times(ts1, ts2);
       assertEquals(timeSeries.path(), Tensors.fromString( // consistent with mathematica:
           "{{2, 3}, {3, 6}, {4, 7}, {5, 16}, {6, 33/2}, {7, 25/2}, {8, 8}, {10, 8}}"));
     }
@@ -84,7 +84,7 @@ class TimeSeriesOpTest {
   void testIndicator() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 0}, {5, 6}, {7, 0}, {8, 6}, {10, 2}}");
     TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
-    TimeSeries timeSeries = TimeSeriesOp.indicator(ts1, Sign::isPositive);
+    TimeSeries timeSeries = TsOp.indicator(ts1, Sign::isPositive);
     Tensor tensor = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(tensor, RealScalar.of(3 + 2 + 2));
     assertTrue(ExactTensorQ.of(tensor));

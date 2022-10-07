@@ -15,11 +15,10 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.MergeIllegal;
-import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-/* package */ class TimeSeriesImpl implements TimeSeries, Serializable {
+/* package */ class TimeSeriesImpl extends AbstractTimeSeries implements Serializable {
   /* package */ final NavigableMap<Scalar, Tensor> navigableMap;
   private final ResamplingMethod resamplingMethod;
 
@@ -102,10 +101,5 @@ import ch.alpine.tensor.sca.Clips;
   public final Tensor path() {
     return Tensor.of(navigableMap.entrySet().stream() //
         .map(entry -> Tensors.of(entry.getKey(), entry.getValue()))); // value is copied
-  }
-
-  @Override // from Object
-  public final String toString() {
-    return MathematicaFormat.concise("TimeSeries", size(), resamplingMethod());
   }
 }

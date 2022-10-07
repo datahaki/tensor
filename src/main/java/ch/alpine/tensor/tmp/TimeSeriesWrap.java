@@ -9,12 +9,11 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarTensorFunction;
-import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
 /** unmodifiable view to an external data base for interpolation purposes */
-/* package */ class TimeSeriesWrap implements TimeSeries {
+/* package */ class TimeSeriesWrap extends AbstractTimeSeries {
   private final NavigableSet<Scalar> navigableSet;
   private final ScalarTensorFunction function;
   private final ResamplingMethod resamplingMethod;
@@ -90,10 +89,5 @@ import ch.alpine.tensor.sca.Clips;
   public final Tensor path() {
     return Tensor.of(navigableSet.stream() //
         .map(key -> Tensors.of(key, function.apply(key)))); // value is copied
-  }
-
-  @Override // from Object
-  public final String toString() {
-    return MathematicaFormat.concise("TimeSeries", size(), resamplingMethod());
   }
 }

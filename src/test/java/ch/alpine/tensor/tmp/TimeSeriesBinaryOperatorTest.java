@@ -41,7 +41,7 @@ class TimeSeriesBinaryOperatorTest {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
     TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
     TimeSeries ts2 = TimeSeries.path(p1.map(N.DOUBLE), ResamplingMethods.LINEAR_INTERPOLATION);
-    TimeSeries timeSeries = TimeSeriesOp.add(ts1, ts2);
+    TimeSeries timeSeries = TsKeywise.plus(ts1, ts2);
     assertEquals(timeSeries.size(), 5);
   }
 
@@ -52,9 +52,9 @@ class TimeSeriesBinaryOperatorTest {
     assertTrue(ts1.containsKey(RealScalar.ONE));
     assertFalse(ts1.containsKey(RealScalar.of(2)));
     TimeSeries ts2 = TimeSeries.empty(ResamplingMethods.HOLD_LO);
-    assertTrue(TimeSeriesOp.add(ts1, ts2).isEmpty());
-    assertTrue(TimeSeriesOp.add(ts2, ts1).isEmpty());
-    assertTrue(TimeSeriesOp.add(ts2, ts2).isEmpty());
+    assertTrue(TsKeywise.plus(ts1, ts2).isEmpty());
+    assertTrue(TsKeywise.plus(ts2, ts1).isEmpty());
+    assertTrue(TsKeywise.plus(ts2, ts2).isEmpty());
     TimeSeries timeSeries = ts1.block(Clips.interval(2, 7), true);
     assertEquals(timeSeries.size(), 3);
   }
@@ -65,7 +65,7 @@ class TimeSeriesBinaryOperatorTest {
     Tensor p2 = Tensors.fromString("{{7, 5}, {10, 2}}");
     TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
     TimeSeries ts2 = TimeSeries.path(p2, ResamplingMethods.HOLD_LO);
-    assertTrue(TimeSeriesOp.add(ts1, ts2).isEmpty());
-    assertTrue(TimeSeriesOp.add(ts2, ts1).isEmpty());
+    assertTrue(TsKeywise.plus(ts1, ts2).isEmpty());
+    assertTrue(TsKeywise.plus(ts2, ts1).isEmpty());
   }
 }

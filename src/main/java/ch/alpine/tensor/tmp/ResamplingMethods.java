@@ -22,11 +22,6 @@ public enum ResamplingMethods implements ResamplingMethod {
    * default in Mathematica as "LinearInterpolation", and "{Interpolation, 1}" */
   LINEAR_INTERPOLATION {
     @Override // from ResamplingMethod
-    public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
-      navigableMap.put(key, value);
-    }
-
-    @Override // from ResamplingMethod
     public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
       Entry<Scalar, Tensor> e_lo = navigableMap.floorEntry(x);
       Scalar lo = e_lo.getKey();
@@ -47,14 +42,14 @@ public enum ResamplingMethods implements ResamplingMethod {
       Scalar hi = navigableSet.ceiling(x);
       return LinearInterpolation.of(Tensors.of(f_lo, function.apply(hi))).at(Clips.interval(lo, hi).rescale(x));
     }
-  },
-  /** in Mathematica: HoldValueFromLeft */
-  HOLD_LO {
+
     @Override // from ResamplingMethod
     public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
       navigableMap.put(key, value);
     }
-
+  },
+  /** in Mathematica: HoldValueFromLeft */
+  HOLD_LO {
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
       Scalar last = navigableMap.lastKey();
@@ -70,9 +65,30 @@ public enum ResamplingMethods implements ResamplingMethod {
         return function.apply(navigableSet.floor(x)).copy();
       throw new Throw(last, x);
     }
+
+    @Override // from ResamplingMethod
+    public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
+      navigableMap.put(key, value);
+    }
   },
   /** suitable for exact precision data sets */
   HOLD_LO_SPARSE {
+    @Override // from ResamplingMethod
+    public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
+      Scalar last = navigableMap.lastKey();
+      if (Scalars.lessEquals(x, last))
+        return navigableMap.floorEntry(x).getValue().copy();
+      throw new Throw(last, x);
+    }
+
+    @Override // from ResamplingMethod
+    public Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x) {
+      Scalar last = navigableSet.last();
+      if (Scalars.lessEquals(x, last))
+        return function.apply(navigableSet.floor(x)).copy();
+      throw new Throw(last, x);
+    }
+
     @Override // from ResamplingMethod
     public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
       // if given key is higher than existing max key, or map is empty
@@ -100,22 +116,6 @@ public enum ResamplingMethods implements ResamplingMethod {
     }
 
     @Override // from ResamplingMethod
-    public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
-      Scalar last = navigableMap.lastKey();
-      if (Scalars.lessEquals(x, last))
-        return navigableMap.floorEntry(x).getValue().copy();
-      throw new Throw(last, x);
-    }
-
-    @Override // from ResamplingMethod
-    public Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x) {
-      Scalar last = navigableSet.last();
-      if (Scalars.lessEquals(x, last))
-        return function.apply(navigableSet.floor(x)).copy();
-      throw new Throw(last, x);
-    }
-
-    @Override // from ResamplingMethod
     public NavigableMap<Scalar, Tensor> pack(NavigableMap<Scalar, Tensor> navigableMap) {
       Entry<Scalar, Tensor> first = navigableMap.firstEntry();
       if (Objects.nonNull(first)) {
@@ -138,13 +138,6 @@ public enum ResamplingMethods implements ResamplingMethod {
   /** in Mathematica: HoldValueFromRight */
   HOLD_HI {
     @Override // from ResamplingMethod
-    public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
-      Entry<Scalar, Tensor> entry = navigableMap.ceilingEntry(key);
-      if (Objects.isNull(entry) || !entry.getValue().equals(value))
-        navigableMap.put(key, value);
-    }
-
-    @Override // from ResamplingMethod
     public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
       Scalar first = navigableMap.firstKey();
       if (Scalars.lessEquals(first, x))
@@ -158,14 +151,16 @@ public enum ResamplingMethods implements ResamplingMethod {
         return function.apply(navigableSet.ceiling(x)).copy();
       throw new Throw(x);
     }
+
+    @Override // from ResamplingMethod
+    public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
+      Entry<Scalar, Tensor> entry = navigableMap.ceilingEntry(key);
+      if (Objects.isNull(entry) || !entry.getValue().equals(value))
+        navigableMap.put(key, value);
+    }
   },
   /** in Mathematica: None */
   NONE {
-    @Override // from ResamplingMethod
-    public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
-      navigableMap.put(key, value);
-    }
-
     @Override // from ResamplingMethod
     public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
       return Objects.requireNonNull(navigableMap.get(x));
@@ -176,6 +171,11 @@ public enum ResamplingMethods implements ResamplingMethod {
       if (navigableSet.contains(x))
         return Objects.requireNonNull(function.apply(x));
       throw new Throw(x);
+    }
+
+    @Override // from ResamplingMethod
+    public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
+      navigableMap.put(key, value);
     }
   },
 }
