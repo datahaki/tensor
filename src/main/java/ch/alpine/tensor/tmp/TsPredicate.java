@@ -10,7 +10,7 @@ public enum TsPredicate {
         timeSeries2.containsKey(entry.key()) //
             && entry.value().equals(timeSeries2.evaluate(entry.key())));
   }
-  
+
   public static boolean isUnmodifiable(TimeSeries timeSeries) {
     return timeSeries.unmodifiable() == timeSeries; // equality by reference intended
   }

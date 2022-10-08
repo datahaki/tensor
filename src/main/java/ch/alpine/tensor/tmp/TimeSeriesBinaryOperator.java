@@ -54,7 +54,7 @@ public class TimeSeriesBinaryOperator implements BinaryOperator<TimeSeries>, Ser
     if (!timeSeries1.isEmpty() && !timeSeries2.isEmpty()) {
       Clip clip1 = timeSeries1.domain();
       Clip clip2 = timeSeries2.domain();
-      if (nonEmptyIntersection(clip1, clip2)) {
+      if (Clips.nonEmptyIntersection(clip1, clip2)) {
         Clip clip = Clips.intersection(clip1, clip2);
         NavigableSet<Scalar> navigableSet = new TreeSet<>();
         navigableSet.addAll(timeSeries1.keySet(clip, true));
@@ -67,15 +67,5 @@ public class TimeSeriesBinaryOperator implements BinaryOperator<TimeSeries>, Ser
       }
     }
     return TimeSeries.empty(resamplingMethod);
-  }
-
-  /** @param clip1
-   * @param clip2
-   * @return whether clip1 and clip2 have at least one point in common */
-  public static boolean nonEmptyIntersection(Clip clip1, Clip clip2) {
-    return clip1.isInside(clip2.min()) //
-        || clip1.isInside(clip2.max()) //
-        || clip2.isInside(clip1.min()) //
-        || clip2.isInside(clip1.max());
   }
 }

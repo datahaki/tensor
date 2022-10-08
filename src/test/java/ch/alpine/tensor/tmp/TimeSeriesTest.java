@@ -2,6 +2,7 @@
 package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -93,6 +94,13 @@ class TimeSeriesTest {
   void testFails() {
     Tensor p1 = Tensors.fromString("{{1, {1,1}}, {4, {3,2}, 3}}").unmodifiable();
     assertThrows(Exception.class, () -> TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION));
+  }
+
+  @Test
+  void testEmptyString() {
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    assertFalse(TsPredicate.isUnmodifiable(timeSeries));
+    assertEquals(timeSeries.toString(), "TimeSeries[LINEAR_INTERPOLATION, null, 0]");
   }
 
   @Test

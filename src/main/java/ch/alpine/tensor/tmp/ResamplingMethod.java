@@ -18,15 +18,18 @@ public interface ResamplingMethod {
    * [navigableSet.first(), navigableSet.last()] */
   Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x);
 
-  /** @param navigableMap
+  /** default implementation is
+   * <pre>
+   * return evaluate(navigableMap.navigableKeySet(), navigableMap::get, x);
+   * </pre>
+   * 
+   * @param navigableMap
    * @param x
    * @return result of resampling method at location x taking account the keys in the vicinity of x
    * and their corresponding values
    * @throws Exception if parameter x is is outside the interval
    * [navigableMap.firstKey(), navigableMap.lastKey()] */
-  default Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
-    return evaluate(navigableMap.navigableKeySet(), navigableMap::get, x);
-  }
+  Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x);
 
   /** inserts value in given navigableMap at key
    * 

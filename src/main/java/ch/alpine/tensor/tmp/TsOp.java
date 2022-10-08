@@ -9,21 +9,9 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.num.Boole;
-import ch.alpine.tensor.sca.Clip;
 
 public enum TsOp {
   ;
-  public static TimeSeries cut(TimeSeries timeSeries, Clip clip) {
-    TimeSeries result = timeSeries.block(clip, true).copy();
-    Scalar lo = clip.min();
-    Scalar hi = clip.max();
-    if (!result.containsKey(lo))
-      timeSeries.insert(lo, timeSeries.evaluate(lo));
-    if (!result.containsKey(hi))
-      timeSeries.insert(hi, timeSeries.evaluate(hi));
-    return timeSeries;
-  }
-
   public static TimeSeries indicator(NavigableSet<Scalar> navigableSet) {
     AtomicInteger atomicInteger = new AtomicInteger();
     return TimeSeries.of(navigableSet.stream() //
