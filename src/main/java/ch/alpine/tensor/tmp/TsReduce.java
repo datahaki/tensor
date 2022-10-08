@@ -5,8 +5,7 @@ import java.util.Optional;
 import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.red.Max;
-import ch.alpine.tensor.red.Min;
+import ch.alpine.tensor.red.Entrywise;
 
 public enum TsReduce {
   ;
@@ -17,10 +16,10 @@ public enum TsReduce {
   }
 
   public static Optional<Tensor> max(TimeSeries timeSeries) {
-    return reduce(timeSeries, Max::of);
+    return reduce(timeSeries, Entrywise.max());
   }
 
   public static Optional<Tensor> min(TimeSeries timeSeries) {
-    return reduce(timeSeries, Min::of);
+    return reduce(timeSeries, Entrywise.min());
   }
 }
