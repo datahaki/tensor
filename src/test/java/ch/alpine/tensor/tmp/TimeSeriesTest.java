@@ -59,14 +59,14 @@ class TimeSeriesTest {
     TimeSeries timeSeries = TimeSeries.of(Stream.generate(() -> new TsEntry( //
         RealScalar.of(atomicInteger.getAndIncrement()), //
         Tensors.vector(1, 2, 3))).limit(11), //
-        ResamplingMethods.LINEAR_INTERPOLATION);
+        ResamplingMethods.LINEAR);
     assertEquals(timeSeries.size(), 11);
   }
 
   @Test
   void testPath() {
     Tensor p1 = Tensors.fromString("{{1, {1,1}}, {4, {3,2}}}");
-    TimeSeries timeSeries = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.path(p1, ResamplingMethods.LINEAR);
     Tensor path = timeSeries.path();
     path.set(r -> r.append(RealScalar.ZERO), 0);
     // System.out.println(path);
@@ -76,7 +76,7 @@ class TimeSeriesTest {
   @Test
   void testDimension() {
     Tensor p1 = Tensors.fromString("{{1, {1,1}}, {4, {3,2}}}").unmodifiable();
-    TimeSeries timeSeries = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.path(p1, ResamplingMethods.LINEAR);
     Tensor path = timeSeries.path();
     path.set(r -> r.append(RealScalar.ZERO), 0, 1);
     assertEquals(timeSeries.path(), p1);
@@ -93,22 +93,22 @@ class TimeSeriesTest {
   @Test
   void testFails() {
     Tensor p1 = Tensors.fromString("{{1, {1,1}}, {4, {3,2}, 3}}").unmodifiable();
-    assertThrows(Exception.class, () -> TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION));
+    assertThrows(Exception.class, () -> TimeSeries.path(p1, ResamplingMethods.LINEAR));
   }
 
   @Test
   void testEmptyString() {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR);
     assertFalse(TsPredicate.isUnmodifiable(timeSeries));
-    assertEquals(timeSeries.toString(), "TimeSeries[LINEAR_INTERPOLATION, null, 0]");
+    assertEquals(timeSeries.toString(), "TimeSeries[LINEAR, null, 0]");
   }
 
   @Test
   void testNullFails() {
-    assertThrows(Exception.class, () -> TimeSeries.path((Tensor) null, ResamplingMethods.LINEAR_INTERPOLATION));
+    assertThrows(Exception.class, () -> TimeSeries.path((Tensor) null, ResamplingMethods.LINEAR));
     assertThrows(Exception.class, () -> TimeSeries.empty(null));
     Tensor p1 = Tensors.fromString("{{1, {1,1}}, {4, {3,2}}}").unmodifiable();
-    TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries.path(p1, ResamplingMethods.LINEAR);
     assertThrows(Exception.class, () -> TimeSeries.path(p1.stream(), null));
   }
 }

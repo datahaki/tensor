@@ -18,12 +18,12 @@ class TsOpTest {
   @Test
   void testMathematica() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
-    assertEquals(ts1.resamplingMethod(), ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR);
+    assertEquals(ts1.resamplingMethod(), ResamplingMethods.LINEAR);
     assertEquals(ts1.path(), p1);
     TimeSeries ts2 = TimeSeries.path( //
         Tensors.fromString("{{2, 1}, {3, 2}, {6, 3}, {8, 2}, {10, 4}, {11, 3}}"), //
-        ResamplingMethods.LINEAR_INTERPOLATION);
+        ResamplingMethods.LINEAR);
     Clip clip = Clips.intersection(ts1.domain(), ts2.domain());
     assertEquals(clip, Clips.interval(2, 10));
     {
@@ -83,7 +83,7 @@ class TsOpTest {
   @Test
   void testIndicator() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 0}, {5, 6}, {7, 0}, {8, 6}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR);
     TimeSeries timeSeries = TsOp.indicator(ts1, Sign::isPositive);
     Tensor tensor = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(tensor, RealScalar.of(3 + 2 + 2));

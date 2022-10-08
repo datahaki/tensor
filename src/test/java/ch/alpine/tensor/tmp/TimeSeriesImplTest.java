@@ -21,7 +21,7 @@ import ch.alpine.tensor.sca.Clip;
 class TimeSeriesImplTest {
   @Test
   void testInterp1() throws ClassNotFoundException, IOException {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
     DateTime dateTime = DateTime.of(1993, 4, 5, 4, 5);

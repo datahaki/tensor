@@ -70,7 +70,7 @@ public class WienerProcess implements RandomProcess, Serializable {
 
   @Override // from RandomProcess
   public TimeSeries spawn() {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR);
     timeSeries.insert(t_zero, v_zero);
     return timeSeries;
   }
