@@ -42,7 +42,7 @@ public class TimeSeriesBinaryOperator implements BinaryOperator<TimeSeries>, Ser
   /** @param binaryOperator
    * @param resamplingMethod fallback may be null */
   private TimeSeriesBinaryOperator(BinaryOperator<Tensor> binaryOperator, ResamplingMethod resamplingMethod) {
-    this.binaryOperator = Objects.requireNonNull(binaryOperator);
+    this.binaryOperator = binaryOperator;
     this.resamplingMethod = resamplingMethod;
   }
 
