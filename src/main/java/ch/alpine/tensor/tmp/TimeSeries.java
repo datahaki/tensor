@@ -105,7 +105,31 @@ public interface TimeSeries {
   /** @return method for computation of values inside {@link #domain()} */
   ResamplingMethod resamplingMethod();
 
-  /** @return unmodifiable view of this time series */
+  /** function returns a time series with equal evaluation of this time series but
+   * with the guarantee that its contents cannot be altered via member functions.
+   * 
+   * <p>If this time series is already unmodifiable, the function simply returns this
+   * instance. Therefore, the check whether a time series is unmodifiable is simply
+   * <pre>
+   * timeSeries.unmodifiable() == timeSeries // equal by reference intended
+   * </pre>
+   * 
+   * <p>The function is idemponent with regards to equality by reference, i.e.
+   * <pre>
+   * timeSeries.unmodifiable() == timeSeries.unmodifiable().unmodifiable() == ...
+   * </pre>
+   * 
+   * <p>The operation never duplicates any content, but wraps the data container,
+   * and overrides setters.
+   * 
+   * <p>Remarks:
+   * <ul>
+   * <li>This time series remains modifiable
+   * <li>modification is still possible via references to the original entries
+   * </ul>
+   * 
+   * @return time series with equal evaluation of this time series but with the
+   * guarantee that its contents cannot be altered via member functions */
   TimeSeries unmodifiable();
 
   /** @return duplicate of this time series */

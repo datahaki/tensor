@@ -1,8 +1,9 @@
+// code by jph
 package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -35,7 +36,7 @@ class TsReduceTest {
     Tensor tensor = Tensors.fromString("{{1,3},{2,3},{3,3},{4,4},{5,4},{6,2},{7,2}}");
     TimeSeries timeSeries1 = TimeSeries.path(tensor, resamplingMethods);
     TimeSeries timeSeries2 = TimeSeries.path(tensor, resamplingMethods);
-    assertEquals(timeSeries1, timeSeries2);
+    assertTrue(TsPredicate.equals(timeSeries1, timeSeries2));
   }
 
   @ParameterizedTest
@@ -43,6 +44,6 @@ class TsReduceTest {
   void testNotEquals(ResamplingMethods resamplingMethods) {
     TimeSeries timeSeries1 = TimeSeries.path(Tensors.fromString("{{1,3},{2,3},{3,3},{4,4},{5,4},{6,2},{7,2}}"), resamplingMethods);
     TimeSeries timeSeries2 = TimeSeries.path(Tensors.fromString("{{1,3},{2,3},{3,3},{4,4},{5,4},{6,2},{7,3}}"), resamplingMethods);
-    assertNotEquals(timeSeries1, timeSeries2);
+    assertFalse(TsPredicate.equals(timeSeries1, timeSeries2));
   }
 }
