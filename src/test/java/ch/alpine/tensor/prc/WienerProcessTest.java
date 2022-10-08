@@ -2,16 +2,20 @@
 package ch.alpine.tensor.prc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.tmp.MinimumTimeIncrement;
 
 class WienerProcessTest {
   @Test
@@ -22,6 +26,8 @@ class WienerProcessTest {
     RandomVariate.of(UniformDistribution.of(0, 10), 100).stream() //
         .map(Scalar.class::cast) //
         .forEach(randomFunction::evaluate);
+    Scalar scalar = MinimumTimeIncrement.of(randomFunction.timeSeries());
+    assertTrue(Scalars.lessEquals(scalar, RealScalar.of(10.0 / 100)));
   }
 
   @Test

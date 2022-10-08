@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
@@ -45,6 +46,8 @@ class TimeSeriesImplTest {
     assertEquals(integral, Tensors.fromString("{91800[s], 140400[s], 243000[s]}"));
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
     assertEquals(integrate.evaluate(timeSeries.domain().max()), integral);
+    Scalar scalar = MinimumTimeIncrement.of(timeSeries);
+    assertEquals(scalar, Quantity.of(10800, "s"));
   }
 
   @Test
