@@ -21,7 +21,7 @@ public enum TimeSeriesIntegrate {
    * @return new instance of time series with identical keys of given timeSeries
    * and values that are the accumulated integration */
   public static TimeSeries of(TimeSeries timeSeries) {
-    TimeSeries result = TimeSeries.empty(ResamplingMethods.LINEAR);
+    TimeSeries result = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
     if (!timeSeries.isEmpty()) {
       Clip clip = timeSeries.domain();
       Scalar prev = clip.min();
@@ -44,8 +44,8 @@ public enum TimeSeriesIntegrate {
 
   /** Remark: implementation uses Euler-method for integration
    * which is exact for the resampling methods:
-   * {@link ResamplingMethods#LINEAR},
-   * {@link ResamplingMethods#HOLD_LO}, etc.
+   * {@link ResamplingMethods#LINEAR_INTERPOLATION},
+   * {@link ResamplingMethods#HOLD_VALUE_FROM_LEFT}, etc.
    * 
    * @param timeSeries non-empty
    * @param clip must be subset of domain of given time series

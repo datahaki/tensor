@@ -4,15 +4,20 @@ package ch.alpine.tensor.tmp;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Clip;
 
-/** implementation is not consistent with Mathematica
+/** Careful:
+ * implementation is not consistent with Mathematica::TimeSeriesWindow
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/TimeSeriesWindow.html">TimeSeriesWindow</a> */
 public enum TimeSeriesWindow {
   ;
-  /** @param timeSeries
-   * @param clip
-   * @return */
+  /** duplicates an excerpt from a given time series
+   * and ensures that the clip endpoints are contained in the key set
+   * 
+   * @param timeSeries
+   * @param clip subset of timeSeries.domain()
+   * @return
+   * @throws Exception if domain of given time series does not cover clip */
   public static TimeSeries of(TimeSeries timeSeries, Clip clip) {
     TimeSeries result = timeSeries.block(clip, true).copy();
     Scalar lo = clip.min();

@@ -13,7 +13,7 @@ import ch.alpine.tensor.Tensors;
 class UnmodifiableTimeSeriesTest {
   @Test
   void test() {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_LO_SPARSE);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_VALUE_FROM_LEFT_SPARSE);
     timeSeries.insert(RealScalar.of(3), Tensors.vector(1, 2, 3));
     timeSeries.insert(RealScalar.of(4), Tensors.vector(2, 3, 4));
     timeSeries.insert(RealScalar.of(5), Tensors.vector(5, 2, 3));

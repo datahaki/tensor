@@ -16,7 +16,7 @@ public enum TsOp {
     AtomicInteger atomicInteger = new AtomicInteger();
     return TimeSeries.of(navigableSet.stream() //
         .map(key -> new TsEntry(key, RealScalar.of(atomicInteger.getAndIncrement()))), //
-        ResamplingMethods.HOLD_LO);
+        ResamplingMethods.HOLD_VALUE_FROM_LEFT);
   }
 
   /** the function can be used in combination with integration
@@ -34,7 +34,7 @@ public enum TsOp {
   public static <T extends Tensor> TimeSeries indicator(TimeSeries timeSeries, Predicate<T> predicate) {
     return TimeSeries.of(timeSeries.stream() //
         .map(entry -> new TsEntry(entry.key(), Boole.of(predicate.test((T) entry.value())))), //
-        ResamplingMethods.HOLD_LO_SPARSE);
+        ResamplingMethods.HOLD_VALUE_FROM_LEFT_SPARSE);
   }
 
   /** @param timeSeries

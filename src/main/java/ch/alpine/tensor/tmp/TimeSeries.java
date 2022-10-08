@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.Clip;
  * 
  * <p>In Mathematica, the default resampling method is linear
  * interpolation, which is available here as
- * {@link ResamplingMethods#LINEAR}.
+ * {@link ResamplingMethods#LINEAR_INTERPOLATION}.
  * 
  * <p>All values in the time series must have the same tensor structure.
  * {@link #insert(Scalar, Tensor)} throws an exception if the value
@@ -167,7 +167,11 @@ public interface TimeSeries {
   /** @return whether time series is without (key, value)-pairs */
   boolean isEmpty();
 
-  /** @param clip
+  /** Remark: depending on the {@link ResamplingMethod} not all keys in
+   * (key, value)-pairs inserted via {@link #insert(Scalar, Tensor)} may
+   * appear in the key set
+   * 
+   * @param clip
    * @param maxInclusive whether a key of value clip.max() should be included in the set
    * @return */
   NavigableSet<Scalar> keySet(Clip clip, boolean maxInclusive);

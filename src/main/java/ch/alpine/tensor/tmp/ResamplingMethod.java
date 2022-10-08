@@ -46,7 +46,5 @@ public interface ResamplingMethod {
 
   /** @param navigableMap
    * @return given navigableMap but potentially with some entries removed */
-  default NavigableMap<Scalar, Tensor> pack(NavigableMap<Scalar, Tensor> navigableMap) {
-    return navigableMap;
-  }
+  NavigableMap<Scalar, Tensor> pack(NavigableMap<Scalar, Tensor> navigableMap);
 }

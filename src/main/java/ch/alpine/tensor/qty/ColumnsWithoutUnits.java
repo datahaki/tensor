@@ -17,7 +17,7 @@ public class ColumnsWithoutUnits {
   private static final UnitSystem EMPTY = SimpleUnitSystem.from(Collections.emptyMap());
 
   /** @param matrix
-   * @param unitSystem
+   * @param unitSystem for instance UnitSystem.SI()
    * @return
    * @throws Exception if given matrix is not an array of dimensions n x m
    * @throws Exception if the scalars from a column have incompatible units
