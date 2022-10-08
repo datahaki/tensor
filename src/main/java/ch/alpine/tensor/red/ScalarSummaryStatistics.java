@@ -1,9 +1,15 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import java.util.EnumSet;
 import java.util.IntSummaryStatistics;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import ch.alpine.tensor.RealScalar;
@@ -124,5 +130,38 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
         ", min=" + getMin() + //
         ", average=" + getAverage() + //
         ", max=" + getMax() + "}";
+  }
+
+  /* package */ enum ScalarSummaryStatisticsCollector implements //
+      Collector<Scalar, ScalarSummaryStatistics, ScalarSummaryStatistics> {
+    INSTANCE;
+
+    @Override // from Collector
+    public Supplier<ScalarSummaryStatistics> supplier() {
+      return ScalarSummaryStatistics::new;
+    }
+
+    @Override // from Collector
+    public BiConsumer<ScalarSummaryStatistics, Scalar> accumulator() {
+      return ScalarSummaryStatistics::accept;
+    }
+
+    @Override // from Collector
+    public BinaryOperator<ScalarSummaryStatistics> combiner() {
+      return ScalarSummaryStatistics::combine;
+    }
+
+    @Override // from Collector
+    public Function<ScalarSummaryStatistics, ScalarSummaryStatistics> finisher() {
+      return Function.identity();
+    }
+
+    @Override // from Collector
+    public Set<Characteristics> characteristics() {
+      return EnumSet.of(
+          // Characteristics.CONCURRENT, // we don't understand the specs
+          Characteristics.UNORDERED, //
+          Characteristics.IDENTITY_FINISH);
+    }
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -25,6 +26,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.MinMax.MinMaxCollector;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
@@ -158,5 +160,10 @@ class MinMaxTest {
   @Test
   void testFinal() {
     assertTrue(Modifier.isFinal(MinMax.class.getModifiers()));
+  }
+
+  @Test
+  void test() {
+    assertFalse(Modifier.isPublic(MinMaxCollector.class.getModifiers()));
   }
 }

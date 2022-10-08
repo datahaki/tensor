@@ -18,6 +18,7 @@ public enum TimeSeriesRegion {
     return of(series, Scalar.class::cast, predicate);
   }
 
+  // TODO TENSOR TEST HARDEN
   public static List<Clip> of(TimeSeries series, TensorScalarFunction function, Predicate<Scalar> predicate) {
     Clip domain = series.domain();
     List<Clip> list = new ArrayList<>();
