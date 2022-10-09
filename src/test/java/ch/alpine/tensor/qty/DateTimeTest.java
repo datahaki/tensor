@@ -455,6 +455,13 @@ class DateTimeTest {
   }
 
   @Test
+  void testStatics() {
+    Scalar scalar = DateTime.of(1982, Month.APRIL, 3, 23, 59, 59, 0);
+    assertEquals(DateTime.month(scalar), Month.APRIL);
+    assertEquals(DateTime.dayOfWeek(scalar), DayOfWeek.SATURDAY);
+  }
+
+  @Test
   void testZeroAndOneSame() {
     assertSame(DateTime.now().zero(), DateTime.now().zero());
     assertSame(DateTime.now().one(), DateTime.now().one());

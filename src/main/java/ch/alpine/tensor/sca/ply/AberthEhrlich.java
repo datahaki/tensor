@@ -10,8 +10,8 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.chq.FiniteTensorQ;
 import ch.alpine.tensor.chq.DeterminateScalarQ;
+import ch.alpine.tensor.chq.FiniteTensorQ;
 import ch.alpine.tensor.itp.FindRoot;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
@@ -59,7 +59,6 @@ public class AberthEhrlich {
                 vector.set(cand.divide(abs).multiply(radius), k);
             } else {
               vector.set(RandomVariate.of(distribution, random), k);
-
             }
           }
           FiniteTensorQ.require(vector);

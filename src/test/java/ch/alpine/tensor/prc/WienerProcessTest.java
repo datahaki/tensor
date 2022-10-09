@@ -20,7 +20,7 @@ import ch.alpine.tensor.tmp.MinimumTimeIncrement;
 class WienerProcessTest {
   @Test
   void test() {
-    RandomProcess randomProcess = WienerProcess.of(0, 1);
+    RandomProcess randomProcess = WienerProcess.standard();
     assertEquals(randomProcess.toString(), "WienerProcess[0, 1]");
     RandomFunction randomFunction = RandomFunction.of(randomProcess);
     RandomVariate.of(UniformDistribution.of(0, 10), 100).stream() //
