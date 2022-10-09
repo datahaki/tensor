@@ -7,6 +7,7 @@ import java.util.function.BinaryOperator;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.red.Entrywise;
 
+/** reduction of all values from a time series to a single value */
 public enum TsReduce {
   ;
   public static Optional<Tensor> reduce(TimeSeries timeSeries, BinaryOperator<Tensor> binaryOperator) {

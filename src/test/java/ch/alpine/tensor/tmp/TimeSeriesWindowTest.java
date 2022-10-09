@@ -47,4 +47,14 @@ class TimeSeriesWindowTest {
     TimeSeries timeSeries = TimeSeriesWindow.of(ts1, clip);
     assertEquals(timeSeries.path(), Tensors.fromString("{{2, 1}, {4, 3}, {5, 6}, {7, 5}}"));
   }
+
+  @Test
+  void testSimple3() {
+    TimeSeries ts1 = TimeSeries.path( //
+        Tensors.fromString("{{1, 0}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}"), //
+        ResamplingMethods.LINEAR_INTERPOLATION).unmodifiable();
+    Clip clip = Clips.interval(4, 7);
+    TimeSeries timeSeries = TimeSeriesWindow.of(ts1, clip);
+    assertEquals(timeSeries.path(), Tensors.fromString("{{4, 3}, {5, 6}, {7, 5}}"));
+  }
 }

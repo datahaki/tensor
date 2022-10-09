@@ -20,6 +20,6 @@ import ch.alpine.tensor.Tensor;
     return navigableMap;
   }
 
-  @Override
+  @Override // from Object
   public abstract String toString();
 }

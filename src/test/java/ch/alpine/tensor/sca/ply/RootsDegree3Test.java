@@ -6,11 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
@@ -18,6 +20,8 @@ import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Im;
@@ -197,5 +201,15 @@ class RootsDegree3Test {
     assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m0)));
     assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m1)));
     assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m2)));
+  }
+
+  @RepeatedTest(100)
+  void testOneReal() {
+    Tensor coeffs = RandomVariate.of(NormalDistribution.standard(), 4);
+    Tensor roots = Roots.of(coeffs);
+    assertTrue(roots.stream() //
+        .map(Scalar.class::cast) //
+        .map(Im.FUNCTION) //
+        .anyMatch(Scalars::isZero));
   }
 }

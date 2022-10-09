@@ -2,9 +2,7 @@
 package ch.alpine.tensor.tmp;
 
 import java.util.function.BinaryOperator;
-import java.util.function.Function;
 
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Inner;
@@ -58,29 +56,5 @@ public enum TsEntrywise {
   public static TimeSeries max(TimeSeries timeSeries1, TimeSeries timeSeries2) {
     return TimeSeriesBinaryOperator.of(Entrywise.max(), ResamplingMethods.LINEAR_INTERPOLATION) //
         .apply(timeSeries1, timeSeries2);
-  }
-
-  /** @param timeSeries
-   * @param factor
-   * @return */
-  public static TimeSeries multiply(TimeSeries timeSeries, Scalar factor) {
-    return map(timeSeries, factor::multiply);
-  }
-
-  /** @param timeSeries
-   * @param function
-   * @return */
-  public static TimeSeries map(TimeSeries timeSeries, Function<Scalar, ? extends Tensor> function) {
-    return map(timeSeries, function, timeSeries.resamplingMethod());
-  }
-
-  /** @param timeSeries
-   * @param function
-   * @param resamplingMethod
-   * @return */
-  public static TimeSeries map(TimeSeries timeSeries, Function<Scalar, ? extends Tensor> function, ResamplingMethod resamplingMethod) {
-    return TimeSeries.of(timeSeries.stream() //
-        .map(entry -> new TsEntry(entry.key(), entry.value().map(function))), //
-        resamplingMethod);
   }
 }

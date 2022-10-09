@@ -145,23 +145,6 @@ class TsEntrywiseTest {
   }
 
   @Test
-  void testMultiply() {
-    Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.HOLD_VALUE_FROM_LEFT);
-    TimeSeries ts2 = TsEntrywise.multiply(ts1, RealScalar.TWO);
-    assertFalse(TsPredicate.equals(ts1, ts2));
-  }
-
-  @Test
-  void testMultiplySparse() {
-    Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.HOLD_VALUE_FROM_LEFT_SPARSE);
-    TimeSeries ts2 = TsEntrywise.multiply(ts1, RealScalar.ZERO);
-    assertFalse(TsPredicate.equals(ts1, ts2));
-    assertEquals(ts2.path(), Tensors.fromString("{{1, 0}, {10, 0}}"));
-  }
-
-  @Test
   void testNonOverlap() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}}");
     Tensor p2 = Tensors.fromString("{{7, 5}, {10, 2}}");

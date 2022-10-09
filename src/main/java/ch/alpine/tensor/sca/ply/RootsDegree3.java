@@ -12,6 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
@@ -120,6 +121,8 @@ import ch.alpine.tensor.sca.pow.Sqrt;
         return Re.of(roots);
       }
       // the equation has one real root and two non-real complex conjugate roots
+      // the expression below also works for scalars with unit
+      roots = Re.of(roots).add(Im.of(roots).map(Tolerance.CHOP).multiply(ComplexScalar.I));
     }
     return roots;
   }

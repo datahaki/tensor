@@ -25,6 +25,6 @@ class TimeSeriesAggregateTest {
     TimeSeriesAggregate timeSeriesAggregate = //
         TimeSeriesAggregate.of(Entrywise.max(), ResamplingMethods.HOLD_VALUE_FROM_LEFT);
     TimeSeries result = timeSeriesAggregate.of(timeSeries, dateTime.subtract(Quantity.of(1, "min")), Quantity.of(5, "h"));
-    System.out.println(result.path());
+    assertEquals(result.path().length(), 2);
   }
 }
