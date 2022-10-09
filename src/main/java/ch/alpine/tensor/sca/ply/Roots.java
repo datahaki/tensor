@@ -44,14 +44,6 @@ public enum Roots {
     return roots;
   }
 
-  /** attempts to find all roots of given polynomial
-   * 
-   * @param polynomial
-   * @return roots of given polynomial */
-  public static Tensor of(Polynomial polynomial) {
-    return of(polynomial.coeffs());
-  }
-
   /** @param coeffs of polynomial, for instance {a, b, c, d} represents
    * cubic polynomial a + b*x + c*x^2 + d*x^3
    * @return upper bound on absolute value of any root of given polynomial */

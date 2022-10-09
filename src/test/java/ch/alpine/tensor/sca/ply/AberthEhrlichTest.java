@@ -35,7 +35,7 @@ class AberthEhrlichTest {
     Random random = new Random(3);
     Polynomial polynomial = Polynomial.of(Tensors.fromString("{-13[bar], 0.27[K^-1*bar]}")).antiderivative();
     Tolerance.CHOP.requireClose( //
-        Roots.of(polynomial), //
+        polynomial.roots(), //
         AberthEhrlich.of(polynomial, random).map(Tolerance.CHOP));
   }
 

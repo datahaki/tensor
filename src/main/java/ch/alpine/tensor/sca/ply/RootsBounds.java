@@ -19,8 +19,11 @@ import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** Reference:
- * https://en.wikipedia.org/wiki/Geometrical_properties_of_polynomial_roots */
+ * https://en.wikipedia.org/wiki/Geometrical_properties_of_polynomial_roots
+ * 
+ * @see AberthEhrlich */
 public enum RootsBounds {
+  /** Cauchy's bound was not found to be competitive */
   CAUCHY {
     @Override
     public Scalar of(Tensor coeffs) {
@@ -87,7 +90,10 @@ public enum RootsBounds {
       Scalar d2 = Last.of(Roots.of(help));
       return RealScalar.ONE.add(d2);
     }
-  },;
+  };
 
+  /** @param coeffs of polynomial, for instance {a, b, c, d} represents
+   * cubic polynomial a + b*x + c*x^2 + d*x^3
+   * @return upper bound on absolute value of any root of given polynomial */
   public abstract Scalar of(Tensor coeffs);
 }
