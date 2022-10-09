@@ -4,6 +4,7 @@ package ch.alpine.tensor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -165,5 +166,10 @@ class DoubleScalarTest {
     boolean nonNegative = ars.isNonNegative();
     assertTrue(nonNegative);
     assertEquals(Sqrt.FUNCTION.apply(scalar), RealScalar.ZERO);
+  }
+
+  @Test
+  void testNaNEquals() {
+    assertNotEquals(DoubleScalar.INDETERMINATE, DoubleScalar.INDETERMINATE);
   }
 }

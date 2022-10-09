@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,6 +18,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
@@ -206,5 +208,12 @@ class TensorsTest {
   void testOfScalars() {
     Function<Scalar[], Tensor> fscalars = Tensors::of;
     assertEquals(fscalars.apply(new Scalar[] {}), Tensors.empty());
+  }
+
+  @Test
+  void testStringDateTime() {
+    String string = "{   2022-10-08T07:33   ,  {   2022-10-08T07:33   } , {  2022-10-08T07:33 , 2022-10-08T07:33 }  }";
+    Tensor tensor = Tensors.fromString(string);
+    assertFalse(StringScalarQ.any(tensor));
   }
 }

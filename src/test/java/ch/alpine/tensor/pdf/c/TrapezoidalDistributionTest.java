@@ -1,4 +1,4 @@
-// code by clruch
+// code by clruch, jph
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,10 +39,9 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 
 class TrapezoidalDistributionTest {
-  final Random random = new Random();
-
   @Test
   void testPositive() {
+    Random random = new Random();
     Scalar a = RationalScalar.of(random.nextInt(100), 1);
     Scalar b = a.add(RealScalar.of(random.nextDouble() * 10));
     Scalar c = b.add(RealScalar.of(random.nextDouble() * 10));
@@ -52,6 +51,7 @@ class TrapezoidalDistributionTest {
       Scalar scalar = RandomVariate.of(distribution);
       assertTrue(Scalars.lessEquals(RealScalar.ZERO, scalar));
     }
+    assertTrue(distribution.toString().startsWith("TransformedDistribution[TrapezoidalDistribution["));
   }
 
   @Test
@@ -79,7 +79,7 @@ class TrapezoidalDistributionTest {
     Scalar c = RealScalar.of(3);
     Scalar d = RealScalar.of(4);
     Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
-    assertEquals(distribution.toString(), "TrapezoidalDistribution[1, 2, 3, 4]");
+    // assertEquals(distribution.toString(), "TrapezoidalDistribution[1, 2, 3, 4]");
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessEquals(RealScalar.of(-1)), RealScalar.ZERO);
     assertEquals(cdf.p_lessEquals(RealScalar.of(1.5)), RationalScalar.of(1, 16));
@@ -187,7 +187,7 @@ class TrapezoidalDistributionTest {
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
     assertInstanceOf(RealScalar.class, apply);
-    assertTrue(distribution.toString().startsWith("TrapezoidalDistribution["));
+    // assertTrue(distribution.toString().startsWith("TrapezoidalDistribution["));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));

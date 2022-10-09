@@ -5,10 +5,12 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.num.FindInteger;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -19,7 +21,9 @@ import ch.alpine.tensor.sca.Sign;
  * approximately function(x) == 0.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/FindRoot.html">FindRoot</a> */
+ * <a href="https://reference.wolfram.com/language/ref/FindRoot.html">FindRoot</a>
+ * 
+ * @see FindInteger */
 public class FindRoot implements Serializable {
   /** the max iterations was chosen with the following consideration:
    * 
@@ -34,8 +38,11 @@ public class FindRoot implements Serializable {
    * The abort criteria concerns the function values. If the function
    * is very steep, the search interval may need to be reduced to
    * 1E-16 for instance, so we add a few iterations more. */
-  private static final int MAX_ITERATIONS = 128;
+  private static final int MAX_ITERATIONS_B = 128;
+  private static final int MAX_ITERATIONS_A = 256;
+  // TODO TENSOR IMPL investigate and justify magic constants
   private static final Scalar HALF = RealScalar.of(0.5);
+  private static final Scalar FACTOR = RealScalar.of(256);
 
   /** @param function continuous
    * @return */
@@ -84,17 +91,15 @@ public class FindRoot implements Serializable {
     if (s0.equals(s1))
       throw new Throw(clip, y0, y1);
     // ---
-    for (int index = 0; index < MAX_ITERATIONS; ++index) {
+    for (int index = 0; index < MAX_ITERATIONS_B; ++index) {
       Scalar xn = index % 2 == 0 //
           ? (Scalar) LinearBinaryAverage.INSTANCE.split(clip.min(), clip.max(), HALF)
           : linear(clip, y0, y1);
       // ---
       Scalar yn = function.apply(xn);
       // ---
-      if (chop.isZero(yn)) {
-        // System.out.println(index);
+      if (chop.isZero(yn))
         return xn;
-      }
       Scalar sn = Sign.FUNCTION.apply(yn); // sn is never 0
       if (s0.equals(sn)) { // s0 == sn
         clip = Clips.interval(xn, clip.max());
@@ -105,6 +110,27 @@ public class FindRoot implements Serializable {
       }
     }
     throw new Throw(clip, y0, y1);
+  }
+
+  /** @param lo
+   * @param dt positive
+   * @return x greater or equals lo where given function evaluates to zero */
+  public Scalar above(Scalar lo, Scalar dt) {
+    Sign.requirePositive(dt);
+    Scalar y0 = function.apply(lo);
+    if (Scalars.isZero(y0))
+      return lo;
+    final Scalar s0 = Sign.FUNCTION.apply(y0);
+    Scalar hi = lo.add(dt);
+    int count = 0;
+    while (Sign.FUNCTION.apply(function.apply(hi)).equals(s0)) {
+      lo = hi;
+      dt = dt.multiply(FACTOR);
+      hi = lo.add(dt);
+      if (MAX_ITERATIONS_A < ++count)
+        throw new Throw();
+    }
+    return inside(Clips.interval(lo, hi));
   }
 
   /** Function is equivalent to

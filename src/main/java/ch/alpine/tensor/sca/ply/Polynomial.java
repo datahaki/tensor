@@ -8,6 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
@@ -20,6 +21,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
@@ -171,6 +173,9 @@ public class Polynomial extends HornerScheme {
     int length = coeffs.length();
     Tensor tensor = Tensors.reserve(length + 1);
     Scalar a = coeffs.Get(0);
+    // TODO TENSOR IMPL can this be more elegant!
+    if (a instanceof DateTime)
+      throw new Throw(coeffs);
     Unit unit = coeffs.length() == 1 //
         ? Unit.ONE
         : getUnitDomain();
@@ -203,6 +208,7 @@ public class Polynomial extends HornerScheme {
    * @param unit
    * @return scalar.zero() * Quantity(scalar.one(), unit) */
   private static Scalar zero(Scalar scalar, Unit unit) {
+    // return scalar.zero().multiply(Quantity.of(scalar.one(), unit));
     return Quantity.of(scalar.one().zero(), QuantityUnit.of(scalar).add(unit));
   }
 
@@ -303,6 +309,6 @@ public class Polynomial extends HornerScheme {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("Polynomial", coeffs);
+    return MathematicaFormat.concise("Polynomial", coeffs, getUnitDomain(), getUnitValues());
   }
 }

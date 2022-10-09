@@ -25,6 +25,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.ScalarSummaryStatistics.ScalarSummaryStatisticsCollector;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
@@ -163,6 +164,11 @@ class ScalarSummaryStatisticsTest {
     sss1.toString();
     assertInstanceOf(DateTime.class, sss1.getAverage());
     assertThrows(Exception.class, () -> sss1.getSum());
+  }
+
+  @Test
+  void testFinisher() {
+    assertNull(ScalarSummaryStatisticsCollector.INSTANCE.finisher().apply(null));
   }
 
   @Test

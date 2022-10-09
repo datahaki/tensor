@@ -1,24 +1,38 @@
 // code by jph
 package ch.alpine.tensor.prc;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 
 class PoissonProcessTest {
   @Test
-  void testSimple() {
-    Random random = new Random(1);
-    PoissonProcess poissonProcess = new PoissonProcess(Quantity.of(0.2, "s^-1"));
-    Tensor e0 = poissonProcess.next(random);
-    // System.out.println(e0);
-    Tensor e1 = poissonProcess.next(random);
-    // System.out.println(e1);
-    Tensor e2 = poissonProcess.next(random);
-    // System.out.println(e2);
-    e0.add(e1).add(e2);
+  void testSimple() throws ClassNotFoundException, IOException {
+    RandomProcess randomProcess = PoissonProcess.of(2);
+    RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
+    randomFunction.evaluate(RealScalar.of(30));
+    int length = randomFunction.path().length();
+    randomFunction.evaluate(RealScalar.of(20));
+    assertEquals(length, randomFunction.path().length());
+    assertTrue(randomProcess.toString().startsWith("RenewalProcess"));
+  }
+
+  @Test
+  void testQuantity() throws ClassNotFoundException, IOException {
+    RandomProcess randomProcess = PoissonProcess.of(Quantity.of(0.2, "s^-1"));
+    RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
+    randomFunction.evaluate(Quantity.of(30, "s"));
+    int length = randomFunction.path().length();
+    assertThrows(Exception.class, () -> randomFunction.evaluate(RealScalar.of(20)));
+    randomFunction.evaluate(Quantity.of(30, "s"));
+    assertEquals(length, randomFunction.path().length());
   }
 }

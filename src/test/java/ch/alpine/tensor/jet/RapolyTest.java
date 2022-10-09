@@ -10,7 +10,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.re.Det;
-import ch.alpine.tensor.sca.ply.Roots;
 
 class RapolyTest {
   @Test
@@ -19,7 +18,7 @@ class RapolyTest {
     matrix.set(Rapoly.of(Tensors.vector(0, -1)), 0, 0);
     matrix.set(Rapoly.of(Tensors.vector(0, -1)), 1, 1);
     Rapoly rapoly = (Rapoly) Det.withoutDivision(matrix);
-    assertEquals(Roots.of(rapoly.polynomial()), Array.zeros(2));
+    assertEquals(rapoly.polynomial().roots(), Array.zeros(2));
   }
 
   @Test
@@ -28,7 +27,7 @@ class RapolyTest {
     matrix.set(Rapoly.of(Tensors.vector(3, -1)), 0, 0);
     matrix.set(Rapoly.of(Tensors.vector(4, -1)), 1, 1);
     Rapoly rapoly = (Rapoly) Det.withoutDivision(matrix);
-    Tensor roots = Roots.of(rapoly.polynomial());
+    Tensor roots = rapoly.polynomial().roots();
     ExactTensorQ.require(roots);
     assertEquals(Tensors.vector(2, 5), roots);
   }

@@ -27,7 +27,8 @@ public enum Min {
    * 
    * @param a
    * @param b
-   * @return the smaller one among a and b */
+   * @return the smaller one among a and b
+   * @throws Exception if a cannot be compared to b */
   public static <T> T of(T a, T b) {
     @SuppressWarnings("unchecked")
     Comparable<T> comparable = (Comparable<T>) a;

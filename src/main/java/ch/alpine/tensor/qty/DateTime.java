@@ -37,65 +37,65 @@ import ch.alpine.tensor.sca.Floor;
  * and a time such as 12:34:56.123456789 without specification of a
  * time-zone, {@link ZoneOffset}.
  * 
- * The purpose of {@link DateTime} is to allow the interoperation
+ * <p>The purpose of {@link DateTime} is to allow the interoperation
  * between {@link LocalDateTime} and {@link Quantity} with temporal SI-unit,
  * for instance "s", "ms", "h", etc.
  * 
- * The difference between two {@link DateTime}s is a {@link Quantity} with
+ * <p>The difference between two {@link DateTime}s is a {@link Quantity} with
  * unit "s" and value as a rational scalar, i.e. in exact precision.
  * 
- * In particular, that makes the use of type {@link Duration} obsolete.
+ * <p>In particular, that makes the use of type {@link Duration} obsolete.
  * 
- * An {@link DateTime} encodes an absolute point in a local calendar by
+ * <p>An {@link DateTime} encodes an absolute point in a local calendar by
  * wrapping an instance of {@link LocalDateTime}.
  * 
- * Addition and subtraction of a quantity with temporal SI unit is supported.
+ * <p>Addition and subtraction of a quantity with temporal SI unit is supported.
  * This includes the units "s", "ms", "h", "days", ...
  * The result of the sum is a new instance of {@link DateTime}.
  * 
- * Addition of two instances of {@link DateTime} results in an exception.
+ * <p>Addition of two instances of {@link DateTime} results in an exception.
  * Subtraction of two instances of {@link DateTime} results in a {@link Quantity}.
  * Negation of a {@link DateTime} results in an exception.
  * 
- * The string expression is of a date time scalar adheres to the ISO-8601
+ * <p>The string expression is of a date time scalar adheres to the ISO-8601
  * formats, i.e. the pattern uuuu-MM-dd'T'HH:mm:ss.SSSSSSSSS
  * resulting in strings of the form
  * 2022-09-16T10:42:13.724124032
  * but with seconds and nanos zero can be as truncated as
  * 2022-09-16T10:42
  * 
- * Quote from LocalDate:
+ * <p>Quote from LocalDate:
  * "The output will be in the ISO-8601 format {@code uuuu-MM-dd}."
  * Quote from LocalTime:
  * The output will be one of the following ISO-8601 formats:
  * [...] {@code HH:mm:ss.SSSSSSSSS}
  * 
- * {@link LocalDateTime} offers methods to perform calendar arithmetic such as
+ * <p>{@link LocalDateTime} offers methods to perform calendar arithmetic such as
  * increasing the year, or month. Equivalent methods are available.
  * 
- * {@link LocalDateTime} offers getter methods for year, month, dayOfMonth.
+ * <p>{@link LocalDateTime} offers getter methods for year, month, dayOfMonth.
  * Equivalent methods are available.
  * 
- * {@link RoundingInterface} rounds to the nearest seconds, which is decided
+ * <p>{@link RoundingInterface} rounds to the nearest seconds, which is decided
  * based on the nano part of the {@link DateTime}. A nano part equal or
  * above 500_000_000 is rounded up, otherwise down.
  * 
- * Several continuous distributions accept DateTime as input parameter:
+ * <p>Several continuous distributions accept DateTime as input parameter:
  * {@link NormalDistribution}, {@link UniformDistribution},
  * {@link TrapezoidalDistribution}, {@link LaplaceDistribution},
  * {@link CauchyDistribution}, {@link LogisticDistribution}, etc.
  * 
- * Remark:
+ * <p>Remark:
  * A similar functionality is provided by Mathematica as
  * <a href="https://reference.wolfram.com/language/ref/DateObject.html">DateObject</a>.
  * 
- * However, we deviate from the name, because DateObject allows a single year
+ * <p>However, we deviate from the name, because DateObject allows a single year
  * DateObject[{2000}] == Year: 2000
  * whereas DateTime/LocalDateTime requires everything from year down to a minute,
  * after which seconds and nano-seconds are assumed to be zero.
  * Also, the term "Object" does not add meaning in Java.
  * 
- * Remark:
+ * <p>Remark:
  * The .net framework has a class/struct called "DateTime".
  * 
  * @see FiniteScalarQ

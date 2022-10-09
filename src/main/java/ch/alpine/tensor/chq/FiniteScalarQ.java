@@ -27,7 +27,7 @@ import ch.alpine.tensor.api.InexactScalarMarker;
 public enum FiniteScalarQ {
   ;
   /** @param scalar
-   * @return true otherwise true */
+   * @return true unless a component of given scalar is +Infinity, -Infinity, or NaN */
   public static boolean of(Scalar scalar) {
     if (scalar instanceof InexactScalarMarker) {
       InexactScalarMarker inexactScalarMarker = (InexactScalarMarker) scalar;

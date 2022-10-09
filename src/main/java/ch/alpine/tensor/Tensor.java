@@ -62,14 +62,33 @@ public interface Tensor extends Iterable<Tensor> {
     return new TensorImpl(stream.map(Tensor.class::cast).collect(Collectors.toList()));
   }
 
-  /** The operation doesn't duplicate data, but wraps the data container
-   * with Collections::unmodifiableList and overrides setters.
+  /** function returns a tensor with content equal to this tensor but with the
+   * guarantee that its contents cannot be altered via member functions.
+   * 
+   * <p>If this tensor is already unmodifiable, the function simply returns this
+   * instance. Therefore, the check whether a tensor is unmodifiable is simply
+   * <pre>
+   * tensor.unmodifiable() == tensor // equal by reference intended
+   * </pre>
+   * as implemented in {@link Tensors#isUnmodifiable(Tensor)}.
+   * 
+   * <p>The function is idemponent with regards to equality by reference, i.e.
+   * <pre>
+   * tensor.unmodifiable() == tensor.unmodifiable().unmodifiable() == ...
+   * </pre>
+   * 
+   * <p>The operation never duplicates any content, but wraps the data container
+   * for instance with Collections::unmodifiableList and overrides setters.
+   * 
+   * <p>Remarks:
    * <ul>
-   * <li>modification is still possible via references to the entries
    * <li>This tensor remains modifiable
+   * <li>modification is still possible via references to the original entries
    * </ul>
    * 
-   * @return new immutable instance of this tensor */
+   * @return tensor with content equal to this tensor but with the guarantee
+   * that its contents cannot be altered via member functions
+   * @see Tensors#isUnmodifiable(Tensor) */
   Tensor unmodifiable();
 
   /** duplicate mutable content of this tensor into new instance.
@@ -110,9 +129,7 @@ public interface Tensor extends Iterable<Tensor> {
    * </pre>
    * 
    * Consequently, an exception is thrown, if there is no Scalar at the specified entry.
-   * 
-   * Remark: The function was introduced to facilitate the extraction of entries
-   * from vectors.
+   * The function facilitates the extraction of scalars entries from vectors.
    * 
    * @param i in the range 0, 1, ..., length() - 1
    * @return (Scalar) get(i)

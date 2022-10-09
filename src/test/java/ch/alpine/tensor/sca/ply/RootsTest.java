@@ -295,6 +295,8 @@ class RootsTest {
 
   @Test
   void testNotImplemented() {
-    assertThrows(Throw.class, () -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
+    Polynomial polynomial = Polynomial.of(Tensors.vector(1, 2, 3, 4, 5, 6));
+    Tensor tensor = polynomial.roots();
+    Tolerance.CHOP.requireAllZero(tensor.map(polynomial));
   }
 }

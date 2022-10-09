@@ -114,6 +114,7 @@ public enum Clips {
    * 
    * @param sortedMap with canonic comparator, i.e. {@link Scalars#compare(Scalar, Scalar)}
    * @return
+   * @throws Exception if given sortedMap is empty
    * @see MinMax#toClip() */
   public static <K extends Scalar> Clip keycover(SortedMap<K, ?> sortedMap) {
     return interval( //
@@ -136,6 +137,16 @@ public enum Clips {
   }
 
   // ---
+  /** @param clip1
+   * @param clip2
+   * @return whether clip1 and clip2 have at least one point in common */
+  public static boolean nonEmptyIntersection(Clip clip1, Clip clip2) {
+    return clip1.isInside(clip2.min()) //
+        || clip1.isInside(clip2.max()) //
+        || clip2.isInside(clip1.min()) //
+        || clip2.isInside(clip1.max());
+  }
+
   /** @param clip1
    * @param clip2
    * @return [max(clip1.min, clip2.min), min(clip1.max, clip2.max)], i.e.

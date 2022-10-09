@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 
@@ -256,5 +257,11 @@ class ClipsTest {
   @Test
   void testComplexFail() {
     assertThrows(ClassCastException.class, () -> Clips.absolute(ComplexScalar.I));
+  }
+
+  @Test
+  void testCoverEmptyFail() {
+    assertThrows(Exception.class, () -> Clips.keycover(new TreeMap<>()));
+    assertThrows(Exception.class, () -> Clips.setcover(new TreeSet<>()));
   }
 }

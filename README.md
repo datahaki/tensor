@@ -329,7 +329,7 @@ From time to time, a version is deployed and made available for maven integratio
 
 For Java 17, for `version` use `1.0.6` .
 
-For Java 11, for `version` use `1.1.1-jdk-11`.
+For Java 11, for `version` use `1.1.2-jdk-11`.
 
 The source code is attached to every release.
 
