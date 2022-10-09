@@ -8,13 +8,17 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Drop;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.VectorInfinityNorm;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
@@ -88,7 +92,9 @@ public enum RootsBounds {
           RealScalar.ONE.subtract(hi).subtract(lo), //
           RealScalar.TWO.subtract(hi), RealScalar.ONE);
       Scalar d2 = Last.of(Roots.of(help));
-      return RealScalar.ONE.add(d2);
+      if (Tolerance.CHOP.isZero(Im.FUNCTION.apply(d2)))
+        return RealScalar.ONE.add(Re.FUNCTION.apply(d2));
+      throw new Throw(coeffs, d2);
     }
   };
 

@@ -2,10 +2,12 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -29,6 +31,7 @@ class ShiftedGompertzDistributionTest {
     Scalar quantile = inverseCDF.quantile(RealScalar.of(0.6));
     Tolerance.CHOP.requireClose(quantile, RealScalar.of(1.037510735992861));
     assertTrue(distribution.toString().startsWith("ShiftedGompertzDistribution["));
+    assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
@@ -41,5 +44,10 @@ class ShiftedGompertzDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(RealScalar.of(0.6));
     Tolerance.CHOP.requireClose(quantile, Quantity.of(1.037510735992861, "s"));
+  }
+
+  @Test
+  void testFail() {
+    assertThrows(Exception.class, () -> ShiftedGompertzDistribution.of(2, 0));
   }
 }

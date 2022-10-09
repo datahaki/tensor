@@ -11,7 +11,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
-import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
@@ -184,13 +183,6 @@ public class Polynomial extends HornerScheme {
     for (int index = 0; index < length; ++index)
       tensor.append(coeffs.Get(index).multiply(RationalScalar.of(1, index + 1)));
     return of(tensor);
-  }
-
-  /** Careful: changes unit of values
-   * 
-   * @return */
-  public Polynomial withLeadingCoefficientOne() {
-    return of(coeffs.divide(Last.of(coeffs)));
   }
 
   /** Example:

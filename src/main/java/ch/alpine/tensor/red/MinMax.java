@@ -13,7 +13,6 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
@@ -85,26 +84,11 @@ public final class MinMax implements Consumer<Scalar> {
     return this;
   }
 
-  /** @return min of scalars in stream or null if stream is empty */
-  public Scalar min() {
-    return min;
-  }
-
-  /** @return max of scalars in stream or null if stream is empty */
-  public Scalar max() {
-    return max;
-  }
-
   /** @return clip[min, max], or null if stream is empty */
   public Clip clip() {
     return Objects.isNull(min) //
         ? null
         : Clips.interval(min, max);
-  }
-
-  @Override // from Object
-  public String toString() {
-    return MathematicaFormat.concise("MinMax", min, max);
   }
 
   /* package */ enum MinMaxCollector implements Collector<Scalar, MinMax, MinMax> {

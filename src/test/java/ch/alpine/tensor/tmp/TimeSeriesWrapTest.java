@@ -58,5 +58,7 @@ class TimeSeriesWrapTest {
     assertFalse(timeSeries.containsKey(RealScalar.of(30)));
     assertEquals(timeSeries.keySet(Clips.interval(0, 5), false).size(), 5);
     assertEquals(timeSeries.keySet(Clips.interval(0, 5), true).size(), 6);
+    assertEquals(timeSeries.block(Clips.interval(3, 4), false).size(), 1);
+    assertEquals(timeSeries.block(Clips.interval(3, 4), true).size(), 2);
   }
 }

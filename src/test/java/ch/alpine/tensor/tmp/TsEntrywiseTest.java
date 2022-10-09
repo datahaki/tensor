@@ -50,6 +50,56 @@ class TsEntrywiseTest {
           "{{2, 3}, {3, 6}, {4, 7}, {5, 16}, {6, 33/2}, {7, 25/2}, {8, 8}, {10, 8}}"));
       checkSymmetric(TsEntrywise::times, ts1, ts2);
     }
+    {
+      TimeSeries timeSeries = TsEntrywise.min(ts1, ts2);
+      String string = "{{2, 1}, {3, 2}, {4, 7/3}, {5, 8/3}, {6, 3}, {7, 5/2}, {8, 2}, {10, 2}}";
+      assertEquals(timeSeries.path(), Tensors.fromString(string));
+    }
+    {
+      TimeSeries timeSeries = TsEntrywise.max(ts1, ts2);
+      String string = "{{2, 3}, {3, 3}, {4, 3}, {5, 6}, {6, 11/2}, {7, 5}, {8, 4}, {10, 4}}";
+      assertEquals(timeSeries.path(), Tensors.fromString(string));
+    }
+  }
+
+  @Test
+  void testMathematica1Sparse() {
+    Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION_SPARSE);
+    assertEquals(ts1.resamplingMethod(), ResamplingMethods.LINEAR_INTERPOLATION_SPARSE);
+    assertEquals(ts1.path(), p1);
+    TimeSeries ts2 = TimeSeries.path( //
+        Tensors.fromString("{{2, 1}, {3, 2}, {6, 3}, {8, 2}, {10, 4}, {11, 3}}"), //
+        ResamplingMethods.LINEAR_INTERPOLATION_SPARSE);
+    Clip clip = Clips.intersection(ts1.domain(), ts2.domain());
+    assertEquals(clip, Clips.interval(2, 10));
+    {
+      TimeSeries timeSeries = TsEntrywise.plus(ts1, ts2);
+      assertEquals(timeSeries.path(), Tensors.fromString( // consistent with mathematica:
+          "{{2, 4}, {3, 5}, {4, 16/3}, {5, 26/3}, {6, 17/2}, {7, 15/2}, {8, 6}, {10, 6}}"));
+      checkSymmetric(TsEntrywise::plus, ts1, ts2);
+    }
+    {
+      TimeSeries timeSeries = TsEntrywise.minus(ts1, ts2);
+      assertEquals(timeSeries.path(), Tensors.fromString( // consistent with mathematica:
+          "{{2, 2}, {3, 1}, {4, 2/3}, {5, 10/3}, {6, 5/2}, {7, 5/2}, {8, 2}, {10, -2}}"));
+    }
+    {
+      TimeSeries timeSeries = TsEntrywise.times(ts1, ts2);
+      assertEquals(timeSeries.path(), Tensors.fromString( // consistent with mathematica:
+          "{{2, 3}, {3, 6}, {4, 7}, {5, 16}, {6, 33/2}, {7, 25/2}, {8, 8}, {10, 8}}"));
+      checkSymmetric(TsEntrywise::times, ts1, ts2);
+    }
+    {
+      TimeSeries timeSeries = TsEntrywise.min(ts1, ts2);
+      String string = "{{2, 1}, {3, 2}, {4, 7/3}, {5, 8/3}, {6, 3}, {7, 5/2}, {8, 2}, {10, 2}}";
+      assertEquals(timeSeries.path(), Tensors.fromString(string));
+    }
+    {
+      TimeSeries timeSeries = TsEntrywise.max(ts1, ts2);
+      String string = "{{2, 3}, {4, 3}, {5, 6}, {6, 11/2}, {7, 5}, {8, 4}, {10, 4}}";
+      assertEquals(timeSeries.path(), Tensors.fromString(string));
+    }
   }
 
   @Test
