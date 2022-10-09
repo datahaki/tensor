@@ -15,7 +15,10 @@ import ch.alpine.tensor.sca.Sign;
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/TimeSeriesRescale.html">TimeSeriesRescale</a> */
 public class TimeSeriesAggregate {
-  /** @param binaryOperator
+  /** Example:
+   * TimeSeriesAggregate.of(Entrywise.min(), ResamplingMethods.HOLD_VALUE_FROM_LEFT)
+   * 
+   * @param binaryOperator
    * @param resamplingMethod
    * @return */
   public static TimeSeriesAggregate of(BinaryOperator<Tensor> binaryOperator, ResamplingMethod resamplingMethod) {

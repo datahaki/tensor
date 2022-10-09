@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.ply;
 
 import java.util.Comparator;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -49,6 +50,16 @@ public enum Roots {
    * @return roots of given polynomial */
   public static Tensor of(Polynomial polynomial) {
     return of(polynomial.coeffs());
+  }
+
+  /** @param coeffs of polynomial, for instance {a, b, c, d} represents
+   * cubic polynomial a + b*x + c*x^2 + d*x^3
+   * @return upper bound on absolute value of any root of given polynomial */
+  public static Scalar bound(Tensor coeffs) {
+    return Stream.of(RootsBounds.values()) //
+        .map(rootsBounds -> rootsBounds.of(coeffs)) //
+        .min(Scalars::compare) //
+        .orElseThrow();
   }
 
   /** @param coeffs of polynomial

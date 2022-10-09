@@ -43,24 +43,12 @@ public final class MinMax implements Consumer<Scalar> {
    * clip == Clip[1, 10]
    * </pre>
    * 
-   * <pre>
-   * MinMax minMax = Tensors.vector(4, 2, 10, 8, 1, 3)
-   * .stream().parallel().map(Scalar.class::cast).collect(MinMax.collector());
-   * minMax.min() == 1
-   * minMax.max() == 10
-   * </pre>
+   * function name is chosen analogous to {@link Collectors#toList()}
    * 
-   * @return */
-  public static Collector<Scalar, ?, MinMax> collector() {
-    return MinMaxCollector.INSTANCE;
-  }
-
-  /** function name is chosen analogous to {@link Collectors#toList()}
-   * 
-   * @return clip that contains min and max of scalars in a stream,
-   * or null is the stream has no elements. */
+   * @return collector that returns clip that contains min and max of scalars
+   * in a stream, or null is the stream has no elements */
   public static Collector<Scalar, ?, Clip> toClip() {
-    return Collectors.collectingAndThen(collector(), MinMax::clip);
+    return Collectors.collectingAndThen(MinMaxCollector.INSTANCE, MinMax::clip);
   }
 
   // ---
