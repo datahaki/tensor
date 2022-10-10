@@ -4,12 +4,25 @@ package ch.alpine.tensor.sca.ply;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.sca.pow.Sqrt;
+import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.TimeSeries;
+import ch.alpine.tensor.tmp.TimeSeriesIntegrate;
+import ch.alpine.tensor.tmp.TsEntry;
 
 class ChebyshevTest {
   @Test
@@ -45,5 +58,26 @@ class ChebyshevTest {
   @EnumSource
   void testFail(Chebyshev chebyshev) {
     assertThrows(Exception.class, () -> chebyshev.of(-1));
+  }
+
+  @RepeatedTest(3)
+  void testOrthogonal(RepetitionInfo repetitionInfo) {
+    ScalarUnaryOperator w = s -> Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(s.multiply(s))).reciprocal();
+    Tensor domain = ChebyshevNodes._1.of(11 + repetitionInfo.getCurrentRepetition() * 3);
+    for (int k = 0; k < 7; ++k) {
+      for (int j = k; j < 7; ++j) {
+        Polynomial p1 = Chebyshev.T.of(k);
+        Polynomial p2 = Chebyshev.T.of(j);
+        TimeSeries timeSeries = TimeSeries.of(domain.stream() //
+            .map(Scalar.class::cast) //
+            .map(t -> new TsEntry(t, Times.of(w.apply(t), p1.apply(t), p2.apply(t)))), //
+            ResamplingMethods.LINEAR_INTERPOLATION);
+        Scalar result = (Scalar) TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
+        // System.out.println(k+" "+j+" "+result);
+        if (k != j)
+          Tolerance.CHOP.requireZero(result);
+      }
+      // System.out.println("---");
+    }
   }
 }

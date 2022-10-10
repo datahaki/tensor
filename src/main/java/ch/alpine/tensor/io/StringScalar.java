@@ -33,14 +33,18 @@ import ch.alpine.tensor.chq.ExactScalarQ;
  * @see ExactScalarQ */
 public class StringScalar extends AbstractScalar implements //
     Comparable<Scalar>, Serializable {
-  /** instance of string scalar with empty string "" as value */
-  public static final Scalar EMPTY = of("");
+  private static final Scalar EMPTY = of("");
 
   /** @param string
    * @return new instance of {@link StringScalar} representing string
    * @throws Exception if argument is null */
   public static Scalar of(String string) {
     return new StringScalar(Objects.requireNonNull(string));
+  }
+
+  /** instance of string scalar with empty string "" as value */
+  public static Scalar empty() {
+    return EMPTY;
   }
 
   // ---

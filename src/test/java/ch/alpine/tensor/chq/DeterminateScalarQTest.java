@@ -2,6 +2,7 @@
 package ch.alpine.tensor.chq;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -30,5 +31,10 @@ class DeterminateScalarQTest {
     assertFalse(DeterminateScalarQ.of(Quantity.of(Double.NaN, "m")));
     assertTrue(DeterminateScalarQ.of(Quantity.of(ComplexScalar.of(3, Double.POSITIVE_INFINITY), "m")));
     assertFalse(DeterminateScalarQ.of(Quantity.of(ComplexScalar.of(3, Double.NaN), "m")));
+  }
+
+  @Test
+  void testNullFail() {
+    assertThrows(Exception.class, () -> DeterminateScalarQ.of(null));
   }
 }

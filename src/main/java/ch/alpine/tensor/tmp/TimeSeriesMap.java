@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.tmp;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -12,7 +13,7 @@ import ch.alpine.tensor.Tensor;
  *
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/TimeSeriesMap.html">TimeSeriesMap</a> */
-public class TimeSeriesMap implements UnaryOperator<TimeSeries> {
+public class TimeSeriesMap implements UnaryOperator<TimeSeries>, Serializable {
   /** @param function
    * @param resamplingMethod may be null
    * @return */

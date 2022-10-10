@@ -3,6 +3,7 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,6 +47,12 @@ class StringScalarTest {
   void testCurrentStandard() {
     String string = "{Hello, World}";
     assertEquals(string, Tensors.fromString(string).toString());
+  }
+
+  @Test
+  void testEmpty() {
+    assertEquals(StringScalar.of(""), StringScalar.empty());
+    assertSame(StringScalar.empty(), StringScalar.empty());
   }
 
   @Test
