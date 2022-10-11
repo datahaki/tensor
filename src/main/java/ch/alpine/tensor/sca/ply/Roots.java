@@ -9,6 +9,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Re;
 
@@ -22,6 +23,10 @@ import ch.alpine.tensor.sca.Re;
  * @see Polynomial */
 public enum Roots {
   ;
+  private static final RootsBounds[] QUANTITY_ROOTS_BOUNDS = { //
+      RootsBounds.LAGRANGE2, //
+      RootsBounds.FUJIWARA };
+
   /** attempts to find all roots of a polynomial
    * 
    * <pre>
@@ -44,11 +49,14 @@ public enum Roots {
     return roots;
   }
 
-  /** @param coeffs of polynomial, for instance {a, b, c, d} represents
-   * cubic polynomial a + b*x + c*x^2 + d*x^3
-   * @return upper bound on absolute value of any root of given polynomial */
+  /** @param coeffs vector of length at least 2, coefficients of polynomial,
+   * for instance {a, b, c, d} represents the cubic polynomial a + b*x + c*x^2 + d*x^3
+   * @return upper bound on absolute value of any root of given polynomial
+   * @throws Exception if coeffs has not length at least 2 */
   public static Scalar bound(Tensor coeffs) {
-    return Stream.of(RootsBounds.values()) //
+    return Stream.of(StaticHelper.getDomainUnit(coeffs).equals(Unit.ONE) //
+        ? RootsBounds.values()
+        : QUANTITY_ROOTS_BOUNDS) //
         .map(rootsBounds -> rootsBounds.of(coeffs)) //
         .min(Scalars::compare) //
         .orElseThrow();

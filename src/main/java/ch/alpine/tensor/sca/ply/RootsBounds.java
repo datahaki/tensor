@@ -12,13 +12,17 @@ import ch.alpine.tensor.alg.Drop;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.VectorInfinityNorm;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/** Reference:
+/** {@link #LAGRANGE2} as well as {@link #FUJIWARA} work for coefficients
+ * of type {@link Quantity}.
+ * 
+ * Reference:
  * https://en.wikipedia.org/wiki/Geometrical_properties_of_polynomial_roots
  * 
  * @see AberthEhrlich */
@@ -27,15 +31,18 @@ public enum RootsBounds {
   CAUCHY {
     @Override
     public Scalar of(Tensor coeffs) {
+      // infinity norm does not work for a vector with mixed unit entries
       return VectorInfinityNorm.of(Drop.tail(coeffs, 1).divide(Last.of(coeffs))).add(RealScalar.ONE);
     }
   },
   LAGRANGE1 {
     @Override
     public Scalar of(Tensor coeffs) {
+      // 1-norm does not work for a vector with mixed unit entries
       return Max.of(Vector1Norm.of(Drop.tail(coeffs, 1).divide(Last.of(coeffs))), RealScalar.ONE);
     }
   },
+  /** LAGRANGE2 works for coefficients of type {@link Quantity} */
   LAGRANGE2 {
     @Override
     public Scalar of(Tensor coeffs) {
@@ -49,6 +56,7 @@ public enum RootsBounds {
           .skip(last - 2)));
     }
   },
+  /** FUJIWARA works for coefficients of type {@link Quantity} */
   FUJIWARA {
     @Override
     public Scalar of(Tensor coeffs) {
@@ -69,6 +77,8 @@ public enum RootsBounds {
     @Override
     public Scalar of(Tensor coeffs) {
       coeffs = Drop.tail(coeffs, 1).divide(Last.of(coeffs));
+      // coefficients of monic polynomial might have mixed units
+      // ... inf-norm of coefficients fails in that case
       Scalar a = VectorInfinityNorm.of(coeffs);
       Scalar b = Abs.FUNCTION.apply(Last.of(coeffs)).subtract(RealScalar.ONE);
       Scalar d1 = b.add(Sqrt.FUNCTION.apply(b.multiply(b).add(a.multiply(RealScalar.of(4)))));
@@ -80,6 +90,9 @@ public enum RootsBounds {
     @Override
     public Scalar of(Tensor coeffs) {
       coeffs = Drop.tail(coeffs, 1).divide(Last.of(coeffs));
+      // coefficients of monic polynomial might have mixed units
+      // for instance {-3/4[s^3], -1/2[s^2], -3/4[s]}
+      // ... inf-norm of coefficients fails in that case
       Scalar a = VectorInfinityNorm.of(coeffs);
       Scalar hi = Abs.FUNCTION.apply(coeffs.Get(coeffs.length() - 1));
       Scalar lo = Abs.FUNCTION.apply(coeffs.Get(coeffs.length() - 2));

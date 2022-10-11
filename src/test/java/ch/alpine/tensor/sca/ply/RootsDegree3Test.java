@@ -212,4 +212,11 @@ class RootsDegree3Test {
         .map(Im.FUNCTION) //
         .anyMatch(Scalars::isZero));
   }
+
+  @Test
+  void testOrdering() {
+    Tensor zeros = Tensors.fromString("{1, 2-I, 2+I}");
+    Polynomial polynomial = TestHelper.fromZeros(zeros);
+    Tolerance.CHOP.requireClose(zeros, polynomial.roots());
+  }
 }

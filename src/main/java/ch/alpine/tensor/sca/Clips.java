@@ -101,6 +101,7 @@ public enum Clips {
    * 
    * @param sortedSet with canonic comparator, i.e. {@link Scalars#compare(Scalar, Scalar)}
    * @return
+   * @throws Exception if given sortedSet is empty
    * @see MinMax#toClip() */
   public static <K extends Scalar> Clip setcover(SortedSet<K> sortedSet) {
     return interval( //

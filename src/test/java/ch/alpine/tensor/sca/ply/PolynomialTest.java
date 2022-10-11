@@ -402,7 +402,7 @@ class PolynomialTest {
     assertEquals(c1.getUnitDomain(), Unit.ONE);
     assertEquals(c1.getUnitValues(), Unit.ONE);
     Polynomial c2 = Polynomial.of(Tensors.vector(5, 7, 1));
-    assertEquals(c2.toString(), "Polynomial[{5, 7, 1}, , ]");
+    assertEquals(c2.toString(), "Polynomial[{5, 7, 1}]");
     Tensor roots = c2.roots();
     Tolerance.CHOP.requireAllZero(roots.map(c2));
     assertNotEquals(c1, c2);

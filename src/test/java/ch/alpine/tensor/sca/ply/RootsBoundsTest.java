@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -66,13 +67,46 @@ class RootsBoundsTest {
   }
 
   @Test
-  @Disabled
   void testQuantity() {
-    Polynomial polynomial = Polynomial.of(Tensors.fromString("{3[m*s], 2[m], 3[m*s^-1], -4[m*s^-2]}"));
+    Tensor coeffs = Tensors.fromString("{3[m], 2[m*s^-1], 3[m*s^-2], -4[m*s^-3]}");
+    Roots.bound(coeffs);
+    Polynomial polynomial = Polynomial.of(coeffs);
     assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
-    assertEquals(polynomial.getUnitValues(), Unit.of("m*s"));
+    assertEquals(polynomial.getUnitValues(), Unit.of("m"));
     polynomial.apply(Quantity.of(4, "s"));
-    System.out.println(polynomial.roots());
-    System.out.println(Roots.bound(polynomial.coeffs()));
+    for (RootsBounds rootsBounds : RootsBounds.values())
+      try {
+        rootsBounds.of(coeffs);
+      } catch (Exception exception) {
+        exception.getMessage();
+      }
+  }
+
+  @Test
+  void testQuantitySimple() {
+    Tensor coeffs = Tensors.fromString("{3, 2[s^-1], 3[s^-2], -4[s^-3]}");
+    Roots.bound(coeffs);
+    Polynomial polynomial = Polynomial.of(coeffs);
+    assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
+    assertEquals(polynomial.getUnitValues(), Unit.of(""));
+    polynomial.apply(Quantity.of(4, "s"));
+    for (RootsBounds rootsBounds : RootsBounds.values())
+      try {
+        rootsBounds.of(coeffs);
+      } catch (Exception exception) {
+        exception.getMessage();
+      }
+  }
+
+  @Test
+  void testQuantity3() {
+    Tensor coeffs = Tensors.fromString("{3[m], 2[m], 3[m], -4[m]}");
+    Roots.bound(coeffs);
+    Polynomial polynomial = Polynomial.of(coeffs);
+    assertEquals(polynomial.getUnitDomain(), Unit.of(""));
+    assertEquals(polynomial.getUnitValues(), Unit.of("m"));
+    polynomial.apply(RealScalar.of(4));
+    for (RootsBounds rootsBounds : RootsBounds.values())
+      rootsBounds.of(coeffs);
   }
 }

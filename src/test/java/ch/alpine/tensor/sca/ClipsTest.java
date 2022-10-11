@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -214,6 +215,14 @@ class ClipsTest {
   void testClipsCover() {
     Clip clip = Clips.cover(Clips.interval(0, 1), Clips.interval(5, 6));
     assertEquals(clip, Clips.interval(0, 6));
+  }
+
+  @Test
+  void testClipsCoverDate() {
+    NavigableSet<DateTime> navigableSet = new TreeSet<>();
+    assertThrows(Exception.class, () -> Clips.setcover(navigableSet));
+    navigableSet.add(DateTime.now());
+    assertEquals(Clips.setcover(navigableSet).width(), Quantity.of(0, "s"));
   }
 
   @Test
