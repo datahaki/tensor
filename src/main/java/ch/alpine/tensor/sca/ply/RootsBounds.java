@@ -30,25 +30,24 @@ public enum RootsBounds {
   /** Cauchy's bound was not found to be competitive */
   CAUCHY {
     @Override
-    public Scalar of(Tensor coeffs) {
-      // infinity norm does not work for a vector with mixed unit entries
-      return VectorInfinityNorm.of(Drop.tail(coeffs, 1).divide(Last.of(coeffs))).add(RealScalar.ONE);
+    Scalar ofMonic(Tensor monic) {
+      return VectorInfinityNorm.of(monic).add(RealScalar.ONE); // norm of vector with mixed units fails
     }
   },
+  /** does not work for coefficients with mixed unit */
   LAGRANGE1 {
     @Override
-    public Scalar of(Tensor coeffs) {
-      // 1-norm does not work for a vector with mixed unit entries
-      return Max.of(Vector1Norm.of(Drop.tail(coeffs, 1).divide(Last.of(coeffs))), RealScalar.ONE);
+    Scalar ofMonic(Tensor monic) {
+      return Max.of(Vector1Norm.of(monic), RealScalar.ONE); // norm of vector with mixed units fails
     }
   },
   /** LAGRANGE2 works for coefficients of type {@link Quantity} */
   LAGRANGE2 {
     @Override
-    public Scalar of(Tensor coeffs) {
-      int last = coeffs.length() - 1;
+    Scalar ofMonic(Tensor monic) {
+      int last = monic.length();
       AtomicInteger atomicInteger = new AtomicInteger(last);
-      return Total.ofVector(Tensor.of(Drop.tail(coeffs, 1).divide(Last.of(coeffs)).stream() //
+      return Total.ofVector(Tensor.of(monic.stream() //
           .map(Scalar.class::cast) //
           .map(Abs.FUNCTION) //
           .map(ratio -> Power.of(ratio, RationalScalar.of(1, atomicInteger.getAndDecrement()))) //
@@ -59,10 +58,10 @@ public enum RootsBounds {
   /** FUJIWARA works for coefficients of type {@link Quantity} */
   FUJIWARA {
     @Override
-    public Scalar of(Tensor coeffs) {
-      int last = coeffs.length() - 1;
-      AtomicInteger atomicInteger = new AtomicInteger(coeffs.length() - 1);
-      Scalar max = Drop.tail(coeffs, 1).divide(Last.of(coeffs)).stream() //
+    Scalar ofMonic(Tensor monic) {
+      int last = monic.length();
+      AtomicInteger atomicInteger = new AtomicInteger(last);
+      Scalar max = monic.stream() //
           .map(Scalar.class::cast) //
           .map(Abs.FUNCTION) //
           .map(ratio -> atomicInteger.get() == last ? ratio.multiply(RationalScalar.HALF) : ratio) //
@@ -72,15 +71,12 @@ public enum RootsBounds {
       return max.add(max);
     }
   },
-  /** never better than SUN_HSIEH2 */
+  /** never better than {@link #SUN_HSIEH2} */
   SUN_HSIEH1 {
     @Override
-    public Scalar of(Tensor coeffs) {
-      coeffs = Drop.tail(coeffs, 1).divide(Last.of(coeffs));
-      // coefficients of monic polynomial might have mixed units
-      // ... inf-norm of coefficients fails in that case
-      Scalar a = VectorInfinityNorm.of(coeffs);
-      Scalar b = Abs.FUNCTION.apply(Last.of(coeffs)).subtract(RealScalar.ONE);
+    Scalar ofMonic(Tensor monic) {
+      Scalar a = VectorInfinityNorm.of(monic); // norm of vector with mixed units fails
+      Scalar b = Abs.FUNCTION.apply(Last.of(monic)).subtract(RealScalar.ONE);
       Scalar d1 = b.add(Sqrt.FUNCTION.apply(b.multiply(b).add(a.multiply(RealScalar.of(4)))));
       return RealScalar.ONE.add(d1);
     }
@@ -88,14 +84,10 @@ public enum RootsBounds {
   /** really competitive for polynomials of large degree */
   SUN_HSIEH2 {
     @Override
-    public Scalar of(Tensor coeffs) {
-      coeffs = Drop.tail(coeffs, 1).divide(Last.of(coeffs));
-      // coefficients of monic polynomial might have mixed units
-      // for instance {-3/4[s^3], -1/2[s^2], -3/4[s]}
-      // ... inf-norm of coefficients fails in that case
-      Scalar a = VectorInfinityNorm.of(coeffs);
-      Scalar hi = Abs.FUNCTION.apply(coeffs.Get(coeffs.length() - 1));
-      Scalar lo = Abs.FUNCTION.apply(coeffs.Get(coeffs.length() - 2));
+    Scalar ofMonic(Tensor monic) {
+      Scalar a = VectorInfinityNorm.of(monic); // norm of vector with mixed units fails
+      Scalar hi = Abs.FUNCTION.apply(monic.Get(monic.length() - 1));
+      Scalar lo = Abs.FUNCTION.apply(monic.Get(monic.length() - 2));
       Tensor help = Tensors.of( //
           a.negate(), //
           RealScalar.ONE.subtract(hi).subtract(lo), //
@@ -108,5 +100,18 @@ public enum RootsBounds {
   /** @param coeffs of polynomial, for instance {a, b, c, d} represents
    * cubic polynomial a + b*x + c*x^2 + d*x^3
    * @return upper bound on absolute value of any root of given polynomial */
-  public abstract Scalar of(Tensor coeffs);
+  public final Scalar of(Tensor coeffs) {
+    return ofMonic(Drop.tail(coeffs, 1).divide(Last.of(coeffs)));
+  }
+
+  /** for a polynomial with coefficient vector {a, b, c, d}
+   * the function ofMonic is called with vector {a/d, b/d, c/d},
+   * i.e. the tailing d/d == 1 is omitted.
+   * 
+   * coefficients of monic polynomial might have mixed units
+   * for instance {-3/4[s^3], -1/2[s^2], -3/4[s]}
+   * 
+   * @param monic vector
+   * @return upper bound on absolute value of any root of given polynomial */
+  /* package */ abstract Scalar ofMonic(Tensor monic);
 }

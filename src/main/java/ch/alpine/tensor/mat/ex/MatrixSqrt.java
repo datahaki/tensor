@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.ex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
@@ -30,19 +31,23 @@ public interface MatrixSqrt {
             .map(Im.FUNCTION) //
             .allMatch(Scalars::isZero))
       return ofSymmetric(matrix);
-    // TODO TENSOR ALG faster check if symmetric, check if hermitian
+    if (HermitianMatrixQ.of(matrix))
+      return ofHermitian(matrix);
     return new DenmanBeaversDet(matrix, Tolerance.CHOP);
   }
 
   /** @param matrix symmetric and non-complex
    * @return sqrt of given matrix
-   * @throws Exception if matrix is not symmetric, or has complex entries */
+   * @throws Exception if matrix is not symmetric, or has complex entries
+   * @see SymmetricMatrixQ */
   static MatrixSqrt ofSymmetric(Tensor matrix) {
     return new MatrixSqrtEigensystem(Eigensystem.ofSymmetric(matrix));
   }
 
-  /** @param matrix
-   * @return */
+  /** @param matrix hermitian
+   * @return sqrt of given matrix
+   * @throws Exception if matrix is not hermitian
+   * @see HermitianMatrixQ */
   static MatrixSqrt ofHermitian(Tensor matrix) {
     return new MatrixSqrtEigensystem(Eigensystem.ofHermitian(matrix));
   }
