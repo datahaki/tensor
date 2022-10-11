@@ -44,7 +44,10 @@ public interface ResamplingMethod {
    * @param value */
   void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value);
 
-  /** @param navigableMap
+  /** the method never removes the first or last element so as not to
+   * alter the support
+   * 
+   * @param navigableMap
    * @return given navigableMap but potentially with some entries removed */
   NavigableMap<Scalar, Tensor> pack(NavigableMap<Scalar, Tensor> navigableMap);
 }

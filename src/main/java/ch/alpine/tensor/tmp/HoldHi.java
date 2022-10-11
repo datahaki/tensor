@@ -21,12 +21,13 @@ import ch.alpine.tensor.api.ScalarTensorFunction;
 
   @Override // from ResamplingMethod
   public Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x) {
-    if (Scalars.lessEquals(navigableSet.first(), x))
+    Scalar first = navigableSet.first();
+    if (Scalars.lessEquals(first, x))
       return function.apply(navigableSet.ceiling(x)).copy();
-    throw new Throw(x);
+    throw new Throw(first, x);
   }
 
-  @Override
+  @Override // from BaseResamplingMethod
   public String toString() {
     return "HoldValueFromRight";
   }

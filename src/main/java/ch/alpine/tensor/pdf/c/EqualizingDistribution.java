@@ -19,6 +19,7 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
 /** EqualizingDistribution is a continuous {@link CategoricalDistribution} */
+// TODO TENSOR EqualizingDistribution seems to be a special case of HistogramDistribution
 public class EqualizingDistribution implements UnivariateDistribution, Serializable {
   /** Hint: distribution can be used for arc-length parameterization
    * 
