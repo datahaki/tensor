@@ -3,13 +3,13 @@ package ch.alpine.tensor.sca.ply;
 
 import java.util.Random;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
@@ -32,13 +32,19 @@ class AberthEhrlichTest {
   }
 
   @Test
-  @Disabled
   void testQuantity() {
-    Random random = new Random(2);
     Polynomial polynomial = Polynomial.of(Tensors.fromString("{-13[bar], 0.27[K^-1*bar]}")).antiderivative();
-    Tolerance.CHOP.requireClose( //
-        polynomial.roots(), //
-        AberthEhrlich.of(polynomial, random).map(Tolerance.CHOP));
+    Tensor v1 = polynomial.roots();
+    Tensor v2 = Sort.of(AberthEhrlich.of(polynomial).map(Tolerance.CHOP));
+    Tolerance.CHOP.requireClose(v1, v2);
+  }
+
+  @Test
+  void testQuantity1() {
+    Tensor coeffs = Tensors.fromString("{3[m], 2[m*s^-1], 3[m*s^-2], -4[m*s^-3]}");
+    Polynomial polynomial = Polynomial.of(coeffs);
+    Tensor roots = AberthEhrlich.of(polynomial);
+    Tolerance.CHOP.requireAllZero(roots.map(polynomial));
   }
 
   @RepeatedTest(8)
@@ -60,6 +66,20 @@ class AberthEhrlichTest {
     Tensor zeros1 = RandomVariate.of(distribution, random, degree);
     Polynomial polynomial = TestHelper.fromZeros(zeros1);
     Tensor zeros = AberthEhrlich.of(polynomial, random);
+    Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
+  }
+
+  @Test
+  void testMultiplicity2() {
+    Polynomial polynomial = TestHelper.fromZeros(Tensors.fromString("{3,3,1+I}"));
+    Tensor zeros = AberthEhrlich.of(polynomial);
+    Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
+  }
+
+  @Test
+  void testMultiplicity3() {
+    Polynomial polynomial = TestHelper.fromZeros(Tensors.fromString("{3,3,3,1+I,-2-I}"));
+    Tensor zeros = AberthEhrlich.of(polynomial);
     Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
   }
 }

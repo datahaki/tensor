@@ -44,7 +44,7 @@ public enum Roots {
     try {
       return Tensor.of(roots.stream().map(Scalar.class::cast).sorted(ComplexComparator.INSTANCE));
     } catch (Exception exception) {
-      // ---
+      // in the case of quaternions
     }
     return roots;
   }

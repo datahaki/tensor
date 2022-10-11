@@ -16,6 +16,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Variance;
 
 class ShiftedGompertzDistributionTest {
   @Test
@@ -44,6 +46,21 @@ class ShiftedGompertzDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(RealScalar.of(0.6));
     Tolerance.CHOP.requireClose(quantile, Quantity.of(1.037510735992861, "s"));
+  }
+
+  @Test
+  void testCoverage() {
+    Distribution distribution = ShiftedGompertzDistribution.of(2, 1);
+    try {
+      Mean.of(distribution);
+    } catch (Exception exception) {
+      exception.getMessage();
+    }
+    try {
+      Variance.of(distribution);
+    } catch (Exception exception) {
+      exception.getMessage();
+    }
   }
 
   @Test

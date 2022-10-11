@@ -9,17 +9,14 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.chq.FiniteTensorQ;
 import ch.alpine.tensor.itp.FindRoot;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.nrm.VectorInfinityNorm;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.ComplexDiskUniformDistribution;
-import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.qty.Unit;
-import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Abs;
 
 /** https://en.wikipedia.org/wiki/Aberth_method
@@ -27,7 +24,7 @@ import ch.alpine.tensor.sca.Abs;
  * @see FindRoot */
 public class AberthEhrlich {
   private static final int MAX_ATTEMPTS = 5;
-  private static final int MAX_ITERATIONS = 128;
+  private static final int MAX_ITERATIONS = 32;
   private static final Random RANDOM = new SecureRandom();
 
   /** @param polynomial of degree at least 2
@@ -42,8 +39,7 @@ public class AberthEhrlich {
    * @return unsorted roots of polynomial
    * @throws Exception if convergence fail */
   public static Tensor of(Polynomial polynomial, Random random) {
-    Unit unit = polynomial.getUnitDomain();
-    Scalar radius = Quantity.of(Roots.bound(polynomial.coeffs().map(Unprotect::withoutUnit)), unit);
+    Scalar radius = Roots.bound(polynomial.coeffs());
     Distribution distribution = ComplexDiskUniformDistribution.of(radius);
     for (int attempt = 0; attempt < MAX_ATTEMPTS; ++attempt)
       try {
@@ -64,9 +60,11 @@ public class AberthEhrlich {
           FiniteTensorQ.require(vector);
           Tensor eval = vector.map(polynomial);
           FiniteTensorQ.require(eval);
-          Scalar err = Total.ofVector(eval.map(Abs.FUNCTION));
-          if (Tolerance.CHOP.isZero(err))
+          Scalar err = VectorInfinityNorm.of(eval);
+          if (Tolerance.CHOP.isZero(err)) {
+            // System.out.println("ERROR["+attempt+"/" + index + "]=" + err);
             return aberthEhrlich.vector;
+          }
         }
       } catch (Exception exception) {
         System.out.println(exception);
