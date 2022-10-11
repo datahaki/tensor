@@ -10,15 +10,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.num.Boole;
 
+// TODO TENSOR API rename
 public enum TsOp {
   ;
-  public static TimeSeries indicator(NavigableSet<Scalar> navigableSet) {
-    AtomicInteger atomicInteger = new AtomicInteger();
-    return TimeSeries.of(navigableSet.stream() //
-        .map(key -> new TsEntry(key, RealScalar.of(atomicInteger.getAndIncrement()))), //
-        ResamplingMethods.HOLD_VALUE_FROM_LEFT);
-  }
-
   /** the function can be used in combination with integration
    * to determine the extent during which the predicate is true
    * Example:
@@ -27,9 +21,11 @@ public enum TsOp {
    * Tensor result = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
    * </pre>
    * 
-   * @param timeSeries with scalar value of either 0 or 1
-   * @param predicate
-   * @return */
+   * @param timeSeries
+   * @param predicate for testing each value in given time series
+   * @return time series with scalar values of either 0 or 1 and resampling method
+   * depending on the evaluation of the predicate at each value, and with
+   * {@link ResamplingMethods#HOLD_VALUE_FROM_LEFT_SPARSE} */
   @SuppressWarnings("unchecked")
   public static <T extends Tensor> TimeSeries indicator(TimeSeries timeSeries, Predicate<T> predicate) {
     return TimeSeries.of(timeSeries.stream() //
@@ -37,17 +33,21 @@ public enum TsOp {
         ResamplingMethods.HOLD_VALUE_FROM_LEFT_SPARSE);
   }
 
-  /** @param timeSeries
-   * @return
-   * @throws Exception if time series is empty */
-  public static Tensor firstValue(TimeSeries timeSeries) {
-    return timeSeries.evaluate(timeSeries.domain().min());
-  }
-
-  /** @param timeSeries
-   * @return
-   * @throws Exception if time series is empty */
-  public static Tensor lastValue(TimeSeries timeSeries) {
-    return timeSeries.evaluate(timeSeries.domain().max());
+  /** Example:
+   * for the set {4, 10, 12, 20} the time series with path
+   * <pre>
+   * {{4, 0}, {10, 1}, {12, 2}, {20, 3}}
+   * </pre>
+   * will be generated.
+   * 
+   * @param navigableSet
+   * @return time series with domain setcover[navigableSet] and integer values
+   * incrementing by one for each element in the set and resampling method
+   * {@link ResamplingMethods#HOLD_VALUE_FROM_LEFT} */
+  public static TimeSeries indicator(NavigableSet<Scalar> navigableSet) {
+    AtomicInteger atomicInteger = new AtomicInteger();
+    return TimeSeries.of(navigableSet.stream() //
+        .map(key -> new TsEntry(key, RealScalar.of(atomicInteger.getAndIncrement()))), //
+        ResamplingMethods.HOLD_VALUE_FROM_LEFT);
   }
 }

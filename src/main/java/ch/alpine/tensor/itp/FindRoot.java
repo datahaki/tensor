@@ -113,20 +113,21 @@ public class FindRoot implements Serializable {
 
   /** @param lo
    * @param dt positive
-   * @return x greater or equals lo where given function evaluates to zero */
+   * @return x greater or equals lo where given function evaluates to zero
+   * @throws Exception if dt is negative or zero */
   public Scalar above(Scalar lo, Scalar dt) {
     Sign.requirePositive(dt);
     Scalar y0 = function.apply(lo);
-    if (Scalars.isZero(y0))
-      return lo;
     final Scalar s0 = Sign.FUNCTION.apply(y0);
+    if (Scalars.isZero(s0))
+      return lo;
     Scalar hi = lo.add(dt);
-    int count = 0;
-    while (Sign.FUNCTION.apply(function.apply(hi)).equals(s0)) {
+    int iteration = 0;
+    while (Sign.FUNCTION.apply(function.apply(hi)).equals(s0)) { // at this point s0 != 0
       lo = hi;
       dt = dt.multiply(FACTOR);
       hi = lo.add(dt);
-      if (MAX_ITERATIONS_A < ++count)
+      if (MAX_ITERATIONS_A < ++iteration)
         throw new Throw();
     }
     return inside(Clips.interval(lo, hi));

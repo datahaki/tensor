@@ -45,7 +45,7 @@ public class AberthEhrlich {
       try {
         Tensor vector = RandomVariate.of(distribution, random, polynomial.degree());
         AberthEhrlich aberthEhrlich = new AberthEhrlich(polynomial, vector);
-        for (int index = 0; index < MAX_ITERATIONS; ++index) {
+        for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
           vector = aberthEhrlich.iterate();
           for (int k = 0; k < vector.length(); ++k) {
             Scalar cand = vector.Get(k);

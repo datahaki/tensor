@@ -25,17 +25,21 @@ class TsOpTest {
     Tensor tensor = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(tensor, RealScalar.of(3 + 2 + 2));
     assertTrue(ExactTensorQ.of(tensor));
-    assertEquals(TsOp.firstValue(ts1), RealScalar.of(3));
   }
 
   @Test
   void testIndicator2() {
     TreeSet<Scalar> treeSet = new TreeSet<>();
+    TimeSeries ts1 = TsOp.indicator(treeSet);
+    assertTrue(ts1.isEmpty());
     treeSet.add(RealScalar.of(4));
+    TimeSeries ts2 = TsOp.indicator(treeSet);
+    assertEquals(ts2.path(), Tensors.fromString("{{4, 0}}"));
     treeSet.add(RealScalar.of(10));
     treeSet.add(RealScalar.of(12));
     treeSet.add(RealScalar.of(20));
-    TimeSeries timeSeries = TsOp.indicator(treeSet);
-    assertEquals(timeSeries.domain(), Clips.interval(4, 20));
+    TimeSeries ts3 = TsOp.indicator(treeSet);
+    assertEquals(ts3.domain(), Clips.interval(4, 20));
+    assertEquals(ts3.path(), Tensors.fromString("{{4, 0}, {10, 1}, {12, 2}, {20, 3}}"));
   }
 }

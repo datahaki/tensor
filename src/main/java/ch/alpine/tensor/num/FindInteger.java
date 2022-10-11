@@ -28,7 +28,7 @@ public enum FindInteger {
   public static Scalar min(Predicate<Scalar> predicate, BigInteger lo) {
     Integers.requirePositive(lo.signum());
     BigInteger hi = lo;
-    for (int index = 0; index < MAX_ITERATIONS_A; ++index) {
+    for (int iteration = 0; iteration < MAX_ITERATIONS_A; ++iteration) {
       if (predicate.test(RealScalar.of(hi)))
         return min(predicate, Clips.interval(lo, hi));
       lo = hi;

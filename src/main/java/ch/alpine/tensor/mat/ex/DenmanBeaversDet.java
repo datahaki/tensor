@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.pow.Power;
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Scalar _1_4 = RealScalar.of(0.25);
   // ---
-  private int count = 0;
+  private int iteration = 0;
   private Tensor mk;
   private Tensor yk;
 
@@ -45,7 +45,7 @@ import ch.alpine.tensor.sca.pow.Power;
     Tensor id2 = id.multiply(HALF);
     ScalarUnaryOperator power = Power.function(RationalScalar.of(-1, n << 1));
     // Incomplete square root cascade
-    for (; count < MAX_ITERATIONS; ++count) {
+    for (; iteration < MAX_ITERATIONS; ++iteration) {
       /* the publication suggests to use |Det(mk)^(-1/2n)|
        * which would just take a detour via complex numbers!? */
       GaussianElimination gaussianElimination = new GaussianElimination(mk, id, Pivots.ARGMAX_ABS);
@@ -80,6 +80,6 @@ import ch.alpine.tensor.sca.pow.Power;
 
   @PackageTestAccess
   /* package */ int count() {
-    return count;
+    return iteration;
   }
 }

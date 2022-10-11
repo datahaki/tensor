@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Clips;
 
 class TimeSeriesTest {
@@ -80,14 +79,6 @@ class TimeSeriesTest {
     Tensor path = timeSeries.path();
     path.set(r -> r.append(RealScalar.ZERO), 0, 1);
     assertEquals(timeSeries.path(), p1);
-  }
-
-  @Test
-  void testTable() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/io/dateobject.csv");
-    TimeSeries timeSeries = TimeSeries.table(tensor.stream(), ResamplingMethods.HOLD_VALUE_FROM_LEFT);
-    Tensor value = TsOp.lastValue(timeSeries);
-    assertEquals(value, Tensors.fromString("{2398749, 2233.2[m]}"));
   }
 
   @Test
