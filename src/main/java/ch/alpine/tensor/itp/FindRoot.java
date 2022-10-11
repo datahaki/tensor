@@ -8,7 +8,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.FindInteger;
 import ch.alpine.tensor.sca.Chop;
@@ -92,9 +91,9 @@ public class FindRoot implements Serializable {
       throw new Throw(clip, y0, y1);
     // ---
     for (int index = 0; index < MAX_ITERATIONS_B; ++index) {
-      Scalar xn = index % 2 == 0 //
-          ? (Scalar) LinearBinaryAverage.INSTANCE.split(clip.min(), clip.max(), HALF)
-          : linear(clip, y0, y1);
+      Scalar xn = LinearInterpolation.of(clip).apply(index % 2 == 0 //
+          ? HALF
+          : y0.divide(y0.subtract(y1)));
       // ---
       Scalar yn = function.apply(xn);
       // ---
@@ -131,21 +130,5 @@ public class FindRoot implements Serializable {
         throw new Throw();
     }
     return inside(Clips.interval(lo, hi));
-  }
-
-  /** Function is equivalent to
-   * <pre>
-   * Polynomial.fit(Tensors.of(clip.min(), clip.max()), Tensors.of(y0, y1), 1).roots().Get(0);
-   * </pre>
-   * 
-   * Functionality is implemented explicitly for speed.
-   * 
-   * @param clip
-   * @param y0
-   * @param y1
-   * @return (x0 y1 - x1 y0) / (y1 - y0) */
-  @PackageTestAccess
-  static Scalar linear(Clip clip, Scalar y0, Scalar y1) {
-    return clip.min().multiply(y1).subtract(clip.max().multiply(y0)).divide(y1.subtract(y0));
   }
 }
