@@ -74,8 +74,8 @@ class LaplaceDistributionTest {
     PDF pdf = PDF.of(distribution);
     pdf.at(mean);
     CDF cdf = CDF.of(distribution);
-    // TODO TENSOR EASY test generally CDF[MEAN] == 1/2
     assertEquals(RationalScalar.HALF, cdf.p_lessEquals(mean));
+    assertEquals(Mean.of(distribution), mean);
   }
 
   @Test

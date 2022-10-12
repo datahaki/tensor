@@ -20,6 +20,7 @@ import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -180,9 +181,8 @@ class TimesTest {
   }
 
   @Test
-  void testBiOperator() {
-    // TODO TENSOR API not serializable
-    // Serialization.copy(Times.operator());
+  void testBiOperator() throws ClassNotFoundException, IOException {
+    Serialization.copy(Times.operator(Pi.VALUE));
   }
 
   @Test

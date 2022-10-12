@@ -17,7 +17,6 @@ import ch.alpine.tensor.tmp.TimeSeries;
 
 /** Remark: the name of the class is not final
  * 
- * 
  * @see WhiteNoiseProcess
  * @see BernoulliProcess */
 public class DiscreteTimeIidProcess implements RandomProcess, Serializable {

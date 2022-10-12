@@ -8,6 +8,7 @@ import java.io.InputStream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.ReadLine;
+import ch.alpine.tensor.spa.SparseArray;
 
 /** The file format is intended for data exchange between
  * Mathematica and the tensor library.
@@ -30,9 +31,11 @@ import ch.alpine.tensor.ext.ReadLine;
  * file extension. Mathematica also does not define an extension
  * for this format.
  * 
+ * <p>Careful:
+ * the import of {@link SparseArray} is not supported.
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Get.html">Get</a> */
-// TODO TENSOR IMPL for SparseArray
 public enum Get {
   ;
   /** @param file source

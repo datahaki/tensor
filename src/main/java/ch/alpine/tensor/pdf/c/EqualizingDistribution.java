@@ -2,9 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
-import java.util.Random;
 
-import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -13,14 +11,12 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.LinearBinaryAverage;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
-import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
 /** EqualizingDistribution is a continuous {@link CategoricalDistribution} */
-// TODO TENSOR EqualizingDistribution seems to be a special case of HistogramDistribution
-public class EqualizingDistribution implements UnivariateDistribution, Serializable {
+public class EqualizingDistribution extends AbstractContinuousDistribution implements Serializable {
   /** Hint: distribution can be used for arc-length parameterization
    * 
    * @param unscaledPDF vector with non-negative weights over the numbers
@@ -47,6 +43,11 @@ public class EqualizingDistribution implements UnivariateDistribution, Serializa
     return categoricalDistribution.mean().add(RationalScalar.HALF);
   }
 
+  @Override // from VarianceInterface
+  public Scalar variance() {
+    return Expectation.variance(categoricalDistribution).add(RationalScalar.of(1, 12));
+  }
+
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     Scalar xlo = Floor.FUNCTION.apply(x);
@@ -56,27 +57,12 @@ public class EqualizingDistribution implements UnivariateDistribution, Serializa
         categoricalDistribution.p_lessEquals(xlo), ofs);
   }
 
-  @Override // from CDF
-  public Scalar p_lessEquals(Scalar x) {
-    return p_lessThan(x);
-  }
-
   @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
+  public Scalar protected_quantile(Scalar p) {
     Scalar x_floor = categoricalDistribution.quantile(p);
     return x_floor.add(Clips.interval( //
         categoricalDistribution.p_lessThan(x_floor), //
         categoricalDistribution.p_lessEquals(x_floor)).rescale(p));
-  }
-
-  @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
-    return categoricalDistribution.randomVariate(random).add(DoubleScalar.of(random.nextDouble()));
-  }
-
-  @Override // from VarianceInterface
-  public Scalar variance() {
-    return Expectation.variance(categoricalDistribution).add(RationalScalar.of(1, 12));
   }
 
   @Override // from Object

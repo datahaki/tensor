@@ -36,9 +36,9 @@ public enum FourierDST implements DiscreteFourierTransform {
             Tensors.vector(0), //
             Reverse.of(vector.negate()));
         return Fourier.of(r).extract(1, 1 + n) //
-            .divide(ComplexScalar.I).map(Tolerance.CHOP); // FIXME TENSOR math incorrect
+            .divide(ComplexScalar.I).map(Tolerance.CHOP); // FIXME TENSOR ALG math incorrect
       }
-      return VectorQ.require(vector).dot(matrix(n)); // FIXME TENSOR math incorrect for complex?
+      return VectorQ.require(vector).dot(matrix(n)); // FIXME TENSOR ALG math incorrect for complex?
     }
 
     @Override

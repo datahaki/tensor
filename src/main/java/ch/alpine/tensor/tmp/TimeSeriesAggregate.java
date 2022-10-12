@@ -42,7 +42,8 @@ public class TimeSeriesAggregate {
     Clip domain = timeSeries.domain();
     while (Scalars.lessThan(offset, domain.max())) {
       Clip clip = Clips.interval(offset, offset.add(delta));
-      Optional<Tensor> optional = timeSeries.block(clip, clip.max().equals(domain.max())).stream() //
+      boolean maxInclusive = clip.max().equals(domain.max());
+      Optional<Tensor> optional = timeSeries.block(clip, maxInclusive).stream() //
           .map(TsEntry::value) //
           .reduce(binaryOperator);
       if (optional.isPresent())
