@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
@@ -140,12 +141,15 @@ public enum Clips {
   // ---
   /** @param clip1
    * @param clip2
-   * @return whether clip1 and clip2 have at least one point in common */
-  public static boolean nonEmptyIntersection(Clip clip1, Clip clip2) {
-    return clip1.isInside(clip2.min()) //
-        || clip1.isInside(clip2.max()) //
-        || clip2.isInside(clip1.min()) //
-        || clip2.isInside(clip1.max());
+   * @return intersection of clip1 and clip2 if the two intervals have at least
+   * one point in common, otherwise empty
+   * @throws Exception if the clip boundaries cannot be compared */
+  public static Optional<Clip> optionalIntersection(Clip clip1, Clip clip2) {
+    Scalar min = Max.of(clip1.min(), clip2.min());
+    Scalar max = Min.of(clip1.max(), clip2.max());
+    return Scalars.lessEquals(min, max) //
+        ? Optional.of(interval(min, max))
+        : Optional.empty();
   }
 
   /** @param clip1

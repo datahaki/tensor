@@ -135,6 +135,16 @@ class ClipsTest {
   }
 
   @Test
+  void testOptionalIntersection() {
+    assertEquals(Clips.optionalIntersection(Clips.interval(2, 6), Clips.interval(3, 10)).orElseThrow(), Clips.interval(3, 6));
+    assertEquals(Clips.optionalIntersection(Clips.interval(3, 10), Clips.interval(2, 6)).orElseThrow(), Clips.interval(3, 6));
+    assertEquals(Clips.optionalIntersection(Clips.interval(2, 6), Clips.interval(6, 10)).orElseThrow(), Clips.interval(6, 6));
+    assertEquals(Clips.optionalIntersection(Clips.interval(6, 10), Clips.interval(2, 6)).orElseThrow(), Clips.interval(6, 6));
+    assertTrue(Clips.optionalIntersection(Clips.interval(2, 6), Clips.interval(8, 10)).isEmpty());
+    assertTrue(Clips.optionalIntersection(Clips.interval(8, 10), Clips.interval(2, 6)).isEmpty());
+  }
+
+  @Test
   void testGaussScalar() {
     Clip clip = Clips.positive(GaussScalar.of(3, 13));
     clip.requireInside(GaussScalar.of(0, 13));

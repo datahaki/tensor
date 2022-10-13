@@ -161,7 +161,10 @@ public interface TimeSeries {
    * @return whether a value is associated to the exact key */
   boolean containsKey(Scalar key);
 
-  /** @return number of (key, value)-pairs */
+  /** Remark: in Mathematica the number of points is denoted with
+   * "Data points", for instance "Data points: 815"
+   * 
+   * @return number of (key, value)-pairs */
   int size();
 
   /** @return whether time series is without (key, value)-pairs */

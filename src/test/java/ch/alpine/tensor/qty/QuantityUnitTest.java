@@ -60,6 +60,12 @@ class QuantityUnitTest {
   }
 
   @Test
+  void testDateTime() {
+    Clip clip = Clips.interval(DateTime.of(1950, 1, 1, 0, 0), DateTime.of(1953, 1, 1, 0, 0));
+    assertEquals(QuantityUnit.of(clip), Unit.ONE);
+  }
+
+  @Test
   void testNullFail() {
     assertThrows(NullPointerException.class, () -> QuantityUnit.of((Scalar) null));
     assertThrows(NullPointerException.class, () -> QuantityUnit.of((Clip) null));

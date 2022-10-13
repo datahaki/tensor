@@ -4,6 +4,7 @@ package ch.alpine.tensor.tmp;
 import java.io.Serializable;
 import java.util.NavigableSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.TreeSet;
 import java.util.function.BinaryOperator;
 
@@ -54,8 +55,9 @@ public class TimeSeriesBinaryOperator implements BinaryOperator<TimeSeries>, Ser
     if (!timeSeries1.isEmpty() && !timeSeries2.isEmpty()) {
       Clip clip1 = timeSeries1.domain();
       Clip clip2 = timeSeries2.domain();
-      if (Clips.nonEmptyIntersection(clip1, clip2)) {
-        Clip clip = Clips.intersection(clip1, clip2);
+      Optional<Clip> optional = Clips.optionalIntersection(clip1, clip2);
+      if (optional.isPresent()) {
+        Clip clip = optional.orElseThrow();
         NavigableSet<Scalar> navigableSet = new TreeSet<>();
         navigableSet.addAll(timeSeries1.keySet(clip, true));
         navigableSet.addAll(timeSeries2.keySet(clip, true));

@@ -65,11 +65,12 @@ import ch.alpine.tensor.sca.pow.Sqrt;
       Scalar fraction = RealScalar.ONE.add(Hypot.withOne(d_c)).multiply(RationalScalar.HALF);
       w = Sqrt.FUNCTION.apply(ca).multiply(Sqrt.FUNCTION.apply(fraction));
     }
+    Scalar w2 = w.add(w);
     if (Sign.isPositiveOrZero(c))
-      return ComplexScalarImpl.of(w, d.divide(w.add(w)));
+      return ComplexScalarImpl.of(w, d.divide(w2));
     if (Sign.isPositiveOrZero(d))
-      return ComplexScalarImpl.of(da.divide(w.add(w)), w);
-    return ComplexScalarImpl.of(da.divide(w.add(w)), w.negate());
+      return ComplexScalarImpl.of(da.divide(w2), w);
+    return ComplexScalarImpl.of(da.divide(w2), w.negate());
   }
 
   public static Scalar sqrtPolar(Scalar z) {

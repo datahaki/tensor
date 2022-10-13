@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -141,20 +142,17 @@ class ComplexHelperTest {
     assertTrue(lessThan);
   }
 
-  @SuppressWarnings("unused")
   @Test
-  void testEpsilon01() {
+  void testEpsMultiplicationIssue() {
+    // Mathematica:
+    // x = 1.5717277847026288*^-162 + 1.5717277847026285*^-162 I
+    // x x = 5.*10^-324 + 0. I
+    // Warning: too small to represent as a normalized machine number; precision may be lost.
     Scalar re = RealScalar.of(0);
     Scalar im = RealScalar.of(4.9E-324);
-    Scalar scalar = ComplexScalar.of(re, im);
-    Scalar ref = ComplexHelper.sqrtPolar(scalar);
-    Scalar cmp = ComplexHelper.sqrt(re, im);
-    // TODO TENSOR NUM result not satisfactory!
-    // System.out.println(ref);
-    // System.out.println(cmp);
-    // System.out.println(ref.multiply(ref));
-    // System.out.println(cmp.multiply(cmp));
-    // 2.432040959320809*10^-162 + 1.007384349597552*10^-162 I
+    Scalar x = ComplexHelper.sqrt(re, im);
+    Scalar res = x.multiply(x); // gives 4.9E-324 as in mathematica
+    assertFalse(Scalars.isZero(res));
   }
 
   @Test
