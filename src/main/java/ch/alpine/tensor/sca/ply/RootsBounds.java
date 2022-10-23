@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.ply;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.alpine.tensor.RationalScalar;
@@ -59,16 +60,16 @@ public enum RootsBounds {
   FUJIWARA {
     @Override
     Scalar ofMonic(Tensor monic) {
-      int last = monic.length();
-      AtomicInteger atomicInteger = new AtomicInteger(last);
-      Scalar max = monic.stream() //
+      AtomicBoolean atomicBoolean = new AtomicBoolean();
+      AtomicInteger atomicInteger = new AtomicInteger(monic.length());
+      return monic.stream() //
           .map(Scalar.class::cast) //
           .map(Abs.FUNCTION) //
-          .map(ratio -> atomicInteger.get() == last ? ratio.multiply(RationalScalar.HALF) : ratio) //
+          .map(ratio -> atomicBoolean.getAndSet(true) ? ratio : ratio.multiply(RationalScalar.HALF))
           .map(ratio -> Power.of(ratio, RationalScalar.of(1, atomicInteger.getAndDecrement()))) //
           .reduce(Max::of) //
+          .map(max -> max.add(max)) //
           .orElseThrow();
-      return max.add(max);
     }
   },
   /** never better than {@link #SUN_HSIEH2} */
@@ -77,7 +78,7 @@ public enum RootsBounds {
     Scalar ofMonic(Tensor monic) {
       Scalar a = VectorInfinityNorm.of(monic); // norm of vector with mixed units fails
       Scalar b = Abs.FUNCTION.apply(Last.of(monic)).subtract(RealScalar.ONE);
-      Scalar d1 = b.add(Sqrt.FUNCTION.apply(b.multiply(b).add(a.multiply(RealScalar.of(4)))));
+      Scalar d1 = b.add(Sqrt.FUNCTION.apply(b.multiply(b).add(a.multiply(_4))));
       return RealScalar.ONE.add(d1);
     }
   },
@@ -96,6 +97,8 @@ public enum RootsBounds {
       return RealScalar.ONE.add(Last.of(Roots.of(help)));
     }
   };
+
+  private static final Scalar _4 = RealScalar.of(4);
 
   /** @param coeffs of polynomial, for instance {a, b, c, d} represents
    * cubic polynomial a + b*x + c*x^2 + d*x^3

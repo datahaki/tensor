@@ -15,6 +15,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -108,5 +109,17 @@ class RootsBoundsTest {
     polynomial.apply(RealScalar.of(4));
     for (RootsBounds rootsBounds : RootsBounds.values())
       rootsBounds.of(coeffs);
+  }
+
+  @Test
+  void testSpecific() {
+    Tensor coeffs = Tensors.fromString("{-3, 2[m^-1], 3[m^-2], -2[m^-3]}");
+    Polynomial polynomial = Polynomial.of(coeffs);
+    assertEquals(polynomial.apply(Quantity.of(2, "m")), RealScalar.of(-3));
+    Scalar scalar = RootsBounds.FUJIWARA.of(coeffs);
+    ExactScalarQ.require(scalar);
+    assertEquals(scalar, Quantity.of(3, "m"));
+    Tensor tensor = Roots.of(coeffs);
+    assertEquals(tensor, Tensors.fromString("{-1[m], 1[m], 3/2[m]}"));
   }
 }

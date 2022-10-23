@@ -14,18 +14,30 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clips;
 
 class CoordinateBoundsTest {
   @Test
   void testSimple() {
-    // CoordinateBoundingBox[{{0, 1}, {1, 2}, {2, 1}, {3, 2}, {4, 1}}]
     Tensor tensor = Tensors.fromString("{{0, 1}, {1, 2}, {2, 1}, {3, 2}, {4, 1}}");
     CoordinateBoundingBox box = CoordinateBounds.of(tensor);
     assertEquals(box.getClip(0), Clips.interval(0, 4));
     assertEquals(box.getClip(1), Clips.interval(1, 2));
     // assertEquals(minMax.min(), Tensors.vector(1, 5, -6));
     // assertEquals(minMax.max(), Tensors.vector(4, 9, 3));
+  }
+
+  @Test
+  void testUnits() {
+    CoordinateBoundingBox cbb1 = CoordinateBoundingBox.of( //
+        Clips.positive(Quantity.of(3, "m")), //
+        Clips.absolute(Quantity.of(1, "A")));
+    CoordinateBoundingBox cbb2 = CoordinateBoundingBox.of( //
+        Clips.absolute(Quantity.of(2, "m")), //
+        Clips.positive(Quantity.of(2, "A")));
+    CoordinateBoundingBox cbb3 = CoordinateBounds.cover(cbb1, cbb2);
+    assertEquals(cbb3.toString(), "[Clip[-2[m], 3[m]], Clip[-1[A], 2[A]]]");
   }
 
   @Test

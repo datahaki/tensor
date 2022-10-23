@@ -39,4 +39,16 @@ public enum CoordinateBounds {
         Entrywise.min().of(tensor), //
         Entrywise.max().of(tensor));
   }
+
+  /** @param cbb1
+   * @param cbb2 with same dimensions as cbb1
+   * @return smallest coordinate bounding box that covers the two given coordinate bounding boxes
+   * @throws Exception if the two given coordinate bounding boxes are not compatible */
+  public static CoordinateBoundingBox cover(CoordinateBoundingBox cbb1, CoordinateBoundingBox cbb2) {
+    int n = Integers.requireEquals(cbb1.dimensions(), cbb2.dimensions());
+    return CoordinateBoundingBox.of(IntStream.range(0, n) //
+        .mapToObj(index -> Clips.cover( //
+            cbb1.getClip(index), //
+            cbb2.getClip(index))));
+  }
 }
