@@ -485,6 +485,19 @@ class DateTimeTest {
     assertEquals(string.length(), 29);
   }
 
+  private static void _checkInvariant(Scalar s) {
+    String string = s.toString();
+    assertEquals(s, Scalars.fromString(string));
+  }
+
+  @Test
+  void testStringParsing() {
+    _checkInvariant(DateTime.of(-1, 10, 3, 3, 15)); // -0001-10-03T03:15
+    _checkInvariant(DateTime.of(0, 1, 1, 0, 0)); // 0000-12-31T23:59
+    _checkInvariant(DateTime.of(10000, 12, 31, 23, 59)); // +10000-12-31T23:59
+    _checkInvariant(DateTime.of(-10000, 12, 31, 23, 59)); // -10000-12-31T12:48
+  }
+
   @Test
   void testQuantityFail() {
     DateTime dateTime = DateTime.now();

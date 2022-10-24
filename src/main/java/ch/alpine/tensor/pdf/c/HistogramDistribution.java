@@ -2,9 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
-import java.util.Random;
 
-import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -15,7 +13,6 @@ import ch.alpine.tensor.pdf.BinCounts;
 import ch.alpine.tensor.pdf.BinningMethod;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
-import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Min;
@@ -39,7 +36,7 @@ import ch.alpine.tensor.sca.Floor;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/HistogramDistribution.html">HistogramDistribution</a> */
-public class HistogramDistribution implements UnivariateDistribution, Serializable {
+public class HistogramDistribution extends AbstractContinuousDistribution implements Serializable {
   /** Example:
    * HistogramDistribution[{10.2, -1.6, 3.2, -0.4, 11.5, 7.3, 3.8, 9.8}, 2]
    * 
@@ -95,11 +92,6 @@ public class HistogramDistribution implements UnivariateDistribution, Serializab
     return categoricalDistribution.at(Floor.FUNCTION.apply(discrete.apply(x))).divide(width);
   }
 
-  @Override // from MeanInterface
-  public Scalar mean() {
-    return original.apply(categoricalDistribution.mean()).add(width_half);
-  }
-
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     Scalar xlo = discrete.apply(Floor.toMultipleOf(width).apply(x));
@@ -109,23 +101,17 @@ public class HistogramDistribution implements UnivariateDistribution, Serializab
         categoricalDistribution.p_lessEquals(xlo), ofs);
   }
 
-  @Override // from CDF
-  public Scalar p_lessEquals(Scalar x) {
-    return p_lessThan(x);
-  }
-
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
+  @Override // from AbstractContinuousDistribution
+  public Scalar protected_quantile(Scalar p) {
     Scalar x_floor = categoricalDistribution.quantile(p);
     return original.apply(x_floor.add(Clips.interval( //
         categoricalDistribution.p_lessThan(x_floor), //
         categoricalDistribution.p_lessEquals(x_floor)).rescale(p)));
   }
 
-  @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
-    return original.apply(categoricalDistribution.randomVariate(random) //
-        .add(DoubleScalar.of(random.nextDouble())));
+  @Override // from MeanInterface
+  public Scalar mean() {
+    return original.apply(categoricalDistribution.mean()).add(width_half);
   }
 
   @Override // from VarianceInterface

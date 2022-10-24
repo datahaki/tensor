@@ -42,8 +42,9 @@ public enum Scalars {
       // ---
     }
     if (16 <= string.length() && //
-        string.charAt(10) == 'T' && //
-        string.charAt(13) == ':')
+        4 <= string.indexOf('-', 4) && //
+        10 <= string.indexOf('T', 10) && //
+        13 <= string.indexOf(':', 13))
       try {
         return DateTime.parse(string);
       } catch (Exception exception) {
