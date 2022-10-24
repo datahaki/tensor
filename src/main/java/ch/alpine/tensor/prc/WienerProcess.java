@@ -92,8 +92,11 @@ public class WienerProcess implements RandomProcess, Serializable {
           (Scalar) timeSeries.evaluate(interval.min()), //
           (Scalar) timeSeries.evaluate(interval.max()), x);
     } else {
-      Scalar t = x.subtract(clip.max());
-      distribution = NormalDistribution.of(mu.multiply(t), Sqrt.FUNCTION.apply(t).multiply(sigma));
+      Scalar max = clip.max();
+      Scalar t = x.subtract(max);
+      distribution = NormalDistribution.of( //
+          mu.multiply(t).add(timeSeries.evaluate(max)), //
+          Sqrt.FUNCTION.apply(t).multiply(sigma));
     }
     Scalar value = RandomVariate.of(distribution, random);
     timeSeries.insert(x, value);

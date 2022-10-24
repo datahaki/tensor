@@ -27,7 +27,7 @@ public interface PDF {
     if (distribution instanceof PDF pdf)
       return pdf;
     Objects.requireNonNull(distribution);
-    throw new IllegalArgumentException(distribution.getClass().getName());
+    throw new IllegalArgumentException(distribution.toString());
   }
 
   /** "PDF.of(distribution).at(x)" corresponds to Mathematica::PDF[distribution, x]

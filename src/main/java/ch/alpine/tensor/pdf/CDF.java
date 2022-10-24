@@ -29,7 +29,7 @@ public interface CDF {
     if (distribution instanceof CDF cdf)
       return cdf;
     Objects.requireNonNull(distribution);
-    throw new IllegalArgumentException(distribution.getClass().getName());
+    throw new IllegalArgumentException(distribution.toString());
   }
 
   /** @param x

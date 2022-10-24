@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ArgInterface;
@@ -92,6 +93,7 @@ public interface RealScalar extends Scalar, //
       return RationalScalar.integer((BigInteger) number);
     if (number instanceof BigDecimal)
       return DecimalScalar.of((BigDecimal) number);
-    throw new IllegalArgumentException(number.getClass().getName());
+    Objects.requireNonNull(number);
+    throw new IllegalArgumentException(number.toString());
   }
 }

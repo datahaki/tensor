@@ -28,7 +28,7 @@ public enum Expectation {
     if (distribution instanceof DiscreteDistribution discreteDistribution)
       return _of(function, discreteDistribution);
     Objects.requireNonNull(distribution);
-    throw new IllegalArgumentException(distribution.getClass().getName());
+    throw new IllegalArgumentException(distribution.toString());
   }
 
   /** @param distribution
