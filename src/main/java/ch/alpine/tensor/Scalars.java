@@ -41,15 +41,15 @@ public enum Scalars {
     } catch (Exception exception) {
       // ---
     }
-    if (16 <= string.length() && //
-        4 <= string.indexOf('-', 4) && //
-        10 <= string.indexOf('T', 10) && //
-        13 <= string.indexOf(':', 13))
-      try {
-        return DateTime.parse(string);
-      } catch (Exception exception) {
-        // ---
-      }
+    if (16 <= string.length()) {
+      int sep = string.indexOf('T', 10);
+      if (string.indexOf('-', 4) < sep && sep < string.indexOf(':', 13))
+        try {
+          return DateTime.parse(string);
+        } catch (Exception exception) {
+          // ---
+        }
+    }
     return StringScalar.of(string);
   }
 

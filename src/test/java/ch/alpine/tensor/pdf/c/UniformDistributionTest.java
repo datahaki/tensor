@@ -211,6 +211,8 @@ class UniformDistributionTest {
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessThan(x), RationalScalar.of(3653, 7305));
     assertEquals(Variance.of(distribution), CentralMoment.of(distribution, 2));
+    assertEquals(CentralMoment.of(distribution, 3), Quantity.of(0, "s^3"));
+    assertEquals(CentralMoment.of(distribution, 4), Scalars.fromString("1983562384948285014835200000000000[s^4]"));
   }
 
   @Test

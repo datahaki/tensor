@@ -291,7 +291,16 @@ class ScalarsTest {
   @Test
   void testToStringDateObject3() {
     assertInstanceOf(StringScalar.class, Scalars.fromString("2020-12-20T04:30a"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("2020-12-20T04:3"));
     assertInstanceOf(StringScalar.class, Scalars.fromString("2020-12-20T04a30"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("2020.12.20T04:30"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("2020-12-20R04:30"));
+  }
+
+  @Test
+  void testStringIndexOf() {
+    int index = "asd".indexOf('#', 10);
+    assertEquals(-1, index);
   }
 
   @Test
