@@ -13,6 +13,7 @@ import java.lang.reflect.Modifier;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -75,10 +76,16 @@ class MinMaxTest {
   }
 
   @Test
-  void testEmpty() {
-    Clip stats = Tensors.empty().stream() //
+  void testEmpty1() {
+    Clip clip = Stream.empty().map(Scalar.class::cast).collect(MinMax.toClip());
+    assertNull(clip);
+  }
+
+  @Test
+  void testEmpty2() {
+    Clip clip = Tensors.empty().stream() //
         .parallel().map(Scalar.class::cast).collect(MinMax.toClip());
-    assertNull(stats);
+    assertNull(clip);
   }
 
   @Test

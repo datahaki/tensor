@@ -120,6 +120,12 @@ class SubdivideTest {
   }
 
   @Test
+  void testWidthZero() {
+    assertEquals(ConstantArray.of(RealScalar.of(3), 11), Subdivide.increasing(Clips.interval(3, 3), 10));
+    assertEquals(ConstantArray.of(RealScalar.of(3), 11), Subdivide.increasing(Clips.interval(3.0, 3.0), 10));
+  }
+
+  @Test
   void testZeroFail() {
     assertThrows(IllegalArgumentException.class, () -> Subdivide.of(RealScalar.of(-2), RealScalar.of(2), 0));
   }

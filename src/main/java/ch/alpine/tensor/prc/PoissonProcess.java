@@ -17,13 +17,14 @@ import ch.alpine.tensor.qty.Quantity;
  * @see ExponentialDistribution */
 public enum PoissonProcess {
   ;
-  /** @param lambda positive, may be instance of {@link Quantity}
+  /** @param lambda positive with interpretation events per duration,
+   * may be instance of {@link Quantity}
    * @return */
   public static RandomProcess of(Scalar lambda) {
     return RenewalProcess.of(ExponentialDistribution.of(lambda));
   }
 
-  /** @param lambda positive
+  /** @param lambda positive with interpretation events per duration
    * @return */
   public static RandomProcess of(Number lambda) {
     return of(RealScalar.of(lambda));

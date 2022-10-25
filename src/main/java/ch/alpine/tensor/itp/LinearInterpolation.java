@@ -39,10 +39,11 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
    * values ranging linearly between given clip.min and clip.max. values
    * outside [0, 1] cause an Exception to be thrown */
   public static ScalarUnaryOperator of(Clip clip) {
-    return ExactScalarQ.of(clip.min()) && ExactScalarQ.of(clip.max()) //
-        ? ratio -> clip.min().add(clip.width().multiply(Clips.unit().requireInside(ratio)))
-        : ratio -> clip.min().multiply(RealScalar.ONE.subtract(ratio)) //
-            .add(clip.max().multiply(Clips.unit().requireInside(ratio)));
+    return (ExactScalarQ.of(clip.min()) && ExactScalarQ.of(clip.max())) //
+        || Scalars.isZero(clip.width()) //
+            ? ratio -> clip.min().add(clip.width().multiply(Clips.unit().requireInside(ratio)))
+            : ratio -> clip.min().multiply(RealScalar.ONE.subtract(ratio)) //
+                .add(clip.max().multiply(Clips.unit().requireInside(ratio)));
   }
 
   // ---
@@ -83,7 +84,7 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
    * @return
    * @throws Exception if given ratio is not a {@link Scalar} */
   private static ScalarBinaryOperator interp(Tensor ratio) {
-    return (a, b) -> ExactScalarQ.of(a) && ExactScalarQ.of(b) //
+    return (a, b) -> (ExactScalarQ.of(a) && ExactScalarQ.of(b)) || a.equals(b) //
         ? a.add(ratio.multiply(b.subtract(a)))
         : a.multiply(RealScalar.ONE.subtract(ratio)).add(ratio.multiply(b));
   }

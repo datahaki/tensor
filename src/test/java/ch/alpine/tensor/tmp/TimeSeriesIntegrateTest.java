@@ -11,7 +11,9 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clips;
 
 class TimeSeriesIntegrateTest {
@@ -51,6 +53,20 @@ class TimeSeriesIntegrateTest {
       TimeSeries timeSeries = TimeSeries.empty(resamplingMethod);
       TimeSeries result = TimeSeriesIntegrate.of(timeSeries);
       assertTrue(result.isEmpty());
+    }
+  }
+
+  @Test
+  void testSinglePoint() {
+    Tensor path = Tensors.fromString("{{1[s], 3[m]}}");
+    for (ResamplingMethod resamplingMethod : TestHelper.list()) {
+      TimeSeries timeSeries = TimeSeries.path(path, resamplingMethod);
+      TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
+      Tensor result = integrate.evaluate(Quantity.of(1, "s"));
+      assertTrue(ExactTensorQ.of(result));
+      assertEquals(result, Quantity.of(0, "m*s"));
+      Tensor value = TimeSeriesIntegrate.of(timeSeries, Clips.interval(Quantity.of(1, "s"), Quantity.of(1, "s")));
+      assertEquals(value, Quantity.of(0, "m*s"));
     }
   }
 

@@ -207,6 +207,18 @@ class LinearInterpolationTest {
   }
 
   @Test
+  void testClipWidthZero() {
+    ScalarUnaryOperator interpolation = LinearInterpolation.of(Clips.interval(3.0, 3.0));
+    assertEquals(interpolation.apply(RationalScalar.of(3, 10)), RealScalar.of(3.0));
+  }
+
+  @Test
+  void testLinterpWidthZero() {
+    Interpolation interpolation = LinearInterpolation.of(Tensors.vector(3.0, 3.0));
+    assertEquals(interpolation.at(RationalScalar.of(3, 10)), RealScalar.of(3.0));
+  }
+
+  @Test
   void testCsv() {
     Tensor tensor = ResourceData.of("/ch/alpine/tensor/io/dateobject.csv");
     assertInstanceOf(DateTime.class, tensor.Get(0, 0));

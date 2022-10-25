@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Integers;
@@ -64,6 +65,7 @@ public enum Subdivide {
     }
     // implementation deliberately uses two multiplications instead of one
     // tests have shown that this implementation is numerical more precise
+    // TODO TENSOR MATH however, this may still result in values outside start and end !
     return Tensor.of(IntStream.rangeClosed(0, n) //
         .mapToObj(count -> startInclusive.multiply(RationalScalar.of(n - count, n)) //
             .add(endInclusive.multiply(RationalScalar.of(count, n)))));
@@ -89,7 +91,9 @@ public enum Subdivide {
    * @param n strictly positive
    * @return Subdivide.increasing(clip.min(), clip.max(), n) */
   public static Tensor increasing(Clip clip, int n) {
-    return of(clip.min(), clip.max(), n);
+    return Scalars.isZero(clip.width()) //
+        ? Array.same(clip.min(), Integers.requirePositive(n) + 1)
+        : of(clip.min(), clip.max(), n);
   }
 
   /** Example:
@@ -102,6 +106,8 @@ public enum Subdivide {
    * @param n strictly positive
    * @return Subdivide.of(clip.max(), clip.min(), n) */
   public static Tensor decreasing(Clip clip, int n) {
-    return of(clip.max(), clip.min(), n);
+    return Scalars.isZero(clip.width()) //
+        ? Array.same(clip.max(), Integers.requirePositive(n) + 1)
+        : of(clip.max(), clip.min(), n);
   }
 }
