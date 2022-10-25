@@ -9,6 +9,10 @@ import ch.alpine.tensor.Tensor;
  * p * (1 - lambda) + q * lambda == p + lambda * (q - p)
  * </pre>
  * 
+ * implementation guarantees that 
+ * for lambda == 0 the return value is p
+ * for lambda == 1 the return value is q
+ * 
  * Remark:
  * implementation is useful when only few interpolations
  * between p and q are needed.
@@ -20,6 +24,9 @@ public enum LinearBinaryAverage implements BinaryAverage {
 
   @Override // from BinaryAverage
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
-    return q.subtract(p).multiply(scalar).add(p);
+    Tensor shift = q.subtract(p).multiply(scalar);
+    return scalar.one().equals(scalar) //
+        ? q.copy()
+        : p.add(shift);
   }
 }

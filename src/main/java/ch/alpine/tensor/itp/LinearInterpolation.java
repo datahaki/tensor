@@ -12,7 +12,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarBinaryOperator;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Ceiling;
@@ -38,12 +37,18 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
    * @return interpolation for evaluation over the unit interval [0, 1] with
    * values ranging linearly between given clip.min and clip.max. values
    * outside [0, 1] cause an Exception to be thrown */
+  // public static ScalarUnaryOperator of(Clip clip) {
+  // return (ExactScalarQ.of(clip.min()) && ExactScalarQ.of(clip.max())) //
+  // || Scalars.isZero(clip.width()) //
+  // ? ratio -> clip.min().add(clip.width().multiply(Clips.unit().requireInside(ratio)))
+  // : ratio -> clip.min().multiply(RealScalar.ONE.subtract(ratio)) //
+  // .add(clip.max().multiply(Clips.unit().requireInside(ratio)));
+  // }
   public static ScalarUnaryOperator of(Clip clip) {
-    return (ExactScalarQ.of(clip.min()) && ExactScalarQ.of(clip.max())) //
-        || Scalars.isZero(clip.width()) //
-            ? ratio -> clip.min().add(clip.width().multiply(Clips.unit().requireInside(ratio)))
-            : ratio -> clip.min().multiply(RealScalar.ONE.subtract(ratio)) //
-                .add(clip.max().multiply(Clips.unit().requireInside(ratio)));
+    Objects.requireNonNull(clip);
+    return ratio -> ratio.equals(RealScalar.ONE) //
+        ? clip.max()
+        : clip.min().add(clip.width().multiply(Clips.unit().requireInside(ratio)));
   }
 
   // ---
@@ -80,12 +85,10 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
         : Entrywise.with(interp(weight)).apply(tensor.get(below), tensor.get(below + 1));
   }
 
-  /** @param ratio scalar
+  /** @param ratio scalar should be in semi-open interval [0, 1)
    * @return
    * @throws Exception if given ratio is not a {@link Scalar} */
   private static ScalarBinaryOperator interp(Tensor ratio) {
-    return (a, b) -> (ExactScalarQ.of(a) && ExactScalarQ.of(b)) || a.equals(b) //
-        ? a.add(ratio.multiply(b.subtract(a)))
-        : a.multiply(RealScalar.ONE.subtract(ratio)).add(ratio.multiply(b));
+    return (a, b) -> a.add(ratio.multiply(b.subtract(a)));
   }
 }

@@ -115,7 +115,8 @@ class SubdivideTest {
     Tensor result = compare(beg, end, 5);
     assertEquals(beg, tensor.get(0));
     assertEquals(end, Last.of(tensor));
-    assertEquals(RealScalar.of(0.06), tensor.Get(2));
+    // unfortunately, after the simplification of the formula, the result 0.06 +- eps
+    Chop._16.requireClose(RealScalar.of(0.06), tensor.Get(2));
     Chop._16.requireClose(tensor, result);
   }
 

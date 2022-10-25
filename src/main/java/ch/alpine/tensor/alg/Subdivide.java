@@ -2,12 +2,11 @@
 package ch.alpine.tensor.alg;
 
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
@@ -57,18 +56,11 @@ public enum Subdivide {
    * @throws Exception if n is negative or zero */
   public static Tensor of(Tensor startInclusive, Tensor endInclusive, int n) {
     Integers.requirePositive(n);
-    if (ExactTensorQ.of(startInclusive) && ExactTensorQ.of(endInclusive)) {
-      // general implementation suitable for DateObject
-      Tensor delta = endInclusive.subtract(startInclusive);
-      return Tensor.of(IntStream.rangeClosed(0, n) //
-          .mapToObj(count -> startInclusive.add(delta.multiply(RationalScalar.of(count, n)))));
-    }
-    // implementation deliberately uses two multiplications instead of one
-    // tests have shown that this implementation is numerical more precise
-    // TODO TENSOR MATH however, this may still result in values outside start and end !
-    return Tensor.of(IntStream.rangeClosed(0, n) //
-        .mapToObj(count -> startInclusive.multiply(RationalScalar.of(n - count, n)) //
-            .add(endInclusive.multiply(RationalScalar.of(count, n)))));
+    Tensor delta = endInclusive.subtract(startInclusive);
+    return Tensor.of(Stream.concat( //
+        IntStream.range(0, n) //
+            .mapToObj(count -> startInclusive.add(delta.multiply(RationalScalar.of(count, n)))), //
+        Stream.of(endInclusive.copy())));
   }
 
   /** see description above
@@ -91,9 +83,7 @@ public enum Subdivide {
    * @param n strictly positive
    * @return Subdivide.increasing(clip.min(), clip.max(), n) */
   public static Tensor increasing(Clip clip, int n) {
-    return Scalars.isZero(clip.width()) //
-        ? Array.same(clip.min(), Integers.requirePositive(n) + 1)
-        : of(clip.min(), clip.max(), n);
+    return of(clip.min(), clip.max(), n);
   }
 
   /** Example:
@@ -106,8 +96,6 @@ public enum Subdivide {
    * @param n strictly positive
    * @return Subdivide.of(clip.max(), clip.min(), n) */
   public static Tensor decreasing(Clip clip, int n) {
-    return Scalars.isZero(clip.width()) //
-        ? Array.same(clip.max(), Integers.requirePositive(n) + 1)
-        : of(clip.max(), clip.min(), n);
+    return of(clip.max(), clip.min(), n);
   }
 }
