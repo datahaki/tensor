@@ -30,20 +30,13 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
    * @return
    * @throws Exception if tensor == null */
   public static Interpolation of(Tensor tensor) {
-    return new LinearInterpolation(tensor);
+    return new LinearInterpolation(Objects.requireNonNull(tensor));
   }
 
   /** @param clip
    * @return interpolation for evaluation over the unit interval [0, 1] with
    * values ranging linearly between given clip.min and clip.max. values
    * outside [0, 1] cause an Exception to be thrown */
-  // public static ScalarUnaryOperator of(Clip clip) {
-  // return (ExactScalarQ.of(clip.min()) && ExactScalarQ.of(clip.max())) //
-  // || Scalars.isZero(clip.width()) //
-  // ? ratio -> clip.min().add(clip.width().multiply(Clips.unit().requireInside(ratio)))
-  // : ratio -> clip.min().multiply(RealScalar.ONE.subtract(ratio)) //
-  // .add(clip.max().multiply(Clips.unit().requireInside(ratio)));
-  // }
   public static ScalarUnaryOperator of(Clip clip) {
     Objects.requireNonNull(clip);
     return ratio -> ratio.equals(RealScalar.ONE) //
@@ -55,7 +48,7 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
   private final Tensor tensor;
 
   private LinearInterpolation(Tensor tensor) {
-    this.tensor = Objects.requireNonNull(tensor);
+    this.tensor = tensor;
   }
 
   @Override // from Interpolation

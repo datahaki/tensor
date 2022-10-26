@@ -9,9 +9,9 @@ import ch.alpine.tensor.Tensor;
  * p * (1 - lambda) + q * lambda == p + lambda * (q - p)
  * </pre>
  * 
- * implementation guarantees that 
- * for lambda == 0 the return value is p
- * for lambda == 1 the return value is q
+ * The implementation guarantees that
+ * for lambda == 0 the return value equals to p
+ * for lambda == 1 the return value equals to q
  * 
  * Remark:
  * implementation is useful when only few interpolations
