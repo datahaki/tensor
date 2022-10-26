@@ -17,10 +17,10 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BrownianBridgeProcess.html">BrownianBridgeProcess</a> */
 public class BrownianBridgeProcess implements Serializable {
-  /** @param sigma volatility positive
+  /** @param sigma volatility non-negative
    * @return */
   public static BrownianBridgeProcess of(Scalar sigma) {
-    return new BrownianBridgeProcess(Sign.requirePositive(sigma));
+    return new BrownianBridgeProcess(Sign.requirePositiveOrZero(sigma));
   }
 
   /** @param sigma volatility positive

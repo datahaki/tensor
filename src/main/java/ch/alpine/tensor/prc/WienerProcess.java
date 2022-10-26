@@ -9,6 +9,7 @@ import java.util.Random;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -17,6 +18,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.InvertUnlessZero;
+import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.tmp.ResamplingMethods;
@@ -27,21 +29,34 @@ import ch.alpine.tensor.tmp.TimeSeries;
 public class WienerProcess implements RandomProcess, Serializable {
   private static final RandomProcess STANDARD = of(0, 1);
 
+  /** @param mu drift
+   * @param sigma volatility non-negative
+   * @param t_zero start time
+   * @param v_zero start value
+   * @return */
+  public static RandomProcess of(Scalar mu, Scalar sigma, Scalar t_zero, Scalar v_zero) {
+    return new WienerProcess( //
+        Objects.requireNonNull(mu), //
+        Sign.requirePositiveOrZero(sigma), //
+        t_zero, v_zero);
+  }
+
   /** input parameters may be of type {@link Quantity}, for instance
    * <pre>
    * WienerProcess[mu = 1[m*s^-1], sigma=2[m*s^-1/2]]
    * </pre>
    * 
    * @param mu drift
-   * @param sigma volatility positive */
+   * @param sigma volatility non-negative */
   public static RandomProcess of(Scalar mu, Scalar sigma) {
-    return new WienerProcess( //
-        Objects.requireNonNull(mu), //
-        Sign.requirePositiveOrZero(sigma));
+    Scalar ratio = mu.divide(N.DOUBLE.apply(sigma)); // switch to numeric for division
+    return of(mu, sigma, //
+        InvertUnlessZero.FUNCTION.apply(ratio.multiply(ratio)).zero(), //
+        InvertUnlessZero.FUNCTION.apply(ratio.divide(sigma)).zero());
   }
 
   /** @param mu drift
-   * @param sigma volatility positive
+   * @param sigma volatility non-negative
    * @return */
   public static RandomProcess of(Number mu, Number sigma) {
     return of(RealScalar.of(mu), RealScalar.of(sigma));
@@ -59,12 +74,11 @@ public class WienerProcess implements RandomProcess, Serializable {
   private final Scalar v_zero;
   private BrownianBridgeProcess brownianBridgeProcess;
 
-  private WienerProcess(Scalar mu, Scalar sigma) {
+  private WienerProcess(Scalar mu, Scalar sigma, Scalar t_zero, Scalar v_zero) {
     this.mu = mu;
     this.sigma = sigma;
-    Scalar ratio = mu.divide(sigma);
-    t_zero = InvertUnlessZero.FUNCTION.apply(ratio.multiply(ratio)).zero();
-    v_zero = InvertUnlessZero.FUNCTION.apply(ratio.divide(sigma)).zero();
+    this.t_zero = t_zero;
+    this.v_zero = v_zero;
     brownianBridgeProcess = BrownianBridgeProcess.of(sigma);
   }
 
@@ -77,7 +91,8 @@ public class WienerProcess implements RandomProcess, Serializable {
 
   @Override // from RandomProcess
   public Scalar evaluate(TimeSeries timeSeries, Random random, Scalar x) {
-    Sign.requirePositiveOrZero(x);
+    if (Scalars.lessThan(x, t_zero)) // TODO TENSOR check if necessary
+      throw new Throw(t_zero, x);
     Clip clip = timeSeries.domain();
     Distribution distribution = null;
     if (clip.isInside(x)) {
@@ -103,7 +118,7 @@ public class WienerProcess implements RandomProcess, Serializable {
     return value;
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return MathematicaFormat.concise("WienerProcess", mu, sigma);
   }
