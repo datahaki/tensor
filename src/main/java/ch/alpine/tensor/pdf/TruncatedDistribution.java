@@ -11,15 +11,14 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.LinearInterpolation;
+import ch.alpine.tensor.pdf.c.AbstractContinuousDistribution;
 import ch.alpine.tensor.pdf.c.DiracDeltaDistribution;
-import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TruncatedDistribution.html">TruncatedDistribution</a> */
-public class TruncatedDistribution implements Distribution, //
-    PDF, CDF, InverseCDF, RandomVariateInterface, Serializable {
+public class TruncatedDistribution extends AbstractContinuousDistribution implements Serializable {
   /** maximum number of attempts to produce a random variate before an exception is thrown */
   private static final int MAX_ITERATIONS = 100;
 
@@ -68,19 +67,19 @@ public class TruncatedDistribution implements Distribution, //
     return clip_cdf.rescale(univariateDistribution.p_lessThan(x));
   }
 
-  @Override // from CDF
-  public Scalar p_lessEquals(Scalar x) {
-    return clip_cdf.rescale(univariateDistribution.p_lessEquals(x));
-  }
-
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
+  @Override // from AbstractContinuousDistribution
+  protected Scalar protected_quantile(Scalar p) {
     return univariateDistribution.quantile(LinearInterpolation.of(clip_cdf).apply(p));
   }
 
-  @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
-    return univariateDistribution.quantile(RandomVariate.of(UniformDistribution.of(clip_cdf), random));
+  @Override // from MeanInterface
+  public Scalar mean() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override // from VarianceInterface
+  public Scalar variance() {
+    throw new UnsupportedOperationException();
   }
 
   @Override // from Object

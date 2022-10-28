@@ -236,6 +236,26 @@ class ClipsTest {
   }
 
   @Test
+  void testSolitary() {
+    Clip clip = Clips.solitary(3);
+    assertEquals(clip.width(), RealScalar.ZERO);
+    assertTrue(clip.isInside(RealScalar.of(3)));
+  }
+
+  @Test
+  void testSolitaryDateTime() {
+    Scalar value = DateTime.now();
+    Clip clip = Clips.solitary(value);
+    assertEquals(clip.width(), Quantity.of(0, "s"));
+    assertTrue(clip.isInside(value));
+  }
+
+  @Test
+  void testSolitaryNullFail() {
+    assertThrows(Exception.class, () -> Clips.solitary((Scalar) null));
+  }
+
+  @Test
   void testPositiveFail() {
     assertThrows(Throw.class, () -> Clips.positive(Quantity.of(-1, "kg")));
   }

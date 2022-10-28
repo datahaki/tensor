@@ -25,7 +25,9 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Quantile;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -59,6 +61,8 @@ class TruncatedDistributionTest {
     CDF cdf = CDF.of(distribution);
     Tolerance.CHOP.requireZero(cdf.p_lessEquals(RealScalar.ZERO));
     Tolerance.CHOP.requireZero(cdf.p_lessThan(RealScalar.ZERO));
+    assertThrows(Exception.class, () -> Mean.of(distribution));
+    assertThrows(Exception.class, () -> Variance.of(distribution));
   }
 
   @Test

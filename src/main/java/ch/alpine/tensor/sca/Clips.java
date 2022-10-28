@@ -4,10 +4,12 @@ package ch.alpine.tensor.sca;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.jet.CenteredInterval;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -76,6 +78,18 @@ public enum Clips {
    * @throws Exception if max is negative */
   public static Clip absolute(Number max) {
     return absolute(RealScalar.of(max));
+  }
+
+  /** @param value
+   * @return */
+  public static Clip solitary(Scalar value) {
+    return new ClipPoint(value, value.zero());
+  }
+
+  /** @param value
+   * @return */
+  public static Clip solitary(Number value) {
+    return solitary(RealScalar.of(value));
   }
 
   // ---
@@ -171,6 +185,13 @@ public enum Clips {
     return create( //
         Min.of(clip1.min(), clip2.min()), //
         Max.of(clip1.max(), clip2.max()));
+  }
+
+  public static UnaryOperator<Clip> translation(Scalar value) {
+    FiniteScalarQ.require(value);
+    return clip -> create( //
+        clip.min().add(value), //
+        clip.max().add(value));
   }
 
   // ---

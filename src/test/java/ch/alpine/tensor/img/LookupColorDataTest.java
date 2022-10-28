@@ -2,7 +2,6 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Color;
@@ -17,22 +16,21 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.nrm.Vector2Norm;
 
-class GrayscaleColorDataTest {
+class LookupColorDataTest {
   @Test
   void testColor() {
-    assertEquals(ColorFormat.toColor(GrayscaleColorData.DEFAULT.apply(RealScalar.ZERO)), Color.BLACK);
-    assertEquals(ColorFormat.toColor(GrayscaleColorData.DEFAULT.apply(RationalScalar.HALF)), Color.GRAY);
-    assertEquals(ColorFormat.toColor(GrayscaleColorData.DEFAULT.apply(RealScalar.ONE)), Color.WHITE);
+    assertEquals(ColorFormat.toColor(StaticHelper.GRAYSCALE.apply(RealScalar.ZERO)), Color.BLACK);
+    assertEquals(ColorFormat.toColor(StaticHelper.GRAYSCALE.apply(RationalScalar.HALF)), Color.GRAY);
+    assertEquals(ColorFormat.toColor(StaticHelper.GRAYSCALE.apply(RealScalar.ONE)), Color.WHITE);
   }
 
   @Test
   void testApply() {
     Tensor tensor = ColorDataGradients.GRAYSCALE.apply(RealScalar.of(0.3));
-    assertFalse(ExactTensorQ.of(tensor));
+    // assertFalse(ExactTensorQ.of(tensor));
     tensor.set(RealScalar.ONE, 1);
     assertEquals(ColorDataGradients.GRAYSCALE.apply(RealScalar.of(0.3)), //
         Tensors.vector(new Double[] { 77.0, 77.0, 77.0, 255.0 }));
@@ -40,7 +38,7 @@ class GrayscaleColorDataTest {
 
   @Test
   void testTransparent() {
-    Tensor vector = GrayscaleColorData.DEFAULT.apply(DoubleScalar.POSITIVE_INFINITY);
+    Tensor vector = StaticHelper.GRAYSCALE.apply(DoubleScalar.POSITIVE_INFINITY);
     assertTrue(Scalars.isZero(Vector2Norm.of(vector)));
     assertEquals(vector, Array.zeros(4));
   }
@@ -53,6 +51,6 @@ class GrayscaleColorDataTest {
 
   @Test
   void testSerializable() throws ClassNotFoundException, IOException {
-    Serialization.copy(GrayscaleColorData.DEFAULT);
+    Serialization.copy(StaticHelper.GRAYSCALE);
   }
 }

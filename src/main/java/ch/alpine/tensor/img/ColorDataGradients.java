@@ -76,7 +76,9 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** red, orange, yellow */
   SOLAR,
   /** black, gray, white */
-  GRAYSCALE(GrayscaleColorData.DEFAULT),
+  GRAYSCALE(StaticHelper.GRAYSCALE),
+  /** Mathematica default in ArrayPlot */
+  GRAYSCALE_REVERSED(StaticHelper.GRAYSCALE_REVERSED),
   /** black, blue-gray, white */
   BONE,
   /** purple, blue, white */
