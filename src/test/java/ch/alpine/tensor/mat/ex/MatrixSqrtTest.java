@@ -107,6 +107,13 @@ class MatrixSqrtTest {
   }
 
   @Test
+  void testHermitianOf() {
+    Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
+    MatrixSqrt matrixSqrt = MatrixSqrt.of(matrix);
+    _check(matrix, matrixSqrt);
+  }
+
+  @Test
   void testSymNegativeDiagonal() {
     Tensor matrix = DiagonalMatrix.of(-1, -2, -3);
     _check(matrix, MatrixSqrt.of(matrix));

@@ -210,6 +210,15 @@ class PolynomialTest {
   }
 
   @Test
+  void testOne() {
+    Tensor coeffs = Tensors.fromString("{2[m], 3[m*s^-1], -4[m*s^-2]}");
+    Polynomial polynomial = Polynomial.of(coeffs);
+    Scalar one = polynomial.one();
+    assertEquals(polynomial, polynomial.times(one));
+    polynomial.apply(Quantity.of(10, "s"));
+  }
+
+  @Test
   void testMoment() {
     Scalar qs0 = Quantity.of(3, "m*s^-1");
     Scalar qs1 = Quantity.of(-4, "m*s^-2");

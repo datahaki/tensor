@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -248,6 +249,12 @@ class ClipsTest {
     Clip clip = Clips.solitary(value);
     assertEquals(clip.width(), Quantity.of(0, "s"));
     assertTrue(clip.isInside(value));
+  }
+
+  @Test
+  void testFinite() {
+    Clip result = Clips.translation(RationalScalar.HALF).apply(Clips.positive(3));
+    assertEquals(result, Clips.interval(0.5, 3.5));
   }
 
   @Test

@@ -187,6 +187,9 @@ public enum Clips {
         Max.of(clip1.max(), clip2.max()));
   }
 
+  /** @param value finite to be added to clip boundaries
+   * @return
+   * @see FiniteScalarQ */
   public static UnaryOperator<Clip> translation(Scalar value) {
     FiniteScalarQ.require(value);
     return clip -> create( //

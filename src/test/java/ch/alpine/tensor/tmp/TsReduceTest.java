@@ -80,6 +80,13 @@ class TsReduceTest {
   }
 
   @Test
+  void testFirstLastEmpty() {
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    assertFalse(TsReduce.firstValue(timeSeries).isPresent());
+    assertFalse(TsReduce.lastValue(timeSeries).isPresent());
+  }
+
+  @Test
   void testTable() {
     Tensor tensor = ResourceData.of("/ch/alpine/tensor/io/dateobject.csv");
     TimeSeries timeSeries = TimeSeries.table(tensor.stream(), ResamplingMethods.HOLD_VALUE_FROM_LEFT);

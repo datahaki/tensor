@@ -259,6 +259,7 @@ public class Polynomial extends HornerScheme {
     return of(coeffs.map(Scalar::zero));
   }
 
+  /** @return scalar so that polynomial times scalar equals polynomial */
   public Scalar one() {
     return coeffs.Get(0).one();
   }
