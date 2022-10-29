@@ -16,6 +16,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.qty.DateTime;
 
 class ImTest {
   @Test
@@ -53,6 +54,12 @@ class ImTest {
   @Test
   void testFail() {
     Scalar scalar = StringScalar.of("string");
+    assertThrows(Throw.class, () -> Im.of(scalar));
+  }
+
+  @Test
+  void testDateTimeFail() {
+    Scalar scalar = DateTime.now();
     assertThrows(Throw.class, () -> Im.of(scalar));
   }
 }

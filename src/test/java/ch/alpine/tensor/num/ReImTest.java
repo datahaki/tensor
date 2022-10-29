@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 
 class ReImTest {
@@ -14,5 +15,6 @@ class ReImTest {
   void testSimple() {
     assertEquals(ReIm.of(RealScalar.ONE), UnitVector.of(2, 0));
     assertEquals(ReIm.of(ComplexScalar.I), UnitVector.of(2, 1));
+    assertEquals(ReIm.of(ComplexScalar.of(3, 4)), Tensors.vector(3, 4));
   }
 }

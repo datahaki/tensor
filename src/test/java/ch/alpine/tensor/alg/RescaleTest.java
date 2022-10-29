@@ -8,15 +8,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 
 class RescaleTest {
   @Test
@@ -117,6 +121,17 @@ class RescaleTest {
   }
 
   @Test
+  void testDateTime() {
+    Scalar a1 = DateTime.of(2020, 3, 4, 5, 2);
+    Scalar a2 = DateTime.of(2021, 10, 14, 2, 32);
+    Scalar a3 = DateTime.of(2020, 8, 9, 22, 17);
+    Tensor tensor = Rescale.of(Tensors.of(a1, a2, a3));
+    assertEquals(tensor, Tensors.fromString("{0, 1, 15237/56534}"));
+    ExactTensorQ.require(tensor);
+    tensor.stream().map(Scalar.class::cast).allMatch(Clips.unit()::isInside);
+  }
+
+  @Test
   void testScalarFail() {
     assertThrows(Throw.class, () -> Rescale.of(RealScalar.ONE));
   }
@@ -125,6 +140,12 @@ class RescaleTest {
   void testQuantityMixedFail() {
     Tensor vector = Tensors.of(Quantity.of(1, "s"), Quantity.of(2, "m"));
     assertThrows(Throw.class, () -> Rescale.of(vector));
+  }
+
+  @Test
+  void testMixedFail() {
+    Tensor vector = Tensors.fromString("{3[s], Infinity, 6[s], 2[s]}");
+    assertThrows(Exception.class, () -> new Rescale(vector));
   }
 
   @Test

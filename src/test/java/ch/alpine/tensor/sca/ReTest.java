@@ -12,6 +12,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.qty.DateTime;
 
 class ReTest {
   @Test
@@ -33,8 +34,14 @@ class ReTest {
   }
 
   @Test
-  void testFail() {
+  void testStringFail() {
     Scalar scalar = StringScalar.of("string");
+    assertThrows(Throw.class, () -> Re.of(scalar));
+  }
+
+  @Test
+  void testDateTimeFail() {
+    Scalar scalar = DateTime.now();
     assertThrows(Throw.class, () -> Re.of(scalar));
   }
 }
