@@ -18,37 +18,40 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
 public enum WindowFunctions implements Supplier<ScalarUnaryOperator> {
-  BARTLETT(BartlettWindow.FUNCTION), //
-  BARTLETT_HANN(BartlettHannWindow.FUNCTION), //
-  BLACKMAN(BlackmanWindow.FUNCTION), //
-  BLACKMAN_HARRIS(BlackmanHarrisWindow.FUNCTION), //
-  BLACKMAN_NUTTALL(BlackmanNuttallWindow.FUNCTION), //
+  BARTLETT(BartlettWindow.FUNCTION),
+  BARTLETT_HANN(BartlettHannWindow.FUNCTION),
+  BLACKMAN(BlackmanWindow.FUNCTION),
+  BLACKMAN_HARRIS(BlackmanHarrisWindow.FUNCTION),
+  BLACKMAN_NUTTALL(BlackmanNuttallWindow.FUNCTION),
   BOHMAN(BohmanWindow.FUNCTION),
   /** default alpha == 3 */
   CAUCHY(CauchyWindow.FUNCTION),
   /** default alpha == 1 */
   CONNES(ConnesWindow.FUNCTION),
   /** default alpha == 1 */
-  COSINE(CosineWindow.FUNCTION), //
-  DIRICHLET(DirichletWindow.FUNCTION), //
-  EXACT_BLACKMAN(ExactBlackmanWindow.FUNCTION), //
-  FLAT_TOP(FlatTopWindow.FUNCTION), //
+  COSINE(CosineWindow.FUNCTION),
+  DIRICHLET(DirichletWindow.FUNCTION),
+  EXACT_BLACKMAN(ExactBlackmanWindow.FUNCTION),
+  FLAT_TOP(FlatTopWindow.FUNCTION),
   /** default sigma == 3/10 */
-  GAUSSIAN(GaussianWindow.FUNCTION), //
+  GAUSSIAN(GaussianWindow.FUNCTION),
   HAMMING(HammingWindow.FUNCTION),
   /** default alpha == 1/2 */
   HANN(HannWindow.FUNCTION),
   /** default alpha == 1 */
-  HANN_POISSON(HannPoissonWindow.FUNCTION), //
-  LANCZOS(LanczosWindow.FUNCTION), //
-  NUTTALL(NuttallWindow.FUNCTION), //
-  PARZEN(ParzenWindow.FUNCTION), //
+  HANN_POISSON(HannPoissonWindow.FUNCTION),
+  KAISER(KaiserWindow.FUNCTION),
+  KAISER_BESSEL(KaiserBesselWindow.FUNCTION),
+  LANCZOS(LanczosWindow.FUNCTION),
+  NUTTALL(NuttallWindow.FUNCTION),
+  PARZEN(ParzenWindow.FUNCTION),
   /** default alpha == 3 */
-  POISSON(PoissonWindow.FUNCTION), //
+  POISSON(PoissonWindow.FUNCTION),
   /** default alpha == 1/3 */
   TUKEY(TukeyWindow.FUNCTION),
   /** default alpha == 1 */
-  WELCH(WelchWindow.FUNCTION), //
+  WELCH(WelchWindow.FUNCTION),
+  //
   ;
 
   private final ScalarUnaryOperator scalarUnaryOperator;

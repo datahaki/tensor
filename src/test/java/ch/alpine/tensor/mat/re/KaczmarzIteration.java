@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.Conjugate;
   }
 
   public Tensor refine(Random random) {
-    // TODO TENSOR MAT for every batch generate discrete sequence with according occurrences
+    // QUEST TENSOR MAT for every batch generate discrete sequence with according occurrences
     return refine(RandomVariate.of(distribution, random).number().intValue());
   }
 

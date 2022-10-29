@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.exp.LogInterface;
 import ch.alpine.tensor.sca.pow.PowerInterface;
 
-/** API EXPERIMENTAL
+/** EXPERIMENTAL
  * 
  * Careful: our implementation of CenteredInterval deviates from Mathematica
  * 

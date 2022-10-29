@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.SoftThreshold;
     Tensor ax_b = A.dot(x).subtract(b);
     Scalar min = Vector1Norm.of(ax_b);
     Tensor x_bst = x;
-    // TODO TENSOR MAT not final implementation
+    // QUEST TENSOR MAT not final implementation
     for (int i = 0; i < 100; ++i) {
       x = pinv.dot(b.add(z).subtract(u));
       ax_b = A.dot(x).subtract(b);

@@ -40,7 +40,7 @@ public enum Symmetrize {
   /** @param tensor of rank at least 2
    * @return given tensor symmetrized in first two dimensions
    * @see Transpose */
-  @PackageTestAccess // EXPERIMENTAL API
+  @PackageTestAccess // EXPERIMENTAL
   static Tensor _01(Tensor tensor) {
     AtomicInteger atomicInteger = new AtomicInteger();
     return Tensor.of(tensor.stream() //

@@ -40,7 +40,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
-/** API EXPERIMENTAL
+/** EXPERIMENTAL
  * 
  * automatic differentiation
  * 

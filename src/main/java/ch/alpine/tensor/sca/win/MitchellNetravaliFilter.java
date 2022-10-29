@@ -9,7 +9,7 @@ import ch.alpine.tensor.itp.MitchellNetravaliKernel;
 
 /** not interpolatory
  * 
- * EXPERIMENTAL API */
+ * EXPERIMENTAL */
 /* package */ class MitchellNetravaliFilter extends ParameterizedWindow {
   private static final Scalar _4 = RealScalar.of(4);
   public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.of(1, 3));
