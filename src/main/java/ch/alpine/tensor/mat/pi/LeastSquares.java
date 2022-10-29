@@ -137,7 +137,6 @@ public enum LeastSquares {
    * @return operator that maps a vector b to the least square solution x */
   public static TensorUnaryOperator operator(SingularValueDecomposition svd) {
     Tensor wi = SingularValueList.inverted(svd, CHOP);
-    // TODO TENSOR ALG extract non-zero indices from b and U
     return b -> svd.getV().dot(Times.of(wi, VectorQ.require(b).dot(svd.getU()))); // U^t . b == b . U
   }
 }

@@ -22,6 +22,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
@@ -36,11 +37,13 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.ply.Polynomial;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 class UniformDistributionTest {
   @Test
@@ -122,6 +125,9 @@ class UniformDistributionTest {
     Scalar var = Expectation.variance(distribution);
     assertInstanceOf(Quantity.class, var);
     assertEquals(var, Scalars.fromString("1/3[g^2]"));
+    Tolerance.CHOP.requireClose( //
+        StandardDeviation.of(distribution), //
+        Sqrt.FUNCTION.apply(var));
     {
       Scalar prob = PDF.of(distribution).at(mean);
       QuantityMagnitude.SI().in(Unit.of("lb^-1")).apply(prob);

@@ -13,6 +13,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.PDF;
@@ -20,7 +21,9 @@ import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 class ErlangDistributionTest {
   @Test
@@ -45,6 +48,7 @@ class ErlangDistributionTest {
     Distribution distribution = ErlangDistribution.of(5, Quantity.of(10, "m"));
     Scalar var = Expectation.variance(distribution);
     assertEquals(var, Scalars.fromString("1/20[m^-2]"));
+    Tolerance.CHOP.requireClose(StandardDeviation.of(distribution), Sqrt.FUNCTION.apply(var));
   }
 
   @Test

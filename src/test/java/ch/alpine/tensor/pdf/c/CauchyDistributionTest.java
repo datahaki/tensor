@@ -26,6 +26,7 @@ import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
+import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
@@ -55,6 +56,7 @@ class CauchyDistributionTest {
     assertTrue(distribution.toString().startsWith("CauchyDistribution["));
     assertEquals(Mean.of(distribution).toString(), "NaN");
     assertEquals(Variance.of(distribution).toString(), "NaN");
+    assertEquals(StandardDeviation.of(distribution).toString(), "NaN");
   }
 
   @Test

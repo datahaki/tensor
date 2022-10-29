@@ -30,7 +30,7 @@ public enum VandermondeSolve {
       for (int j = n - 1 - i; j < n - 1; ++j) {
         int fj = j;
         // c.set(xx.multiply(c.Get(fj + 1))::add, j);
-        // TODO TENSOR MAT check for simplifications
+        // QUEST TENSOR MAT check for simplifications
         c.set(s -> LenientAdd.of(s, xx.multiply(c.Get(fj + 1))), j);
       }
       c.set(xx::add, n - 1);

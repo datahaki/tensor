@@ -10,13 +10,15 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.StandardDeviationInterface;
 import ch.alpine.tensor.sca.erf.Erfc;
 import ch.alpine.tensor.sca.erf.InverseErfc;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BirnbaumSaundersDistribution.html">BirnbaumSaundersDistribution</a> */
-public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution implements Serializable {
+public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution implements //
+    StandardDeviationInterface, Serializable {
   private static final Scalar _4 = RealScalar.of(4);
   private static final Scalar _5 = RealScalar.of(5);
 
@@ -78,6 +80,11 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
   @Override // from VarianceInterface
   public Scalar variance() {
     return alpha2.multiply(_4.add(_5.multiply(alpha2))).divide(_4.multiply(lambda).multiply(lambda));
+  }
+
+  @Override // from StandardDeviationInterface
+  public Scalar standardDeviation() {
+    return alpha.multiply(Sqrt.FUNCTION.apply(_4.add(_5.multiply(alpha2)))).divide(lambda.add(lambda));
   }
 
   @Override // from AbstractContinuousDistribution

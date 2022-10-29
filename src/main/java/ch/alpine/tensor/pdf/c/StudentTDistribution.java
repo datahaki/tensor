@@ -75,7 +75,7 @@ public class StudentTDistribution implements Distribution, //
   @Override // from VarianceInterface
   public Scalar variance() {
     return Scalars.lessThan(RealScalar.TWO, v) //
-        ? v.multiply(sigma).multiply(sigma).divide(v.subtract(RealScalar.TWO))
+        ? v.multiply(sigma).divide(v.subtract(RealScalar.TWO)).multiply(sigma)
         : DoubleScalar.INDETERMINATE;
   }
 

@@ -9,7 +9,6 @@ import java.util.Random;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -91,8 +90,6 @@ public class WienerProcess implements RandomProcess, Serializable {
 
   @Override // from RandomProcess
   public Scalar evaluate(TimeSeries timeSeries, Random random, Scalar x) {
-    if (Scalars.lessThan(x, t_zero)) // TODO TENSOR check if necessary
-      throw new Throw(t_zero, x);
     Clip clip = timeSeries.domain();
     Distribution distribution = null;
     if (clip.isInside(x)) {
@@ -108,7 +105,7 @@ public class WienerProcess implements RandomProcess, Serializable {
           (Scalar) timeSeries.evaluate(interval.max()), x);
     } else {
       Scalar max = clip.max();
-      Scalar t = x.subtract(max);
+      Scalar t = Sign.requirePositive(x.subtract(max));
       distribution = NormalDistribution.of( //
           mu.multiply(t).add(timeSeries.evaluate(max)), //
           Sqrt.FUNCTION.apply(t).multiply(sigma));

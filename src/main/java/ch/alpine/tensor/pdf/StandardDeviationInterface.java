@@ -2,8 +2,9 @@
 package ch.alpine.tensor.pdf;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.red.StandardDeviation;
 
-// TODO TENSOR IMPL for more distributions to gain precision
+/** @see StandardDeviation */
 @FunctionalInterface
 public interface StandardDeviationInterface {
   /** @return standard deviation */

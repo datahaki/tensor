@@ -56,7 +56,6 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return new Cycles(map(check(tensor)));
   }
 
-  // TODO TENSOR API not yet finalized
   /* package */ static Cycles single(int[] cycle) {
     IntStream.of(cycle).forEach(Integers::requirePositiveOrZero);
     if (cycle.length < 2)

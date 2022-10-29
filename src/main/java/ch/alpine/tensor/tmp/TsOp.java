@@ -10,7 +10,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.num.Boole;
 
-// TODO TENSOR API rename
 public enum TsOp {
   ;
   /** the function can be used in combination with integration

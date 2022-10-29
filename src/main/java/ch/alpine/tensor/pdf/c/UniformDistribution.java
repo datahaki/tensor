@@ -12,10 +12,12 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.KurtosisInterface;
+import ch.alpine.tensor.pdf.StandardDeviationInterface;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** uniform distribution over continuous interval [a, b].
  * 
@@ -26,7 +28,7 @@ import ch.alpine.tensor.sca.pow.Power;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UniformDistribution.html">UniformDistribution</a> */
 public class UniformDistribution extends AbstractContinuousDistribution //
-    implements CentralMomentInterface, KurtosisInterface, Serializable {
+    implements StandardDeviationInterface, CentralMomentInterface, KurtosisInterface, Serializable {
   private static final Scalar _1_12 = RationalScalar.of(1, 12);
   private static final Distribution UNIT = new UniformDistribution(Clips.unit());
 
@@ -104,6 +106,11 @@ public class UniformDistribution extends AbstractContinuousDistribution //
   @Override // from VarianceInterface
   public Scalar variance() {
     return clip.width().multiply(clip.width()).multiply(_1_12);
+  }
+
+  @Override // from StandardDeviationInterface
+  public Scalar standardDeviation() {
+    return clip.width().multiply(Sqrt.FUNCTION.apply(_1_12));
   }
 
   @Override // from KurtosisInterface

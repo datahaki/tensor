@@ -22,7 +22,7 @@ import ch.alpine.tensor.tmp.MinimumTimeIncrement;
 
 class WienerProcessTest {
   @Test
-  void test() {
+  void testStandard() {
     RandomProcess randomProcess = WienerProcess.standard();
     assertEquals(randomProcess.toString(), "WienerProcess[0, 1]");
     RandomFunction randomFunction = RandomFunction.of(randomProcess);
@@ -31,6 +31,14 @@ class WienerProcessTest {
         .forEach(randomFunction::evaluate);
     Scalar scalar = MinimumTimeIncrement.of(randomFunction.timeSeries());
     assertTrue(Scalars.lessEquals(scalar, RealScalar.of(10.0 / 100)));
+  }
+
+  @Test
+  void testStandard2() {
+    RandomFunction randomFunction = RandomFunction.of(WienerProcess.of(0, 0));
+    randomFunction.evaluate(RealScalar.ZERO);
+    randomFunction.evaluate(RealScalar.ONE);
+    assertThrows(Exception.class, () -> randomFunction.evaluate(RealScalar.of(-1)));
   }
 
   @Test

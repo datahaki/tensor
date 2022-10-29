@@ -75,7 +75,6 @@ public class Polynomial extends HornerScheme {
    * @see InterpolatingPolynomial */
   public static Polynomial fit(Tensor xdata, Tensor ydata, int degree) {
     int excess = Integers.requirePositiveOrZero(xdata.length() - degree - 1);
-    // TODO TENSOR ALG use Chebyshev
     return new Polynomial(truncate(excess == 0 //
         ? LinearSolve.of(VandermondeMatrix.of(xdata), ydata)
         : LeastSquares.of(VandermondeMatrix.of(xdata, degree), ydata), Tolerance.CHOP::isZero));
@@ -168,12 +167,11 @@ public class Polynomial extends HornerScheme {
 
   /** @return polynomial that is an indefinite integral of this polynomial */
   public Polynomial antiderivative() {
-    int length = coeffs.length();
-    Tensor tensor = Tensors.reserve(length + 1);
     Scalar a = coeffs.Get(0);
-    // TODO TENSOR IMPL can this be more elegant!
     if (a instanceof DateTime)
       throw new Throw(coeffs);
+    int length = coeffs.length();
+    Tensor tensor = Tensors.reserve(length + 1);
     Unit unit = coeffs.length() == 1 //
         ? Unit.ONE
         : getUnitDomain();

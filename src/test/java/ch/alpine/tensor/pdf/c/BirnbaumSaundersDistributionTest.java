@@ -20,7 +20,9 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 class BirnbaumSaundersDistributionTest {
   @Test
@@ -41,6 +43,9 @@ class BirnbaumSaundersDistributionTest {
     Tolerance.CHOP.requireClose(quantile, RealScalar.of(1.5750493692432221));
     RandomVariate.of(distribution, 30);
     assertTrue(distribution.toString().startsWith("BirnbaumSaundersDistribution["));
+    Tolerance.CHOP.requireClose( //
+        StandardDeviation.of(distribution), //
+        Sqrt.FUNCTION.apply(Variance.of(distribution)));
   }
 
   @Test

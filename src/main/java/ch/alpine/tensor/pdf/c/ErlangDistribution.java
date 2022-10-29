@@ -12,6 +12,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.StandardDeviationInterface;
 import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
@@ -19,6 +20,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.gam.Factorial;
 import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** ErlangDistribution[k, lambda] == GammaDistribution[k, 1 / lambda]
  * 
@@ -28,7 +30,8 @@ import ch.alpine.tensor.sca.pow.Power;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ErlangDistribution.html">ErlangDistribution</a> */
-public class ErlangDistribution implements Distribution, MeanInterface, PDF, VarianceInterface, Serializable {
+public class ErlangDistribution implements Distribution, PDF, //
+    MeanInterface, VarianceInterface, StandardDeviationInterface, Serializable {
   /** @param k positive integer
    * @param lambda, may be instance of {@link Quantity}
    * @return
@@ -76,6 +79,11 @@ public class ErlangDistribution implements Distribution, MeanInterface, PDF, Var
   @Override // from VarianceInterface
   public Scalar variance() {
     return k.divide(lambda.multiply(lambda));
+  }
+
+  @Override // from StandardDeviationInterface
+  public Scalar standardDeviation() {
+    return Sqrt.FUNCTION.apply(k).divide(lambda);
   }
 
   @Override // from Object
