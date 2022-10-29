@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.sv;
 import java.io.Serializable;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.qr.GramSchmidt;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
 
@@ -14,15 +15,16 @@ import ch.alpine.tensor.mat.qr.QRDecomposition;
  * "Linear Algebra Learning from Data", p.144
  * by G. Strang, 2019 */
 public class QRSvd implements SingularValueDecomposition, Serializable {
-  /** @param matrix
+  /** @param matrix with maximal rank
    * @return */
   public static SingularValueDecomposition of(Tensor matrix) {
     return of(GramSchmidt.of(matrix));
   }
 
-  /** @param qrDecomposition
+  /** @param qrDecomposition with r as square matrix
    * @return
-   * @see GramSchmidt */
+   * @see GramSchmidt
+   * @see SquareMatrixQ */
   public static SingularValueDecomposition of(QRDecomposition qrDecomposition) {
     return new QRSvd(qrDecomposition);
   }

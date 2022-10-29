@@ -12,6 +12,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
@@ -92,6 +93,22 @@ class NormalDistributionTest {
         CDF.of(distribution).p_lessEquals(mean), //
         RationalScalar.of(1, 2));
     TestMarkovChebyshev.symmetricAroundMean(distribution);
+  }
+
+  @Test
+  void testQuantityLimit() {
+    Distribution d1 = NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(1e-10, "m"));
+    {
+      Scalar mean = Expectation.mean(d1);
+      Scalar prob = PDF.of(d1).at(mean);
+      Chop._01.requireClose(prob, Scalars.fromString("3.9894228040143E9[m^-1]"));
+    }
+    Distribution d2 = NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(0, "m"));
+    {
+      Scalar mean = Expectation.mean(d2);
+      Scalar prob = PDF.of(d2).at(mean);
+      assertEquals(prob, Scalars.fromString("Infinity[m^-1]"));
+    }
   }
 
   @Test

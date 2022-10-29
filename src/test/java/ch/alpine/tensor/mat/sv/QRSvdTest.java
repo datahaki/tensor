@@ -2,10 +2,10 @@
 package ch.alpine.tensor.mat.sv;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.RepeatedTest;
@@ -15,6 +15,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
+import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -38,21 +39,17 @@ class QRSvdTest {
     Tolerance.CHOP.requireClose(v1, v2);
   }
 
-  @RepeatedTest(3)
+  @Test
   void testRect5x2() throws ClassNotFoundException, IOException {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 2);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
-    List<Integer> list = Dimensions.of(qrDecomposition.getR());
-    // TODO TENSOR QR the zeros in r are to be avoided when computing SVD
-    // System.out.println(list);
-    list.size();
     SingularValueDecomposition approximateSvd = Serialization.copy(QRSvd.of(qrDecomposition));
     Tensor v1 = SingularValueList.of(matrix);
     Tensor v2 = SingularValueList.of(approximateSvd);
     Tolerance.CHOP.requireClose(v1, v2);
   }
 
-  @RepeatedTest(3)
+  @Test
   void testRect5x3() {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 3);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
@@ -61,6 +58,19 @@ class QRSvdTest {
     Tensor v1 = SingularValueList.of(matrix);
     Tensor v2 = SingularValueList.of(approximateSvd);
     Tolerance.CHOP.requireClose(v1, v2);
+  }
+
+  @Test
+  void testRect5x3def() {
+    Tensor a = RandomVariate.of(UniformDistribution.unit(), 5, 2);
+    Tensor b = RandomVariate.of(UniformDistribution.unit(), 2, 3);
+    Tensor matrix = a.dot(b);
+    QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
+    Tolerance.CHOP.requireClose(qrDecomposition.getQ().dot(qrDecomposition.getR()), matrix);
+    assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(2, 3));
+    assertThrows(Exception.class, () -> QRSvd.of(qrDecomposition)); // r is not squared
+    Tensor v1 = SingularValueList.of(matrix);
+    Tolerance.CHOP.requireZero(Last.of(v1));
   }
 
   @RepeatedTest(3)

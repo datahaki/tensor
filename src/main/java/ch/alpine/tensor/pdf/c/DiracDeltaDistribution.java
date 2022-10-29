@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
-import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -15,6 +14,7 @@ import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.N;
 
 /** Reference:
  * https://en.wikipedia.org/wiki/Dirac_delta_function */
@@ -28,16 +28,18 @@ public class DiracDeltaDistribution implements UnivariateDistribution, CentralMo
 
   // ---
   private final Scalar value;
+  private final Scalar infty;
 
   private DiracDeltaDistribution(Scalar value) {
     this.value = value;
+    infty = N.DOUBLE.apply(value.zero()).reciprocal();
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    return x.equals(value) //
-        ? DoubleScalar.POSITIVE_INFINITY
-        : RealScalar.ZERO;
+    return 0 == Scalars.compare(x, value) //
+        ? infty
+        : infty.zero();
   }
 
   @Override // from CDF

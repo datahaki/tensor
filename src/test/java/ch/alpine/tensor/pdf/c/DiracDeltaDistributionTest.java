@@ -69,6 +69,7 @@ class DiracDeltaDistributionTest {
     Distribution distribution = DiracDeltaDistribution.of(d1);
     PDF pdf = PDF.of(distribution);
     assertTrue(Scalars.isZero(pdf.at(d2)));
+    assertEquals(pdf.at(d1), Scalars.fromString("Infinity[s^-1]"));
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessThan(d2), RealScalar.ONE);
     assertEquals(distribution.toString(), "DiracDeltaDistribution[2022-11-13T10:12]");
