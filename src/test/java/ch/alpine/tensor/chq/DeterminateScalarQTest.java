@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.qty.Quantity;
 
 class DeterminateScalarQTest {
@@ -36,5 +37,13 @@ class DeterminateScalarQTest {
   @Test
   void testNullFail() {
     assertThrows(Exception.class, () -> DeterminateScalarQ.of(null));
+  }
+
+  @Test
+  void testIsNaN() {
+    assertFalse(DeterminateScalarQ.of(ComplexScalar.of(Double.NaN, Double.NaN)));
+    assertFalse(DeterminateScalarQ.of(RealScalar.of(Double.NaN)));
+    assertFalse(DeterminateScalarQ.of(Quantity.of(Double.NaN, "s")));
+    assertTrue(DeterminateScalarQ.of(RealScalar.of(Double.POSITIVE_INFINITY)));
   }
 }

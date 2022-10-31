@@ -3,6 +3,7 @@ package ch.alpine.tensor.tmp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ class TsEntryTest {
   void test() {
     TsEntry tsEntry = new TsEntry(Pi.VALUE, Tensors.vector(1, 2, 3));
     tsEntry.hashCode();
-    tsEntry.toString();
+    assertTrue(tsEntry.toString().startsWith("TsEntry["));
     assertEquals(tsEntry, new TsEntry(Pi.VALUE, Tensors.vector(1, 2, 3)));
     assertNotEquals(tsEntry, new TsEntry(Pi.VALUE, Tensors.vector(1, 3, 3)));
     assertNotEquals(tsEntry, new TsEntry(Pi.TWO, Tensors.vector(1, 2, 3)));

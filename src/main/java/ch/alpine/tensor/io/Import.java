@@ -45,7 +45,7 @@ public enum Import {
    * 
    * @param file source
    * @return file content as {@link Tensor}
-   * @throws IOException */
+   * @throws IOException if file cannot be read */
   public static Tensor of(File file) throws IOException {
     try (InputStream inputStream = new FileInputStream(file)) {
       return ImportHelper.of(new Filename(file.getName()), inputStream);

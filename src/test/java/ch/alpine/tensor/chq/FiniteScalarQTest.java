@@ -145,18 +145,6 @@ class FiniteScalarQTest {
     assertThrows(Throw.class, () -> FiniteScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
   }
 
-  private static boolean isNaN(Scalar scalar) {
-    return !scalar.equals(scalar);
-  }
-
-  @Test
-  void testIsNaN() {
-    assertTrue(isNaN(ComplexScalar.of(Double.NaN, Double.NaN)));
-    assertTrue(isNaN(RealScalar.of(Double.NaN)));
-    assertTrue(isNaN(Quantity.of(Double.NaN, "s")));
-    assertFalse(isNaN(RealScalar.of(Double.POSITIVE_INFINITY)));
-  }
-
   @Test
   void testNullFail() {
     assertThrows(NullPointerException.class, () -> FiniteScalarQ.of(null));
