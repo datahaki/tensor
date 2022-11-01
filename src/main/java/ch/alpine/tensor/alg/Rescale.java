@@ -52,18 +52,25 @@ public class Rescale {
   private final Tensor result;
 
   /** @param tensor of rank at least 1
+   * @param clip may be null
    * @throws Exception if given tensor is a scalar */
-  public Rescale(Tensor tensor) {
+  public Rescale(Tensor tensor, Clip clip) {
     ScalarQ.thenThrow(tensor);
-    clip = tensor.flatten(-1) //
-        .map(Scalar.class::cast) //
-        .filter(FiniteScalarQ::of) //
-        .collect(MinMax.toClip());
+    this.clip = clip;
     result = tensor.map(Objects.nonNull(clip) && Scalars.nonZero(clip.width()) //
         // operation is not identical to Clip#rescale for non-finite values
         ? scalar -> scalar.subtract(clip.min()).divide(clip.width())
         // set all finite number entries to 0, but keep non-finite values
         : FINITE_NUMBER_ZERO);
+  }
+
+  /** @param tensor of rank at least 1
+   * @throws Exception if given tensor is a scalar */
+  public Rescale(Tensor tensor) {
+    this(tensor, tensor.flatten(-1) //
+        .map(Scalar.class::cast) //
+        .filter(FiniteScalarQ::of) //
+        .collect(MinMax.toClip()));
   }
 
   /** @return interval that tightly contains the finite scalars in the given tensor,

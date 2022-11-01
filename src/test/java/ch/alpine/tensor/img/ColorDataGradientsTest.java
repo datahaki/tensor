@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -94,6 +95,12 @@ class ColorDataGradientsTest {
   void testGrayscaleTable() {
     assertThrows(RuntimeException.class, () -> ColorDataGradients.HUE.queryTableRgba().orElseThrow());
     assertThrows(RuntimeException.class, () -> ColorDataGradients.GRAYSCALE.queryTableRgba().orElseThrow());
+  }
+
+  @Test
+  void testTemperatureCenter() {
+    assertEquals(ColorFormat.toColor(ColorDataGradients.TEMPERATURE.apply(RationalScalar.HALF)), Color.WHITE);
+    assertEquals(ColorFormat.toColor(ColorDataGradients.TEMPERATURE_LIGHT.apply(RationalScalar.HALF)), Color.WHITE);
   }
 
   @ParameterizedTest
