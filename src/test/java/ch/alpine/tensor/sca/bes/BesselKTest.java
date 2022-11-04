@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -18,6 +19,12 @@ class BesselKTest {
   }
 
   @Test
+  void test0Zero() {
+    Scalar scalar = BesselK._0(0);
+    assertEquals(scalar, DoubleScalar.POSITIVE_INFINITY);
+  }
+
+  @Test
   void test0Stage() {
     Scalar scalar = BesselK._0(3.7);
     Chop._08.requireClose(scalar, RealScalar.of(0.01563065992162666));
@@ -27,6 +34,12 @@ class BesselKTest {
   void test1() {
     Scalar scalar = BesselK._1(1.2);
     Chop._08.requireClose(scalar, RealScalar.of(0.4345923910607151));
+  }
+
+  @Test
+  void test1Zero() {
+    Scalar scalar = BesselK._1(0);
+    assertEquals(scalar, ComplexInfinity.INSTANCE);
   }
 
   @Test

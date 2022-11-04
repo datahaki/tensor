@@ -30,7 +30,7 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.pow.SqrtInterface;
 
-/** EXPERIMENTAL
+/** EXPERIMENTAL TENSOR
  * 
  * "Around[mean, sigma] represents an approximate number or quantity with a value around
  * mean and an uncertainty sigma."

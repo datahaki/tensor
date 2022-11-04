@@ -37,4 +37,9 @@ class MitchellNetravaliKernelTest {
     Tolerance.CHOP.requireZero(mnk.apply(RealScalar.of(2.4)));
     assertThrows(Throw.class, () -> mnk.apply(Quantity.of(1, "m")));
   }
+
+  @Test
+  void testToString() {
+    assertEquals(MitchellNetravaliKernel.standard().toString(), "MitchellNetravaliKernel[1/3, 1/3]");
+  }
 }

@@ -7,6 +7,8 @@
 // adapted from colt by jph
 package ch.alpine.tensor.sca.bes;
 
+import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -97,8 +99,15 @@ public enum BesselK {
    *
    * @param x the value to compute the bessel function of. */
   public static Scalar _0(Scalar x) {
-    if (Sign.isNegativeOrZero(x))
+    if (Sign.isNegative(x)) {
+      /* the real part of BesselK[0, x] is a SYMMETRIC function */
+      Scalar re = _0(x.negate());
+      Scalar im = DoubleScalar.INDETERMINATE; // unknown to us
+      ComplexScalar.of(re, im);
       throw new ArithmeticException();
+    }
+    if (x.equals(RealScalar.ZERO))
+      return DoubleScalar.POSITIVE_INFINITY;
     if (Scalars.lessEquals(x, RealScalar.TWO))
       return A_k0.apply(x.multiply(x)).subtract(Log.FUNCTION.apply(x.multiply(RationalScalar.HALF)).multiply(BesselI._0(x)));
     return Exp.FUNCTION.apply(x.negate()).multiply(B_k0.apply(x)).divide(Sqrt.FUNCTION.apply(x));
@@ -173,8 +182,15 @@ public enum BesselK {
    * @param x the value to compute the bessel function of. */
   public static Scalar _1(Scalar x) {
     Scalar z = x.multiply(RationalScalar.HALF);
-    if (Sign.isNegativeOrZero(z))
+    if (Sign.isNegative(z)) {
+      /* the real part of BesselK[0, x] is an ANTI-SYMMETRIC function */
+      Scalar re = _0(x.negate()).negate();
+      Scalar im = DoubleScalar.INDETERMINATE; // unknown to us
+      ComplexScalar.of(re, im);
       throw new ArithmeticException();
+    }
+    if (x.equals(RealScalar.ZERO))
+      return ComplexInfinity.INSTANCE;
     if (Scalars.lessEquals(x, RealScalar.TWO))
       return Log.FUNCTION.apply(z).multiply(BesselI._1(x)).add(A_k1.apply(x.multiply(x)).divide(x));
     return Exp.FUNCTION.apply(x.negate()).multiply(B_k1.apply(x)).divide(Sqrt.FUNCTION.apply(x));
