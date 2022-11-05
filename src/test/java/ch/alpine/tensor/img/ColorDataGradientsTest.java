@@ -80,6 +80,8 @@ class ColorDataGradientsTest {
         LinearColorDataGradient.of(tableRgba);
         ++count;
       }
+      // else
+      // System.out.println(colorDataGradients);
     }
     assertTrue(34 <= count);
   }

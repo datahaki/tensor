@@ -21,6 +21,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -152,6 +153,13 @@ class RationalizeTest {
     assertEquals(Rationalize._3.apply(DoubleScalar.of(12.435)), RationalScalar.of(12435, 1000));
     assertEquals(Rationalize._4.apply(Pi.VALUE), RationalScalar.of(31416, 10000));
     assertEquals(Rationalize._3.apply(Quantity.of(1.23456, "m")), Quantity.of(RationalScalar.of(1235, 1000), "m"));
+  }
+
+  @Test
+  void testRationalizeZero() {
+    ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(10_000);
+    Scalar scalar = suo.apply(RealScalar.of(0.0));
+    ExactScalarQ.require(scalar);
   }
 
   @Test

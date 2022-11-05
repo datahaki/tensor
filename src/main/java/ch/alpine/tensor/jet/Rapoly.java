@@ -11,8 +11,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.sca.ply.Polynomial;
 
-/** EXPERIMENTAL */
-class Rapoly extends MultiplexScalar {
+/** EXPERIMENTAL TENSOR
+ * 
+ * ratio of two polynomials */
+/* package */ class Rapoly extends MultiplexScalar {
   /** @param polynomial
    * @return */
   public static Rapoly of(Polynomial polynomial) {

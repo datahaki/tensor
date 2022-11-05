@@ -43,7 +43,7 @@ public enum ColorDataLists {
   _106,
   /** 16 colors */
   _108,
-  /** 16 colors */
+  /** 16 colors approx. RGB */
   _109,
   /** 16 colors */
   _110,

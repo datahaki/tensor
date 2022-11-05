@@ -23,6 +23,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 
 class ModTest {
@@ -184,6 +185,15 @@ class ModTest {
     Scalar qs1 = Quantity.of(5, "m");
     Scalar qs2 = Quantity.of(3, "s");
     assertThrows(Throw.class, () -> Mod.function(qs2).apply(qs1));
+  }
+
+  @Test
+  void testDateTime() {
+    DateTime dateTime = DateTime.of(1789, 12, 24, 10, 20);
+    Mod mod = Mod.function(Quantity.of(1000, "s"), dateTime);
+    Scalar scalar = mod.apply(DateTime.of(1989, 12, 24, 10, 20));
+    assertEquals(scalar, DateTime.of(1789, 12, 24, 10, 23, 20));
+    assertEquals(mod.toString(), "Mod[1000[s], 1789-12-24T10:20]");
   }
 
   @Test

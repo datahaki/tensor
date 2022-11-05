@@ -66,7 +66,7 @@ import ch.alpine.tensor.sca.Sign;
     return tensor.add(TensorProduct.of(svd.getU().get(Tensor.ALL, n - 1), ve.add(ve)));
   }
 
-  /** EXPERIMENTAL
+  /** EXPERIMENTAL TENSOR
    * 
    * for input of square matrix, the function returns a matrix with determinant +1
    * 
