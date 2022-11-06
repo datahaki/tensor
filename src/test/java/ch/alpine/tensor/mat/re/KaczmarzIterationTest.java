@@ -10,15 +10,36 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.num.RandomPermutation;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.spa.SparseArray;
 
 class KaczmarzIterationTest {
+  @Test
+  void test2x2() {
+    Tensor matrix = Tensors.fromString("{{3,2},{2,4}}");
+    Tensor b = Tensors.vector(4, 7);
+    Tensor sol = LinearSolve.of(matrix, b);
+    System.out.println(sol.map(N.DOUBLE));
+    KaczmarzIteration kaczmarzIteration = new KaczmarzIteration(matrix, b);
+    for (int i = 0; i < 10; ++i) {
+      Tensor x1 = kaczmarzIteration.refine(0);
+      System.out.println("x1=" + x1.map(N.DOUBLE));
+      Tensor x2 = kaczmarzIteration.refine(1);
+      System.out.println("x2=" + x2.map(N.DOUBLE));
+      System.out.println("err="+Vector2Norm.between(x2, sol));
+    }
+  }
+
   @Test
   void testSimple() {
     Random random = new Random(10);
@@ -26,6 +47,37 @@ class KaczmarzIterationTest {
     Distribution distribution = UniformDistribution.of(-1, 1);
     Tensor matrix = RandomVariate.of(distribution, random, n, n);
     Tensor b = RandomVariate.of(distribution, random, n);
+    KaczmarzIteration kaczmarzIteration = new KaczmarzIteration(matrix, b);
+    for (int count = 0; count < 30; ++count)
+      kaczmarzIteration.refine(random);
+    Tensor actual = kaczmarzIteration.refine(random);
+    Tensor expect = LinearSolve.of(matrix, b);
+    Chop._03.requireClose(actual, expect);
+  }
+
+  @Test
+  void testQuantity() {
+    Random random = new Random(10);
+    int n = 3;
+    Distribution distribution = UniformDistribution.of(Clips.absolute(Quantity.of(3, "m")));
+    Tensor matrix = RandomVariate.of(distribution, random, n, n);
+    Tensor b = RandomVariate.of(distribution, random, n);
+    KaczmarzIteration kaczmarzIteration = new KaczmarzIteration(matrix, b);
+    for (int count = 0; count < 30; ++count)
+      kaczmarzIteration.refine(random);
+    Tensor actual = kaczmarzIteration.refine(random);
+    Tensor expect = LinearSolve.of(matrix, b);
+    Chop._03.requireClose(actual, expect);
+  }
+
+  @Test
+  void testQuantity2() {
+    Random random = new Random(10);
+    int n = 3;
+    Distribution dA = UniformDistribution.of(Clips.absolute(Quantity.of(3, "m")));
+    Tensor matrix = RandomVariate.of(dA, random, n, n);
+    Distribution db = UniformDistribution.of(Clips.absolute(Quantity.of(3, "")));
+    Tensor b = RandomVariate.of(db, random, n);
     KaczmarzIteration kaczmarzIteration = new KaczmarzIteration(matrix, b);
     for (int count = 0; count < 30; ++count)
       kaczmarzIteration.refine(random);
