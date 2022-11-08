@@ -153,4 +153,26 @@ class FindRootTest {
     FindRoot findRoot = FindRoot.of(x -> (Scalar) timeSeries.evaluate(x));
     assertThrows(Exception.class, () -> findRoot.inside(timeSeries.domain()));
   }
+
+  @Test
+  void testAbove() {
+    FindRoot findRoot = FindRoot.of(Cos.FUNCTION);
+    assertTrue(findRoot.toString().startsWith("FindRoot["));
+    Scalar x = findRoot.above(RealScalar.ZERO, RealScalar.ONE);
+    Tolerance.CHOP.requireClose(x, Pi.HALF);
+  }
+
+  @Test
+  void testAboveHit() {
+    FindRoot findRoot = FindRoot.of(Sin.FUNCTION);
+    assertTrue(findRoot.toString().startsWith("FindRoot["));
+    Scalar x = findRoot.above(RealScalar.ZERO, RealScalar.ONE);
+    assertEquals(x, RealScalar.ZERO);
+  }
+
+  @Test
+  void testAboveFail() {
+    FindRoot findRoot = FindRoot.of(s -> RealScalar.ONE);
+    assertThrows(Exception.class, () -> findRoot.above(RealScalar.ZERO, RealScalar.ONE));
+  }
 }

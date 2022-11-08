@@ -8,6 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.FindInteger;
 import ch.alpine.tensor.sca.Chop;
@@ -41,7 +42,6 @@ public class FindRoot implements Serializable {
   private static final int MAX_ITERATIONS_A = 256;
   // TODO TENSOR IMPL investigate and justify magic constants
   private static final Scalar HALF = RealScalar.of(0.5);
-  private static final Scalar FACTOR = RealScalar.of(256);
 
   /** @param function continuous
    * @return */
@@ -125,11 +125,17 @@ public class FindRoot implements Serializable {
     int iteration = 0;
     while (Sign.FUNCTION.apply(function.apply(hi)).equals(s0)) { // at this point s0 != 0
       lo = hi;
-      dt = dt.multiply(FACTOR);
+      dt = dt.add(dt);
       hi = lo.add(dt);
       if (MAX_ITERATIONS_A < ++iteration)
         throw new Throw();
     }
-    return inside(Clips.interval(lo, hi));
+    Clip clip = Clips.interval(lo, hi);
+    return inside(clip);
+  }
+
+  @Override
+  public String toString() {
+    return MathematicaFormat.concise("FindRoot", function);
   }
 }

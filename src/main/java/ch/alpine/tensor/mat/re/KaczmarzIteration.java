@@ -7,6 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.pdf.Distribution;
@@ -16,12 +17,21 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.sca.Conjugate;
 
-/** Careful:
+/** Experiments have shown that the iteration is most suitable
+ * for system of equations with many more variables than equations,
+ * i.e. where matrix rows << cols.
+ * 
+ * In that case, the iteration is expected to converge to
+ * LeastSquares.of(matrix, b)
+ * 
+ * Careful:
  * Many iterations may be needed for an accurate solution.
  * When exact precision is used the result consists of lengthy fractions.
  * 
  * Reference:
- * https://en.wikipedia.org/wiki/Kaczmarz_method */
+ * https://en.wikipedia.org/wiki/Kaczmarz_method 
+ * 
+ * @see LeastSquares */
 public class KaczmarzIteration {
   public static KaczmarzIteration of(Tensor matrix, Tensor b) {
     Tensor mat = Tensors.empty();

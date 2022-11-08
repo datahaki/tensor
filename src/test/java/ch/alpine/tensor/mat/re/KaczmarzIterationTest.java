@@ -12,7 +12,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.nrm.Vector2Norm;
+import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.num.RandomPermutation;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -20,7 +20,6 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.spa.SparseArray;
 
 class KaczmarzIterationTest {
@@ -29,15 +28,36 @@ class KaczmarzIterationTest {
     Tensor matrix = Tensors.fromString("{{3,2},{2,4}}");
     Tensor b = Tensors.vector(4, 7);
     Tensor sol = LinearSolve.of(matrix, b);
-    System.out.println(sol.map(N.DOUBLE));
+    sol.copy();
+    // System.out.println(sol.map(N.DOUBLE));
     KaczmarzIteration kaczmarzIteration = new KaczmarzIteration(matrix, b);
     for (int i = 0; i < 10; ++i) {
-      Tensor x1 = kaczmarzIteration.refine(0);
-      System.out.println("x1=" + x1.map(N.DOUBLE));
-      Tensor x2 = kaczmarzIteration.refine(1);
-      System.out.println("x2=" + x2.map(N.DOUBLE));
-      System.out.println("err="+Vector2Norm.between(x2, sol));
+      Tensor x = kaczmarzIteration.refine();
+      x.copy();
+      // System.out.println("x1=" + x.map(N.DOUBLE));
+      // System.out.println("err="+Vector2Norm.between(x, sol));
     }
+  }
+
+  @Test
+  void test2x5() {
+    Distribution distribution = UniformDistribution.of(-2, 2);
+    int n = 3;
+    Tensor matrix = RandomVariate.of(distribution, n, 5);
+    Tensor b = RandomVariate.of(distribution, n);
+    Tensor sol = LeastSquares.of(matrix, b);
+    sol.copy();
+    // System.out.println(sol.map(N.DOUBLE));
+    KaczmarzIteration kaczmarzIteration = new KaczmarzIteration(matrix, b);
+    // Tensor x = null;
+    for (int i = 0; i < 30; ++i) {
+      kaczmarzIteration.refine();
+      // System.out.println("x1=" + x.map(N.DOUBLE));
+      // System.out.println("err="+Vector2Norm.between(x, sol));
+    }
+    Tensor x = kaczmarzIteration.refine();
+    x.copy();
+    // System.out.println("err="+Vector2Norm.between(x, sol));
   }
 
   @Test
