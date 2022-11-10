@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.Conjugate;
  * When exact precision is used the result consists of lengthy fractions.
  * 
  * Reference:
- * https://en.wikipedia.org/wiki/Kaczmarz_method 
+ * https://en.wikipedia.org/wiki/Kaczmarz_method
  * 
  * @see LeastSquares */
 public class KaczmarzIteration {
