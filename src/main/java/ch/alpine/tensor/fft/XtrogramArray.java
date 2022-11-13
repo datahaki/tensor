@@ -31,21 +31,26 @@ public enum XtrogramArray {
     @Override
     public Tensor process(Tensor vector) {
       return InverseFourier.of(Fourier.of(vector) //
-          .map(AbsSquared.FUNCTION).map(Log.FUNCTION)).map(AbsSquared.FUNCTION);
+          .map(AbsSquared.FUNCTION) //
+          .map(Log.FUNCTION)).map(AbsSquared.FUNCTION);
     }
   },
   CepstrogramReal {
     @Override
     public Tensor process(Tensor vector) {
       return InverseFourier.of(Fourier.of(vector) //
-          .map(Abs.FUNCTION).map(Log.FUNCTION)).map(Re.FUNCTION);
+          .map(Abs.FUNCTION) //
+          .map(Log.FUNCTION)).map(Re.FUNCTION);
     }
   },
   CepstrogramReal1 {
     @Override
     public Tensor process(Tensor vector) {
       return InverseFourier.of(Fourier.of(vector) //
-          .map(Abs.FUNCTION).map(RealScalar.of(0.5)::add).map(Log.FUNCTION)).map(Re.FUNCTION);
+          .map(Abs.FUNCTION) //
+          .map(RealScalar.of(1E-12)::add) //
+          .map(Log.FUNCTION)) //
+          .map(Re.FUNCTION);
     }
   },
   //

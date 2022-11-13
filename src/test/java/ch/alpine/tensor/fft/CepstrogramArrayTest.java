@@ -9,8 +9,10 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.SawtoothWave;
 
@@ -23,7 +25,11 @@ class CepstrogramArrayTest {
 
   @Test
   void testMathematica() {
-    CepstrogramArray.of(signal());
+    Tensor tensor = CepstrogramArray.of(signal());
+    boolean status = tensor.flatten(-1) //
+        .map(Scalar.class::cast) //
+        .allMatch(DeterminateScalarQ::of);
+    assertTrue(status);
   }
 
   @Test
