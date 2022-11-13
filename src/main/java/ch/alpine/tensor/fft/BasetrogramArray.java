@@ -38,7 +38,7 @@ import ch.alpine.tensor.red.Times;
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise(name(), windowLength, offset, tensorUnaryOperator);
+    return MathematicaFormat.concise(title() + "Array", windowLength, offset, tensorUnaryOperator);
   }
 
   /** @param vector
@@ -46,5 +46,5 @@ import ch.alpine.tensor.red.Times;
   protected abstract Tensor processBlock(Tensor vector);
 
   /** @return */
-  protected abstract String name();
+  protected abstract String title();
 }

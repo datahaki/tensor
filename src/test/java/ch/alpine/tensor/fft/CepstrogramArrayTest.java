@@ -31,6 +31,6 @@ class CepstrogramArrayTest {
     TensorUnaryOperator tuo = CepstrogramArray.of(1345, 300);
     Serialization.copy(tuo);
     tuo.apply(signal());
-    assertTrue(tuo.toString().startsWith("CepstrogramArray["));
+    assertTrue(tuo.toString().startsWith("CepstrogramRealArray["));
   }
 }

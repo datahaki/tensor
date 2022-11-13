@@ -1,6 +1,7 @@
 // code by ob, jph
 package ch.alpine.tensor.fft;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -8,6 +9,9 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.AbsSquared;
+import ch.alpine.tensor.sca.Re;
+import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.win.DirichletWindow;
 import ch.alpine.tensor.sca.win.HannWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
@@ -17,38 +21,33 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
  * 
  * @see WindowFunctions */
 public enum XtrogramArray {
-  SPECTRO {
+  Spectrogram {
     @Override
-    public TensorUnaryOperator of(int windowLength, int offset, ScalarUnaryOperator window) {
-      return new BasetrogramArray(windowLength, offset, window) {
-        @Override
-        protected Tensor processBlock(Tensor vector) {
-          return Fourier.of(vector);
-        }
-
-        @Override
-        protected String name() {
-          return "SpectrogramArray";
-        }
-      };
+    public Tensor process(Tensor vector) {
+      return Fourier.of(vector);
     }
   },
-  CEPSTRO {
+  CepstrogramPower {
     @Override
-    public TensorUnaryOperator of(int windowLength, int offset, ScalarUnaryOperator window) {
-      return new BasetrogramArray(windowLength, offset, window) {
-        @Override
-        protected Tensor processBlock(Tensor vector) {
-          return CepstrumArray.REAL.apply(vector);
-        }
-
-        @Override
-        protected String name() {
-          return "CepstrogramArray";
-        }
-      };
+    public Tensor process(Tensor vector) {
+      return InverseFourier.of(Fourier.of(vector) //
+          .map(AbsSquared.FUNCTION).map(Log.FUNCTION)).map(AbsSquared.FUNCTION);
     }
-  }
+  },
+  CepstrogramReal {
+    @Override
+    public Tensor process(Tensor vector) {
+      return InverseFourier.of(Fourier.of(vector) //
+          .map(Abs.FUNCTION).map(Log.FUNCTION)).map(Re.FUNCTION);
+    }
+  },
+  CepstrogramReal1 {
+    @Override
+    public Tensor process(Tensor vector) {
+      return InverseFourier.of(Fourier.of(vector) //
+          .map(Abs.FUNCTION).map(RealScalar.of(0.5)::add).map(Log.FUNCTION)).map(Re.FUNCTION);
+    }
+  },
   //
   ;
 
@@ -106,10 +105,23 @@ public enum XtrogramArray {
     return of(windowLength, StaticHelper.default_offset(windowLength), window);
   }
 
-  // ---
   /** @param windowLength
    * @param offset
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return */
-  public abstract TensorUnaryOperator of(int windowLength, int offset, ScalarUnaryOperator window);
+  public final TensorUnaryOperator of(int windowLength, int offset, ScalarUnaryOperator window) {
+    return new BasetrogramArray(windowLength, offset, window) {
+      @Override
+      protected Tensor processBlock(Tensor vector) {
+        return process(vector);
+      }
+
+      @Override
+      protected String title() {
+        return name();
+      }
+    };
+  }
+
+  protected abstract Tensor process(Tensor vector);
 }

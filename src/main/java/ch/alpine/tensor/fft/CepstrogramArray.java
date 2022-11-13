@@ -19,7 +19,7 @@ public enum CepstrogramArray {
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return */
   public static Tensor of(Tensor vector, ScalarUnaryOperator window) {
-    return XtrogramArray.CEPSTRO.of(vector, window);
+    return XtrogramArray.CepstrogramReal.of(vector, window);
   }
 
   /** Mathematica default
@@ -28,7 +28,7 @@ public enum CepstrogramArray {
    * @return
    * @throws Exception if input is not a vector */
   public static Tensor of(Tensor vector) {
-    return XtrogramArray.CEPSTRO.of(vector);
+    return XtrogramArray.CepstrogramReal.of(vector);
   }
 
   /** @param vector
@@ -36,7 +36,7 @@ public enum CepstrogramArray {
    * @return truncated and transposed spectrogram array for visualization
    * @throws Exception if input is not a vector */
   public static Tensor half_abs(Tensor vector, ScalarUnaryOperator window) {
-    return XtrogramArray.CEPSTRO.half_abs(vector, window);
+    return XtrogramArray.CepstrogramReal.half_abs(vector, window);
   }
 
   // ---
@@ -45,14 +45,14 @@ public enum CepstrogramArray {
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return */
   public static TensorUnaryOperator of(int windowLength, int offset, ScalarUnaryOperator window) {
-    return XtrogramArray.CEPSTRO.of(windowLength, offset, window);
+    return XtrogramArray.CepstrogramReal.of(windowLength, offset, window);
   }
 
   /** @param windowLength
    * @param offset positive and not greater than windowLength
    * @return */
   public static TensorUnaryOperator of(int windowLength, int offset) {
-    return XtrogramArray.CEPSTRO.of(windowLength, offset);
+    return XtrogramArray.CepstrogramReal.of(windowLength, offset);
   }
 
   /** @param windowDuration
@@ -62,7 +62,7 @@ public enum CepstrogramArray {
    * @return */
   public static TensorUnaryOperator of( //
       Scalar windowDuration, Scalar samplingFrequency, int offset, ScalarUnaryOperator window) {
-    return XtrogramArray.CEPSTRO.of(windowDuration, samplingFrequency, offset, window);
+    return XtrogramArray.CepstrogramReal.of(windowDuration, samplingFrequency, offset, window);
   }
 
   /** @param windowDuration
@@ -71,6 +71,6 @@ public enum CepstrogramArray {
    * @return spectrogram operator with default offset */
   public static TensorUnaryOperator of( //
       Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window) {
-    return XtrogramArray.CEPSTRO.of(windowDuration, samplingFrequency, window);
+    return XtrogramArray.CepstrogramReal.of(windowDuration, samplingFrequency, window);
   }
 }
