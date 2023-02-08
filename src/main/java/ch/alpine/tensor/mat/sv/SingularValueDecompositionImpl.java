@@ -14,6 +14,8 @@ import ch.alpine.tensor.red.CopySign;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 
+/** implements "thin" svd, i.e. u has the same format as given matrix
+ * instead of being square */
 /* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
   private static final int MAX_ITERATIONS = 28;
   // ---
@@ -31,6 +33,7 @@ import ch.alpine.tensor.sca.Sign;
     w = init.w;
     r = init.r;
     for (int i = w.length() - 1; 0 <= i; --i) {
+      // System.out.println(i);
       for (int iteration = 0; iteration <= MAX_ITERATIONS; ++iteration) {
         int l = levelW(i, init.chop);
         if (!Unprotect.getUnitUnique(w).equals(Unprotect.getUnitUnique(r)))

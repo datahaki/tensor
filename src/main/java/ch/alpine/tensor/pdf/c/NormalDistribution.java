@@ -2,7 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -98,7 +98,7 @@ public class NormalDistribution implements UnivariateDistribution, //
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     return mean.add(StandardNormalDistribution.INSTANCE.randomVariate(random).multiply(sigma));
   }
 

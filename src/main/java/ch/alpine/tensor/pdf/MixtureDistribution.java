@@ -4,8 +4,8 @@ package ch.alpine.tensor.pdf;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Function;
+import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
@@ -73,7 +73,7 @@ public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterfac
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     int index = RandomVariate.of(categoricalDistribution, random).number().intValue();
     return RandomVariate.of(list.get(index), random);
   }

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
@@ -31,7 +31,7 @@ public class ComplexUniformDistribution implements Distribution, RandomVariateIn
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     return ComplexScalar.of( //
         RandomVariate.of(distribution_re, random), //
         RandomVariate.of(distribution_im, random));

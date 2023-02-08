@@ -3,7 +3,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import java.io.Serializable;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -61,7 +61,7 @@ public class PoissonBinomialDistribution implements Distribution, //
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     return RealScalar.of(lowerBound + p_vector.stream() //
         .map(Scalar.class::cast) //
         .map(Scalar::number) //

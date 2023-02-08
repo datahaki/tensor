@@ -32,17 +32,21 @@ import ch.alpine.tensor.nrm.Vector2Norm;
     Tensor r = matrix;
     Tensor qInv = qInv0;
     for (int k = 0; k < m; ++k) { // m reflections
+      // System.out.println(k);
       AtomicInteger atomicInteger = new AtomicInteger(-k);
       Tensor x = Tensor.of(r.get(Tensor.ALL, k).stream() // k-th column of R
           .map(Scalar.class::cast) //
           .map(scalar -> atomicInteger.getAndIncrement() < 0 ? scalar.zero() : scalar));
       Scalar xn = Vector2Norm.of(x);
       if (Scalars.nonZero(xn)) { // else reflection reduces to identity, hopefully => det == 0
+        // System.out.println("---");
         Tensor signed = qrSignOperator.sign(x.Get(k)).multiply(xn);
         x.set(signed::add, k);
         QRReflection qrReflection = new QRReflection(k, x);
         qInv = qrReflection.forward(qInv);
         r = qrReflection.forward(r);
+        // if (!FiniteTensorQ.of(r) || !FiniteTensorQ.of(qInv))
+        // System.err.println("non-finite");
       }
     }
     // chop lower entries to symbolic zero

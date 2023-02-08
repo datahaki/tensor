@@ -42,7 +42,9 @@ public enum Roots {
   public static Tensor of(Tensor coeffs) {
     Tensor roots = unsorted(coeffs);
     try {
-      return Tensor.of(roots.stream().map(Scalar.class::cast).sorted(ComplexComparator.INSTANCE));
+      return Tensor.of(roots.stream() //
+          .map(Scalar.class::cast) //
+          .sorted(ComplexComparator.INSTANCE));
     } catch (Exception exception) {
       // in the case of quaternions
     }

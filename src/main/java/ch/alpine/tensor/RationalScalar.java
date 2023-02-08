@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 import ch.alpine.tensor.api.NInterface;
+import ch.alpine.tensor.ext.BigIntegerMath;
 
 /** a RationalScalar corresponds to an element from the field of rational numbers.
  * 

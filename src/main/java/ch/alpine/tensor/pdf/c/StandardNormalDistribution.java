@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -41,7 +41,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     return DoubleScalar.of(random.nextGaussian());
   }
 

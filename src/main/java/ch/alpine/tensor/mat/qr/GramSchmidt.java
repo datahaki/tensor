@@ -14,6 +14,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.gr.InfluenceMatrix;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.nrm.Vector2Norm;
+import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Conjugate;
 
 /** the {@link GramSchmidt} algorithm is efficient for obtaining the {@link InfluenceMatrix}
@@ -42,13 +43,18 @@ public class GramSchmidt extends QRDecompositionBase implements Serializable {
     int m = Unprotect.dimension1(matrix);
     int[] _sigma = new int[m];
     for (int i = 0; i < m; ++i) {
-      Tensor a = matrix;
-      Tensor norms = Tensor.of(IntStream.range(0, m).mapToObj(l -> Vector2Norm.of(a.get(Tensor.ALL, l))));
+      // System.out.println(i);
+      // Tensor a = matrix;
+      Tensor norms;
+      norms = matrix.stream().map(r -> r.map(Abs.FUNCTION)).reduce(Tensor::add).orElseThrow();
+      // norms = Tensor.of(IntStream.range(0, m).mapToObj(l -> Vector2Norm.of(a.get(Tensor.ALL, l))));
       _sigma[i] = ArgMax.of(norms.map(Unprotect::withoutUnit));
-      Scalar norm = norms.Get(_sigma[i]);
+      Tensor col = matrix.get(Tensor.ALL, _sigma[i]);
+      Scalar norm = Vector2Norm.of(col);
+      // norms.Get(_sigma[i]);
       if (Tolerance.CHOP.isZero(norm))
         break;
-      Tensor q = a.get(Tensor.ALL, _sigma[i]).divide(norm);
+      Tensor q = col.divide(norm);
       // we refrain from using the more thorough Normalization for vector q
       // ... until data shows that it is necessary
       Tensor qc = Conjugate.of(q);

@@ -14,6 +14,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
@@ -27,14 +28,17 @@ import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
+import ch.alpine.tensor.nrm.Matrix2Norm;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.LogNormalDistribution;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clips;
 
 class InfluenceMatrixImplTest {
   @Test
@@ -146,6 +150,17 @@ class InfluenceMatrixImplTest {
     InfluenceMatrixImpl influenceMatrixImpl = (InfluenceMatrixImpl) InfluenceMatrix.of(design);
     influenceMatrixImpl.image(RandomVariate.of(distribution, 8));
     assertTrue(influenceMatrixImpl.dotMatrix());
+  }
+
+  @Test
+  void testDistance() { // "Distance Between Subspaces"
+    int n = 7;
+    for (int k = 1; k < n; ++k) {
+      InfluenceMatrix in1 = InfluenceMatrix.of(RandomVariate.of(NormalDistribution.standard(), n, k));
+      InfluenceMatrix in2 = InfluenceMatrix.of(RandomVariate.of(NormalDistribution.standard(), n, k));
+      Scalar scalar = Matrix2Norm.of(in1.matrix().subtract(in2.matrix()));
+      Clips.unit().requireInside(scalar);
+    }
   }
 
   @Test

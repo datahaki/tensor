@@ -2,7 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -64,7 +64,7 @@ public class ExponentialDistribution implements UnivariateDistribution, //
   }
 
   @Override // from AbstractContinuousDistribution
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
     return randomVariate(random.nextDouble());
   }

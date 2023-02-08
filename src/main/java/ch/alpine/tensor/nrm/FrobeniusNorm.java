@@ -5,7 +5,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
 /** implementation is consistent with Mathematica
- * Norm[{3, 4}, "Frobenius"] == 5 */
+ * Norm[{3, 4}, "Frobenius"] == 5
+ * 
+ * FrobeniusNorm[matrix] == Vector2Norm[SVD[matrix].values()] */
 public enum FrobeniusNorm {
   ;
   /** @param tensor of arbitrary rank

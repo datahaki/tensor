@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -26,12 +27,12 @@ public enum RandomVariate {
   /** The default constructor of {@link Random} determines the seed at time of creation
    * using {@link System#nanoTime()}. Typically, the implementation will produce a different
    * random sequence for two successive program executions. */
-  private static final Random RANDOM = new SecureRandom();
+  private static final RandomGenerator RANDOM = new SecureRandom();
 
   /** @param distribution
    * @param random
    * @return random variate from given distribution */
-  public static Scalar of(Distribution distribution, Random random) {
+  public static Scalar of(Distribution distribution, RandomGenerator random) {
     return _of((RandomVariateInterface) distribution, random); // terminal
   }
 
@@ -45,7 +46,7 @@ public enum RandomVariate {
    * @param random
    * @param dimensions
    * @return array of random variates from given interface with given dimensions */
-  public static Tensor of(Distribution distribution, Random random, List<Integer> dimensions) {
+  public static Tensor of(Distribution distribution, RandomGenerator random, List<Integer> dimensions) {
     RandomVariateInterface randomVariateInterface = (RandomVariateInterface) distribution;
     return Array.fill(() -> _of(randomVariateInterface, random), dimensions); // terminal
   }
@@ -61,7 +62,7 @@ public enum RandomVariate {
    * @param random
    * @param dimensions
    * @return array of random variates from given interface with given dimensions */
-  public static Tensor of(Distribution distribution, Random random, int... dimensions) {
+  public static Tensor of(Distribution distribution, RandomGenerator random, int... dimensions) {
     return of(distribution, random, Integers.asList(dimensions)); // of # interface, random, list
   }
 
@@ -73,7 +74,7 @@ public enum RandomVariate {
   }
 
   // helper function
-  private static Scalar _of(RandomVariateInterface randomVariateInterface, Random random) {
+  private static Scalar _of(RandomVariateInterface randomVariateInterface, RandomGenerator random) {
     return randomVariateInterface.randomVariate(random);
   }
 }

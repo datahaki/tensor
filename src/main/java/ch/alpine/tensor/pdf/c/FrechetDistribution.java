@@ -2,7 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -56,7 +56,7 @@ public class FrechetDistribution implements UnivariateDistribution, Serializable
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     return randomVariate(random.nextDouble());
   }
 

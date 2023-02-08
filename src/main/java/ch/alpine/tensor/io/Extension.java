@@ -25,6 +25,8 @@ package ch.alpine.tensor.io;
    * However, we choose the extension for import/export because of
    * the characteristic {@link MathematicaFormat}. */
   MATHEMATICA,
+  /** matrix market */
+  MTX,
   /** compressed image format with alpha channel */
   PNG,
   /** Tag Image File Format */

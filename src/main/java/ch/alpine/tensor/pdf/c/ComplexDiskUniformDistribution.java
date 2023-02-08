@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -40,7 +40,7 @@ public class ComplexDiskUniformDistribution implements Distribution, RandomVaria
   }
 
   @Override
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     return ComplexScalar.fromPolar( //
         Sqrt.FUNCTION.apply(RandomVariate.of(UniformDistribution.unit(), random)), //
         RandomVariate.of(arg, random)).multiply(radius);

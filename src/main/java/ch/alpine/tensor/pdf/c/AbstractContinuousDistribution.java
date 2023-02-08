@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
@@ -20,7 +20,7 @@ public abstract class AbstractContinuousDistribution implements UnivariateDistri
   }
 
   @Override // from RandomVariateInterface
-  public final Scalar randomVariate(Random random) {
+  public final Scalar randomVariate(RandomGenerator random) {
     // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
     return protected_quantile(DoubleScalar.of(random.nextDouble()));
   }

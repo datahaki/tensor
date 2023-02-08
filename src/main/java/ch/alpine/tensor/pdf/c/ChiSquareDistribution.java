@@ -2,7 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -62,7 +62,7 @@ public class ChiSquareDistribution implements Distribution, //
 
   // CDF requires GammaRegularized
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     throw new UnsupportedOperationException();
   }
 

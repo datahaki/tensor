@@ -3,7 +3,7 @@ package ch.alpine.tensor.pdf.d;
 
 import java.math.BigInteger;
 import java.util.Optional;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -14,7 +14,7 @@ import ch.alpine.tensor.pdf.DiscreteDistribution;
 /** functionality and suggested base class for a discrete probability distribution */
 public abstract class AbstractDiscreteDistribution implements DiscreteDistribution {
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     return protected_quantile(DoubleScalar.of(random.nextDouble()));
   }
 

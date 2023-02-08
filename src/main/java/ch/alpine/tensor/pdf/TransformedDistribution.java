@@ -3,7 +3,7 @@ package ch.alpine.tensor.pdf;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.io.MathematicaFormat;
@@ -58,7 +58,7 @@ public enum TransformedDistribution {
     }
 
     @Override // from RandomVariateInterface
-    public Scalar randomVariate(Random random) {
+    public Scalar randomVariate(RandomGenerator random) {
       return RandomVariate.of(distribution, random).add(offset);
     }
 

@@ -12,6 +12,12 @@ import ch.alpine.tensor.sca.N;
 
 class PositiveDefiniteMatrixQTest {
   @Test
+  void testMathematica1() {
+    boolean status = PositiveDefiniteMatrixQ.of(Tensors.fromString("{{2, 3}, {4, 8}}"));
+    assertTrue(status);
+  }
+
+  @Test
   void testMathematica2() {
     boolean status = PositiveDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{8, 3}, {3, 8}}"));
     assertTrue(status);

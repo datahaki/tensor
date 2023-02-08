@@ -14,6 +14,10 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.fft.FourierMatrix;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
 class FrobeniusNormTest {
@@ -51,5 +55,13 @@ class FrobeniusNormTest {
     Chop._14.requireClose(norm, expected);
     Scalar scalar = FrobeniusNorm.of(Array.of(i -> RealScalar.ONE, 6));
     Chop._14.requireClose(scalar, expected);
+  }
+
+  @Test
+  void testSvd() {
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 7, 4);
+    Scalar v1 = FrobeniusNorm.of(matrix);
+    Scalar v2 = Vector2Norm.of(SingularValueDecomposition.of(matrix).values());
+    Tolerance.CHOP.requireClose(v1, v2);
   }
 }

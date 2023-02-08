@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
@@ -11,7 +11,7 @@ public enum ComplexNormalDistribution implements Distribution, RandomVariateInte
   STANDARD;
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     return ComplexScalar.of(random.nextGaussian(), random.nextGaussian());
   }
 }

@@ -3,7 +3,7 @@ package ch.alpine.tensor.pdf;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
@@ -94,7 +94,7 @@ public class TruncatedDistribution extends AbstractContinuousDistribution implem
 
   private record RV_S(RandomVariateInterface randomVariateInterface, Clip clip) implements Distribution, RandomVariateInterface, Serializable {
     @Override // from RandomVariateInterface
-    public Scalar randomVariate(Random random) {
+    public Scalar randomVariate(RandomGenerator random) {
       return Stream.generate(() -> randomVariateInterface.randomVariate(random)) //
           .limit(MAX_ITERATIONS) //
           .filter(clip::isInside) //

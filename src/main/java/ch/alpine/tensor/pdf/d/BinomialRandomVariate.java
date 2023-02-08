@@ -2,7 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import java.io.Serializable;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.stream.DoubleStream;
 
 import ch.alpine.tensor.RealScalar;
@@ -35,7 +35,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(Random random) {
+  public Scalar randomVariate(RandomGenerator random) {
     return RealScalar.of(DoubleStream.generate(random::nextDouble) //
         .limit(n) //
         .filter(value -> value < p_success) //
