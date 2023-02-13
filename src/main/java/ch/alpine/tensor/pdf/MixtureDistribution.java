@@ -73,8 +73,8 @@ public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterfac
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
-    int index = RandomVariate.of(categoricalDistribution, random).number().intValue();
-    return RandomVariate.of(list.get(index), random);
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    int index = RandomVariate.of(categoricalDistribution, randomGenerator).number().intValue();
+    return RandomVariate.of(list.get(index), randomGenerator);
   }
 }

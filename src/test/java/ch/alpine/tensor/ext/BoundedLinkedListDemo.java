@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 public enum BoundedLinkedListDemo {
   ;
@@ -9,7 +10,7 @@ public enum BoundedLinkedListDemo {
     Timing timing = Timing.started();
     double timeout = 3;
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(12);
-    Random random = new Random();
+    RandomGenerator random = new Random();
     new Thread(() -> {
       System.out.println("runA1");
       while (timing.seconds() < timeout)

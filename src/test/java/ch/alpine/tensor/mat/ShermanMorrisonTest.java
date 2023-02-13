@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 class ShermanMorrisonTest {
   @Test
   void testSimple() {
-    Random random = new Random(3);
+    RandomGenerator random = new Random(3);
     Distribution distribution = NormalDistribution.standard();
     for (int n = 3; n < 8; ++n) {
       Tensor matrix = RandomVariate.of(distribution, random, n, n);

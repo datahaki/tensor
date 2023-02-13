@@ -98,8 +98,8 @@ public class NormalDistribution implements UnivariateDistribution, //
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
-    return mean.add(StandardNormalDistribution.INSTANCE.randomVariate(random).multiply(sigma));
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return mean.add(StandardNormalDistribution.INSTANCE.randomVariate(randomGenerator).multiply(sigma));
   }
 
   @Override // from StandardDeviationInterface

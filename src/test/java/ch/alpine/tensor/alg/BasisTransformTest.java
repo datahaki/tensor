@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ class BasisTransformTest {
   void testForm() {
     int rows = 6;
     int cols = 8;
-    Random random = new Random(4);
+    RandomGenerator random = new Random(4);
     Tensor m = IdentityMatrix.of(rows);
     Tensor v = Tensors.matrix((i, j) -> RealScalar.of(random.nextInt(10)), rows, cols);
     Tensor t = BasisTransform.ofForm(m, v);
@@ -69,7 +70,7 @@ class BasisTransformTest {
 
   @Test
   void testMatrix() {
-    Random random = new Random(3);
+    RandomGenerator random = new Random(3);
     int n = 5;
     Distribution distribution = BinomialDistribution.of(10, 0.3);
     Tensor matrix = RandomVariate.of(distribution, random, n, n);

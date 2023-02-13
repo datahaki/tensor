@@ -3,7 +3,7 @@ package ch.alpine.tensor.prc;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -47,7 +47,7 @@ public class RenewalProcess implements RandomProcess, Serializable {
   }
 
   @Override // from RandomProcess
-  public Scalar evaluate(TimeSeries timeSeries, Random random, Scalar x) {
+  public Scalar evaluate(TimeSeries timeSeries, RandomGenerator random, Scalar x) {
     Sign.requirePositiveOrZero(x);
     while (Scalars.lessThan(timeSeries.domain().max(), x)) {
       Scalar dt = Sign.requirePositive(RandomVariate.of(distribution, random));

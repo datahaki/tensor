@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.ex;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ import ch.alpine.tensor.sca.Chop;
 class DenmanBeaversTest {
   @Test
   void testSimple() {
-    Random random = new Random(3);
+    RandomGenerator random = new Random(3);
     Distribution distribution = NormalDistribution.standard();
     for (int n = 2; n < 6; ++n) {
       Tensor _a = RandomVariate.of(distribution, random, n, n);

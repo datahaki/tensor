@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.prc;
 
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.tmp.ResamplingMethod;
@@ -16,5 +16,5 @@ public interface RandomProcess {
    * @param random
    * @param time
    * @return value of random process at given time */
-  Scalar evaluate(TimeSeries timeSeries, Random random, Scalar time);
+  Scalar evaluate(TimeSeries timeSeries, RandomGenerator random, Scalar time);
 }

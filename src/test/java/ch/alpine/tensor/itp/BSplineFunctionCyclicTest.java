@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +60,7 @@ class BSplineFunctionCyclicTest {
 
   @Test
   void testCyclic() {
-    Random random = new Random();
+    RandomGenerator random = new Random();
     Distribution distribution = DiscreteUniformDistribution.of(-50, 50);
     for (int n = 1; n < 10; ++n)
       for (int degree = 0; degree < 6; ++degree) {

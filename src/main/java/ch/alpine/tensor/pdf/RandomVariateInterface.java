@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
 /** capability to produce random variate */
 @FunctionalInterface
 public interface RandomVariateInterface {
-  /** @param random
+  /** @param randomGenerator
    * @return sample generated using the given random generator */
-  Scalar randomVariate(RandomGenerator random);
+  Scalar randomVariate(RandomGenerator randomGenerator);
 }

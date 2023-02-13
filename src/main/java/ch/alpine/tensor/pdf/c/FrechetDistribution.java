@@ -56,8 +56,8 @@ public class FrechetDistribution implements UnivariateDistribution, Serializable
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
-    return randomVariate(random.nextDouble());
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return randomVariate(randomGenerator.nextDouble());
   }
 
   @PackageTestAccess

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -238,7 +239,7 @@ class NullSpaceTest {
   @Test
   void testExtended() {
     Distribution distribution = CauchyDistribution.of(-1, 2);
-    Random random = new Random(1344343);
+    RandomGenerator random = new Random(1344343);
     int n = 10;
     for (int d = 1; d < n; ++d) {
       Tensor matrix = RandomVariate.of(distribution, random, n, d);
@@ -266,7 +267,7 @@ class NullSpaceTest {
   @Test
   void testGaussScalar() {
     int prime = 7879;
-    Random random = new Random();
+    RandomGenerator random = new Random();
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 3, 7);
     Tensor nullsp = NullSpace.of(matrix);
     assertEquals(nullsp.length(), 4);

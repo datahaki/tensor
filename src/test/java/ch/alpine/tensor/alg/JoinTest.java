@@ -98,6 +98,66 @@ class JoinTest {
   }
 
   @Test
+  void testRank3d2a() {
+    Tensor tensor = Tensor.of(Array.zeros(2, 3, 4).stream().map(s -> Join.of(0, s.stream().toArray(Tensor[]::new))));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(2, 12));
+  }
+
+  @Test
+  void testRank4d() {
+    Tensor tensor = Tensor.of(Array.zeros(2, 3, 4, 5).stream().map(s -> Join.of(1, s.stream().toArray(Tensor[]::new))));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(2, 4, 15));
+  }
+
+  @Test
+  void testRank6d0() {
+    Tensor tensor = Tensor.of(Array.zeros(1, 2, 3, 4, 5, 6).stream().map(s -> Join.of(0, s.stream().toArray(Tensor[]::new))));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(1, 6, 4, 5, 6));
+  }
+
+  @Test
+  void testRank6d1() {
+    Tensor tensor = Tensor.of(Array.zeros(1, 2, 3, 4, 5, 6).stream().map(s -> Join.of(1, s.stream().toArray(Tensor[]::new))));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(1, 3, 8, 5, 6));
+  }
+
+  @Test
+  void testRank6d2() {
+    Tensor tensor = Tensor.of(Array.zeros(1, 2, 3, 4, 5, 6).stream().map(s -> Join.of(2, s.stream().toArray(Tensor[]::new))));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(1, 3, 4, 10, 6));
+  }
+
+  @Test
+  void testRank6d3() {
+    Tensor tensor = Tensor.of(Array.zeros(1, 2, 3, 4, 5, 6).stream().map(s -> Join.of(3, s.stream().toArray(Tensor[]::new))));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(1, 3, 4, 5, 12));
+  }
+
+  @Test
+  void test2Rank6d0() {
+    Tensor tensor = Join.of(0, Array.zeros(3, 2, 3, 4, 5, 6).stream().toArray(Tensor[]::new));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(3 * 2, 3, 4, 5, 6));
+  }
+
+  @Test
+  void test2Rank6d1() {
+    Tensor tensor = Join.of(1, Array.zeros(3, 2, 3, 4, 5, 6).stream().toArray(Tensor[]::new));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(2, 3 * 3, 4, 5, 6));
+  }
+
+  @Test
+  void test2Rank6d2() {
+    Tensor tensor = Join.of(2, Array.zeros(3, 2, 3, 4, 5, 6).stream().toArray(Tensor[]::new));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(2, 3, 3 * 4, 5, 6));
+  }
+
+  @Test
+  void test2Rank6d3() {
+    Tensor tensor = Join.of(3, Array.zeros(3, 2, 3, 4, 5, 6).stream().toArray(Tensor[]::new));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(2, 3, 4, 3 * 5, 6));
+  }
+
+  @Test
   void testEmpty() {
     Tensor v1 = Tensors.vector(2, 3, 4);
     Tensor ap = Join.of(Tensors.empty(), v1);

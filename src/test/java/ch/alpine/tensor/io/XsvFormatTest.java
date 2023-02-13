@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ class XsvFormatTest {
 
   @Test
   void testCsvR() {
-    Random random = new Random();
+    RandomGenerator random = new Random();
     convertCheck( //
         Tensors.matrix((i, j) -> RationalScalar.of(random.nextInt(100) - 50, random.nextInt(100) + 1), 20, 4));
     convertCheck(Tensors.matrix((i, j) -> DoubleScalar.of(random.nextGaussian() * 1e-50), 20, 10));

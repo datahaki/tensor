@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
@@ -175,12 +176,12 @@ class TensorParserTest {
     assertTrue(pattern.matcher("  \t \n ").matches());
   }
 
-  private static final Random RANDOM = new Random();
+  private static final RandomGenerator RANDOM_GENERATOR = new Random();
 
   private static Tensor generate(int level, int max) {
-    if (level < max && 0.2 < RANDOM.nextDouble())
-      return Tensor.of(IntStream.range(0, RANDOM.nextInt(4)).mapToObj(i -> generate(level + 1, max)));
-    return RealScalar.of(RANDOM.nextInt(100));
+    if (level < max && 0.2 < RANDOM_GENERATOR.nextDouble())
+      return Tensor.of(IntStream.range(0, RANDOM_GENERATOR.nextInt(4)).mapToObj(i -> generate(level + 1, max)));
+    return RealScalar.of(RANDOM_GENERATOR.nextInt(100));
   }
 
   @Test

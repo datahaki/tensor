@@ -41,8 +41,8 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
-    return DoubleScalar.of(random.nextGaussian());
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return DoubleScalar.of(randomGenerator.nextGaussian());
   }
 
   @Override // from InverseCDF

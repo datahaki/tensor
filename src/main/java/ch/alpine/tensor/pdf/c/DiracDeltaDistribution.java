@@ -53,7 +53,7 @@ public class DiracDeltaDistribution implements UnivariateDistribution, CentralMo
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
     return value;
   }
 

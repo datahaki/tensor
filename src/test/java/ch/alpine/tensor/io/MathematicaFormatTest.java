@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,7 +34,7 @@ class MathematicaFormatTest {
   void testMathematica() {
     int n = 20;
     int m = 10;
-    Random random = new Random();
+    RandomGenerator random = new Random();
     Tensor a = Tensors.matrix((i, j) -> //
     random.nextInt(3) == 0 ? //
         DoubleScalar.of(random.nextDouble()) : //

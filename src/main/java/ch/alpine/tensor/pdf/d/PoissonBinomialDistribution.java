@@ -61,12 +61,12 @@ public class PoissonBinomialDistribution implements Distribution, //
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
     return RealScalar.of(lowerBound + p_vector.stream() //
         .map(Scalar.class::cast) //
         .map(Scalar::number) //
         .mapToDouble(Number::doubleValue) //
-        .filter(p -> random.nextDouble() < p) //
+        .filter(p -> randomGenerator.nextDouble() < p) //
         .count());
   }
 

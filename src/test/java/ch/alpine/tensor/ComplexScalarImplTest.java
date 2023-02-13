@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +84,7 @@ class ComplexScalarImplTest {
   @Test
   void testSolveCR() {
     int n = 8;
-    Random random = new Random();
+    RandomGenerator random = new Random();
     Tensor A = Tensors.matrix((i, j) -> //
     ComplexScalar.of( //
         RealScalar.of(random.nextInt(35)), //

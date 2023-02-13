@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -106,7 +107,7 @@ class LeftNullSpaceTest {
 
   @Test
   void testGaussScalar() {
-    Random random = new Random();
+    RandomGenerator random = new Random();
     int prime = 7741;
     int dim1 = 6;
     Tensor matrix = Array.fill(() -> GaussScalar.of(random.nextInt(), prime), dim1 - 2, dim1);
@@ -141,7 +142,7 @@ class LeftNullSpaceTest {
   @Test
   void testLeftGaussScalar() {
     int prime = 7879;
-    Random random = new Random();
+    RandomGenerator random = new Random();
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 7, 4);
     Tensor nullsp = LeftNullSpace.of(matrix);
     assertEquals(nullsp.length(), 3);

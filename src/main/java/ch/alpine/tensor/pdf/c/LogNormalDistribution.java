@@ -87,8 +87,8 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
-    return Exp.FUNCTION.apply(univariateDistribution.randomVariate(random));
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return Exp.FUNCTION.apply(univariateDistribution.randomVariate(randomGenerator));
   }
 
   @Override // from MeanInterface

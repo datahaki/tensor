@@ -13,10 +13,8 @@ public enum BigIntegerMath {
    * @return exact root of value
    * @throws IllegalArgumentException if value is not a square number */
   public static Optional<BigInteger> sqrt(BigInteger value) {
-    BigInteger root = sqrtApproximation(value);
-    if (root.multiply(root).equals(value))
-      return Optional.of(root);
-    return Optional.empty();
+    return Optional.of(sqrtApproximation(value)) //
+        .filter(root -> root.multiply(root).equals(value));
   }
 
   /** @param value
@@ -42,7 +40,7 @@ public enum BigIntegerMath {
    * {@link RandomGenerator} instance.
    * 
    * @param numBits maximum bitLength of the new BigInteger.
-   * @param rnd source of randomness to be used in computing the new
+   * @param randomGenerator source of randomness to be used in computing the new
    * BigInteger.
    * @throws IllegalArgumentException {@code numBits} is negative.
    * @see #bitLength() */

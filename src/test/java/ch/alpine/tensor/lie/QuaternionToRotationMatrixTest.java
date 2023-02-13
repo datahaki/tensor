@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.SecureRandom;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +52,7 @@ class QuaternionToRotationMatrixTest {
 
   @Test
   void testQuaternionVector() {
-    Random random = new SecureRandom();
+    RandomGenerator random = new SecureRandom();
     for (int index = 0; index < 10; ++index) {
       Quaternion quaternion = Quaternion.of(random.nextGaussian(), random.nextGaussian(), random.nextGaussian(), random.nextGaussian());
       quaternion = quaternion.divide(quaternion.abs()); // normalize

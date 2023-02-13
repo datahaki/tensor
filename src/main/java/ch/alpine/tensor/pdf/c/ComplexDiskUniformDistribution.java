@@ -40,10 +40,10 @@ public class ComplexDiskUniformDistribution implements Distribution, RandomVaria
   }
 
   @Override
-  public Scalar randomVariate(RandomGenerator random) {
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
     return ComplexScalar.fromPolar( //
-        Sqrt.FUNCTION.apply(RandomVariate.of(UniformDistribution.unit(), random)), //
-        RandomVariate.of(arg, random)).multiply(radius);
+        Sqrt.FUNCTION.apply(RandomVariate.of(UniformDistribution.unit(), randomGenerator)), //
+        RandomVariate.of(arg, randomGenerator)).multiply(radius);
   }
 
   @Override

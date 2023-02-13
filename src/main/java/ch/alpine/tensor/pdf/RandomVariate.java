@@ -3,7 +3,6 @@ package ch.alpine.tensor.pdf;
 
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
@@ -24,46 +23,45 @@ import ch.alpine.tensor.ext.Integers;
  * <a href="https://reference.wolfram.com/language/ref/RandomVariate.html">RandomVariate</a> */
 public enum RandomVariate {
   ;
-  /** The default constructor of {@link Random} determines the seed at time of creation
-   * using {@link System#nanoTime()}. Typically, the implementation will produce a different
+  /** Typically, the implementation will produce a different
    * random sequence for two successive program executions. */
-  private static final RandomGenerator RANDOM = new SecureRandom();
+  private static final RandomGenerator RANDOM_GENERATOR = new SecureRandom();
 
   /** @param distribution
-   * @param random
+   * @param randomGenerator
    * @return random variate from given distribution */
-  public static Scalar of(Distribution distribution, RandomGenerator random) {
-    return _of((RandomVariateInterface) distribution, random); // terminal
+  public static Scalar of(Distribution distribution, RandomGenerator randomGenerator) {
+    return _of((RandomVariateInterface) distribution, randomGenerator); // terminal
   }
 
   /** @param distribution
    * @return random variate from given distribution */
   public static Scalar of(Distribution distribution) {
-    return of(distribution, RANDOM); // of # interface, random
+    return of(distribution, RANDOM_GENERATOR); // of # interface, random
   }
 
   /** @param distribution
-   * @param random
+   * @param randomGenerator
    * @param dimensions
    * @return array of random variates from given interface with given dimensions */
-  public static Tensor of(Distribution distribution, RandomGenerator random, List<Integer> dimensions) {
+  public static Tensor of(Distribution distribution, RandomGenerator randomGenerator, List<Integer> dimensions) {
     RandomVariateInterface randomVariateInterface = (RandomVariateInterface) distribution;
-    return Array.fill(() -> _of(randomVariateInterface, random), dimensions); // terminal
+    return Array.fill(() -> _of(randomVariateInterface, randomGenerator), dimensions); // terminal
   }
 
   /** @param distribution
    * @param dimensions
    * @return array of random variates with given dimensions */
   public static Tensor of(Distribution distribution, List<Integer> dimensions) {
-    return of(distribution, RANDOM, dimensions); // of # interface, random, list
+    return of(distribution, RANDOM_GENERATOR, dimensions); // of # interface, random, list
   }
 
   /** @param distribution
-   * @param random
+   * @param randomGenerator
    * @param dimensions
    * @return array of random variates from given interface with given dimensions */
-  public static Tensor of(Distribution distribution, RandomGenerator random, int... dimensions) {
-    return of(distribution, random, Integers.asList(dimensions)); // of # interface, random, list
+  public static Tensor of(Distribution distribution, RandomGenerator randomGenerator, int... dimensions) {
+    return of(distribution, randomGenerator, Integers.asList(dimensions)); // of # interface, random, list
   }
 
   /** @param distribution
@@ -74,7 +72,7 @@ public enum RandomVariate {
   }
 
   // helper function
-  private static Scalar _of(RandomVariateInterface randomVariateInterface, RandomGenerator random) {
-    return randomVariateInterface.randomVariate(random);
+  private static Scalar _of(RandomVariateInterface randomVariateInterface, RandomGenerator randomGenerator) {
+    return randomVariateInterface.randomVariate(randomGenerator);
   }
 }

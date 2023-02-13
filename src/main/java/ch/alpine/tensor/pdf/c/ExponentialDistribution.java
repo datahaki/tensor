@@ -64,9 +64,9 @@ public class ExponentialDistribution implements UnivariateDistribution, //
   }
 
   @Override // from AbstractContinuousDistribution
-  public Scalar randomVariate(RandomGenerator random) {
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
     // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
-    return randomVariate(random.nextDouble());
+    return randomVariate(randomGenerator.nextDouble());
   }
 
   @PackageTestAccess

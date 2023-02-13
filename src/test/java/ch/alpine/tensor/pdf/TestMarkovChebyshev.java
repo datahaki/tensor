@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
@@ -27,7 +28,7 @@ import ch.alpine.tensor.sca.pow.Power;
 public enum TestMarkovChebyshev {
   ;
   public static void markov(Distribution distribution) {
-    Random random = new Random();
+    RandomGenerator random = new Random();
     Scalar xbar = Mean.of(distribution);
     Sign.requirePositiveOrZero(xbar);
     Scalar a = Sign.isPositive(xbar) //
@@ -38,7 +39,7 @@ public enum TestMarkovChebyshev {
   }
 
   public static void chebyshev(Distribution distribution) {
-    Random random = new Random();
+    RandomGenerator random = new Random();
     Scalar xbar = Mean.of(distribution);
     Scalar a = Scalars.nonZero(xbar) //
         ? RealScalar.of(2 * random.nextDouble()).multiply(xbar)

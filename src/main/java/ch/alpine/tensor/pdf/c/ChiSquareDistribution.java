@@ -62,7 +62,7 @@ public class ChiSquareDistribution implements Distribution, //
 
   // CDF requires GammaRegularized
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
     throw new UnsupportedOperationException();
   }
 

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -20,7 +21,7 @@ import ch.alpine.tensor.tmp.TimeSeries;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/RandomFunction.html">RandomFunction</a> */
 public class RandomFunction implements Serializable {
-  private static final Random RANDOM = new SecureRandom();
+  private static final RandomGenerator RANDOM_GENERATOR = new SecureRandom();
 
   /** @param randomProcess non null
    * @return */
@@ -40,13 +41,13 @@ public class RandomFunction implements Serializable {
   /** @param time
    * @return */
   public Scalar evaluate(Scalar time) {
-    return evaluate(RANDOM, time);
+    return evaluate(RANDOM_GENERATOR, time);
   }
 
   /** @param random
    * @param time
    * @return */
-  public Scalar evaluate(Random random, Scalar time) {
+  public Scalar evaluate(RandomGenerator random, Scalar time) {
     return randomProcess.evaluate(timeSeries, random, time);
   }
 

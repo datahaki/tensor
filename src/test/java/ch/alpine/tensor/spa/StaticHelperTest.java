@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -105,7 +106,7 @@ class StaticHelperTest {
   }
 
   private final Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(10, 1, 0, 1, 1));
-  private final Random random = new Random(3);
+  private final RandomGenerator random = new Random(3);
 
   private Tensor _random(int... size) {
     return RandomVariate.of(distribution, random, size);

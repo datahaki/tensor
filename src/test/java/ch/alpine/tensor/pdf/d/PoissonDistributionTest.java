@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -121,7 +122,7 @@ class PoissonDistributionTest {
 
   @Test
   void testMarkov() {
-    Random random = new Random();
+    RandomGenerator random = new Random();
     Distribution distribution = PoissonDistribution.of(0.1 + 10 * random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);

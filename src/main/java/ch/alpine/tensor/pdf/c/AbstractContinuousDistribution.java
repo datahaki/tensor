@@ -20,9 +20,9 @@ public abstract class AbstractContinuousDistribution implements UnivariateDistri
   }
 
   @Override // from RandomVariateInterface
-  public final Scalar randomVariate(RandomGenerator random) {
+  public final Scalar randomVariate(RandomGenerator randomGenerator) {
     // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
-    return protected_quantile(DoubleScalar.of(random.nextDouble()));
+    return protected_quantile(DoubleScalar.of(randomGenerator.nextDouble()));
   }
 
   /** @param p guaranteed to be inside the interval [0, 1]

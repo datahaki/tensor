@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.security.SecureRandom;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
 class CompressionTest {
   private static byte[] createBytes(int length) {
-    Random random = new SecureRandom();
+    RandomGenerator random = new SecureRandom();
     byte[] bytes = new byte[length];
     for (int count = 0; count < bytes.length; ++count)
       bytes[count] = (byte) random.nextInt(2);

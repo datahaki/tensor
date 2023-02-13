@@ -2,7 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import java.security.SecureRandom;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
@@ -11,15 +11,15 @@ import ch.alpine.tensor.Scalar;
  * <a href="https://reference.wolfram.com/language/ref/RandomComplex.html">RandomComplex</a> */
 public enum RandomComplex {
   ;
-  private static final Random RANDOM = new SecureRandom();
+  private static final RandomGenerator RANDOM_GENERATOR = new SecureRandom();
 
-  public static Scalar of(Random random) {
+  public static Scalar of(RandomGenerator random) {
     return ComplexScalar.of( //
         random.nextDouble(), //
         random.nextDouble());
   }
 
   public static Scalar of() {
-    return of(RANDOM);
+    return of(RANDOM_GENERATOR);
   }
 }

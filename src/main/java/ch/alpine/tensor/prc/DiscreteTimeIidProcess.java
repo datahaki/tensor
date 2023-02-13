@@ -3,7 +3,7 @@ package ch.alpine.tensor.prc;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RealScalar;
@@ -40,7 +40,7 @@ public class DiscreteTimeIidProcess implements RandomProcess, Serializable {
   }
 
   @Override // from RandomProcess
-  public final Scalar evaluate(TimeSeries timeSeries, Random random, Scalar x) {
+  public final Scalar evaluate(TimeSeries timeSeries, RandomGenerator random, Scalar x) {
     IntegerQ.require(x);
     Sign.requirePositiveOrZero(x);
     if (timeSeries.isEmpty())

@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +61,7 @@ class TensorsTest {
   void testNorm5() {
     int n = 6;
     int m = 12;
-    Random random = new Random();
+    RandomGenerator random = new Random();
     Tensor A = Tensors.matrix((i, j) -> //
     RationalScalar.of( //
         random.nextInt(100) - 50, //

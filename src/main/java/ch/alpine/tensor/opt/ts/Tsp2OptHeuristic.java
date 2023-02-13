@@ -2,7 +2,7 @@
 package ch.alpine.tensor.opt.ts;
 
 import java.util.Arrays;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -20,14 +20,14 @@ import ch.alpine.tensor.num.RandomPermutation;
 public class Tsp2OptHeuristic {
   private final Tensor matrix;
   private final int n;
-  private final Random random;
+  private final RandomGenerator random;
   private final int[] index;
 
   /** the entries in the symmetric distance matrix may be negative
    * 
    * @param matrix symmetric
    * @param random */
-  public Tsp2OptHeuristic(Tensor matrix, Random random) {
+  public Tsp2OptHeuristic(Tensor matrix, RandomGenerator random) {
     this.matrix = SymmetricMatrixQ.require(matrix);
     n = matrix.length();
     this.random = random;

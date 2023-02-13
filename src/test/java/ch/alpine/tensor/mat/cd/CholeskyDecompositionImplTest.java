@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +48,7 @@ class CholeskyDecompositionImplTest {
   void testGaussScalar() throws ClassNotFoundException, IOException {
     int n = 7;
     int prime = 7879;
-    Random random = new Random(1);
+    RandomGenerator random = new Random(1);
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, n);
     // Symmetrize
     matrix = Transpose.of(matrix).add(matrix).divide(GaussScalar.of(2, prime));

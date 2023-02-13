@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -532,7 +533,7 @@ class PolynomialTest {
 
   @Test
   void testLinear() {
-    Random random = new Random(2);
+    RandomGenerator random = new Random(2);
     Polynomial polynomial = Polynomial.of(Tensors.vector(-2., 3., 0.5));
     Distribution distribution = TriangularDistribution.of(-2, 1, 2);
     for (int n = 5; n < 10; ++n) {

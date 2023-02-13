@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -133,7 +134,7 @@ class AroundTest {
   void testDistribution() {
     Around around = (Around) Around.of(-200, 0.8);
     Distribution distribution = around.distribution();
-    Random random = new Random(1);
+    RandomGenerator random = new Random(1);
     Scalar mean = Mean.ofVector(RandomVariate.of(distribution, random, 20));
     Chop.below(3).requireClose(mean, RealScalar.of(-200));
   }

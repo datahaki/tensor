@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
 import java.security.SecureRandom;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ import ch.alpine.tensor.alg.Array;
 class ColorFormatTest {
   @Test
   void testRandom() {
-    Random random = new SecureRandom();
+    RandomGenerator random = new SecureRandom();
     for (int index = 0; index < 10; ++index) {
       int red = random.nextInt(256);
       int green = random.nextInt(256);

@@ -35,8 +35,8 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
-    return RealScalar.of(DoubleStream.generate(random::nextDouble) //
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return RealScalar.of(DoubleStream.generate(randomGenerator::nextDouble) //
         .limit(n) //
         .filter(value -> value < p_success) //
         .count());

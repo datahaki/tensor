@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +44,7 @@ class FourierMatrixTest {
 
   @Test
   void testSeveral() {
-    Random random = new Random();
+    RandomGenerator random = new Random();
     int n = 1 + random.nextInt(20);
     checkFormat(n);
   }

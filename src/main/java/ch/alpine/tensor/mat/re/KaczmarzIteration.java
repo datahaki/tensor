@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -88,7 +88,7 @@ public class KaczmarzIteration {
    * 
    * @param random
    * @return */
-  public Tensor refine(Random random) {
+  public Tensor refine(RandomGenerator random) {
     // QUEST TENSOR MAT for every batch generate discrete sequence with according occurrences
     return refine(RandomVariate.of(distribution, random).number().intValue());
   }

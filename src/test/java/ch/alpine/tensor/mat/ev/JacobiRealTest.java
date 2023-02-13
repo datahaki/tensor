@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +32,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 class JacobiRealTest {
   @Test
   void testRandom() {
-    Random random = new Random(1);
+    RandomGenerator random = new Random(1);
     Distribution distribution = UniformDistribution.of(-10, 10);
     for (int d = 2; d < 10; ++d)
       for (int count = 0; count < 5; ++count) {

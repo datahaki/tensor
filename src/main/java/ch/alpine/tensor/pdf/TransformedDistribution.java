@@ -58,8 +58,8 @@ public enum TransformedDistribution {
     }
 
     @Override // from RandomVariateInterface
-    public Scalar randomVariate(RandomGenerator random) {
-      return RandomVariate.of(distribution, random).add(offset);
+    public Scalar randomVariate(RandomGenerator randomGenerator) {
+      return RandomVariate.of(distribution, randomGenerator).add(offset);
     }
 
     @Override // from MeanInterface

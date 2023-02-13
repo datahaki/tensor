@@ -2,8 +2,8 @@
 package ch.alpine.tensor.sca.ply;
 
 import java.security.SecureRandom;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -25,20 +25,20 @@ import ch.alpine.tensor.sca.Abs;
 public class AberthEhrlich {
   private static final int MAX_ATTEMPTS = 5;
   private static final int MAX_ITERATIONS = 32;
-  private static final Random RANDOM = new SecureRandom();
+  private static final RandomGenerator RANDOM_GENERATOR = new SecureRandom();
 
   /** @param polynomial of degree at least 2
    * @return unsorted roots of polynomial
    * @throws Exception if convergence fail */
   public static Tensor of(Polynomial polynomial) {
-    return of(polynomial, RANDOM);
+    return of(polynomial, RANDOM_GENERATOR);
   }
 
   /** @param polynomial of degree at least 2
    * @param random to generate seeds
    * @return unsorted roots of polynomial
    * @throws Exception if convergence fail */
-  public static Tensor of(Polynomial polynomial, Random random) {
+  public static Tensor of(Polynomial polynomial, RandomGenerator random) {
     Scalar radius = Roots.bound(polynomial.coeffs());
     Distribution distribution = ComplexDiskUniformDistribution.of(radius);
     for (int attempt = 0; attempt < MAX_ATTEMPTS; ++attempt)

@@ -94,8 +94,8 @@ public class TruncatedDistribution extends AbstractContinuousDistribution implem
 
   private record RV_S(RandomVariateInterface randomVariateInterface, Clip clip) implements Distribution, RandomVariateInterface, Serializable {
     @Override // from RandomVariateInterface
-    public Scalar randomVariate(RandomGenerator random) {
-      return Stream.generate(() -> randomVariateInterface.randomVariate(random)) //
+    public Scalar randomVariate(RandomGenerator randomGenerator) {
+      return Stream.generate(() -> randomVariateInterface.randomVariate(randomGenerator)) //
           .limit(MAX_ITERATIONS) //
           .filter(clip::isInside) //
           .findFirst() //

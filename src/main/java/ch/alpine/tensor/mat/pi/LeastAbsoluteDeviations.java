@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.pi;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -23,7 +24,7 @@ import ch.alpine.tensor.sca.SoftThreshold;
    * @param rho
    * @return x with small Vector1Norm[A.x - b] */
   public static Tensor of(Tensor A, Tensor b, Scalar rho) {
-    Random random = new Random(2);
+    RandomGenerator random = new Random(2);
     Tensor pinv = PseudoInverse.of(A);
     Tensor u = b.map(Scalar::zero);
     Tensor z = b.map(Scalar::zero);

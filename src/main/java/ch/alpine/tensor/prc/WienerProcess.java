@@ -4,7 +4,7 @@ package ch.alpine.tensor.prc;
 import java.io.Serializable;
 import java.util.NavigableSet;
 import java.util.Objects;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -89,7 +89,7 @@ public class WienerProcess implements RandomProcess, Serializable {
   }
 
   @Override // from RandomProcess
-  public Scalar evaluate(TimeSeries timeSeries, Random random, Scalar x) {
+  public Scalar evaluate(TimeSeries timeSeries, RandomGenerator random, Scalar x) {
     Clip clip = timeSeries.domain();
     Distribution distribution = null;
     if (clip.isInside(x)) {

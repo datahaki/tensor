@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -135,7 +136,7 @@ class DecimalScalarTest {
 
   @Test
   void testPrecision() {
-    Random random = new Random();
+    RandomGenerator random = new Random();
     for (int value = random.nextInt(83); value < 10000; value += 83) {
       DecimalScalar decimalScalar = (DecimalScalar) DecimalScalar.of(new BigDecimal("" + Math.sqrt(value)));
       String string = decimalScalar.toString();

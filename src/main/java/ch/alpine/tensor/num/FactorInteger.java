@@ -4,8 +4,10 @@ package ch.alpine.tensor.num;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Map;
-import java.util.Random;
 import java.util.TreeMap;
+import java.util.random.RandomGenerator;
+
+import ch.alpine.tensor.ext.BigIntegerMath;
 
 /** Pollard's rho
  * 
@@ -15,7 +17,7 @@ import java.util.TreeMap;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FactorInteger.html">FactorInteger</a> */
 /* package */ class FactorInteger {
-  private static final Random RANDOM = new SecureRandom();
+  private static final RandomGenerator RANDOM_GENERATOR = new SecureRandom();
 
   /** @param n non-negative
    * @return */
@@ -51,7 +53,7 @@ import java.util.TreeMap;
   }
 
   private static BigInteger random(BigInteger bigInteger) {
-    return new BigInteger(bigInteger.bitLength(), RANDOM).mod(bigInteger.subtract(BigInteger.ONE));
+    return BigIntegerMath.random(bigInteger.bitLength(), RANDOM_GENERATOR).mod(bigInteger.subtract(BigInteger.ONE));
   }
 
   // QUEST TENSOR NUM improve cycle detection
@@ -62,7 +64,7 @@ import java.util.TreeMap;
     int k = 2;
     while (true) {
       i = i + 1;
-      xi = xi.multiply(xi).add(RANDOM.nextBoolean() ? BigInteger.ONE : BigInteger.ONE.negate()).mod(n);
+      xi = xi.multiply(xi).add(RANDOM_GENERATOR.nextBoolean() ? BigInteger.ONE : BigInteger.ONE.negate()).mod(n);
       BigInteger d = y.subtract(xi).gcd(n);
       if (!d.equals(BigInteger.ONE) && !d.equals(n))
         return d;

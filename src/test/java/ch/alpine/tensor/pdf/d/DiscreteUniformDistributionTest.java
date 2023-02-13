@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -35,7 +35,7 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
 class DiscreteUniformDistributionTest {
-  private static final Random RANDOM = new SecureRandom();
+  private static final RandomGenerator RANDOM = new SecureRandom();
 
   @Test
   void testPdf() throws ClassNotFoundException, IOException {
