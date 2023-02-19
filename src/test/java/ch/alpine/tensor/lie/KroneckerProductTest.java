@@ -2,6 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -111,5 +112,13 @@ class KroneckerProductTest {
   void testScalarMat2() {
     MatrixQ.requireSize(KroneckerProduct_of(Pi.VALUE, HilbertMatrix.of(2, 3)), 2, 3);
     MatrixQ.requireSize(KroneckerProduct_of(HilbertMatrix.of(2, 3), Pi.VALUE), 2, 3);
+  }
+
+  @Test
+  void testFails() {
+    assertThrows(Exception.class, () -> KroneckerProduct.of(HilbertMatrix.of(2, 3), Tensors.vector(1, 2, 3)));
+    Tensor nonArray = Tensors.fromString("{1,{2}}");
+    assertThrows(Exception.class, () -> KroneckerProduct.of(nonArray, Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> KroneckerProduct.of(Tensors.vector(1, 2, 3), nonArray));
   }
 }

@@ -9,7 +9,10 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.red.Total;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -52,5 +55,11 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   // helper function
   static int default_offset(int windowLength) {
     return Round.intValueExact(RationalScalar.of(windowLength, 3));
+  }
+
+  public static Tensor re_re(Tensor vector, Tensor result) {
+    return Chop.NONE.allZero(Im.of(vector)) //
+        ? Re.of(result)
+        : result;
   }
 }

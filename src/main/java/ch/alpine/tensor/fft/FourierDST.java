@@ -16,7 +16,12 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Sin;
 
-/** Reference:
+/** Identity in Mathematica
+ * FourierDST[vector] == vector . FourierDSTMatrix
+ * 
+ * implementation of FourierDCT[x, 1] is consistent with Mathematica for real and complex input
+ * 
+ * Reference:
  * https://en.wikipedia.org/wiki/Discrete_sine_transform
  * 
  * <p>inspired by
@@ -29,16 +34,17 @@ public enum FourierDST implements DiscreteFourierTransform {
     @Override
     public Tensor of(Tensor vector) {
       int n = vector.length();
-      if (Integers.isPowerOf2(1 + n)) {
+      int m = n + 1;
+      if (Integers.isPowerOf2(m)) {
         Tensor r = Join.of( //
             Tensors.vector(0), //
             vector, //
             Tensors.vector(0), //
             Reverse.of(vector.negate()));
-        return Fourier.of(r).extract(1, 1 + n) //
-            .divide(ComplexScalar.I).map(Tolerance.CHOP); // FIXME TENSOR ALG math incorrect
+        // the book Matrix Computations uses a scaling factor of I/2 instead of just I
+        return Fourier.of(r).extract(1, m).divide(ComplexScalar.I).map(Tolerance.CHOP);
       }
-      return VectorQ.require(vector).dot(matrix(n)); // FIXME TENSOR ALG math incorrect for complex?
+      return super.of(vector);
     }
 
     @Override
@@ -81,12 +87,10 @@ public enum FourierDST implements DiscreteFourierTransform {
     }
   };
 
-  /** function evaluates fast for input of length equal to a power of 2
-   * 
-   * @param vector
-   * @return */
   @Override
   public Tensor of(Tensor vector) {
-    return matrix(vector.length()).dot(vector);
+    /* MATHEMATICA CONVENTION
+     * FourierDST[vector] == vector . FourierDSTMatrix */
+    return VectorQ.require(vector).dot(matrix(vector.length()));
   }
 }

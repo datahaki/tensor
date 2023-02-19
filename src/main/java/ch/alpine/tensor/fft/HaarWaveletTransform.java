@@ -2,28 +2,31 @@
 package ch.alpine.tensor.fft;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.ext.Integers;
 
 /** Reference:
  * Matrix Computations */
 public enum HaarWaveletTransform {
   ;
-  public static Tensor of(Tensor x) {
-    int n = x.length();
+  /** @param tensor with length equals to a power of two
+   * @return */
+  public static Tensor of(Tensor tensor) {
+    int n = tensor.length();
     if (n == 1)
-      return x.copy();
-    if (!Integers.isPowerOf2(n))
-      throw new Throw(x); // vector length is not a power of two
-    int m = n / 2;
-    Tensor z = of(x.extract(0, m));
-    Tensor value = Array.zeros(n);
-    int i = -1;
-    for (int j = 0; j < m; ++j) {
-      value.set(z.Get(j).add(x.Get(m + j)), ++i);
-      value.set(z.Get(j).subtract(x.Get(m + j)), ++i);
+      return tensor.copy();
+    if (0 < n && n % 2 == 0) {
+      Tensor value = Tensors.reserve(n);
+      int m = n / 2;
+      Tensor z = of(tensor.extract(0, m));
+      for (int j = 0; j < m; ++j) {
+        Tensor zj = z.get(j);
+        Tensor xj = tensor.get(m + j);
+        value.append(zj.add(xj));
+        value.append(zj.subtract(xj));
+      }
+      return value;
     }
-    return value;
+    throw new Throw(tensor);
   }
 }

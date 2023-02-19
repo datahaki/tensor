@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -43,6 +45,14 @@ class ReverseTest {
   @Test
   void testEmpty() {
     assertEquals(Tensors.empty(), Reverse.of(Tensors.empty()));
+  }
+
+  @RepeatedTest(5)
+  void testIdentity(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor eye = IdentityMatrix.of(n);
+    Tensor rev = Reverse.of(eye);
+    assertEquals(eye, rev.dot(rev));
   }
 
   @Test

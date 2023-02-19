@@ -66,11 +66,11 @@ public enum Integers {
     return (value & 1) == 0;
   }
 
-  /** @param value strictly positive
-   * @return true if value is a power of 2, e.g. 1, 2, 4, 8, 16, etc.
-   * @throws Exception if given value is negative or zero */
+  /** @param value
+   * @return true if value is a power of 2, e.g. 1, 2, 4, 8, 16, etc. */
   public static boolean isPowerOf2(int value) {
-    return 0 == (requirePositive(value) & (value - 1));
+    return 0 < value //
+        && 0 == (value & (value - 1));
   }
 
   /** @param min inclusive

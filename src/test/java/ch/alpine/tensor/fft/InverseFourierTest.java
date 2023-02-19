@@ -25,12 +25,12 @@ class InverseFourierTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(IllegalArgumentException.class, () -> InverseFourier.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> InverseFourier.of(RealScalar.ONE));
   }
 
   @Test
   void testFailEmpty() {
-    assertThrows(IllegalArgumentException.class, () -> InverseFourier.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> InverseFourier.of(Tensors.empty()));
   }
 
   @Test

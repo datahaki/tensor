@@ -56,12 +56,12 @@ class FourierTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(IllegalArgumentException.class, () -> Fourier.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Fourier.of(RealScalar.ONE));
   }
 
   @Test
   void testFailEmpty() {
-    assertThrows(IllegalArgumentException.class, () -> Fourier.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> Fourier.of(Tensors.empty()));
   }
 
   @Test

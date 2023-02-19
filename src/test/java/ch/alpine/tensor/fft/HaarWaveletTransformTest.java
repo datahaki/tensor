@@ -2,6 +2,7 @@
 package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -10,10 +11,14 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Join;
+import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.lie.KroneckerProduct;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
+import ch.alpine.tensor.sca.pow.Power;
 
 class HaarWaveletTransformTest {
   @Test
@@ -43,6 +48,23 @@ class HaarWaveletTransformTest {
   void testMore(RepetitionInfo repetitionInfo) {
     int n = 1 << repetitionInfo.getCurrentRepetition();
     Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), n);
-    assertEquals(_W(n).dot(x), HaarWaveletTransform.of(x));
+    Tensor matrix = _W(n);
+    assertEquals(matrix.dot(x), HaarWaveletTransform.of(x));
+    if (2 < n)
+      assertEquals(Power.of(2, n - 1), Det.of(matrix));
+  }
+
+  @Test
+  void testMatrixSignal() {
+    Tensor x = HilbertMatrix.of(16, 9);
+    HaarWaveletTransform.of(x);
+  }
+
+  @Test
+  void testLengthFail() {
+    assertThrows(Exception.class, () -> HaarWaveletTransform.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> HaarWaveletTransform.of(UnitVector.of(10, 1)));
+    assertThrows(Exception.class, () -> HaarWaveletTransform.of(UnitVector.of(12, 1)));
+    assertThrows(Exception.class, () -> HaarWaveletTransform.of(UnitVector.of(13, 1)));
   }
 }

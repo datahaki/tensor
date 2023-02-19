@@ -81,11 +81,11 @@ class IntegersTest {
   }
 
   @Test
-  void testPowerOf2Fail() {
-    assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(-3));
-    assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(-2));
-    assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(-1));
-    assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(0));
+  void testPowerOf2False() {
+    assertFalse(Integers.isPowerOf2(-3));
+    assertFalse(Integers.isPowerOf2(-2));
+    assertFalse(Integers.isPowerOf2(-1));
+    assertFalse(Integers.isPowerOf2(0));
   }
 
   @Test

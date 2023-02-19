@@ -16,13 +16,15 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Im;
-import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Cos;
 
-/** Reference:
+/** Identity in Mathematica
+ * FourierDCT[vector] == vector . FourierDCTMatrix
+ * 
+ * implementation of FourierDCT[x, 1] is consistent with Mathematica for real and complex input
+ * 
+ * Reference:
  * https://en.wikipedia.org/wiki/Discrete_cosine_transform
  * 
  * <p>inspired by
@@ -36,7 +38,18 @@ public enum FourierDCT implements DiscreteFourierTransform {
     @Override
     public Tensor of(Tensor vector) {
       int n = vector.length();
-      return VectorQ.require(vector).dot(matrix(n));
+      int m = n - 1;
+      if (Integers.isPowerOf2(m)) {
+        Tensor x = vector.extract(1, m);
+        Tensor r = Join.of( //
+            Tensors.of(vector.Get(0)), //
+            x, //
+            Tensors.of(vector.Get(m)), //
+            Reverse.of(x));
+        // the book Matrix Computations uses a scaling factor of 1/2 instead of just 1
+        return StaticHelper.re_re(vector, Fourier.of(r).extract(0, n));
+      }
+      return super.of(vector);
     }
 
     @Override
@@ -44,7 +57,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
       if (Integers.requirePositive(n) == 1)
         return IdentityMatrix.of(1);
       Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(2, n - 1));
-      Tensor matrix = Tensors.empty();
+      Tensor matrix = Tensors.reserve(n);
       matrix.append(ConstantArray.of(RationalScalar.HALF, n));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n - 1));
       for (int i = 1; i < n - 1; ++i) {
@@ -58,14 +71,9 @@ public enum FourierDCT implements DiscreteFourierTransform {
   _2 {
     @Override
     public Tensor of(Tensor vector) {
-      int n = vector.length();
-      if (Integers.isPowerOf2(n)) {
-        Tensor result = raw2(vector);
-        return Chop.NONE.allZero(Im.of(vector)) //
-            ? Re.of(result)
-            : result;
-      }
-      return VectorQ.require(vector).dot(matrix(n));
+      return Integers.isPowerOf2(vector.length()) //
+          ? StaticHelper.re_re(vector, raw2(vector))
+          : super.of(vector);
     }
 
     @Override
@@ -79,14 +87,9 @@ public enum FourierDCT implements DiscreteFourierTransform {
   _3 {
     @Override
     public Tensor of(Tensor vector) {
-      int n = vector.length();
-      if (Integers.isPowerOf2(n)) {
-        Tensor result = raw3(vector);
-        return Chop.NONE.allZero(Im.of(vector)) //
-            ? Re.of(result)
-            : result;
-      }
-      return VectorQ.require(vector).dot(matrix(n));
+      return Integers.isPowerOf2(vector.length()) //
+          ? StaticHelper.re_re(vector, raw3(vector))
+          : super.of(vector);
     }
 
     @Override
@@ -102,8 +105,8 @@ public enum FourierDCT implements DiscreteFourierTransform {
   _4 {
     @Override
     public Tensor of(Tensor vector) {
-      int n = vector.length();
-      return VectorQ.require(vector).dot(matrix(n));
+      // TODO TENSOR
+      return super.of(vector);
     }
 
     @Override
@@ -114,6 +117,13 @@ public enum FourierDCT implements DiscreteFourierTransform {
       Cos.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + j + 1)).multiply(factor)).multiply(scalar), n, n);
     }
   };
+
+  @Override
+  public Tensor of(Tensor vector) {
+    /* MATHEMATICA CONVENTION
+     * FourierDCT[vector] == vector . FourierDCTMatrix */
+    return VectorQ.require(vector).dot(matrix(vector.length()));
+  }
 
   @PackageTestAccess
   static Tensor raw2(Tensor vector) {

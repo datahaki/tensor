@@ -29,7 +29,43 @@ import ch.alpine.tensor.sca.Im;
 
 class FourierDCTTest {
   @Test
-  void testSimple() {
+  void test1Simple() {
+    Tensor vector = Tensors.vector(2, 1, 3, 5, 9);
+    Tensor r2 = FourierDCT._1.of(vector);
+    Tensor r3 = Tensors.vector( //
+        10.25304832720494, -4.474873734152917, //
+        1.7677669529663682, -0.4748737341529168, 1.7677669529663693);
+    Tolerance.CHOP.requireClose(r2, r3);
+  }
+
+  @Test
+  void test1Complex4() {
+    Tensor vector = Tensors.fromString("{1 - I, 3 + 2*I, 5 - 4*I, 2 + 9*I}");
+    Tensor r2 = FourierDCT._1.of(vector);
+    Tensor r3 = Tensors.of( // result of Mathematica
+        ComplexScalar.of(7.756717518813398, 1.632993161855452), //
+        ComplexScalar.of(-1.224744871391589, -1.6329931618554523), //
+        ComplexScalar.of(-2.041241452319315, 4.08248290463863), //
+        ComplexScalar.of(1.224744871391589, -8.981462390204987));
+    Tolerance.CHOP.requireClose(r2, r3);
+  }
+
+  @Test
+  void test1Complex5() {
+    Tensor vector = Tensors.fromString("{2 + I, 1 - I, 3 + 2*I, 5 - 4*I, 2 + 9*I}");
+    Tensor r2 = FourierDCT._1.of(vector);
+    Tensor r3 = Tensors.of( // result of Mathematica
+        ComplexScalar.of(7.778174593052022, 1.4142135623730954), //
+        ComplexScalar.of(-2, -1.3284271247461898), //
+        ComplexScalar.of(-0.7071067811865475, 2.121320343559643), //
+        ComplexScalar.of(2., -4.32842712474619), //
+        ComplexScalar.of(-0.7071067811865475, 8.48528137423857));
+    Tolerance.CHOP.requireClose(r2, r3);
+  }
+
+  // ---
+  @Test
+  void test2Simple() {
     Tensor tensor = FourierDCT._2.of(Tensors.vector(0, 0, 1, 0, 1));
     Tensor vector = Tensors.vector( //
         0.8944271909999159, -0.4253254041760199, -0.08541019662496846, //
