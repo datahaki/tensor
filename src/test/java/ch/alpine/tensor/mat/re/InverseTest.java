@@ -22,7 +22,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
-import ch.alpine.tensor.fft.FourierMatrix;
+import ch.alpine.tensor.fft.Fourier;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -83,8 +83,8 @@ class InverseTest {
 
   @Test
   void testFourier() {
-    Tensor inv1 = Inverse.of(FourierMatrix.of(5), Pivots.FIRST_NON_ZERO);
-    Tensor inv2 = Inverse.of(FourierMatrix.of(5), Pivots.ARGMAX_ABS);
+    Tensor inv1 = Inverse.of(Fourier.FORWARD.matrix(5), Pivots.FIRST_NON_ZERO);
+    Tensor inv2 = Inverse.of(Fourier.FORWARD.matrix(5), Pivots.ARGMAX_ABS);
     Tolerance.CHOP.requireClose(inv1, inv2);
   }
 

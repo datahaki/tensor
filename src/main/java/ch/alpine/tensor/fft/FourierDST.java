@@ -7,6 +7,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
@@ -36,15 +37,15 @@ public enum FourierDST implements DiscreteFourierTransform {
       int n = vector.length();
       int m = n + 1;
       if (Integers.isPowerOf2(m)) {
-        Tensor r = Join.of( //
-            Tensors.vector(0), //
-            vector, //
-            Tensors.vector(0), //
-            Reverse.of(vector.negate()));
+        Tensor zero = Array.same(vector.Get(0).zero(), 1);
         // the book Matrix Computations uses a scaling factor of I/2 instead of just I
-        return Fourier.of(r).extract(1, m).divide(ComplexScalar.I).map(Tolerance.CHOP);
+        return Fourier.FORWARD.of(Join.of( //
+            zero, //
+            vector, //
+            zero, //
+            Reverse.of(vector.negate()))).extract(1, m).divide(ComplexScalar.I).map(Tolerance.CHOP);
       }
-      return super.of(vector);
+      return VectorQ.require(vector).dot(matrix(vector.length()));
     }
 
     @Override
@@ -58,6 +59,14 @@ public enum FourierDST implements DiscreteFourierTransform {
   },
   _2 {
     @Override
+    public Tensor of(Tensor vector) {
+      Tensor result = vector.copy();
+      for (int i = 1; i < result.length(); i += 2)
+        result.set(Scalar::negate, i);
+      return Reverse.of(FourierDCT._2.of(result));
+    }
+
+    @Override
     public Tensor matrix(int n) {
       Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + n));
@@ -66,6 +75,14 @@ public enum FourierDST implements DiscreteFourierTransform {
     }
   },
   _3 {
+    @Override
+    public Tensor of(Tensor vector) {
+      Tensor result = FourierDCT._3.of(Reverse.of(vector));
+      for (int i = 1; i < result.length(); i += 2)
+        result.set(Scalar::negate, i);
+      return result;
+    }
+
     @Override
     public Tensor matrix(int n) {
       Scalar s1 = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
@@ -79,6 +96,14 @@ public enum FourierDST implements DiscreteFourierTransform {
   },
   _4 {
     @Override
+    public Tensor of(Tensor vector) {
+      Tensor result = FourierDCT._4.of(Reverse.of(vector));
+      for (int i = 1; i < result.length(); i += 2)
+        result.set(Scalar::negate, i);
+      return result;
+    }
+
+    @Override
     public Tensor matrix(int n) {
       Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(2, Integers.requirePositive(n)));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(4 * n));
@@ -86,11 +111,4 @@ public enum FourierDST implements DiscreteFourierTransform {
       Sin.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + j + 1)).multiply(factor)).multiply(scalar), n, n);
     }
   };
-
-  @Override
-  public Tensor of(Tensor vector) {
-    /* MATHEMATICA CONVENTION
-     * FourierDST[vector] == vector . FourierDSTMatrix */
-    return VectorQ.require(vector).dot(matrix(vector.length()));
-  }
 }

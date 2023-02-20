@@ -22,6 +22,7 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.num.Pi;
 
 class KroneckerProductTest {
@@ -74,6 +75,15 @@ class KroneckerProductTest {
     assertEquals(Dimensions.of(tp2), List.of(12, 10));
     assertEquals(Last.of(tp1), Tensors.vector(80, 85, 90, 95, 100, 96, 102, 108, 114, 120));
     assertEquals(Last.of(tp2), Tensors.vector(80, 85, 90, 95, 100, 96, 102, 108, 114, 120));
+  }
+
+  @Test
+  void testInverseRule() {
+    Tensor a = Tensors.fromString("{{1,2},{8,9}}");
+    Tensor b = Tensors.fromString("{{4,3,0},{6,0,2},{9,8,9}}");
+    Tensor i1 = Inverse.of(KroneckerProduct.of(a, b));
+    Tensor i2 = KroneckerProduct.of(Inverse.of(a), Inverse.of(b));
+    assertEquals(i1, i2);
   }
 
   @Test

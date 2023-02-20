@@ -11,7 +11,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.fft.FourierMatrix;
+import ch.alpine.tensor.fft.Fourier;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
@@ -44,7 +44,7 @@ class FrobeniusNormTest {
 
   @Test
   void testMatrixComplex() {
-    Scalar norm = FrobeniusNorm.of(FourierMatrix.of(25));
+    Scalar norm = FrobeniusNorm.of(Fourier.FORWARD.matrix(25));
     assertInstanceOf(RealScalar.class, norm);
   }
 

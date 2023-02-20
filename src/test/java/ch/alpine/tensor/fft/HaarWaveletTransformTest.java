@@ -7,15 +7,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Join;
+import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ArrayFlatten;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.lie.KroneckerProduct;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.re.Det;
+import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.pow.Power;
@@ -24,47 +31,66 @@ class HaarWaveletTransformTest {
   @Test
   void testSimple() {
     Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 4);
-    Tensor r = HaarWaveletTransform.of(x);
+    Tensor r = HaarWaveletTransform.FORWARD.of(x);
     Tensor s = Tensors.fromString("{{1,1,1,0},{1,1,-1,0},{1,-1,0,1},{1,-1,0,-1}}");
     assertEquals(r, s.dot(x));
   }
 
-  private static Tensor _W(int n) {
-    if (n == 1)
-      return Tensors.fromString("{{1}}");
-    int m = n / 2;
-    Tensor a = KroneckerProduct.of(_W(m), Tensors.fromString("{{1},{1}}"));
-    Tensor b = KroneckerProduct.of(IdentityMatrix.of(m), Tensors.fromString("{{1},{-1}}"));
-    return Join.of(1, a, b);
-  }
-
   @Test
   void testMatrices() {
-    assertEquals(_W(2), Tensors.fromString("{{1,1},{1,-1}}"));
-    assertEquals(_W(4), Tensors.fromString("{{1,1,1,0},{1,1,-1,0},{1,-1,0,1},{1,-1,0,-1}}"));
+    assertEquals(HaarWaveletTransform.FORWARD.matrix(2), Tensors.fromString("{{1,1},{1,-1}}"));
+    assertEquals(HaarWaveletTransform.FORWARD.matrix(4), Tensors.fromString("{{1,1,1,0},{1,1,-1,0},{1,-1,0,1},{1,-1,0,-1}}"));
   }
 
   @RepeatedTest(5)
   void testMore(RepetitionInfo repetitionInfo) {
     int n = 1 << repetitionInfo.getCurrentRepetition();
     Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), n);
-    Tensor matrix = _W(n);
-    assertEquals(matrix.dot(x), HaarWaveletTransform.of(x));
-    if (2 < n)
-      assertEquals(Power.of(2, n - 1), Det.of(matrix));
+    Tensor matrix = HaarWaveletTransform.FORWARD.matrix(n);
+    Tensor y = HaarWaveletTransform.FORWARD.of(x);
+    assertEquals(x, HaarWaveletTransform.INVERSE.of(y));
+    assertEquals(matrix.dot(x), y);
+    if (2 < n) {
+      Scalar scalar = Power.of(2, n - 1);
+      assertEquals(scalar, Det.of(matrix));
+      Tensor inverse = Inverse.of(matrix);
+      SquareMatrixQ.require(inverse);
+    }
+  }
+
+  @RepeatedTest(2)
+  void test1_4_13(RepetitionInfo repetitionInfo) {
+    int m = 1 << repetitionInfo.getCurrentRepetition();
+    // int n = 2 * m;
+    Tensor wm = HaarWaveletTransform.FORWARD.matrix(m);
+    // Tensor wn = HaarWaveletTransform.FORWARD.matrix(n);
+    Tensor id = IdentityMatrix.of(m);
+    Tensor lhs = ArrayFlatten.of(new Tensor[][] { { wm, id }, { wm, id.negate() } });
+    // System.out.println(Pretty.of(lhs));
+    Tensor w2 = HaarWaveletTransform.FORWARD.matrix(2);
+    Tensor ze = Array.zeros(m, m);
+    Tensor m1 = KroneckerProduct.of(w2, id);
+    // System.out.println(Pretty.of(m1));
+    Tensor m2 = ArrayFlatten.of(new Tensor[][] { { wm, ze }, { ze, id } });
+    Tensor rhs = m1.dot(m2);
+    assertEquals(lhs, rhs); // (1.4.13)
   }
 
   @Test
   void testMatrixSignal() {
     Tensor x = HilbertMatrix.of(16, 9);
-    HaarWaveletTransform.of(x);
+    Tensor y = HaarWaveletTransform.FORWARD.of(x);
+    assertEquals(x, HaarWaveletTransform.INVERSE.of(y));
   }
 
-  @Test
-  void testLengthFail() {
-    assertThrows(Exception.class, () -> HaarWaveletTransform.of(Tensors.empty()));
-    assertThrows(Exception.class, () -> HaarWaveletTransform.of(UnitVector.of(10, 1)));
-    assertThrows(Exception.class, () -> HaarWaveletTransform.of(UnitVector.of(12, 1)));
-    assertThrows(Exception.class, () -> HaarWaveletTransform.of(UnitVector.of(13, 1)));
+  @ParameterizedTest
+  @EnumSource
+  void testLengthFail(HaarWaveletTransform haarWaveletTransform) {
+    assertThrows(Exception.class, () -> haarWaveletTransform.of(Pi.VALUE));
+    assertThrows(Exception.class, () -> haarWaveletTransform.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> haarWaveletTransform.of(UnitVector.of(10, 1)));
+    assertThrows(Exception.class, () -> haarWaveletTransform.of(UnitVector.of(12, 1)));
+    assertThrows(Exception.class, () -> haarWaveletTransform.of(UnitVector.of(13, 1)));
+    assertThrows(Exception.class, () -> haarWaveletTransform.matrix(3));
   }
 }

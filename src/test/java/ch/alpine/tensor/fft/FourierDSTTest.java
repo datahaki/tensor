@@ -19,6 +19,9 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.Quantity;
 
 class FourierDSTTest {
   private static Tensor _consistent1(Tensor vector) {
@@ -86,6 +89,15 @@ class FourierDSTTest {
     SymmetricMatrixQ.require(matrix);
   }
 
+  @RepeatedTest(6)
+  void test_vectorDSTUnit(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).map(s -> Quantity.of(s, "m"));
+    Tensor r1 = FourierDST._1.of(vector);
+    Tensor r2 = vector.dot(FourierDST._1.matrix(n));
+    Tolerance.CHOP.requireClose(r1, r2);
+  }
+
   // ---
   @RepeatedTest(8)
   void test23(RepetitionInfo repetitionInfo) {
@@ -111,15 +123,15 @@ class FourierDSTTest {
 
   @ParameterizedTest
   @EnumSource
-  void testFromResource(FourierDST fourierDSTMatrix) {
-    Tensor expect = ResourceData.of("/ch/alpine/tensor/fft/dstmatrix" + fourierDSTMatrix + ".csv");
-    Tensor actual = fourierDSTMatrix.matrix(5);
+  void testFromResource(FourierDST fourierDST) {
+    Tensor expect = ResourceData.of("/ch/alpine/tensor/fft/dstmatrix" + fourierDST + ".csv");
+    Tensor actual = fourierDST.matrix(5);
     Tolerance.CHOP.requireClose(expect, actual);
   }
 
   @ParameterizedTest
   @EnumSource
-  void testFail(FourierDST fourierDSTMatrix) {
-    assertThrows(Exception.class, () -> fourierDSTMatrix.matrix(0));
+  void testFail(FourierDST fourierDST) {
+    assertThrows(Exception.class, () -> fourierDST.matrix(0));
   }
 }

@@ -11,7 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.fft.FourierMatrix;
+import ch.alpine.tensor.fft.Fourier;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.sca.Chop;
 
@@ -36,7 +36,7 @@ class UnitaryMatrixQTest {
 
   @Test
   void testFourier() {
-    assertTrue(UnitaryMatrixQ.of(FourierMatrix.of(11)));
+    assertTrue(UnitaryMatrixQ.of(Fourier.FORWARD.matrix(11)));
   }
 
   @Test
@@ -49,8 +49,8 @@ class UnitaryMatrixQTest {
 
   @Test
   void testRequire() {
-    UnitaryMatrixQ.require(FourierMatrix.of(7), Chop._12);
-    UnitaryMatrixQ.require(FourierMatrix.of(8));
+    UnitaryMatrixQ.require(Fourier.FORWARD.matrix(7), Chop._12);
+    UnitaryMatrixQ.require(Fourier.FORWARD.matrix(8));
     assertThrows(Throw.class, () -> UnitaryMatrixQ.require(Tensors.fromString("{{1, 2}, {I, I}}")));
   }
 }

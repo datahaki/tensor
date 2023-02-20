@@ -170,15 +170,15 @@ class FourierDCTTest {
 
   @ParameterizedTest
   @EnumSource
-  void testFromResource(FourierDCT fourierDCTMatrix) {
-    Tensor expect = ResourceData.of("/ch/alpine/tensor/fft/dctmatrix" + fourierDCTMatrix + ".csv");
-    Tensor actual = fourierDCTMatrix.matrix(5);
+  void testFromResource(FourierDCT fourierDCT) {
+    Tensor expect = ResourceData.of("/ch/alpine/tensor/fft/dctmatrix" + fourierDCT + ".csv");
+    Tensor actual = fourierDCT.matrix(5);
     Tolerance.CHOP.requireClose(expect, actual);
   }
 
   @ParameterizedTest
   @EnumSource
-  void testFail(FourierDCT fourierDCTMatrix) {
-    assertThrows(Exception.class, () -> fourierDCTMatrix.matrix(0));
+  void testFail(FourierDCT fourierDCT) {
+    assertThrows(Exception.class, () -> fourierDCT.matrix(0));
   }
 }

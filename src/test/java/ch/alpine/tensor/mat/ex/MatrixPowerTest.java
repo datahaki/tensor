@@ -21,7 +21,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
-import ch.alpine.tensor.fft.FourierMatrix;
+import ch.alpine.tensor.fft.Fourier;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -68,8 +68,8 @@ class MatrixPowerTest {
 
   @Test
   void testFourier() {
-    checkLow(FourierMatrix.of(3));
-    checkLow(FourierMatrix.of(6));
+    checkLow(Fourier.FORWARD.matrix(3));
+    checkLow(Fourier.FORWARD.matrix(6));
   }
 
   @Test

@@ -3,6 +3,7 @@
 package ch.alpine.tensor.fft;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -10,6 +11,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.VandermondeMatrix;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
@@ -23,21 +27,48 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * Mathematica::Fourier[{}] throws an Exception
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/Fourier.html">Fourier</a> */
-public enum Fourier {
-  ;
-  /** @param vector of length of power of 2
-   * @return discrete Fourier transform of given vector */
-  public static Tensor of(Tensor vector) {
-    return of(vector, 1);
-  }
+ * <a href="https://reference.wolfram.com/language/ref/Fourier.html">Fourier</a>
+ * <a href="https://reference.wolfram.com/language/ref/InverseFourier.html">InverseFourier</a>
+ * <a href="https://reference.wolfram.com/language/ref/FourierMatrix.html">FourierMatrix</a>
+ * 
+ * @see VandermondeMatrix */
+public enum Fourier implements DiscreteFourierTransform {
+  FORWARD {
+    /** @param vector of length of power of 2
+     * @return discrete Fourier transform of given vector */
+    @Override
+    public Tensor of(Tensor tensor) {
+      return fft(tensor, 1);
+    }
+
+    /** @param n positive
+     * @return square matrix of dimensions [n x n] with complex entries
+     * <code>(i, j) -> sqrt(1/n) exp(i * j * 2pi/n *I)</code> */
+    @Override
+    public Tensor matrix(int n) {
+      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+      return Tensors.matrix((i, j) -> //
+      ComplexScalar.unit(RationalScalar.of(i * j, n).multiply(Pi.TWO)).multiply(scalar), n, n);
+    }
+  },
+  INVERSE {
+    @Override
+    public Tensor of(Tensor tensor) {
+      return fft(tensor, -1);
+    }
+
+    @Override
+    public Tensor matrix(int n) {
+      return ConjugateTranspose.of(FORWARD.matrix(n));
+    }
+  };
 
   /** Hint: uses decimation-in-time or Cooley-Tukey FFT
    * 
    * @param vector of length of power of 2
    * @param b is +1 for forward, and -1 for inverse transform
    * @return discrete Fourier transform of given vector */
-  public static Tensor of(Tensor vector, int b) {
+  private static Tensor fft(Tensor vector, int b) {
     int n = vector.length();
     if (!Integers.isPowerOf2(n))
       throw new Throw(vector); // vector length is not a power of two

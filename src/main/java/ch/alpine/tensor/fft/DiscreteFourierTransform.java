@@ -6,9 +6,9 @@ import ch.alpine.tensor.Tensor;
 public interface DiscreteFourierTransform {
   /** function evaluates fast for input of length equal to a power of 2
    * 
-   * @param vector
+   * @param tensor
    * @return */
-  Tensor of(Tensor vector);
+  Tensor of(Tensor tensor);
 
   /** @param n positive
    * @return square matrix of dimensions n x n */

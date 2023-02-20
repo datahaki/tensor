@@ -24,8 +24,10 @@ import ch.alpine.tensor.sca.tri.Cos;
  * 
  * implementation of FourierDCT[x, 1] is consistent with Mathematica for real and complex input
  * 
- * Reference:
- * https://en.wikipedia.org/wiki/Discrete_cosine_transform
+ * Quote from https://en.wikipedia.org/wiki/Discrete_cosine_transform
+ * "A DST-III or DST-IV can be computed from a DCT-III or DCT-IV (see discrete cosine transform),
+ * respectively, by reversing the order of the inputs and flipping the sign of every other output,
+ * and vice versa for DST-II from DCT-II."
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FourierDCT.html">FourierDCT</a>
@@ -47,7 +49,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
             Tensors.of(vector.Get(m)), //
             Reverse.of(x));
         // the book Matrix Computations uses a scaling factor of 1/2 instead of just 1
-        return StaticHelper.re_re(vector, Fourier.of(r).extract(0, n));
+        return StaticHelper.re_re(vector, Fourier.FORWARD.of(r).extract(0, n));
       }
       return super.of(vector);
     }
@@ -138,14 +140,14 @@ public enum FourierDCT implements DiscreteFourierTransform {
     }
     // x = [p 0 -reverse[drop[p,1]]]
     // Fourier[tensor] = [x -x]
-    return Fourier.of(tensor).extract(0, n);
+    return Fourier.FORWARD.of(tensor).extract(0, n);
   }
 
   @PackageTestAccess
   static Tensor raw3(Tensor vector) {
     int n = vector.length();
     Tensor tensor = Join.of(vector, Array.same(vector.Get(0).zero(), 1), Reverse.of(Drop.head(vector, 1).negate()));
-    Tensor result = InverseFourier.of(Join.of(tensor, tensor.negate()));
+    Tensor result = Fourier.INVERSE.of(Join.of(tensor, tensor.negate()));
     return Tensors.vector(i -> result.Get(i + i + 1), n);
   }
 }

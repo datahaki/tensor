@@ -24,13 +24,13 @@ public enum XtrogramArray {
   Spectrogram {
     @Override
     public Tensor process(Tensor vector) {
-      return Fourier.of(vector);
+      return Fourier.FORWARD.of(vector);
     }
   },
   CepstrogramPower {
     @Override
     public Tensor process(Tensor vector) {
-      return InverseFourier.of(Fourier.of(vector) //
+      return Fourier.INVERSE.of(Fourier.FORWARD.of(vector) //
           .map(AbsSquared.FUNCTION) //
           .map(Log.FUNCTION)).map(AbsSquared.FUNCTION);
     }
@@ -38,7 +38,7 @@ public enum XtrogramArray {
   CepstrogramReal {
     @Override
     public Tensor process(Tensor vector) {
-      return InverseFourier.of(Fourier.of(vector) //
+      return Fourier.INVERSE.of(Fourier.FORWARD.of(vector) //
           .map(Abs.FUNCTION) //
           .map(Log.FUNCTION)).map(Re.FUNCTION);
     }
@@ -46,7 +46,7 @@ public enum XtrogramArray {
   CepstrogramReal1 {
     @Override
     public Tensor process(Tensor vector) {
-      return InverseFourier.of(Fourier.of(vector) //
+      return Fourier.INVERSE.of(Fourier.FORWARD.of(vector) //
           .map(Abs.FUNCTION) //
           .map(RealScalar.of(1E-12)::add) //
           .map(Log.FUNCTION)) //

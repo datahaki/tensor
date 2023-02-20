@@ -1,32 +1,84 @@
 // code by jph
 package ch.alpine.tensor.fft;
 
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Join;
+import ch.alpine.tensor.lie.KroneckerProduct;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.re.Inverse;
 
 /** Reference:
- * Matrix Computations */
-public enum HaarWaveletTransform {
-  ;
-  /** @param tensor with length equals to a power of two
-   * @return */
-  public static Tensor of(Tensor tensor) {
-    int n = tensor.length();
-    if (n == 1)
-      return tensor.copy();
-    if (0 < n && n % 2 == 0) {
-      Tensor value = Tensors.reserve(n);
-      int m = n / 2;
-      Tensor z = of(tensor.extract(0, m));
-      for (int j = 0; j < m; ++j) {
-        Tensor zj = z.get(j);
-        Tensor xj = tensor.get(m + j);
-        value.append(zj.add(xj));
-        value.append(zj.subtract(xj));
+ * "The Haar Wavelet Transform"
+ * in "Matrix Computations", pp.40 */
+public enum HaarWaveletTransform implements DiscreteFourierTransform {
+  FORWARD {
+    /** @param tensor with length equals to a power of two
+     * @return */
+    @Override
+    public Tensor of(Tensor tensor) {
+      int n = tensor.length();
+      if (n == 1)
+        return tensor.copy();
+      if (0 < n && n % 2 == 0) {
+        int m = n / 2;
+        Tensor x = of(tensor.extract(0, m));
+        Tensor value = Tensors.reserve(n);
+        for (int j = 0; j < m; ++j) {
+          Tensor a = x.get(j); // recursion
+          Tensor b = tensor.get(m + j);
+          value.append(a.add(b));
+          value.append(a.subtract(b));
+        }
+        return value;
       }
-      return value;
+      throw new Throw(tensor);
     }
-    throw new Throw(tensor);
-  }
+
+    private final Tensor PP = Tensors.of(Tensors.of(RealScalar.ONE), Tensors.of(RealScalar.ONE));
+    private final Tensor PN = Tensors.of(Tensors.of(RealScalar.ONE), Tensors.of(RealScalar.of(-1)));
+
+    @Override
+    public Tensor matrix(int n) {
+      if (n == 1)
+        return Tensors.of(Tensors.of(RealScalar.ONE)); // {{1}}
+      if (0 < n && n % 2 == 0) {
+        int m = n / 2;
+        return Join.of(1, //
+            KroneckerProduct.of(matrix(m), PP), // recursion
+            KroneckerProduct.of(IdentityMatrix.of(m), PN));
+      }
+      throw new IllegalArgumentException(Integer.toString(n));
+    }
+  },
+  INVERSE {
+    /** @param tensor with length equals to a power of two
+     * @return */
+    @Override
+    public Tensor of(Tensor tensor) {
+      int n = tensor.length();
+      if (n == 1)
+        return tensor.copy();
+      if (0 < n && n % 2 == 0) {
+        int m = n / 2;
+        Tensor xt = Tensors.reserve(m);
+        Tensor xb = Tensors.reserve(m);
+        int index = -1;
+        for (int j = 0; j < m; ++j) {
+          xt.append(tensor.get(++index).multiply(RationalScalar.HALF));
+          xb.append(tensor.get(++index).multiply(RationalScalar.HALF));
+        }
+        return Join.of(of(xt.add(xb)), xt.subtract(xb));
+      }
+      throw new Throw(tensor);
+    }
+
+    @Override
+    public Tensor matrix(int n) {
+      return Inverse.of(FORWARD.matrix(n));
+    }
+  };
 }

@@ -11,9 +11,9 @@ import ch.alpine.tensor.red.Nest;
  * the implementation of the tensor library is not consistent with Mathematica
  * 
  * See the test scope (KroneckerProductTest) for an implementation that attempts
- * to be consistent but was dismissed for the sake of simplicity.
+ * to be consistent but was dismissed in favor of simplicity, instead.
  * 
- * Naturally, the implementation is consistent when both input parameters are
+ * Naturally, the implementations are consistent when both input parameters are
  * matrices.
  * 
  * <p>inspired by
