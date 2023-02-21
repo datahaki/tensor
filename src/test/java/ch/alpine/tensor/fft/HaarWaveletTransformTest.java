@@ -31,7 +31,7 @@ class HaarWaveletTransformTest {
   @Test
   void testSimple() {
     Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 4);
-    Tensor r = HaarWaveletTransform.FORWARD.of(x);
+    Tensor r = HaarWaveletTransform.FORWARD.transform(x);
     Tensor s = Tensors.fromString("{{1,1,1,0},{1,1,-1,0},{1,-1,0,1},{1,-1,0,-1}}");
     assertEquals(r, s.dot(x));
   }
@@ -47,8 +47,8 @@ class HaarWaveletTransformTest {
     int n = 1 << repetitionInfo.getCurrentRepetition();
     Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), n);
     Tensor matrix = HaarWaveletTransform.FORWARD.matrix(n);
-    Tensor y = HaarWaveletTransform.FORWARD.of(x);
-    assertEquals(x, HaarWaveletTransform.INVERSE.of(y));
+    Tensor y = HaarWaveletTransform.FORWARD.transform(x);
+    assertEquals(x, HaarWaveletTransform.INVERSE.transform(y));
     assertEquals(matrix.dot(x), y);
     if (2 < n) {
       Scalar scalar = Power.of(2, n - 1);
@@ -79,18 +79,18 @@ class HaarWaveletTransformTest {
   @Test
   void testMatrixSignal() {
     Tensor x = HilbertMatrix.of(16, 9);
-    Tensor y = HaarWaveletTransform.FORWARD.of(x);
-    assertEquals(x, HaarWaveletTransform.INVERSE.of(y));
+    Tensor y = HaarWaveletTransform.FORWARD.transform(x);
+    assertEquals(x, HaarWaveletTransform.INVERSE.transform(y));
   }
 
   @ParameterizedTest
   @EnumSource
   void testLengthFail(HaarWaveletTransform haarWaveletTransform) {
-    assertThrows(Exception.class, () -> haarWaveletTransform.of(Pi.VALUE));
-    assertThrows(Exception.class, () -> haarWaveletTransform.of(Tensors.empty()));
-    assertThrows(Exception.class, () -> haarWaveletTransform.of(UnitVector.of(10, 1)));
-    assertThrows(Exception.class, () -> haarWaveletTransform.of(UnitVector.of(12, 1)));
-    assertThrows(Exception.class, () -> haarWaveletTransform.of(UnitVector.of(13, 1)));
+    assertThrows(Exception.class, () -> haarWaveletTransform.transform(Pi.VALUE));
+    assertThrows(Exception.class, () -> haarWaveletTransform.transform(Tensors.empty()));
+    assertThrows(Exception.class, () -> haarWaveletTransform.transform(UnitVector.of(10, 1)));
+    assertThrows(Exception.class, () -> haarWaveletTransform.transform(UnitVector.of(12, 1)));
+    assertThrows(Exception.class, () -> haarWaveletTransform.transform(UnitVector.of(13, 1)));
     assertThrows(Exception.class, () -> haarWaveletTransform.matrix(3));
   }
 }

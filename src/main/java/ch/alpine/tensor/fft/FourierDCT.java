@@ -38,7 +38,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
   /** involutory matrix */
   _1 {
     @Override
-    public Tensor of(Tensor vector) {
+    public Tensor transform(Tensor vector) {
       int n = vector.length();
       int m = n - 1;
       if (Integers.isPowerOf2(m)) {
@@ -49,9 +49,9 @@ public enum FourierDCT implements DiscreteFourierTransform {
             Tensors.of(vector.Get(m)), //
             Reverse.of(x));
         // the book Matrix Computations uses a scaling factor of 1/2 instead of just 1
-        return StaticHelper.re_re(vector, Fourier.FORWARD.of(r).extract(0, n));
+        return StaticHelper.re_re(vector, Fourier.FORWARD.transform(r).extract(0, n));
       }
-      return super.of(vector);
+      return super.transform(vector);
     }
 
     @Override
@@ -72,10 +72,10 @@ public enum FourierDCT implements DiscreteFourierTransform {
   },
   _2 {
     @Override
-    public Tensor of(Tensor vector) {
+    public Tensor transform(Tensor vector) {
       return Integers.isPowerOf2(vector.length()) //
           ? StaticHelper.re_re(vector, raw2(vector))
-          : super.of(vector);
+          : super.transform(vector);
     }
 
     @Override
@@ -88,10 +88,10 @@ public enum FourierDCT implements DiscreteFourierTransform {
   },
   _3 {
     @Override
-    public Tensor of(Tensor vector) {
+    public Tensor transform(Tensor vector) {
       return Integers.isPowerOf2(vector.length()) //
           ? StaticHelper.re_re(vector, raw3(vector))
-          : super.of(vector);
+          : super.transform(vector);
     }
 
     @Override
@@ -106,9 +106,9 @@ public enum FourierDCT implements DiscreteFourierTransform {
   /** involutory matrix */
   _4 {
     @Override
-    public Tensor of(Tensor vector) {
+    public Tensor transform(Tensor vector) {
       // TODO TENSOR
-      return super.of(vector);
+      return super.transform(vector);
     }
 
     @Override
@@ -121,7 +121,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
   };
 
   @Override
-  public Tensor of(Tensor vector) {
+  public Tensor transform(Tensor vector) {
     /* MATHEMATICA CONVENTION
      * FourierDCT[vector] == vector . FourierDCTMatrix */
     return VectorQ.require(vector).dot(matrix(vector.length()));
@@ -140,14 +140,14 @@ public enum FourierDCT implements DiscreteFourierTransform {
     }
     // x = [p 0 -reverse[drop[p,1]]]
     // Fourier[tensor] = [x -x]
-    return Fourier.FORWARD.of(tensor).extract(0, n);
+    return Fourier.FORWARD.transform(tensor).extract(0, n);
   }
 
   @PackageTestAccess
   static Tensor raw3(Tensor vector) {
     int n = vector.length();
     Tensor tensor = Join.of(vector, Array.same(vector.Get(0).zero(), 1), Reverse.of(Drop.head(vector, 1).negate()));
-    Tensor result = Fourier.INVERSE.of(Join.of(tensor, tensor.negate()));
+    Tensor result = Fourier.INVERSE.transform(Join.of(tensor, tensor.negate()));
     return Tensors.vector(i -> result.Get(i + i + 1), n);
   }
 }

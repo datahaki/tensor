@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.chq.ScalarQ;
-import ch.alpine.tensor.fft.SpectrogramArray;
 
 /** The tensor library implementation is consistent with Mathematica,
  * also when there are insufficient elements:
@@ -15,7 +14,7 @@ import ch.alpine.tensor.fft.SpectrogramArray;
  * Tensor-Lib.::Partition[{1, 2, 3, 4}, 3] == {{1, 2, 3}}
  * </pre>
  * 
- * <p>Partition is used in {@link Transpose} and {@link SpectrogramArray}.
+ * <p>Partition is used in {@link Transpose} and SpectrogramArray.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Partition.html">Partition</a> */
@@ -44,7 +43,7 @@ public enum Partition {
 
   /** Partition.stream[{a, b, c, d, e, f, g}, 3, 2] == stream {a, b, c}, {c, d, e}, {e, f, g}
    * 
-   * <p>Hint: function is used in {@link SpectrogramArray}
+   * <p>Hint: function is used in SpectrogramArray
    * 
    * @param tensor
    * @param size not smaller than offset

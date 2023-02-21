@@ -31,7 +31,7 @@ class FourierDCTTest {
   @Test
   void test1Simple() {
     Tensor vector = Tensors.vector(2, 1, 3, 5, 9);
-    Tensor r2 = FourierDCT._1.of(vector);
+    Tensor r2 = FourierDCT._1.transform(vector);
     Tensor r3 = Tensors.vector( //
         10.25304832720494, -4.474873734152917, //
         1.7677669529663682, -0.4748737341529168, 1.7677669529663693);
@@ -41,7 +41,7 @@ class FourierDCTTest {
   @Test
   void test1Complex4() {
     Tensor vector = Tensors.fromString("{1 - I, 3 + 2*I, 5 - 4*I, 2 + 9*I}");
-    Tensor r2 = FourierDCT._1.of(vector);
+    Tensor r2 = FourierDCT._1.transform(vector);
     Tensor r3 = Tensors.of( // result of Mathematica
         ComplexScalar.of(7.756717518813398, 1.632993161855452), //
         ComplexScalar.of(-1.224744871391589, -1.6329931618554523), //
@@ -53,7 +53,7 @@ class FourierDCTTest {
   @Test
   void test1Complex5() {
     Tensor vector = Tensors.fromString("{2 + I, 1 - I, 3 + 2*I, 5 - 4*I, 2 + 9*I}");
-    Tensor r2 = FourierDCT._1.of(vector);
+    Tensor r2 = FourierDCT._1.transform(vector);
     Tensor r3 = Tensors.of( // result of Mathematica
         ComplexScalar.of(7.778174593052022, 1.4142135623730954), //
         ComplexScalar.of(-2, -1.3284271247461898), //
@@ -66,7 +66,7 @@ class FourierDCTTest {
   // ---
   @Test
   void test2Simple() {
-    Tensor tensor = FourierDCT._2.of(Tensors.vector(0, 0, 1, 0, 1));
+    Tensor tensor = FourierDCT._2.transform(Tensors.vector(0, 0, 1, 0, 1));
     Tensor vector = Tensors.vector( //
         0.8944271909999159, -0.4253254041760199, -0.08541019662496846, //
         -0.26286555605956674, 0.5854101966249685);
@@ -75,7 +75,7 @@ class FourierDCTTest {
 
   @Test
   void testComplex() {
-    Tensor tensor = FourierDCT._2.of(Tensors.fromString("{0.3-2*I, I, 1+2*I, 1}"));
+    Tensor tensor = FourierDCT._2.transform(Tensors.fromString("{0.3-2*I, I, 1+2*I, 1}"));
     Tolerance.CHOP.requireClose(tensor.Get(0), ComplexScalar.of(1.15, 0.5));
     Tolerance.CHOP.requireClose(tensor.Get(1), ComplexScalar.of(-0.5146995525614952, -1.1152212486938315));
     Tolerance.CHOP.requireClose(tensor.Get(2), ComplexScalar.of(0.10606601717798216, -1.7677669529663689));
@@ -85,11 +85,11 @@ class FourierDCTTest {
   @Test
   void testFirst() {
     Tensor vector = Tensors.vector(0.22204305944782998, 0.779351514647771, 0.298518105256417, 0.9887304754672706);
-    Tensor result = FourierDCT._2.of(vector);
+    Tensor result = FourierDCT._2.transform(vector);
     Tensor expect = Tensors.vector(1.1443215774096442, -0.2621599159963177, 0.04698862977522844, -0.3688153586988667);
     Tolerance.CHOP.requireClose(expect, result);
     Chop.NONE.requireAllZero(Im.of(result));
-    Tensor raw3 = FourierDCT._3.of(result);
+    Tensor raw3 = FourierDCT._3.transform(result);
     Tolerance.CHOP.requireClose(raw3, vector);
     Chop.NONE.requireAllZero(Im.of(raw3));
   }
@@ -117,25 +117,25 @@ class FourierDCTTest {
   void testUnitRandom(RepetitionInfo repetitionInfo) {
     Distribution distribution = UniformDistribution.of(Clips.absolute(Quantity.of(3, "m")));
     Tensor vector = RandomVariate.of(distribution, repetitionInfo.getCurrentRepetition());
-    Tensor result = FourierDCT._2.of(vector);
+    Tensor result = FourierDCT._2.transform(vector);
     Tolerance.CHOP.requireAllZero(Im.of(result));
-    Tensor backto = FourierDCT._3.of(result);
+    Tensor backto = FourierDCT._3.transform(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }
 
   @RepeatedTest(6)
   void test1Random(RepetitionInfo repetitionInfo) {
     Tensor vector = RandomVariate.of(NormalDistribution.standard(), repetitionInfo.getCurrentRepetition());
-    Tensor result = FourierDCT._1.of(vector);
-    Tensor backto = FourierDCT._1.of(result);
+    Tensor result = FourierDCT._1.transform(vector);
+    Tensor backto = FourierDCT._1.transform(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }
 
   @RepeatedTest(6)
   void test4Random(RepetitionInfo repetitionInfo) {
     Tensor vector = RandomVariate.of(NormalDistribution.standard(), repetitionInfo.getCurrentRepetition());
-    Tensor result = FourierDCT._4.of(vector);
-    Tensor backto = FourierDCT._4.of(result);
+    Tensor result = FourierDCT._4.transform(vector);
+    Tensor backto = FourierDCT._4.transform(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }
 

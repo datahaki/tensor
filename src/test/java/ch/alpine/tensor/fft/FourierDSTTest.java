@@ -25,12 +25,12 @@ import ch.alpine.tensor.qty.Quantity;
 
 class FourierDSTTest {
   private static Tensor _consistent1(Tensor vector) {
-    Tensor r1 = FourierDST._1.of(vector);
+    Tensor r1 = FourierDST._1.transform(vector);
     Tensor matrix = FourierDST._1.matrix(vector.length());
     SymmetricMatrixQ.require(matrix);
     Tensor r2 = matrix.dot(vector);
     Tolerance.CHOP.requireClose(r1, r2);
-    Tolerance.CHOP.requireClose(vector, FourierDST._1.of(r1));
+    Tolerance.CHOP.requireClose(vector, FourierDST._1.transform(r1));
     Tolerance.CHOP.requireClose(matrix, Inverse.of(matrix));
     return r1;
   }
@@ -93,7 +93,7 @@ class FourierDSTTest {
   void test_vectorDSTUnit(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).map(s -> Quantity.of(s, "m"));
-    Tensor r1 = FourierDST._1.of(vector);
+    Tensor r1 = FourierDST._1.transform(vector);
     Tensor r2 = vector.dot(FourierDST._1.matrix(n));
     Tolerance.CHOP.requireClose(r1, r2);
   }

@@ -33,8 +33,8 @@ class TensorSpectrogramTest {
     Tensor image = TensorSpectrogram.of(vector, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM);
     ImageFormat.of(image);
     assertEquals(Dimensions.of(image), Arrays.asList(32, 93, 4));
-    assertEquals(Dimensions.of(SpectrogramArray.half_abs(vector, DirichletWindow.FUNCTION)), Arrays.asList(32, 93));
-    Tensor tensor = SpectrogramArray.of(vector).map(Abs.FUNCTION);
+    assertEquals(Dimensions.of(XtrogramArray.SPECTROGRAM.half_abs(vector, DirichletWindow.FUNCTION)), Arrays.asList(32, 93));
+    Tensor tensor = XtrogramArray.SPECTROGRAM.of(vector).map(Abs.FUNCTION);
     assertEquals(Dimensions.of(tensor), Arrays.asList(93, 64));
   }
 

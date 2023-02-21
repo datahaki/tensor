@@ -38,10 +38,10 @@ class FourierDxTMatrixTest {
   void testDCT_vectorDCT(RepetitionInfo repetitionInfo) {
     int n = 1 << repetitionInfo.getCurrentRepetition();
     Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n);
-    Tensor r1 = FourierDCT._2.of(vector);
+    Tensor r1 = FourierDCT._2.transform(vector);
     Tensor r2 = vector.dot(FourierDCT._2.matrix(n));
     Tolerance.CHOP.requireClose(r1, r2);
-    Tensor r3 = FourierDCT._3.of(r1);
+    Tensor r3 = FourierDCT._3.transform(r1);
     Tolerance.CHOP.requireClose(r3, vector);
     Tensor r4 = r1.dot(FourierDCT._3.matrix(n));
     Tolerance.CHOP.requireClose(r3, r4);
@@ -51,10 +51,10 @@ class FourierDxTMatrixTest {
   void testDST_vectorDST(RepetitionInfo repetitionInfo) {
     int n = 1 << repetitionInfo.getCurrentRepetition();
     Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n);
-    Tensor r1 = FourierDST._2.of(vector);
+    Tensor r1 = FourierDST._2.transform(vector);
     Tensor r2 = vector.dot(FourierDST._2.matrix(n));
     Tolerance.CHOP.requireClose(r1, r2);
-    Tensor r3 = FourierDST._3.of(r1);
+    Tensor r3 = FourierDST._3.transform(r1);
     Tolerance.CHOP.requireClose(r3, vector);
     Tensor r4 = r1.dot(FourierDST._3.matrix(n));
     Tolerance.CHOP.requireClose(r3, r4);
@@ -64,10 +64,10 @@ class FourierDxTMatrixTest {
   void testDCT_vectorDCTUnit(RepetitionInfo repetitionInfo) {
     int n = 1 << repetitionInfo.getCurrentRepetition();
     Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).map(s -> Quantity.of(s, "m"));
-    Tensor r1 = FourierDCT._2.of(vector);
+    Tensor r1 = FourierDCT._2.transform(vector);
     Tensor r2 = vector.dot(FourierDCT._2.matrix(n));
     Tolerance.CHOP.requireClose(r1, r2);
-    Tensor r3 = FourierDCT._3.of(r1);
+    Tensor r3 = FourierDCT._3.transform(r1);
     Tolerance.CHOP.requireClose(r3, vector);
     Tensor r4 = r1.dot(FourierDCT._3.matrix(n));
     Tolerance.CHOP.requireClose(r3, r4);
@@ -77,10 +77,10 @@ class FourierDxTMatrixTest {
   void testDST_vectorDSTUnit(RepetitionInfo repetitionInfo) {
     int n = 1 << repetitionInfo.getCurrentRepetition();
     Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).map(s -> Quantity.of(s, "m"));
-    Tensor r1 = FourierDST._2.of(vector);
+    Tensor r1 = FourierDST._2.transform(vector);
     Tensor r2 = vector.dot(FourierDST._2.matrix(n));
     Tolerance.CHOP.requireClose(r1, r2);
-    Tensor r3 = FourierDST._3.of(r1);
+    Tensor r3 = FourierDST._3.transform(r1);
     Tolerance.CHOP.requireClose(r3, vector);
     Tensor r4 = r1.dot(FourierDST._3.matrix(n));
     Tolerance.CHOP.requireClose(r3, r4);

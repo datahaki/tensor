@@ -33,13 +33,13 @@ import ch.alpine.tensor.sca.tri.Sin;
 public enum FourierDST implements DiscreteFourierTransform {
   _1 {
     @Override
-    public Tensor of(Tensor vector) {
+    public Tensor transform(Tensor vector) {
       int n = vector.length();
       int m = n + 1;
       if (Integers.isPowerOf2(m)) {
         Tensor zero = Array.same(vector.Get(0).zero(), 1);
         // the book Matrix Computations uses a scaling factor of I/2 instead of just I
-        return Fourier.FORWARD.of(Join.of( //
+        return Fourier.FORWARD.transform(Join.of( //
             zero, //
             vector, //
             zero, //
@@ -59,11 +59,11 @@ public enum FourierDST implements DiscreteFourierTransform {
   },
   _2 {
     @Override
-    public Tensor of(Tensor vector) {
+    public Tensor transform(Tensor vector) {
       Tensor result = vector.copy();
       for (int i = 1; i < result.length(); i += 2)
         result.set(Scalar::negate, i);
-      return Reverse.of(FourierDCT._2.of(result));
+      return Reverse.of(FourierDCT._2.transform(result));
     }
 
     @Override
@@ -76,8 +76,8 @@ public enum FourierDST implements DiscreteFourierTransform {
   },
   _3 {
     @Override
-    public Tensor of(Tensor vector) {
-      Tensor result = FourierDCT._3.of(Reverse.of(vector));
+    public Tensor transform(Tensor vector) {
+      Tensor result = FourierDCT._3.transform(Reverse.of(vector));
       for (int i = 1; i < result.length(); i += 2)
         result.set(Scalar::negate, i);
       return result;
@@ -96,8 +96,8 @@ public enum FourierDST implements DiscreteFourierTransform {
   },
   _4 {
     @Override
-    public Tensor of(Tensor vector) {
-      Tensor result = FourierDCT._4.of(Reverse.of(vector));
+    public Tensor transform(Tensor vector) {
+      Tensor result = FourierDCT._4.transform(Reverse.of(vector));
       for (int i = 1; i < result.length(); i += 2)
         result.set(Scalar::negate, i);
       return result;

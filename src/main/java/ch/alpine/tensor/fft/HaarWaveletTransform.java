@@ -16,26 +16,26 @@ import ch.alpine.tensor.mat.re.Inverse;
  * in "Matrix Computations", pp.40 */
 public enum HaarWaveletTransform implements DiscreteFourierTransform {
   FORWARD {
-    /** @param tensor with length equals to a power of two
+    /** @param vector with length equals to a power of two
      * @return */
     @Override
-    public Tensor of(Tensor tensor) {
-      int n = tensor.length();
+    public Tensor transform(Tensor vector) {
+      int n = vector.length();
       if (n == 1)
-        return tensor.copy();
+        return vector.copy();
       if (0 < n && n % 2 == 0) {
         int m = n / 2;
-        Tensor x = of(tensor.extract(0, m));
+        Tensor x = transform(vector.extract(0, m));
         Tensor value = Tensors.reserve(n);
         for (int j = 0; j < m; ++j) {
           Tensor a = x.get(j); // recursion
-          Tensor b = tensor.get(m + j);
+          Tensor b = vector.get(m + j);
           value.append(a.add(b));
           value.append(a.subtract(b));
         }
         return value;
       }
-      throw new Throw(tensor);
+      throw new Throw(vector);
     }
 
     private final Tensor PP = Tensors.of(Tensors.of(RealScalar.ONE), Tensors.of(RealScalar.ONE));
@@ -55,25 +55,25 @@ public enum HaarWaveletTransform implements DiscreteFourierTransform {
     }
   },
   INVERSE {
-    /** @param tensor with length equals to a power of two
+    /** @param vector with length equals to a power of two
      * @return */
     @Override
-    public Tensor of(Tensor tensor) {
-      int n = tensor.length();
+    public Tensor transform(Tensor vector) {
+      int n = vector.length();
       if (n == 1)
-        return tensor.copy();
+        return vector.copy();
       if (0 < n && n % 2 == 0) {
         int m = n / 2;
         Tensor xt = Tensors.reserve(m);
         Tensor xb = Tensors.reserve(m);
         int index = -1;
         for (int j = 0; j < m; ++j) {
-          xt.append(tensor.get(++index).multiply(RationalScalar.HALF));
-          xb.append(tensor.get(++index).multiply(RationalScalar.HALF));
+          xt.append(vector.get(++index).multiply(RationalScalar.HALF));
+          xb.append(vector.get(++index).multiply(RationalScalar.HALF));
         }
-        return Join.of(of(xt.add(xb)), xt.subtract(xb));
+        return Join.of(transform(xt.add(xb)), xt.subtract(xb));
       }
-      throw new Throw(tensor);
+      throw new Throw(vector);
     }
 
     @Override

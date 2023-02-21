@@ -28,6 +28,6 @@ public enum TensorSpectrogram {
    * @return array plot of the spectrogram of given vector with colors specified by given function
    * @throws Exception if input is not a vector */
   public static Tensor of(Tensor vector, ScalarUnaryOperator window, Function<Scalar, ? extends Tensor> function) {
-    return Raster.of(SpectrogramArray.half_abs(vector, window), function);
+    return Raster.of(XtrogramArray.SPECTROGRAM.half_abs(vector, window), function);
   }
 }

@@ -37,8 +37,8 @@ public enum Fourier implements DiscreteFourierTransform {
     /** @param vector of length of power of 2
      * @return discrete Fourier transform of given vector */
     @Override
-    public Tensor of(Tensor tensor) {
-      return fft(tensor, 1);
+    public Tensor transform(Tensor vector) {
+      return fft(vector, 1);
     }
 
     /** @param n positive
@@ -53,8 +53,8 @@ public enum Fourier implements DiscreteFourierTransform {
   },
   INVERSE {
     @Override
-    public Tensor of(Tensor tensor) {
-      return fft(tensor, -1);
+    public Tensor transform(Tensor vector) {
+      return fft(vector, -1);
     }
 
     @Override

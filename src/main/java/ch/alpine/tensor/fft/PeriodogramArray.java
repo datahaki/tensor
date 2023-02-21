@@ -18,7 +18,7 @@ public class PeriodogramArray implements TensorUnaryOperator {
   /** @param vector of length of power of 2
    * @return squared magnitude of the discrete Fourier transform (power spectrum) of given vector */
   public static Tensor of(Tensor vector) {
-    return Fourier.FORWARD.of(vector).map(AbsSquared.FUNCTION);
+    return Fourier.FORWARD.transform(vector).map(AbsSquared.FUNCTION);
   }
 
   /** @param vector of length of power of 2
@@ -48,7 +48,7 @@ public class PeriodogramArray implements TensorUnaryOperator {
   private final TensorUnaryOperator spectrogramArray;
 
   private PeriodogramArray(int windowLength, int offset, ScalarUnaryOperator window) {
-    spectrogramArray = SpectrogramArray.of(windowLength, offset, window);
+    spectrogramArray = XtrogramArray.SPECTROGRAM.of(windowLength, offset, window);
   }
 
   @Override
