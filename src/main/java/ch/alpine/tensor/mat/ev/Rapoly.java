@@ -1,7 +1,6 @@
 // code by jph
-package ch.alpine.tensor.jet;
+package ch.alpine.tensor.mat.ev;
 
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
@@ -9,27 +8,33 @@ import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.sca.ply.Polynomial;
 
 /** EXPERIMENTAL TENSOR
  * 
- * ratio of two polynomials */
+ * wrapper of a polynomial that simplifies to a real/complex scalar when
+ * higher coefficients are zero. */
 /* package */ class Rapoly extends MultiplexScalar {
   /** @param polynomial
    * @return */
-  public static Rapoly of(Polynomial polynomial) {
-    return new Rapoly(Objects.requireNonNull(polynomial));
+  public static Scalar of(Polynomial polynomial) {
+    return 0 < polynomial.degree() //
+        ? new Rapoly(polynomial)
+        : polynomial.coeffs().Get(0);
   }
 
   /** @param coeffs of polynomial
    * @return */
-  public static Rapoly of(Tensor coeffs) {
-    return new Rapoly(Polynomial.of(coeffs));
+  @PackageTestAccess
+  static Scalar of(Tensor coeffs) {
+    return of(Polynomial.of(coeffs));
   }
 
   // ---
   private final Polynomial polynomial;
 
+  /** @param polynomial non-constant */
   private Rapoly(Polynomial polynomial) {
     this.polynomial = polynomial;
   }
@@ -42,7 +47,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
   public Scalar multiply(Scalar scalar) {
     return scalar instanceof Rapoly rapoly //
         ? new Rapoly(polynomial.times(rapoly.polynomial))
-        : new Rapoly(polynomial.times(scalar));
+        : of(polynomial.times(scalar));
   }
 
   @Override
@@ -57,11 +62,12 @@ import ch.alpine.tensor.sca.ply.Polynomial;
 
   @Override
   public Scalar zero() {
-    return new Rapoly(polynomial.zero());
+    return of(polynomial.zero());
   }
 
   @Override
   public Scalar one() {
+    // multiplicative neutral element, for instance RealScalar.ONE
     return polynomial.one();
   }
 
@@ -78,7 +84,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
   @Override
   protected Scalar plus(Scalar scalar) {
     return scalar instanceof Rapoly rapoly //
-        ? new Rapoly(polynomial.plus(rapoly.polynomial))
+        ? of(polynomial.plus(rapoly.polynomial))
         : new Rapoly(polynomial.plus(scalar));
   }
 

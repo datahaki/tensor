@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
@@ -54,6 +55,20 @@ public interface Eigensystem {
     JacobiComplex jacobiComplex = new JacobiComplex(HermitianMatrixQ.require(matrix, chop));
     jacobiComplex.solve();
     return new EigensystemImpl(jacobiComplex);
+  }
+
+  /** Careful: the general case is only for use with small matrices
+   * 
+   * @param matrix
+   * @return */
+  static Eigensystem of(Tensor matrix) {
+    boolean isComplex = matrix.flatten(1) //
+        .anyMatch(scalar -> scalar instanceof ComplexScalar);
+    if (SymmetricMatrixQ.of(matrix) && !isComplex)
+      return ofSymmetric(matrix);
+    if (HermitianMatrixQ.of(matrix))
+      return ofHermitian(matrix);
+    return new SimpleEigensystem(matrix);
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.

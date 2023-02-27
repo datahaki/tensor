@@ -258,6 +258,21 @@ class DetTest {
   }
 
   @Test
+  void testQuantity2() {
+    Scalar qs1 = Quantity.of(0, "m");
+    Scalar qs2 = Quantity.of(2, "m");
+    Scalar qs3 = Quantity.of(0, "rad");
+    Scalar qs4 = Quantity.of(4, "rad");
+    Tensor ve1 = Tensors.of(qs1.multiply(qs1), qs2.multiply(qs3));
+    Tensor ve2 = Tensors.of(qs2.multiply(qs3), qs4.multiply(qs4));
+    Tensor mat = Tensors.of(ve1, ve2);
+    Scalar det = Det.of(mat);
+    assertEquals(det, Quantity.of(0, "m^2*rad^2"));
+    // System.out.println(det);
+    // System.out.println(Pretty.of(mat));
+  }
+
+  @Test
   void testFailMatrixQ() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
     assertThrows(Throw.class, () -> Det.of(tensor));

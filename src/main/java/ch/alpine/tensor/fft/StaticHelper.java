@@ -57,6 +57,11 @@ import ch.alpine.tensor.sca.pow.Sqrt;
     return Round.intValueExact(RationalScalar.of(windowLength, 3));
   }
 
+  /** function truncates to real output depending on all-real input
+   * 
+   * @param vector input
+   * @param result output
+   * @return result output with imaginary part projected to zero, if input is all-real */
   public static Tensor re_re(Tensor vector, Tensor result) {
     return Chop.NONE.allZero(Im.of(vector)) //
         ? Re.of(result)

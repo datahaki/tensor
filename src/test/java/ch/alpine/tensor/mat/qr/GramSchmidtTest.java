@@ -18,6 +18,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
@@ -188,5 +189,16 @@ class GramSchmidtTest {
     Timing timing = Timing.started();
     GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 500, 150));
     System.out.println(timing.seconds());
+  }
+
+  @Test
+  void testNonOrdered() {
+    Tensor matrix = Tensors.fromString("{{0,0,0,1},{0,0,1,0}}");
+    QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
+    Tensor r = qrDecomposition.getR();
+    assertEquals(r.get(0), UnitVector.of(4, 2));
+    assertEquals(r.get(1), UnitVector.of(4, 3));
+    // QRDecomposition of = QRDecomposition.of(matrix);
+    // System.out.println(of.getR());
   }
 }

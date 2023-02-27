@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -29,14 +29,14 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 
 class InfluenceMatrixSvdTest {
-  @RepeatedTest(3)
-  void testRankDeficient(RepetitionInfo repetitionInfo) {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3 })
+  void testRankDeficient(int rank) {
     int n = 7;
-    int _m = repetitionInfo.getTotalRepetitions() + 2;
+    int _m = 5;
     Distribution distribution = NormalDistribution.standard();
-    int r = repetitionInfo.getCurrentRepetition();
-    Tensor m1 = RandomVariate.of(distribution, n, r);
-    Tensor m2 = RandomVariate.of(distribution, r, _m);
+    Tensor m1 = RandomVariate.of(distribution, n, rank);
+    Tensor m2 = RandomVariate.of(distribution, rank, _m);
     Tensor design = m1.dot(m2);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     influenceMatrix.image(RandomVariate.of(distribution, n));

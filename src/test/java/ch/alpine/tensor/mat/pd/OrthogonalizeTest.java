@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -250,9 +250,9 @@ class OrthogonalizeTest {
     }
   }
 
-  @RepeatedTest(4)
-  void testMatrixExp(RepetitionInfo repetitionInfo) {
-    int d = repetitionInfo.getCurrentRepetition();
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4 })
+  void testMatrixExp(int d) {
     Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
     OrthogonalMatrixQ.require(matrix);
     Tolerance.CHOP.requireClose(matrix, Orthogonalize.of(matrix));

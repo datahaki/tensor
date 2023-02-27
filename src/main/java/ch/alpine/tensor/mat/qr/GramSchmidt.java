@@ -43,15 +43,13 @@ public class GramSchmidt extends QRDecompositionBase implements Serializable {
     int m = Unprotect.dimension1(matrix);
     int[] _sigma = new int[m];
     for (int i = 0; i < m; ++i) {
-      // System.out.println(i);
-      // Tensor a = matrix;
-      Tensor norms;
-      norms = matrix.stream().map(r -> r.map(Abs.FUNCTION)).reduce(Tensor::add).orElseThrow();
-      // norms = Tensor.of(IntStream.range(0, m).mapToObj(l -> Vector2Norm.of(a.get(Tensor.ALL, l))));
+      Tensor norms = matrix.stream() //
+          .map(Abs::of) //
+          .reduce(Tensor::add) //
+          .orElseThrow();
       _sigma[i] = ArgMax.of(norms.map(Unprotect::withoutUnit));
       Tensor col = matrix.get(Tensor.ALL, _sigma[i]);
       Scalar norm = Vector2Norm.of(col);
-      // norms.Get(_sigma[i]);
       if (Tolerance.CHOP.isZero(norm))
         break;
       Tensor q = col.divide(norm);

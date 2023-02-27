@@ -17,7 +17,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
   /** @param eigensystem */
   public EigensystemImpl(Eigensystem eigensystem) {
     Tensor values = eigensystem.values();
-    int[] ordering = Ordering.DECREASING.of(values);
+    int[] ordering = Ordering.DECREASING.of(values); // TODO TENSOR IMPL mathematica's system
     d = Tensor.of(IntStream.of(ordering).mapToObj(values::Get));
     V = Tensor.of(IntStream.of(ordering).mapToObj(eigensystem.vectors()::get));
   }

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
@@ -18,12 +20,17 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
+import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.lie.TensorProduct;
+import ch.alpine.tensor.mat.pd.Orthogonalize;
+import ch.alpine.tensor.mat.qr.GramSchmidt;
+import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -35,7 +42,7 @@ class LeftNullSpaceTest {
   @Test
   void testRankDeficient() {
     Tensor matrix = Tensors.fromString("{{0, 1}, {0, 1}, {0, 1}, {0, 1}}");
-    Tensor nullsp = LeftNullSpace.of(matrix);
+    Tensor nullsp = LeftNullSpace.usingRowReduce(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(3, 4));
     Chop._10.requireAllZero(nullsp.dot(matrix));
   }
@@ -43,7 +50,7 @@ class LeftNullSpaceTest {
   @Test
   void testMaxRank() {
     Tensor matrix = Tensors.fromString("{{0, 1}, {2, 1}, {0, 1}, {0, 1}}");
-    Tensor nullsp = LeftNullSpace.of(matrix);
+    Tensor nullsp = LeftNullSpace.usingRowReduce(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(2, 4));
     Chop._10.requireAllZero(nullsp.dot(matrix));
   }
@@ -51,7 +58,7 @@ class LeftNullSpaceTest {
   @Test
   void testRankDeficientTranspose() {
     Tensor matrix = Tensors.fromString("{{0, 0, 0, 0}, {1, 1, 1, 1}}");
-    Tensor nullsp = LeftNullSpace.of(matrix);
+    Tensor nullsp = LeftNullSpace.usingRowReduce(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(1, 2));
     Chop._10.requireAllZero(nullsp.dot(matrix));
   }
@@ -59,19 +66,19 @@ class LeftNullSpaceTest {
   @Test
   void testMaxRankTranspose() {
     Tensor matrix = Tensors.fromString("{{0, 2, 0, 0}, {1, 1, 1, 1}}");
-    Tensor nullsp = LeftNullSpace.of(matrix);
+    Tensor nullsp = LeftNullSpace.usingRowReduce(matrix);
     assertEquals(Dimensions.of(nullsp), List.of(0));
   }
 
   private static void _matrix(Tensor A) {
     assertTrue(NullSpace.of(A).stream().map(A::dot).allMatch(Chop.NONE::allZero));
-    assertTrue(LeftNullSpace.of(A).stream().map(vector -> vector.dot(A)).allMatch(Chop.NONE::allZero));
+    assertTrue(LeftNullSpace.usingRowReduce(A).stream().map(vector -> vector.dot(A)).allMatch(Chop.NONE::allZero));
     _matrixNumeric(A);
   }
 
   private static void _matrixNumeric(Tensor A) {
     assertTrue(NullSpace.of(A.map(N.DOUBLE)).stream().map(A::dot).allMatch(Chop._12::allZero));
-    assertTrue(LeftNullSpace.of(A.map(N.DOUBLE)).stream().map(vector -> vector.dot(A)).allMatch(Chop._12::allZero));
+    // assertTrue(LeftNullSpace.of(A.map(N.DOUBLE)).stream().map(vector -> vector.dot(A)).allMatch(Chop._12::allZero));
     assertTrue(NullSpace.usingQR(A.map(N.DOUBLE)).stream().map(A::dot).allMatch(Chop._12::allZero));
   }
 
@@ -144,9 +151,44 @@ class LeftNullSpaceTest {
     int prime = 7879;
     RandomGenerator random = new Random();
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 7, 4);
-    Tensor nullsp = LeftNullSpace.of(matrix);
+    Tensor nullsp = LeftNullSpace.usingRowReduce(matrix);
     assertEquals(nullsp.length(), 3);
     for (Tensor vector : nullsp)
       Chop.NONE.requireAllZero(Dot.of(vector, matrix));
+  }
+
+  @RepeatedTest(5)
+  void testLeftNullSpaceSingular(RepetitionInfo repetitionInfo) {
+    int r = 2;
+    int n = 5;
+    int c = r + repetitionInfo.getCurrentRepetition();
+    Tensor v = RandomVariate.of(NormalDistribution.standard(), r, n);
+    Tensor w = RandomVariate.of(NormalDistribution.standard(), c, r);
+    Tensor matrix = w.dot(v);
+    QRDecomposition qrDecomposition = GramSchmidt.of(ConjugateTranspose.of(matrix));
+    int rank = qrDecomposition.getR().length();
+    assertEquals(rank, r);
+    Tensor augm = Join.of(qrDecomposition.getR(), IdentityMatrix.of(c));
+    Tensor frame = Orthogonalize.of(augm).extract(r, c);
+    Tensor verify = frame.dot(matrix);
+    Tolerance.CHOP.requireAllZero(verify);
+  }
+
+  @RepeatedTest(5)
+  void testLeftNullSpaceComplex(RepetitionInfo repetitionInfo) {
+    int r = 2;
+    int n = 5;
+    int c = r + repetitionInfo.getCurrentRepetition();
+    Tensor v = RandomVariate.of(ComplexNormalDistribution.STANDARD, r, n);
+    Tensor w = RandomVariate.of(ComplexNormalDistribution.STANDARD, c, r);
+    Tensor matrix = w.dot(v);
+    QRDecomposition qrDecomposition = GramSchmidt.of(ConjugateTranspose.of(matrix));
+    int rank = qrDecomposition.getR().length();
+    assertEquals(rank, r);
+    Tensor augm = Join.of(qrDecomposition.getR(), IdentityMatrix.of(c));
+    Tensor frame = Orthogonalize.of(augm).extract(r, c);
+    Tensor verify = frame.dot(matrix);
+    Tolerance.CHOP.requireAllZero(verify);
+    // Tolerance.CHOP.requireAllZero(LeftNullSpace.of(matrix).dot(matrix));
   }
 }

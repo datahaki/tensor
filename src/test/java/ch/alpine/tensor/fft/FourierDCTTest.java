@@ -3,11 +3,10 @@ package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -104,60 +103,64 @@ class FourierDCTTest {
     Tolerance.CHOP.requireClose(raw3, vector);
   }
 
-  @RepeatedTest(4)
-  void testRawRandom(RepetitionInfo repetitionInfo) {
-    Tensor vector = RandomVariate.of(NormalDistribution.standard(), 1 << repetitionInfo.getCurrentRepetition());
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4 })
+  void testRawRandom(int n) {
+    Tensor vector = RandomVariate.of(NormalDistribution.standard(), 1 << n);
     Tensor result = FourierDCT.raw2(vector);
     Tolerance.CHOP.requireAllZero(Im.of(result));
     Tensor backto = FourierDCT.raw3(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }
 
-  @RepeatedTest(8)
-  void testUnitRandom(RepetitionInfo repetitionInfo) {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4 })
+  void testUnitRandom(int n) {
     Distribution distribution = UniformDistribution.of(Clips.absolute(Quantity.of(3, "m")));
-    Tensor vector = RandomVariate.of(distribution, repetitionInfo.getCurrentRepetition());
+    Tensor vector = RandomVariate.of(distribution, n);
     Tensor result = FourierDCT._2.transform(vector);
     Tolerance.CHOP.requireAllZero(Im.of(result));
     Tensor backto = FourierDCT._3.transform(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }
 
-  @RepeatedTest(6)
-  void test1Random(RepetitionInfo repetitionInfo) {
-    Tensor vector = RandomVariate.of(NormalDistribution.standard(), repetitionInfo.getCurrentRepetition());
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4, 5, 6 })
+  void test1Random(int n) {
+    Tensor vector = RandomVariate.of(NormalDistribution.standard(), n);
     Tensor result = FourierDCT._1.transform(vector);
     Tensor backto = FourierDCT._1.transform(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }
 
-  @RepeatedTest(6)
-  void test4Random(RepetitionInfo repetitionInfo) {
-    Tensor vector = RandomVariate.of(NormalDistribution.standard(), repetitionInfo.getCurrentRepetition());
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4, 5, 6 })
+  void test4Random(int n) {
+    Tensor vector = RandomVariate.of(NormalDistribution.standard(), n);
     Tensor result = FourierDCT._4.transform(vector);
     Tensor backto = FourierDCT._4.transform(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }
 
-  @RepeatedTest(8)
-  void test1(RepetitionInfo repetitionInfo) {
-    int n = repetitionInfo.getCurrentRepetition();
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4, 5, 6, 7, 8 })
+  void test1(int n) {
     Tensor matrix = FourierDCT._1.matrix(n);
     Tolerance.CHOP.requireClose(matrix, Inverse.of(matrix));
   }
 
-  @RepeatedTest(8)
-  void test23(RepetitionInfo repetitionInfo) {
-    int n = repetitionInfo.getCurrentRepetition();
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4, 5, 6, 7, 8 })
+  void test23(int n) {
     Tensor matrix2 = FourierDCT._2.matrix(n);
     Tensor matrix3 = FourierDCT._3.matrix(n);
     Tensor result = matrix2.dot(matrix3);
     Tolerance.CHOP.requireClose(result, IdentityMatrix.of(n));
   }
 
-  @RepeatedTest(8)
-  void test4(RepetitionInfo repetitionInfo) {
-    int n = repetitionInfo.getCurrentRepetition();
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4, 5, 6, 7, 8 })
+  void test4(int n) {
     Tensor matrix = FourierDCT._4.matrix(n);
     Tolerance.CHOP.requireClose(matrix, Inverse.of(matrix));
   }

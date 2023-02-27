@@ -5,8 +5,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.sca.Chop;
 
-/** Quote
- * A matrix m is normal if m.ConjugateTranspose[m]==ConjugateTranspose[m].m. */
+/** Quote:
+ * A matrix m is normal if m.ConjugateTranspose[m] == ConjugateTranspose[m].m */
 public enum NormalMatrixQ {
   ;
   /** @param tensor

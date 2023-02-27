@@ -3,15 +3,20 @@ package ch.alpine.tensor.mat;
 
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.mat.pd.Orthogonalize;
+import ch.alpine.tensor.mat.qr.GramSchmidt;
 import ch.alpine.tensor.mat.re.RowReduce;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Conjugate;
 
 /** {@link NullSpace#of(Tensor)} picks the most suited algorithm to determine the
  * nullspace of a given matrix.
@@ -26,6 +31,9 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * <p>Let N = NullSpace[A]. If N is non-empty, then A.Transpose[N] == 0.
  * 
+ * Careful: The above equation is also the Mathematica convention for matrices with complex
+ * entries, where the user might be tempted to erroneously use conjugate transpose.
+ * 
  * <p>Quote from Wikipedia:
  * For matrices whose entries are floating-point numbers, the problem of computing the kernel
  * makes sense only for matrices such that the number of rows is equal to their rank:
@@ -37,6 +45,7 @@ import ch.alpine.tensor.sca.Chop;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/NullSpace.html">NullSpace</a>
  * 
+ * @see MatrixDotTranspose
  * @see LeftNullSpace */
 public enum NullSpace {
   ;
@@ -59,22 +68,28 @@ public enum NullSpace {
       return usingRowReduce(matrix);
     int rows = matrix.length();
     int cols = Unprotect.dimension1Hint(matrix);
-    return rows < cols //
+    boolean isComplex = matrix.flatten(1) //
+        .anyMatch(scalar -> scalar instanceof ComplexScalar);
+    return rows < cols || isComplex //
         ? usingQR(matrix)
         : usingSvd(matrix);
   }
 
   /** @param matrix of dimensions n x m with exact precision entries
    * @return tensor of vectors that span the kernel of given matrix */
-  public static Tensor usingRowReduce(Tensor matrix) {
+  /* package */ static Tensor usingRowReduce(Tensor matrix) {
     return LeftNullSpace.usingRowReduce(Transpose.of(matrix));
   }
 
-  /** @param matrix of any dimensions
+  /** N = NullSpace[A]. If N is non-empty, then A.Transpose[N] == 0.
+   * 
+   * @param matrix of any dimensions possibly with complex entries
    * @return list of orthogonal vectors that span the nullspace
    * @see OrthogonalMatrixQ */
   public static Tensor usingQR(Tensor matrix) {
-    return LeftNullSpace.usingQR(Transpose.of(matrix));
+    Tensor r = GramSchmidt.of(matrix).getR();
+    int n = Unprotect.dimension1Hint(matrix);
+    return Conjugate.of(Orthogonalize.of(Join.of(r, IdentityMatrix.of(n))).extract(r.length(), n));
   }
 
   /** @param matrix of dimensions rows x cols with rows >= cols

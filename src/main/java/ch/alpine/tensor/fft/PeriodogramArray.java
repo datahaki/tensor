@@ -48,7 +48,7 @@ public class PeriodogramArray implements TensorUnaryOperator {
   private final TensorUnaryOperator spectrogramArray;
 
   private PeriodogramArray(int windowLength, int offset, ScalarUnaryOperator window) {
-    spectrogramArray = XtrogramArray.SPECTROGRAM.of(windowLength, offset, window);
+    spectrogramArray = new SpectrogramArray(Fourier.FORWARD::transform, windowLength, offset, window);
   }
 
   @Override

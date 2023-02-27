@@ -25,7 +25,7 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.LeftNullSpace;
+import ch.alpine.tensor.mat.NullSpace;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.VandermondeMatrix;
@@ -245,7 +245,7 @@ class PseudoInverseTest {
     Tensor sequence = RandomVariate.of(NormalDistribution.standard(), 10, 3);
     Tensor point = RandomVariate.of(NormalDistribution.standard(), 3);
     Tensor matrix = Tensor.of(sequence.stream().map(point.negate()::add));
-    Tensor nullsp = LeftNullSpace.of(matrix);
+    Tensor nullsp = NullSpace.of(Transpose.of(matrix));
     OrthogonalMatrixQ.require(nullsp);
     Chop._08.requireClose(PseudoInverse.usingSvd(nullsp), Transpose.of(nullsp));
   }
@@ -260,7 +260,7 @@ class PseudoInverseTest {
     for (int count = 0; count < 10; ++count) {
       Tensor vector = RandomVariate.of(distribution, 10);
       Tensor design = RandomVariate.of(distribution, 10, 3);
-      Tensor nullsp = LeftNullSpace.usingQR(design);
+      Tensor nullsp = NullSpace.of(Transpose.of(design));
       Tensor p1 = deprec(vector, nullsp);
       Tensor p2 = Dot.of(nullsp, vector, nullsp);
       Tolerance.CHOP.requireClose(p1, p2);

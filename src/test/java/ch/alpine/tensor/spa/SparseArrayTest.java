@@ -47,6 +47,9 @@ class SparseArrayTest {
     assertEquals(fullze, tensor);
     Tensor tinsor = SparseArray.of(RealScalar.ZERO, 5, 6, 8);
     assertEquals(tensor, tinsor);
+    Tensor[] array = tinsor.stream().toArray(Tensor[]::new);
+    assertEquals(array.length, 5);
+    assertInstanceOf(SparseArray.class, array[0]);
   }
 
   @Test

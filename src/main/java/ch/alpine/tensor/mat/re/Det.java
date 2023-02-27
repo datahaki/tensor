@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.re;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -71,7 +72,11 @@ public class Det extends AbstractReduce {
       pivot(c0, c0);
       Scalar piv = lhs[ind(c0)].Get(c0);
       if (Scalars.isZero(piv))
-        return piv;
+        return IntStream.range(0, lhs.length) //
+            .mapToObj(i -> lhs[i].Get(i)) //
+            .map(Scalar::zero) //
+            .reduce(Scalar::multiply) //
+            .orElseThrow();
       eliminate(c0, piv);
     }
     return det();

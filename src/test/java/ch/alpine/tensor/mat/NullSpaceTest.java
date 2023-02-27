@@ -22,21 +22,28 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
+import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.mat.pd.Orthogonalize;
+import ch.alpine.tensor.mat.qr.GramSchmidt;
+import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.CauchyDistribution;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
+import ch.alpine.tensor.sca.Round;
 
 class NullSpaceTest {
   private static void _checkZeros(Tensor zeros) {
@@ -233,6 +240,7 @@ class NullSpaceTest {
     Tensor matrix = Array.zeros(3, d);
     Tensor id = IdentityMatrix.of(d);
     assertEquals(id, NullSpace.of(matrix));
+    assertEquals(id, NullSpace.usingQR(matrix));
     assertEquals(id, NullSpace.usingQR(matrix.map(N.DOUBLE)));
   }
 
@@ -246,20 +254,20 @@ class NullSpaceTest {
       assertEquals(NullSpace.of(matrix), Tensors.empty());
       Tensor mt = Transpose.of(matrix);
       {
-        Tensor nullspace = NullSpace.usingRowReduce(mt);
+        Tensor nullspace = NullSpace.of(mt);
         assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
-        Chop._08.requireAllZero(mt.dot(Transpose.of(nullspace)));
+        Chop._08.requireAllZero(MatrixDotTranspose.of(mt, nullspace));
       }
       {
         Tensor nullspace = NullSpace.usingQR(mt);
         assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
-        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
-        Chop._10.requireClose(nullspace.dot(Transpose.of(nullspace)), IdentityMatrix.of(n - d));
+        Chop._10.requireAllZero(MatrixDotTranspose.of(mt, nullspace));
+        Chop._10.requireClose(MatrixDotTranspose.of(nullspace, nullspace), IdentityMatrix.of(n - d));
       }
       {
         Tensor nullspace = NullSpace.of(mt);
         assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
-        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
+        Chop._10.requireAllZero(MatrixDotTranspose.of(mt, nullspace));
       }
     }
   }
@@ -279,6 +287,55 @@ class NullSpaceTest {
   void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
     Tensor ns = NullSpace.of(matrix);
+    Tolerance.CHOP.requireAllZero(matrix.dot(Transpose.of(ns)));
+  }
+
+  @RepeatedTest(6)
+  void testNullSpaceReal(RepetitionInfo repetitionInfo) {
+    int r = 2;
+    int n = 5;
+    int c = r + repetitionInfo.getCurrentRepetition() - 1;
+    Tensor v = RandomVariate.of(NormalDistribution.standard(), r, n);
+    Tensor w = RandomVariate.of(NormalDistribution.standard(), c, r);
+    Tensor matrix = w.dot(v);
+    QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
+    int rank = qrDecomposition.getR().length();
+    assertEquals(rank, r);
+    Tensor augm = Join.of(qrDecomposition.getR(), IdentityMatrix.of(n));
+    Tensor frame = Orthogonalize.of(augm).extract(rank, n);
+    Tensor verify = matrix.dot(ConjugateTranspose.of(frame));
+    Tolerance.CHOP.requireAllZero(verify);
+    Tolerance.CHOP.requireAllZero(MatrixDotTranspose.of(matrix, NullSpace.of(matrix)));
+  }
+
+  @RepeatedTest(6)
+  void testNullSpaceComplex(RepetitionInfo repetitionInfo) {
+    int r = 2;
+    int n = 5;
+    int c = r + repetitionInfo.getCurrentRepetition() - 1;
+    Tensor v = RandomVariate.of(ComplexNormalDistribution.STANDARD, r, n);
+    Tensor w = RandomVariate.of(ComplexNormalDistribution.STANDARD, c, r);
+    Tensor matrix = w.dot(v);
+    QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
+    int rank = qrDecomposition.getR().length();
+    assertEquals(rank, r);
+    Tensor augm = Join.of(qrDecomposition.getR(), IdentityMatrix.of(n));
+    Tensor frame = Orthogonalize.of(augm).extract(rank, n);
+    Tensor verify = matrix.dot(ConjugateTranspose.of(frame));
+    Tolerance.CHOP.requireAllZero(verify);
+    Tolerance.CHOP.requireAllZero(MatrixDotTranspose.of(matrix, NullSpace.of(matrix)));
+  }
+
+  @RepeatedTest(6)
+  void testNullSpaceComplexExact(RepetitionInfo repetitionInfo) {
+    int r = 2;
+    int n = 5;
+    int c = r + repetitionInfo.getCurrentRepetition() - 1;
+    Tensor v = RandomVariate.of(ComplexNormalDistribution.STANDARD, r, n).map(RealScalar.of(10)::multiply).map(Round.FUNCTION);
+    Tensor w = RandomVariate.of(ComplexNormalDistribution.STANDARD, c, r).map(RealScalar.of(10)::multiply).map(Round.FUNCTION);
+    Tensor matrix = w.dot(v);
+    Tensor ns = NullSpace.of(matrix);
+    ExactTensorQ.require(ns);
     Tolerance.CHOP.requireAllZero(matrix.dot(Transpose.of(ns)));
   }
 

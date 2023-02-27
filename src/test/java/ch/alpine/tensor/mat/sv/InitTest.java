@@ -21,7 +21,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.NullSpace;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.mat.re.MatrixRankSvd;
+import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Sign;
 
@@ -59,7 +59,7 @@ class InitTest {
     Tensor UW_AV = Tolerance.CHOP.of(U.dot(W).subtract(matrix.dot(V)));
     assertEquals(UW_AV, UW_AV.map(Scalar::zero));
     assertTrue(w.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative));
-    if (MatrixRankSvd.of(svd) < N) {
+    if (MatrixRank.of(matrix) < N) {
       Tensor nul = NullSpace.of(svd);
       Tensor res = MatrixDotTranspose.of(matrix, nul);
       assertEquals(Tolerance.CHOP.of(res), res.map(Scalar::zero));

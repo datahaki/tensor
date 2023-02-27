@@ -48,14 +48,12 @@ class MatrixRankTest {
   @Test
   void testNumeric3() {
     Tensor matrix = Tensors.fromString("{{0, 1.0, 0}, {0, 1, 1/1000000000000000000000000000000000000}}");
-    assertEquals(MatrixRankSvd.of(matrix), 1);
     assertEquals(MatrixRank.of(matrix), 1); // <- numeric
   }
 
   @Test
   void testExact() {
     Tensor matrix = Tensors.fromString("{{0, 1, 0}, {0, 1, 1/1000000000000000000000000000000000000}}");
-    assertEquals(MatrixRankSvd.of(matrix), 1); // <- numeric
     assertEquals(MatrixRank.of(matrix), 2); // <- exact
   }
 
@@ -65,6 +63,29 @@ class MatrixRankTest {
         Array.zeros(3), //
         UnitVector.of(3, 1));
     _check(matrix, 1);
+  }
+
+  @Test
+  void testZeros() {
+    Tensor matrix = Array.zeros(9, 5);
+    int rank = MatrixRank.of(matrix);
+    assertEquals(rank, 0);
+  }
+
+  @Test
+  void testNumeric() {
+    Tensor m = Tensors.of( //
+        Tensors.vector(0, 1, 0), //
+        Tensors.vector(0, 1, 1e-40));
+    assertEquals(MatrixRank.of(m), 1); // <- numeric
+  }
+
+  @Test
+  void testNumeric2() {
+    Tensor m = Transpose.of(Tensors.of( //
+        Tensors.vector(0, 1, 0), //
+        Tensors.vector(0, 1, 1e-40)));
+    assertEquals(MatrixRank.of(m), 1); // <- numeric
   }
 
   @Test

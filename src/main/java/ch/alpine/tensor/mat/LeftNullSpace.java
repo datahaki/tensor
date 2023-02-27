@@ -1,21 +1,16 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Join;
-import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
-import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.re.Pivot;
 import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.mat.re.RowReduce;
 
-/** Let N = NullSpace[A]. If N is non-empty, then N.A == 0.
+/** Let N = LeftNullSpace[A]. If N is non-empty, then N.A == 0.
  * 
  * <pre>
  * LeftNullSpace[matrix] == NullSpace[Transpose[matrix]]
@@ -25,20 +20,13 @@ import ch.alpine.tensor.mat.re.RowReduce;
  * The command "LeftNullSpace" does not exist in Mathematica.
  * 
  * @see NullSpace */
-public enum LeftNullSpace {
+/* package */ enum LeftNullSpace {
   ;
-  /** @param matrix
-   * @return list of vectors that span the left nullspace of given matrix */
-  public static Tensor of(Tensor matrix) {
-    return ExactTensorQ.of(matrix) //
-        ? usingRowReduce(matrix, Pivots.FIRST_NON_ZERO)
-        : usingQR(matrix);
-  }
-
-  /** @param matrix
+  /** @param matrix with exact precision
    * @return */
   public static Tensor usingRowReduce(Tensor matrix) {
-    return usingRowReduce(matrix, Pivots.selection(matrix));
+    ExactTensorQ.require(matrix);
+    return usingRowReduce(matrix, Pivots.FIRST_NON_ZERO);
   }
 
   /** @param matrix
@@ -54,29 +42,5 @@ public enum LeftNullSpace {
       if (Scalars.nonZero(lhs.Get(j, c0++))) // <- careful: c0 is modified
         ++j;
     return Tensor.of(lhs.extract(j, rows).stream().map(row -> row.extract(cols, cols + rows)));
-  }
-
-  /** @param matrix of any dimensions
-   * @return list of orthogonal vectors that span the left nullspace
-   * @see OrthogonalMatrixQ */
-  public static Tensor usingQR(Tensor matrix) {
-    int rows = matrix.length();
-    int cols = Unprotect.dimension1Hint(matrix);
-    if (rows <= cols)
-      return NullSpace.usingSvd(Transpose.of(matrix));
-    QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
-    Tensor r = qrDecomposition.getR();
-    Tensor qinv = qrDecomposition.getQConjugateTranspose();
-    boolean nonRankMax = IntStream.range(0, cols) //
-        .mapToObj(i -> r.Get(i, i)) //
-        .anyMatch(Tolerance.CHOP::isZero);
-    if (nonRankMax) {
-      Tensor nspace = NullSpace.usingSvd(Transpose.of(qrDecomposition.getR().extract(0, cols)));
-      Tensor upper = Tensor.of(qinv.stream().limit(cols));
-      return Tensor.of(Stream.concat( //
-          nspace.stream().map(row -> row.dot(upper)), //
-          qinv.stream().skip(cols)));
-    }
-    return Tensor.of(qinv.stream().skip(cols)); // matrix has maximal rank
   }
 }

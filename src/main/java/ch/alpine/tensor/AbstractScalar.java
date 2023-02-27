@@ -142,6 +142,7 @@ public abstract class AbstractScalar implements Scalar {
 
   @Override // from Scalar
   public Scalar under(Scalar scalar) {
+    System.out.println(scalar + " / " + this);
     return reciprocal().multiply(scalar);
   }
 

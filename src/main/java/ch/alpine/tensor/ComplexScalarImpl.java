@@ -113,6 +113,8 @@ import ch.alpine.tensor.sca.tri.Sinh;
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof ComplexEmbedding z)
       return of(re.add(z.real()), im.add(z.imag()));
+    if (scalar instanceof MultiplexScalar)
+      return scalar.add(this);
     throw new Throw(this, scalar);
   }
 

@@ -99,6 +99,10 @@ class DbscanTest {
     assertTrue(map.values().contains(5L));
     assertTrue(map.values().contains(7L));
   }
+  // @Test
+  // void testReIm() {
+  // Dbscan.of(null, NdCenters.VECTOR_2_NORM, RealScalar.of(1e-12), 1);
+  // }
 
   @Test
   void testFail() {
