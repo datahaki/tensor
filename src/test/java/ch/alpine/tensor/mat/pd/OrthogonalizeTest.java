@@ -46,7 +46,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 
 class OrthogonalizeTest {
   private static void orthogonalMatrixQ_require(Tensor q) {
-    Tensor id = q.dot(Transpose.of(q));
+    Tensor id = MatrixDotTranspose.of(q, q);
     Tensor diagonal = Diagonal.of(id);
     Tolerance.CHOP.requireClose(id, DiagonalMatrix.with(diagonal));
     for (Tensor d : diagonal)

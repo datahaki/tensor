@@ -22,7 +22,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
-import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.MathematicaFormat;
@@ -30,6 +29,7 @@ import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -59,7 +59,7 @@ class MatrixExpTest {
     double[][] mat = new double[][] { { 0, val, va2 }, { -val, 0, va3 }, { -va2, -va3, 0 } };
     Tensor bu = Tensors.matrixDouble(mat);
     Tensor ort = MatrixExp.of(bu);
-    Tolerance.CHOP.requireAllZero(ort.dot(Transpose.of(ort)).subtract(IdentityMatrix.of(ort.length())));
+    Tolerance.CHOP.requireClose(MatrixDotTranspose.of(ort, ort), IdentityMatrix.of(ort.length()));
     Tensor log = MatrixLog.of(ort);
     Tolerance.CHOP.requireClose(bu, log);
   }

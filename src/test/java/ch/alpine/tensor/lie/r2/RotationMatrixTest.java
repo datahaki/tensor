@@ -12,8 +12,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
@@ -22,8 +22,7 @@ class RotationMatrixTest {
   @Test
   void testPointThree() {
     Tensor matrix = RotationMatrix.of(RealScalar.of(0.3));
-    Tensor eye = matrix.dot(Transpose.of(matrix));
-    assertEquals(eye, IdentityMatrix.of(2));
+    assertEquals(IdentityMatrix.of(2), MatrixDotTranspose.of(matrix, matrix));
     assertTrue(OrthogonalMatrixQ.of(matrix));
     assertTrue(matrix.Get(0, 1).toString().startsWith("-0.2955"));
     assertTrue(matrix.Get(1, 1).toString().startsWith("0.95533"));

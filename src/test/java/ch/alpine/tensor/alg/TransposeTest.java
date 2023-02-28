@@ -19,6 +19,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.lie.Permutations;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
@@ -179,6 +180,8 @@ class TransposeTest {
     Tensor a = RandomVariate.of(distribution, 2, 4);
     Tensor b = RandomVariate.of(distribution, 4, 3);
     assertEquals(Transpose.of(a.dot(b)), Transpose.of(b).dot(Transpose.of(a)));
+    assertEquals(Transpose.of(a.dot(b)), Transpose.of(b).dot(Transpose.of(a)));
+    assertEquals(Transpose.of(a.dot(b)), MatrixDotTranspose.of(Transpose.of(b), a));
   }
 
   @Test

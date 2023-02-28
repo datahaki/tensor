@@ -28,5 +28,4 @@ public enum CepstrogramArray {
         .map(Log.FUNCTION)) //
         .map(Re.FUNCTION);
   });
-
 }

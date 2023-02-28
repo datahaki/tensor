@@ -24,6 +24,7 @@ import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -56,10 +57,10 @@ class CholeskyDecompositionImplTest {
     HermitianMatrixQ.require(matrix);
     CholeskyDecomposition choleskyDecomposition = //
         Serialization.copy(CholeskyDecomposition.of(matrix));
-    Tensor result = Dot.of( //
+    Tensor result = MatrixDotTranspose.of(Dot.of( //
         choleskyDecomposition.getL(), //
-        DiagonalMatrix.with(choleskyDecomposition.diagonal()), //
-        Transpose.of(choleskyDecomposition.getL()));
+        DiagonalMatrix.with(choleskyDecomposition.diagonal())), //
+        choleskyDecomposition.getL());
     assertEquals(result, matrix);
     Scalar one = GaussScalar.of(1, prime);
     Tensor id = DiagonalMatrix.of(n, one);
@@ -72,10 +73,10 @@ class CholeskyDecompositionImplTest {
   void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
     CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
-    Tensor result = Dot.of( //
+    Tensor result = MatrixDotTranspose.of(Dot.of( //
         choleskyDecomposition.getL(), //
-        DiagonalMatrix.with(choleskyDecomposition.diagonal()), //
-        Transpose.of(choleskyDecomposition.getL()));
+        DiagonalMatrix.with(choleskyDecomposition.diagonal())), //
+        choleskyDecomposition.getL());
     assertInstanceOf(DecimalScalar.class, result.Get(3, 3));
     Tolerance.CHOP.requireClose(matrix, result);
   }

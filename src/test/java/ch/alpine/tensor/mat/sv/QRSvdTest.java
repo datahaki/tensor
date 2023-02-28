@@ -16,10 +16,10 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Last;
-import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.qr.GramSchmidt;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
@@ -80,7 +80,7 @@ class QRSvdTest {
     Tensor v1 = SingularValueList.of(matrix);
     Tensor v2 = SingularValueList.of(svd);
     Tolerance.CHOP.requireClose(v1, v2);
-    Tensor approx = Dot.of(svd.getU(), DiagonalMatrix.with(svd.values()), Transpose.of(svd.getV()));
+    Tensor approx = MatrixDotTranspose.of(Dot.of(svd.getU(), DiagonalMatrix.with(svd.values())), svd.getV());
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
@@ -93,7 +93,7 @@ class QRSvdTest {
     Tensor v1 = SingularValueList.of(matrix);
     Tensor v2 = SingularValueList.of(svd);
     Tolerance.CHOP.requireClose(v1, v2);
-    Tensor approx = Dot.of(svd.getU(), DiagonalMatrix.with(svd.values()), Transpose.of(svd.getV()));
+    Tensor approx = MatrixDotTranspose.of(Dot.of(svd.getU(), DiagonalMatrix.with(svd.values())), svd.getV());
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
@@ -106,7 +106,7 @@ class QRSvdTest {
     Tensor v1 = SingularValueList.of(matrix);
     Tensor v2 = SingularValueList.of(svd);
     Tolerance.CHOP.requireClose(v1, v2);
-    Tensor approx = Dot.of(svd.getU(), DiagonalMatrix.with(svd.values()), Transpose.of(svd.getV()));
+    Tensor approx = MatrixDotTranspose.of(Dot.of(svd.getU(), DiagonalMatrix.with(svd.values())), svd.getV());
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 }

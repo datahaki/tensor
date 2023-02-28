@@ -202,7 +202,7 @@ class NullSpaceTest {
     Tensor mat = Tensors.of( //
         Tensors.of(Quantity.of(-2, "m"), Quantity.of(1, "kg"), Quantity.of(3, "s")));
     Tensor nul = NullSpace.of(mat);
-    Chop.NONE.requireAllZero(mat.dot(Transpose.of(nul)));
+    Chop.NONE.requireAllZero(MatrixDotTranspose.of(mat, nul));
   }
 
   @Test
@@ -214,7 +214,7 @@ class NullSpaceTest {
     );
     Tensor nul = NullSpace.of(mat);
     assertEquals(Dimensions.of(nul), Arrays.asList(1, 3));
-    Chop.NONE.requireAllZero(mat.dot(Transpose.of(nul)));
+    Chop.NONE.requireAllZero(MatrixDotTranspose.of(mat, nul));
   }
 
   @Test
@@ -286,8 +286,7 @@ class NullSpaceTest {
   @Test
   void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
-    Tensor ns = NullSpace.of(matrix);
-    Tolerance.CHOP.requireAllZero(matrix.dot(Transpose.of(ns)));
+    Tolerance.CHOP.requireAllZero(MatrixDotTranspose.of(matrix, NullSpace.of(matrix)));
   }
 
   @RepeatedTest(6)
@@ -336,7 +335,7 @@ class NullSpaceTest {
     Tensor matrix = w.dot(v);
     Tensor ns = NullSpace.of(matrix);
     ExactTensorQ.require(ns);
-    Tolerance.CHOP.requireAllZero(matrix.dot(Transpose.of(ns)));
+    Tolerance.CHOP.requireAllZero(MatrixDotTranspose.of(matrix, ns));
   }
 
   @Test

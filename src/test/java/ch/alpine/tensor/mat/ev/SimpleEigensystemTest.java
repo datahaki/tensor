@@ -8,6 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -18,7 +19,7 @@ class SimpleEigensystemTest {
     Tensor values = eigensystem.values();
     Tensor vectors = eigensystem.vectors();
     Tensor diagonal = DiagonalMatrix.with(values);
-    Tensor lhs = matrix.dot(Transpose.of(vectors));
+    Tensor lhs = MatrixDotTranspose.of(matrix, vectors);
     Tensor rhs = Transpose.of(vectors).dot(diagonal);
     Tolerance.CHOP.requireClose(lhs, rhs);
   }

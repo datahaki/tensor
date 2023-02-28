@@ -3,8 +3,12 @@ package ch.alpine.tensor.mat.ex;
 
 import java.math.BigInteger;
 
+import ch.alpine.tensor.IntegerQ;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.num.BinaryPower;
@@ -43,6 +47,16 @@ public enum MatrixPower {
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, long exponent) {
     return of(matrix, BigInteger.valueOf(exponent));
+  }
+
+  public static Tensor of(Tensor matrix, Scalar exponent) {
+    if (IntegerQ.of(exponent))
+      return of(matrix, Scalars.bigIntegerValueExact(exponent));
+    if (exponent.equals(RationalScalar.HALF))
+      return MatrixSqrt.of(matrix).sqrt();
+    if (exponent.equals(RationalScalar.HALF.negate()))
+      return MatrixSqrt.of(matrix).sqrt();
+    throw new Throw(matrix, exponent);
   }
 
   // ---
