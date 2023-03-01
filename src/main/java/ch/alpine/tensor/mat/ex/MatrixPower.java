@@ -3,12 +3,12 @@ package ch.alpine.tensor.mat.ex;
 
 import java.math.BigInteger;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.num.BinaryPower;

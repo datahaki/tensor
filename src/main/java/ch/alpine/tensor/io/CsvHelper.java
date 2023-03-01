@@ -3,11 +3,11 @@ package ch.alpine.tensor.io;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.N;
 

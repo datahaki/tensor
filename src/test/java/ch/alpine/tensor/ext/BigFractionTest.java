@@ -1,13 +1,11 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
@@ -50,10 +48,5 @@ class BigFractionTest {
   @Test
   void testDenZero() {
     assertThrows(ArithmeticException.class, () -> BigFraction.of(3, 0));
-  }
-
-  @Test
-  void testPackageVisibility() {
-    assertFalse(Modifier.isPublic(BigFraction.class.getModifiers()));
   }
 }

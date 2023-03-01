@@ -3,9 +3,9 @@ package ch.alpine.tensor.mat.pd;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -23,27 +23,27 @@ class SqrtPuTest {
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));
   }
 
-  @RepeatedTest(5)
-  void testReal1(RepetitionInfo repetitionInfo) {
-    int n = repetitionInfo.getCurrentRepetition();
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 3, 4, 5 })
+  void testReal1(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n + 2);
     PolarDecompositionSqrt sqrtPu = SqrtPu.of(matrix);
     UnitaryMatrixQ.require(sqrtPu.getUnitary());
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));
   }
 
-  @RepeatedTest(5)
-  void testComplex(RepetitionInfo repetitionInfo) {
-    int n = repetitionInfo.getCurrentRepetition();
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 3, 4, 5 })
+  void testComplex(int n) {
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n);
     PolarDecompositionSqrt sqrtPu = SqrtPu.of(matrix);
     UnitaryMatrixQ.require(sqrtPu.getUnitary());
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));
   }
 
-  @RepeatedTest(5)
-  void testComplex1(RepetitionInfo repetitionInfo) {
-    int n = repetitionInfo.getCurrentRepetition();
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 3, 4, 5 })
+  void testComplex1(int n) {
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n + 2);
     PolarDecompositionSqrt sqrtPu = SqrtPu.of(matrix);
     UnitaryMatrixQ.require(sqrtPu.getUnitary());

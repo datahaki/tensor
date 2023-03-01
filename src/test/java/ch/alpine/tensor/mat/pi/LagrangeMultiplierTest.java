@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.VectorQ;
@@ -20,9 +22,9 @@ import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
 class LagrangeMultiplierTest {
-  @Test
-  void testLagrange() {
-    int n = 7;
+  @ParameterizedTest
+  @ValueSource(ints = { 5, 6, 7 })
+  void testLagrange(int n) {
     Distribution distribution = TrapezoidalDistribution.of(-2, -1, 1, 2);
     Tensor eqs = RandomVariate.of(distribution, 3, n);
     Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
@@ -38,9 +40,9 @@ class LagrangeMultiplierTest {
     Tolerance.CHOP.requireClose(sol1, sol3);
   }
 
-  @Test
-  void testLagrangeCholeskyFail() {
-    int n = 8;
+  @ParameterizedTest
+  @ValueSource(ints = { 5, 6, 8 })
+  void testLagrangeCholeskyFail(int n) {
     int r = 1;
     Distribution distribution = ExponentialDistribution.of(1);
     Tensor eqsPre = RandomVariate.of(NormalDistribution.standard(), r, n);

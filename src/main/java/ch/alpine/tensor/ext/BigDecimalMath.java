@@ -1,15 +1,13 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.ext;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import ch.alpine.tensor.ext.Integers;
-
 /** implementation is standalone */
-/* package */ enum BigDecimalMath {
+public enum BigDecimalMath {
   ;
   /** computation of square-root using Newton iteration
    * 

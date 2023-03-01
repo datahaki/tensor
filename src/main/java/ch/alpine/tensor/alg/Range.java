@@ -6,10 +6,10 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.sca.Clip;
 
 /** Range is consistent with {@link LongStream#range(long, long)}, and

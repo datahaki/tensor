@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.ext;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -8,7 +8,7 @@ import java.math.BigInteger;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ final class BigFraction implements Comparable<BigFraction>, Serializable {
+public final class BigFraction implements Comparable<BigFraction>, Serializable {
   private static final String DIVIDE = "/";
 
   /** @param value

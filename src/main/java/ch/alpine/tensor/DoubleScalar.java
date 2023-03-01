@@ -7,6 +7,7 @@ import java.math.RoundingMode;
 
 import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.InexactScalarMarker;
+import ch.alpine.tensor.ext.BigDecimalMath;
 import ch.alpine.tensor.sca.Chop;
 
 /** scalar with double precision, 64-bit, MATLAB style

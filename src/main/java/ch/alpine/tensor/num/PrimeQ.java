@@ -4,10 +4,10 @@ package ch.alpine.tensor.num;
 import java.math.BigInteger;
 import java.util.function.Function;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.ext.Cache;
 
 /** Careful: Implementation only asserts primality with a certain probability.

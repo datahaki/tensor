@@ -19,7 +19,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -27,6 +26,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.TensorComparator;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.ext.ArgMax;
 import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.ext.Integers;

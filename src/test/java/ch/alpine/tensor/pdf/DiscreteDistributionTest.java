@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -15,6 +14,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;

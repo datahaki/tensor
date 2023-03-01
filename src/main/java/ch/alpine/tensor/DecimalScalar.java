@@ -11,6 +11,7 @@ import java.util.OptionalInt;
 import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.api.NInterface;
+import ch.alpine.tensor.ext.BigDecimalMath;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;

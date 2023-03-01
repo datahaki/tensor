@@ -29,7 +29,7 @@ class SchurDecompositionTest {
   private static final SchurDecomposition _check(Tensor matrix) {
     SchurDecomposition hd = SchurDecomposition.of(matrix);
     Tensor t = hd.getT();
-    Tensor p = hd.getP();
+    Tensor p = hd.getUnitary();
     UnitaryMatrixQ.require(p);
     Tensor result = Dot.of(p, t, ConjugateTranspose.of(p));
     Tolerance.CHOP.requireClose(matrix, result);

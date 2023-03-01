@@ -101,7 +101,7 @@ public class HessenbergDecomposition implements Serializable {
     pam = Tensors.matrix(pa);
   }
 
-  public Tensor getP() {
+  public Tensor getUnitary() {
     return pam;
   }
 
@@ -111,6 +111,6 @@ public class HessenbergDecomposition implements Serializable {
 
   @Override
   public String toString() {
-    return MathematicaFormat.concise("HessenbergDecomposition", pam, hmt);
+    return MathematicaFormat.concise("HessenbergDecomposition", getUnitary(), getH());
   }
 }

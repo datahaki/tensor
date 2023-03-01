@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 import ch.alpine.tensor.api.NInterface;
+import ch.alpine.tensor.chq.IntegerQ;
+import ch.alpine.tensor.ext.BigFraction;
 import ch.alpine.tensor.ext.BigIntegerMath;
 
 /** a RationalScalar corresponds to an element from the field of rational numbers.
@@ -215,6 +217,12 @@ public final class RationalScalar extends AbstractRealScalar implements //
     return bigFraction.denominator();
   }
 
+  /** @return
+   * @see IntegerQ */
+  public boolean isInteger() {
+    return bigFraction.isInteger();
+  }
+
   /** @param roundingMode
    * @return for instance HALF_UP[5/3] == 2, or FLOOR[5/3] == 1 */
   private Scalar round(RoundingMode roundingMode) {
@@ -227,12 +235,6 @@ public final class RationalScalar extends AbstractRealScalar implements //
    * @return */
   /* package */ BigDecimal toBigDecimal(MathContext mathContext) {
     return new BigDecimal(numerator()).divide(new BigDecimal(denominator()), mathContext);
-  }
-
-  /** @return
-   * @see IntegerQ */
-  /* package */ boolean isInteger() {
-    return bigFraction.isInteger();
   }
 
   // ---

@@ -5,12 +5,12 @@ import java.math.BigInteger;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarTensorFunction;
+import ch.alpine.tensor.chq.IntegerQ;
 
 /** IntegerDigits is consistent with Mathematica::IntegerDigits except for input zero:
  * <pre>

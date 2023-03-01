@@ -9,6 +9,8 @@ import java.util.Objects;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -51,18 +53,16 @@ class LeastSquaresTest {
     ExactTensorQ.require(pinv);
   }
 
-  @Test
-  void testMixedUnitsVantHoff() {
+  @ParameterizedTest
+  @ValueSource(ints = { 0, 1, 2 })
+  void testMixedUnitsVantHoff(int degree) {
     // inspired by code by gjoel
-    for (int deg = 0; deg <= 2; ++deg) {
-      int degree = deg;
-      Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}").map(Scalar::reciprocal);
-      Tensor y = Tensors.fromString("{10[bar], 20[bar], 22[bar], 23[bar]}");
-      assertEquals(x.Get(0).one(), RealScalar.ONE);
-      Tensor matrix = x.map(s -> NestList.of(s::multiply, s.one(), degree));
-      Tensor sol = LeastSquares.of(matrix, y);
-      matrix.dot(sol).subtract(y);
-    }
+    Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}").map(Scalar::reciprocal);
+    Tensor y = Tensors.fromString("{10[bar], 20[bar], 22[bar], 23[bar]}");
+    assertEquals(x.Get(0).one(), RealScalar.ONE);
+    Tensor matrix = x.map(s -> NestList.of(s::multiply, s.one(), degree));
+    Tensor sol = LeastSquares.of(matrix, y);
+    matrix.dot(sol).subtract(y);
   }
 
   private static void _checkSpecialExact(Tensor m) {
@@ -197,59 +197,55 @@ class LeastSquaresTest {
     assertEquals(Dimensions.of(matrix.dot(x)), Dimensions.of(b));
   }
 
-  @Test
-  void testLeastSquaresReal() {
-    for (int n = 3; n < 6; ++n) {
-      Tensor matrix = IdentityMatrix.of(n).add(RandomVariate.of(NormalDistribution.standard(), n, n));
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 4, 5 })
+  void testLeastSquaresReal(int n) {
+    Tensor matrix = IdentityMatrix.of(n).add(RandomVariate.of(NormalDistribution.standard(), n, n));
+    Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
+    Chop._09.requireClose( //
+        LinearSolve.of(matrix, b), //
+        LeastSquares.usingQR(matrix, b));
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 4, 5 })
+  void testLeastSquaresComplexSquare(int n) {
+    Random random = new Random(3);
+    Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, random, n, n);
+    Tensor b = RandomVariate.of(NormalDistribution.standard(), random, n, 3);
+    Tensor sol = LinearSolve.of(matrix, b);
+    Tolerance.CHOP.requireClose(sol, LeastSquares.of(matrix, b));
+    Tolerance.CHOP.requireClose(sol, LeastSquares.usingQR(matrix, b));
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 4, 5 })
+  void testLeastSquaresRect(int m) {
+    int n = m + 3;
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
+    {
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
-      Chop._09.requireClose( //
-          LinearSolve.of(matrix, b), //
+      Tolerance.CHOP.requireClose( //
+          LeastSquares.usingSvd(matrix, b), //
+          LeastSquares.usingQR(matrix, b));
+    }
+    {
+      Tensor b = RandomVariate.of(NormalDistribution.standard(), n);
+      Tolerance.CHOP.requireClose( //
+          LeastSquares.usingSvd(matrix, b), //
           LeastSquares.usingQR(matrix, b));
     }
   }
 
-  @Test
-  void testLeastSquaresComplexSquare() {
-    Random random = new Random(3);
-    for (int n = 3; n < 6; ++n) {
-      Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, random, n, n);
-      Tensor b = RandomVariate.of(NormalDistribution.standard(), random, n, 3);
-      Tensor sol = LinearSolve.of(matrix, b);
-      Tolerance.CHOP.requireClose(sol, LeastSquares.of(matrix, b));
-      Tolerance.CHOP.requireClose(sol, LeastSquares.usingQR(matrix, b));
-    }
-  }
-
-  @Test
-  void testLeastSquaresRect() {
-    for (int m = 3; m < 6; ++m) {
-      int n = m + 3;
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
-      {
-        Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
-        Tolerance.CHOP.requireClose( //
-            LeastSquares.usingSvd(matrix, b), //
-            LeastSquares.usingQR(matrix, b));
-      }
-      {
-        Tensor b = RandomVariate.of(NormalDistribution.standard(), n);
-        Tolerance.CHOP.requireClose( //
-            LeastSquares.usingSvd(matrix, b), //
-            LeastSquares.usingQR(matrix, b));
-      }
-    }
-  }
-
-  @Test
-  void testLeastSquaresSmallBig() {
-    for (int n = 3; n < 6; ++n) {
-      int m = n + 3;
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
-      Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
-      Tensor sol1 = PseudoInverse.of(matrix).dot(b);
-      Tensor sol2 = LeastSquares.usingQR(matrix, b);
-      Tolerance.CHOP.requireClose(sol1, sol2);
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 4, 5 })
+  void testLeastSquaresSmallBig(int n) {
+    int m = n + 3;
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
+    Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
+    Tensor sol1 = PseudoInverse.of(matrix).dot(b);
+    Tensor sol2 = LeastSquares.usingQR(matrix, b);
+    Tolerance.CHOP.requireClose(sol1, sol2);
   }
 
   @Test

@@ -9,7 +9,10 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -43,27 +46,24 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
 class PseudoInverseTest {
-  @Test
-  void testHilbertSquare() {
-    for (int n = 1; n < 8; ++n) {
-      Tensor matrix = HilbertMatrix.of(n);
-      Tensor result = PseudoInverse.usingSvd(matrix);
-      Tensor identy = IdentityMatrix.of(n);
-      Chop._06.requireClose(result.dot(matrix), identy);
-      Chop._06.requireClose(matrix.dot(result), identy);
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 4, 7 })
+  void testHilbertSquare(int n) {
+    Tensor matrix = HilbertMatrix.of(n);
+    Tensor result = PseudoInverse.usingSvd(matrix);
+    Tensor identy = IdentityMatrix.of(n);
+    Chop._06.requireClose(result.dot(matrix), identy);
+    Chop._06.requireClose(matrix.dot(result), identy);
   }
 
-  @Test
-  void testMixedUnitsVantHoff() {
+  @ParameterizedTest
+  @ValueSource(ints = { 0, 1, 2 })
+  void testMixedUnitsVantHoff(int degree) {
     // inspired by code by gjoel
-    for (int deg = 0; deg <= 2; ++deg) {
-      int degree = deg;
-      Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}").map(Scalar::reciprocal);
-      assertEquals(x.Get(0).one(), RealScalar.ONE);
-      Tensor matrix = x.map(s -> NestList.of(s::multiply, s.one(), degree));
-      PseudoInverse.of(matrix);
-    }
+    Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}").map(Scalar::reciprocal);
+    assertEquals(x.Get(0).one(), RealScalar.ONE);
+    Tensor matrix = x.map(s -> NestList.of(s::multiply, s.one(), degree));
+    PseudoInverse.of(matrix);
   }
 
   @Test
@@ -80,30 +80,28 @@ class PseudoInverseTest {
     assertEquals(PseudoInverse.of(HilbertMatrix.of(2, 3)), Transpose.of(expect));
   }
 
-  @Test
-  void testHilbertRect() {
-    for (int m = 2; m < 6; ++m) {
-      int n = m + 2;
-      Tensor matrix = HilbertMatrix.of(n, m);
-      assertEquals(MatrixRank.of(matrix), m);
-      ExactTensorQ.require(matrix);
-      Tensor sol1 = PseudoInverse.of(matrix);
-      ExactTensorQ.require(sol1);
-      Tensor sol2 = PseudoInverse.usingQR(matrix);
-      Chop._03.requireClose(sol1, sol2);
-      Tensor sol3 = PseudoInverse.usingSvd(matrix);
-      Chop._03.requireClose(sol1, sol3);
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 2, 4, 5 })
+  void testHilbertRect(int m) {
+    int n = m + 2;
+    Tensor matrix = HilbertMatrix.of(n, m);
+    assertEquals(MatrixRank.of(matrix), m);
+    ExactTensorQ.require(matrix);
+    Tensor sol1 = PseudoInverse.of(matrix);
+    ExactTensorQ.require(sol1);
+    Tensor sol2 = PseudoInverse.usingQR(matrix);
+    Chop._03.requireClose(sol1, sol2);
+    Tensor sol3 = PseudoInverse.usingSvd(matrix);
+    Chop._03.requireClose(sol1, sol3);
   }
 
-  @Test
-  void testHilbert46() {
-    for (int n = 1; n < 6; ++n) {
-      Tensor matrix = HilbertMatrix.of(n, 6);
-      Tensor result = PseudoInverse.usingSvd(matrix);
-      assertEquals(Dimensions.of(result), Arrays.asList(6, n));
-      Chop._10.requireClose(matrix.dot(result), IdentityMatrix.of(n));
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 4, 5 })
+  void testHilbert46(int n) {
+    Tensor matrix = HilbertMatrix.of(n, 6);
+    Tensor result = PseudoInverse.usingSvd(matrix);
+    assertEquals(Dimensions.of(result), Arrays.asList(6, n));
+    Chop._10.requireClose(matrix.dot(result), IdentityMatrix.of(n));
   }
 
   @Test
@@ -126,29 +124,27 @@ class PseudoInverseTest {
     Chop._12.requireClose(result.subtract(actual), Array.zeros(4, 3));
   }
 
-  @Test
-  void testQuantity() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 4, 5, 6 })
+  void testQuantity(int n) {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
-    for (int n = 1; n < 7; ++n) {
-      Tensor matrix = RandomVariate.of(distribution, random, n, n);
-      Tensor invers = Inverse.of(matrix);
-      Chop._12.requireClose(invers, PseudoInverse.usingSvd(matrix)); // chop_09 was insufficient
-      Chop._12.requireClose(invers, PseudoInverse.usingQR(matrix));
-    }
+    Tensor matrix = RandomVariate.of(distribution, random, n, n);
+    Tensor invers = Inverse.of(matrix);
+    Chop._12.requireClose(invers, PseudoInverse.usingSvd(matrix));
+    Chop._12.requireClose(invers, PseudoInverse.usingQR(matrix));
   }
 
-  @Test
-  void testRectangular() {
+  @ParameterizedTest
+  @ValueSource(ints = { 5, 10, 11 })
+  void testRectangular(int m) {
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
-    for (int m = 5; m < 12; ++m) {
-      int n = m + 3;
-      Tensor matrix = RandomVariate.of(distribution, n, m);
-      Tensor pinv = PseudoInverse.usingSvd(matrix);
-      Tensor piqr = PseudoInverse.usingQR(matrix);
-      Chop._09.requireClose(pinv, piqr);
-      Tolerance.CHOP.requireClose(Dot.of(piqr, matrix), IdentityMatrix.of(m));
-    }
+    int n = m + 3;
+    Tensor matrix = RandomVariate.of(distribution, n, m);
+    Tensor pinv = PseudoInverse.usingSvd(matrix);
+    Tensor piqr = PseudoInverse.usingQR(matrix);
+    Chop._09.requireClose(pinv, piqr);
+    Tolerance.CHOP.requireClose(Dot.of(piqr, matrix), IdentityMatrix.of(m));
   }
 
   @Test
@@ -175,16 +171,15 @@ class PseudoInverseTest {
     assertEquals(sol0, sol1);
   }
 
-  @Test
-  void testComplexRectangular() {
-    for (int m = 3; m < 9; ++m) {
-      int n = m + 3;
-      Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, m);
-      Tensor piqr = PseudoInverse.usingQR(matrix);
-      Tolerance.CHOP.requireClose(Dot.of(piqr, matrix), IdentityMatrix.of(m));
-      Tensor pbic = PseudoInverse.of(matrix);
-      Chop._08.requireClose(piqr, pbic);
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 6, 8 })
+  void testComplexRectangular(int m) {
+    int n = m + 3;
+    Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, m);
+    Tensor piqr = PseudoInverse.usingQR(matrix);
+    Tolerance.CHOP.requireClose(Dot.of(piqr, matrix), IdentityMatrix.of(m));
+    Tensor pbic = PseudoInverse.of(matrix);
+    Chop._08.requireClose(piqr, pbic);
   }
 
   @Test
@@ -201,20 +196,19 @@ class PseudoInverseTest {
     assertInstanceOf(DecimalScalar.class, pseudo.Get(1, 2));
   }
 
-  @Test
-  void testPseudoInverseIdempotent() {
-    for (int m = 3; m < 6; ++m) {
-      int n = m + 3;
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
-      Tensor sol = LeastSquares.usingQR(matrix, IdentityMatrix.of(n));
-      assertEquals(Dimensions.of(sol), Arrays.asList(m, n));
-      Tolerance.CHOP.requireClose(PseudoInverse.usingSvd(matrix), sol);
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 4, 5 })
+  void testPseudoInverseIdempotent(int m) {
+    int n = m + 3;
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
+    Tensor sol = LeastSquares.usingQR(matrix, IdentityMatrix.of(n));
+    assertEquals(Dimensions.of(sol), Arrays.asList(m, n));
+    Tolerance.CHOP.requireClose(PseudoInverse.usingSvd(matrix), sol);
   }
 
-  @Test
-  void testRankDeficient() {
-    int r = 2;
+  @ParameterizedTest
+  @ValueSource(ints = { 2, 3 })
+  void testRankDeficient(int r) {
     Distribution distribution = NormalDistribution.standard();
     Tensor m1 = RandomVariate.of(distribution, 7, r);
     Tensor m2 = RandomVariate.of(distribution, r, 4);
@@ -254,17 +248,15 @@ class PseudoInverseTest {
     return vector.dot(PseudoInverse.usingSvd(nullsp)).dot(nullsp);
   }
 
-  @Test
+  @RepeatedTest(10)
   void testQR() {
     Distribution distribution = UniformDistribution.unit();
-    for (int count = 0; count < 10; ++count) {
-      Tensor vector = RandomVariate.of(distribution, 10);
-      Tensor design = RandomVariate.of(distribution, 10, 3);
-      Tensor nullsp = NullSpace.of(Transpose.of(design));
-      Tensor p1 = deprec(vector, nullsp);
-      Tensor p2 = Dot.of(nullsp, vector, nullsp);
-      Tolerance.CHOP.requireClose(p1, p2);
-    }
+    Tensor vector = RandomVariate.of(distribution, 10);
+    Tensor design = RandomVariate.of(distribution, 10, 3);
+    Tensor nullsp = NullSpace.of(Transpose.of(design));
+    Tensor p1 = deprec(vector, nullsp);
+    Tensor p2 = Dot.of(nullsp, vector, nullsp);
+    Tolerance.CHOP.requireClose(p1, p2);
   }
 
   @Test

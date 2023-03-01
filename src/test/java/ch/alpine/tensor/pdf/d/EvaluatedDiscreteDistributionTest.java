@@ -9,10 +9,10 @@ import java.util.NavigableMap;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.sca.Chop;

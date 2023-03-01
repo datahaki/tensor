@@ -4,11 +4,11 @@ package ch.alpine.tensor.num;
 import java.math.BigInteger;
 import java.util.function.Predicate;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.itp.FindRoot;
 import ch.alpine.tensor.sca.Clip;

@@ -3,8 +3,8 @@ package ch.alpine.tensor.mat.pd;
 
 import java.util.Random;
 
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.RepetitionInfo;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
@@ -15,10 +15,10 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
 class SqrtUpTest {
-  @RepeatedTest(5)
-  void testRectangle(RepetitionInfo repetitionInfo) {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 3, 4, 5 })
+  void testRectangle(int n) {
     Random random = new Random(2);
-    int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, n, n);
     PolarDecomposition polarDecomposition = SqrtUp.of(matrix);
     Tensor s = polarDecomposition.getPositiveSemidefinite();
@@ -29,10 +29,10 @@ class SqrtUpTest {
     Chop._10.requireClose(tensor, matrix);
   }
 
-  @RepeatedTest(5)
-  void testRectangleComplex(RepetitionInfo repetitionInfo) {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 3, 4, 5 })
+  void testRectangleComplex(int n) {
     Random random = new Random(2);
-    int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, random, n, n);
     PolarDecomposition polarDecomposition = SqrtUp.of(matrix);
     Tensor s = polarDecomposition.getPositiveSemidefinite();

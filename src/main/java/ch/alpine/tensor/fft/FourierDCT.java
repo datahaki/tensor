@@ -41,17 +41,10 @@ public enum FourierDCT implements DiscreteFourierTransform {
     public Tensor transform(Tensor vector) {
       int n = vector.length();
       int m = n - 1;
-      if (Integers.isPowerOf2(m)) {
-        Tensor x = vector.extract(1, m);
-        Tensor r = Join.of( //
-            Tensors.of(vector.Get(0)), //
-            x, //
-            Tensors.of(vector.Get(m)), //
-            Reverse.of(x));
-        // the book Matrix Computations uses a scaling factor of 1/2 instead of just 1
-        return StaticHelper.re_re(vector, Fourier.FORWARD.transform(r).extract(0, n));
-      }
-      return super.transform(vector);
+      return Integers.isPowerOf2(m) //
+          // the book Matrix Computations uses a scaling factor of 1/2 instead of just 1
+          ? StaticHelper.re_re(vector, Fourier.FORWARD.transform(Join.of(vector, Reverse.of(vector.extract(1, m)))).extract(0, n))
+          : super.transform(vector);
     }
 
     @Override
@@ -66,7 +59,8 @@ public enum FourierDCT implements DiscreteFourierTransform {
         int fi = i;
         matrix.append(Tensors.vector(j -> Cos.FUNCTION.apply(factor.multiply(RealScalar.of(fi * j))), n));
       }
-      matrix.append(Tensors.vector(i -> i % 2 == 0 ? RationalScalar.HALF : RationalScalar.HALF.negate(), n));
+      Scalar neg_half = RationalScalar.HALF.negate();
+      matrix.append(Tensors.vector(i -> i % 2 == 0 ? RationalScalar.HALF : neg_half, n));
       return matrix.multiply(scalar);
     }
   },

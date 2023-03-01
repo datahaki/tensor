@@ -48,7 +48,6 @@ class GramSchmidtTest {
   }
 
   @RepeatedTest(3)
-  // RepetitionInfo repetitionInfo
   void testSimple() throws ClassNotFoundException, IOException {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4);
     QRDecomposition qrDecomposition = Serialization.copy(GramSchmidt.of(matrix));
@@ -122,30 +121,28 @@ class GramSchmidtTest {
     Tolerance.CHOP.requireClose(design, res);
   }
 
-  @Test
-  void testDet() {
+  @ParameterizedTest
+  @ValueSource(ints = { 2, 3, 5 })
+  void testDet(int n) {
     Random random = new Random(5);
-    for (int n = 2; n < 6; ++n) {
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, n, n);
-      QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
-      OrthogonalMatrixQ.require(qrDecomposition.getQ());
-      OrthogonalMatrixQ.require(qrDecomposition.getQConjugateTranspose());
-      Scalar det1 = qrDecomposition.det();
-      Scalar det2 = Det.of(matrix);
-      Tolerance.CHOP.requireClose(Abs.FUNCTION.apply(det1), Abs.FUNCTION.apply(det2));
-    }
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, n, n);
+    QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
+    OrthogonalMatrixQ.require(qrDecomposition.getQ());
+    OrthogonalMatrixQ.require(qrDecomposition.getQConjugateTranspose());
+    Scalar det1 = qrDecomposition.det();
+    Scalar det2 = Det.of(matrix);
+    Tolerance.CHOP.requireClose(Abs.FUNCTION.apply(det1), Abs.FUNCTION.apply(det2));
   }
 
-  @Test
-  void testPInv2x2() {
+  @ParameterizedTest
+  @ValueSource(ints = { 0, 1, 2, 4, 5 })
+  void testPInv2x2(int n) {
     Random random = new Random(2);
-    for (int n = 0; n < 6; ++n) {
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, 2 + n, 2 + n / 2);
-      QRDecomposition gramSchmidt = GramSchmidt.of(matrix);
-      Tensor pinv1 = gramSchmidt.pseudoInverse();
-      Tensor pinv2 = PseudoInverse.of(SingularValueDecomposition.of(matrix));
-      Tolerance.CHOP.requireClose(pinv1, pinv2);
-    }
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, 2 + n, 2 + n / 2);
+    QRDecomposition gramSchmidt = GramSchmidt.of(matrix);
+    Tensor pinv1 = gramSchmidt.pseudoInverse();
+    Tensor pinv2 = PseudoInverse.of(SingularValueDecomposition.of(matrix));
+    Tolerance.CHOP.requireClose(pinv1, pinv2);
   }
 
   @ParameterizedTest

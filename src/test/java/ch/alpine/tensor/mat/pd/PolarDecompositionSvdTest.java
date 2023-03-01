@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -67,15 +69,14 @@ class PolarDecompositionSvdTest {
     assertEquals(Dimensions.of(result), Dimensions.of(matrix));
   }
 
-  @Test
-  void testMatrixExp() {
-    for (int d = 2; d < 5; ++d) {
-      Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
-      OrthogonalMatrixQ.require(matrix);
-      PolarDecompositionSvd polarDecompositionSvd = PolarDecompositionSvd.pu(matrix);
-      Tolerance.CHOP.requireClose(matrix, polarDecompositionSvd.getUnitaryWithDetOne());
-      Tolerance.CHOP.requireClose(matrix, polarDecompositionSvd.getUnitaryWithDetOne2());
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 2, 3, 4 })
+  void testMatrixExp(int d) {
+    Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
+    OrthogonalMatrixQ.require(matrix);
+    PolarDecompositionSvd polarDecompositionSvd = PolarDecompositionSvd.pu(matrix);
+    Tolerance.CHOP.requireClose(matrix, polarDecompositionSvd.getUnitaryWithDetOne());
+    Tolerance.CHOP.requireClose(matrix, polarDecompositionSvd.getUnitaryWithDetOne2());
   }
 
   @Test
@@ -87,17 +88,16 @@ class PolarDecompositionSvdTest {
     Tolerance.CHOP.requireClose(rdetp1, polarDecompositionSvd.getUnitaryWithDetOne2());
   }
 
-  @Test
-  void testAlternatives() {
-    for (int d = 2; d < 10; ++d) {
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), d, d);
-      PolarDecompositionSvd polarDecompositionSvd = PolarDecompositionSvd.pu(matrix);
-      Tensor u1 = polarDecompositionSvd.getUnitaryWithDetOne();
-      Tensor u2 = polarDecompositionSvd.getUnitaryWithDetOne2();
-      Tolerance.CHOP.requireClose(u1, u2);
-      OrthogonalMatrixQ.require(u1);
-      OrthogonalMatrixQ.require(Transpose.of(u1));
-      UnitaryMatrixQ.require(u1);
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 2, 3, 4, 9 })
+  void testAlternatives(int d) {
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), d, d);
+    PolarDecompositionSvd polarDecompositionSvd = PolarDecompositionSvd.pu(matrix);
+    Tensor u1 = polarDecompositionSvd.getUnitaryWithDetOne();
+    Tensor u2 = polarDecompositionSvd.getUnitaryWithDetOne2();
+    Tolerance.CHOP.requireClose(u1, u2);
+    OrthogonalMatrixQ.require(u1);
+    OrthogonalMatrixQ.require(Transpose.of(u1));
+    UnitaryMatrixQ.require(u1);
   }
 }

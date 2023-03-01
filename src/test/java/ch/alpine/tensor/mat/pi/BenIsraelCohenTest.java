@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -35,19 +37,18 @@ import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
 
 class BenIsraelCohenTest {
-  @Test
-  void testQuantity() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4 })
+  void testQuantity(int r) {
     Random random = new Random(2);
     Distribution distribution = LogisticDistribution.of(1, 5);
     ScalarUnaryOperator suo = QuantityMagnitude.singleton("K^1/2*m^-1");
-    for (int r = 1; r < 5; ++r) {
-      Tensor p1 = RandomVariate.of(distribution, random, 8, r);
-      Tensor p2 = RandomVariate.of(distribution, random, r, 4).map(s -> Quantity.of(s, "m*K^-1/2"));
-      Tensor design = p1.dot(p2);
-      Tensor pinv = BenIsraelCohen.of(design);
-      suo.apply(pinv.Get(0, 0));
-      InfluenceMatrixQ.require(design.dot(pinv), Chop._10); // 1e-12 does not always work
-    }
+    Tensor p1 = RandomVariate.of(distribution, random, 8, r);
+    Tensor p2 = RandomVariate.of(distribution, random, r, 4).map(s -> Quantity.of(s, "m*K^-1/2"));
+    Tensor design = p1.dot(p2);
+    Tensor pinv = BenIsraelCohen.of(design);
+    suo.apply(pinv.Get(0, 0));
+    InfluenceMatrixQ.require(design.dot(pinv), Chop._10); // 1e-12 does not always work
   }
 
   @Test
@@ -97,12 +98,13 @@ class BenIsraelCohenTest {
     BenIsraelCohen.of(Tensors.fromString("{{1E-300}}"));
   }
 
-  @Test
-  void testReal() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4 })
+  void testReal(int r) {
     Random random = new Random(3);
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
-    Tensor p1 = RandomVariate.of(distribution, random, 8, 3);
-    Tensor p2 = RandomVariate.of(distribution, random, 3, 4);
+    Tensor p1 = RandomVariate.of(distribution, random, 8, r);
+    Tensor p2 = RandomVariate.of(distribution, random, r, 4);
     Tensor matrix = p1.dot(p2);
     Tensor refine = BenIsraelCohen.of(matrix);
     Chop._09.requireClose(PseudoInverse.of(matrix), refine);
@@ -116,33 +118,33 @@ class BenIsraelCohenTest {
     assertThrows(Throw.class, () -> BenIsraelCohen.of(matrix));
   }
 
-  @Test
-  void testComplexFullRank() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4 })
+  void testComplexFullRank(int r) {
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
-    Tensor re = RandomVariate.of(distribution, 5, 3);
-    Tensor im = RandomVariate.of(distribution, 5, 3);
+    Tensor re = RandomVariate.of(distribution, 5, r);
+    Tensor im = RandomVariate.of(distribution, 5, r);
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
     Tensor refine = BenIsraelCohen.of(matrix);
-    Tolerance.CHOP.requireClose(refine.dot(matrix), IdentityMatrix.of(3));
+    Tolerance.CHOP.requireClose(refine.dot(matrix), IdentityMatrix.of(r));
     Tensor pinvtr = BenIsraelCohen.of(Transpose.of(matrix));
     Tolerance.CHOP.requireClose(Transpose.of(pinvtr), refine);
   }
 
-  @Test
-  void testComplexRankDeficient() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 4 })
+  void testComplexRankDeficient(int r) {
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
-    for (int r = 1; r < 5; ++r) {
-      Tensor p1 = Entrywise.with(ComplexScalar::of).apply( //
-          RandomVariate.of(distribution, 5, r), //
-          RandomVariate.of(distribution, 5, r));
-      Tensor p2 = Entrywise.with(ComplexScalar::of).apply( //
-          RandomVariate.of(distribution, r, 4), //
-          RandomVariate.of(distribution, r, 4));
-      Tensor matrix = p1.dot(p2);
-      Tensor refine = BenIsraelCohen.of(matrix);
-      Scalar rank = Trace.of(matrix.dot(refine));
-      Tolerance.CHOP.requireClose(rank, RealScalar.of(r));
-    }
+    Tensor p1 = Entrywise.with(ComplexScalar::of).apply( //
+        RandomVariate.of(distribution, 5, r), //
+        RandomVariate.of(distribution, 5, r));
+    Tensor p2 = Entrywise.with(ComplexScalar::of).apply( //
+        RandomVariate.of(distribution, r, 4), //
+        RandomVariate.of(distribution, r, 4));
+    Tensor matrix = p1.dot(p2);
+    Tensor refine = BenIsraelCohen.of(matrix);
+    Scalar rank = Trace.of(matrix.dot(refine));
+    Tolerance.CHOP.requireClose(rank, RealScalar.of(r));
   }
 
   @Test

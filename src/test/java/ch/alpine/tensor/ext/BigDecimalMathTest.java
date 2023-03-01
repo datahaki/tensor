@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -12,6 +12,10 @@ import java.math.RoundingMode;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.DecimalScalar;
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Cos;

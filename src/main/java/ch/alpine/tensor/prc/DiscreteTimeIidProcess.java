@@ -5,9 +5,9 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;

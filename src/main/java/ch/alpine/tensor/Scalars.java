@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Divisible;
 import ch.alpine.tensor.num.GaussScalar;

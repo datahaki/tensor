@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -44,56 +46,50 @@ class PolarDecompositionTest {
     assertTrue(hermitian);
   }
 
-  @Test
-  void testRectangle() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 3, 4 })
+  void testRectangle(int k) {
     Random random = new Random(2);
-    int n = 5;
-    for (int k = 1; k < n; ++k) {
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, k, 5);
-      PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
-      _check(matrix, polarDecomposition);
-      Tensor r1 = polarDecomposition.getUnitary();
-      Tensor r2 = Orthogonalize.usingSvd(matrix);
-      Tolerance.CHOP.requireClose(r1, r2);
-    }
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, k, 5);
+    PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
+    _check(matrix, polarDecomposition);
+    Tensor r1 = polarDecomposition.getUnitary();
+    Tensor r2 = Orthogonalize.usingSvd(matrix);
+    Tolerance.CHOP.requireClose(r1, r2);
   }
 
-  @Test
-  void testSquare() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 3, 4, 6 })
+  void testSquare(int k) {
     Random random = new Random(3);
-    int d = 7;
-    for (int k = 1; k < d; ++k) {
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, k, k);
-      PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
-      _check(matrix, polarDecomposition);
-      Tensor r1 = polarDecomposition.getUnitary();
-      Tensor r2 = Orthogonalize.usingSvd(matrix);
-      if (Sign.isPositive(Det.of(matrix)) && Sign.isPositive(Det.of(r1))) {
-        Tolerance.CHOP.requireClose(r1, r2);
-      } else {
-        // System.out.println("---");
-        // System.out.println(Det.of(matrix));
-        // System.out.println(Det.of(r1));
-        // System.out.println(Pretty.of(r1.map(Round._4)));
-        // System.out.println(Pretty.of(r2.map(Round._4)));
-      }
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, k, k);
+    PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
+    _check(matrix, polarDecomposition);
+    Tensor r1 = polarDecomposition.getUnitary();
+    Tensor r2 = Orthogonalize.usingSvd(matrix);
+    if (Sign.isPositive(Det.of(matrix)) && Sign.isPositive(Det.of(r1))) {
+      Tolerance.CHOP.requireClose(r1, r2);
+    } else {
+      // System.out.println("---");
+      // System.out.println(Det.of(matrix));
+      // System.out.println(Det.of(r1));
+      // System.out.println(Pretty.of(r1.map(Round._4)));
+      // System.out.println(Pretty.of(r2.map(Round._4)));
     }
   }
 
-  @Test
-  void testDet1Invariance() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 3, 4, 6 })
+  void testDet1Invariance(int k) {
     Random random = new Random(5);
-    int d = 7;
-    for (int k = 1; k < d; ++k) {
-      Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(NormalDistribution.of(0, 0.1), random, k, k)));
-      Tolerance.CHOP.requireClose(Det.of(matrix), RealScalar.ONE);
-      PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
-      _check(matrix, polarDecomposition);
-      Tensor r1 = polarDecomposition.getUnitary();
-      Tolerance.CHOP.requireClose(Det.of(r1), RealScalar.ONE);
-      Tensor result = Orthogonalize.usingSvd(matrix);
-      Tolerance.CHOP.requireClose(result, matrix);
-    }
+    Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(NormalDistribution.of(0, 0.1), random, k, k)));
+    Tolerance.CHOP.requireClose(Det.of(matrix), RealScalar.ONE);
+    PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
+    _check(matrix, polarDecomposition);
+    Tensor r1 = polarDecomposition.getUnitary();
+    Tolerance.CHOP.requireClose(Det.of(r1), RealScalar.ONE);
+    Tensor result = Orthogonalize.usingSvd(matrix);
+    Tolerance.CHOP.requireClose(result, matrix);
   }
 
   @Test

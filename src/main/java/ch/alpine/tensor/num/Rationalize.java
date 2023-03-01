@@ -2,12 +2,12 @@
 // adapted from http://www.ics.uci.edu/~eppstein/numth/frap.c
 package ch.alpine.tensor.num;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Floor;

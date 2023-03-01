@@ -13,7 +13,6 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -21,6 +20,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.DiscreteDistribution;

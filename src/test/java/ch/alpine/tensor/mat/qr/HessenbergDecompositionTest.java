@@ -27,7 +27,7 @@ import ch.alpine.tensor.qty.Quantity;
 class HessenbergDecompositionTest {
   private static final HessenbergDecomposition _check(Tensor matrix) {
     HessenbergDecomposition hessenbergDecomposition = HessenbergDecomposition.of(matrix);
-    Tensor p = hessenbergDecomposition.getP();
+    Tensor p = hessenbergDecomposition.getUnitary();
     UnitaryMatrixQ.require(p);
     Tensor h = hessenbergDecomposition.getH();
     Tolerance.CHOP.requireClose(UpperTriangularize.of(h, -1), h);

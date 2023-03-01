@@ -3,7 +3,6 @@ package ch.alpine.tensor.chq;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;

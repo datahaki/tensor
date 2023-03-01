@@ -37,12 +37,12 @@ public class SchurDecomposition implements Serializable {
   }
 
   // ---
-  private Scalar[][] hmt;
-  private Scalar[][] pam;
+  private final Scalar[][] hmt;
+  private final Scalar[][] pam;
 
   private SchurDecomposition(HessenbergDecomposition hessenbergDecomposition) {
     hmt = ScalarArray.ofMatrix(hessenbergDecomposition.getH());
-    pam = ScalarArray.ofMatrix(hessenbergDecomposition.getP());
+    pam = ScalarArray.ofMatrix(hessenbergDecomposition.getUnitary());
     // ---
     final int n = hmt.length;
     // compute matrix norm
@@ -289,7 +289,7 @@ public class SchurDecomposition implements Serializable {
     }
   }
 
-  public Tensor getP() {
+  public Tensor getUnitary() {
     return Tensors.matrix(pam);
   }
 
@@ -299,6 +299,6 @@ public class SchurDecomposition implements Serializable {
 
   @Override
   public String toString() {
-    return MathematicaFormat.concise("SchurDecomposition", getP(), getT());
+    return MathematicaFormat.concise("SchurDecomposition", getUnitary(), getT());
   }
 }

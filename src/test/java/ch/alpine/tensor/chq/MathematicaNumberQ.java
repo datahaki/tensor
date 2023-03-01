@@ -2,7 +2,6 @@
 package ch.alpine.tensor.chq;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;

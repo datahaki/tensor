@@ -1,9 +1,11 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Throw;
 
 /** implementation consistent with Mathematica but requires scalar type as input
  * 
