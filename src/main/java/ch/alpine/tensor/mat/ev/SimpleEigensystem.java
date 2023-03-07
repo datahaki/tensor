@@ -51,6 +51,12 @@ import ch.alpine.tensor.mat.re.Det;
   public Tensor values() {
     return values;
   }
+  
+  @Override
+  public Tensor diagonalMatrix() {
+    return DiagonalMatrix.with(values());
+  }
+
 
   @Override
   public Tensor vectors() {

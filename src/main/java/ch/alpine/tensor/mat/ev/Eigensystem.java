@@ -68,14 +68,18 @@ public interface Eigensystem {
       return ofSymmetric(matrix);
     if (HermitianMatrixQ.of(matrix))
       return ofHermitian(matrix);
-    return new SimpleEigensystem(matrix);
+    return new RealEigensystem(matrix);
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.
    * However, the tensor library does not guarantee any particular ordering.
    * 
-   * @return vector of eigenvalues corresponding to the eigenvectors */
+   * @return vector of eigenvalues corresponding to the eigenvectors TODO TENSOR DOC */
   Tensor values();
+
+  /** @return */
+  // TODO TENSOR DOC
+  Tensor diagonalMatrix();
 
   /** @return matrix with rows as eigenvectors of given matrix
    * The eigenvectors are not necessarily scaled to unit length.

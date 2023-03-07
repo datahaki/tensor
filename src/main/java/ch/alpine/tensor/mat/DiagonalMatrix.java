@@ -1,11 +1,14 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import java.util.stream.IntStream;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.spa.SparseArray;
 
 /** consistent with Mathematica, in particular DiagonalMatrix[{}] results in error.
  * 
@@ -19,6 +22,18 @@ public enum DiagonalMatrix {
   public static Tensor with(Tensor vector) {
     int length = Integers.requirePositive(vector.length());
     return Tensors.matrix((i, j) -> i.equals(j) ? vector.Get(i) : vector.Get(i).zero(), length, length);
+    // List<Scalar> list = vector.stream() //
+    // .map(Scalar.class::cast) //
+    // .map(Scalar::zero) //
+    // .distinct() //
+    // .limit(2).toList();
+    // if (list.size() == 1) {
+    // int n = vector.length();
+    // Tensor tensor = SparseArray.of(list.get(0), n, n);
+    // IntStream.range(0, n).forEach(i -> tensor.set(vector.get(i), i, i));
+    // return tensor;
+    // }
+    // throw new Throw(vector);
   }
 
   /** @param n
@@ -28,7 +43,9 @@ public enum DiagonalMatrix {
   public static Tensor of(int n, Scalar value) {
     Integers.requirePositive(n);
     Scalar zero = value.zero();
-    return Tensors.matrix((i, j) -> i.equals(j) ? value : zero, n, n);
+    Tensor tensor = SparseArray.of(zero, n, n);
+    IntStream.range(0, n).forEach(i -> tensor.set(value, i, i));
+    return tensor;
   }
 
   /** @param scalars

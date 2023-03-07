@@ -12,6 +12,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.qty.Quantity;
@@ -20,7 +21,12 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/** for the special case of symmetric matrices the result corresponds to
+/** Quote from SchurTransformer:
+ * "A m &times; m matrix A can be written as the product of three matrices:
+ * A = P . T . P' with P an orthogonal matrix and T an quasi-triangular
+ * matrix. Both P and T are m &times; m matrices."
+ * 
+ * For the special case of symmetric matrices the result corresponds to
  * {@link Eigensystem#ofSymmetric(Tensor)}
  * 
  * Implementation works for matrices consisting of scalars of type {@link Quantity}.
@@ -289,10 +295,15 @@ public class SchurDecomposition implements Serializable {
     }
   }
 
+  /** @return
+   * @see UnitaryMatrixQ */
   public Tensor getUnitary() {
     return Tensors.matrix(pam);
   }
 
+  /** @return quasi upper triangular matrix, i.e.
+   * along the diagonal there are either 1x1 blocks or 2x2 blocks
+   * the latter of which are 2x2 rotation matrices */
   public Tensor getT() {
     return Tensors.matrix(hmt);
   }

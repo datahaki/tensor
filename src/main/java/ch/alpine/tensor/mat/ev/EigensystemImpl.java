@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Ordering;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.mat.DiagonalMatrix;
 
 /** container class to host results of unsorted {@link Eigensystem} and convert
  * to {@link Eigensystem} with eigenvalues sorted in decreasing order. */
@@ -25,6 +26,11 @@ import ch.alpine.tensor.io.MathematicaFormat;
   @Override // from Eigensystem
   public Tensor values() {
     return d;
+  }
+
+  @Override // from Eigensystem
+  public Tensor diagonalMatrix() {
+    return DiagonalMatrix.with(values());
   }
 
   @Override // from Eigensystem

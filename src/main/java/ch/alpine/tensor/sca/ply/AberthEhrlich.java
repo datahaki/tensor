@@ -67,7 +67,6 @@ public class AberthEhrlich {
           }
         }
       } catch (Exception exception) {
-        System.out.println(exception);
         exception.printStackTrace();
       }
     throw new Throw(polynomial);

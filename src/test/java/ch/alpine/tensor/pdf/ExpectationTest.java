@@ -49,7 +49,7 @@ class ExpectationTest {
     }
     Scalar var = Expectation.variance(distribution);
     {
-      Scalar Var = Expectation.of(s -> AbsSquared.of(s.subtract(mean)), distribution);
+      Scalar Var = Expectation.of(s -> AbsSquared.between(s, mean), distribution);
       Chop._12.requireClose(Var, var);
     }
   }

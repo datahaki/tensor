@@ -12,6 +12,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.sca.Abs;
 
 /** vector of eigen{@link #values()} has strictly zero imaginary part */
@@ -83,6 +84,11 @@ import ch.alpine.tensor.sca.Abs;
   @Override // from Eigensystem
   public final Tensor values() {
     return Tensor.of(IntStream.range(0, n).mapToObj(this::diag));
+  }
+
+  @Override
+  public Tensor diagonalMatrix() {
+    return DiagonalMatrix.with(values());
   }
 
   @Override // from Eigensystem
