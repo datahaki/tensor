@@ -5,7 +5,7 @@ import ch.alpine.tensor.Tensor;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Eigenvalues.html">Eigenvalues</a> */
-public enum Eigenvalues {
+enum Eigenvalues {
   ;
   /** @param matrix symmetric
    * @return vector of eigenvalues */

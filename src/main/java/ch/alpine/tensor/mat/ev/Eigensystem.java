@@ -35,9 +35,7 @@ public interface Eigensystem {
    * @param chop threshold to check symmetry of matrix
    * @return */
   static Eigensystem ofSymmetric(Tensor matrix, Chop chop) {
-    JacobiReal jacobiReal = new JacobiReal(SymmetricMatrixQ.require(matrix, chop));
-    jacobiReal.solve();
-    return new EigensystemImpl(jacobiReal);
+    return new EigensystemImpl(JacobiReal.eigensystem(SymmetricMatrixQ.require(matrix, chop)));
   }
 
   /** @param matrix hermitian
@@ -52,9 +50,7 @@ public interface Eigensystem {
    * @return eigenvalue decomposition of given matrix
    * @see HermitianMatrixQ */
   static Eigensystem ofHermitian(Tensor matrix, Chop chop) {
-    JacobiComplex jacobiComplex = new JacobiComplex(HermitianMatrixQ.require(matrix, chop));
-    jacobiComplex.solve();
-    return new EigensystemImpl(jacobiComplex);
+    return new EigensystemImpl(JacobiComplex.eigensystem(HermitianMatrixQ.require(matrix, chop)));
   }
 
   /** Careful: the general case is only for use with small matrices
@@ -77,8 +73,12 @@ public interface Eigensystem {
    * @return vector of eigenvalues corresponding to the eigenvectors TODO TENSOR DOC */
   Tensor values();
 
-  /** @return */
-  // TODO TENSOR DOC
+  /** A*V = V*D
+   * 
+   * where
+   * A is the original matrix
+   * V = Transpose.of(vectors())
+   * D = diagonalMatrix() */
   Tensor diagonalMatrix();
 
   /** @return matrix with rows as eigenvectors of given matrix

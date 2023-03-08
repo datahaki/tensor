@@ -2,6 +2,7 @@
 // modified by jph
 package ch.alpine.tensor.mat.ev;
 
+import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -11,12 +12,13 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.sca.Abs;
 
 /** vector of eigen{@link #values()} has strictly zero imaginary part */
-/* package */ abstract class JacobiMethod implements Eigensystem {
+/* package */ abstract class JacobiMethod implements Eigensystem, Serializable {
   private static final int MAX_ITERATIONS = 50;
   protected static final Scalar DBL_EPSILON = DoubleScalar.of(Math.ulp(1.0));
   private static final Scalar HUNDRED = DoubleScalar.of(100);
@@ -86,13 +88,18 @@ import ch.alpine.tensor.sca.Abs;
     return Tensor.of(IntStream.range(0, n).mapToObj(this::diag));
   }
 
-  @Override
-  public Tensor diagonalMatrix() {
+  @Override // from Eigensystem
+  public final Tensor diagonalMatrix() {
     return DiagonalMatrix.with(values());
   }
 
   @Override // from Eigensystem
   public final Tensor vectors() {
     return Unprotect.byRef(V);
+  }
+
+  @Override // from Object
+  public final String toString() {
+    return MathematicaFormat.concise("Eigensystem", values(), vectors());
   }
 }

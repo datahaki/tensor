@@ -10,11 +10,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -26,12 +24,7 @@ class RealEigensystemTest {
   void testRandom(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
     Eigensystem eigensystem = new RealEigensystem(matrix);
-    Tensor v = Transpose.of(eigensystem.vectors());
-    Tensor d = eigensystem.diagonalMatrix();
-    // A*V = V*D
-    Tensor lhs = Dot.of(matrix, v);
-    Tensor rhs = Dot.of(v, d);
-    Tolerance.CHOP.requireClose(lhs, rhs);
+    TestHelper.checkEquation(matrix, eigensystem);
   }
 
   @ParameterizedTest
@@ -39,12 +32,7 @@ class RealEigensystemTest {
   void testRandomOfs(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.of(10, 1), n, n);
     Eigensystem eigensystem = new RealEigensystem(matrix);
-    Tensor v = Transpose.of(eigensystem.vectors());
-    Tensor d = eigensystem.diagonalMatrix();
-    // A*V = V*D
-    Tensor lhs = Dot.of(matrix, v);
-    Tensor rhs = Dot.of(v, d);
-    Tolerance.CHOP.requireClose(lhs, rhs);
+    TestHelper.checkEquation(matrix, eigensystem);
   }
 
   @ParameterizedTest
@@ -52,12 +40,7 @@ class RealEigensystemTest {
   void testRandomEps(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.of(0, 1e-12), n, n);
     Eigensystem eigensystem = new RealEigensystem(matrix);
-    Tensor v = Transpose.of(eigensystem.vectors());
-    Tensor d = eigensystem.diagonalMatrix();
-    // A*V = V*D
-    Tensor lhs = Dot.of(matrix, v);
-    Tensor rhs = Dot.of(v, d);
-    Chop._06.requireClose(lhs, rhs);
+    TestHelper.checkEquation(matrix, eigensystem, Chop._08);
   }
 
   @Disabled // schur decomp fails
@@ -66,12 +49,7 @@ class RealEigensystemTest {
   void testRandomEps2(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.of(0, 1e-14), n, n);
     Eigensystem eigensystem = new RealEigensystem(matrix);
-    Tensor v = Transpose.of(eigensystem.vectors());
-    Tensor d = eigensystem.diagonalMatrix();
-    // A*V = V*D
-    Tensor lhs = Dot.of(matrix, v);
-    Tensor rhs = Dot.of(v, d);
-    Chop._06.requireClose(lhs, rhs);
+    TestHelper.checkEquation(matrix, eigensystem);
   }
 
   @ParameterizedTest
@@ -79,26 +57,16 @@ class RealEigensystemTest {
   void testId(int n) {
     Tensor matrix = IdentityMatrix.of(n);
     Eigensystem eigensystem = new RealEigensystem(matrix);
-    Tensor v = Transpose.of(eigensystem.vectors());
-    Tensor d = eigensystem.diagonalMatrix();
-    // A*V = V*D
-    Tensor lhs = Dot.of(matrix, v);
-    Tensor rhs = Dot.of(v, d);
-    Tolerance.CHOP.requireClose(lhs, rhs);
-    UnitaryMatrixQ.require(v);
+    TestHelper.checkEquation(matrix, eigensystem);
+    UnitaryMatrixQ.require(eigensystem.vectors());
   }
 
   @Test
   void test10() {
     Tensor matrix = DiagonalMatrix.of(1, 0, 0, 0, 1, 0, 0, 0, 0);
     Eigensystem eigensystem = new RealEigensystem(matrix);
-    Tensor v = Transpose.of(eigensystem.vectors());
-    Tensor d = eigensystem.diagonalMatrix();
-    // A*V = V*D
-    Tensor lhs = Dot.of(matrix, v);
-    Tensor rhs = Dot.of(v, d);
-    Tolerance.CHOP.requireClose(lhs, rhs);
-    UnitaryMatrixQ.require(v);
+    TestHelper.checkEquation(matrix, eigensystem);
+    UnitaryMatrixQ.require(eigensystem.vectors());
   }
 
   @ParameterizedTest
@@ -107,14 +75,8 @@ class RealEigensystemTest {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
     matrix = Transpose.of(matrix).subtract(matrix);
     Eigensystem eigensystem = new RealEigensystem(matrix);
-    Tensor v = Transpose.of(eigensystem.vectors());
-    Tensor d = eigensystem.diagonalMatrix();
-    // A*V = V*D
-    Tensor lhs = Dot.of(matrix, v);
-    Tensor rhs = Dot.of(v, d);
-    Tolerance.CHOP.requireClose(lhs, rhs);
-    UnitaryMatrixQ.require(v);
-    // System.out.println(eigensystem.values());
+    TestHelper.checkEquation(matrix, eigensystem);
+    UnitaryMatrixQ.require(eigensystem.vectors());
   }
 
   @ParameterizedTest

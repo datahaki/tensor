@@ -30,6 +30,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
@@ -42,7 +43,7 @@ import ch.alpine.tensor.sca.N;
 
 class JacobiMethodTest {
   private static void checkEquation(Tensor matrix, Eigensystem eigensystem) {
-    assertTrue(eigensystem.toString().startsWith("Eigensystem["));
+    
     Tensor vectors = eigensystem.vectors();
     Tensor values = eigensystem.values();
     {
@@ -78,6 +79,8 @@ class JacobiMethodTest {
     assertEquals(eigensystem.values(), Reverse.of(Sort.of(eigensystem.values())));
     JacobiReal jacobiMethod = new JacobiReal(matrix);
     SymmetricMatrixQ.require(Tensors.matrix(jacobiMethod.H), Chop.NONE);
+    TestHelper.checkEquation(matrix, eigensystem);
+    UnitaryMatrixQ.require(eigensystem.vectors());
   }
 
   @Test

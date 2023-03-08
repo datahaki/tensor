@@ -2,6 +2,8 @@
 // adapted by jph
 package ch.alpine.tensor.mat.ev;
 
+import java.io.Serializable;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -12,6 +14,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.qr.SchurDecomposition;
@@ -29,7 +32,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.spa.SparseArray;
 
-/* package */ class RealEigensystem implements Eigensystem {
+/* package */ class RealEigensystem implements Eigensystem, Serializable {
   private static final Scalar DEFAULT_EPSILON = RealScalar.of(1e-12);
   private static final Scalar EPSILON = RealScalar.of(1e-16);
   // ---
@@ -167,9 +170,10 @@ import ch.alpine.tensor.spa.SparseArray;
                 matrixT[i + 1][idx - 1] = ra.negate().subtract(w.multiply(matrixT[i][idx - 1])).add(q.multiply(matrixT[i][idx])).divide(x);
                 matrixT[i + 1][idx] = sa.negate().subtract(w.multiply(matrixT[i][idx])).subtract(q.multiply(matrixT[i][idx - 1])).divide(x);
               } else {
-                Scalar rs = ComplexScalar.of(r, s).negate();
-                ReIm c3 = new ReIm(rs.subtract(y.multiply(ComplexScalar.of( //
-                    matrixT[i][idx - 1], matrixT[i][idx]))).divide(ComplexScalar.of(z, q)));
+                Scalar rs = ComplexScalar.of(r, s);
+                Scalar zq = ComplexScalar.of(z, q);
+                Scalar mi = ComplexScalar.of(matrixT[i][idx - 1], matrixT[i][idx]);
+                ReIm c3 = new ReIm(rs.negate().subtract(y.multiply(mi)).divide(zq));
                 matrixT[i + 1][idx - 1] = c3.re();
                 matrixT[i + 1][idx] = c3.im();
               }
@@ -199,12 +203,12 @@ import ch.alpine.tensor.spa.SparseArray;
     eigenvectors = Transpose.of(Tensors.matrix(matrixP));
   }
 
-  @Override
+  @Override // from Eigensystem
   public Tensor values() {
     return Tensors.of(eigenvalues);
   }
 
-  @Override
+  @Override // from Eigensystem
   public Tensor diagonalMatrix() {
     int n = eigenvalues.length;
     Tensor values = SparseArray.of(RealScalar.ZERO, n, n); // TODO TENSOR zero
@@ -220,8 +224,13 @@ import ch.alpine.tensor.spa.SparseArray;
     return values;
   }
 
-  @Override
+  @Override // from Eigensystem
   public Tensor vectors() {
     return eigenvectors;
+  }
+
+  @Override // from Object
+  public String toString() {
+    return MathematicaFormat.concise("Eigensystem", values(), vectors());
   }
 }

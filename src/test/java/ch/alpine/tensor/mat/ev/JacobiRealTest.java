@@ -53,6 +53,7 @@ class JacobiRealTest {
     Tensor v = Transpose.of(vs);
     Tolerance.CHOP.requireClose(Dot.of(v, D, vs), matrix);
     Tolerance.CHOP.requireClose(Dot.of(vs, matrix, v), D);
+    TestHelper.checkEquation(matrix, eigensystem);
   }
 
   private static void _check(Tensor matrix, Scalar[][] A, Tensor[] Vs) {
@@ -100,7 +101,7 @@ class JacobiRealTest {
 
   @Test
   void testEmulation() {
-    Tensor matrix = HilbertMatrix.of(4).unmodifiable();
+    final Tensor matrix = HilbertMatrix.of(4).unmodifiable();
     int p = 1;
     int q = 2;
     JacobiReal jacobiReal = new JacobiReal(matrix);
@@ -119,6 +120,9 @@ class JacobiRealTest {
     Tolerance.CHOP.requireClose( //
         Tensors.matrix(A), //
         BasisTransform.of(matrix, 1, r));
+    Eigensystem eigensystem = jacobiReal;
+    // solve was not called
+    assertTrue(eigensystem.toString().startsWith("Eigensystem["));
   }
 
   @Test

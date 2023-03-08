@@ -11,6 +11,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.NullSpace;
 import ch.alpine.tensor.mat.Tolerance;
@@ -51,15 +52,19 @@ import ch.alpine.tensor.mat.re.Det;
   public Tensor values() {
     return values;
   }
-  
+
   @Override
   public Tensor diagonalMatrix() {
     return DiagonalMatrix.with(values());
   }
 
-
   @Override
   public Tensor vectors() {
     return vectors;
+  }
+
+  @Override // from Object
+  public String toString() {
+    return MathematicaFormat.concise("Eigensystem", values(), vectors());
   }
 }

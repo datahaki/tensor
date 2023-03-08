@@ -19,8 +19,10 @@ class EigensystemImplTest {
     Distribution distribution = UniformDistribution.of(-1, 1);
     Tensor x = RandomVariate.of(distribution, 4, 3);
     Tensor matrix = MatrixDotTranspose.of(x, x);
-    Tensor values1 = Eigensystem.ofSymmetric(matrix).values();
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+    Tensor values1 = eigensystem.values();
     Tensor values2 = SingularValueList.of(matrix);
     Tolerance.CHOP.requireClose(values1, values2);
+    TestHelper.checkEquation(matrix, eigensystem);
   }
 }

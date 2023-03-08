@@ -10,7 +10,6 @@ import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.sca.Chop;
 
-@Deprecated
 /* package */ class QREigensystem implements Eigensystem, Serializable {
   private static final int MAX_ITERATIONS = 20;
   // ---

@@ -5,6 +5,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Arg;
@@ -20,7 +21,15 @@ import ch.alpine.tensor.sca.tri.Sin;
  * https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices */
 /* package */ class JacobiComplex extends JacobiMethod {
   /** @param matrix hermitian */
-  public JacobiComplex(Tensor matrix) {
+  public static Eigensystem eigensystem(Tensor matrix) {
+    JacobiMethod jacobiMethod = new JacobiComplex(matrix);
+    jacobiMethod.solve();
+    return jacobiMethod;
+  }
+
+  // ---
+  @PackageTestAccess
+  JacobiComplex(Tensor matrix) {
     super(matrix);
     // remove any imaginary part on diagonal after check that hermitian numerical
     for (int p = 0; p < n; ++p)
