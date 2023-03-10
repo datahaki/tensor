@@ -3,7 +3,6 @@ package ch.alpine.tensor.mat.pi;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.ArrayFlatten;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -13,6 +12,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.red.EqualsReduce;
 
 /** Solves the linear system
  * 
@@ -37,10 +37,9 @@ public final class LagrangeMultiplier implements Serializable {
   public LagrangeMultiplier(Tensor square, Tensor linear) {
     n = square.length();
     int d = linear.length();
-    Scalar zero = square.Get(0, 0).zero();
     matrix = ArrayFlatten.of(new Tensor[][] { //
         { square, ConjugateTranspose.of(linear) }, //
-        { linear, ConstantArray.of(zero, d, d) } }); // Array.zeros(d, d)
+        { linear, ConstantArray.of(EqualsReduce.zero(square), d, d) } });
   }
 
   /** matrix=

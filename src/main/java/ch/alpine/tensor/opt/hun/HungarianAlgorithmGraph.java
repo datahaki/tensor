@@ -12,7 +12,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.PadRight;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.red.EqualsReduce;
 
 /* package */ abstract class HungarianAlgorithmGraph implements BipartiteMatching, Serializable {
   private final int rows;
@@ -24,12 +26,10 @@ import ch.alpine.tensor.io.ScalarArray;
 
   /** @param _matrix with entries of unique unit */
   protected HungarianAlgorithmGraph(Tensor _matrix) {
-    Unprotect.getUnitUnique(_matrix);
-    rows = _matrix.length();
+    rows = Integers.requirePositive(_matrix.length());
     cols = Unprotect.dimension1(_matrix);
     int dim = Math.max(rows, cols);
-    Scalar zero = _matrix.Get(0, 0).zero();
-    Tensor normal = PadRight.with(zero, dim, dim).apply(rows <= cols //
+    Tensor normal = PadRight.with(EqualsReduce.zero(_matrix), dim, dim).apply(rows <= cols //
         ? _matrix
         : Transpose.of(_matrix));
     matrix = ScalarArray.ofMatrix(normal);

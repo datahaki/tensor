@@ -136,28 +136,28 @@ class UnprotectTest {
 
   @Test
   void testGetUnitUnique() {
-    assertEquals(Unprotect.getUnitUnique(Range.of(1, 10)), Unit.of(""));
-    assertEquals(Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")), Unit.of("m"));
-    assertEquals(Unprotect.getUnitUnique(DiagonalMatrix.of(3, Quantity.of(1, "s^2*m^-1"))), Unit.of("s^2*m^-1"));
+    assertEquals(UnprotectDepr.getUnitUnique(Range.of(1, 10)), Unit.of(""));
+    assertEquals(UnprotectDepr.getUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")), Unit.of("m"));
+    assertEquals(UnprotectDepr.getUnitUnique(DiagonalMatrix.of(3, Quantity.of(1, "s^2*m^-1"))), Unit.of("s^2*m^-1"));
   }
 
   @Test
   void testOne() {
     Tensor tensor = Tensors.vector(2, 3, 4);
-    Unit unit = Unprotect.getUnitUnique(tensor);
+    Unit unit = UnprotectDepr.getUnitUnique(tensor);
     assertTrue(UnitQ.isOne(unit));
   }
 
   @Test
   void testGetUnitUniqueFail1() {
-    assertThrows(IllegalArgumentException.class, () -> Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[s],3[m]}}")));
+    assertThrows(IllegalArgumentException.class, () -> UnprotectDepr.getUnitUnique(Tensors.fromString("{{1[m],2[s],3[m]}}")));
   }
 
   @Test
   void testGetUnitUniqueFail2() {
     Tensor tensor = Tensors.fromString("{1[m], 2[s]}");
     assertFalse(StringScalarQ.any(tensor));
-    assertThrows(IllegalArgumentException.class, () -> Unprotect.getUnitUnique(tensor));
+    assertThrows(IllegalArgumentException.class, () -> UnprotectDepr.getUnitUnique(tensor));
   }
 
   @Test

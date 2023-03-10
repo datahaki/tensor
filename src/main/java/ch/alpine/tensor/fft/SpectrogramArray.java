@@ -12,6 +12,7 @@ import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.win.DirichletWindow;
@@ -88,7 +89,7 @@ public class SpectrogramArray implements TensorUnaryOperator {
         : this.offset;
     if (offset <= 0 || windowLength < offset)
       throw new IllegalArgumentException("windowLength=" + windowLength + " offset=" + offset);
-    Scalar zero = vector.Get(0).zero();
+    Scalar zero = EqualsReduce.zero(vector);
     int highestOneBit = Integer.highestOneBit(windowLength);
     TensorUnaryOperator tuo = Objects.isNull(window) //
         ? TensorUnaryOperator.IDENTITY

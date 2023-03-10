@@ -40,12 +40,20 @@ public interface ComplexScalar extends Scalar, //
    * 
    * @param re
    * @param im
-   * @return scalar with re as real part and im as imaginary part
-   * @throws Exception if re or im are {@link ComplexScalar} */
+   * @return re + im * I */
   static Scalar of(Scalar re, Scalar im) {
-    if (re instanceof MultiplexScalar || im instanceof MultiplexScalar)
-      throw new Throw(re, im);
-    return ComplexScalarImpl.of(Objects.requireNonNull(re), im);
+    return re instanceof MultiplexScalar || im instanceof MultiplexScalar //
+        ? im.multiply(I).add(re)
+        : ComplexScalarImpl.of(Objects.requireNonNull(re), im);
+  }
+
+  /** @param im
+   * @return complex number with given im as imaginary part and
+   * real part of im.zero() */
+  static Scalar withIm(Scalar im) {
+    return im instanceof MultiplexScalar //
+        ? im.multiply(I)
+        : ComplexScalarImpl.of(im.zero(), im);
   }
 
   /** @param re

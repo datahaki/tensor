@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.UnprotectDepr;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
@@ -29,24 +29,24 @@ class InitTest {
   public static SingularValueDecomposition svd(Tensor matrix) {
     Init init = new Init(matrix);
     {
-      Unprotect.getUnitUnique(init.u);
-      Unprotect.getUnitUnique(init.v);
+      UnprotectDepr.getUnitUnique(init.u);
+      UnprotectDepr.getUnitUnique(init.v);
       assertEquals( //
-          Unprotect.getUnitUnique(init.w), //
-          Unprotect.getUnitUnique(init.r));
+          UnprotectDepr.getUnitUnique(init.w), //
+          UnprotectDepr.getUnitUnique(init.r));
     }
     SingularValueDecomposition svd = new SingularValueDecompositionImpl(init);
-    Unit unit = Unprotect.getUnitUnique(matrix);
+    Unit unit = UnprotectDepr.getUnitUnique(matrix);
     List<Integer> dims = Dimensions.of(matrix);
     int N = dims.get(1);
     final Tensor U = svd.getU();
-    assertEquals(Unprotect.getUnitUnique(U), Unit.ONE);
+    assertEquals(UnprotectDepr.getUnitUnique(U), Unit.ONE);
     assertEquals(dims, Dimensions.of(U));
     final Tensor w = svd.values();
-    Unit unitUnique = Unprotect.getUnitUnique(w);
+    Unit unitUnique = UnprotectDepr.getUnitUnique(w);
     assertEquals(unit, unitUnique);
     final Tensor V = svd.getV();
-    assertEquals(Unprotect.getUnitUnique(V), Unit.ONE);
+    assertEquals(UnprotectDepr.getUnitUnique(V), Unit.ONE);
     Tensor W = DiagonalMatrix.with(w);
     Tensor UtU = Tolerance.CHOP.of(Transpose.of(U).dot(U).subtract(IdentityMatrix.of(N)));
     assertEquals(UtU, Array.zeros(N, N));

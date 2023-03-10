@@ -19,7 +19,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.UnprotectDepr;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dot;
@@ -255,8 +255,8 @@ class InfluenceMatrixTest {
   void testZeroQuantity() {
     Tensor design = ConstantArray.of(Quantity.of(0, "m"), 4, 3);
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-    assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
-    assertEquals(Unprotect.getUnitUnique(svd.values()), Unit.of("m"));
+    assertEquals(UnprotectDepr.getUnitUnique(svd.getU()), Unit.ONE);
+    assertEquals(UnprotectDepr.getUnitUnique(svd.values()), Unit.of("m"));
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     Tensor matrix = SymmetricMatrixQ.require(influenceMatrix.matrix());
     ExactTensorQ.require(matrix);
@@ -274,8 +274,8 @@ class InfluenceMatrixTest {
     Tensor matrix = SymmetricMatrixQ.require(influenceMatrix.matrix());
     assertEquals(matrix, Array.zeros(4, 4));
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-    assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
-    assertEquals(Unprotect.getUnitUnique(svd.values()), Unit.of("m"));
+    assertEquals(UnprotectDepr.getUnitUnique(svd.getU()), Unit.ONE);
+    assertEquals(UnprotectDepr.getUnitUnique(svd.values()), Unit.of("m"));
   }
 
   @Test

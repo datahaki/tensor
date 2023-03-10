@@ -19,6 +19,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.num.BinaryPower;
@@ -42,7 +43,6 @@ import ch.alpine.tensor.sca.tri.Sin;
   private final Scalar w;
   private final Tensor xyz;
 
-  // ---
   public QuaternionImpl(Scalar w, Tensor xyz) {
     this.w = w;
     this.xyz = xyz;
@@ -50,15 +50,16 @@ import ch.alpine.tensor.sca.tri.Sin;
 
   @Override // from Quaternion
   public Quaternion multiply(Scalar scalar) {
-    if (scalar instanceof Quaternion quaternion)
+    if (scalar instanceof Quaternion quaternion) {
+      Tensor _xyz = quaternion.xyz();
       return new QuaternionImpl( //
-          w.multiply(quaternion.w()).subtract(xyz.dot(quaternion.xyz())), //
-          xyz.multiply(quaternion.w()).add(quaternion.xyz().multiply(w())).add(Cross.of(xyz, quaternion.xyz())));
+          w.multiply(quaternion.w()).subtract(xyz.dot(_xyz)), //
+          xyz.multiply(quaternion.w()).add(_xyz.multiply(w)).add(Cross.of(xyz, _xyz)));
+    }
     if (scalar instanceof ComplexEmbedding complexEmbedding) {
       Scalar imag = complexEmbedding.imag();
-      return multiply(new QuaternionImpl( //
-          complexEmbedding.real(), //
-          Tensors.of(imag, imag.zero(), imag.zero())));
+      Scalar zero = imag.zero();
+      return multiply(new QuaternionImpl(complexEmbedding.real(), Tensors.of(imag, zero, zero)));
     }
     return new QuaternionImpl(w.multiply(scalar), xyz.multiply(scalar));
   }
@@ -244,7 +245,7 @@ import ch.alpine.tensor.sca.tri.Sin;
   @Override // from AbstractScalar
   public String toString() {
     // Mathematica
-    // return String.format("Quaternion[%s, %s, %s, %s]", w, xyz.get(0), xyz.get(1), xyz.get(2));
-    return "{\"w\": " + w + ", \"xyz\": " + xyz + "}";
+    // return String.format("Quaternion[%s, %s, %s, %s]", w, xyz.Get(0), xyz.Get(1), xyz.Get(2));
+    return MathematicaFormat.concise("Quaternion", w, xyz);
   }
 }

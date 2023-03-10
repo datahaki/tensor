@@ -16,6 +16,7 @@ import ch.alpine.tensor.nrm.Matrix1Norm;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.red.CopySign;
+import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
@@ -41,10 +42,8 @@ import ch.alpine.tensor.sca.pow.Sqrt;
     if (matrix.length() < cols)
       throw new IllegalArgumentException("rows=" + matrix.length() + " cols=" + cols);
     // ---
-    Unprotect.getUnitUnique(matrix);
-    // ---
     u = matrix.copy();
-    w = matrix.get(0).map(Scalar::zero);
+    w = Array.same(EqualsReduce.zero(matrix), cols);
     r = w.copy();
     // ---
     for (int i = 0; i < cols; ++i) {

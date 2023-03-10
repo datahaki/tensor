@@ -16,6 +16,7 @@ import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
@@ -43,10 +44,12 @@ public class SchurDecomposition implements Serializable {
   }
 
   // ---
+  private final Scalar zero;
   private final Scalar[][] hmt;
   private final Scalar[][] pam;
 
   private SchurDecomposition(HessenbergDecomposition hessenbergDecomposition) {
+    zero = EqualsReduce.zero(hessenbergDecomposition.getH());
     hmt = ScalarArray.ofMatrix(hessenbergDecomposition.getH());
     pam = ScalarArray.ofMatrix(hessenbergDecomposition.getUnitary());
     // ---
@@ -55,7 +58,7 @@ public class SchurDecomposition implements Serializable {
     final Scalar norm = getNorm();
     // shift information
     final ShiftInfo shift = new ShiftInfo();
-    shift.exShift = hmt[0][0].zero();
+    shift.exShift = zero;
     // Outer loop over eigenvalue index
     int iteration = 0;
     int iu = n - 1;
@@ -124,7 +127,7 @@ public class SchurDecomposition implements Serializable {
   }
 
   private Scalar getNorm() {
-    Scalar norm = hmt[0][0].zero();
+    Scalar norm = zero;
     for (int i = 0; i < hmt.length; ++i)
       // as matrix T is (quasi-)triangular, also take the sub-diagonal element into account
       for (int j = Math.max(i - 1, 0); j < hmt.length; ++j)
@@ -229,7 +232,7 @@ public class SchurDecomposition implements Serializable {
         q = hmt[k + 1][k - 1];
         r = notlast //
             ? hmt[k + 2][k - 1]
-            : hmt[0][0].zero(); // 0
+            : zero;
         shift.x = Abs.FUNCTION.apply(p).add(Abs.FUNCTION.apply(q)).add(Abs.FUNCTION.apply(r));
         // if (Scalars.lessThan(Abs.FUNCTION.apply(shift.x), EPSILON))
         if (Chop._16.isZero(shift.x)) // related to EPSILON (see commented line above)

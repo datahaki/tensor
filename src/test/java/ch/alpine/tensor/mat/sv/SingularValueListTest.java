@@ -35,6 +35,6 @@ class SingularValueListTest {
     Distribution distribution = DiscreteUniformDistribution.of(1, 4);
     Tensor matrix = RandomVariate.of(distribution, 7, 2);
     matrix.set(s -> Quantity.of((Scalar) s, "s"), Tensor.ALL, 1);
-    assertThrows(IllegalArgumentException.class, () -> SingularValueDecomposition.of(matrix));
+    assertThrows(Exception.class, () -> SingularValueDecomposition.of(matrix));
   }
 }

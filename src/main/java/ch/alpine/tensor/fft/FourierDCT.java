@@ -16,6 +16,7 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Cos;
 
@@ -125,7 +126,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
   static Tensor raw2(Tensor vector) {
     int n = vector.length();
     int tail = n * 4;
-    Tensor tensor = Array.same(vector.Get(0).zero(), tail);
+    Tensor tensor = Array.same(EqualsReduce.zero(vector), tail);
     int head = -1;
     ++tail;
     for (Tensor scalar : vector) {
@@ -140,7 +141,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
   @PackageTestAccess
   static Tensor raw3(Tensor vector) {
     int n = vector.length();
-    Tensor tensor = Join.of(vector, Array.same(vector.Get(0).zero(), 1), Reverse.of(Drop.head(vector, 1).negate()));
+    Tensor tensor = Join.of(vector, Array.same(EqualsReduce.zero(vector), 1), Reverse.of(Drop.head(vector, 1).negate()));
     Tensor result = Fourier.INVERSE.transform(Join.of(tensor, tensor.negate()));
     return Tensors.vector(i -> result.Get(i + i + 1), n);
   }

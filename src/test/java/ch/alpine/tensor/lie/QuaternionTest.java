@@ -216,7 +216,8 @@ class QuaternionTest {
     ExactScalarQ.require(q1);
     Scalar n1 = N.DOUBLE.apply(q1);
     assertFalse(ExactScalarQ.of(n1));
-    assertEquals(n1.toString(), "{\"w\": 1.0, \"xyz\": {3.0, -2.0, 2.0}}");
+    // assertEquals(n1.toString(), "{\"w\": 1.0, \"xyz\": {3.0, -2.0, 2.0}}");
+    assertEquals(n1.toString(), "Quaternion[1.0, {3.0, -2.0, 2.0}]");
   }
 
   @Test
@@ -225,7 +226,8 @@ class QuaternionTest {
     ExactScalarQ.require(q1);
     Scalar n1 = N.DECIMAL64.apply(q1);
     assertFalse(ExactScalarQ.of(n1));
-    assertEquals(n1.toString(), "{\"w\": 1, \"xyz\": {3, -2, 2}}");
+    // assertEquals(n1.toString(), "{\"w\": 1, \"xyz\": {3, -2, 2}}");
+    assertEquals(n1.toString(), "Quaternion[1, {3, -2, 2}]");
   }
 
   @Test

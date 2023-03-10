@@ -14,6 +14,7 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Sin;
 
@@ -37,7 +38,7 @@ public enum FourierDST implements DiscreteFourierTransform {
       int n = vector.length();
       int m = n + 1;
       if (Integers.isPowerOf2(m)) {
-        Tensor zero = Array.same(vector.Get(0).zero(), 1);
+        Tensor zero = Array.same(EqualsReduce.zero(vector), 1);
         // the book Matrix Computations uses a scaling factor of I/2 instead of just I
         return Fourier.FORWARD.transform(Join.of( //
             zero, //

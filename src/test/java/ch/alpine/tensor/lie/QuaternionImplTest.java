@@ -263,7 +263,8 @@ class QuaternionImplTest {
   void testToString() {
     Quaternion quaternion = Quaternion.of(1, 2, 3, 4);
     String string = quaternion.toString();
-    assertEquals(string, "{\"w\": 1, \"xyz\": {2, 3, 4}}");
+    // assertEquals(string, "{\"w\": 1, \"xyz\": {2, 3, 4}}");
+    assertEquals(string, "Quaternion[1, {2, 3, 4}]");
   }
 
   @Test

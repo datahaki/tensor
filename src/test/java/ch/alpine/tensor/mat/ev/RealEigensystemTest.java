@@ -16,6 +16,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
 class RealEigensystemTest {
@@ -23,6 +24,16 @@ class RealEigensystemTest {
   @ValueSource(ints = { 1, 2, 3, 5, 6, 7, 10 })
   void testRandom(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
+    Eigensystem eigensystem = new RealEigensystem(matrix);
+    TestHelper.checkEquation(matrix, eigensystem);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3, 5, 6, 7, 10 })
+  void testRandomWithUnits(int n) {
+    Tensor matrix = RandomVariate.of(NormalDistribution.of( //
+        Quantity.of(0, "m"), //
+        Quantity.of(1, "m")), n, n);
     Eigensystem eigensystem = new RealEigensystem(matrix);
     TestHelper.checkEquation(matrix, eigensystem);
   }

@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.UnprotectDepr;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -57,7 +57,7 @@ class InfluenceMatrixSvdTest {
       Tensor design = m1.dot(m2);
       ExactTensorQ.require(design);
       SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-      assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
+      assertEquals(UnprotectDepr.getUnitUnique(svd.getU()), Unit.ONE);
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
       InfluenceMatrixQ.require(influenceMatrix.matrix());
       influenceMatrix.residualMaker();

@@ -33,7 +33,7 @@ class MatrixNormsTest {
     for (TensorScalarFunction norm : VALUES) {
       assertThrows(Throw.class, () -> norm.apply(RealScalar.ONE));
       assertThrows(Exception.class, () -> norm.apply(Tensors.empty()));
-      assertThrows(Throw.class, () -> norm.apply(Tensors.vector(1, 2, 3)));
+      assertThrows(Exception.class, () -> norm.apply(Tensors.vector(1, 2, 3)));
       assertThrows(Exception.class, () -> norm.apply(LeviCivitaTensor.of(3)));
       assertThrows(Exception.class, () -> norm.apply(Tensors.fromString("{{1, 2}, {3}}")));
     }

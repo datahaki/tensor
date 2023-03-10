@@ -43,7 +43,6 @@ import ch.alpine.tensor.sca.N;
 
 class JacobiMethodTest {
   private static void checkEquation(Tensor matrix, Eigensystem eigensystem) {
-    
     Tensor vectors = eigensystem.vectors();
     Tensor values = eigensystem.values();
     {

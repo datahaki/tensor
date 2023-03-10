@@ -54,7 +54,7 @@ class DiagonalMatrixTest {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(2, "s");
     Tensor vec = Tensors.of(qs1, qs2);
-//    assertThrows(Exception.class, () -> DiagonalMatrix.with(vec));
+    // assertThrows(Exception.class, () -> DiagonalMatrix.with(vec));
     Tensor matrix = DiagonalMatrix.with(vec);
     ExactTensorQ.require(matrix);
     assertEquals(matrix, Tensors.fromString("{{1[m], 0[m]}, {0[s], 2[s]}}"));

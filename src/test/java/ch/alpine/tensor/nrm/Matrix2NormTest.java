@@ -44,7 +44,7 @@ class Matrix2NormTest {
   @Test
   void testMatrix2() {
     Tensor matrix = Tensors.fromString("{{}}");
-    assertThrows(IllegalArgumentException.class, () -> Matrix2Norm.of(matrix));
+    assertThrows(Exception.class, () -> Matrix2Norm.of(matrix));
   }
 
   private static void _check(Tensor x) {

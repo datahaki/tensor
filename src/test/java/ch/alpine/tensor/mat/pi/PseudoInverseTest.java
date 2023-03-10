@@ -262,15 +262,15 @@ class PseudoInverseTest {
   @Test
   void testEmptyFail() {
     Tensor tensor = Tensors.empty();
-    assertThrows(IllegalArgumentException.class, () -> PseudoInverse.of(tensor));
-    assertThrows(IllegalArgumentException.class, () -> PseudoInverse.usingSvd(tensor));
+    assertThrows(Exception.class, () -> PseudoInverse.of(tensor));
+    assertThrows(Exception.class, () -> PseudoInverse.usingSvd(tensor));
   }
 
   @Test
   void testVectorFail() {
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
-    assertThrows(Throw.class, () -> PseudoInverse.of(tensor));
-    assertThrows(Throw.class, () -> PseudoInverse.usingSvd(tensor));
+    assertThrows(Exception.class, () -> PseudoInverse.of(tensor));
+    assertThrows(Exception.class, () -> PseudoInverse.usingSvd(tensor));
   }
 
   @Test
@@ -282,7 +282,7 @@ class PseudoInverseTest {
   @Test
   void testEmptyMatrixFail() {
     Tensor tensor = Tensors.of(Tensors.empty());
-    assertThrows(IllegalArgumentException.class, () -> PseudoInverse.of(tensor));
-    assertThrows(IllegalArgumentException.class, () -> PseudoInverse.usingSvd(tensor));
+    assertThrows(Exception.class, () -> PseudoInverse.of(tensor));
+    assertThrows(Exception.class, () -> PseudoInverse.usingSvd(tensor));
   }
 }

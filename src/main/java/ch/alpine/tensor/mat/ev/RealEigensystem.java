@@ -21,6 +21,7 @@ import ch.alpine.tensor.mat.qr.SchurDecomposition;
 import ch.alpine.tensor.nrm.Matrix1Norm;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.num.ReIm;
+import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Abs;
@@ -36,10 +37,12 @@ import ch.alpine.tensor.spa.SparseArray;
   private static final Scalar DEFAULT_EPSILON = RealScalar.of(1e-12);
   private static final Scalar EPSILON = RealScalar.of(1e-16);
   // ---
+  private final Scalar zero;
   private final Tensor eigenvectors;
   private final Scalar[] eigenvalues;
 
   public RealEigensystem(Tensor matrix) {
+    zero = EqualsReduce.zero(matrix);
     SchurDecomposition schurDecomposition = SchurDecomposition.of(matrix);
     final int n = matrix.length();
     eigenvalues = ScalarArray.ofVector(Array.zeros(n));
@@ -54,14 +57,14 @@ import ch.alpine.tensor.spa.SparseArray;
           Scalar x = matrixT[i + 1][i + 1];
           Scalar p = matrixT[i][i].subtract(x).multiply(RationalScalar.HALF);
           Scalar z = Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(p.multiply(p).add(matrixT[i + 1][i].multiply(matrixT[i][i + 1]))));
-          eigenvalues[i] = ComplexScalar.of(x.add(p), z);
+          eigenvalues[i] = x.add(p).add(z.multiply(ComplexScalar.I));
           eigenvalues[i + 1] = Conjugate.FUNCTION.apply(eigenvalues[i]);
           ++i;
         }
     }
     final Scalar[][] matrixP = ScalarArray.ofMatrix(schurDecomposition.getUnitary());
     // compute matrix norm
-    Scalar norm = matrixT[0][0].zero();
+    Scalar norm = zero;
     for (int i = 0; i < n; ++i)
       for (int j = Math.max(i - 1, 0); j < n; ++j)
         norm = norm.add(Abs.FUNCTION.apply(matrixT[i][j]));
@@ -82,10 +85,11 @@ import ch.alpine.tensor.spa.SparseArray;
         matrixT[idx][idx] = RealScalar.ONE;
         for (int i = idx - 1; 0 <= i; --i) {
           Scalar w = matrixT[i][i].subtract(p);
-          r = RealScalar.ZERO;
+          r = zero;
           for (int j = l; j <= idx; ++j)
             r = r.add(matrixT[i][j].multiply(matrixT[j][idx]));
-          if (Scalars.lessThan(Im.FUNCTION.apply(eigenvalues[i]), DEFAULT_EPSILON.negate())) {
+          Scalar chopped = Tolerance.CHOP.apply(Im.FUNCTION.apply(eigenvalues[i]));
+          if (Sign.isNegative(chopped)) {
             z = w;
             s = r;
           } else {
@@ -123,22 +127,22 @@ import ch.alpine.tensor.spa.SparseArray;
           matrixT[idx - 1][idx - 1] = q.divide(matrixT[idx][idx - 1]);
           matrixT[idx - 1][idx] = matrixT[idx][idx].subtract(p).negate().divide(matrixT[idx][idx - 1]);
         } else {
-          ReIm c3 = new ReIm(
-              ComplexScalar.of(RealScalar.ZERO, matrixT[idx - 1][idx].negate()).divide(ComplexScalar.of(matrixT[idx - 1][idx - 1].subtract(p), q)));
+          ReIm c3 = new ReIm(ComplexScalar.withIm(matrixT[idx - 1][idx].negate()).divide(ComplexScalar.of(matrixT[idx - 1][idx - 1].subtract(p), q)));
           matrixT[idx - 1][idx - 1] = c3.re();
           matrixT[idx - 1][idx] = c3.im();
         }
         matrixT[idx][idx - 1] = RealScalar.ZERO;
         matrixT[idx][idx] = RealScalar.ONE;
         for (int i = idx - 2; 0 <= i; --i) {
-          Scalar ra = RealScalar.ZERO;
-          Scalar sa = RealScalar.ZERO;
+          Scalar ra = zero;
+          Scalar sa = zero;
           for (int j = l; j <= idx; ++j) {
             ra = ra.add(matrixT[i][j].multiply(matrixT[j][idx - 1]));
             sa = sa.add(matrixT[i][j].multiply(matrixT[j][idx]));
           }
           Scalar w = matrixT[i][i].subtract(p);
-          if (Scalars.lessThan(Im.FUNCTION.apply(eigenvalues[i]), DEFAULT_EPSILON.negate())) {
+          Scalar chopped = Tolerance.CHOP.apply(Im.FUNCTION.apply(eigenvalues[i]));
+          if (Sign.FUNCTION.apply(chopped).equals(RealScalar.of(-1))) {
             z = w;
             r = ra;
             s = sa;
@@ -211,14 +215,15 @@ import ch.alpine.tensor.spa.SparseArray;
   @Override // from Eigensystem
   public Tensor diagonalMatrix() {
     int n = eigenvalues.length;
-    Tensor values = SparseArray.of(RealScalar.ZERO, n, n); // TODO TENSOR zero
+    Tensor values = SparseArray.of(zero, n, n);
     for (int i = 0; i < n; ++i) {
       ReIm reIm = new ReIm(eigenvalues[i]);
       values.set(reIm.re(), i, i);
-      if (Scalars.lessThan(DEFAULT_EPSILON, reIm.im()))
+      Scalar chopped = Tolerance.CHOP.apply(reIm.im());
+      if (Sign.isPositive(chopped))
         values.set(reIm.im(), i, i + 1);
       else //
-      if (Scalars.lessThan(reIm.im(), DEFAULT_EPSILON.negate()))
+      if (Sign.isNegative(chopped))
         values.set(reIm.im(), i, i - 1);
     }
     return values;

@@ -52,10 +52,10 @@ class ComplexScalarTest {
 
   @Test
   void testConstructFail() {
-    assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
-    assertThrows(Throw.class, () -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
+    // assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
+    // assertThrows(Throw.class, () -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
     assertThrows(Throw.class, () -> ComplexScalar.of(Quaternion.ONE, RealScalar.ONE));
-    assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, Quaternion.ONE));
+    // assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, Quaternion.ONE));
   }
 
   @Test
@@ -129,6 +129,31 @@ class ComplexScalarTest {
           assertEquals(scalar.under(scalar), neutral);
         }
     }
+  }
+
+  @Test
+  void testQuantityQuantity() {
+    Scalar r1 = ComplexScalar.of(Quantity.of(3, "m"), Quantity.of(4, "m"));
+    Scalar r2 = Quantity.of(ComplexScalar.of(3, 4), "m");
+    assertEquals(r1, r2);
+    assertEquals(r1.toString(), "3+4*I[m]");
+  }
+
+  @Test
+  void testQuantityMulQuantity() {
+    Scalar r1 = ComplexScalar.of(Quantity.of(3, "m"), Quantity.of(4, "m"));
+    Scalar r2 = ComplexScalar.of(Quantity.of(5, "m"), Quantity.of(6, "m"));
+    Scalar r3 = r1.multiply(r2);
+    assertInstanceOf(Quantity.class, r3);
+    assertEquals(r3.toString(), "-9+38*I[m^2]");
+  }
+
+  @Test
+  void testWithImQuantity() {
+    Scalar r1 = ComplexScalar.withIm(Quantity.of(4, "m"));
+    Scalar r2 = Quantity.of(ComplexScalar.withIm(RealScalar.of(4)), "m");
+    assertEquals(r1, r2);
+    assertEquals(r1.toString(), "4*I[m]");
   }
 
   @Test

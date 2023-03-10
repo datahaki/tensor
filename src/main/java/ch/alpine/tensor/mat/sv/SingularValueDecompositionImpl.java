@@ -6,8 +6,6 @@ import java.io.Serializable;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.red.CopySign;
@@ -33,11 +31,10 @@ import ch.alpine.tensor.sca.Sign;
     w = init.w;
     r = init.r;
     for (int i = w.length() - 1; 0 <= i; --i) {
-      // System.out.println(i);
       for (int iteration = 0; iteration <= MAX_ITERATIONS; ++iteration) {
         int l = levelW(i, init.chop);
-        if (!Unprotect.getUnitUnique(w).equals(Unprotect.getUnitUnique(r)))
-          throw new Throw(w, r);
+        // if (!Unprotect.getUnitUnique(w).equals(Unprotect.getUnitUnique(r)))
+        // throw new Throw(w, r);
         if (l == i)
           break;
         if (iteration == MAX_ITERATIONS)

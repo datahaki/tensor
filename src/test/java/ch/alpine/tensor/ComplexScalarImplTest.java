@@ -59,10 +59,12 @@ class ComplexScalarImplTest {
   void testFalseConstruct() {
     Scalar c1 = ComplexScalar.of(3, -4);
     Scalar c2 = ComplexScalar.of(-2, 9);
-    assertThrows(Throw.class, () -> ComplexScalar.of(c1, c2));
-    Scalar r1 = RealScalar.of(7);
-    assertThrows(Throw.class, () -> ComplexScalar.of(r1, c2));
-    assertThrows(Throw.class, () -> ComplexScalar.of(c1, r1));
+    Scalar c3 = ComplexScalar.of(c1, c2);
+    // System.out.println(c3);
+    assertEquals(c3, ComplexScalar.of(-6, -6));
+    // Scalar r1 = RealScalar.of(7);
+    // assertThrows(Throw.class, () -> ComplexScalar.of(r1, c2));
+    // assertThrows(Throw.class, () -> ComplexScalar.of(c1, r1));
   }
 
   @Test

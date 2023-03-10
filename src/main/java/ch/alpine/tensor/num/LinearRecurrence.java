@@ -11,6 +11,7 @@ import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.ex.MatrixPower;
+import ch.alpine.tensor.red.EqualsReduce;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/LinearRecurrence.html">LinearRecurrence</a> */
@@ -27,7 +28,7 @@ public class LinearRecurrence implements Serializable {
     this.reverse = Reverse.of(VectorQ.require(kernel));
     n = reverse.length();
     this.init = VectorQ.requireLength(init, n);
-    matrix = Array.same(reverse.Get(0).zero(), n, n);
+    matrix = Array.same(EqualsReduce.zero(reverse), n, n);
     last = n - 1;
     matrix.set(reverse, last);
     Scalar one = reverse.Get(0).one();

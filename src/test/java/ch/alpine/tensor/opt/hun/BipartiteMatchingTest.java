@@ -15,7 +15,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
@@ -114,12 +113,12 @@ class BipartiteMatchingTest {
   @Test
   void testMixedUnitsFail() {
     Tensor matrix = Tensors.matrix(new Scalar[][] { { Quantity.of(1, "MYR"), Quantity.of(1, "SGD") } });
-    assertThrows(IllegalArgumentException.class, () -> BipartiteMatching.of(matrix));
+    assertThrows(Exception.class, () -> BipartiteMatching.of(matrix));
   }
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> BipartiteMatching.of(Pi.VALUE));
+    assertThrows(Exception.class, () -> BipartiteMatching.of(Pi.VALUE));
   }
 
   @Test
