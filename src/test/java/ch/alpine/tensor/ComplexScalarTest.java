@@ -148,10 +148,18 @@ class ComplexScalarTest {
     assertEquals(r3.toString(), "-9+38*I[m^2]");
   }
 
+  /** @param im
+   * @return complex number with given im as imaginary part and
+   * real part of im.zero() */
+  static Scalar withIm(Scalar im) {
+    return im instanceof MultiplexScalar //
+        ? im.multiply(ComplexScalar.I)
+        : ComplexScalar.of(im.zero(), im);
+  }
   @Test
   void testWithImQuantity() {
-    Scalar r1 = ComplexScalar.withIm(Quantity.of(4, "m"));
-    Scalar r2 = Quantity.of(ComplexScalar.withIm(RealScalar.of(4)), "m");
+    Scalar r1 = withIm(Quantity.of(4, "m"));
+    Scalar r2 = Quantity.of(withIm(RealScalar.of(4)), "m");
     assertEquals(r1, r2);
     assertEquals(r1.toString(), "4*I[m]");
   }

@@ -47,6 +47,7 @@ import ch.alpine.tensor.spa.SparseArray;
     final int n = matrix.length();
     eigenvalues = ScalarArray.ofVector(Array.zeros(n));
     final Scalar[][] matrixT = ScalarArray.ofMatrix(schurDecomposition.getT());
+    ComplexWrap cmplxWrp = new ComplexWrap(matrixT);
     {
       Scalar norm = Matrix1Norm.of(matrix);
       for (int i = 0; i < n; ++i)
@@ -54,10 +55,12 @@ import ch.alpine.tensor.spa.SparseArray;
             Scalars.lessThan(Abs.FUNCTION.apply(matrixT[i + 1][i]), norm.multiply(DEFAULT_EPSILON)))
           eigenvalues[i] = matrixT[i][i];
         else {
-          Scalar x = matrixT[i + 1][i + 1];
-          Scalar p = matrixT[i][i].subtract(x).multiply(RationalScalar.HALF);
-          Scalar z = Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(p.multiply(p).add(matrixT[i + 1][i].multiply(matrixT[i][i + 1]))));
-          eigenvalues[i] = x.add(p).add(z.multiply(ComplexScalar.I));
+          Scalar x0 = matrixT[i + 0][i + 0];
+          Scalar x1 = matrixT[i + 1][i + 1];
+          Scalar half = x1.subtract(x0).multiply(RationalScalar.HALF);
+          Scalar zr = x0.add(half); // mean
+          Scalar zi = Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(half.multiply(half).add(matrixT[i + 1][i].multiply(matrixT[i][i + 1]))));
+          eigenvalues[i] = ComplexScalar.of(zr, zi);
           eigenvalues[i + 1] = Conjugate.FUNCTION.apply(eigenvalues[i]);
           ++i;
         }
@@ -72,42 +75,41 @@ import ch.alpine.tensor.spa.SparseArray;
     if (Scalars.isZero(norm))
       throw new Throw(matrix);
     // Backsubstitute to find vectors of upper triangular form
-    Scalar r = RealScalar.ZERO;
-    Scalar s = RealScalar.ZERO;
-    Scalar z = RealScalar.ZERO;
     for (int idx = n - 1; 0 <= idx; --idx) {
-      ReIm reIm = new ReIm(eigenvalues[idx]);
-      final Scalar p = reIm.re();
-      final Scalar q = reIm.im();
+      Scalar zr = RealScalar.ZERO;
+      Scalar zi = RealScalar.ZERO;
+      Scalar z = RealScalar.ZERO;
+      final Scalar p = Re.FUNCTION.apply(eigenvalues[idx]);
+      final Scalar q = Im.FUNCTION.apply(eigenvalues[idx]);
       if (Tolerance.CHOP.isZero(q)) {
         // Real vector
         int l = idx;
         matrixT[idx][idx] = RealScalar.ONE;
         for (int i = idx - 1; 0 <= i; --i) {
           Scalar w = matrixT[i][i].subtract(p);
-          r = zero;
+          zr = zero;
           for (int j = l; j <= idx; ++j)
-            r = r.add(matrixT[i][j].multiply(matrixT[j][idx]));
+            zr = zr.add(matrixT[i][j].multiply(matrixT[j][idx]));
           Scalar chopped = Tolerance.CHOP.apply(Im.FUNCTION.apply(eigenvalues[i]));
           if (Sign.isNegative(chopped)) {
             z = w;
-            s = r;
+            zi = zr;
           } else {
             l = i;
-            if (Scalars.isZero(Im.FUNCTION.apply(eigenvalues[i]))) {
+            if (Scalars.isZero(Im.FUNCTION.apply(eigenvalues[i])))
               matrixT[i][idx] = Scalars.nonZero(w) //
-                  ? r.divide(w).negate()
-                  : r.divide(DEFAULT_EPSILON.multiply(norm)).negate();
-            } else {
+                  ? zr.divide(w).negate()
+                  : zr.divide(DEFAULT_EPSILON.multiply(norm)).negate();
+            else {
               // Solve real equations
               Scalar x = matrixT[i][i + 1];
               Scalar y = matrixT[i + 1][i];
               Scalar fq = AbsSquared.FUNCTION.apply(eigenvalues[i].subtract(p));
-              Scalar t = x.multiply(s).subtract(z.multiply(r)).divide(fq);
+              Scalar t = x.multiply(zi).subtract(z.multiply(zr)).divide(fq);
               matrixT[i][idx] = t;
               matrixT[i + 1][idx] = Scalars.lessThan(Abs.FUNCTION.apply(z), Abs.FUNCTION.apply(x)) //
-                  ? r.negate().subtract(w.multiply(t)).divide(x)
-                  : s.negate().subtract(y.multiply(t)).divide(z);
+                  ? zr.negate().subtract(w.multiply(t)).divide(x)
+                  : zi.negate().subtract(y.multiply(t)).divide(z);
             }
             // Overflow control
             Scalar t = Abs.FUNCTION.apply(matrixT[i][idx]);
@@ -121,15 +123,14 @@ import ch.alpine.tensor.spa.SparseArray;
       if (Sign.isNegative(q)) { // Complex vector
         int l = idx - 1;
         // Last vector component imaginary so matrix is triangular
-        if (Scalars.lessThan( //
-            Abs.FUNCTION.apply(matrixT[idx - 1][idx]), //
-            Abs.FUNCTION.apply(matrixT[idx][idx - 1]))) {
-          matrixT[idx - 1][idx - 1] = q.divide(matrixT[idx][idx - 1]);
-          matrixT[idx - 1][idx] = matrixT[idx][idx].subtract(p).negate().divide(matrixT[idx][idx - 1]);
-        } else {
-          ReIm c3 = new ReIm(ComplexScalar.withIm(matrixT[idx - 1][idx].negate()).divide(ComplexScalar.of(matrixT[idx - 1][idx - 1].subtract(p), q)));
-          matrixT[idx - 1][idx - 1] = c3.re();
-          matrixT[idx - 1][idx] = c3.im();
+        {
+          ReIm reIm = new ReIm(Scalars.lessThan( //
+              Abs.FUNCTION.apply(matrixT[idx - 1][idx]), //
+              Abs.FUNCTION.apply(matrixT[idx][idx - 1])) //
+                  ? eigenvalues[idx].subtract(matrixT[idx][idx]).divide(matrixT[idx][idx - 1])
+                  : matrixT[idx - 1][idx].divide(eigenvalues[idx].subtract(matrixT[idx - 1][idx - 1])));
+          matrixT[idx - 1][idx] = reIm.re();
+          matrixT[idx - 1][idx - 1] = reIm.im();
         }
         matrixT[idx][idx - 1] = RealScalar.ZERO;
         matrixT[idx][idx] = RealScalar.ONE;
@@ -144,15 +145,14 @@ import ch.alpine.tensor.spa.SparseArray;
           Scalar chopped = Tolerance.CHOP.apply(Im.FUNCTION.apply(eigenvalues[i]));
           if (Sign.FUNCTION.apply(chopped).equals(RealScalar.of(-1))) {
             z = w;
-            r = ra;
-            s = sa;
+            zr = ra;
+            zi = sa;
           } else {
             l = i;
+            Scalar rsa = ComplexScalar.of(ra, sa);
+            Scalar wq = ComplexScalar.of(w, q);
             if (Scalars.isZero(Im.FUNCTION.apply(eigenvalues[i]))) {
-              Scalar rsa = ComplexScalar.of(ra, sa);
-              ReIm c3 = new ReIm(rsa.negate().divide(ComplexScalar.of(w, q)));
-              matrixT[i][idx - 1] = c3.re();
-              matrixT[i][idx] = c3.im();
+              cmplxWrp.set(i, idx, rsa.divide(wq).negate());
             } else {
               // Solve complex equations
               Scalar x = matrixT[i][i + 1];
@@ -162,24 +162,18 @@ import ch.alpine.tensor.spa.SparseArray;
               if (Scalars.isZero(vr) && Scalars.isZero(vi))
                 // case not covered by tests
                 vr = Times.of(EPSILON, norm, Vector1Norm.of(Tensors.of(w, q, x, y, z)));
+              Scalar zq = ComplexScalar.of(z, q);
               {
-                Scalar rs = ComplexScalar.of(r, s);
-                Scalar rsa = ComplexScalar.of(ra, sa);
-                Scalar zq = ComplexScalar.of(z, q);
-                ReIm c3 = new ReIm(x.multiply(rs).subtract(zq.multiply(rsa)).divide(ComplexScalar.of(vr, vi)));
-                matrixT[i][idx - 1] = c3.re();
-                matrixT[i][idx] = c3.im();
+                Scalar rs = ComplexScalar.of(zr, zi);
+                Scalar vz = ComplexScalar.of(vr, vi);
+                cmplxWrp.set(i, idx, x.multiply(rs).subtract(zq.multiply(rsa)).divide(vz));
               }
-              if (Scalars.lessThan(Abs.FUNCTION.apply(z).add(Abs.FUNCTION.apply(q)), Abs.FUNCTION.apply(x))) {
-                matrixT[i + 1][idx - 1] = ra.negate().subtract(w.multiply(matrixT[i][idx - 1])).add(q.multiply(matrixT[i][idx])).divide(x);
-                matrixT[i + 1][idx] = sa.negate().subtract(w.multiply(matrixT[i][idx])).subtract(q.multiply(matrixT[i][idx - 1])).divide(x);
-              } else {
-                Scalar rs = ComplexScalar.of(r, s);
-                Scalar zq = ComplexScalar.of(z, q);
-                Scalar mi = ComplexScalar.of(matrixT[i][idx - 1], matrixT[i][idx]);
-                ReIm c3 = new ReIm(rs.negate().subtract(y.multiply(mi)).divide(zq));
-                matrixT[i + 1][idx - 1] = c3.re();
-                matrixT[i + 1][idx] = c3.im();
+              Scalar cc = ComplexScalar.of(matrixT[i][idx - 1], matrixT[i][idx]);
+              if (Scalars.lessThan(Abs.FUNCTION.apply(z).add(Abs.FUNCTION.apply(q)), Abs.FUNCTION.apply(x)))
+                cmplxWrp.set(i + 1, idx, wq.multiply(cc).add(rsa).divide(x).negate());
+              else {
+                Scalar rs = ComplexScalar.of(zr, zi);
+                cmplxWrp.set(i + 1, idx, rs.add(y.multiply(cc)).divide(zq).negate());
               }
             }
             // Overflow control
@@ -188,23 +182,18 @@ import ch.alpine.tensor.spa.SparseArray;
                 Abs.FUNCTION.apply(matrixT[i][idx]));
             if (Scalars.lessThan(RealScalar.ONE, Times.of(EPSILON, t, t)))
               // case not covered by tests
-              for (int j = i; j <= idx; ++j) {
-                matrixT[j][idx - 1] = matrixT[j][idx - 1].divide(t);
-                matrixT[j][idx] = matrixT[j][idx].divide(t);
-              }
+              for (int j = i; j <= idx; ++j)
+                cmplxWrp.set(j, idx, ComplexScalar.of(matrixT[j][idx - 1], matrixT[j][idx]).divide(t));
           }
         }
       }
     }
     // Back transformation to get eigenvectors of original matrix
-    for (int j = n - 1; 0 <= j; --j)
-      for (int i = 0; i <= n - 1; ++i) {
-        z = RealScalar.ZERO;
-        for (int k = 0; k <= Math.min(j, n - 1); k++)
-          z = z.add(matrixP[i][k].multiply(matrixT[k][j]));
-        matrixP[i][j] = z;
-      }
-    eigenvectors = Transpose.of(Tensors.matrix(matrixP));
+    // at this point matrixT is upper triangular matrix but lower diagonal entries may still have unit
+    for (int j = 1; j < n; ++j)
+      for (int i = 0; i < j; ++i)
+        matrixT[j][i] = matrixT[j][i].one().zero();
+    eigenvectors = Transpose.of(Tensors.matrix(matrixP).dot(Tensors.matrix(matrixT)));
   }
 
   @Override // from Eigensystem

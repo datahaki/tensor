@@ -30,6 +30,9 @@ class SchurDecompositionTest {
     SchurDecomposition hd = SchurDecomposition.of(matrix);
     Tensor t = hd.getT();
     Tensor p = hd.getUnitary();
+    // System.out.println("P and T");
+    // System.out.println(Pretty.of(p.map(Round._3)));
+    // System.out.println(Pretty.of(t.map(Round._3)));
     UnitaryMatrixQ.require(p);
     Tensor result = Dot.of(p, t, ConjugateTranspose.of(p));
     Tolerance.CHOP.requireClose(matrix, result);

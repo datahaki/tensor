@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.qr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -12,9 +13,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.UpperTriangularize;
@@ -27,13 +30,19 @@ import ch.alpine.tensor.qty.Quantity;
 class HessenbergDecompositionTest {
   private static final HessenbergDecomposition _check(Tensor matrix) {
     HessenbergDecomposition hessenbergDecomposition = HessenbergDecomposition.of(matrix);
+    _check(matrix, hessenbergDecomposition);
+    return hessenbergDecomposition;
+  }
+
+  static final void _check( //
+      Tensor matrix, //
+      HessenbergDecomposition hessenbergDecomposition) {
     Tensor p = hessenbergDecomposition.getUnitary();
     UnitaryMatrixQ.require(p);
     Tensor h = hessenbergDecomposition.getH();
     Tolerance.CHOP.requireClose(UpperTriangularize.of(h, -1), h);
     Tensor result = Dot.of(p, h, ConjugateTranspose.of(p));
     Tolerance.CHOP.requireClose(matrix, result);
-    return hessenbergDecomposition;
   }
 
   @Test
@@ -43,10 +52,25 @@ class HessenbergDecompositionTest {
     assertTrue(hessenbergDecomposition.toString().startsWith("HessenbergDecomposition["));
   }
 
+  @Test
+  void testRandom2x2() {
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 2, 2);
+    HessenbergDecomposition hessenbergDecomposition = _check(matrix);
+    assertEquals(hessenbergDecomposition.getH(), matrix);
+    assertEquals(hessenbergDecomposition.getUnitary(), IdentityMatrix.of(2));
+  }
+
   @ParameterizedTest
   @ValueSource(ints = { 2, 3, 5, 10 })
   void testRandom(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
+    _check(matrix);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 2, 3, 5, 10 })
+  void testZeros(int n) {
+    Tensor matrix = Array.zeros(n, n);
     _check(matrix);
   }
 
@@ -66,7 +90,7 @@ class HessenbergDecompositionTest {
 
   @Disabled
   @ParameterizedTest
-  @ValueSource(ints = { 3 })
+  @ValueSource(ints = { 3, 4, 5 })
   void testRandomComplex(int n) {
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n);
     _check(matrix);

@@ -47,15 +47,6 @@ public interface ComplexScalar extends Scalar, //
         : ComplexScalarImpl.of(Objects.requireNonNull(re), im);
   }
 
-  /** @param im
-   * @return complex number with given im as imaginary part and
-   * real part of im.zero() */
-  static Scalar withIm(Scalar im) {
-    return im instanceof MultiplexScalar //
-        ? im.multiply(I)
-        : ComplexScalarImpl.of(im.zero(), im);
-  }
-
   /** @param re
    * @param im
    * @return scalar with re as real part and im as imaginary part */
