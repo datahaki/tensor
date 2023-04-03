@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.InvertUnlessZero;
     }
   }
 
-  /** @param tensor orthogonal matrix, and r matrix in qr-decomposition
+  /** @param tensor
    * @return */
   public Tensor forward(Tensor tensor) {
     Tensor project = tensor.add(TensorProduct.of(vc.negate(), vr.dot(tensor)));

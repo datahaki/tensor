@@ -22,7 +22,9 @@ public interface HessenbergDecomposition {
     return new HessenbergDecompositionImpl(SquareMatrixQ.require(matrix));
   }
 
+  /** @return */
   Tensor getUnitary();
 
+  /** @return */
   Tensor getH();
 }

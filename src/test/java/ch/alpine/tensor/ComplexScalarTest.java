@@ -156,6 +156,7 @@ class ComplexScalarTest {
         ? im.multiply(ComplexScalar.I)
         : ComplexScalar.of(im.zero(), im);
   }
+
   @Test
   void testWithImQuantity() {
     Scalar r1 = withIm(Quantity.of(4, "m"));

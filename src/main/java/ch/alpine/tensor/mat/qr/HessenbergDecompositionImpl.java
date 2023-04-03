@@ -1,106 +1,79 @@
-// code corresponds to "org.hipparchus.linear.HessenbergTransformer" in Hipparchus project
-// adapted by jph
+// code by jph
 package ch.alpine.tensor.mat.qr;
 
 import java.io.Serializable;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.MathematicaFormat;
-import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.UpperTriangularize;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Vector2Norm;
+import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Im;
-import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Conjugate;
 
 /** Equation of decomposition:
  * <pre>
  * p . h . ConjugateTranspose[p] == m
  * </pre>
  * 
- * Implementation works for matrices consisting of scalars of type {@link Quantity}.
+ * Implementation works for matrices consisting of scalars of type {@link Quantity}, as well as
+ * complex scalars.
+ * 
+ * Reference:
+ * https://en.wikipedia.org/wiki/Hessenberg_matrix
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/HessenbergDecomposition.html">HessenbergDecomposition</a> */
+/* package */
 class HessenbergDecompositionImpl implements HessenbergDecomposition, Serializable {
-  private final Tensor pam;
-  private final Tensor hmt;
+  private final Tensor u;
+  private Tensor h;
 
-  // TODO TENSOR IMPL does not work for complex
-  HessenbergDecompositionImpl(Tensor matrix) {
-    final int n = matrix.length();
-    Scalar[][] hhv = ScalarArray.ofMatrix(matrix);
-    Scalar[] ort = new Scalar[n];
-    final int last = n - 1;
-    for (int m = 1; m < last; ++m) {
+  public HessenbergDecompositionImpl(Tensor matrix) {
+    int n = matrix.length();
+    Tensor u = IdentityMatrix.of(n);
+    h = matrix;
+    for (int m = 1; m < n - 1; ++m) {
       final int mp = m - 1;
-      Tensor vec = Tensor.of(IntStream.range(m, n).mapToObj(i -> hhv[i][mp]));
-      Scalar norm = Vector2Norm.of(vec);
+      Tensor a = Tensor.of(IntStream.range(0, n).mapToObj(i -> h.Get(i, mp)));
+      for (int i = 0; i < m; ++i)
+        a.set(Scalar::zero, i);
+      Scalar norm = Vector2Norm.of(a);
       if (Scalars.nonZero(norm)) {
-        vec = vec.divide(norm); // normalize
-        Scalar piv = vec.Get(0);
-        final Scalar g = Scalars.nonZero(Im.FUNCTION.apply(piv)) //
-            || Sign.isPositive(piv) //
-                ? RealScalar.ONE.negate()
-                : RealScalar.ONE;
-        final Scalar h = piv.multiply(g).subtract(RealScalar.ONE);
-        vec.set(g.negate()::add, 0);
-        // Apply Householder similarity transformation
-        // H = (I - u*u' / h) * H * (I - u*u' / h)
-        // Tensor ve2 = Conjugate.of(vec);
-        for (int j = m; j < n; ++j) {
-          final int fj = j;
-          Tensor v = Tensor.of(IntStream.range(m, n).mapToObj(i -> hhv[i][fj]));
-          Tensor w = TensorProduct.of(vec, vec.dot(v).divide(h));
-          for (int i = m; i < n; ++i)
-            hhv[i][j] = hhv[i][j].add(w.Get(i - m));
-        }
-        for (int i = 0; i < n; ++i) {
-          final int fi = i;
-          Tensor v = Tensor.of(IntStream.range(m, n).mapToObj(j -> hhv[fi][j]));
-          Tensor w = TensorProduct.of(vec, vec.dot(v).divide(h));
-          for (int j = m; j < n; ++j)
-            hhv[i][j] = hhv[i][j].add(w.Get(j - m));
-        }
-        ort[m] = norm.multiply(vec.Get(0));
-        hhv[m][mp] = norm.multiply(g);
+        Scalar piv = a.Get(m);
+        Tensor w = Scalars.isZero(piv) //
+            ? a.negate()
+            : a.multiply(Conjugate.FUNCTION.apply(piv).divide(Abs.FUNCTION.apply(piv)));
+        w.set(norm::add, m);
+        Scalar f = RealScalar.TWO.divide(Vector2NormSquared.of(w)).negate();
+        Tensor cwf = Conjugate.of(w.multiply(f));
+        h = h.add(TensorProduct.of(w, cwf.dot(h)));
+        h = h.add(TensorProduct.of(h.dot(w), cwf));
+        u = u.add(TensorProduct.of(u.dot(w), cwf));
       }
     }
-    hmt = UpperTriangularize.of(Tensors.matrix(hhv), -1);
-    Scalar[][] pa = ScalarArray.ofMatrix(IdentityMatrix.of(n));
-    for (int m = last - 1; 1 <= m; --m) {
-      final int mp = m - 1;
-      if (Scalars.nonZero(hhv[m][mp])) {
-        Tensor vec = Tensor.of(Stream.concat(Stream.of(ort[m]), IntStream.range(m + 1, n).mapToObj(i -> hhv[i][mp])));
-        for (int j = m; j < n; ++j) {
-          final int fj = j;
-          Tensor res = Tensor.of(IntStream.range(m, n).mapToObj(i -> pa[i][fj]));
-          Scalar g = (Scalar) vec.dot(res).divide(ort[m]).divide(hhv[m][mp]);
-          Tensor ins = vec.multiply(g).add(res);
-          for (int i = m; i < n; ++i)
-            pa[i][j] = ins.Get(i - m);
-        }
-      }
-    }
-    pam = Tensors.matrix(pa);
+    // chop lower entries to symbolic zero
+    for (int k = 0; k < n - 2; ++k)
+      for (int i = k + 2; i < n; ++i)
+        h.set(Tolerance.CHOP, i, k);
+    this.u = u;
   }
 
-  @Override
+  @Override // from HessenbergDecomposition
   public Tensor getUnitary() {
-    return pam;
+    return u;
   }
 
-  @Override
+  @Override // from HessenbergDecomposition
   public Tensor getH() {
-    return hmt;
+    return h;
   }
 
   @Override
