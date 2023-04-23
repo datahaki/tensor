@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.UpperTriangularize;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.qty.Quantity;
@@ -59,10 +59,6 @@ class HessenbergDecompositionImpl implements HessenbergDecomposition, Serializab
         u = u.add(TensorProduct.of(u.dot(w), cwf));
       }
     }
-    // chop lower entries to symbolic zero
-    for (int k = 0; k < n - 2; ++k)
-      for (int i = k + 2; i < n; ++i)
-        h.set(Tolerance.CHOP, i, k);
     this.u = u;
   }
 
@@ -73,7 +69,7 @@ class HessenbergDecompositionImpl implements HessenbergDecomposition, Serializab
 
   @Override // from HessenbergDecomposition
   public Tensor getH() {
-    return h;
+    return UpperTriangularize.of(h, -1);
   }
 
   @Override

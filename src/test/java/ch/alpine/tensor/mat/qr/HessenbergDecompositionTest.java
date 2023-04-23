@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LowerTriangularize;
 import ch.alpine.tensor.pdf.ComplexNormalDistribution;
@@ -40,8 +41,11 @@ class HessenbergDecompositionTest {
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n);
     HessenbergDecomposition hessenbergDecomposition = HessenbergDecomposition.of(matrix);
     TestHelper.check(matrix, hessenbergDecomposition);
-    Tensor lt = LowerTriangularize.of(hessenbergDecomposition.getH(), -2);
+    Tensor h = hessenbergDecomposition.getH();
+    Tensor lt = LowerTriangularize.of(h, -2);
     Chop.NONE.requireAllZero(lt);
+    HessenbergDecomposition hd2 = HessenbergDecomposition.of(h);
+    TestHelper.check(h, hd2);
   }
 
   @ParameterizedTest
@@ -50,13 +54,26 @@ class HessenbergDecompositionTest {
     Tensor matrix = RandomVariate.of(NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m")), n, n);
     HessenbergDecomposition hessenbergDecomposition = HessenbergDecomposition.of(matrix);
     TestHelper.check(matrix, hessenbergDecomposition);
-    Tensor lt = LowerTriangularize.of(hessenbergDecomposition.getH(), -2);
+    Tensor h = hessenbergDecomposition.getH();
+    Tensor lt = LowerTriangularize.of(h, -2);
     Chop.NONE.requireAllZero(lt);
+    HessenbergDecomposition hd2 = HessenbergDecomposition.of(h);
+    TestHelper.check(h, hd2);
   }
 
   @Test
   void testIdMat() {
     Tensor matrix = IdentityMatrix.of(5);
+    HessenbergDecomposition hessenbergDecomposition = HessenbergDecomposition.of(matrix);
+    TestHelper.check(matrix, hessenbergDecomposition);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 4, 15, 20, 31 })
+  void testSoN(int n) {
+    Tensor x = RandomVariate.of(NormalDistribution.standard(), n);
+    Tensor y = RandomVariate.of(NormalDistribution.standard(), n);
+    Tensor matrix = TensorWedge.of(x, y);
     HessenbergDecomposition hessenbergDecomposition = HessenbergDecomposition.of(matrix);
     TestHelper.check(matrix, hessenbergDecomposition);
   }

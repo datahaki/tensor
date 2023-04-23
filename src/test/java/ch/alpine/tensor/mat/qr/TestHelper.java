@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.qr;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.BasisTransform;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.Tolerance;
@@ -17,5 +18,6 @@ enum TestHelper {
     Tolerance.CHOP.requireClose(UpperTriangularize.of(h, -1), h);
     Tensor result = Dot.of(p, h, ConjugateTranspose.of(p));
     Tolerance.CHOP.requireClose(matrix, result);
+    Tolerance.CHOP.requireClose(h, BasisTransform.of(matrix, 1, p));
   }
 }

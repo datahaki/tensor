@@ -1,29 +1,40 @@
 // code by jph
 package ch.alpine.tensor.mat.qr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.lie.Symmetrize;
+import ch.alpine.tensor.lie.TensorWedge;
+import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
 import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.UpperTriangularize;
 import ch.alpine.tensor.mat.ev.Eigensystem;
+import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Diagonal;
+import ch.alpine.tensor.red.Nest;
+import ch.alpine.tensor.red.Total;
+import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Sign;
 
 class SchurDecompositionTest {
   private static final SchurDecomposition _check(Tensor matrix) {
@@ -71,5 +82,61 @@ class SchurDecompositionTest {
   void testRandomUnits(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m")), n, n);
     _check(matrix);
+  }
+
+  @Test
+  void testSo3() {
+    Tensor x = RandomVariate.of(NormalDistribution.standard(), 3);
+    Tensor y = RandomVariate.of(NormalDistribution.standard(), 3);
+    Tensor xy = TensorWedge.of(x, y);
+    SchurDecomposition sd = _check(xy);
+    Tensor t = sd.getT();
+    AntisymmetricMatrixQ.require(t);
+    Tensor d = Diagonal.of(t);
+    Tolerance.CHOP.requireAllZero(d);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 2, 3, 5, 6 })
+  void testSoN(int n) {
+    Random random = new Random(2);
+    Tensor x = RandomVariate.of(NormalDistribution.standard(), random, n);
+    Tensor y = RandomVariate.of(NormalDistribution.standard(), random, n);
+    Tensor xy = TensorWedge.of(x, y);
+    SchurDecomposition sd = _check(xy);
+    Tensor t = sd.getT();
+    // System.out.println(Pretty.of(t.map(Round._4)));
+    AntisymmetricMatrixQ.require(t);
+    Tensor d = Diagonal.of(t);
+    Tolerance.CHOP.requireAllZero(d);
+    Tensor bin = t.map(Tolerance.CHOP).map(Abs.FUNCTION).map(Sign.FUNCTION);
+    Tensor r = Nest.of(Total::of, bin, 2);
+    assertEquals(r, RealScalar.TWO);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 2, 3, 5, 6 })
+  void testSON(int n) {
+    Random random = new Random(2);
+    Tensor x = RandomVariate.of(NormalDistribution.of(0, 0.3), random, n);
+    Tensor y = RandomVariate.of(NormalDistribution.of(0, 0.3), random, n);
+    Tensor xy = TensorWedge.of(x, y);
+    Tensor orth = MatrixExp.of(xy);
+    SchurDecomposition sd = _check(orth);
+    Tensor t = sd.getT();
+    // System.out.println(Pretty.of(t.map(Round._4)));
+    Tensor bin = t.map(Tolerance.CHOP).map(Abs.FUNCTION).map(Sign.FUNCTION);
+    Tensor r = Nest.of(Total::of, bin, 2);
+    assertEquals(r, RealScalar.of(n + 2));
+  }
+
+  @Test
+  void Math4x4() {
+    Tensor matrix = Tensors.fromString("{{0, 1, 2, 3}, {-1, 0, 4, 5}, {-2, -4, 0, 6}, {-3, -5, -6, 0}}");
+    SchurDecomposition sd = _check(matrix);
+    Tensor t = sd.getT();
+    SquareMatrixQ.require(t);
+    // confirmed with mathematica
+    // System.out.println(Pretty.of(t.map(Round._4)));
   }
 }

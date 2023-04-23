@@ -10,7 +10,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.UpperTriangularize;
 import ch.alpine.tensor.nrm.Vector2Norm;
 
 /** decomposition Q.R = A with Det[Q] == +1
@@ -27,7 +27,6 @@ import ch.alpine.tensor.nrm.Vector2Norm;
    * @param qrSignOperator
    * @throws Exception if input is not a matrix */
   public QRDecompositionImpl(Tensor matrix, Tensor qInv0, QRSignOperator qrSignOperator) {
-    int n = matrix.length();
     m = Integers.requirePositive(Unprotect.dimension1Hint(matrix));
     Tensor r = matrix;
     Tensor qInv = qInv0;
@@ -49,17 +48,13 @@ import ch.alpine.tensor.nrm.Vector2Norm;
         // System.err.println("non-finite");
       }
     }
-    // chop lower entries to symbolic zero
-    for (int k = 0; k < m; ++k)
-      for (int i = k + 1; i < n; ++i)
-        r.set(Tolerance.CHOP, i, k);
     this.r = r;
     this.qInv = qInv;
   }
 
   @Override // from QRDecomposition
   public Tensor getR() {
-    return r; // n x m
+    return UpperTriangularize.of(r, 0); // n x m
   }
 
   @Override // from QRDecomposition
