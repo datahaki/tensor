@@ -20,18 +20,18 @@ class StaticHelperTest {
 
   @RepeatedTest(10)
   void testUsAscii() {
-    RandomGenerator random = new Random();
-    byte[] data = new byte[random.nextInt(567)];
-    random.nextBytes(data);
+    RandomGenerator randomGenerator = new Random();
+    byte[] data = new byte[randomGenerator.nextInt(567)];
+    randomGenerator.nextBytes(data);
     String string = new String(data, StandardCharsets.US_ASCII);
     assertEquals(data.length, string.length());
   }
 
   @RepeatedTest(10)
   void testUtf8() {
-    RandomGenerator random = new Random();
-    byte[] data = new byte[random.nextInt(567)];
-    random.nextBytes(data);
+    RandomGenerator randomGenerator = new Random();
+    byte[] data = new byte[randomGenerator.nextInt(567)];
+    randomGenerator.nextBytes(data);
     String string = new String(data, StandardCharsets.ISO_8859_1);
     assertEquals(data.length, string.length());
   }

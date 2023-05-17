@@ -74,10 +74,9 @@ class IntegersTest {
   void testPowerOf2() {
     assertTrue(Integers.isPowerOf2(1));
     assertTrue(Integers.isPowerOf2(2));
-    assertFalse(Integers.isPowerOf2(3));
     assertTrue(Integers.isPowerOf2(4));
-    assertFalse(Integers.isPowerOf2(5));
-    assertFalse(Integers.isPowerOf2(6));
+    assertTrue(Integers.isPowerOf2(1 << 29));
+    assertTrue(Integers.isPowerOf2(1 << 30));
   }
 
   @Test
@@ -86,6 +85,12 @@ class IntegersTest {
     assertFalse(Integers.isPowerOf2(-2));
     assertFalse(Integers.isPowerOf2(-1));
     assertFalse(Integers.isPowerOf2(0));
+    assertFalse(Integers.isPowerOf2(3));
+    assertFalse(Integers.isPowerOf2(5));
+    assertFalse(Integers.isPowerOf2(6));
+    assertFalse(Integers.isPowerOf2(7));
+    assertFalse(Integers.isPowerOf2(Integer.MAX_VALUE));
+    assertFalse(Integers.isPowerOf2(Integer.MIN_VALUE));
   }
 
   @Test

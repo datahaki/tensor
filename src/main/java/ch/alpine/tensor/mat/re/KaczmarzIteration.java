@@ -62,7 +62,7 @@ public class KaczmarzIteration {
         QuantityUnit.of(b.Get(0)).add(QuantityUnit.of(matrix.Get(0, i)).negate())), m);
     // System.out.println(x);
   }
-  // TODO also relaxation parameter
+  // TODO TENSOR also relaxation parameter
 
   /** fixed rate convergence
    * 
@@ -86,10 +86,10 @@ public class KaczmarzIteration {
 
   /** Careful: in our experiments the randomization slows down convergence rate (!)
    * 
-   * @param random
+   * @param randomGenerator
    * @return */
-  public Tensor refine(RandomGenerator random) {
+  public Tensor refine(RandomGenerator randomGenerator) {
     // QUEST TENSOR MAT for every batch generate discrete sequence with according occurrences
-    return refine(RandomVariate.of(distribution, random).number().intValue());
+    return refine(RandomVariate.of(distribution, randomGenerator).number().intValue());
   }
 }

@@ -13,10 +13,10 @@ public enum RandomComplex {
   ;
   private static final RandomGenerator RANDOM_GENERATOR = new SecureRandom();
 
-  public static Scalar of(RandomGenerator random) {
+  public static Scalar of(RandomGenerator randomGenerator) {
     return ComplexScalar.of( //
-        random.nextDouble(), //
-        random.nextDouble());
+        randomGenerator.nextDouble(), //
+        randomGenerator.nextDouble());
   }
 
   public static Scalar of() {

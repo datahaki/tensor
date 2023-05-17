@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 
 class CompressionTest {
   private static byte[] createBytes(int length) {
-    RandomGenerator random = new SecureRandom();
+    RandomGenerator randomGenerator = new SecureRandom();
     byte[] bytes = new byte[length];
     for (int count = 0; count < bytes.length; ++count)
-      bytes[count] = (byte) random.nextInt(2);
+      bytes[count] = (byte) randomGenerator.nextInt(2);
     return bytes;
   }
 

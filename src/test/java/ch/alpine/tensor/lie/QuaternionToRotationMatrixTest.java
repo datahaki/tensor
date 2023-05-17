@@ -52,9 +52,10 @@ class QuaternionToRotationMatrixTest {
 
   @Test
   void testQuaternionVector() {
-    RandomGenerator random = new SecureRandom();
+    RandomGenerator randomGenerator = new SecureRandom();
     for (int index = 0; index < 10; ++index) {
-      Quaternion quaternion = Quaternion.of(random.nextGaussian(), random.nextGaussian(), random.nextGaussian(), random.nextGaussian());
+      Quaternion quaternion = Quaternion.of(randomGenerator.nextGaussian(), randomGenerator.nextGaussian(), randomGenerator.nextGaussian(),
+          randomGenerator.nextGaussian());
       quaternion = quaternion.divide(quaternion.abs()); // normalize
       Tensor vector = RandomVariate.of(NormalDistribution.standard(), 3);
       Scalar v = Quaternion.of(RealScalar.ZERO, vector);

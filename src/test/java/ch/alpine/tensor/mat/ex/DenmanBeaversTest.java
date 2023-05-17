@@ -16,10 +16,10 @@ import ch.alpine.tensor.sca.Chop;
 class DenmanBeaversTest {
   @Test
   void testSimple() {
-    RandomGenerator random = new Random(3);
+    RandomGenerator randomGenerator = new Random(3);
     Distribution distribution = NormalDistribution.standard();
     for (int n = 2; n < 6; ++n) {
-      Tensor _a = RandomVariate.of(distribution, random, n, n);
+      Tensor _a = RandomVariate.of(distribution, randomGenerator, n, n);
       Tensor a = MatrixPower.of(_a, 2);
       MatrixSqrt matrixSqrt = new DenmanBeavers(a);
       Chop._08.requireClose(a, MatrixPower.of(matrixSqrt.sqrt(), 2));

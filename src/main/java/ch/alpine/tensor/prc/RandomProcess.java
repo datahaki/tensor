@@ -13,8 +13,8 @@ public interface RandomProcess {
   TimeSeries spawn();
 
   /** @param timeSeries
-   * @param random
+   * @param randomGenerator
    * @param time
    * @return value of random process at given time */
-  Scalar evaluate(TimeSeries timeSeries, RandomGenerator random, Scalar time);
+  Scalar evaluate(TimeSeries timeSeries, RandomGenerator randomGenerator, Scalar time);
 }

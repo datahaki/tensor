@@ -26,12 +26,12 @@ public class Tsp2OptHeuristic {
   /** the entries in the symmetric distance matrix may be negative
    * 
    * @param matrix symmetric
-   * @param random */
-  public Tsp2OptHeuristic(Tensor matrix, RandomGenerator random) {
+   * @param randomGenerator */
+  public Tsp2OptHeuristic(Tensor matrix, RandomGenerator randomGenerator) {
     this.matrix = SymmetricMatrixQ.require(matrix);
     n = matrix.length();
-    this.random = random;
-    index = RandomPermutation.of(matrix.length(), random);
+    this.random = randomGenerator;
+    index = RandomPermutation.of(matrix.length(), randomGenerator);
   }
 
   /** one random re-routing attempt

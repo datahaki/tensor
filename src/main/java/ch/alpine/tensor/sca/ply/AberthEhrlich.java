@@ -35,15 +35,15 @@ public class AberthEhrlich {
   }
 
   /** @param polynomial of degree at least 2
-   * @param random to generate seeds
+   * @param randomGenerator to generate seeds
    * @return unsorted roots of polynomial
    * @throws Exception if convergence fail */
-  public static Tensor of(Polynomial polynomial, RandomGenerator random) {
+  public static Tensor of(Polynomial polynomial, RandomGenerator randomGenerator) {
     Scalar radius = Roots.bound(polynomial.coeffs());
     Distribution distribution = ComplexDiskUniformDistribution.of(radius);
     for (int attempt = 0; attempt < MAX_ATTEMPTS; ++attempt)
       try {
-        Tensor vector = RandomVariate.of(distribution, random, polynomial.degree());
+        Tensor vector = RandomVariate.of(distribution, randomGenerator, polynomial.degree());
         AberthEhrlich aberthEhrlich = new AberthEhrlich(polynomial, vector);
         for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
           vector = aberthEhrlich.iterate();
@@ -54,7 +54,7 @@ public class AberthEhrlich {
               if (Scalars.lessThan(radius, abs))
                 vector.set(cand.divide(abs).multiply(radius), k);
             } else {
-              vector.set(RandomVariate.of(distribution, random), k);
+              vector.set(RandomVariate.of(distribution, randomGenerator), k);
             }
           }
           FiniteTensorQ.require(vector);

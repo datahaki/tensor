@@ -32,11 +32,11 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 class JacobiRealTest {
   @Test
   void testRandom() {
-    RandomGenerator random = new Random(1);
+    RandomGenerator randomGenerator = new Random(1);
     Distribution distribution = UniformDistribution.of(-10, 10);
     for (int d = 2; d < 10; ++d)
       for (int count = 0; count < 5; ++count) {
-        Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, random, d, d));
+        Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, randomGenerator, d, d));
         Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
         Tensor diagon = DiagonalMatrix.with(eigensystem.values());
         Tensor m1 = BasisTransform.ofMatrix(diagon, eigensystem.vectors());

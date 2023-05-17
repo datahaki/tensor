@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Modifier;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -87,10 +88,10 @@ class MatrixLog2Test {
 
   @Test
   void testTraceZero() {
-    Random random = new Random(3);
+    RandomGenerator randomGenerator = new Random(3);
     Distribution distribution = NormalDistribution.of(0, 2);
     for (int index = 0; index < 10; ++index) {
-      Tensor alg = RandomVariate.of(distribution, random, 2, 2);
+      Tensor alg = RandomVariate.of(distribution, randomGenerator, 2, 2);
       alg.set(alg.Get(0, 0).negate(), 1, 1);
       assertEquals(Trace.of(alg), RealScalar.ZERO);
       _checkExpLog(alg);

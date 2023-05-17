@@ -49,8 +49,8 @@ class CholeskyDecompositionImplTest {
   void testGaussScalar() throws ClassNotFoundException, IOException {
     int n = 7;
     int prime = 7879;
-    RandomGenerator random = new Random(1);
-    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, n);
+    RandomGenerator randomGenerator = new Random(1);
+    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(randomGenerator.nextInt(), prime), n, n);
     // Symmetrize
     matrix = Transpose.of(matrix).add(matrix).divide(GaussScalar.of(2, prime));
     SymmetricMatrixQ.require(matrix);

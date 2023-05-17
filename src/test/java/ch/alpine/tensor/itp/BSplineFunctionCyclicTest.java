@@ -60,13 +60,13 @@ class BSplineFunctionCyclicTest {
 
   @Test
   void testCyclic() {
-    RandomGenerator random = new Random();
+    RandomGenerator randomGenerator = new Random();
     Distribution distribution = DiscreteUniformDistribution.of(-50, 50);
     for (int n = 1; n < 10; ++n)
       for (int degree = 0; degree < 6; ++degree) {
         Tensor control = RandomVariate.of(distribution, n, 3);
         ScalarTensorFunction stf1 = BSplineFunctionCyclic.of(degree, control);
-        int shift = random.nextInt(20);
+        int shift = randomGenerator.nextInt(20);
         ScalarTensorFunction stf2 = BSplineFunctionCyclic.of(degree, RotateRight.of(control, shift));
         Scalar x1 = RandomVariate.of(distribution).divide(RealScalar.of(7));
         Scalar x2 = x1.add(RealScalar.of(shift));

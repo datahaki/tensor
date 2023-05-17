@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.RepeatedTest;
@@ -52,10 +53,10 @@ class MatrixExpTest {
 
   @Test
   void testExp() {
-    Random random = new Random();
-    double val = random.nextGaussian() * 0.1;
-    double va2 = random.nextGaussian() * 0.1;
-    double va3 = random.nextGaussian() * 0.1;
+    RandomGenerator randomGenerator = new Random();
+    double val = randomGenerator.nextGaussian() * 0.1;
+    double va2 = randomGenerator.nextGaussian() * 0.1;
+    double va3 = randomGenerator.nextGaussian() * 0.1;
     double[][] mat = new double[][] { { 0, val, va2 }, { -val, 0, va3 }, { -va2, -va3, 0 } };
     Tensor bu = Tensors.matrixDouble(mat);
     Tensor ort = MatrixExp.of(bu);

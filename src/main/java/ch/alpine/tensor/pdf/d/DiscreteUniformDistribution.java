@@ -87,19 +87,19 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
   }
 
   @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
-    return RealScalar.of(min.add(random(max.subtract(min), random)));
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return RealScalar.of(min.add(random(max.subtract(min), randomGenerator)));
   }
 
   /** @param limit
-   * @param random
+   * @param randomGenerator
    * @return random BigInteger from 0, 1, ..., limit - 1 */
   @PackageTestAccess
-  /* package */ static BigInteger random(BigInteger limit, RandomGenerator random) {
+  /* package */ static BigInteger random(BigInteger limit, RandomGenerator randomGenerator) {
     BigInteger max = limit.subtract(BigInteger.ONE);
     BigInteger bigInteger;
     do {
-      bigInteger = BigIntegerMath.random(max.bitLength(), random);
+      bigInteger = BigIntegerMath.random(max.bitLength(), randomGenerator);
     } while (0 < bigInteger.compareTo(max));
     return bigInteger;
   }

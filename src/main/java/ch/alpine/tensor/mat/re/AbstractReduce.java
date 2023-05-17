@@ -21,7 +21,7 @@ import ch.alpine.tensor.ext.Integers;
   }
 
   protected final void pivot(int row, int col) {
-    int k = pivot.get(row, col, ind, lhs);
+    int k = pivot.index(row, col, ind, lhs);
     if (k != row) {
       int swap = ind[k];
       ind[k] = ind[row];

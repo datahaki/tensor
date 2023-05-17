@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.SoftThreshold;
    * @param rho
    * @return x with small Vector1Norm[A.x - b] */
   public static Tensor of(Tensor A, Tensor b, Scalar rho) {
-    RandomGenerator random = new Random(2);
+    RandomGenerator randomGenerator = new Random(2);
     Tensor pinv = PseudoInverse.of(A);
     Tensor u = b.map(Scalar::zero);
     Tensor z = b.map(Scalar::zero);
@@ -41,7 +41,7 @@ import ch.alpine.tensor.sca.SoftThreshold;
         min = cmp;
         x_bst = x;
       }
-      rho = RealScalar.of(random.nextDouble() * 2);
+      rho = RealScalar.of(randomGenerator.nextDouble() * 2);
       ScalarUnaryOperator suo = SoftThreshold.of(Clips.absolute(rho));
       z = ax_b.add(u).map(suo);
       u = u.add(ax_b).subtract(z);

@@ -10,19 +10,19 @@ public enum BoundedLinkedListDemo {
     Timing timing = Timing.started();
     double timeout = 3;
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(12);
-    RandomGenerator random = new Random();
+    RandomGenerator randomGenerator = new Random();
     new Thread(() -> {
       System.out.println("runA1");
       while (timing.seconds() < timeout)
         synchronized (boundedLinkedList) {
-          boundedLinkedList.add(random.nextInt());
+          boundedLinkedList.add(randomGenerator.nextInt());
         }
     }).start();
     new Thread(() -> {
       System.out.println("runA2");
       while (timing.seconds() < timeout) {
         synchronized (boundedLinkedList) {
-          boundedLinkedList.add(random.nextInt());
+          boundedLinkedList.add(randomGenerator.nextInt());
         }
       }
     }).start();

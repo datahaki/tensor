@@ -100,8 +100,8 @@ class FourierTest {
 
   @Test
   void testSeveral() {
-    RandomGenerator random = new Random();
-    int n = 1 + random.nextInt(20);
+    RandomGenerator randomGenerator = new Random();
+    int n = 1 + randomGenerator.nextInt(20);
     checkFormat(n);
   }
 

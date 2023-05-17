@@ -49,9 +49,9 @@ class BasisTransformTest {
   void testForm() {
     int rows = 6;
     int cols = 8;
-    RandomGenerator random = new Random(4);
+    RandomGenerator randomGenerator = new Random(4);
     Tensor m = IdentityMatrix.of(rows);
-    Tensor v = Tensors.matrix((i, j) -> RealScalar.of(random.nextInt(10)), rows, cols);
+    Tensor v = Tensors.matrix((i, j) -> RealScalar.of(randomGenerator.nextInt(10)), rows, cols);
     Tensor t = BasisTransform.ofForm(m, v);
     Tensor d = t.subtract(Transpose.of(t));
     assertEquals(d, Array.zeros(cols, cols));
@@ -70,11 +70,11 @@ class BasisTransformTest {
 
   @Test
   void testMatrix() {
-    RandomGenerator random = new Random(3);
+    RandomGenerator randomGenerator = new Random(3);
     int n = 5;
     Distribution distribution = BinomialDistribution.of(10, 0.3);
-    Tensor matrix = RandomVariate.of(distribution, random, n, n);
-    Tensor v = RandomVariate.of(distribution, random, n, n);
+    Tensor matrix = RandomVariate.of(distribution, randomGenerator, n, n);
+    Tensor v = RandomVariate.of(distribution, randomGenerator, n, n);
     if (Scalars.nonZero(Det.of(v))) {
       Tensor trafo1 = BasisTransform.ofMatrix(matrix, v);
       ExactTensorQ.require(trafo1);

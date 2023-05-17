@@ -89,7 +89,7 @@ public class WienerProcess implements RandomProcess, Serializable {
   }
 
   @Override // from RandomProcess
-  public Scalar evaluate(TimeSeries timeSeries, RandomGenerator random, Scalar x) {
+  public Scalar evaluate(TimeSeries timeSeries, RandomGenerator randomGenerator, Scalar x) {
     Clip clip = timeSeries.domain();
     Distribution distribution = null;
     if (clip.isInside(x)) {
@@ -110,7 +110,7 @@ public class WienerProcess implements RandomProcess, Serializable {
           mu.multiply(t).add(timeSeries.evaluate(max)), //
           Sqrt.FUNCTION.apply(t).multiply(sigma));
     }
-    Scalar value = RandomVariate.of(distribution, random);
+    Scalar value = RandomVariate.of(distribution, randomGenerator);
     timeSeries.insert(x, value);
     return value;
   }

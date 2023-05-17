@@ -40,14 +40,14 @@ public class DiscreteTimeIidProcess implements RandomProcess, Serializable {
   }
 
   @Override // from RandomProcess
-  public final Scalar evaluate(TimeSeries timeSeries, RandomGenerator random, Scalar x) {
+  public final Scalar evaluate(TimeSeries timeSeries, RandomGenerator randomGenerator, Scalar x) {
     IntegerQ.require(x);
     Sign.requirePositiveOrZero(x);
     if (timeSeries.isEmpty())
-      timeSeries.insert(RealScalar.ZERO, RandomVariate.of(distribution, random));
+      timeSeries.insert(RealScalar.ZERO, RandomVariate.of(distribution, randomGenerator));
     while (timeSeries.domain().isOutside(x)) {
       Scalar ofs = timeSeries.domain().max().add(RealScalar.ONE);
-      timeSeries.insert(ofs, RandomVariate.of(distribution, random));
+      timeSeries.insert(ofs, RandomVariate.of(distribution, randomGenerator));
     }
     return (Scalar) timeSeries.evaluate(x);
   }

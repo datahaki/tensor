@@ -18,12 +18,12 @@ import ch.alpine.tensor.alg.Array;
 class ColorFormatTest {
   @Test
   void testRandom() {
-    RandomGenerator random = new SecureRandom();
+    RandomGenerator randomGenerator = new SecureRandom();
     for (int index = 0; index < 10; ++index) {
-      int red = random.nextInt(256);
-      int green = random.nextInt(256);
-      int blue = random.nextInt(256);
-      int alpha = random.nextInt(256);
+      int red = randomGenerator.nextInt(256);
+      int green = randomGenerator.nextInt(256);
+      int blue = randomGenerator.nextInt(256);
+      int alpha = randomGenerator.nextInt(256);
       Color color = new Color(red, green, blue, alpha);
       Tensor vector = ColorFormat.toVector(color);
       assertEquals(red, vector.Get(0).number());

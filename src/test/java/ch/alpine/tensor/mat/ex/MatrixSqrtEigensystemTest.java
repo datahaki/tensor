@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,9 +30,9 @@ import ch.alpine.tensor.sca.Sign;
 class MatrixSqrtEigensystemTest {
   @Test
   void testSimple() throws ClassNotFoundException, IOException {
-    Random random = new Random(1);
+    RandomGenerator randomGenerator = new Random(1);
     int n = 11;
-    Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), random, n, n));
+    Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), randomGenerator, n, n));
     Tensor x2 = x.dot(x);
     DenmanBeaversDet denmanBeaversDet = //
         Serialization.copy(new DenmanBeaversDet(x2, Tolerance.CHOP)); // <- should converge faster

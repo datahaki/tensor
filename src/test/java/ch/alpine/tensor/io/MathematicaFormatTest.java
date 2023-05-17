@@ -34,11 +34,11 @@ class MathematicaFormatTest {
   void testMathematica() {
     int n = 20;
     int m = 10;
-    RandomGenerator random = new Random();
+    RandomGenerator randomGenerator = new Random();
     Tensor a = Tensors.matrix((i, j) -> //
-    random.nextInt(3) == 0 ? //
-        DoubleScalar.of(random.nextDouble()) : //
-        RationalScalar.of(random.nextLong(), random.nextLong()), n, m);
+    randomGenerator.nextInt(3) == 0 ? //
+        DoubleScalar.of(randomGenerator.nextDouble()) : //
+        RationalScalar.of(randomGenerator.nextLong(), randomGenerator.nextLong()), n, m);
     assertEquals(MathematicaFormat.of(a).count(), n); // count rows
     assertEquals(a, MathematicaFormat.parse(MathematicaFormat.of(a))); // full circle
   }

@@ -42,11 +42,11 @@ class XsvFormatTest {
 
   @Test
   void testCsvR() {
-    RandomGenerator random = new Random();
+    RandomGenerator randomGenerator = new Random();
     convertCheck( //
-        Tensors.matrix((i, j) -> RationalScalar.of(random.nextInt(100) - 50, random.nextInt(100) + 1), 20, 4));
-    convertCheck(Tensors.matrix((i, j) -> DoubleScalar.of(random.nextGaussian() * 1e-50), 20, 10));
-    convertCheck(Tensors.matrix((i, j) -> DoubleScalar.of(random.nextGaussian() * 1e+50), 20, 10));
+        Tensors.matrix((i, j) -> RationalScalar.of(randomGenerator.nextInt(100) - 50, randomGenerator.nextInt(100) + 1), 20, 4));
+    convertCheck(Tensors.matrix((i, j) -> DoubleScalar.of(randomGenerator.nextGaussian() * 1e-50), 20, 10));
+    convertCheck(Tensors.matrix((i, j) -> DoubleScalar.of(randomGenerator.nextGaussian() * 1e+50), 20, 10));
   }
 
   @Test

@@ -18,7 +18,7 @@ public enum Pivots implements Pivot {
    * the pivot is computer over the absolute numeric value of the columns */
   ARGMAX_ABS {
     @Override // from Pivot
-    public int get(int row, int col, int[] ind, Tensor[] lhs) {
+    public int index(int row, int col, int[] ind, Tensor[] lhs) {
       Scalar max = Abs.FUNCTION.apply(Unprotect.withoutUnit(lhs[ind[row]].Get(col)));
       int arg = row;
       for (int i = row + 1; i < ind.length; ++i) {
@@ -39,7 +39,7 @@ public enum Pivots implements Pivot {
    * @see MatrixRank */
   FIRST_NON_ZERO {
     @Override // from Pivot
-    public int get(int row, int col, int[] ind, Tensor[] lhs) {
+    public int index(int row, int col, int[] ind, Tensor[] lhs) {
       return IntStream.range(row, ind.length) //
           .filter(c1 -> Scalars.nonZero(lhs[ind[c1]].Get(col))) //
           .findFirst().orElse(row);
