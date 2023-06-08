@@ -51,11 +51,12 @@ Autonomous Gokart
 * values are encoded as exact integer fractions, in double precision, and as `java.math.BigDecimal`
 * probability distributions for random variate generation: Binomial-, Poisson-, Exponential-distribution, etc.
 * linear solvers `GaussianElimination`, `CholeskyDecomposition`, `QRDecomposition`, `SingularValueDecomposition`
-* matrix functions `MatrixExp`, `MatrixLog`, `MatrixSqrt`, etc.
-* tensor functions `TensorProduct`, `TensorWedge`, `Trace`, `HodgeDual`, etc.
-* parametric functions `LinearInterpolation`, `BSplineFunction`, etc.
-* window functions: Gaussian, Hamming, Hann, Blackman, etc.
-* spectral analysis: `Fourier`, `SpectrogramArray`, etc.
+* matrix functions `MatrixExp`, `MatrixLog`, `MatrixSqrt`, ...
+* tensor functions `TensorProduct`, `TensorWedge`, `Trace`, `HodgeDual`, ...
+* Lie theory: `BakerCampbellHausdorff`
+* parametric functions `LinearInterpolation`, `BSplineFunction`
+* window functions: Gaussian, Hamming, Hann, Blackman, ...
+* spectral analysis: `Fourier`, `SpectrogramArray`
 * import from and export to `Mathematica`, `CSV`, and image files
 
 ## Gallery
