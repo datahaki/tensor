@@ -25,7 +25,8 @@ public class Tsp2OptHeuristic {
 
   /** the entries in the symmetric distance matrix may be negative
    * 
-   * @param matrix symmetric
+   * @param matrix symmetric where an entry (i, j) is the cost of including
+   * edge (i, j) in the path
    * @param randomGenerator */
   public Tsp2OptHeuristic(Tensor matrix, RandomGenerator randomGenerator) {
     this.matrix = SymmetricMatrixQ.require(matrix);

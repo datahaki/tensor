@@ -8,6 +8,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.Clips;
 
+/** for a continuous probability distribution over the real numbers
+ * that does not have a discontinuity over the support */
 public abstract class AbstractContinuousDistribution implements UnivariateDistribution {
   @Override // from CDF
   public final Scalar p_lessEquals(Scalar x) {
@@ -19,13 +21,14 @@ public abstract class AbstractContinuousDistribution implements UnivariateDistri
     return protected_quantile(Clips.unit().requireInside(p));
   }
 
-  @Override // from RandomVariateInterface
-  public final Scalar randomVariate(RandomGenerator randomGenerator) {
-    // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
-    return protected_quantile(DoubleScalar.of(randomGenerator.nextDouble()));
-  }
-
   /** @param p guaranteed to be inside the interval [0, 1]
    * @return */
   protected abstract Scalar protected_quantile(Scalar p);
+
+  /* non-final only because FrechetDistribution requires override */
+  @Override // from RandomVariateInterface
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
+    return protected_quantile(DoubleScalar.of(randomGenerator.nextDouble()));
+  }
 }

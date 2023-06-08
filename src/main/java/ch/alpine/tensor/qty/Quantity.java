@@ -45,7 +45,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
  * <p>Two quantities are comparable only if they have the same unit. Otherwise an
  * exception is thrown.
  * 
- * <p>Different units should mapped to a common unit system before carrying out
+ * <p>Different units should be mapped to a common unit system before carrying out
  * operations.
  * <pre>
  * Scalar a = Quantity.of(200, "g");

@@ -2,7 +2,6 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
-import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -29,7 +28,7 @@ import ch.alpine.tensor.sca.exp.Log;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LogNormalDistribution.html">LogNormalDistribution</a> */
-public class LogNormalDistribution implements UnivariateDistribution, KurtosisInterface, Serializable {
+public class LogNormalDistribution extends AbstractContinuousDistribution implements KurtosisInterface, Serializable {
   private static final Distribution STANDARD = LogNormalDistribution.of(RealScalar.ZERO, RealScalar.ONE);
 
   /** @param mu any real number
@@ -74,21 +73,11 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
         : RealScalar.ZERO;
   }
 
-  @Override // from CDF
-  public Scalar p_lessEquals(Scalar x) {
-    return p_lessThan(x);
-  }
-
   @Override // from PDF
   public Scalar at(Scalar x) {
     return Scalars.lessThan(RealScalar.ZERO, x) //
         ? univariateDistribution.at(Log.FUNCTION.apply(x)).divide(x)
         : RealScalar.ZERO;
-  }
-
-  @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator randomGenerator) {
-    return Exp.FUNCTION.apply(univariateDistribution.randomVariate(randomGenerator));
   }
 
   @Override // from MeanInterface
@@ -109,7 +98,7 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
   }
 
   @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
+  public Scalar protected_quantile(Scalar p) {
     return Exp.FUNCTION.apply(univariateDistribution.quantile(p));
   }
 

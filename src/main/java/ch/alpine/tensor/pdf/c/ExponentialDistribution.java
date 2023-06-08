@@ -98,6 +98,7 @@ public class ExponentialDistribution implements UnivariateDistribution, //
 
   @Override // from PDF
   public Scalar at(Scalar x) {
+    // TODO TENSOR BUG unit check of x
     return Sign.isPositiveOrZero(x) //
         ? Exp.FUNCTION.apply(x.multiply(lambda_negate)).multiply(lambda)
         : lambda.zero();

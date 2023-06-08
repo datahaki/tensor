@@ -82,7 +82,7 @@ public enum ResourceData {
   /** Hint: function bypasses conversion of image to tensor. When the
    * image is needed as a {@link Tensor}, rather use {@link #of(String)}
    * 
-   * @param string as path to resource
+   * @param string as path to resource, typically starts with the slash character '/'
    * @return imported image
    * @throws Exception if resource could not be loaded */
   public static BufferedImage bufferedImage(String string) {

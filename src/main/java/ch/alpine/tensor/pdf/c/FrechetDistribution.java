@@ -12,10 +12,8 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
@@ -27,7 +25,7 @@ import ch.alpine.tensor.sca.pow.Power;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FrechetDistribution.html">FrechetDistribution</a> */
-public class FrechetDistribution implements UnivariateDistribution, Serializable {
+public class FrechetDistribution extends AbstractContinuousDistribution implements Serializable {
   private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
 
   /** @param alpha positive real
@@ -69,11 +67,7 @@ public class FrechetDistribution implements UnivariateDistribution, Serializable
     return protected_quantile(DoubleScalar.of(uniform));
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return protected_quantile(Clips.unit().requireInside(p));
-  }
-
+  @Override
   protected Scalar protected_quantile(Scalar p) {
     return beta.multiply(Power.of(Log.FUNCTION.apply(p).negate(), alpha.reciprocal().negate()));
   }
@@ -104,11 +98,6 @@ public class FrechetDistribution implements UnivariateDistribution, Serializable
     return Sign.isPositive(x) //
         ? Exp.FUNCTION.apply(Power.of(x.divide(beta), alpha.negate()).negate())
         : RealScalar.ZERO;
-  }
-
-  @Override // from CDF
-  public Scalar p_lessEquals(Scalar x) {
-    return p_lessThan(x);
   }
 
   @Override // from Object
