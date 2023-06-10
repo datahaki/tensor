@@ -13,7 +13,7 @@ class HoldHiSparseTest {
   void testPack() {
     TimeSeries timeSeries = TimeSeries.path( //
         Tensors.fromString("{{2, 1}, {3, 1}, {6, 1}, {8, 2}, {10, 4}, {11, 4}}"), //
-        ResamplingMethods.HOLD_VALUE_FROM_RIGHT_SPARSE);
+        ResamplingMethod.HOLD_VALUE_FROM_RIGHT_SPARSE);
     assertEquals(Tensors.fromString("{{2, 1}, {6, 1}, {8, 2}, {11, 4}}"), timeSeries.path());
   }
 
@@ -21,7 +21,7 @@ class HoldHiSparseTest {
   void testSize2() {
     Tensor in = Tensors.fromString("{{2, 1}, {3, 1}}");
     TimeSeries timeSeries = TimeSeries.path(in, //
-        ResamplingMethods.HOLD_VALUE_FROM_RIGHT_SPARSE);
+        ResamplingMethod.HOLD_VALUE_FROM_RIGHT_SPARSE);
     assertEquals(timeSeries.path(), in);
   }
 }

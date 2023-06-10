@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -20,8 +22,8 @@ class TimeSeriesIntegrateTest {
   @Test
   void testIntegrateBlocks() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.HOLD_VALUE_FROM_LEFT);
-    assertEquals(ts1.resamplingMethod(), ResamplingMethods.HOLD_VALUE_FROM_LEFT);
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethod.HOLD_VALUE_FROM_LEFT);
+    assertEquals(ts1.resamplingMethod(), ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     assertThrows(Exception.class, () -> TimeSeriesIntegrate.of(ts1, Clips.interval(0, 3)));
     assertThrows(Exception.class, () -> TimeSeriesIntegrate.of(ts1, Clips.interval(2, 11)));
     assertThrows(Exception.class, () -> TimeSeriesIntegrate.of(ts1, Clips.interval(0, 11)));
@@ -38,7 +40,7 @@ class TimeSeriesIntegrateTest {
   @Test
   void testIntegrateLinear() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
-    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethod.LINEAR_INTERPOLATION);
     Tensor value1 = TimeSeriesIntegrate.of(ts1, ts1.domain());
     Tolerance.CHOP.requireClose(value1, RealScalar.of(3 * 3 + 4.5 + 2 * 5.5 + 3 * 3.5));
     Tensor value2 = TimeSeriesIntegrate.of(ts1, Clips.interval(2, 8));
@@ -47,34 +49,37 @@ class TimeSeriesIntegrateTest {
     Tolerance.CHOP.requireClose(value2, RealScalar.of(2 * 3 + 4.5 + 2 * 5.5 + 1 * 4.5));
   }
 
-  @Test
-  void testIntegrateEmpty() {
-    for (ResamplingMethod resamplingMethod : TestHelper.list()) {
-      TimeSeries timeSeries = TimeSeries.empty(resamplingMethod);
-      TimeSeries result = TimeSeriesIntegrate.of(timeSeries);
-      assertTrue(result.isEmpty());
-    }
+  @ParameterizedTest
+  @EnumSource
+  void testIntegrateEmpty(ResamplingMethods resamplingMethods) {
+    ResamplingMethod resamplingMethod = resamplingMethods.get();
+    TimeSeries timeSeries = TimeSeries.empty(resamplingMethod);
+    TimeSeries result = TimeSeriesIntegrate.of(timeSeries);
+    assertTrue(result.isEmpty());
   }
 
-  @Test
-  void testSinglePoint() {
+  @ParameterizedTest
+  @EnumSource
+  void testSinglePoint(ResamplingMethods resamplingMethods) {
+    ResamplingMethod resamplingMethod = resamplingMethods.get();
     Tensor path = Tensors.fromString("{{1[s], 3[m]}}");
-    for (ResamplingMethod resamplingMethod : TestHelper.list()) {
-      TimeSeries timeSeries = TimeSeries.path(path, resamplingMethod);
-      TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
-      Tensor result = integrate.evaluate(Quantity.of(1, "s"));
-      assertTrue(ExactTensorQ.of(result));
-      assertEquals(result, Quantity.of(0, "m*s"));
-      Tensor value = TimeSeriesIntegrate.of(timeSeries, Clips.interval(Quantity.of(1, "s"), Quantity.of(1, "s")));
-      assertEquals(value, Quantity.of(0, "m*s"));
-    }
+    // for (ResamplingMethod resamplingMethod : TestHelper.list()) {
+    TimeSeries timeSeries = TimeSeries.path(path, resamplingMethod);
+    TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
+    Tensor result = integrate.evaluate(Quantity.of(1, "s"));
+    assertTrue(ExactTensorQ.of(result));
+    assertEquals(result, Quantity.of(0, "m*s"));
+    Tensor value = TimeSeriesIntegrate.of(timeSeries, Clips.interval(Quantity.of(1, "s"), Quantity.of(1, "s")));
+    assertEquals(value, Quantity.of(0, "m*s"));
   }
 
-  @Test
-  void testException() {
-    for (ResamplingMethod resamplingMethod : TestHelper.list()) {
-      TimeSeries timeSeries = TimeSeries.empty(resamplingMethod);
-      assertThrows(Throw.class, () -> TimeSeriesIntegrate.of(timeSeries, Clips.interval(0, 1)));
-    }
+  @ParameterizedTest
+  @EnumSource
+  void testException(ResamplingMethods resamplingMethods) {
+    ResamplingMethod resamplingMethod = resamplingMethods.get();
+    // for (ResamplingMethod resamplingMethod : TestHelper.list()) {
+    TimeSeries timeSeries = TimeSeries.empty(resamplingMethod);
+    assertThrows(Throw.class, () -> TimeSeriesIntegrate.of(timeSeries, Clips.interval(0, 1)));
+    // }
   }
 }

@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.Clip;
 class TimeSeriesImplTest {
   @Test
   void testInterp1() throws ClassNotFoundException, IOException {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.LINEAR_INTERPOLATION);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
     DateTime dateTime = DateTime.of(1993, 4, 5, 4, 5);
@@ -52,7 +52,7 @@ class TimeSeriesImplTest {
 
   @Test
   void testHoldLo() throws ClassNotFoundException, IOException {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_VALUE_FROM_LEFT);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
     DateTime dateTime = DateTime.of(1993, 4, 5, 4, 5);
@@ -80,7 +80,7 @@ class TimeSeriesImplTest {
 
   @Test
   void testHoldLoSparse() throws ClassNotFoundException, IOException {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_VALUE_FROM_LEFT_SPARSE);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.HOLD_VALUE_FROM_LEFT_SPARSE);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
     DateTime dateTime = DateTime.of(1993, 4, 5, 4, 5);
@@ -108,7 +108,7 @@ class TimeSeriesImplTest {
 
   @Test
   void testHoldHi() throws ClassNotFoundException, IOException {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_VALUE_FROM_RIGHT_SPARSE);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.HOLD_VALUE_FROM_RIGHT_SPARSE);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
     DateTime dateTime = DateTime.of(1993, 4, 5, 4, 5);

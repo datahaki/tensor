@@ -11,7 +11,7 @@ import ch.alpine.tensor.red.Inner;
 public enum TsEntrywise {
   ;
   private static final BinaryOperator<TimeSeries> TIMES = TimeSeriesBinaryOperator.of( //
-      Inner.with((s, t) -> t.multiply(s)), ResamplingMethods.LINEAR_INTERPOLATION);
+      Inner.with((s, t) -> t.multiply(s)), ResamplingMethod.LINEAR_INTERPOLATION);
 
   /** implementation is consistent with Mathematica
    * 
@@ -19,7 +19,7 @@ public enum TsEntrywise {
    * @param timeSeries2
    * @return time series that is the sum of the two given time series */
   public static TimeSeries plus(TimeSeries timeSeries1, TimeSeries timeSeries2) {
-    return TimeSeriesBinaryOperator.of(Tensor::add, ResamplingMethods.LINEAR_INTERPOLATION) //
+    return TimeSeriesBinaryOperator.of(Tensor::add, ResamplingMethod.LINEAR_INTERPOLATION) //
         .apply(timeSeries1, timeSeries2);
   }
 
@@ -29,7 +29,7 @@ public enum TsEntrywise {
    * @param timeSeries2
    * @return time series that is the timeSeries1 minus timeSeries2 */
   public static TimeSeries minus(TimeSeries timeSeries1, TimeSeries timeSeries2) {
-    return TimeSeriesBinaryOperator.of(Tensor::subtract, ResamplingMethods.LINEAR_INTERPOLATION) //
+    return TimeSeriesBinaryOperator.of(Tensor::subtract, ResamplingMethod.LINEAR_INTERPOLATION) //
         .apply(timeSeries1, timeSeries2);
   }
 
@@ -46,7 +46,7 @@ public enum TsEntrywise {
    * @param timeSeries2
    * @return */
   public static TimeSeries min(TimeSeries timeSeries1, TimeSeries timeSeries2) {
-    return TimeSeriesBinaryOperator.of(Entrywise.min(), ResamplingMethods.LINEAR_INTERPOLATION) //
+    return TimeSeriesBinaryOperator.of(Entrywise.min(), ResamplingMethod.LINEAR_INTERPOLATION) //
         .apply(timeSeries1, timeSeries2);
   }
 
@@ -54,7 +54,7 @@ public enum TsEntrywise {
    * @param timeSeries2
    * @return */
   public static TimeSeries max(TimeSeries timeSeries1, TimeSeries timeSeries2) {
-    return TimeSeriesBinaryOperator.of(Entrywise.max(), ResamplingMethods.LINEAR_INTERPOLATION) //
+    return TimeSeriesBinaryOperator.of(Entrywise.max(), ResamplingMethod.LINEAR_INTERPOLATION) //
         .apply(timeSeries1, timeSeries2);
   }
 }

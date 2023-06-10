@@ -1,20 +1,20 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
-abstract class BSplineBasisOld {
-  public static final BSplineBasisOld constant = new BSplineBasisOld() {
+/* package */ abstract class BSplineBasisDouble {
+  public static final BSplineBasisDouble constant = new BSplineBasisDouble() {
     @Override
     public double at(double t) {
       return -0.5 <= t && t < +0.5 ? 1 : 0;
     }
   };
-  public static final BSplineBasisOld linear = new BSplineBasisOld() {
+  public static final BSplineBasisDouble linear = new BSplineBasisDouble() {
     @Override
     public double at(double t) {
       return Math.max(0, 1 - Math.abs(t));
     }
   };
-  public static final BSplineBasisOld quadratic = new BSplineBasisOld() {
+  public static final BSplineBasisDouble quadratic = new BSplineBasisDouble() {
     @Override
     public double at(double t) {
       if (t < 0)
@@ -27,7 +27,7 @@ abstract class BSplineBasisOld {
       return 0;
     }
   };
-  public static final BSplineBasisOld cubic = new BSplineBasisOld() {
+  public static final BSplineBasisDouble cubic = new BSplineBasisDouble() {
     @Override
     public double at(double t) {
       if (t < 0)
@@ -43,7 +43,7 @@ abstract class BSplineBasisOld {
       return 0;
     }
   };
-  public static final BSplineBasisOld[] of = new BSplineBasisOld[] { constant, linear, quadratic, cubic };
+  public static final BSplineBasisDouble[] of = new BSplineBasisDouble[] { constant, linear, quadratic, cubic };
 
   public abstract double at(double t);
 }

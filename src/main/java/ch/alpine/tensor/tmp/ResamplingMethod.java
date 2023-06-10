@@ -3,12 +3,28 @@ package ch.alpine.tensor.tmp;
 
 import java.util.NavigableMap;
 import java.util.NavigableSet;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 
 public interface ResamplingMethod {
+  /** linear interpolation
+   * default in Mathematica as "LinearInterpolation", and "{Interpolation, 1}" */
+  ResamplingMethod LINEAR_INTERPOLATION = new Linear();
+  ResamplingMethod LINEAR_INTERPOLATION_SPARSE = new LinearSparse();
+  /** in Mathematica: HoldValueFromLeft */
+  ResamplingMethod HOLD_VALUE_FROM_LEFT = new HoldLo();
+  /** suitable for exact precision data sets */
+  ResamplingMethod HOLD_VALUE_FROM_LEFT_SPARSE = new HoldLoSparse();
+  /** in Mathematica: HoldValueFromRight */
+  ResamplingMethod HOLD_VALUE_FROM_RIGHT = new HoldHi();
+  /** suitable for exact precision data sets */
+  ResamplingMethod HOLD_VALUE_FROM_RIGHT_SPARSE = new HoldHiSparse();
+  /** in Mathematica: None */
+  ResamplingMethod NONE = new None();
+
   /** @param navigableSet
    * @param function mapping key to value
    * @param x
@@ -50,4 +66,6 @@ public interface ResamplingMethod {
    * @param navigableMap
    * @return given navigableMap but potentially with some entries removed */
   NavigableMap<Scalar, Tensor> pack(NavigableMap<Scalar, Tensor> navigableMap);
+
+  Stream<Tensor> lines(NavigableMap<Scalar, Tensor> navigableMap);
 }

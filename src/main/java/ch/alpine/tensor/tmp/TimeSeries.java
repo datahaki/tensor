@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.Clip;
  * 
  * <p>In Mathematica, the default resampling method is linear
  * interpolation, which is available here as
- * {@link ResamplingMethods#LINEAR_INTERPOLATION}.
+ * {@link ResamplingMethod#LINEAR_INTERPOLATION}.
  * 
  * <p>All values in the time series must have the same tensor structure.
  * {@link #insert(Scalar, Tensor)} throws an exception if the value
@@ -203,4 +203,6 @@ public interface TimeSeries {
    * 
    * @return tensor with dimensions size() x 2 */
   Tensor path();
+
+  Stream<Tensor> lines();
 }

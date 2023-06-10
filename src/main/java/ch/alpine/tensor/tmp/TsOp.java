@@ -24,12 +24,12 @@ public enum TsOp {
    * @param predicate for testing each value in given time series
    * @return time series with scalar values of either 0 or 1 and resampling method
    * depending on the evaluation of the predicate at each value, and with
-   * {@link ResamplingMethods#HOLD_VALUE_FROM_LEFT_SPARSE} */
+   * {@link ResamplingMethod#HOLD_VALUE_FROM_LEFT_SPARSE} */
   @SuppressWarnings("unchecked")
   public static <T extends Tensor> TimeSeries indicator(TimeSeries timeSeries, Predicate<T> predicate) {
     return TimeSeries.of(timeSeries.stream() //
         .map(entry -> new TsEntry(entry.key(), Boole.of(predicate.test((T) entry.value())))), //
-        ResamplingMethods.HOLD_VALUE_FROM_LEFT_SPARSE);
+        ResamplingMethod.HOLD_VALUE_FROM_LEFT_SPARSE);
   }
 
   /** Example:
@@ -42,11 +42,11 @@ public enum TsOp {
    * @param navigableSet
    * @return time series with domain setcover[navigableSet] and integer values
    * incrementing by one for each element in the set and resampling method
-   * {@link ResamplingMethods#HOLD_VALUE_FROM_LEFT} */
+   * {@link ResamplingMethod#HOLD_VALUE_FROM_LEFT} */
   public static TimeSeries indicator(NavigableSet<Scalar> navigableSet) {
     AtomicInteger atomicInteger = new AtomicInteger();
     return TimeSeries.of(navigableSet.stream() //
         .map(key -> new TsEntry(key, RealScalar.of(atomicInteger.getAndIncrement()))), //
-        ResamplingMethods.HOLD_VALUE_FROM_LEFT);
+        ResamplingMethod.HOLD_VALUE_FROM_LEFT);
   }
 }

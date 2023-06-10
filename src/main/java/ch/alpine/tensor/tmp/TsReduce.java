@@ -8,6 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.red.Entrywise;
 
 /** reduction of all values from a time series to a single value */
+// TODO TENSOR API TsXY possibly rename
 public enum TsReduce {
   ;
   /** @param timeSeries

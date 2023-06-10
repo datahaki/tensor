@@ -4,6 +4,7 @@ package ch.alpine.tensor.tmp;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -33,6 +34,12 @@ import ch.alpine.tensor.sca.Clips;
       return f_lo;
     Scalar hi = navigableSet.ceiling(x);
     return LinearInterpolation.of(Tensors.of(f_lo, function.apply(hi))).at(Clips.interval(lo, hi).rescale(x));
+  }
+
+  @Override
+  public Stream<Tensor> lines(NavigableMap<Scalar, Tensor> navigableMap) {
+    return Stream.of(Tensor.of(navigableMap.entrySet().stream() //
+        .map(entry -> Tensors.of(entry.getKey(), entry.getValue())))); // value is copied
   }
 
   @Override

@@ -19,7 +19,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.ResamplingMethod;
 import ch.alpine.tensor.tmp.TimeSeries;
 import ch.alpine.tensor.tmp.TimeSeriesIntegrate;
 import ch.alpine.tensor.tmp.TsEntry;
@@ -71,7 +71,7 @@ class ChebyshevTest {
         TimeSeries timeSeries = TimeSeries.of(domain.stream() //
             .map(Scalar.class::cast) //
             .map(t -> new TsEntry(t, Times.of(w.apply(t), p1.apply(t), p2.apply(t)))), //
-            ResamplingMethods.LINEAR_INTERPOLATION);
+            ResamplingMethod.LINEAR_INTERPOLATION);
         Scalar result = (Scalar) TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
         // System.out.println(k+" "+j+" "+result);
         if (k != j)

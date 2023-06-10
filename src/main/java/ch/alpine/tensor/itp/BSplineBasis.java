@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BSplineBasis.html">BSplineBasis</a> */
 public class BSplineBasis implements ScalarUnaryOperator {
-  private static final int CACHE_SIZE = 10;
+  private static final int CACHE_SIZE = 16;
   private static final Function<Integer, ScalarUnaryOperator> CACHE = Cache.of(BSplineBasis::new, CACHE_SIZE);
 
   /** @param degree

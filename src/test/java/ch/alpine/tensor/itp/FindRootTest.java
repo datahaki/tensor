@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Sin;
-import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.ResamplingMethod;
 import ch.alpine.tensor.tmp.TimeSeries;
 
 class FindRootTest {
@@ -122,7 +122,7 @@ class FindRootTest {
 
   @Test
   void testTimeSeriesLinear() {
-    TimeSeries timeSeries = TimeSeries.path(Tensors.fromString("{{2, 4}, {5, -1}}"), ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.path(Tensors.fromString("{{2, 4}, {5, -1}}"), ResamplingMethod.LINEAR_INTERPOLATION);
     FindRoot findRoot = FindRoot.of(x -> (Scalar) timeSeries.evaluate(x));
     Scalar scalar = findRoot.inside(timeSeries.domain());
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(4.4));
@@ -130,7 +130,7 @@ class FindRootTest {
 
   @RepeatedTest(10)
   void testTimeSeriesDateTime() {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.LINEAR_INTERPOLATION);
     DateTime dateTime = DateTime.of(2020, 1, 1, 0, 0);
     timeSeries.insert(dateTime, RealScalar.of(-1));
     Scalar hi = RandomVariate.of(UniformDistribution.of(2, 3));
@@ -142,14 +142,14 @@ class FindRootTest {
 
   @Test
   void testTimeSeriesLoFail() {
-    TimeSeries timeSeries = TimeSeries.path(Tensors.fromString("{{2, 4}, {5, -1}}"), ResamplingMethods.HOLD_VALUE_FROM_LEFT);
+    TimeSeries timeSeries = TimeSeries.path(Tensors.fromString("{{2, 4}, {5, -1}}"), ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     FindRoot findRoot = FindRoot.of(x -> (Scalar) timeSeries.evaluate(x));
     assertThrows(Exception.class, () -> findRoot.inside(timeSeries.domain()));
   }
 
   @Test
   void testTimeSeriesHiFail() {
-    TimeSeries timeSeries = TimeSeries.path(Tensors.fromString("{{2, 4}, {5, -1}}"), ResamplingMethods.HOLD_VALUE_FROM_RIGHT);
+    TimeSeries timeSeries = TimeSeries.path(Tensors.fromString("{{2, 4}, {5, -1}}"), ResamplingMethod.HOLD_VALUE_FROM_RIGHT);
     FindRoot findRoot = FindRoot.of(x -> (Scalar) timeSeries.evaluate(x));
     assertThrows(Exception.class, () -> findRoot.inside(timeSeries.domain()));
   }

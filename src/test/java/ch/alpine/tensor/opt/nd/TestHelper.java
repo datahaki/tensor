@@ -11,7 +11,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
   ;
   public static Tensor sample(CoordinateBoundingBox coordinateBoundingBox) {
     return Tensor.of(IntStream.range(0, coordinateBoundingBox.dimensions()) //
-        .mapToObj(coordinateBoundingBox::getClip) //
+        .mapToObj(coordinateBoundingBox::clip) //
         .map(UniformDistribution::of) //
         .map(RandomVariate::of));
   }

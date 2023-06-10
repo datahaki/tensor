@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.InvertUnlessZero;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.ResamplingMethod;
 import ch.alpine.tensor.tmp.TimeSeries;
 
 /** <p>inspired by
@@ -83,7 +83,7 @@ public class WienerProcess implements RandomProcess, Serializable {
 
   @Override // from RandomProcess
   public TimeSeries spawn() {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.LINEAR_INTERPOLATION);
     timeSeries.insert(t_zero, v_zero);
     return timeSeries;
   }

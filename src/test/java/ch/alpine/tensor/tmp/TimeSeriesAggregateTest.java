@@ -14,7 +14,7 @@ import ch.alpine.tensor.red.Entrywise;
 class TimeSeriesAggregateTest {
   @Test
   void test() {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.LINEAR_INTERPOLATION);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
     DateTime dateTime = DateTime.of(1993, 4, 5, 4, 5);
@@ -23,7 +23,7 @@ class TimeSeriesAggregateTest {
     timeSeries.insert(dateTime.add(Quantity.of(3.2, "h")), RealScalar.of(5));
     timeSeries.insert(dateTime.add(Quantity.of(24, "h")), RealScalar.of(1));
     TimeSeriesAggregate timeSeriesAggregate = //
-        TimeSeriesAggregate.of(Entrywise.max(), ResamplingMethods.HOLD_VALUE_FROM_LEFT);
+        TimeSeriesAggregate.of(Entrywise.max(), ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     TimeSeries result = timeSeriesAggregate.of(timeSeries, dateTime.subtract(Quantity.of(1, "min")), Quantity.of(5, "h"));
     assertEquals(result.path().length(), 2);
   }

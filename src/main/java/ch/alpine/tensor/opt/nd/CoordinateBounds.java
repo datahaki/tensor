@@ -48,7 +48,7 @@ public enum CoordinateBounds {
     int n = Integers.requireEquals(cbb1.dimensions(), cbb2.dimensions());
     return CoordinateBoundingBox.of(IntStream.range(0, n) //
         .mapToObj(index -> Clips.cover( //
-            cbb1.getClip(index), //
-            cbb2.getClip(index))));
+            cbb1.clip(index), //
+            cbb2.clip(index))));
   }
 }

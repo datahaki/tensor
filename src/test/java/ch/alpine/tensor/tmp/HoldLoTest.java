@@ -11,7 +11,7 @@ import ch.alpine.tensor.RealScalar;
 class HoldLoTest {
   @Test
   void testDirac() {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_VALUE_FROM_LEFT);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     timeSeries.insert(DoubleScalar.NEGATIVE_INFINITY, RealScalar.ZERO);
     timeSeries.insert(RealScalar.TWO, RealScalar.ONE);
     timeSeries.insert(DoubleScalar.POSITIVE_INFINITY, RealScalar.ONE);

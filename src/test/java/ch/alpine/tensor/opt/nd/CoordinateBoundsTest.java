@@ -22,8 +22,8 @@ class CoordinateBoundsTest {
   void testSimple() {
     Tensor tensor = Tensors.fromString("{{0, 1}, {1, 2}, {2, 1}, {3, 2}, {4, 1}}");
     CoordinateBoundingBox box = CoordinateBounds.of(tensor);
-    assertEquals(box.getClip(0), Clips.interval(0, 4));
-    assertEquals(box.getClip(1), Clips.interval(1, 2));
+    assertEquals(box.clip(0), Clips.interval(0, 4));
+    assertEquals(box.clip(1), Clips.interval(1, 2));
     // assertEquals(minMax.min(), Tensors.vector(1, 5, -6));
     // assertEquals(minMax.max(), Tensors.vector(4, 9, 3));
   }

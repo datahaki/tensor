@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.Clips;
 class TimeSeriesRescaleTest {
   @Test
   void testTimeSeries() {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.LINEAR_INTERPOLATION);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
     DateTime dateTime = DateTime.of(1993, 4, 5, 4, 5);

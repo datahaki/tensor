@@ -13,7 +13,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.ResamplingMethod;
 import ch.alpine.tensor.tmp.TimeSeries;
 
 /** Quote from Mathematica:
@@ -41,7 +41,7 @@ public class RenewalProcess implements RandomProcess, Serializable {
 
   @Override // from RandomProcess
   public TimeSeries spawn() {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_VALUE_FROM_LEFT);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     timeSeries.insert(RandomVariate.of(distribution).zero(), RealScalar.ZERO);
     return timeSeries;
   }

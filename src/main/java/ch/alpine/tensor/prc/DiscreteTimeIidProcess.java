@@ -12,7 +12,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.ResamplingMethod;
 import ch.alpine.tensor.tmp.TimeSeries;
 
 /** Remark: the name of the class is not final
@@ -36,7 +36,7 @@ public class DiscreteTimeIidProcess implements RandomProcess, Serializable {
 
   @Override // from RandomProcess
   public final TimeSeries spawn() {
-    return TimeSeries.empty(ResamplingMethods.NONE);
+    return TimeSeries.empty(ResamplingMethod.NONE);
   }
 
   @Override // from RandomProcess

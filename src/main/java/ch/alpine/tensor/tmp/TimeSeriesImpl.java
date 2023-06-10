@@ -104,6 +104,11 @@ import ch.alpine.tensor.sca.Clips;
         .map(entry -> Tensors.of(entry.getKey(), entry.getValue()))); // value is copied
   }
 
+  @Override
+  public Stream<Tensor> lines() {
+    return resamplingMethod.lines(navigableMap);
+  }
+
   @Override // from Object
   public final String toString() {
     return MathematicaFormat.concise("TimeSeries", //

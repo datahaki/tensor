@@ -53,14 +53,14 @@ public class CoordinateBoundingBox implements Serializable {
 
   /** @param index in the range 0, 1, ... {@link #dimensions()} - 1
    * @return clip in given dimension */
-  public Clip getClip(int index) {
+  public Clip clip(int index) {
     return list.get(index);
   }
 
   /** @param vector of length {@link #dimensions()}
    * @return coordinates of vector clipped to bounds of this box instance */
   public Tensor mapInside(Tensor vector) {
-    return Tensors.vector(i -> getClip(i).apply(vector.Get(i)), //
+    return Tensors.vector(i -> clip(i).apply(vector.Get(i)), //
         Integers.requireEquals(dimensions(), vector.length()));
   }
 
@@ -68,7 +68,7 @@ public class CoordinateBoundingBox implements Serializable {
    * @return whether given vector is inside this bounding box */
   public boolean isInside(Tensor vector) {
     return IntStream.range(0, Integers.requireEquals(dimensions(), vector.length())) //
-        .allMatch(i -> getClip(i).isInside(vector.Get(i)));
+        .allMatch(i -> clip(i).isInside(vector.Get(i)));
   }
 
   /** @param vector
@@ -85,7 +85,7 @@ public class CoordinateBoundingBox implements Serializable {
    * @return left, i.e. lower half of this bounding box */
   public CoordinateBoundingBox splitLo(int index) {
     List<Clip> copy = new ArrayList<>(list);
-    Clip clip = getClip(index);
+    Clip clip = clip(index);
     copy.set(index, Clips.interval(clip.min(), median(clip)));
     return new CoordinateBoundingBox(copy);
   }
@@ -94,7 +94,7 @@ public class CoordinateBoundingBox implements Serializable {
    * @return right, i.e. upper half of this bounding box */
   public CoordinateBoundingBox splitHi(int index) {
     List<Clip> copy = new ArrayList<>(list);
-    Clip clip = getClip(index);
+    Clip clip = clip(index);
     copy.set(index, Clips.interval(median(clip), clip.max()));
     return new CoordinateBoundingBox(copy);
   }
@@ -102,7 +102,7 @@ public class CoordinateBoundingBox implements Serializable {
   /** @param index
    * @return median of bounds in dimension of given index */
   public Scalar median(int index) {
-    return median(getClip(index));
+    return median(clip(index));
   }
 
   private static Scalar median(Clip clip) {

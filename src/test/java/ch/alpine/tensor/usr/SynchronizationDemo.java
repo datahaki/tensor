@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
-import ch.alpine.tensor.tmp.ResamplingMethods;
+import ch.alpine.tensor.tmp.ResamplingMethod;
 import ch.alpine.tensor.tmp.TimeSeries;
 
 /** the demo shows that the 2 synchronizations are both necessary and sufficient.
@@ -26,7 +26,7 @@ import ch.alpine.tensor.tmp.TimeSeries;
   }
 
   public static void main(String[] args) throws InterruptedException {
-    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethods.HOLD_VALUE_FROM_LEFT);
+    TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     Timing timing = Timing.started();
     launchThread(timing, timeSeries);
     while (timing.seconds() < SEC) {

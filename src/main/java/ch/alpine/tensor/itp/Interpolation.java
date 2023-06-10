@@ -7,7 +7,8 @@ import ch.alpine.tensor.Tensor;
 /** multi-dimensional interpolation
  * 
  * inspired by
- * <a href="https://reference.wolfram.com/language/ref/Interpolation.html">Interpolation</a> */
+ * <a href="https://reference.wolfram.com/language/ref/Interpolation.html">Interpolation</a>
+ * <a href="https://reference.wolfram.com/language/ref/ListInterpolation.html">ListInterpolation</a> */
 public interface Interpolation {
   /** if index.length() is less than the rank r of the tensor object that is being interpolated,
    * then the function get(...) returns a tensor of rank r - index.length()

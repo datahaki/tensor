@@ -21,7 +21,7 @@ public enum TimeSeriesIntegrate {
    * @return new instance of time series with identical keys of given timeSeries
    * and values that are the accumulated integration */
   public static TimeSeries of(TimeSeries timeSeries) {
-    TimeSeries result = TimeSeries.empty(ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries result = TimeSeries.empty(ResamplingMethod.LINEAR_INTERPOLATION);
     if (!timeSeries.isEmpty()) {
       Clip clip = timeSeries.domain();
       Scalar prev = clip.min();
@@ -34,18 +34,20 @@ public enum TimeSeriesIntegrate {
         result.insert(next, sum);
         prev = next;
       }
-      Clip interval = Clips.interval(prev, clip.max());
-      Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
-      sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
-      result.insert(prev, sum);
+      // TODO TENSOR why is this last block necessary? perhaps for INFTY?
+      // Clip interval = Clips.interval(prev, clip.max());
+      // System.out.println("intervalWidth=" + interval.width());
+      // Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
+      // sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
+      // result.insert(prev, sum);
     }
     return result;
   }
 
   /** Remark: implementation uses Euler-method for integration
    * which is exact for the resampling methods:
-   * {@link ResamplingMethods#LINEAR_INTERPOLATION},
-   * {@link ResamplingMethods#HOLD_VALUE_FROM_LEFT}, etc.
+   * {@link ResamplingMethod#LINEAR_INTERPOLATION},
+   * {@link ResamplingMethod#HOLD_VALUE_FROM_LEFT}, etc.
    * 
    * @param timeSeries non-empty
    * @param clip must be subset of domain of given time series

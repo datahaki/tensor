@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Clips;
 class TimeSeriesWrapTest {
   @Test
   void testEmpty() {
-    TimeSeries timeSeries = TimeSeries.wrap(new TreeSet<>(), s -> null, ResamplingMethods.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.wrap(new TreeSet<>(), s -> null, ResamplingMethod.LINEAR_INTERPOLATION);
     assertEquals(timeSeries.toString(), "TimeSeries[LinearInterpolation, null, 0]");
   }
 
@@ -39,12 +39,12 @@ class TimeSeriesWrapTest {
         .forEach(keys::add);
     TimeSeries timeSeries = TimeSeries.wrap( //
         keys, s -> database.get(s.number().intValue()), //
-        ResamplingMethods.LINEAR_INTERPOLATION);
+        ResamplingMethod.LINEAR_INTERPOLATION);
     assertEquals(timeSeries.domain(), Clips.interval(0, 9));
     RandomVariate.of(UniformDistribution.of(timeSeries.domain()), 20).stream() //
         .map(Scalar.class::cast).forEach(timeSeries::evaluate);
     assertTrue(timeSeries.toString().startsWith("TimeSeries["));
-    assertEquals(timeSeries.resamplingMethod(), ResamplingMethods.LINEAR_INTERPOLATION);
+    assertEquals(timeSeries.resamplingMethod(), ResamplingMethod.LINEAR_INTERPOLATION);
     assertFalse(timeSeries.isEmpty());
     assertEquals(timeSeries.size(), database.length());
     Tensor path = timeSeries.path();

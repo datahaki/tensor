@@ -51,9 +51,9 @@ class CoordinateBoundingBoxTest {
     Clip clip = Clips.absolute(1);
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBoundingBox.of(clip, clip);
     CoordinateBoundingBox lo = coordinateBoundingBox.splitLo(1);
-    assertEquals(lo.getClip(0), clip);
-    assertSame(lo.getClip(0), clip);
-    assertEquals(lo.getClip(1), Clips.interval(-1, 0));
+    assertEquals(lo.clip(0), clip);
+    assertSame(lo.clip(0), clip);
+    assertEquals(lo.clip(1), Clips.interval(-1, 0));
     Serialization.copy(coordinateBoundingBox);
   }
 
