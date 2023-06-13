@@ -114,7 +114,7 @@ import ch.alpine.tensor.spa.SparseArray;
             // Overflow control
             Scalar t = Abs.FUNCTION.apply(matrixT[i][idx]);
             if (Scalars.lessThan(RealScalar.ONE, Times.of(EPSILON, t, t)))
-              // case not covered by tests
+              // TODO TENSOR COVERAGE case not covered by tests
               for (int j = i; j <= idx; ++j)
                 matrixT[j][idx] = matrixT[j][idx].divide(t);
           }

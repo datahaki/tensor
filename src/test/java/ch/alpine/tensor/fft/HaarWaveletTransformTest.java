@@ -15,6 +15,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ArrayFlatten;
+import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.lie.KroneckerProduct;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -47,6 +48,8 @@ class HaarWaveletTransformTest {
     int n = 1 << repetitionInfo.getCurrentRepetition();
     Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), n);
     Tensor matrix = HaarWaveletTransform.FORWARD.matrix(n);
+    Tensor invers = HaarWaveletTransform.INVERSE.matrix(n);
+    assertEquals(Dot.of(matrix, invers), IdentityMatrix.of(n));
     Tensor y = HaarWaveletTransform.FORWARD.transform(x);
     assertEquals(x, HaarWaveletTransform.INVERSE.transform(y));
     assertEquals(matrix.dot(x), y);

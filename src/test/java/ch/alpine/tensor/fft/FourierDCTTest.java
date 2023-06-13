@@ -3,6 +3,8 @@ package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -17,6 +19,7 @@ import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.pdf.ComplexUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -169,6 +172,30 @@ class FourierDCTTest {
   void testSpecific() {
     Scalar scalar = FourierDCT._2.matrix(7).Get(5, 6);
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(-0.2356569943861637));
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testDotR(FourierDCT fourierDCT) {
+    if (Set.of(3).contains(fourierDCT.ordinal())) {
+      Tensor vector = RandomVariate.of(ComplexUniformDistribution.unit(), 4);
+      Tensor r1 = fourierDCT.transform(vector);
+      Tensor matrix = fourierDCT.matrix(vector.length());
+      Tensor r2 = matrix.dot(vector);
+      Tolerance.CHOP.requireClose(r1, r2);
+    }
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testDotL(FourierDCT fourierDCT) {
+    if (Set.of(0, 1, 2, 3).contains(fourierDCT.ordinal())) {
+      Tensor vector = RandomVariate.of(ComplexUniformDistribution.unit(), 4);
+      Tensor r1 = fourierDCT.transform(vector);
+      Tensor matrix = fourierDCT.matrix(vector.length());
+      Tensor r2 = vector.dot(matrix);
+      Tolerance.CHOP.requireClose(r1, r2);
+    }
   }
 
   @ParameterizedTest

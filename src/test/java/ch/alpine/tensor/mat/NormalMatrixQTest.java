@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -28,5 +29,10 @@ class NormalMatrixQTest {
     assertFalse(NormalMatrixQ.of(Pi.VALUE));
     assertFalse(NormalMatrixQ.of(Tensors.vector(1, 2, 3)));
     assertFalse(NormalMatrixQ.of(HilbertMatrix.of(2, 3)));
+  }
+
+  @Test
+  void testFail() {
+    assertThrows(Exception.class, () -> NormalMatrixQ.require(Pi.VALUE));
   }
 }

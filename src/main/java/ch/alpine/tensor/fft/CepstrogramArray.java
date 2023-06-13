@@ -11,6 +11,7 @@ import ch.alpine.tensor.sca.exp.Log;
  * <a href="https://reference.wolfram.com/language/ref/CepstrogramArray.html">CepstrogramArray</a> */
 public enum CepstrogramArray {
   ;
+  // TODO TENSOR API no good
   public static final SpectrogramArray Power = new SpectrogramArray(vector -> {
     return Fourier.INVERSE.transform(Fourier.FORWARD.transform(vector) //
         .map(AbsSquared.FUNCTION) //

@@ -91,12 +91,11 @@ import ch.alpine.tensor.sca.Clips;
     return Tensor.of(navigableSet.stream() //
         .map(key -> Tensors.of(key, function.apply(key)))); // value is copied
   }
-  
+
   @Override
   public Stream<Tensor> lines() {
     return resamplingMethod.lines(null); // TODO
   }
-
 
   @Override // from Object
   public final String toString() {

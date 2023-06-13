@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -70,6 +71,28 @@ class MatrixPowerTest {
   void testFourier() {
     checkLow(Fourier.FORWARD.matrix(3));
     checkLow(Fourier.FORWARD.matrix(6));
+  }
+
+  @Test
+  void testHalf() {
+    Tensor a = Tensors.fromString("{{4, 10}, {0, 9}}");
+    {
+      Tolerance.CHOP.requireClose( //
+          MatrixPower.of(a, RealScalar.of(5)), //
+          MatrixPower.of(a, 5));
+    }
+    {
+      Tensor sqrt = MatrixPower.of(a, RationalScalar.HALF);
+      MatrixSqrt matrixSqrt = MatrixSqrt.of(a);
+      Tolerance.CHOP.requireClose(sqrt, matrixSqrt.sqrt());
+      Tolerance.CHOP.requireClose(sqrt, Tensors.fromString("{{2, 2}, {0, 3}}"));
+    }
+    {
+      Tensor sqrt = MatrixPower.of(a, RationalScalar.HALF.negate());
+      MatrixSqrt matrixSqrt = MatrixSqrt.of(a);
+      Tolerance.CHOP.requireClose(sqrt, matrixSqrt.sqrt_inverse());
+      Tolerance.CHOP.requireClose(sqrt, Inverse.of(Tensors.fromString("{{2, 2}, {0, 3}}")));
+    }
   }
 
   @Test
@@ -182,6 +205,18 @@ class MatrixPowerTest {
     Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
     Tensor hermitian = MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
     SquareMatrixQ.require(hermitian);
+  }
+
+  @Test
+  void testLog() {
+    Tensor m = Tensors.fromString("{{1, 2},{3, 4}}");
+    Tensor r = MatrixPower.of(m, 2.3);
+    Scalar r11 = Scalars.fromString("11.463078683352899 + 0.06344722688460262* I");
+    Scalar r12 = Scalars.fromString("16.618332368706692 - 0.029022481488983957* I");
+    Scalar r21 = Scalars.fromString("24.927498553060037 - 0.04353372223347594 * I");
+    Scalar r22 = Scalars.fromString("36.39057723641294 + 0.01991350465112669* I");
+    Tensor e = Tensors.of(Tensors.of(r11, r12), Tensors.of(r21, r22));
+    Tolerance.CHOP.requireClose(r, e);
   }
 
   @Test

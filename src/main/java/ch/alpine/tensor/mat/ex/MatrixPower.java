@@ -4,10 +4,10 @@ package ch.alpine.tensor.mat.ex;
 import java.math.BigInteger;
 
 import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
@@ -49,14 +49,24 @@ public enum MatrixPower {
     return of(matrix, BigInteger.valueOf(exponent));
   }
 
+  /** @param matrix square
+   * @param exponent
+   * @return */
+  public static Tensor of(Tensor matrix, Number exponent) {
+    return of(matrix, RealScalar.of(exponent));
+  }
+
+  /** @param matrix square
+   * @param exponent
+   * @return matrix ^ exponent */
   public static Tensor of(Tensor matrix, Scalar exponent) {
     if (IntegerQ.of(exponent))
       return of(matrix, Scalars.bigIntegerValueExact(exponent));
     if (exponent.equals(RationalScalar.HALF))
       return MatrixSqrt.of(matrix).sqrt();
     if (exponent.equals(RationalScalar.HALF.negate()))
-      return MatrixSqrt.of(matrix).sqrt();
-    throw new Throw(matrix, exponent);
+      return MatrixSqrt.of(matrix).sqrt_inverse();
+    return MatrixExp.of(MatrixLog.of(matrix).multiply(exponent));
   }
 
   // ---
@@ -69,14 +79,14 @@ public enum MatrixPower {
    * 
    * @param matrix symmetric
    * @param exponent
-   * @return */
+   * @return matrix ^ exponent */
   public static Tensor ofSymmetric(Tensor matrix, Scalar exponent) {
     return StaticHelper.mapEv(Eigensystem.ofSymmetric(matrix, Tolerance.CHOP), Power.function(exponent));
   }
 
   /** @param matrix
    * @param exponent
-   * @return */
+   * @return matrix ^ exponent */
   public static Tensor ofHermitian(Tensor matrix, Scalar exponent) {
     return StaticHelper.mapEv(Eigensystem.ofHermitian(matrix, Tolerance.CHOP), Power.function(exponent));
   }

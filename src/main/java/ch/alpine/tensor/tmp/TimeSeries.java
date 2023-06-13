@@ -179,7 +179,9 @@ public interface TimeSeries {
    * @return */
   NavigableSet<Scalar> keySet(Clip clip, boolean maxInclusive);
 
-  /** @param clip
+  /** in Mathematica::TimeSeriesWindow
+   * 
+   * @param clip
    * @param maxInclusive
    * @return view on part of this time series in the given clip range */
   TimeSeries block(Clip clip, boolean maxInclusive);

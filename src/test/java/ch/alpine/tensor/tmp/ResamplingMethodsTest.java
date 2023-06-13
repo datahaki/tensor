@@ -40,24 +40,22 @@ class ResamplingMethodsTest {
   @EnumSource
   void testFails(ResamplingMethods resamplingMethods) throws ClassNotFoundException, IOException {
     ResamplingMethod resamplingMethod = resamplingMethods.get();
-      Serialization.copy(resamplingMethod);
-      assertTrue(0 < resamplingMethod.toString().length());
-      NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
-      assertSame(resamplingMethod.pack(navigableMap), navigableMap);
-      assertThrows(Exception.class, () -> resamplingMethod.insert(navigableMap, null, RealScalar.ONE));
-      assertEquals(navigableMap.size(), 0);
-      resamplingMethod.insert(navigableMap, Pi.VALUE, RealScalar.ONE);
-      assertEquals(resamplingMethod.evaluate(navigableMap, Pi.VALUE), RealScalar.ONE);
-    
+    Serialization.copy(resamplingMethod);
+    assertTrue(0 < resamplingMethod.toString().length());
+    NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
+    assertSame(resamplingMethod.pack(navigableMap), navigableMap);
+    assertThrows(Exception.class, () -> resamplingMethod.insert(navigableMap, null, RealScalar.ONE));
+    assertEquals(navigableMap.size(), 0);
+    resamplingMethod.insert(navigableMap, Pi.VALUE, RealScalar.ONE);
+    assertEquals(resamplingMethod.evaluate(navigableMap, Pi.VALUE), RealScalar.ONE);
   }
-
-//  @ParameterizedTest
-//  @EnumSource
-//  void testStringDistinct(ResamplingMethods resamplingMethods) {
-//    ResamplingMethod resamplingMethod = resamplingMethods.get();
-//    long count = TestHelper.list().stream().map(Object::toString).distinct().count();
-//    assertEquals(count, TestHelper.list().size());
-//  }
+  // @ParameterizedTest
+  // @EnumSource
+  // void testStringDistinct(ResamplingMethods resamplingMethods) {
+  // ResamplingMethod resamplingMethod = resamplingMethods.get();
+  // long count = TestHelper.list().stream().map(Object::toString).distinct().count();
+  // assertEquals(count, TestHelper.list().size());
+  // }
 
   @Test
   void testSparse1() {
