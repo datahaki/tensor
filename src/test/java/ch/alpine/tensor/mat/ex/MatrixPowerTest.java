@@ -217,6 +217,8 @@ class MatrixPowerTest {
     Scalar r22 = Scalars.fromString("36.39057723641294 + 0.01991350465112669* I");
     Tensor e = Tensors.of(Tensors.of(r11, r12), Tensors.of(r21, r22));
     Tolerance.CHOP.requireClose(r, e);
+    assertEquals(MatrixPower.of(m, 0), IdentityMatrix.of(2));
+    assertEquals(MatrixPower.of(m, -1), Inverse.of(m));
   }
 
   @Test

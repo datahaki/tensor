@@ -11,11 +11,14 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 public enum EqualsReduce implements BinaryOperator<Scalar> {
   INSTANCE;
 
+  /** @param tensor
+   * @return common {@link Scalar#zero()} of all entries in given tensor
+   * with precedence of inexact precision over exact precision */
   public static Scalar zero(Tensor tensor) {
     return tensor.flatten(-1) //
         .map(Scalar.class::cast) //
         .map(Scalar::zero) //
-        .reduce(EqualsReduce.INSTANCE) //
+        .reduce(INSTANCE) //
         .orElseThrow();
   }
 

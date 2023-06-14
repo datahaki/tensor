@@ -6,7 +6,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 
-enum StaticHelper {
+/* package */ enum StaticHelper {
   ;
   /** @return unit of domain
    * @throws Exception if {@link #coeffs} has length 1 */

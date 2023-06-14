@@ -26,6 +26,7 @@ public class ReIm implements Serializable {
         Im.FUNCTION.apply(z));
   }
 
+  // ---
   private final Scalar re;
   private final Scalar im;
 

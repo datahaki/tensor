@@ -67,6 +67,8 @@ public enum Power {
   /** @param exponent
    * @return function that maps a scalar to scalar ^ exponent */
   public static ScalarUnaryOperator function(Scalar exponent) {
+    if (exponent.equals(RealScalar.ONE))
+      return ScalarUnaryOperator.IDENTITY;
     if (exponent instanceof RationalScalar rationalScalar && //
         rationalScalar.denominator().equals(TWO))
       return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rationalScalar.numerator()));

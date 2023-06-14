@@ -1,9 +1,10 @@
+// code by jph
 package ch.alpine.tensor.mat.ev;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.num.ReIm;
 
-class ComplexWrap {
+/* package */ class ComplexWrap {
   final Scalar[][] matrixT;
 
   public ComplexWrap(Scalar[][] matrixT) {
