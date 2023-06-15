@@ -37,7 +37,8 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 public class SchurDecomposition implements Serializable {
   /** Maximum allowed iterations for convergence of the transformation. */
   private static final int MAX_ITERATIONS = 100;
-  private static final Scalar EPSILON = RealScalar.of(2.220446049250313E-16);
+  private static final Scalar EPSILON = RealScalar.of(1 - Math.nextDown(1.0));
+  private static final Chop CHOP = Chop.below(Math.nextUp(1 - Math.nextDown(1.0)));
 
   public static SchurDecomposition of(Tensor matrix) {
     return new SchurDecomposition(HessenbergDecomposition.of(matrix));
@@ -79,7 +80,7 @@ public class SchurDecomposition implements Serializable {
         hmt[iu][iu] = hmt[iu][iu].add(shift.exShift);
         hmt[iu - 1][iu - 1] = hmt[iu - 1][iu - 1].add(shift.exShift);
         if (Sign.isPositiveOrZero(q)) {
-          Scalar z = Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(q));
+          Scalar z = Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(q)); // TODO TENSOR ABS should be obsolete
           z = Sign.isPositiveOrZero(p) //
               ? p.add(z)
               : p.subtract(z);
@@ -234,17 +235,15 @@ public class SchurDecomposition implements Serializable {
             ? hmt[k + 2][k - 1]
             : zero;
         shift.x = Abs.FUNCTION.apply(p).add(Abs.FUNCTION.apply(q)).add(Abs.FUNCTION.apply(r));
-        // if (Scalars.lessThan(Abs.FUNCTION.apply(shift.x), EPSILON))
-        if (Chop._16.isZero(shift.x)) // related to EPSILON (see commented line above)
+        if (CHOP.isZero(shift.x)) // related to EPSILON (see commented line above)
           continue;
         p = p.divide(shift.x);
         q = q.divide(shift.x);
         r = r.divide(shift.x);
       }
       Scalar s = Hypot.ofVector(Tensors.of(p, q, r));
-      if (Sign.isNegative(p)) {
+      if (Sign.isNegative(p))
         s = s.negate();
-      }
       if (Scalars.nonZero(s)) {
         if (k != im) {
           hmt[k][k - 1] = s.negate().multiply(shift.x);
@@ -292,9 +291,9 @@ public class SchurDecomposition implements Serializable {
     } // k loop
     // clean up pollution due to round-off errors
     for (int i = im + 2; i <= iu; ++i) {
-      hmt[i][i - 2] = hmt[i][i - 2].zero();
+      hmt[i][i - 2] = zero; // hmt[i][i - 2].zero();
       if (im + 2 < i)
-        hmt[i][i - 3] = hmt[i][i - 3].zero();
+        hmt[i][i - 3] = zero; // hmt[i][i - 3].zero();
     }
   }
 

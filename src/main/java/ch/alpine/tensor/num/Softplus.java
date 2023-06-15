@@ -11,7 +11,7 @@ import ch.alpine.tensor.sca.Ramp;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 
-/** softplus is a smooth {@link Ramp}
+/** softplus is a non-negative smooth {@link Ramp}
  * 
  * <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">documentation</a> */
 public enum Softplus implements ScalarUnaryOperator {

@@ -20,6 +20,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
@@ -30,6 +31,7 @@ import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.sca.SawtoothWave;
@@ -144,6 +146,15 @@ class SpectrogramArrayTest {
   void testIterate() {
     List<Integer> list = IntStream.iterate(0, i -> i + 10).limit(10).boxed().collect(Collectors.toList());
     assertEquals(list, Arrays.asList(0, 10, 20, 30, 40, 50, 60, 70, 80, 90));
+  }
+
+  @Test
+  void testQuantity2() {
+    Tensor signal = Tensors.vector(1, 2, 1, 4, 3, 2, 3, 4, 3, 4);
+    Tensor vector = signal.map(s -> Quantity.of(s, "m"));
+    Tensor array1 = SpectrogramArray.SPECTROGRAM.apply(signal);
+    Tensor array2 = SpectrogramArray.SPECTROGRAM.apply(vector);
+    Tolerance.CHOP.requireClose(array1.map(s -> Quantity.of(s, "m")), array2);
   }
   // @Test
   // void testFailWindowLength() {

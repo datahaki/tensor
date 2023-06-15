@@ -94,7 +94,7 @@ import ch.alpine.tensor.sca.Clips;
 
   @Override
   public Stream<Tensor> lines() {
-    return resamplingMethod.lines(null); // TODO
+    return resamplingMethod.lines(null); // TODO TENSOR
   }
 
   @Override // from Object

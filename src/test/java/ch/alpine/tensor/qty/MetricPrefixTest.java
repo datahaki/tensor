@@ -5,13 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Floor;
+import ch.alpine.tensor.sca.exp.Log10;
 
 class MetricPrefixTest {
   @Test
@@ -40,6 +46,22 @@ class MetricPrefixTest {
     assertEquals(MetricPrefix.NULL.prefix("A"), "A");
     assertEquals(MetricPrefix.NULL.english("Amperes"), "Amperes");
     assertEquals(MetricPrefix.NULL.factor(), RealScalar.ONE);
+  }
+
+  @Test
+  void testExp() {
+    Map<Scalar, MetricPrefix> map = new HashMap<>();
+    for (MetricPrefix metricPrefix : MetricPrefix.values())
+      if (metricPrefix.exponent() % 3 == 0)
+        map.put(RealScalar.of(metricPrefix.exponent()), metricPrefix);
+    Scalar scalar = RealScalar.of(-3.123456789e-13);
+    Scalar abs = Abs.FUNCTION.apply(scalar);
+    Scalar log = Log10.FUNCTION.apply(abs);
+    Scalar floor = Floor.toMultipleOf(RealScalar.of(3)).apply(log);
+    if (map.containsKey(floor)) {
+      MetricPrefix metricPrefix = map.get(floor);
+      assertEquals(metricPrefix, MetricPrefix.FEMTO);
+    }
   }
 
   @Test

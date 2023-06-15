@@ -90,7 +90,7 @@ class CompatibleUnitQTest {
     assertTrue(predicate.test(Quantity.of(4, "mol*kat^-1")));
     assertTrue(predicate.test(Quantity.of(5, "C*A^-1")));
     assertTrue(predicate.test(Quantity.of(6, "J*W^-1")));
-    assertTrue(predicate.test(Quantity.of(7, "T*cd*V^-1*lux^-1")));
+    assertTrue(predicate.test(Quantity.of(7, "T*cd*V^-1*lx^-1")));
   }
 
   @Test

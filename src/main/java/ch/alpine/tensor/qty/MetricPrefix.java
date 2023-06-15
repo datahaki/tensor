@@ -30,14 +30,21 @@ import ch.alpine.tensor.sca.pow.Power;
   // YOCTO("y", -24), //
   ;
 
+  private final int exponent;
   private final String prefix;
   private final Scalar factor;
   private final String english;
 
   MetricPrefix(String prefix, int exponent) {
+    this.exponent = exponent;
     factor = Power.of(10, exponent);
     this.prefix = prefix;
     english = name().charAt(0) + name().substring(1).toLowerCase();
+  }
+
+  /** @return */
+  public int exponent() {
+    return exponent;
   }
 
   /** Example:
@@ -52,7 +59,7 @@ import ch.alpine.tensor.sca.pow.Power;
   /** Example:
    * GIGA.english("Hertz") == "Gigahertz"
    * 
-   * @param string
+   * @param string with at least one character
    * @return */
   public String english(String string) {
     return equals(NULL) //

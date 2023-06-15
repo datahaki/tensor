@@ -32,6 +32,12 @@ public enum PrimeQ {
     return bigInteger.isProbablePrime(CERTAINTY);
   }
 
+  /** @param value
+   * @return whether given value is probably prime */
+  public static boolean of(long value) {
+    return of(BigInteger.valueOf(value));
+  }
+
   /** @param scalar
    * @return
    * @throws Exception if given scalars does not satisfy {@link IntegerQ} */
@@ -44,6 +50,13 @@ public enum PrimeQ {
    * @throws Exception if given bigInteger is not prime */
   public static BigInteger require(BigInteger bigInteger) {
     return CACHE.apply(bigInteger);
+  }
+
+  /** @param value
+   * @return given value
+   * @throws Exception if given value is not prime */
+  public static long require(long value) {
+    return require(BigInteger.valueOf(value)).longValueExact();
   }
 
   /** @param scalar

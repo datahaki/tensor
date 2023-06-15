@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -28,5 +29,12 @@ public enum GCD {
       b = Mod.function(b).apply(c);
     }
     return StaticHelper.normalForm(a);
+  }
+
+  /** @param a
+   * @param b
+   * @return greatest common divider of a and b */
+  public static Scalar of(Number a, Number b) {
+    return of(RealScalar.of(a), RealScalar.of(b));
   }
 }

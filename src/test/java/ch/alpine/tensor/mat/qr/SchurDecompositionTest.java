@@ -34,6 +34,7 @@ import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 
 class SchurDecompositionTest {
@@ -138,5 +139,22 @@ class SchurDecompositionTest {
     SquareMatrixQ.require(t);
     // confirmed with mathematica
     // System.out.println(Pretty.of(t.map(Round._4)));
+  }
+
+  @Test
+  void testEps() {
+    long EXPONENT_OFFSET = 1023l;
+    double EPSILON = Double.longBitsToDouble((EXPONENT_OFFSET - 53l) << 52);
+    double res = 1 - Math.nextDown(1.0);
+    assertEquals(EPSILON, res);
+    // System.out.println(res);
+  }
+
+  @Test
+  void testChop() {
+    Chop chop = Chop.below(Math.nextUp(1 - Math.nextDown(1.0)));
+    chop.toString();
+    // System.out.println(Chop.below(1e-16));
+    // System.out.println(chop);
   }
 }

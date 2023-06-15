@@ -47,6 +47,13 @@ class GCDTest {
   }
 
   @Test
+  void testNumber() {
+    assertEquals(GCD.of(2, 15), RealScalar.of(1));
+    assertEquals(GCD.of(10, 15), RealScalar.of(5));
+    assertEquals(GCD.of(0, 15), RealScalar.of(15));
+  }
+
+  @Test
   void testComplex1() {
     Scalar scalar = GCD.of(ComplexScalar.of(2, 1), ComplexScalar.of(3, 1));
     assertEquals(scalar, ComplexScalar.I); // Mathematica gives 1

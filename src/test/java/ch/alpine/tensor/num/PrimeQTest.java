@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,6 +31,14 @@ class PrimeQTest {
   void testMathematica() {
     BigInteger bigInteger = BigInteger.valueOf(3371149052237L);
     assertTrue(PrimeQ.of(bigInteger));
+  }
+
+  @Test
+  void testLong() {
+    assertTrue(PrimeQ.of(3371149052237L));
+    PrimeQ.require(3371149052237L);
+    assertFalse(PrimeQ.of(3371149052232L));
+    assertThrows(Exception.class, () -> PrimeQ.require(3371149052232L));
   }
 
   @Test
