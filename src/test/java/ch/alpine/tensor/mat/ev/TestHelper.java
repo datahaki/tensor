@@ -11,7 +11,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
-enum TestHelper {
+/* package */ enum TestHelper {
   ;
   public static void checkEquation(Tensor matrix, Eigensystem eigensystem) {
     checkEquation(matrix, eigensystem, Tolerance.CHOP);

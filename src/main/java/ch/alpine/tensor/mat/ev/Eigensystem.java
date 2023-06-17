@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.ev;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
@@ -60,11 +61,13 @@ public interface Eigensystem {
   static Eigensystem of(Tensor matrix) {
     boolean isComplex = matrix.flatten(1) //
         .anyMatch(scalar -> scalar instanceof ComplexScalar);
-    if (SymmetricMatrixQ.of(matrix) && !isComplex)
-      return ofSymmetric(matrix);
+    if (!isComplex)
+      return SymmetricMatrixQ.of(matrix) //
+          ? ofSymmetric(matrix)
+          : new RealEigensystem(matrix);
     if (HermitianMatrixQ.of(matrix))
       return ofHermitian(matrix);
-    return new RealEigensystem(matrix);
+    throw new Throw(matrix);
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.

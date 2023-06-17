@@ -138,14 +138,18 @@ class EigensystemTest {
   void testComplexFail() {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
     SymmetricMatrixQ.require(matrix);
-    assertThrows(ClassCastException.class, () -> Eigensystem.ofSymmetric(matrix));
+    assertThrows(Exception.class, () -> Eigensystem.of(matrix));
+    assertThrows(Exception.class, () -> Eigensystem.ofSymmetric(matrix));
+    assertThrows(Exception.class, () -> Eigensystem.ofHermitian(matrix));
   }
 
   @Test
   void testComplex2Fail() {
     Tensor matrix = Tensors.fromString("{{0, I}, {I, 0}}");
     SymmetricMatrixQ.require(matrix);
-    assertThrows(ClassCastException.class, () -> Eigensystem.ofSymmetric(matrix));
+    assertThrows(Exception.class, () -> Eigensystem.of(matrix));
+    assertThrows(Exception.class, () -> Eigensystem.ofSymmetric(matrix));
+    assertThrows(Exception.class, () -> Eigensystem.ofHermitian(matrix));
   }
 
   @Test
