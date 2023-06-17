@@ -2,8 +2,12 @@
 package ch.alpine.tensor.num;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.ext.ArgMax;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.gam.Factorial;
 
 /** Implementation does not support negative input.
@@ -20,10 +24,19 @@ public enum Multinomial {
   /** @param values
    * @return multinomial coefficient */
   public static Scalar of(int... values) {
-    int sum = Arrays.stream(values).reduce(Math::addExact).orElse(0);
-    Scalar scalar = Factorial.of(sum);
-    for (int value : values)
-      scalar = scalar.divide(Factorial.of(value));
-    return scalar;
+    if (1 < values.length) {
+      int index = ArgMax.of(Integers.asList(values));
+      int total = Arrays.stream(values).reduce(Math::addExact).orElse(0);
+      Scalar scalar = IntStream.rangeClosed(values[index] + 1, total) //
+          .mapToObj(RealScalar::of) //
+          .reduce(Scalar::multiply) //
+          .orElse(RealScalar.ONE);
+      int count = 0;
+      for (int value : values)
+        if (count++ != index)
+          scalar = scalar.divide(Factorial.of(value));
+      return scalar;
+    }
+    return RealScalar.ONE;
   }
 }

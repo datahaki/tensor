@@ -4,6 +4,7 @@ package ch.alpine.tensor.num;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** Remark: implementation is not consistent with Mathematica
@@ -19,5 +20,19 @@ public enum Denominator implements ScalarUnaryOperator {
     return scalar instanceof RationalScalar rationalScalar //
         ? RealScalar.of(rationalScalar.denominator())
         : scalar.one();
+  }
+
+  /** @param scalar
+   * @return
+   * @throws Exception */
+  public static int intValueExact(Scalar scalar) {
+    return Scalars.intValueExact(FUNCTION.apply(scalar));
+  }
+
+  /** @param scalar
+   * @return
+   * @throws Exception */
+  public static long longValueExact(Scalar scalar) {
+    return Scalars.longValueExact(FUNCTION.apply(scalar));
   }
 }

@@ -20,4 +20,10 @@ class DenominatorTest {
   void testGaussScalar() {
     assertEquals(Denominator.FUNCTION.apply(GaussScalar.of(5, 17)), GaussScalar.of(1, 17));
   }
+
+  @Test
+  void testPrimitives() {
+    assertEquals(Denominator.intValueExact(RationalScalar.of(-2, 3)), 3);
+    assertEquals(Denominator.longValueExact(RationalScalar.of(-2, 3)), 3L);
+  }
 }

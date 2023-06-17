@@ -15,4 +15,10 @@ class NumeratorTest {
     assertEquals(Numerator.FUNCTION.apply(RationalScalar.of(-2, 3)), RealScalar.of(-2));
     assertEquals(Numerator.FUNCTION.apply(Pi.HALF), Pi.HALF);
   }
+
+  @Test
+  void testPrimitives() {
+    assertEquals(Numerator.intValueExact(RationalScalar.of(-2, 3)), -2);
+    assertEquals(Numerator.longValueExact(RationalScalar.of(-2, 3)), -2L);
+  }
 }
