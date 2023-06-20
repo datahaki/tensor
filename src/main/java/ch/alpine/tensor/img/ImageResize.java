@@ -28,7 +28,11 @@ import ch.alpine.tensor.sca.Round;
  * @see MappedInterpolation */
 public enum ImageResize {
   ;
-  /** the function is particularly suitable for down-sizing a given image to a smaller
+  /** Careful: even if given width and height are identical to the dimensions of
+   * given bufferedImage, the color values of the pixels in the return image may
+   * be different from the original!
+   * 
+   * the function is particularly suitable for down-sizing a given image to a smaller
    * resolution. The implementation uses the SCALE_AREA_AVERAGING algorithm.
    * 
    * @param bufferedImage

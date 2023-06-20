@@ -76,6 +76,8 @@ class JacobiComplexTest {
     Eigensystem eigensystem = Eigensystem.ofHermitian(matrix);
     Tolerance.CHOP.requireClose(eigensystem.values(), Tensors.vector(8, -1));
     _check(matrix, eigensystem);
+    Eigensystem eigensystem2 = Eigensystem.of(matrix);
+    _check(matrix, eigensystem2);
   }
 
   @Test

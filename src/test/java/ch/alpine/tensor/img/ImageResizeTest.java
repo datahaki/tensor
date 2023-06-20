@@ -9,14 +9,18 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.NavigableMap;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.OperatingSystem;
 import ch.alpine.tensor.io.ResourceData;
@@ -24,7 +28,10 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
+import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 
 class ImageResizeTest {
   @Test
@@ -54,6 +61,19 @@ class ImageResizeTest {
   }
 
   @Test
+  void testBufferedImageColorNoResize() {
+    BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/rgba15x33.png");
+    BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight());
+    Tensor t1 = ImageFormat.from(original);
+    Tensor t2 = ImageFormat.from(bufferedImage);
+    Tensor diff = t1.subtract(t2);
+    NavigableMap<Scalar, Long> navigableMap = Tally.sorted(diff.flatten(-1).map(Scalar.class::cast));
+    Clip clip = Clips.absolute(25);
+    clip.requireInside(navigableMap.firstKey());
+    clip.requireInside(navigableMap.lastKey());
+  }
+
+  @Test
   void testFactor() {
     Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/album_au_gray.jpg");
     Tensor dimens = ImageResize.of(tensor, Pi.VALUE);
@@ -75,6 +95,18 @@ class ImageResizeTest {
     assertEquals(bufferedImage.getWidth(), 12);
     assertEquals(bufferedImage.getHeight(), 3);
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_BYTE_GRAY);
+  }
+
+  @Test
+  @Disabled
+  void testBufferedImageGrayscaleNoResize() {
+    BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
+    BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight());
+    Tensor t1 = ImageFormat.from(original);
+    Tensor t2 = ImageFormat.from(bufferedImage);
+    // assertEquals();
+    Tensor diff = t1.subtract(t2);
+    System.out.println(diff);
   }
 
   @Test

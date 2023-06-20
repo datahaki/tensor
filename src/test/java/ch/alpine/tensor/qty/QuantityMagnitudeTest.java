@@ -146,6 +146,14 @@ class QuantityMagnitudeTest {
   }
 
   @Test
+  void testKilo() {
+    ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("k");
+    Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2000));
+    ExactScalarQ.require(scalar);
+    assertEquals(scalar, RealScalar.of(2));
+  }
+
+  @Test
   void testVolume() {
     Tolerance.CHOP.requireClose( //
         QuantityMagnitude.SI().in("L").apply(Quantity.of(1.0, "cup")), //

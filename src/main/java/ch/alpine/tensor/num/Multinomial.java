@@ -24,7 +24,7 @@ public enum Multinomial {
   /** @param values
    * @return multinomial coefficient */
   public static Scalar of(int... values) {
-    if (1 < values.length) {
+    if (0 < values.length) {
       int index = ArgMax.of(Integers.asList(values));
       int total = Arrays.stream(values).reduce(Math::addExact).orElse(0);
       Scalar scalar = IntStream.rangeClosed(values[index] + 1, total) //

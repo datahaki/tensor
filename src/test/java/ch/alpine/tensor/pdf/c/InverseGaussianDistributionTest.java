@@ -16,6 +16,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -60,6 +61,7 @@ class InverseGaussianDistributionTest {
   void testToString() {
     Distribution distribution = InverseGaussianDistribution.of(2, 3);
     assertEquals(distribution.toString(), "InverseGaussianDistribution[2, 3]");
+    assertThrows(Exception.class, () -> RandomVariate.of(distribution));
   }
 
   @Test

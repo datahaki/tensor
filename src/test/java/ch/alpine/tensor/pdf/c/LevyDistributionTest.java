@@ -45,6 +45,7 @@ class LevyDistributionTest {
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(Quantity.of(3, "m")), Quantity.of(0.052896750155658534, "m^-1"));
     CDF cdf = CDF.of(distribution);
+    assertEquals(cdf.p_lessThan(Quantity.of(-3, "m")), RealScalar.ZERO);
     Tolerance.CHOP.requireClose(cdf.p_lessThan(Quantity.of(3, "m")), RealScalar.of(0.4457659079148423));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar x = inverseCDF.quantile(RealScalar.of(0.75));

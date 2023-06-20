@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.stream.Collectors;
@@ -42,9 +41,8 @@ public enum FileHash {
    * @throws IOException */
   public static String string(File file, MessageDigest messageDigest) throws FileNotFoundException, IOException {
     byte[] data = of(file, messageDigest);
-    ByteBuffer byteBuffer = ByteBuffer.wrap(data);
     return IntStream.range(0, data.length) //
-        .mapToObj(i -> String.format("%02x", byteBuffer.get())) //
+        .mapToObj(i -> String.format("%02x", data[i])) //
         .collect(Collectors.joining());
   }
 }
