@@ -7,7 +7,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SawtoothWave.html">SawtoothWave</a> */
 public enum SawtoothWave implements ScalarUnaryOperator {
-  INSTANCE;
+  FUNCTION;
 
   @Override
   public Scalar apply(Scalar scalar) {

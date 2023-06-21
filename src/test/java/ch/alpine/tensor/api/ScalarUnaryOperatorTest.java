@@ -55,7 +55,7 @@ class ScalarUnaryOperatorTest {
 
   static void _checkOps(Scalar scalar) {
     try {
-      Abs.of(scalar);
+      Abs.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }

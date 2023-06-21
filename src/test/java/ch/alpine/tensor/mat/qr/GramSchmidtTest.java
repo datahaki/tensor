@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.Random;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -181,11 +180,11 @@ class GramSchmidtTest {
   }
 
   @Test
-  @Disabled
+  // @Disabled
   void testSpeed() {
     Timing timing = Timing.started();
     GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 500, 150));
-    System.out.println(timing.seconds());
+    // System.out.println(timing.seconds());
   }
 
   @Test

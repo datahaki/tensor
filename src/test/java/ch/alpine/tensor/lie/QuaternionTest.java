@@ -191,7 +191,7 @@ class QuaternionTest {
     Tensor vec = RandomVariate.of(distribution, 4);
     Scalar q1 = _createQ(vec);
     Scalar nrm = Vector2Norm.of(vec);
-    Scalar abs = Abs.of(q1);
+    Scalar abs = Abs.FUNCTION.apply(q1);
     Tolerance.CHOP.requireClose(nrm, abs);
   }
 

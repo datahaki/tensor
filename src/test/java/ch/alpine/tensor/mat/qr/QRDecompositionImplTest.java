@@ -116,7 +116,7 @@ class QRDecompositionImplTest {
   void testBic() {
     Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/pi/bic1.csv");
     QRDecompositionImpl qrDecomposition = (QRDecompositionImpl) QRDecomposition.of(matrix);
-    Tensor rs = Abs.of(Diagonal.of(qrDecomposition.getR()));
+    Tensor rs = Diagonal.of(qrDecomposition.getR()).map(Abs.FUNCTION);
     Scalar max = (Scalar) rs.stream().reduce(Max::of).get();
     double thres = max.number().doubleValue() * 1e-12;
     Chop chop = Chop.below(thres);

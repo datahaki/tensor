@@ -34,12 +34,12 @@ class DistributionTest {
     assertTrue(Scalars.nonZero(var));
     Scalar tmean = Expectation.mean(distribution); // theoretical mean
     Scalar tvar = Expectation.variance(distribution); // theoretical variance
-    Scalar dmean = Abs.of(mean.subtract(tmean).divide(tmean));
+    Scalar dmean = Abs.between(mean, tmean).divide(tmean);
     // https://en.wikipedia.org/wiki/Central_limit_theorem
     // @SuppressWarnings("unused")
     // Scalar limmean =
     Sqrt.of(RealScalar.of(n)).multiply(mean.subtract(tmean)).divide(Sqrt.of(tvar));
-    Scalar dvar = Abs.of(var.subtract(tvar).divide(tvar));
+    Scalar dvar = Abs.between(var, tvar).divide(tvar);
     assertTrue(Scalars.lessThan(dmean, RealScalar.of(0.2)));
     assertTrue(Scalars.lessThan(dvar, RealScalar.of(0.22)));
   }

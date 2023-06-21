@@ -9,7 +9,7 @@ import ch.alpine.tensor.mat.Tolerance;
 class SawtoothWaveTest {
   @Test
   void test() {
-    Tolerance.CHOP.requireClose(SawtoothWave.INSTANCE.apply(RealScalar.of(+1.2)), RealScalar.of(0.2));
-    Tolerance.CHOP.requireClose(SawtoothWave.INSTANCE.apply(RealScalar.of(-1.2)), RealScalar.of(0.8));
+    Tolerance.CHOP.requireClose(SawtoothWave.FUNCTION.apply(RealScalar.of(+1.2)), RealScalar.of(0.2));
+    Tolerance.CHOP.requireClose(SawtoothWave.FUNCTION.apply(RealScalar.of(-1.2)), RealScalar.of(0.8));
   }
 }

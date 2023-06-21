@@ -205,7 +205,7 @@ class GaussScalarTest {
       GaussScalar gaussScalar = GaussScalar.of(index, prime);
       assertEquals(Power.of(gaussScalar, 0), scalar);
       assertEquals(gaussScalar, //
-          Sign.of(gaussScalar).multiply(Abs.of(gaussScalar)));
+          Sign.of(gaussScalar).multiply(Abs.FUNCTION.apply(gaussScalar)));
     }
   }
 

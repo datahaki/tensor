@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.NavigableMap;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
@@ -25,6 +24,7 @@ import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.OperatingSystem;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
@@ -32,6 +32,7 @@ import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Sign;
 
 class ImageResizeTest {
   @Test
@@ -98,15 +99,15 @@ class ImageResizeTest {
   }
 
   @Test
-  @Disabled
   void testBufferedImageGrayscaleNoResize() {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
     BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight());
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);
-    // assertEquals();
     Tensor diff = t1.subtract(t2);
-    System.out.println(diff);
+    Scalar norm = Vector1Norm.of(diff.flatten(-1).map(Scalar.class::cast)); // 812636
+    Sign.requirePositiveOrZero(norm);
+    // System.out.println(norm);
   }
 
   @Test

@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.Clips;
     Scalar z = c;
     for (int index = 0; index < DEPTH; ++index) {
       z = z.multiply(z).add(c);
-      if (Scalars.lessThan(TWO, Abs.of(z)))
+      if (Scalars.lessThan(TWO, Abs.FUNCTION.apply(z)))
         return DoubleScalar.INDETERMINATE;
       if (index <= 6)
         arg = Arg.of(z);

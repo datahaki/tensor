@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (Scalars.lessThan(Abs.of(scalar), DoubleScalar.of(0.7))) // error < 10^-9
+    if (Scalars.lessThan(Abs.FUNCTION.apply(scalar), DoubleScalar.of(0.7))) // error < 10^-9
       return POLYNOMIAL.apply(scalar);
     throw new Throw(scalar);
   }

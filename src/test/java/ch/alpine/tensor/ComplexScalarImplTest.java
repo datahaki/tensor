@@ -38,7 +38,7 @@ class ComplexScalarImplTest {
   void testAbs() {
     ComplexScalar s = (ComplexScalar) ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
     // ----------------------------------------- 0.668539037337719303091638399542
-    Scalar a = Abs.of(s); // ------------------- 0.6685390373377194
+    Scalar a = Abs.FUNCTION.apply(s); // ------------------- 0.6685390373377194
     Scalar c = RationalScalar.of(1609, 3600); // 0.6685390373377192
     Tensor r = Sqrt.of(c);
     double d = Math.sqrt(c.number().doubleValue());
@@ -52,7 +52,7 @@ class ComplexScalarImplTest {
   @Test
   void testAbs2() {
     Scalar s = ComplexScalar.of(RealScalar.of(-3), RealScalar.of(4));
-    assertInstanceOf(RationalScalar.class, Abs.of(s));
+    assertInstanceOf(RationalScalar.class, Abs.FUNCTION.apply(s));
   }
 
   @Test
@@ -72,7 +72,7 @@ class ComplexScalarImplTest {
     Scalar c = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
     assertEquals(Re.of(c), RealScalar.of(2));
     assertEquals(Im.of(c), RationalScalar.of(5, 8));
-    assertEquals(Abs.of(c), Vector2Norm.of(Tensors.of(RealScalar.of(2), RationalScalar.of(5, 8))));
+    assertEquals(Abs.FUNCTION.apply(c), Vector2Norm.of(Tensors.of(RealScalar.of(2), RationalScalar.of(5, 8))));
     Scalar r = RealScalar.of(-6);
     assertEquals(Re.of(r), r);
     assertEquals(Im.of(r), RealScalar.ZERO);

@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.tri.Sin;
     Scalar z = ComplexScalar.of(re, im);
     for (int count = 0; count < MAX_ITERATIONS; ++count) {
       z = Sin.FUNCTION.apply(z).multiply(c);
-      if (Scalars.lessThan(MAX, Abs.of(Im.of(z))))
+      if (Scalars.lessThan(MAX, Abs.FUNCTION.apply(Im.of(z))))
         return DoubleScalar.INDETERMINATE;
     }
     return Arg.FUNCTION.apply(z);

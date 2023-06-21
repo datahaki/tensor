@@ -28,10 +28,10 @@ import ch.alpine.tensor.sca.ply.Polynomial;
 
   @Override // from ScalarUnaryOperator
   public Scalar apply(Scalar prev_root) {
-    Scalar prev_error = Abs.of(function.apply(prev_root));
+    Scalar prev_error = Abs.FUNCTION.apply(function.apply(prev_root));
     while (true) {
       Scalar next_root = iteration.apply(prev_root);
-      Scalar next_error = Abs.of(function.apply(next_root));
+      Scalar next_error = Abs.FUNCTION.apply(function.apply(next_root));
       if (Scalars.lessEquals(prev_error, next_error))
         return prev_root;
       prev_error = next_error;

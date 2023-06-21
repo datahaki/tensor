@@ -30,7 +30,9 @@ public enum ImageResize {
   ;
   /** Careful: even if given width and height are identical to the dimensions of
    * given bufferedImage, the color values of the pixels in the return image may
-   * be different from the original!
+   * be different from the original! In particular, it was observed that repeated,
+   * i.e. iterative resizing causes grayscale images to converge to black and white
+   * palette. This effect is regardless of the rendering hint used.
    * 
    * the function is particularly suitable for down-sizing a given image to a smaller
    * resolution. The implementation uses the SCALE_AREA_AVERAGING algorithm.

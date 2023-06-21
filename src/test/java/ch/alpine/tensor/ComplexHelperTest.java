@@ -33,7 +33,7 @@ class ComplexHelperTest {
     Scalar abs = Quantity.of(2, "V*m^-1");
     Scalar q = ComplexScalar.fromPolar(abs, RealScalar.ONE);
     assertInstanceOf(Quantity.class, q);
-    Scalar modulus = Abs.of(q);
+    Scalar modulus = Abs.FUNCTION.apply(q);
     assertEquals(modulus, abs);
   }
 

@@ -46,7 +46,7 @@ class SpectrogramArrayTest {
   private static Tensor signal() {
     return Tensor.of(IntStream.range(0, 10000) //
         .mapToObj(i -> RationalScalar.of(i, 100).add(RationalScalar.of(i * i, 1000_000))) //
-        .map(SawtoothWave.INSTANCE));
+        .map(SawtoothWave.FUNCTION));
   }
 
   @Test

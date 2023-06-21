@@ -16,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -39,8 +40,10 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.CauchyDistribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
+import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Round;
@@ -336,6 +339,31 @@ class NullSpaceTest {
     Tensor ns = NullSpace.of(matrix);
     ExactTensorQ.require(ns);
     Tolerance.CHOP.requireAllZero(MatrixDotTranspose.of(matrix, ns));
+  }
+
+  public Tensor diffs(Tensor matrix, Tensor rhs) {
+    return Transpose.of(Tensor.of(Transpose.of(matrix).stream().map(col -> col.subtract(rhs))));
+  }
+
+  public Tensor affine(Tensor matrix, Tensor rhs) {
+    Tensor nulls = NullSpace.of(diffs(matrix, rhs));
+    assertEquals(nulls.length(), 1);
+    Tensor sol = nulls.get(0);
+    Scalar total = Total.ofVector(sol);
+    return sol.divide(total);
+  }
+
+  @RepeatedTest(6)
+  void testNullSpaceDateTime(RepetitionInfo repetitionInfo) {
+    Distribution distribution = NormalDistribution.of(DateTime.now(), Quantity.of(3, "days"));
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = RandomVariate.of(distribution, n, n + 1);
+    Tensor rhs = RandomVariate.of(distribution, n);
+    Tensor diffs = diffs(matrix, rhs);
+    Tensor sol = affine(matrix, rhs);
+    Tensor check = diffs.dot(sol);
+    Tolerance.CHOP.requireAllZero(check);
+    ExactTensorQ.require(check);
   }
 
   @Test

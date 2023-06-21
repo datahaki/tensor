@@ -13,6 +13,6 @@ public enum Matrix1Norm {
   /** @param matrix
    * @return 1-norm of given matrix */
   public static Scalar of(Tensor matrix) {
-    return (Scalar) Total.of(Abs.of(matrix)).stream().reduce(Max::of).orElseThrow();
+    return (Scalar) Total.of(matrix.map(Abs.FUNCTION)).stream().reduce(Max::of).orElseThrow();
   }
 }

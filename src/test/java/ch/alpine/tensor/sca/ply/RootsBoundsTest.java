@@ -4,9 +4,6 @@ package ch.alpine.tensor.sca.ply;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.stream.Stream;
-
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +13,6 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ExactScalarQ;
-import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -56,15 +52,6 @@ class RootsBoundsTest {
       }
       assertTrue(check);
     }
-  }
-
-  @RepeatedTest(100)
-  @Disabled
-  void testWinner() {
-    Distribution distribution = UniformDistribution.of(-10, +10);
-    Tensor coeffs = RandomVariate.of(distribution, 10);
-    int index = ArgMin.of(Tensor.of(Stream.of(RootsBounds.values()).map(s -> s.of(coeffs))));
-    System.out.println(RootsBounds.values()[index]);
   }
 
   @Test
