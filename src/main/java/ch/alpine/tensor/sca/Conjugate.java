@@ -2,7 +2,6 @@
 package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ConjugateInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -25,12 +24,5 @@ public enum Conjugate implements ScalarUnaryOperator {
     if (scalar instanceof ConjugateInterface conjugateInterface)
       return conjugateInterface.conjugate();
     throw new Throw(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all entries conjugated */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

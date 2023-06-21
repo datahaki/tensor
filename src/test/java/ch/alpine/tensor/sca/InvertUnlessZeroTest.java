@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.Quantity;
 class InvertUnlessZeroTest {
   @Test
   void testVector() {
-    Tensor tensor = InvertUnlessZero.of(Tensors.vector(1, 0, 2));
+    Tensor tensor = Tensors.vector(1, 0, 2).map(InvertUnlessZero.FUNCTION);
     assertEquals(tensor, Tensors.vector(1, 0, 0.5));
     ExactTensorQ.require(tensor);
   }

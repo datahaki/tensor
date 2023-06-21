@@ -40,10 +40,10 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   private static final Scalar _27 = RealScalar.of(27);
   private static final Scalar P1_3 = Power.of(2, _1_3);
   private static final Scalar R1_2 = P1_3.negate();
-  private static final Scalar R2_2 = ComplexScalar.of(RealScalar.ONE, Sqrt.of(_3)).divide(Power.of(2, _2_3));
-  private static final Scalar R2_3 = ComplexScalar.of(RealScalar.ONE, Sqrt.of(_3).negate()).divide(_6).negate();
-  private static final Scalar R3_2 = ComplexScalar.of(RealScalar.ONE, Sqrt.of(_3).negate()).divide(Power.of(2, _2_3));
-  private static final Scalar R3_3 = ComplexScalar.of(RealScalar.ONE, Sqrt.of(_3)).divide(_6).negate();
+  private static final Scalar R2_2 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3)).divide(Power.of(2, _2_3));
+  private static final Scalar R2_3 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3).negate()).divide(_6).negate();
+  private static final Scalar R3_2 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3).negate()).divide(Power.of(2, _2_3));
+  private static final Scalar R3_3 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3)).divide(_6).negate();
   private static final ScalarUnaryOperator POWER_1_3 = Power.function(_1_3);
 
   /** finds the roots of the polynomial
@@ -118,11 +118,11 @@ import ch.alpine.tensor.sca.pow.Sqrt;
       if (Sign.isNegativeOrZero(Dn)) { // discriminant
         // positive: the equation has three distinct real roots
         // zero: the equation has a multiple root and all of its roots are real
-        return Re.of(roots);
+        return roots.map(Re.FUNCTION);
       }
       // the equation has one real root and two non-real complex conjugate roots
       // the expression below also works for scalars with unit
-      roots = Re.of(roots).add(Im.of(roots).map(Tolerance.CHOP).multiply(ComplexScalar.I));
+      roots = roots.map(Re.FUNCTION).add(roots.map(Im.FUNCTION).map(Tolerance.CHOP).multiply(ComplexScalar.I));
     }
     return roots;
   }

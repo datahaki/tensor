@@ -3,7 +3,6 @@ package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -23,13 +22,6 @@ public enum AbsSquared implements ScalarUnaryOperator {
     if (scalar instanceof AbsInterface absInterface)
       return absInterface.absSquared();
     throw new Throw(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their absolute value */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 
   /** @param a

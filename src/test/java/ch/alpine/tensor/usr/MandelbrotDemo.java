@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.Clips;
       if (Scalars.lessThan(TWO, Abs.FUNCTION.apply(z)))
         return DoubleScalar.INDETERMINATE;
       if (index <= 6)
-        arg = Arg.of(z);
+        arg = Arg.FUNCTION.apply(z);
     }
     return arg;
   }

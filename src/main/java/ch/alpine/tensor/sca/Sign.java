@@ -7,7 +7,6 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.SignInterface;
@@ -38,13 +37,6 @@ public enum Sign implements ScalarUnaryOperator {
     if (scalar instanceof SignInterface signInterface)
       return signInterface.sign();
     throw new Throw(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their sign value */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 
   // ---

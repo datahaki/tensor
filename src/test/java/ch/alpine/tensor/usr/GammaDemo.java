@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.gam.Gamma;
   public Scalar apply(Scalar re, Scalar im) {
     Scalar seed = ComplexScalar.of(re, im);
     try {
-      return Arg.of(Nest.of(Gamma.FUNCTION, seed, DEPTH));
+      return Arg.FUNCTION.apply(Nest.of(Gamma.FUNCTION, seed, DEPTH));
     } catch (Exception exception) {
       System.out.println("fail=" + seed);
     }

@@ -35,7 +35,7 @@ class AbsSquaredTest {
     for (Tensor _q : tensor) {
       Scalar q = (Scalar) _q;
       Scalar abs = Abs.FUNCTION.apply(q);
-      Tolerance.CHOP.requireClose(AbsSquared.of(q), abs.multiply(abs));
+      Tolerance.CHOP.requireClose(AbsSquared.FUNCTION.apply(q), abs.multiply(abs));
     }
   }
 
@@ -49,7 +49,7 @@ class AbsSquaredTest {
   @Test
   void testTensor() {
     Tensor qs1 = Tensors.fromString("{3+4*I[s^2*m^-1]}");
-    Tensor qs2 = AbsSquared.of(qs1);
+    Tensor qs2 = qs1.map(AbsSquared.FUNCTION);
     ExactTensorQ.require(qs2);
     assertEquals(qs2.toString(), "{25[m^-2*s^4]}");
   }

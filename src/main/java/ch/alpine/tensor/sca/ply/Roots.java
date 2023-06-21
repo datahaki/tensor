@@ -93,9 +93,9 @@ public enum Roots {
 
     @Override // from Comparator
     public int compare(Scalar scalar1, Scalar scalar2) {
-      int cmp = Scalars.compare(Re.of(scalar1), Re.of(scalar2));
+      int cmp = Scalars.compare(Re.FUNCTION.apply(scalar1), Re.FUNCTION.apply(scalar2));
       return cmp == 0 //
-          ? Scalars.compare(Im.of(scalar1), Im.of(scalar2))
+          ? Scalars.compare(Im.FUNCTION.apply(scalar1), Im.FUNCTION.apply(scalar2))
           : cmp;
     }
   }

@@ -361,8 +361,8 @@ class DateTimeTest {
     assertEquals(a.subtract(recv), b);
     assertEquals(recv.negate().add(a), b);
     ExactTensorQ.require(diff);
-    assertEquals(Sign.of(b.subtract(a)), Tensors.vector(+1, +1, +1));
-    assertEquals(Sign.of(a.subtract(b)), Tensors.vector(-1, -1, -1));
+    assertEquals(b.subtract(a).map(Sign.FUNCTION), Tensors.vector(+1, +1, +1));
+    assertEquals(a.subtract(b).map(Sign.FUNCTION), Tensors.vector(-1, -1, -1));
   }
 
   @Test

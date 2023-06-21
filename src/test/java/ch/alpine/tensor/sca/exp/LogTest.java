@@ -27,29 +27,29 @@ import ch.alpine.tensor.sca.Chop;
 class LogTest {
   @Test
   void testOne() {
-    Scalar scalar = Log.of(RealScalar.ONE);
+    Scalar scalar = Log.FUNCTION.apply(RealScalar.ONE);
     assertTrue(Scalars.isZero(scalar));
   }
 
   @Test
   void testLog() {
     Scalar scalar = DoubleScalar.of(-3);
-    Chop._14.requireClose(Log.of(scalar), ComplexScalar.of(1.0986122886681098, 3.141592653589793));
-    assertEquals(Log.of(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
+    Chop._14.requireClose(Log.FUNCTION.apply(scalar), ComplexScalar.of(1.0986122886681098, 3.141592653589793));
+    assertEquals(Log.FUNCTION.apply(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
   }
 
   @Test
   void testComplex() {
     Scalar s = ComplexScalar.of(2, 3);
     Scalar r = ComplexScalar.of(1.2824746787307681, 0.982793723247329);
-    Chop._14.requireClose(Log.of(s), r);
+    Chop._14.requireClose(Log.FUNCTION.apply(s), r);
   }
 
   @Test
   void testRational() {
     Scalar rem = Scalars.fromString("1/10000000000");
     Scalar ratio = RealScalar.ONE.add(rem);
-    assertEquals(Log.of(ratio).toString(), "" + Math.log1p(rem.number().doubleValue()));
+    assertEquals(Log.FUNCTION.apply(ratio).toString(), "" + Math.log1p(rem.number().doubleValue()));
   }
 
   @Test
@@ -107,12 +107,12 @@ class LogTest {
   @Test
   void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
-    assertThrows(Throw.class, () -> Log.of(scalar));
+    assertThrows(Throw.class, () -> Log.FUNCTION.apply(scalar));
   }
 
   @Test
   void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    assertThrows(Throw.class, () -> Log.of(scalar));
+    assertThrows(Throw.class, () -> Log.FUNCTION.apply(scalar));
   }
 }

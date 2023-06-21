@@ -19,7 +19,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
-import ch.alpine.tensor.mat.MatrixDotTranspose;
+import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
@@ -28,7 +28,6 @@ import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Sign;
 
 class PolarDecompositionTest {
@@ -95,7 +94,7 @@ class PolarDecompositionTest {
   @Test
   void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
-    Tensor mmt = MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
+    Tensor mmt = MatrixDotConjugateTranspose.of(matrix);
     HermitianMatrixQ.require(mmt);
     PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
     Tensor herm = polarDecomposition.getPositiveSemidefinite().map(Tolerance.CHOP);

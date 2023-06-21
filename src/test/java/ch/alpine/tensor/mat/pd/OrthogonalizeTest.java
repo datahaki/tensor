@@ -145,7 +145,7 @@ class OrthogonalizeTest {
   @Test
   void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
-    Tensor mmt = MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
+    Tensor mmt = MatrixDotTranspose.of(matrix, matrix.map(Conjugate.FUNCTION));
     HermitianMatrixQ.require(mmt);
     // System.out.println(Pretty.of(mmt));
     Tensor q1 = Orthogonalize.of(matrix);
@@ -188,7 +188,7 @@ class OrthogonalizeTest {
     Tensor r1 = Orthogonalize.usingPD(matrix);
     Tolerance.CHOP.requireClose(r1, s1);
     OrthogonalMatrixQ.require(r1);
-    Chop.NONE.requireAllZero(Im.of(r1));
+    Chop.NONE.requireAllZero(r1.map(Im.FUNCTION));
     Tensor s2 = Orthogonalize.usingSvd(s1);
     Tensor r2 = Orthogonalize.usingPD(r1);
     Tolerance.CHOP.requireClose(r1, r2);

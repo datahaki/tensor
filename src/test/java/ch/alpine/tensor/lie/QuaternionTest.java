@@ -146,7 +146,7 @@ class QuaternionTest {
 
   @Test
   void testConjugate() {
-    Scalar s = Conjugate.of(Quaternion.of(1, 2, 3, 4));
+    Scalar s = Conjugate.FUNCTION.apply(Quaternion.of(1, 2, 3, 4));
     assertEquals(s, Quaternion.of(1, -2, -3, -4));
   }
 
@@ -154,7 +154,7 @@ class QuaternionTest {
   void testSqrt() {
     Tensor arg = RandomVariate.of(NormalDistribution.standard(), 4);
     Scalar q = Quaternion.of(arg.Get(0), arg.extract(1, 4));
-    Scalar r = Sqrt.of(q);
+    Scalar r = Sqrt.FUNCTION.apply(q);
     Scalar r2 = r.multiply(r);
     Tolerance.CHOP.requireClose(r2, q);
   }
@@ -163,7 +163,7 @@ class QuaternionTest {
   void testSqrt0() {
     Tensor arg = RandomVariate.of(NormalDistribution.standard(), 4);
     Scalar q = Quaternion.of(RealScalar.ZERO, arg.extract(1, 4));
-    Scalar r = Sqrt.of(q);
+    Scalar r = Sqrt.FUNCTION.apply(q);
     Scalar r2 = r.multiply(r);
     Tolerance.CHOP.requireClose(r2, q);
   }

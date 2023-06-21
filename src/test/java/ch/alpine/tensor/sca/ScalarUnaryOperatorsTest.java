@@ -36,7 +36,6 @@ import ch.alpine.tensor.sca.tri.Tanh;
 class ScalarUnaryOperatorsTest {
   public static final ScalarUnaryOperator[] ARRAY = { //
       Abs.FUNCTION, //
-      Abs.FUNCTION, //
       AbsSquared.FUNCTION, //
       ArcCos.FUNCTION, //
       ArcCosh.FUNCTION, //

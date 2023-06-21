@@ -12,6 +12,6 @@ public enum MatrixDotConjugateTranspose {
   /** @param matrix
    * @return matrix . ConjugateTranspose(matrix) */
   public static Tensor of(Tensor matrix) {
-    return MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
+    return MatrixDotTranspose.of(matrix, matrix.map(Conjugate.FUNCTION));
   }
 }

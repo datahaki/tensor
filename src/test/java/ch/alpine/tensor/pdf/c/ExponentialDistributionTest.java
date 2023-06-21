@@ -59,7 +59,7 @@ class ExponentialDistributionTest {
     Distribution distribution = ExponentialDistribution.of(2);
     {
       Scalar actual = PDF.of(distribution).at(RealScalar.of(3));
-      Scalar expected = RealScalar.of(2).divide(Exp.of(RealScalar.of(6)));
+      Scalar expected = RealScalar.of(2).divide(Exp.FUNCTION.apply(RealScalar.of(6)));
       assertEquals(expected, actual);
     }
     {
@@ -73,7 +73,7 @@ class ExponentialDistributionTest {
     Distribution distribution = ExponentialDistribution.of(RealScalar.of(2));
     CDF cdf = CDF.of(distribution);
     Scalar actual = cdf.p_lessEquals(RealScalar.of(3));
-    Scalar expected = RealScalar.ONE.subtract(Exp.of(RealScalar.of(6)).reciprocal());
+    Scalar expected = RealScalar.ONE.subtract(Exp.FUNCTION.apply(RealScalar.of(6)).reciprocal());
     assertEquals(expected, actual);
   }
 

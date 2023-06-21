@@ -26,13 +26,13 @@ class SinhTest {
     Scalar i = RealScalar.of(2);
     Scalar c = Sinh.FUNCTION.apply(i);
     Scalar s = DoubleScalar.of(Math.sinh(2));
-    assertEquals(c, Sinh.of(i));
+    assertEquals(c, Sinh.FUNCTION.apply(i));
     assertEquals(c, s);
   }
 
   @Test
   void testComplex() {
-    Scalar c = Sinh.of(ComplexScalar.of(2, 3.));
+    Scalar c = Sinh.FUNCTION.apply(ComplexScalar.of(2, 3.));
     Scalar s = ComplexScalar.of(-3.59056458998578, 0.5309210862485197);
     assertEquals(c, s);
   }
@@ -40,18 +40,18 @@ class SinhTest {
   @Test
   void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
-    Scalar scalar = Sinh.of(DecimalScalar.of(new BigDecimal("1.2356", MathContext.DECIMAL128), mc.getPrecision()));
+    Scalar scalar = Sinh.FUNCTION.apply(DecimalScalar.of(new BigDecimal("1.2356", MathContext.DECIMAL128), mc.getPrecision()));
     assertInstanceOf(DecimalScalar.class, scalar);
     Tolerance.CHOP.requireClose(scalar, DoubleScalar.of(Math.sinh(1.2356)));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> Sinh.of(Quantity.of(1, "deg")));
+    assertThrows(Throw.class, () -> Sinh.FUNCTION.apply(Quantity.of(1, "deg")));
   }
 
   @Test
   void testGaussScalarFail() {
-    assertThrows(Throw.class, () -> Sinh.of(GaussScalar.of(6, 7)));
+    assertThrows(Throw.class, () -> Sinh.FUNCTION.apply(GaussScalar.of(6, 7)));
   }
 }

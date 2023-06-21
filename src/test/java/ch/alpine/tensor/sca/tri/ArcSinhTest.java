@@ -14,9 +14,9 @@ class ArcSinhTest {
   @Test
   void testReal() {
     Scalar value = RealScalar.of(0.88137358701954302523);
-    Chop._12.requireClose(ArcSinh.of(RealScalar.ONE), value);
-    Chop._12.requireClose(ArcSinh.of(RealScalar.ONE.negate()), value.negate());
-    Chop._12.requireClose(ArcSinh.of(RealScalar.of(3)), RealScalar.of(1.8184464592320668235));
+    Chop._12.requireClose(ArcSinh.FUNCTION.apply(RealScalar.ONE), value);
+    Chop._12.requireClose(ArcSinh.FUNCTION.apply(RealScalar.ONE.negate()), value.negate());
+    Chop._12.requireClose(ArcSinh.FUNCTION.apply(RealScalar.of(3)), RealScalar.of(1.8184464592320668235));
   }
 
   @Test
@@ -28,9 +28,9 @@ class ArcSinhTest {
   @Test
   void testArcSinh() {
     Scalar s = ComplexScalar.of(5, -7);
-    Scalar r = ArcSinh.of(s);
+    Scalar r = ArcSinh.FUNCTION.apply(s);
     Scalar a = ComplexScalar.of(2.8440976626506527, -0.9473406443130489);
     Chop._14.requireClose(a, r);
-    assertEquals(a, ArcSinh.of(s));
+    assertEquals(a, ArcSinh.FUNCTION.apply(s));
   }
 }

@@ -2,7 +2,6 @@
 package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -21,12 +20,5 @@ public enum Im implements ScalarUnaryOperator {
     if (scalar instanceof ComplexEmbedding complexEmbedding)
       return complexEmbedding.imag();
     throw new Throw(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their imaginary part */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

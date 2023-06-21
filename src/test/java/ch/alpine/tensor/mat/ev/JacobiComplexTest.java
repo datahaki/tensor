@@ -54,7 +54,7 @@ class JacobiComplexTest {
     HermitianMatrixQ.require(matrix);
     JacobiComplex jacobiComplex = new JacobiComplex(matrix);
     jacobiComplex.solve();
-    Chop.NONE.requireAllZero(Im.of(jacobiComplex.values()));
+    Chop.NONE.requireAllZero(jacobiComplex.values().map(Im.FUNCTION));
     Tensor h = Tensors.matrix(jacobiComplex.H);
     Tolerance.CHOP.requireClose(DiagonalMatrix.with(Diagonal.of(h)), h);
     Tolerance.CHOP.requireClose( //

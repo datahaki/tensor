@@ -123,7 +123,7 @@ class TransposedImageFormatTest {
       image.append(Raster.of(arr, cdf));
     image = Flatten.of(image, 1);
     image = Transpose.of(image, 1, 0, 2);
-    return Round.of(image);
+    return image.map(Round.FUNCTION);
   }
 
   @Test

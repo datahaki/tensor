@@ -32,18 +32,18 @@ class TrigonometryInterfaceTest {
   void testQuantity() {
     for (Tensor _value : Tensors.vector(-2.323, -1, -0.3, 0, 0.2, 1.2, 3., 4.456)) {
       Scalar value = (Scalar) _value;
-      _check(value, Sin::of, Math::sin);
-      _check(value, Cos::of, Math::cos);
-      _check(value, Sinh::of, Math::sinh);
-      _check(value, Cosh::of, Math::cosh);
+      _check(value, Sin.FUNCTION, Math::sin);
+      _check(value, Cos.FUNCTION, Math::cos);
+      _check(value, Sinh.FUNCTION, Math::sinh);
+      _check(value, Cosh.FUNCTION, Math::cosh);
     }
   }
 
   @Test
   void testQuantityDegree() {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(180, "deg"));
-    Chop._13.requireClose(Sin.of(scalar), RealScalar.ZERO);
-    Chop._13.requireClose(Cos.of(scalar), RealScalar.ONE.negate());
+    Chop._13.requireClose(Sin.FUNCTION.apply(scalar), RealScalar.ZERO);
+    Chop._13.requireClose(Cos.FUNCTION.apply(scalar), RealScalar.ONE.negate());
   }
 
   @Test
@@ -66,7 +66,7 @@ class TrigonometryInterfaceTest {
 
   @Test
   void testFails() {
-    assertThrows(Throw.class, () -> Sin.of(Quantity.of(1.2, "m")));
-    assertThrows(Throw.class, () -> Sin.of(GaussScalar.of(2, 7)));
+    assertThrows(Throw.class, () -> Sin.FUNCTION.apply(Quantity.of(1.2, "m")));
+    assertThrows(Throw.class, () -> Sin.FUNCTION.apply(GaussScalar.of(2, 7)));
   }
 }

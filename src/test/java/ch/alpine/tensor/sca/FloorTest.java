@@ -24,12 +24,12 @@ import ch.alpine.tensor.qty.Quantity;
 class FloorTest {
   @Test
   void testFloor() {
-    assertEquals(Floor.of(RealScalar.ZERO), RealScalar.ZERO);
-    assertEquals(Floor.of(RationalScalar.of(-5, 2)), RationalScalar.of(-3, 1));
-    assertEquals(Floor.of(RationalScalar.of(5, 2)), RationalScalar.of(2, 1));
-    assertEquals(Floor.of(DoubleScalar.of(0.123)), RealScalar.ZERO);
-    assertEquals(Floor.of(RealScalar.ONE), RealScalar.ONE);
-    assertEquals(Floor.of(DoubleScalar.of(-0.123)), RationalScalar.of(-1, 1));
+    assertEquals(Floor.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(Floor.FUNCTION.apply(RationalScalar.of(-5, 2)), RationalScalar.of(-3, 1));
+    assertEquals(Floor.FUNCTION.apply(RationalScalar.of(5, 2)), RationalScalar.of(2, 1));
+    assertEquals(Floor.FUNCTION.apply(DoubleScalar.of(0.123)), RealScalar.ZERO);
+    assertEquals(Floor.FUNCTION.apply(RealScalar.ONE), RealScalar.ONE);
+    assertEquals(Floor.FUNCTION.apply(DoubleScalar.of(-0.123)), RationalScalar.of(-1, 1));
   }
 
   @Test
@@ -45,7 +45,7 @@ class FloorTest {
   @Test
   void testGetFloor() {
     Tensor v = Tensors.vectorDouble(3.5, 5.6, 9.12);
-    Scalar s = Floor.of(v.Get(1));
+    Scalar s = Floor.FUNCTION.apply(v.Get(1));
     RealScalar rs = (RealScalar) s;
     assertEquals(rs.number().doubleValue(), 5.0);
   }
@@ -53,8 +53,8 @@ class FloorTest {
   @Test
   void testLarge() {
     Scalar scalar = DoubleScalar.of(1e30);
-    Scalar r = Round.of(scalar);
-    Scalar f = Floor.of(scalar);
+    Scalar r = Round.FUNCTION.apply(scalar);
+    Scalar f = Floor.FUNCTION.apply(scalar);
     assertEquals(r, f);
     assertEquals(r.toString(), "1000000000000000000000000000000");
   }
@@ -64,7 +64,7 @@ class FloorTest {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Floor.intValueExact(s), 17);
     assertEquals(Floor.longValueExact(s), 17);
-    Scalar r = Floor.of(s);
+    Scalar r = Floor.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(17));
     assertInstanceOf(RationalScalar.class, r);
   }
@@ -78,7 +78,7 @@ class FloorTest {
   @Test
   void testRational2() {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
-    Scalar r = Floor.of(s);
+    Scalar r = Floor.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(54));
     assertInstanceOf(RationalScalar.class, r);
   }
@@ -86,9 +86,9 @@ class FloorTest {
   @Test
   void testComplex() {
     Scalar c = Scalars.fromString("7-2*I");
-    assertEquals(Floor.of(c), c);
+    assertEquals(Floor.FUNCTION.apply(c), c);
     Scalar d = Scalars.fromString("7.9-1.1*I");
-    assertEquals(Floor.of(d), c);
+    assertEquals(Floor.FUNCTION.apply(d), c);
   }
 
   @Test
@@ -143,6 +143,6 @@ class FloorTest {
 
   @Test
   void testTypeFail() {
-    assertThrows(Throw.class, () -> Floor.of(StringScalar.of("some")));
+    assertThrows(Throw.class, () -> Floor.FUNCTION.apply(StringScalar.of("some")));
   }
 }

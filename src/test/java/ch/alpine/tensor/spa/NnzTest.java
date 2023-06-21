@@ -42,7 +42,7 @@ class NnzTest {
     assertInstanceOf(SparseArray.class, MatrixDotConjugateTranspose.of(sparse));
     Tensor dot = MatrixDotConjugateTranspose.of(Transpose.of(sparse));
     assertInstanceOf(SparseArray.class, dot);
-    assertInstanceOf(SparseArray.class, Conjugate.of(raw));
+    assertInstanceOf(SparseArray.class, raw.map(Conjugate.FUNCTION));
   }
 
   @Test

@@ -28,7 +28,7 @@ class ImTest {
 
   @Test
   void testTensorExact() {
-    Tensor tensor = Im.of(Tensors.fromString("{{3+I*6/7, 5*I}, 2, {}}"));
+    Tensor tensor = Tensors.fromString("{{3+I*6/7, 5*I}, 2, {}}").map(Im.FUNCTION);
     assertEquals(tensor, Tensors.fromString("{{6/7, 5}, 0, {}}"));
     ExactTensorQ.require(tensor);
   }
@@ -54,12 +54,12 @@ class ImTest {
   @Test
   void testFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(Throw.class, () -> Im.of(scalar));
+    assertThrows(Throw.class, () -> Im.FUNCTION.apply(scalar));
   }
 
   @Test
   void testDateTimeFail() {
     Scalar scalar = DateTime.now();
-    assertThrows(Throw.class, () -> Im.of(scalar));
+    assertThrows(Throw.class, () -> Im.FUNCTION.apply(scalar));
   }
 }

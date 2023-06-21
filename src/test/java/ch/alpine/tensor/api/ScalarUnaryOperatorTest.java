@@ -60,27 +60,27 @@ class ScalarUnaryOperatorTest {
       // ---
     }
     try {
-      Arg.of(scalar);
+      Arg.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
     try {
-      ArcCos.of(scalar);
+      ArcCos.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
     try {
-      ArcSin.of(scalar);
+      ArcSin.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
-    ArcTan.of(scalar);
+    ArcTan.FUNCTION.apply(scalar);
     try {
-      ArcTanh.of(scalar);
+      ArcTanh.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Ceiling.of(scalar);
+    Ceiling.FUNCTION.apply(scalar);
     Tolerance.CHOP.of(scalar);
     Chop._11.of(scalar);
     try {
@@ -88,11 +88,11 @@ class ScalarUnaryOperatorTest {
     } catch (Exception exception) {
       // ---
     }
-    Cos.of(scalar);
-    Exp.of(scalar);
-    Floor.of(scalar);
+    Cos.FUNCTION.apply(scalar);
+    Exp.FUNCTION.apply(scalar);
+    Floor.FUNCTION.apply(scalar);
     try {
-      Log.of(scalar);
+      Log.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
@@ -110,32 +110,32 @@ class ScalarUnaryOperatorTest {
     }
     Power.of(scalar, RealScalar.ZERO);
     try {
-      Ramp.of(scalar);
+      Ramp.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Round.of(scalar);
+    Round.FUNCTION.apply(scalar);
     try {
       Sign.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Sin.of(scalar);
+    Sin.FUNCTION.apply(scalar);
     try {
-      Sinc.of(scalar);
+      Sinc.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Sinh.of(scalar);
+    Sinh.FUNCTION.apply(scalar);
     try {
-      Sqrt.of(scalar);
+      Sqrt.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Tan.of(scalar);
-    Tanh.of(scalar);
+    Tan.FUNCTION.apply(scalar);
+    Tanh.FUNCTION.apply(scalar);
     try {
-      UnitStep.of(scalar);
+      UnitStep.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }

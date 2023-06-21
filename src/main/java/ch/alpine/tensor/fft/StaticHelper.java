@@ -63,8 +63,9 @@ import ch.alpine.tensor.sca.pow.Sqrt;
    * @param result output
    * @return result output with imaginary part projected to zero, if input is all-real */
   public static Tensor re_re(Tensor vector, Tensor result) {
-    return Chop.NONE.allZero(Im.of(vector)) //
-        ? Re.of(result)
+    // TODO TENSOR this is redundant to some other place
+    return Chop.NONE.allZero(vector.map(Im.FUNCTION)) //
+        ? result.map(Re.FUNCTION)
         : result;
   }
 }

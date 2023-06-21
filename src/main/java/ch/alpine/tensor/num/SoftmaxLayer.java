@@ -13,6 +13,6 @@ public enum SoftmaxLayer {
    * @return
    * @throws Exception if vector is empty */
   public static Tensor of(Tensor vector) {
-    return Vector1Norm.NORMALIZE.apply(Exp.of(vector));
+    return Vector1Norm.NORMALIZE.apply(vector.map(Exp.FUNCTION));
   }
 }

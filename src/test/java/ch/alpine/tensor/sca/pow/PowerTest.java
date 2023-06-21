@@ -59,8 +59,8 @@ class PowerTest {
 
   @Test
   void testSqrt() {
-    assertEquals(Power.of(2, 0.5), Sqrt.of(RealScalar.of(2)));
-    assertEquals(Power.of(14, 0.5), Sqrt.of(RealScalar.of(14)));
+    assertEquals(Power.of(2, 0.5), Sqrt.FUNCTION.apply(RealScalar.of(2)));
+    assertEquals(Power.of(14, 0.5), Sqrt.FUNCTION.apply(RealScalar.of(14)));
   }
 
   @Test
@@ -130,8 +130,8 @@ class PowerTest {
 
   @Test
   void testFunction() {
-    assertEquals(RealScalar.of(7).map(Power.function(0.5)), Sqrt.of(RealScalar.of(7)));
-    assertEquals(Power.function(0.5).apply(RealScalar.of(7)), Sqrt.of(RealScalar.of(7)));
+    assertEquals(RealScalar.of(7).map(Power.function(0.5)), Sqrt.FUNCTION.apply(RealScalar.of(7)));
+    assertEquals(Power.function(0.5).apply(RealScalar.of(7)), Sqrt.FUNCTION.apply(RealScalar.of(7)));
   }
 
   @Test

@@ -103,13 +103,13 @@ class GaussScalarTest {
   void testSqrt() {
     Scalar a = GaussScalar.of(4, 7);
     Scalar s = GaussScalar.of(2, 7);
-    assertEquals(Sqrt.of(a), s);
+    assertEquals(Sqrt.FUNCTION.apply(a), s);
   }
 
   @Test
   void testSqrt0() {
     Scalar zero = GaussScalar.of(0, 7);
-    assertEquals(Sqrt.of(zero), zero);
+    assertEquals(Sqrt.FUNCTION.apply(zero), zero);
   }
 
   @Test
@@ -119,7 +119,7 @@ class GaussScalarTest {
     for (int c = 0; c < prime; ++c) {
       Scalar s = GaussScalar.of(c, prime);
       try {
-        Scalar sqrt = Sqrt.of(s);
+        Scalar sqrt = Sqrt.FUNCTION.apply(s);
         ++count;
         assertEquals(sqrt.multiply(sqrt), s);
       } catch (Exception exception) {
@@ -127,15 +127,15 @@ class GaussScalarTest {
       }
     }
     assertEquals(count, 6);
-    assertThrows(Throw.class, () -> Sqrt.of(GaussScalar.of(2, 11)));
+    assertThrows(Throw.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(2, 11)));
   }
 
   @Test
   void testSqrt5() {
-    assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
-    assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
-    assertThrows(Throw.class, () -> Sqrt.of(GaussScalar.of(2, 5)));
-    assertThrows(Throw.class, () -> Sqrt.of(GaussScalar.of(3, 5)));
+    assertEquals(Sqrt.FUNCTION.apply(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
+    assertEquals(Sqrt.FUNCTION.apply(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
+    assertThrows(Throw.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(2, 5)));
+    assertThrows(Throw.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(3, 5)));
   }
 
   @Test
@@ -205,7 +205,7 @@ class GaussScalarTest {
       GaussScalar gaussScalar = GaussScalar.of(index, prime);
       assertEquals(Power.of(gaussScalar, 0), scalar);
       assertEquals(gaussScalar, //
-          Sign.of(gaussScalar).multiply(Abs.FUNCTION.apply(gaussScalar)));
+          Sign.FUNCTION.apply(gaussScalar).multiply(Abs.FUNCTION.apply(gaussScalar)));
     }
   }
 
@@ -233,9 +233,9 @@ class GaussScalarTest {
   @Test
   void testRounding() {
     Scalar scalar = GaussScalar.of(-432, 677);
-    assertEquals(Round.of(scalar), scalar);
-    assertEquals(Ceiling.of(scalar), scalar);
-    assertEquals(Floor.of(scalar), scalar);
+    assertEquals(Round.FUNCTION.apply(scalar), scalar);
+    assertEquals(Ceiling.FUNCTION.apply(scalar), scalar);
+    assertEquals(Floor.FUNCTION.apply(scalar), scalar);
   }
 
   @Test

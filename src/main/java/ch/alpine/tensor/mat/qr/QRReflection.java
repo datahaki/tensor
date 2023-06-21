@@ -35,11 +35,11 @@ import ch.alpine.tensor.sca.InvertUnlessZero;
         vr = x.map(InvertUnlessZero.FUNCTION);
       } else {
         vc = x;
-        vr = Conjugate.of(x.add(x)).divide(norm2squared);
+        vr = x.add(x).map(Conjugate.FUNCTION).divide(norm2squared);
       }
     } else {
       vc = NORMALIZE_UNLESS_ZERO.apply(x);
-      vr = Conjugate.of(vc.add(vc));
+      vr = vc.add(vc).map(Conjugate.FUNCTION);
     }
   }
 

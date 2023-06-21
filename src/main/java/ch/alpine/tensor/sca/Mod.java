@@ -6,7 +6,6 @@ import java.util.Objects;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
@@ -59,11 +58,6 @@ public class Mod implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     Scalar loops = Floor.FUNCTION.apply(scalar.subtract(d).divide(n));
     return scalar.subtract(FiniteScalarQ.require(loops).multiply(n));
-  }
-
-  @SuppressWarnings("unchecked")
-  public <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(this);
   }
 
   @Override // from Object

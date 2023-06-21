@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
 
   @Override
   public Scalar apply(Scalar re, Scalar im) {
-    return Arg.of(Nest.of(scalarUnaryOperator, ComplexScalar.of(re, im), DEPTH));
+    return Arg.FUNCTION.apply(Nest.of(scalarUnaryOperator, ComplexScalar.of(re, im), DEPTH));
   }
 
   @Override

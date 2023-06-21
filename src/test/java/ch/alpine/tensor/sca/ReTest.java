@@ -20,8 +20,8 @@ class ReTest {
     Scalar scalar = Scalars.fromString("11");
     assertEquals(Re.FUNCTION.apply(scalar), RealScalar.of(11));
     assertEquals(Im.FUNCTION.apply(scalar), RealScalar.of(0));
-    assertEquals(Re.of(scalar), RealScalar.of(11));
-    assertEquals(Im.of(scalar), RealScalar.of(0));
+    assertEquals(Re.FUNCTION.apply(scalar), RealScalar.of(11));
+    assertEquals(Im.FUNCTION.apply(scalar), RealScalar.of(0));
   }
 
   @Test
@@ -29,19 +29,19 @@ class ReTest {
     Scalar scalar = ComplexScalar.of(11, 3.5);
     assertEquals(Re.FUNCTION.apply(scalar), RealScalar.of(11));
     assertEquals(Im.FUNCTION.apply(scalar), RealScalar.of(3.5));
-    assertEquals(Re.of(scalar), RealScalar.of(11));
-    assertEquals(Im.of(scalar), RealScalar.of(3.5));
+    assertEquals(Re.FUNCTION.apply(scalar), RealScalar.of(11));
+    assertEquals(Im.FUNCTION.apply(scalar), RealScalar.of(3.5));
   }
 
   @Test
   void testStringFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(Throw.class, () -> Re.of(scalar));
+    assertThrows(Throw.class, () -> Re.FUNCTION.apply(scalar));
   }
 
   @Test
   void testDateTimeFail() {
     Scalar scalar = DateTime.now();
-    assertThrows(Throw.class, () -> Re.of(scalar));
+    assertThrows(Throw.class, () -> Re.FUNCTION.apply(scalar));
   }
 }

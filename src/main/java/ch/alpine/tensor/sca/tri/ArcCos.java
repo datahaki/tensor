@@ -5,7 +5,6 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -40,12 +39,5 @@ public enum ArcCos implements ScalarUnaryOperator {
     }
     Scalar o_x2 = Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(scalar.multiply(scalar)));
     return I_NEGATE.multiply(Log.FUNCTION.apply(scalar.add(ComplexScalar.I.multiply(o_x2))));
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their arc cos */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

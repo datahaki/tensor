@@ -38,7 +38,7 @@ class DistributionTest {
     // https://en.wikipedia.org/wiki/Central_limit_theorem
     // @SuppressWarnings("unused")
     // Scalar limmean =
-    Sqrt.of(RealScalar.of(n)).multiply(mean.subtract(tmean)).divide(Sqrt.of(tvar));
+    Sqrt.FUNCTION.apply(RealScalar.of(n)).multiply(mean.subtract(tmean)).divide(Sqrt.FUNCTION.apply(tvar));
     Scalar dvar = Abs.between(var, tvar).divide(tvar);
     assertTrue(Scalars.lessThan(dmean, RealScalar.of(0.2)));
     assertTrue(Scalars.lessThan(dvar, RealScalar.of(0.22)));

@@ -121,7 +121,7 @@ class BooleanScalarTest {
 
   @Test
   void testSqrt() {
-    assertEquals(Sqrt.of(BooleanScalar.FALSE), BooleanScalar.FALSE);
-    assertEquals(Sqrt.of(BooleanScalar.TRUE), BooleanScalar.TRUE);
+    assertEquals(Sqrt.FUNCTION.apply(BooleanScalar.FALSE), BooleanScalar.FALSE);
+    assertEquals(Sqrt.FUNCTION.apply(BooleanScalar.TRUE), BooleanScalar.TRUE);
   }
 }

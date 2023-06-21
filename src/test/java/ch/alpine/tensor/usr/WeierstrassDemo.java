@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.tri.Cos;
     Scalar s = DoubleScalar.of(0.0);
     // b = 7.0 has to be a positive odd integer
     for (int n = 0; n < DEPTH; ++n)
-      s = s.add(Power.of(im, n).multiply(Cos.of(Power.of(7.0, n).multiply(DoubleScalar.of(Math.PI)).multiply(re))));
+      s = s.add(Power.of(im, n).multiply(Cos.FUNCTION.apply(Power.of(7.0, n).multiply(DoubleScalar.of(Math.PI)).multiply(re))));
     return s;
   }
 

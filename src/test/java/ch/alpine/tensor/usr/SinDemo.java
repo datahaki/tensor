@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.tri.Sin;
   @Override
   public Scalar apply(Scalar re, Scalar im) {
     Scalar seed = ComplexScalar.of(re, im);
-    return Re.of(ArcTan.of(Nest.of(Sin.FUNCTION, seed, 2)));
+    return Re.FUNCTION.apply(ArcTan.FUNCTION.apply(Nest.of(Sin.FUNCTION, seed, 2)));
   }
 
   @Override

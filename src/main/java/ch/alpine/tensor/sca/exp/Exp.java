@@ -4,7 +4,6 @@ package ch.alpine.tensor.sca.exp;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
@@ -24,12 +23,5 @@ public enum Exp implements ScalarUnaryOperator {
     if (scalar instanceof ExpInterface expInterface)
       return expInterface.exp();
     throw new Throw(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their exponential */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

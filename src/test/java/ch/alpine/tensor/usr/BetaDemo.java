@@ -21,7 +21,7 @@ import ch.alpine.tensor.sca.gam.Beta;
   public Scalar apply(Scalar re, Scalar im) {
     Scalar seed = ComplexScalar.of(re, im);
     try {
-      return Arg.of(Nest.of(z -> Beta.of(z, z), seed, DEPTH));
+      return Arg.FUNCTION.apply(Nest.of(z -> Beta.of(z, z), seed, DEPTH));
     } catch (Exception exception) {
       // ---
     }

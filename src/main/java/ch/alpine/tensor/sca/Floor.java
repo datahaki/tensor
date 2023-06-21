@@ -5,7 +5,6 @@ import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -75,13 +74,6 @@ public enum Floor implements ScalarUnaryOperator {
    * @return */
   public static long longValueExact(Scalar scalar) {
     return Scalars.longValueExact(FUNCTION.apply(scalar));
-  }
-
-  /** @param tensor
-   * @return tensor with all entries replaced by their floor */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 
   /** @param increment non-zero

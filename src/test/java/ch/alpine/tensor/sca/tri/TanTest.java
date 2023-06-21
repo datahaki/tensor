@@ -20,13 +20,13 @@ class TanTest {
     Scalar i = RealScalar.of(2);
     Scalar c = Tan.FUNCTION.apply(i);
     Scalar s = DoubleScalar.of(Math.tan(2));
-    assertEquals(c, Tan.of(i));
+    assertEquals(c, Tan.FUNCTION.apply(i));
     assertEquals(c, s);
   }
 
   @Test
   void testComplex() {
-    Scalar c = Tan.of(ComplexScalar.of(2, 3.));
+    Scalar c = Tan.FUNCTION.apply(ComplexScalar.of(2, 3.));
     Scalar s = ComplexScalar.of(-0.0037640256415042484, 1.0032386273536098);
     Chop._15.requireClose(s, c);
   }
@@ -34,6 +34,6 @@ class TanTest {
   @Test
   void testTypeFail() {
     Scalar scalar = StringScalar.of("some");
-    assertThrows(Throw.class, () -> Tan.of(scalar));
+    assertThrows(Throw.class, () -> Tan.FUNCTION.apply(scalar));
   }
 }

@@ -20,7 +20,7 @@ class GudermannianTest {
 
   @Test
   void testListable() {
-    Tensor tensor = Gudermannian.of(Range.of(-3, 4));
+    Tensor tensor = Range.of(-3, 4).map(Gudermannian.FUNCTION);
     Tolerance.CHOP.requireClose(tensor, Reverse.of(tensor).negate());
   }
 }

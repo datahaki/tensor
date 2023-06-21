@@ -102,7 +102,7 @@ class BigDecimalMathTest {
   void testSin() {
     // mathematica: 0.90929742682568169539601986591174484270225497144789
     // ............ 0.9092974268256816953960198659117451
-    Scalar s0 = Sin.of(RealScalar.of(2));
+    Scalar s0 = Sin.FUNCTION.apply(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.sin(BigDecimal.valueOf(2), MathContext.DECIMAL128);
     Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));
   }
@@ -111,21 +111,21 @@ class BigDecimalMathTest {
   void testSinh() {
     // mathematica: 0.90929742682568169539601986591174484270225497144789
     // ............ 0.9092974268256816953960198659117451
-    Scalar s0 = Sinh.of(RealScalar.of(2));
+    Scalar s0 = Sinh.FUNCTION.apply(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.sinh(BigDecimal.valueOf(2), MathContext.DECIMAL128);
     Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));
   }
 
   @Test
   void testCos() {
-    Scalar s0 = Cos.of(RealScalar.of(2));
+    Scalar s0 = Cos.FUNCTION.apply(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.cos(BigDecimal.valueOf(2), MathContext.DECIMAL128);
     Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));
   }
 
   @Test
   void testCosh() {
-    Scalar s0 = Cosh.of(RealScalar.of(2));
+    Scalar s0 = Cosh.FUNCTION.apply(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.cosh(BigDecimal.valueOf(2), MathContext.DECIMAL128);
     Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));
   }

@@ -69,18 +69,18 @@ class CliffordAlgebraTest {
     Scalar cx = ComplexScalar.of(2, 5);
     Scalar cy = ComplexScalar.of(1, -3);
     Scalar cm = cx.multiply(cy);
-    assertEquals(Re.of(cm), m.Get(0));
-    assertEquals(Im.of(cm), m.Get(1));
+    assertEquals(Re.FUNCTION.apply(cm), m.Get(0));
+    assertEquals(Im.FUNCTION.apply(cm), m.Get(1));
     Scalar ce = Exp.FUNCTION.apply(cx);
     Tensor xe = cliffordAlgebra.exp(x);
-    Chop._10.requireClose(Re.of(ce), xe.Get(0));
-    Chop._10.requireClose(Im.of(ce), xe.Get(1));
+    Chop._10.requireClose(Re.FUNCTION.apply(ce), xe.Get(0));
+    Chop._10.requireClose(Im.FUNCTION.apply(ce), xe.Get(1));
     Scalar cr = cx.reciprocal();
     Tensor xr = cliffordAlgebra.reciprocal(x);
     ExactTensorQ.require(cr);
     ExactTensorQ.require(xr);
-    assertEquals(Re.of(cr), xr.Get(0));
-    assertEquals(Im.of(cr), xr.Get(1));
+    assertEquals(Re.FUNCTION.apply(cr), xr.Get(0));
+    assertEquals(Im.FUNCTION.apply(cr), xr.Get(1));
   }
 
   @Test

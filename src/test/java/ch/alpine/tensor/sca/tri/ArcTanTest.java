@@ -30,7 +30,7 @@ class ArcTanTest {
   void testReal() {
     Scalar s = RealScalar.of(-3);
     Scalar r = ArcTan.FUNCTION.apply(s);
-    assertEquals(r, ArcTan.of(s));
+    assertEquals(r, ArcTan.FUNCTION.apply(s));
     // -1.5707963267948966192 + 1.7627471740390860505 I
     assertEquals(r, Scalars.fromString("-1.2490457723982544"));
   }
@@ -60,7 +60,7 @@ class ArcTanTest {
   void testComplex() {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcTan.FUNCTION.apply(s);
-    assertEquals(r, ArcTan.of(s));
+    assertEquals(r, ArcTan.FUNCTION.apply(s));
     assertEquals(r, ComplexScalar.of(1.502726846368326, -0.09444062638970714));
   }
 

@@ -2,7 +2,6 @@
 package ch.alpine.tensor.sca.tri;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
@@ -25,12 +24,5 @@ public enum Sin implements ScalarUnaryOperator {
     if (scalar instanceof TrigonometryInterface trigonometryInterface)
       return trigonometryInterface.sin();
     throw new Throw(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their sin */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

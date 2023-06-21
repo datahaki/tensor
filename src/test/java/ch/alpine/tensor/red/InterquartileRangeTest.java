@@ -40,7 +40,7 @@ class InterquartileRangeTest {
   void testDistributionExp() { // continuous
     Scalar lambda = RealScalar.of(5);
     Distribution distribution = ExponentialDistribution.of(lambda);
-    Tolerance.CHOP.requireClose(InterquartileRange.of(distribution), Log.of(RealScalar.of(3)).divide(lambda));
+    Tolerance.CHOP.requireClose(InterquartileRange.of(distribution), Log.FUNCTION.apply(RealScalar.of(3)).divide(lambda));
   }
 
   @Test

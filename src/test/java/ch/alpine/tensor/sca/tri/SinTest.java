@@ -20,7 +20,7 @@ class SinTest {
     Scalar i = RealScalar.of(2);
     Scalar c = Sin.FUNCTION.apply(i);
     Scalar s = DoubleScalar.of(Math.sin(2));
-    assertEquals(c, Sin.of(i));
+    assertEquals(c, Sin.FUNCTION.apply(i));
     assertEquals(c, s);
   }
 
@@ -33,11 +33,11 @@ class SinTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> Sin.of(Quantity.of(1, "deg")));
+    assertThrows(Throw.class, () -> Sin.FUNCTION.apply(Quantity.of(1, "deg")));
   }
 
   @Test
   void testStringScalarFail() {
-    assertThrows(Throw.class, () -> Sin.of(StringScalar.of("some")));
+    assertThrows(Throw.class, () -> Sin.FUNCTION.apply(StringScalar.of("some")));
   }
 }

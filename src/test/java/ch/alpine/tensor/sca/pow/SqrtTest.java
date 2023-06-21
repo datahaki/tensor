@@ -37,14 +37,14 @@ class SqrtTest {
   void testMixingTemplates() {
     {
       Scalar tensor = RealScalar.of(-2);
-      Sqrt.of(tensor);
-      Scalar scalar = Sqrt.of(tensor);
+      Sqrt.FUNCTION.apply(tensor);
+      Scalar scalar = Sqrt.FUNCTION.apply(tensor);
       scalar.zero();
     }
     {
       Scalar tensor = RationalScalar.of(-2, 3);
-      Sqrt.of(tensor);
-      Scalar scalar = Sqrt.of(tensor);
+      Sqrt.FUNCTION.apply(tensor);
+      Scalar scalar = Sqrt.FUNCTION.apply(tensor);
       scalar.zero();
     }
   }
@@ -64,36 +64,36 @@ class SqrtTest {
 
   @Test
   void testRational() {
-    assertEquals(Sqrt.of(RationalScalar.of(16, 25)).toString(), "4/5");
-    Scalar scalar = Sqrt.of(RationalScalar.of(-16, 25));
+    assertEquals(Sqrt.FUNCTION.apply(RationalScalar.of(16, 25)).toString(), "4/5");
+    Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(-16, 25));
     assertInstanceOf(ComplexScalar.class, scalar);
     assertEquals(scalar.toString(), "4/5*I");
   }
 
   @Test
   void testReal() {
-    assertEquals(Sqrt.of(RationalScalar.of(-16, 25)).toString(), "4/5*I");
+    assertEquals(Sqrt.FUNCTION.apply(RationalScalar.of(-16, 25)).toString(), "4/5*I");
     assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(16 / 25.)), Scalars.fromString("4/5"));
     assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(-16 / 25.)), Scalars.fromString("4/5*I"));
   }
 
   @Test
   void testTensor() {
-    Tensor vector = Sqrt.of(Tensors.vector(1, 4, 9, 16));
+    Tensor vector = Tensors.vector(1, 4, 9, 16).map(Sqrt.FUNCTION);
     assertEquals(vector, Tensors.vector(1, 2, 3, 4));
   }
 
   @Test
   void testPositiveInfty() {
     assertEquals( //
-        Sqrt.of(DoubleScalar.POSITIVE_INFINITY), //
+        Sqrt.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), //
         DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
   void testNegativeInfty() {
     assertEquals( //
-        Sqrt.of(DoubleScalar.NEGATIVE_INFINITY), //
+        Sqrt.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), //
         ComplexScalar.of(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
   }
 
@@ -101,14 +101,14 @@ class SqrtTest {
   void testQuantity() {
     Scalar qs1 = Quantity.of(9, "m^2");
     Scalar qs2 = Quantity.of(3, "m");
-    assertEquals(Sqrt.of(qs1), qs2);
+    assertEquals(Sqrt.FUNCTION.apply(qs1), qs2);
   }
 
   @Test
   void testQuantity2() {
     Scalar qs1 = Quantity.of(9, "m*s^2");
     Scalar qs2 = Quantity.of(3, "m^1/2*s");
-    assertEquals(Sqrt.of(qs1), qs2);
+    assertEquals(Sqrt.FUNCTION.apply(qs1), qs2);
   }
 
   @Test
@@ -119,6 +119,6 @@ class SqrtTest {
   @Test
   void testFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(Throw.class, () -> Sqrt.of(scalar));
+    assertThrows(Throw.class, () -> Sqrt.FUNCTION.apply(scalar));
   }
 }

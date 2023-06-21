@@ -197,8 +197,8 @@ class CholeskyDecompositionTest {
     CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     {
       assertEquals(Det.of(matrix), cd.det()); // 100[kg^2, m^2, rad^2]
-      Tensor lower = rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
-      Tensor upper = Times.of(Sqrt.of(cd.diagonal()), ConjugateTranspose.of(cd.getL()));
+      Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal().map(Sqrt.FUNCTION));
+      Tensor upper = Times.of(cd.diagonal().map(Sqrt.FUNCTION), ConjugateTranspose.of(cd.getL()));
       Tensor res = Tensors.matrix((i, j) -> Times.of(lower.get(i), upper.get(Tensor.ALL, j)).stream().reduce(LenientAdd::of).orElseThrow(), 3, 3);
       Chop._10.requireClose(matrix, res);
     }
@@ -232,7 +232,7 @@ class CholeskyDecompositionTest {
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     // System.out.println(MathematicaForm.of(matrix));
     CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
-    Tensor sdiag = Sqrt.of(cd.diagonal());
+    Tensor sdiag = cd.diagonal().map(Sqrt.FUNCTION);
     Times.of(sdiag, ConjugateTranspose.of(cd.getL()));
     {
       Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal());

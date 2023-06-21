@@ -53,7 +53,7 @@ class HessenbergDecompositionImpl implements HessenbergDecomposition, Serializab
             : a.multiply(Conjugate.FUNCTION.apply(piv).divide(Abs.FUNCTION.apply(piv)));
         w.set(norm::add, m);
         Scalar f = RealScalar.TWO.divide(Vector2NormSquared.of(w)).negate();
-        Tensor cwf = Conjugate.of(w.multiply(f));
+        Tensor cwf = w.multiply(f).map(Conjugate.FUNCTION);
         h = h.add(TensorProduct.of(w, cwf.dot(h)));
         h = h.add(TensorProduct.of(h.dot(w), cwf));
         u = u.add(TensorProduct.of(u.dot(w), cwf));

@@ -18,22 +18,22 @@ class ConjugateTest {
   void testQuantity1() {
     Scalar scalar = Scalars.fromString("0+0*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
-    assertEquals(Re.of(scalar).toString(), "0[m*s]");
-    assertEquals(Im.of(scalar).toString(), "0[m*s]");
-    assertEquals(Conjugate.of(scalar).toString(), "0[m*s]");
+    assertEquals(Re.FUNCTION.apply(scalar).toString(), "0[m*s]");
+    assertEquals(Im.FUNCTION.apply(scalar).toString(), "0[m*s]");
+    assertEquals(Conjugate.FUNCTION.apply(scalar).toString(), "0[m*s]");
   }
 
   @Test
   void testQuantity2() {
     Scalar scalar = Scalars.fromString("3+5*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
-    assertEquals(Re.of(scalar), Quantity.of(3, "m*s"));
-    assertEquals(Im.of(scalar), Quantity.of(5, "m*s"));
-    assertEquals(Conjugate.of(scalar), Scalars.fromString("3-5*I[m*s]"));
+    assertEquals(Re.FUNCTION.apply(scalar), Quantity.of(3, "m*s"));
+    assertEquals(Im.FUNCTION.apply(scalar), Quantity.of(5, "m*s"));
+    assertEquals(Conjugate.FUNCTION.apply(scalar), Scalars.fromString("3-5*I[m*s]"));
   }
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> Conjugate.of(StringScalar.of("asd")));
+    assertThrows(Throw.class, () -> Conjugate.FUNCTION.apply(StringScalar.of("asd")));
   }
 }

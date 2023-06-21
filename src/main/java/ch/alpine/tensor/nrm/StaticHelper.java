@@ -24,9 +24,10 @@ import ch.alpine.tensor.sca.Conjugate;
       Integers.requireEquals(u.length(), v.length());
       return Optional.empty();
     }
+    Tensor vc = v.map(Conjugate.FUNCTION);
     Scalar ratio = ExactTensorQ.of(u) || ExactTensorQ.of(v) //
-        ? (Scalar) u.dot(Conjugate.of(v)).divide(nu).divide(nv)
-        : (Scalar) Vector2Norm.NORMALIZE.apply(u).dot(Vector2Norm.NORMALIZE.apply(Conjugate.of(v)));
+        ? (Scalar) u.dot(vc).divide(nu).divide(nv)
+        : (Scalar) Vector2Norm.NORMALIZE.apply(u).dot(Vector2Norm.NORMALIZE.apply(vc));
     if (ratio instanceof RealScalar)
       // due to numerical inaccuracy, for instance, ratio == 1.0000000000000002 may occur
       ratio = Clips.absoluteOne().apply(ratio); // clip to [-1, 1]

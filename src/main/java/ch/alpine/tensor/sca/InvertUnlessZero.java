@@ -4,7 +4,6 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.nrm.NormalizeUnlessZero;
 import ch.alpine.tensor.qty.Quantity;
@@ -47,10 +46,5 @@ public enum InvertUnlessZero implements ScalarUnaryOperator {
           ? Quantity.of(quantity.value(), quantity.unit().negate())
           : scalar;
     return scalar.reciprocal();
-  }
-
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

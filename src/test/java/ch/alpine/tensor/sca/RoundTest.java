@@ -51,7 +51,7 @@ class RoundTest {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Round.intValueExact(s), 17);
     assertEquals(Round.longValueExact(s), 17);
-    Scalar r = Round.of(s);
+    Scalar r = Round.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(17));
     assertInstanceOf(RationalScalar.class, r);
   }
@@ -65,7 +65,7 @@ class RoundTest {
   @Test
   void testRational2() {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
-    Scalar r = Round.of(s);
+    Scalar r = Round.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(55));
     assertInstanceOf(RationalScalar.class, r);
   }
@@ -74,7 +74,7 @@ class RoundTest {
   void testLarge() {
     BigInteger bi = new BigInteger("97826349587623498756234545976");
     Scalar s = RealScalar.of(bi);
-    Scalar r = Round.of(s);
+    Scalar r = Round.FUNCTION.apply(s);
     assertInstanceOf(RationalScalar.class, r);
     assertEquals(s, r);
   }
@@ -83,7 +83,7 @@ class RoundTest {
   void testMatsim() {
     Scalar e = DoubleScalar.of(Math.exp(1));
     Scalar b = e.multiply(RealScalar.of(new BigInteger("1000000000000000000000000000000000")));
-    Scalar r = Round.of(b);
+    Scalar r = Round.FUNCTION.apply(b);
     assertEquals(r.toString().length(), "2718281828459045300000000000000000".length());
     assertTrue(r.toString().startsWith("2718281828459045"));
     assertTrue(r.toString().endsWith("00000000000000000"));
@@ -171,29 +171,29 @@ class RoundTest {
   void testQuantity() {
     Scalar qs1 = Quantity.of(2.333, "m");
     Scalar qs2 = Quantity.of(2, "m");
-    assertEquals(Round.of(qs1), qs2);
+    assertEquals(Round.FUNCTION.apply(qs1), qs2);
   }
 
   @Test
   void testNonFailInfPos() {
     Scalar scalar = DoubleScalar.POSITIVE_INFINITY;
-    assertEquals(Round.of(scalar), scalar);
+    assertEquals(Round.FUNCTION.apply(scalar), scalar);
   }
 
   @Test
   void testNonFailInfNeg() {
     Scalar scalar = DoubleScalar.NEGATIVE_INFINITY;
-    assertEquals(Round.of(scalar), scalar);
+    assertEquals(Round.FUNCTION.apply(scalar), scalar);
   }
 
   @Test
   void testNonFailNaN() {
-    assertTrue(Double.isNaN(Round.of(DoubleScalar.INDETERMINATE).number().doubleValue()));
+    assertTrue(Double.isNaN(Round.FUNCTION.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
     assertTrue(Double.isNaN(Round._2.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
   }
 
   @Test
   void testTypeFail() {
-    assertThrows(Throw.class, () -> Round.of(StringScalar.of("some")));
+    assertThrows(Throw.class, () -> Round.FUNCTION.apply(StringScalar.of("some")));
   }
 }

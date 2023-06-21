@@ -189,29 +189,29 @@ import ch.alpine.tensor.sca.tri.Sinh;
   @Override // from TrigonometryInterface
   public Scalar cos() {
     return of( //
-        Cos.of(re).multiply(Cosh.of(im)), //
-        Sin.of(re).multiply(Sinh.of(im)).negate());
+        Cos.FUNCTION.apply(re).multiply(Cosh.FUNCTION.apply(im)), //
+        Sin.FUNCTION.apply(re).multiply(Sinh.FUNCTION.apply(im)).negate());
   }
 
   @Override // from TrigonometryInterface
   public Scalar cosh() {
     return of( //
-        Cosh.of(re).multiply(Cos.of(im)), //
-        Sinh.of(re).multiply(Sin.of(im)));
+        Cosh.FUNCTION.apply(re).multiply(Cos.FUNCTION.apply(im)), //
+        Sinh.FUNCTION.apply(re).multiply(Sin.FUNCTION.apply(im)));
   }
 
   @Override // from TrigonometryInterface
   public Scalar sin() {
     return of( //
-        Sin.of(re).multiply(Cosh.of(im)), //
-        Cos.of(re).multiply(Sinh.of(im)));
+        Sin.FUNCTION.apply(re).multiply(Cosh.FUNCTION.apply(im)), //
+        Cos.FUNCTION.apply(re).multiply(Sinh.FUNCTION.apply(im)));
   }
 
   @Override // from TrigonometryInterface
   public Scalar sinh() {
     return of( //
-        Sinh.of(re).multiply(Cos.of(im)), //
-        Cosh.of(re).multiply(Sin.of(im)));
+        Sinh.FUNCTION.apply(re).multiply(Cos.FUNCTION.apply(im)), //
+        Cosh.FUNCTION.apply(re).multiply(Sin.FUNCTION.apply(im)));
   }
 
   @Override // from MultiplexScalar

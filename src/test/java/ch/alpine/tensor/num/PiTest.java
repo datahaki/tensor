@@ -20,8 +20,8 @@ class PiTest {
   @Test
   void testTrigonometry() {
     Scalar pi = Pi.in(100);
-    Scalar sin_pi = Sin.of(pi);
-    Scalar cos_pi = Cos.of(pi);
+    Scalar sin_pi = Sin.FUNCTION.apply(pi);
+    Scalar cos_pi = Cos.FUNCTION.apply(pi);
     Chop._40.requireClose(sin_pi, RealScalar.ZERO);
     Chop._40.requireClose(cos_pi, RealScalar.ONE.negate());
   }

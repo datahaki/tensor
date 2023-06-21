@@ -76,10 +76,10 @@ import ch.alpine.tensor.sca.tri.Sin;
       rpq = ComplexScalar.unit(theta1).negate().multiply(cos);
       rqp = ComplexScalar.unit(theta1.negate()).multiply(cos);
       rqq = ComplexScalar.unit(theta1).multiply(ComplexScalar.I).multiply(sin);
-      cpp = Conjugate.of(rpp);
-      cpq = Conjugate.of(rpq);
-      cqp = Conjugate.of(rqp);
-      cqq = Conjugate.of(rqq);
+      cpp = Conjugate.FUNCTION.apply(rpp);
+      cpq = Conjugate.FUNCTION.apply(rpq);
+      cqp = Conjugate.FUNCTION.apply(rqp);
+      cqq = Conjugate.FUNCTION.apply(rqq);
     }
 
     @Override // from GivensRotation

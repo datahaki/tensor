@@ -2,7 +2,6 @@
 package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.qty.Quantity;
@@ -27,12 +26,5 @@ public enum UnitStep implements ScalarUnaryOperator {
   @Override
   public Scalar apply(Scalar scalar) {
     return Boole.of(Sign.isPositiveOrZero(scalar));
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their unit step evaluation */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

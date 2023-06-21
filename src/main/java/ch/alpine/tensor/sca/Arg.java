@@ -4,7 +4,6 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ArgInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -30,12 +29,5 @@ public enum Arg implements ScalarUnaryOperator {
     if (scalar instanceof ArgInterface argInterface)
       return argInterface.arg();
     throw new Throw(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their argument */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

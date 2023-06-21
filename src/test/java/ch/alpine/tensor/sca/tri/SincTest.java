@@ -22,8 +22,8 @@ class SincTest {
   static final Scalar THRESHOLD = DoubleScalar.of(0.05);
 
   private static Scalar checkBoth(Scalar scalar) {
-    Scalar c = Sinc.of(scalar);
-    Scalar s = Sin.of(scalar).divide(scalar);
+    Scalar c = Sinc.FUNCTION.apply(scalar);
+    Scalar s = Sin.FUNCTION.apply(scalar).divide(scalar);
     assertEquals(Chop._15.of(c.subtract(s)), RealScalar.ZERO);
     return c;
   }
@@ -62,29 +62,29 @@ class SincTest {
 
   @Test
   void testZero() {
-    assertEquals(Sinc.of(RealScalar.ZERO), RealScalar.ONE);
+    assertEquals(Sinc.FUNCTION.apply(RealScalar.ZERO), RealScalar.ONE);
     assertEquals(Sinc.FUNCTION.apply(RealScalar.ZERO), RealScalar.ONE);
   }
 
   @Test
   void testComplex() {
-    checkBoth(Sinc.of(ComplexScalar.of(2, 3.0)));
-    checkBoth(Sinc.of(ComplexScalar.of(-0.002, 0.03)));
-    checkBoth(Sinc.of(ComplexScalar.of(0.002, -0.003)));
-    checkBoth(Sinc.of(ComplexScalar.of(-0.002, -0.003)));
-    checkBoth(Sinc.of(ComplexScalar.of(Double.MIN_VALUE, Double.MIN_VALUE)));
-    checkBoth(Sinc.of(ComplexScalar.of(Double.MIN_VALUE, -Double.MIN_VALUE)));
-    checkBoth(Sinc.of(ComplexScalar.of(-Double.MIN_VALUE, Double.MIN_VALUE)));
-    checkBoth(Sinc.of(ComplexScalar.of(-Double.MIN_VALUE, -Double.MIN_VALUE)));
+    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(2, 3.0)));
+    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(-0.002, 0.03)));
+    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(0.002, -0.003)));
+    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(-0.002, -0.003)));
+    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(Double.MIN_VALUE, Double.MIN_VALUE)));
+    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(Double.MIN_VALUE, -Double.MIN_VALUE)));
+    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(-Double.MIN_VALUE, Double.MIN_VALUE)));
+    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(-Double.MIN_VALUE, -Double.MIN_VALUE)));
   }
 
   @Test
   void testThreshold() {
-    Scalar res1 = Sinc.of(THRESHOLD);
+    Scalar res1 = Sinc.FUNCTION.apply(THRESHOLD);
     double val0 = THRESHOLD.number().doubleValue();
     for (int count = 0; count < 100; ++count)
       val0 = Math.nextDown(val0);
-    Scalar res0 = Sinc.of(DoubleScalar.of(val0));
+    Scalar res0 = Sinc.FUNCTION.apply(DoubleScalar.of(val0));
     Tolerance.CHOP.requireClose(res1, res0);
   }
 
@@ -118,6 +118,6 @@ class SincTest {
 
   @Test
   void testTypeFail() {
-    assertThrows(Throw.class, () -> Sinc.of(StringScalar.of("some")));
+    assertThrows(Throw.class, () -> Sinc.FUNCTION.apply(StringScalar.of("some")));
   }
 }

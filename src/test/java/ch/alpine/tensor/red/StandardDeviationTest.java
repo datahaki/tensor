@@ -24,7 +24,7 @@ class StandardDeviationTest {
   @Test
   void testSimple() {
     Scalar scalar = StandardDeviation.ofVector(Tensors.vector(1, 2, 6, 3, -2, 3, 10));
-    assertEquals(scalar, Sqrt.of(RationalScalar.of(102, 7)));
+    assertEquals(scalar, Sqrt.FUNCTION.apply(RationalScalar.of(102, 7)));
   }
 
   @Test

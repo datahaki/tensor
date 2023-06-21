@@ -26,12 +26,12 @@ import ch.alpine.tensor.qty.Quantity;
 class CeilingTest {
   @Test
   void testCeiling() {
-    assertEquals(Ceiling.of(RealScalar.ZERO), RealScalar.ZERO);
-    assertEquals(Ceiling.of(RationalScalar.of(-5, 2)), RationalScalar.of(-2, 1));
-    assertEquals(Ceiling.of(RationalScalar.of(5, 2)), RationalScalar.of(3, 1));
-    assertEquals(Ceiling.of(DoubleScalar.of(0.123)), RealScalar.ONE);
-    assertEquals(Ceiling.of(RealScalar.ONE), RealScalar.ONE);
-    assertEquals(Ceiling.of(DoubleScalar.of(-0.123)), RationalScalar.of(0, 1));
+    assertEquals(Ceiling.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(Ceiling.FUNCTION.apply(RationalScalar.of(-5, 2)), RationalScalar.of(-2, 1));
+    assertEquals(Ceiling.FUNCTION.apply(RationalScalar.of(5, 2)), RationalScalar.of(3, 1));
+    assertEquals(Ceiling.FUNCTION.apply(DoubleScalar.of(0.123)), RealScalar.ONE);
+    assertEquals(Ceiling.FUNCTION.apply(RealScalar.ONE), RealScalar.ONE);
+    assertEquals(Ceiling.FUNCTION.apply(DoubleScalar.of(-0.123)), RationalScalar.of(0, 1));
   }
 
   @Test
@@ -47,7 +47,7 @@ class CeilingTest {
   @Test
   void testGetCeiling() {
     Tensor v = Tensors.vectorDouble(3.5, 5.6, 9.12);
-    Scalar s = Ceiling.of(v.Get(1));
+    Scalar s = Ceiling.FUNCTION.apply(v.Get(1));
     RealScalar rs = (RealScalar) s;
     assertEquals(rs.number(), 6);
   }
@@ -55,9 +55,9 @@ class CeilingTest {
   @Test
   void testComplex() {
     Scalar c = ComplexScalar.of(7, -2);
-    assertEquals(Ceiling.of(c), c);
+    assertEquals(Ceiling.FUNCTION.apply(c), c);
     Scalar d = ComplexScalar.of(6.1, -2.1);
-    assertEquals(Ceiling.of(d), c);
+    assertEquals(Ceiling.FUNCTION.apply(d), c);
   }
 
   @Test
@@ -65,7 +65,7 @@ class CeilingTest {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Ceiling.intValueExact(s), 18);
     assertEquals(Ceiling.longValueExact(s), 18);
-    Scalar r = Ceiling.of(s);
+    Scalar r = Ceiling.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(18));
     assertInstanceOf(RationalScalar.class, r);
   }
@@ -79,7 +79,7 @@ class CeilingTest {
   @Test
   void testRational2() {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
-    Scalar r = Ceiling.of(s);
+    Scalar r = Ceiling.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(55));
     assertInstanceOf(RationalScalar.class, r);
   }
@@ -88,7 +88,7 @@ class CeilingTest {
   void testLarge() {
     BigInteger bi = new BigInteger("97826349587623498756234545976");
     Scalar s = RealScalar.of(bi);
-    Scalar r = Ceiling.of(s);
+    Scalar r = Ceiling.FUNCTION.apply(s);
     assertEquals(s, r);
     assertInstanceOf(RationalScalar.class, r);
   }
@@ -122,18 +122,18 @@ class CeilingTest {
   @Test
   void testPositiveInfinity() {
     Scalar scalar = DoubleScalar.POSITIVE_INFINITY;
-    assertEquals(Ceiling.of(scalar), scalar);
+    assertEquals(Ceiling.FUNCTION.apply(scalar), scalar);
   }
 
   @Test
   void testNegativeInfinity() {
     Scalar scalar = DoubleScalar.NEGATIVE_INFINITY;
-    assertEquals(Ceiling.of(scalar), scalar);
+    assertEquals(Ceiling.FUNCTION.apply(scalar), scalar);
   }
 
   @Test
   void testNaN() {
-    assertTrue(Double.isNaN(Ceiling.of(DoubleScalar.INDETERMINATE).number().doubleValue()));
+    assertTrue(Double.isNaN(Ceiling.FUNCTION.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
     assertTrue(Double.isNaN(Ceiling._2.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
   }
 
@@ -146,6 +146,6 @@ class CeilingTest {
   @Test
   void testTypeFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(Throw.class, () -> Ceiling.of(scalar));
+    assertThrows(Throw.class, () -> Ceiling.FUNCTION.apply(scalar));
   }
 }

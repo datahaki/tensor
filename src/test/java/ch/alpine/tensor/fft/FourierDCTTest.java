@@ -90,10 +90,10 @@ class FourierDCTTest {
     Tensor result = FourierDCT._2.transform(vector);
     Tensor expect = Tensors.vector(1.1443215774096442, -0.2621599159963177, 0.04698862977522844, -0.3688153586988667);
     Tolerance.CHOP.requireClose(expect, result);
-    Chop.NONE.requireAllZero(Im.of(result));
+    Chop.NONE.requireAllZero(result.map(Im.FUNCTION));
     Tensor raw3 = FourierDCT._3.transform(result);
     Tolerance.CHOP.requireClose(raw3, vector);
-    Chop.NONE.requireAllZero(Im.of(raw3));
+    Chop.NONE.requireAllZero(raw3.map(Im.FUNCTION));
   }
 
   @Test
@@ -111,7 +111,7 @@ class FourierDCTTest {
   void testRawRandom(int n) {
     Tensor vector = RandomVariate.of(NormalDistribution.standard(), 1 << n);
     Tensor result = FourierDCT.raw2(vector);
-    Tolerance.CHOP.requireAllZero(Im.of(result));
+    Tolerance.CHOP.requireAllZero(result.map(Im.FUNCTION));
     Tensor backto = FourierDCT.raw3(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }
@@ -122,7 +122,7 @@ class FourierDCTTest {
     Distribution distribution = UniformDistribution.of(Clips.absolute(Quantity.of(3, "m")));
     Tensor vector = RandomVariate.of(distribution, n);
     Tensor result = FourierDCT._2.transform(vector);
-    Tolerance.CHOP.requireAllZero(Im.of(result));
+    Tolerance.CHOP.requireAllZero(result.map(Im.FUNCTION));
     Tensor backto = FourierDCT._3.transform(result);
     Tolerance.CHOP.requireClose(vector, backto);
   }

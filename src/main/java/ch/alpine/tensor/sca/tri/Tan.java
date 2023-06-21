@@ -5,7 +5,6 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
@@ -27,12 +26,5 @@ public enum Tan implements ScalarUnaryOperator {
     if (scalar instanceof ComplexScalar z)
       return Sin.FUNCTION.apply(z).divide(Cos.FUNCTION.apply(z));
     throw new Throw(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all entries replaced by their tan */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

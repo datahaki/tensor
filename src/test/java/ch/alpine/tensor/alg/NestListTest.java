@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.tri.Cos;
 class NestListTest {
   @Test
   void testLength() {
-    Tensor list = NestList.of(Cos::of, RealScalar.ONE, 4);
+    Tensor list = NestList.of(Cos.FUNCTION, RealScalar.ONE, 4);
     assertEquals(list.length(), 5);
   }
 
@@ -53,7 +53,7 @@ class NestListTest {
 
   @Test
   void testZero() {
-    Tensor vector = NestList.of(Cos::of, RealScalar.ONE, 0);
+    Tensor vector = NestList.of(Cos.FUNCTION, RealScalar.ONE, 0);
     assertEquals(vector, Tensors.vector(1));
   }
 
@@ -73,12 +73,12 @@ class NestListTest {
 
   @Test
   void testFailNull() {
-    assertThrows(NullPointerException.class, () -> NestList.of(Cos::of, null, 0));
+    assertThrows(NullPointerException.class, () -> NestList.of(Cos.FUNCTION, null, 0));
   }
 
   @Test
   void testFailNegative() {
-    assertThrows(IllegalArgumentException.class, () -> NestList.of(Cos::of, RealScalar.ONE, -1));
-    assertThrows(IllegalArgumentException.class, () -> NestList.of(Cos::of, RealScalar.ONE, -2));
+    assertThrows(IllegalArgumentException.class, () -> NestList.of(Cos.FUNCTION, RealScalar.ONE, -1));
+    assertThrows(IllegalArgumentException.class, () -> NestList.of(Cos.FUNCTION, RealScalar.ONE, -2));
   }
 }

@@ -88,7 +88,7 @@ class HypotTest {
     Scalar c1 = ComplexScalar.of(1, -5);
     Scalar c2 = ComplexScalar.of(2, 4);
     Scalar pair = Hypot.of(c1, c2);
-    assertEquals(Sqrt.of(RealScalar.of(46)), pair);
+    assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(46)), pair);
     Scalar value = Hypot.ofVector(Tensors.of(c1, c2));
     assertEquals(value, pair);
     Scalar norm = Vector2Norm.of(Tensors.of(c1, c2));

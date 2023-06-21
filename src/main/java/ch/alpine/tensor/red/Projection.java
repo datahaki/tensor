@@ -33,7 +33,7 @@ public class Projection implements TensorUnaryOperator {
   private final Tensor vs;
 
   private Projection(Tensor vector) {
-    vc = Conjugate.of(vector);
+    vc = vector.map(Conjugate.FUNCTION);
     Scalar scalar = (Scalar) vc.dot(vector);
     if (Scalars.isZero(scalar))
       throw new Throw(vector);

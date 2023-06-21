@@ -7,7 +7,6 @@ import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -79,16 +78,6 @@ public enum Round implements ScalarUnaryOperator {
    * @throws Exception if input scalar is instance of {@link Quantity} */
   public static long longValueExact(Scalar scalar) {
     return Scalars.longValueExact(FUNCTION.apply(scalar));
-  }
-
-  /** rounds all entries of tensor to nearest integers, with
-   * ties rounding to positive infinity.
-   * 
-   * @param tensor
-   * @return tensor with all entries replaced by their rounded values */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 
   /** for best results, the parameter increment should be a instance of

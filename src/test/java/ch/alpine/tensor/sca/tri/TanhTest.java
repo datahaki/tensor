@@ -20,13 +20,13 @@ class TanhTest {
     Scalar i = RealScalar.of(2);
     Scalar c = Tanh.FUNCTION.apply(i);
     Scalar s = DoubleScalar.of(Math.tanh(2));
-    assertEquals(c, Tanh.of(i));
+    assertEquals(c, Tanh.FUNCTION.apply(i));
     assertEquals(c, s);
   }
 
   @Test
   void testComplex() {
-    Scalar c = Tanh.of(ComplexScalar.of(2, 3.));
+    Scalar c = Tanh.FUNCTION.apply(ComplexScalar.of(2, 3.));
     Scalar s = ComplexScalar.of(0.965385879022133, -0.009884375038322494);
     Chop._13.requireClose(c, s);
   }
@@ -34,6 +34,6 @@ class TanhTest {
   @Test
   void testFail() {
     Scalar scalar = GaussScalar.of(3, 11);
-    assertThrows(Throw.class, () -> Tanh.of(scalar));
+    assertThrows(Throw.class, () -> Tanh.FUNCTION.apply(scalar));
   }
 }

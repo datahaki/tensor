@@ -114,8 +114,8 @@ class ModTest {
   @Test
   void testTemplate() {
     Mod mod = Mod.function(RealScalar.of(5));
-    assertEquals(mod.of(RealScalar.of(6)), RealScalar.ONE);
-    assertEquals(mod.of(Tensors.vector(-1, 3, 6)), Tensors.vector(4, 3, 1));
+    assertEquals(mod.apply(RealScalar.of(6)), RealScalar.ONE);
+    assertEquals(Tensors.vector(-1, 3, 6).map(mod), Tensors.vector(4, 3, 1));
   }
 
   @Test

@@ -14,14 +14,14 @@ import ch.alpine.tensor.sca.Chop;
 class ArcSinTest {
   @Test
   void testReal() {
-    assertEquals(ArcSin.of(Scalars.fromString("1")), RealScalar.of(Math.asin(1)));
-    assertEquals(ArcSin.of(Scalars.fromString("-1")), RealScalar.of(Math.asin(-1)));
+    assertEquals(ArcSin.FUNCTION.apply(Scalars.fromString("1")), RealScalar.of(Math.asin(1)));
+    assertEquals(ArcSin.FUNCTION.apply(Scalars.fromString("-1")), RealScalar.of(Math.asin(-1)));
   }
 
   @Test
   void testRealOutside() {
     Scalar s = RealScalar.of(3);
-    Scalar r = ArcSin.of(s);
+    Scalar r = ArcSin.FUNCTION.apply(s);
     Chop._14.requireClose(r, ComplexScalar.of(1.5707963267948966, -1.762747174039086));
   }
 
@@ -29,7 +29,7 @@ class ArcSinTest {
   void testRealOutsideNeg() {
     Scalar s = RealScalar.of(-3);
     Scalar r = ArcSin.FUNCTION.apply(s);
-    assertEquals(r, ArcSin.of(s));
+    assertEquals(r, ArcSin.FUNCTION.apply(s));
     Chop._14.requireClose(r, ComplexScalar.of(-1.5707963267948966, +1.7627471740390872));
   }
 
@@ -37,7 +37,7 @@ class ArcSinTest {
   void testComplex() {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcSin.FUNCTION.apply(s);
-    assertEquals(r, ArcSin.of(s));
+    assertEquals(r, ArcSin.FUNCTION.apply(s));
     Chop._14.requireClose(r, ComplexScalar.of(0.6170642966759935, -2.8462888282083862));
   }
 }

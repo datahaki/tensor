@@ -5,7 +5,6 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -39,12 +38,5 @@ public enum ArcSin implements ScalarUnaryOperator {
     }
     Scalar o_x2 = Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(scalar.multiply(scalar)));
     return I_NEGATE.multiply(Log.FUNCTION.apply(ComplexScalar.I.multiply(scalar).add(o_x2)));
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their arc sin */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

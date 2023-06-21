@@ -4,7 +4,6 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Boole;
 
@@ -18,12 +17,5 @@ public enum Unitize implements ScalarUnaryOperator {
   @Override
   public Scalar apply(Scalar scalar) {
     return Boole.of(Scalars.nonZero(scalar));
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars unitized */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

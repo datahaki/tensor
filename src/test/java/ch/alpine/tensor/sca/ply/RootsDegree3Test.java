@@ -34,7 +34,7 @@ class RootsDegree3Test {
     Tensor coeffs = Tensors.of(RealScalar.ZERO, c, RealScalar.ZERO, a);
     ScalarUnaryOperator cubic = Polynomial.of(coeffs);
     Tensor roots = Roots.of(Tensors.of(RealScalar.ZERO, c, RealScalar.ZERO, a));
-    Chop.NONE.requireAllZero(Im.of(roots));
+    Chop.NONE.requireAllZero(roots.map(Im.FUNCTION));
     Chop._13.requireAllZero(roots.get(1));
     Chop._13.requireAllZero(roots.map(cubic));
   }

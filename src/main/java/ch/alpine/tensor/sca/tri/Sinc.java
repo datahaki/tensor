@@ -5,7 +5,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** for a complex scalar z the Sinc function is defined as
@@ -34,12 +33,5 @@ public enum Sinc implements ScalarUnaryOperator {
     return Scalars.isZero(scalar) //
         ? RealScalar.ONE
         : sin.divide(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their sinc */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

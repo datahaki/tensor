@@ -6,7 +6,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.exp.Log;
@@ -80,12 +79,5 @@ public enum ArcTan implements ScalarUnaryOperator {
    * @return ArcTan.of(RealScalar.of(x), RealScalar.of(y)) */
   public static Scalar of(Number x, Number y) {
     return of(RealScalar.of(x), RealScalar.of(y));
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their arc tan */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }
