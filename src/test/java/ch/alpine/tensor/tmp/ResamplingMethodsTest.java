@@ -103,7 +103,7 @@ class ResamplingMethodsTest {
     TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethod.LINEAR_INTERPOLATION_SPARSE);
     assertEquals(ts1.path(), Tensors.fromString("{{1, 3}, {5, 3}, {7, 5}, {9, 5}, {10, 2}, {11, 5}}"));
     TimeSeries ts2 = TimeSeries.empty(ResamplingMethod.LINEAR_INTERPOLATION_SPARSE);
-    p1.stream().forEach(kv -> ts2.insert(kv.Get(0), kv.Get(1)));
+    p1.forEach(kv -> ts2.insert(kv.Get(0), kv.Get(1)));
     assertEquals(ts1.path(), ts2.path());
   }
 

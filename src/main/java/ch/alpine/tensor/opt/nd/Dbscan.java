@@ -35,7 +35,7 @@ public enum Dbscan {
     Integers.requirePositive(minPts);
     NdMap<Integer> ndMap = NdTreeMap.of(CoordinateBounds.of(points));
     AtomicInteger atomicInteger = new AtomicInteger();
-    points.stream().forEach(point -> ndMap.insert(point, atomicInteger.getAndIncrement()));
+    points.forEach(point -> ndMap.insert(point, atomicInteger.getAndIncrement()));
     // ---
     Integer[] labels = new Integer[points.length()];
     int index = 0;

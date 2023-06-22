@@ -55,7 +55,7 @@ public class Dimensions implements Serializable {
       lengths.add(new HashSet<>());
     lengths.get(level).add(tensor.length());
     if (!(tensor instanceof Scalar))
-      tensor.stream().forEach(entry -> build(entry, level + 1));
+      tensor.forEach(entry -> build(entry, level + 1));
   }
 
   /** @return dimensions of given tensor as unmodifiable list

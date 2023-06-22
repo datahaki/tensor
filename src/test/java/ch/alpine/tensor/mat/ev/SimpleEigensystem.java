@@ -39,8 +39,8 @@ import ch.alpine.tensor.mat.re.Det;
       else {
         Tensor diff = matrix.add(DiagonalMatrix.of(n, root.negate()));
         Tensor ns = NullSpace.of(diff);
-        ns.stream().forEach(vectors::append);
-        ns.stream().forEach(dummy -> values.append(root));
+        ns.forEach(vectors::append);
+        ns.forEach(dummy -> values.append(root));
         for (int index = 1; index < ns.length(); ++index)
           list.add(root);
       }

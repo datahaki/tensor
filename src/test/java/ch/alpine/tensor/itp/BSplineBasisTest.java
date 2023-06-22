@@ -49,9 +49,9 @@ class BSplineBasisTest {
     TimeSeries integral = TimeSeriesIntegrate.of(timeSeries);
     Scalar x_hi = integral.keySet(clip, true).last();
     Tensor hi = integral.evaluate(x_hi);
-    Chop._02.requireClose(hi, RealScalar.ONE);
+    Chop._01.requireClose(hi, RealScalar.ONE);
     Tensor in = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
-    Chop._02.requireClose(in, RealScalar.ONE);
+    Chop._01.requireClose(in, RealScalar.ONE);
   }
 
   @RepeatedTest(4)
@@ -68,8 +68,8 @@ class BSplineBasisTest {
     TimeSeries integral = TimeSeriesIntegrate.of(timeSeries);
     Scalar x_hi = integral.keySet(clip, true).last();
     Tensor hi = integral.evaluate(x_hi);
-    Chop._02.requireClose(hi, RealScalar.ONE);
+    Chop._01.requireClose(hi, RealScalar.ONE);
     Tensor in = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
-    Chop._02.requireClose(in, RealScalar.ONE);
+    Chop._01.requireClose(in, RealScalar.ONE);
   }
 }

@@ -116,7 +116,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
       if (head == ALL) {
         Integers.requireEquals(size.get(0), tensor.length());
         AtomicInteger i = new AtomicInteger();
-        tensor.stream().forEach(entry -> _set(i.getAndIncrement(), entry, _size));
+        tensor.forEach(entry -> _set(i.getAndIncrement(), entry, _size));
       } else
         _set(requireInRange(head), tensor, _size);
     else {
@@ -124,7 +124,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
       if (head == ALL) {
         Integers.requireEquals(size.get(0), tensor.length());
         AtomicInteger i = new AtomicInteger();
-        tensor.stream().forEach(entry -> //
+        tensor.forEach(entry -> //
         navigableMap.computeIfAbsent(i.getAndIncrement(), j -> new SparseArray(fallback, _size)) //
             .set(entry, _index));
       } else {

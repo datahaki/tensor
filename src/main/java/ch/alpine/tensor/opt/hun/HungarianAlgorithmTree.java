@@ -73,7 +73,7 @@ import ch.alpine.tensor.red.Min;
   }
 
   private void updateLabels(Scalar delta) { // slows down (n x n)-Problem
-    S.stream().forEach(x -> xLabel[x] = xLabel[x].add(delta));
+    S.forEach(x -> xLabel[x] = xLabel[x].add(delta));
     bipartition.nodesStream().forEach(y -> yLabel[y] = yLabel[y].subtract(delta));
     for (int y : bipartition.notNodes()) {
       alpha[y] = alpha[y].subtract(delta);

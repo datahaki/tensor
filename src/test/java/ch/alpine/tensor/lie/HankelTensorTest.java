@@ -24,13 +24,13 @@ class HankelTensorTest {
   @Test
   void testRank3a() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4), 3);
-    tensor.stream().forEach(SymmetricMatrixQ::require);
+    tensor.forEach(SymmetricMatrixQ::require);
   }
 
   @Test
   void testRank3b() {
     Tensor tensor = HankelTensor.of(Tensors.vector(0, 1, 2, 3, 4, 5, 6), 3);
-    tensor.stream().forEach(SymmetricMatrixQ::require);
+    tensor.forEach(SymmetricMatrixQ::require);
   }
 
   @Test

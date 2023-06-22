@@ -43,7 +43,7 @@ public class Pretty {
       stringBuilder.append(array(tensor));
     else {
       stringBuilder.append(spaces(level++)).append(OPENING);
-      tensor.stream().forEach(this::branch);
+      tensor.forEach(this::branch);
       stringBuilder.append(spaces(--level)).append(CLOSING);
     }
   }

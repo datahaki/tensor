@@ -33,7 +33,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
   public static ColorDataGradient of(Tensor tensor) {
     if (Tensors.isEmpty(tensor))
       throw new Throw(tensor);
-    tensor.stream().forEach(ColorFormat::toColor);
+    tensor.forEach(ColorFormat::toColor);
     return new LinearColorDataGradient(tensor.map(CLIP::requireInside));
   }
 

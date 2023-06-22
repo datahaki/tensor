@@ -63,7 +63,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
       if (head == ALL) {
         Integers.requireEquals(length(), tensor.length());
         AtomicInteger i = new AtomicInteger();
-        tensor.stream().forEach(entry -> list.get(i.getAndIncrement()).set(entry, _index));
+        tensor.forEach(entry -> list.get(i.getAndIncrement()).set(entry, _index));
       } else
         list.get(head).set(tensor, _index);
     }

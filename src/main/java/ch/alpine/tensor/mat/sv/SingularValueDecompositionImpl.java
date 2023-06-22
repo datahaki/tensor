@@ -146,7 +146,7 @@ import ch.alpine.tensor.sca.Sign;
   }
 
   private static void rotate(Tensor m, Scalar c, Scalar s, int i, int j) {
-    m.stream().forEach(mk -> {
+    m.forEach(mk -> {
       Rotate rotate = new Rotate(mk.Get(i), mk.Get(j), c, s);
       mk.set(rotate.re(), i);
       mk.set(rotate.im(), j);

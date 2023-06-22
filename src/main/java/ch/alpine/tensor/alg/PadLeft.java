@@ -23,7 +23,7 @@ public class PadLeft extends PadBase {
    * @param dimensions non-empty
    * @return */
   public static TensorUnaryOperator with(Tensor element, List<Integer> dimensions) {
-    dimensions.stream().forEach(Integers::requirePositiveOrZero);
+    dimensions.forEach(Integers::requirePositiveOrZero);
     return new PadLeft(Objects.requireNonNull(element), dimensions);
   }
 
