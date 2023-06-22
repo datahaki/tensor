@@ -3,6 +3,8 @@ package ch.alpine.tensor.mat.ev;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -49,7 +51,8 @@ class RealEigensystemTest {
   @ParameterizedTest
   @ValueSource(ints = { 1, 2, 3, 5, 6, 7, 10 })
   void testRandomEps(int n) {
-    Tensor matrix = RandomVariate.of(NormalDistribution.of(0, 1e-12), n, n);
+    Random random = new Random(3);
+    Tensor matrix = RandomVariate.of(NormalDistribution.of(0, 1e-12), random, n, n);
     Eigensystem eigensystem = new RealEigensystem(matrix);
     TestHelper.checkEquation(matrix, eigensystem, Chop._08);
   }
