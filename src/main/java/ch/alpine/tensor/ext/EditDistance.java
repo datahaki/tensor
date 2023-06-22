@@ -11,7 +11,7 @@ import java.util.Objects;
  * <a href="https://reference.wolfram.com/language/ref/EditDistance.html">EditDistance</a> */
 public enum EditDistance {
   ;
-  private static record Stamp(int cost, Stamp prev, String info, char chr) {
+  private record Stamp(int cost, Stamp prev, String info, char chr) {
   }
 
   /** @param origin

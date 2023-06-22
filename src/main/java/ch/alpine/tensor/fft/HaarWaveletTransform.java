@@ -80,5 +80,5 @@ public enum HaarWaveletTransform implements DiscreteFourierTransform {
     public Tensor matrix(int n) {
       return Inverse.of(FORWARD.matrix(n));
     }
-  };
+  }
 }

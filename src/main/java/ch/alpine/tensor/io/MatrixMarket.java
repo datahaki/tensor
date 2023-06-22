@@ -19,7 +19,7 @@ import ch.alpine.tensor.spa.SparseArray;
 
 /* package */ enum MatrixMarket {
   ;
-  private static enum Symmetry {
+  private enum Symmetry {
     GENERAL,
     SYMMETRIC,
     SKEW_SYMMETRIC,

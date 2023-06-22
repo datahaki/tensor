@@ -111,5 +111,5 @@ public enum FourierDST implements DiscreteFourierTransform {
       return Tensors.matrix((i, j) -> //
       Sin.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + j + 1)).multiply(factor)).multiply(scalar), n, n);
     }
-  };
+  }
 }

@@ -27,16 +27,8 @@ public enum TransformedDistribution {
         Objects.requireNonNull(offset));
   }
 
-  private static class Shifted implements UnivariateDistribution, //
+  private record Shifted(Distribution distribution, Scalar offset) implements UnivariateDistribution, //
       CentralMomentInterface, Serializable {
-    private final Distribution distribution;
-    private final Scalar offset;
-
-    public Shifted(Distribution distribution, Scalar offset) {
-      this.distribution = distribution;
-      this.offset = offset;
-    }
-
     @Override
     public Scalar at(Scalar x) {
       return PDF.of(distribution).at(x.subtract(offset));

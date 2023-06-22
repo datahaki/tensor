@@ -58,13 +58,13 @@ import ch.alpine.tensor.sca.Sign;
   // ---
   private final Tensor tab; // (m+1) x (n+1)
   private final Tensor ind; // vector of length m
-  private final int m;
+  // private final m;
   private final int n;
 
   private SimplexMethod(Tensor tab, Tensor ind, SimplexPivot simplexPivot) {
     this.tab = tab;
     this.ind = ind;
-    m = tab.length() - 1;
+    int m = tab.length() - 1;
     n = Unprotect.dimension1Hint(tab) - 1;
     if (!StaticHelper.isInsideRange(ind, n) || ind.length() != m)
       throw new Throw(ind);

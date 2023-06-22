@@ -39,8 +39,8 @@ public class InverseGammaDistribution extends AbstractContinuousDistribution imp
   // ---
   private final Scalar alpha;
   private final Scalar beta;
-  private ScalarUnaryOperator power;
-  private Scalar gamma;
+  private final ScalarUnaryOperator power;
+  private final Scalar gamma;
 
   private InverseGammaDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;

@@ -71,7 +71,7 @@ public class WienerProcess implements RandomProcess, Serializable {
   private final Scalar sigma;
   private final Scalar t_zero;
   private final Scalar v_zero;
-  private BrownianBridgeProcess brownianBridgeProcess;
+  private final BrownianBridgeProcess brownianBridgeProcess;
 
   private WienerProcess(Scalar mu, Scalar sigma, Scalar t_zero, Scalar v_zero) {
     this.mu = mu;

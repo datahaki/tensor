@@ -18,7 +18,7 @@ import ch.alpine.tensor.qty.Quantity;
 public interface HessenbergDecomposition {
   /** @param matrix
    * @return */
-  public static HessenbergDecomposition of(Tensor matrix) {
+  static HessenbergDecomposition of(Tensor matrix) {
     return new HessenbergDecompositionImpl(SquareMatrixQ.require(matrix));
   }
 
