@@ -44,8 +44,8 @@ class PositiveDefiniteMatrixQTest {
   void testComplex() {
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 10}}")));
     assertFalse(PositiveDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 1/10}}")));
-    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(N.DOUBLE.of(Tensors.fromString("{{10, I}, {-I, 10}}"))));
-    assertFalse(PositiveDefiniteMatrixQ.ofHermitian(N.DOUBLE.of(Tensors.fromString("{{10, I}, {-I, 1/10}}"))));
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 10}}").map(N.DOUBLE)));
+    assertFalse(PositiveDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 1/10}}").map(N.DOUBLE)));
   }
 
   @Test

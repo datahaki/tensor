@@ -86,7 +86,7 @@ class ModTest {
       assertEquals(Mod.function(n, d).apply(m), expected);
     }
     {
-      Scalar r = Mod.function(n, d).apply(N.DOUBLE.of(m));
+      Scalar r = Mod.function(n, d).apply(N.DOUBLE.apply(m));
       assertEquals(Chop._09.apply(r.subtract(expected)), RealScalar.ZERO);
     }
   }
@@ -106,7 +106,7 @@ class ModTest {
     Scalar expected = Scalars.fromString(mathem);
     assertEquals(Mod.function(n, d).apply(m), expected);
     {
-      Scalar r = Mod.function(n, d).apply(N.DOUBLE.of(m));
+      Scalar r = Mod.function(n, d).apply(N.DOUBLE.apply(m));
       assertEquals(Chop.below(0.01).apply(r.subtract(expected)), RealScalar.ZERO);
     }
   }

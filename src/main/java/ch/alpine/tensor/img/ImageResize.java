@@ -45,6 +45,7 @@ public enum ImageResize {
   public static BufferedImage of(BufferedImage bufferedImage, int width, int height) {
     BufferedImage result = new BufferedImage(width, height, StaticHelper.type(bufferedImage.getType()));
     Graphics graphics = result.createGraphics();
+    // TODO TENSOR IMPL improve results
     Image image = bufferedImage.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
     graphics.drawImage(image, 0, 0, null);
     graphics.dispose();

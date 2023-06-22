@@ -27,7 +27,7 @@ class GammaTest {
   @RepeatedTest(20)
   void testFactorial(RepetitionInfo repetitionInfo) {
     int index = repetitionInfo.getCurrentRepetition();
-    assertEquals(Gamma.of(RealScalar.of(index)), Factorial.of(RealScalar.of(index - 1)));
+    assertEquals(Gamma.FUNCTION.apply(RealScalar.of(index)), Factorial.FUNCTION.apply(RealScalar.of(index - 1)));
   }
 
   @Test
@@ -48,59 +48,59 @@ class GammaTest {
 
   @Test
   void testGammaNumPos() {
-    Chop._08.requireClose(Gamma.of(RealScalar.of(3.0)), RealScalar.of(2));
-    Chop._08.requireClose(Gamma.of(RealScalar.of(4.0)), RealScalar.of(6));
-    Chop._08.requireClose(Gamma.of(RealScalar.of(5.0)), RealScalar.of(24));
-    Tolerance.CHOP.requireClose(Gamma.of(RealScalar.of(3.2)), RealScalar.of(2.4239654799353683));
-    Tolerance.CHOP.requireClose(Gamma.of(RealScalar.of(7.9)), RealScalar.of(4122.709484285446));
+    Chop._08.requireClose(Gamma.FUNCTION.apply(RealScalar.of(3.0)), RealScalar.of(2));
+    Chop._08.requireClose(Gamma.FUNCTION.apply(RealScalar.of(4.0)), RealScalar.of(6));
+    Chop._08.requireClose(Gamma.FUNCTION.apply(RealScalar.of(5.0)), RealScalar.of(24));
+    Tolerance.CHOP.requireClose(Gamma.FUNCTION.apply(RealScalar.of(3.2)), RealScalar.of(2.4239654799353683));
+    Tolerance.CHOP.requireClose(Gamma.FUNCTION.apply(RealScalar.of(7.9)), RealScalar.of(4122.709484285446));
   }
 
   @Test
   void testGammaNum() {
-    Chop._08.requireClose(Gamma.of(RealScalar.of(2.0)), RealScalar.of(1));
-    Chop._08.requireClose(Gamma.of(RealScalar.of(1.0)), RealScalar.of(1));
-    Chop._08.requireClose(Gamma.of(RealScalar.of(-1.2)), RealScalar.of(4.850957140522099));
-    Chop._08.requireClose(Gamma.of(RealScalar.of(-3.8)), RealScalar.of(0.29963213450284565));
-    Tolerance.CHOP.requireClose(Gamma.of(RealScalar.of(-2.1)), RealScalar.of(-4.626098277572807));
+    Chop._08.requireClose(Gamma.FUNCTION.apply(RealScalar.of(2.0)), RealScalar.of(1));
+    Chop._08.requireClose(Gamma.FUNCTION.apply(RealScalar.of(1.0)), RealScalar.of(1));
+    Chop._08.requireClose(Gamma.FUNCTION.apply(RealScalar.of(-1.2)), RealScalar.of(4.850957140522099));
+    Chop._08.requireClose(Gamma.FUNCTION.apply(RealScalar.of(-3.8)), RealScalar.of(0.29963213450284565));
+    Tolerance.CHOP.requireClose(Gamma.FUNCTION.apply(RealScalar.of(-2.1)), RealScalar.of(-4.626098277572807));
   }
 
   @Test
   void testLargeInt() {
-    assertEquals(Gamma.of(RealScalar.of(-1000.2)), RealScalar.ZERO);
-    assertEquals(Gamma.of(RealScalar.of(1000.2)), DoubleScalar.POSITIVE_INFINITY);
+    assertEquals(Gamma.FUNCTION.apply(RealScalar.of(-1000.2)), RealScalar.ZERO);
+    assertEquals(Gamma.FUNCTION.apply(RealScalar.of(1000.2)), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
   void testLargeNegativeInteger() {
-    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(-100000000000L)));
+    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(-100000000000L)));
   }
 
   @Test
   void testLargeNegativeIntegerDouble() {
-    assertThrows(Throw.class, () -> Gamma.of(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
+    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
   }
 
   @Test
   void testLargeNegative() {
-    assertEquals(Gamma.of(RealScalar.of(-23764528364522.345)), RealScalar.ZERO);
+    assertEquals(Gamma.FUNCTION.apply(RealScalar.of(-23764528364522.345)), RealScalar.ZERO);
   }
 
   @Test
   void testLargePoistive() {
-    assertEquals(Gamma.of(RealScalar.of(1000000000000L)), DoubleScalar.POSITIVE_INFINITY);
-    assertEquals(Gamma.of(RealScalar.of(23764528364522.345)), DoubleScalar.POSITIVE_INFINITY);
+    assertEquals(Gamma.FUNCTION.apply(RealScalar.of(1000000000000L)), DoubleScalar.POSITIVE_INFINITY);
+    assertEquals(Gamma.FUNCTION.apply(RealScalar.of(23764528364522.345)), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
   void testComplex1() {
-    Scalar result = Gamma.of(ComplexScalar.of(1.1, 0.3));
+    Scalar result = Gamma.FUNCTION.apply(ComplexScalar.of(1.1, 0.3));
     Scalar actual = ComplexScalar.of(0.886904759534451, -0.10608824042449128);
     Tolerance.CHOP.requireClose(result, actual);
   }
 
   @Test
   void testComplex2() {
-    Scalar result = Gamma.of(ComplexScalar.of(0, 1));
+    Scalar result = Gamma.FUNCTION.apply(ComplexScalar.of(0, 1));
     Scalar actual = ComplexScalar.of(-0.15494982830181073, -0.4980156681183565);
     Tolerance.CHOP.requireClose(result, actual);
   }
@@ -116,9 +116,9 @@ class GammaTest {
   @Test
   void testNest2() {
     Scalar seed = ComplexScalar.of(-1.0486274509803923, -0.028431372549019604);
-    seed = Gamma.of(seed);
-    seed = Gamma.of(seed);
-    seed = Gamma.of(seed);
+    seed = Gamma.FUNCTION.apply(seed);
+    seed = Gamma.FUNCTION.apply(seed);
+    seed = Gamma.FUNCTION.apply(seed);
     assertFalse(FiniteScalarQ.of(seed));
   }
 
@@ -132,28 +132,28 @@ class GammaTest {
 
   @Test
   void testInt0Fail() {
-    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(0)));
+    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(0)));
   }
 
   @Test
   void testIntN1Fail() {
-    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(-1)));
+    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(-1)));
   }
 
   @Test
   void testDouble0Fail() {
-    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(0.0)));
+    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(0.0)));
   }
 
   @Test
   void testDoubleN1Fail() {
-    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(-1.0)));
+    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(-1.0)));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> Gamma.of(Quantity.of(3, "m*s")));
-    assertThrows(Throw.class, () -> Gamma.of(Quantity.of(-2, "m"))); // <- fails for the wrong reason
-    assertThrows(Throw.class, () -> Gamma.of(Quantity.of(-2.12, "m^2")));
+    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(Quantity.of(3, "m*s")));
+    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(Quantity.of(-2, "m"))); // <- fails for the wrong reason
+    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(Quantity.of(-2.12, "m^2")));
   }
 }

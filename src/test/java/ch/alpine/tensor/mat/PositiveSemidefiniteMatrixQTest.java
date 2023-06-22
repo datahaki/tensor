@@ -26,8 +26,8 @@ class PositiveSemidefiniteMatrixQTest {
   void testComplex() {
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 10}}")));
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 1/10}}")));
-    assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(N.DOUBLE.of(Tensors.fromString("{{10, I}, {-I, 10}}"))));
-    assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(N.DOUBLE.of(Tensors.fromString("{{10, I}, {-I, 1/10}}"))));
+    assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 10}}").map(N.DOUBLE)));
+    assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 1/10}}").map(N.DOUBLE)));
   }
 
   @Test

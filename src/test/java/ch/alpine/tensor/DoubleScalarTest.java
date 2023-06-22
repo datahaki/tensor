@@ -45,10 +45,10 @@ class DoubleScalarTest {
   @Test
   void testChop() {
     Scalar s = DoubleScalar.of(3.14);
-    assertEquals(Chop._12.of(s), s);
+    assertEquals(Chop._12.apply(s), s);
     Scalar r = DoubleScalar.of(1e-14);
-    assertEquals(Chop._12.of(r), r.zero());
-    assertEquals(Chop._12.of(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(Chop._12.apply(r), r.zero());
+    assertEquals(Chop._12.apply(RealScalar.ZERO), RealScalar.ZERO);
   }
 
   @Test

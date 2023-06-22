@@ -3,7 +3,6 @@ package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 
@@ -29,12 +28,6 @@ import ch.alpine.tensor.io.MathematicaFormat;
     if (Scalars.lessThan(max, scalar))
       return max;
     return scalar;
-  }
-
-  @Override
-  @SuppressWarnings("unchecked")
-  public final <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(this);
   }
 
   @Override // from Clip

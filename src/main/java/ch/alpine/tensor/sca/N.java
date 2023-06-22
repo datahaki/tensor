@@ -10,7 +10,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.NInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
@@ -58,13 +57,6 @@ public abstract class N implements ScalarUnaryOperator {
     if (scalar instanceof MultiplexScalar multiplexScalar)
       return multiplexScalar.eachMap(this);
     return Objects.requireNonNull(scalar);
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their decimal numerical */
-  @SuppressWarnings("unchecked")
-  public final <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(this);
   }
 
   /** @param nInterface

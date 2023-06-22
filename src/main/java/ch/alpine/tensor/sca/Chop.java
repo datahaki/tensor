@@ -192,13 +192,6 @@ public class Chop implements ScalarUnaryOperator {
     throw new Throw(lhs, rhs, lhs.subtract(rhs));
   }
 
-  /** @param tensor
-   * @return */
-  @SuppressWarnings("unchecked")
-  public <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(this);
-  }
-
   @Override // from Object
   public String toString() {
     return MathematicaFormat.concise("Chop", threshold);

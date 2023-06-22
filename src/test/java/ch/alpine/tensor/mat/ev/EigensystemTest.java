@@ -88,7 +88,7 @@ class EigensystemTest {
       assertInstanceOf(Quantity.class, eigensystem.values().Get(1));
     }
     {
-      Eigensystem eigensystem = Eigensystem.ofSymmetric(N.DOUBLE.of(matrix));
+      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix.map(N.DOUBLE));
       assertInstanceOf(Quantity.class, eigensystem.values().Get(0));
       assertInstanceOf(Quantity.class, eigensystem.values().Get(1));
     }

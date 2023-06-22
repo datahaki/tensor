@@ -192,7 +192,7 @@ class QRDecompositionTest {
     Tensor matrix = Tensors.fromString( //
         "{{ 12[s], -51[s], 4[s] }, { 6[s], 167[s], -68[s] }, { -4[s], 24[s], -41[s] } }");
     _specialOps(matrix);
-    _specialOps(N.DOUBLE.of(matrix));
+    _specialOps(matrix.map(N.DOUBLE));
     QRDecomposition qr = QRDecomposition.of(matrix);
     assertInstanceOf(Quantity.class, qr.det());
   }
@@ -240,7 +240,7 @@ class QRDecompositionTest {
     Tensor matrix = Tensors.fromString( //
         "{{ 12[s], -51[A], 4[m] }, { 6[s], 167[A], -68[m] }, { -4[s], 24[A], -41[m] } }");
     _specialOps(matrix);
-    _specialOps(N.DOUBLE.of(matrix));
+    _specialOps(matrix.map(N.DOUBLE));
     QRDecomposition qr = QRDecomposition.of(matrix);
     assertInstanceOf(Quantity.class, qr.det());
   }
@@ -249,7 +249,7 @@ class QRDecompositionTest {
   void testComplexMathematica() {
     Tensor matrix = Tensors.fromString("{{8 + I, 2 - 3 *I}, {3 + I, I}} ");
     _specialOps(matrix);
-    _specialOps(N.DOUBLE.of(matrix));
+    _specialOps(matrix.map(N.DOUBLE));
   }
 
   @Test
@@ -257,7 +257,7 @@ class QRDecompositionTest {
     Tensor matrix = Tensors.fromString( //
         "{{ 12+3*I[s], -51[A], 4[m] }, { 6[s], 167-7*I[A], -68[m] }, { -4*I[s], 24[A], -41-9*I[m] } }");
     _specialOps(matrix);
-    _specialOps(N.DOUBLE.of(matrix));
+    _specialOps(matrix.map(N.DOUBLE));
   }
 
   private static void _check(Tensor matrix) {

@@ -81,8 +81,8 @@ class ScalarUnaryOperatorTest {
       // ---
     }
     Ceiling.FUNCTION.apply(scalar);
-    Tolerance.CHOP.of(scalar);
-    Chop._11.of(scalar);
+    Tolerance.CHOP.apply(scalar);
+    Chop._11.apply(scalar);
     try {
       Clips.unit().apply(scalar);
     } catch (Exception exception) {
@@ -96,8 +96,8 @@ class ScalarUnaryOperatorTest {
     } catch (Exception exception) {
       // ---
     }
-    LogisticSigmoid.of(scalar);
-    N.DOUBLE.of(scalar);
+    LogisticSigmoid.FUNCTION.apply(scalar);
+    N.DOUBLE.apply(scalar);
     try {
       Power.of(scalar, RealScalar.of(0.3));
     } catch (Exception exception) {

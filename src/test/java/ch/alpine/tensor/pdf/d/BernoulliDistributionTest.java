@@ -66,7 +66,7 @@ class BernoulliDistributionTest {
     long v0 = map.get(RealScalar.ZERO);
     long v1 = map.get(RealScalar.ONE);
     Scalar ratio = RationalScalar.of(v1, v0 + v1);
-    Scalar dev = N.DOUBLE.of(Abs.between(ratio, p));
+    Scalar dev = N.DOUBLE.apply(Abs.between(ratio, p));
     assertTrue(Scalars.lessThan(dev, RealScalar.of(0.07)));
   }
 

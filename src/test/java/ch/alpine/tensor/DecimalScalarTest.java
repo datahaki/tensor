@@ -65,8 +65,8 @@ class DecimalScalarTest {
   @Test
   void testN() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
-    assertEquals(N.DECIMAL64.of(s), s);
-    assertInstanceOf(DoubleScalar.class, N.DOUBLE.of(s));
+    assertEquals(N.DECIMAL64.apply(s), s);
+    assertInstanceOf(DoubleScalar.class, N.DOUBLE.apply(s));
   }
 
   @Test

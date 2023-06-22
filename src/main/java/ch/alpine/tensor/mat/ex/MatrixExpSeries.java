@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.N;
       if (Chop.NONE.allZero(nxt))
         return sum;
     }
-    sum = N.DOUBLE.of(sum); // switch to numeric precision
+    sum = sum.map(N.DOUBLE); // switch to numeric precision
     for (int k = n + 1; k < MAX_ITERATIONS; ++k) {
       nxt = nxt.dot(matrix).divide(RealScalar.of(k));
       if (sum.equals(sum = sum.add(nxt)))

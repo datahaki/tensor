@@ -39,7 +39,7 @@ class ClipTest {
     Scalar max = RealScalar.of(10);
     Clip clip = Clips.interval(min, max);
     Tensor vector = Tensors.vector(-30, 30, 5);
-    assertEquals(clip.of(vector), Tensors.vector(-3, 10, 5));
+    assertEquals(vector.map(clip), Tensors.vector(-3, 10, 5));
   }
 
   @Test

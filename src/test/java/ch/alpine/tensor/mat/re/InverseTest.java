@@ -109,7 +109,7 @@ class InverseTest {
     Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
     assertThrows(Throw.class, () -> Inverse.of(matrix));
-    assertThrows(Throw.class, () -> Inverse.of(N.DOUBLE.of(matrix)));
+    assertThrows(Throw.class, () -> Inverse.of(matrix.map(N.DOUBLE)));
   }
 
   @Test

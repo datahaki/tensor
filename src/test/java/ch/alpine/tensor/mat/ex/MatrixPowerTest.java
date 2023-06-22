@@ -44,7 +44,7 @@ import ch.alpine.tensor.sca.Re;
 
 class MatrixPowerTest {
   private static boolean trunc(Tensor m, Tensor r) {
-    return Tolerance.CHOP.of(m.subtract(r)).equals(Array.zeros(m.length(), m.length()));
+    return Tolerance.CHOP.isClose(m, r);
   }
 
   private static void checkLow(Tensor m) {

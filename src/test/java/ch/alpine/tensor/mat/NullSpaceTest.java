@@ -61,7 +61,7 @@ class NullSpaceTest {
   void testZerosUsingSvd(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     _checkZeros(Array.zeros(n, n));
-    _checkZeros(N.DOUBLE.of(Array.zeros(n, n)));
+    _checkZeros(Array.zeros(n, n).map(N.DOUBLE));
   }
 
   @Test

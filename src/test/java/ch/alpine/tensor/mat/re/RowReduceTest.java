@@ -59,7 +59,7 @@ class RowReduceTest {
 
   @Test
   void testReduce2N() {
-    Tensor matrix = N.DOUBLE.of(Tensors.fromString("{{1, 2, 3, 1}, {5, 6, 7, -2}, {7, 8, 9, 1}}"));
+    Tensor matrix = Tensors.fromString("{{1, 2, 3, 1}, {5, 6, 7, -2}, {7, 8, 9, 1}}").map(N.DOUBLE);
     Tensor reduce = RowReduce.of(matrix);
     Tensor sol = Tensors.fromString("{{1, 0, -1, 0}, {0, 1, 2, 0}, {0, 0, 0, 1}}");
     Tolerance.CHOP.requireClose(reduce, sol);

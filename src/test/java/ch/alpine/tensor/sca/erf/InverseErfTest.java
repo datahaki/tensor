@@ -26,8 +26,8 @@ class InverseErfTest {
 
   @Test
   void testCorners() {
-    assertEquals(InverseErf.of(RealScalar.of(-1)), DoubleScalar.NEGATIVE_INFINITY);
-    assertEquals(InverseErf.of(RealScalar.of(+1)), DoubleScalar.POSITIVE_INFINITY);
+    assertEquals(InverseErf.FUNCTION.apply(RealScalar.of(-1)), DoubleScalar.NEGATIVE_INFINITY);
+    assertEquals(InverseErf.FUNCTION.apply(RealScalar.of(+1)), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test

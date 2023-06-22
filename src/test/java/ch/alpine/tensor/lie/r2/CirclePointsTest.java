@@ -79,7 +79,7 @@ class CirclePointsTest {
   void testSmall() {
     assertEquals(CirclePoints.of(0), Tensors.empty());
     assertEquals(CirclePoints.of(1), Tensors.fromString("{{1, 0}}"));
-    assertEquals(Chop._14.of(CirclePoints.of(2)), Tensors.fromString("{{1, 0}, {-1, 0}}"));
+    assertEquals(CirclePoints.of(2).map(Chop._14), Tensors.fromString("{{1, 0}, {-1, 0}}"));
   }
 
   @Test

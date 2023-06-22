@@ -55,8 +55,8 @@ class ChopTest {
   void testQuantity() {
     Scalar qs1 = Quantity.of(1e-9, "kg");
     Scalar act = Quantity.of(0, "kg");
-    assertEquals(Chop._07.of(qs1), act);
-    assertEquals(Chop._10.of(qs1), qs1);
+    assertEquals(Chop._07.apply(qs1), act);
+    assertEquals(Chop._10.apply(qs1), qs1);
   }
 
   @Test

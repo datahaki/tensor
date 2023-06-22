@@ -24,7 +24,7 @@ class SincTest {
   private static Scalar checkBoth(Scalar scalar) {
     Scalar c = Sinc.FUNCTION.apply(scalar);
     Scalar s = Sin.FUNCTION.apply(scalar).divide(scalar);
-    assertEquals(Chop._15.of(c.subtract(s)), RealScalar.ZERO);
+    Chop._15.requireClose(c, s);
     return c;
   }
 

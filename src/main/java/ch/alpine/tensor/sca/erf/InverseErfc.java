@@ -5,7 +5,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -42,12 +41,5 @@ public enum InverseErfc implements ScalarUnaryOperator {
       x = x.add(err.divide(den));
     }
     return lessThan1 ? x : x.negate();
-  }
-
-  /** @param tensor
-   * @return tensor with all scalar entries replaced by the evaluation under InverseErfc */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

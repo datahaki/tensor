@@ -14,6 +14,7 @@ import ch.alpine.tensor.chq.FiniteScalarQ;
  * 
  * @see DoubleScalar
  * @see DecimalScalar */
+@FunctionalInterface
 public interface InexactScalarMarker {
   /** Examples:
    * FiniteScalarQ[Pi.VALUE] == true

@@ -44,7 +44,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
 
   /* package */ LinearColorDataGradient(Tensor tensor) {
     this.tensor = tensor;
-    interpolation = LinearInterpolation.of(N.DOUBLE.of(tensor));
+    interpolation = LinearInterpolation.of(tensor.map(N.DOUBLE));
     scale = DoubleScalar.of(tensor.length() - 1);
   }
 

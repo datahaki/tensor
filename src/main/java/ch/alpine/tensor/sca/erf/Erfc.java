@@ -55,11 +55,4 @@ public enum Erfc implements ScalarUnaryOperator {
         ? evaluate(z)
         : TWO.subtract(evaluate(z.negate()));
   }
-
-  /** @param tensor
-   * @return tensor with all scalar entries replaced by the evaluation under Erfc */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
-  }
 }

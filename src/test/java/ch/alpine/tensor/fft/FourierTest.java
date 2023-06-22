@@ -19,7 +19,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -87,14 +86,13 @@ class FourierTest {
   }
 
   public void checkFormat(int n) {
-    Tensor zeros = Array.zeros(n, n);
     Tensor original = Fourier.FORWARD.matrix(n);
     SymmetricMatrixQ.require(original);
-    Tensor matrix = Tolerance.CHOP.of(original);
+    Tensor matrix = original.map(Tolerance.CHOP);
     SymmetricMatrixQ.require(matrix);
     Tensor invert = ConjugateTranspose.of(matrix);
     SymmetricMatrixQ.require(matrix);
-    assertEquals(Tolerance.CHOP.of(matrix.dot(invert).subtract(IdentityMatrix.of(n))), zeros);
+    Tolerance.CHOP.requireClose(matrix.dot(invert), IdentityMatrix.of(n));
     Tolerance.CHOP.requireClose(Inverse.of(matrix), invert);
   }
 

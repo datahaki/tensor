@@ -21,7 +21,7 @@ class ErfcTest {
   @Test
   void testCompare() {
     Tensor x = Subdivide.of(-0.6, 0.6, 50);
-    Chop._07.requireClose(Erfc.of(x), x.map(ErfcRestricted.FUNCTION));
+    Chop._07.requireClose(x.map(Erfc.FUNCTION), x.map(ErfcRestricted.FUNCTION));
   }
 
   @Test

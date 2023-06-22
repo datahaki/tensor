@@ -3,7 +3,6 @@ package ch.alpine.tensor.sca.erf;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** <pre>
@@ -21,12 +20,5 @@ public enum InverseErf implements ScalarUnaryOperator {
   @Override
   public Scalar apply(Scalar scalar) {
     return InverseErfc.FUNCTION.apply(RealScalar.ONE.subtract(scalar));
-  }
-
-  /** @param tensor
-   * @return tensor with all scalar entries replaced by the evaluation under InverseErf */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

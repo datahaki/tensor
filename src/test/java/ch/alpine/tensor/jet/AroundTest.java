@@ -182,8 +182,8 @@ class AroundTest {
         Quantity.of(RationalScalar.of(-1, 3), "s^-1"), //
         Quantity.of(RationalScalar.of(7, 9), "s^-1")));
     assertNotEquals(scalar, Pi.VALUE);
-    N.DOUBLE.of(scalar);
-    N.DECIMAL64.of(scalar);
+    N.DOUBLE.apply(scalar);
+    N.DECIMAL64.apply(scalar);
   }
 
   private static Tensor _meanOnly(Tensor tensor) {

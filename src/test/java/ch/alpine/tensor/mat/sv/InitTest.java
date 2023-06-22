@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.UnprotectDepr;
-import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -48,21 +47,16 @@ class InitTest {
     final Tensor V = svd.getV();
     assertEquals(UnprotectDepr.getUnitUnique(V), Unit.ONE);
     Tensor W = DiagonalMatrix.with(w);
-    Tensor UtU = Tolerance.CHOP.of(Transpose.of(U).dot(U).subtract(IdentityMatrix.of(N)));
-    assertEquals(UtU, Array.zeros(N, N));
-    Tensor VVt = Tolerance.CHOP.of(MatrixDotTranspose.of(V, V).subtract(IdentityMatrix.of(N)));
-    assertEquals(VVt, Array.zeros(N, N));
-    Tensor VtV = Tolerance.CHOP.of(Transpose.of(V).dot(V).subtract(IdentityMatrix.of(N)));
-    assertEquals(VtV, Array.zeros(N, N));
-    Tensor UWVt = Tolerance.CHOP.of(MatrixDotTranspose.of(U.dot(W), V).subtract(matrix));
-    assertEquals(UWVt, UWVt.map(Scalar::zero));
-    Tensor UW_AV = Tolerance.CHOP.of(U.dot(W).subtract(matrix.dot(V)));
-    assertEquals(UW_AV, UW_AV.map(Scalar::zero));
+    Tolerance.CHOP.requireClose(Transpose.of(U).dot(U), IdentityMatrix.of(N));
+    Tolerance.CHOP.requireClose(MatrixDotTranspose.of(V, V), IdentityMatrix.of(N));
+    Tolerance.CHOP.requireClose(Transpose.of(V).dot(V), IdentityMatrix.of(N));
+    Tolerance.CHOP.requireClose(MatrixDotTranspose.of(U.dot(W), V), matrix);
+    Tolerance.CHOP.requireClose(U.dot(W), matrix.dot(V));
     assertTrue(w.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative));
     if (MatrixRank.of(matrix) < N) {
       Tensor nul = NullSpace.of(svd);
       Tensor res = MatrixDotTranspose.of(matrix, nul);
-      assertEquals(Tolerance.CHOP.of(res), res.map(Scalar::zero));
+      Tolerance.CHOP.requireAllZero(res);
     }
     return svd;
   }

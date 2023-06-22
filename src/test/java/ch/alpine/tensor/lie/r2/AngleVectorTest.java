@@ -30,7 +30,7 @@ class AngleVectorTest {
   @Test
   void testNumeric() {
     for (int count = 0; count < 12; ++count) {
-      Scalar scalar = N.DOUBLE.of(RationalScalar.of(count, 12));
+      Scalar scalar = N.DOUBLE.apply(RationalScalar.of(count, 12));
       Tensor tensor = AngleVector.turns(scalar);
       Tolerance.CHOP.requireClose(tensor, AngleVector.of(scalar.multiply(Pi.TWO)));
     }

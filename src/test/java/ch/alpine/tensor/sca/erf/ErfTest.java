@@ -56,7 +56,7 @@ class ErfTest {
         0.9999999945765992, 0.9999999988065282, 0.9999999997526137, //
         0.999999999951703, 0.9999999999911201, 0.9999999999984626 //
     };
-    Chop._07.requireClose(Erf.of(xs), Tensors.vectorDouble(values));
+    Chop._07.requireClose(xs.map(Erf.FUNCTION), Tensors.vectorDouble(values));
   }
 
   @Test

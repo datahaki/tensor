@@ -92,7 +92,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   static void demoDecimal() {
     System.out.println(Exp.FUNCTION.apply(DecimalScalar.of(new BigDecimal("10"))));
     System.out.println(Sqrt.FUNCTION.apply(DecimalScalar.of(new BigDecimal("2"))));
-    Scalar a = N.in(100).of(RealScalar.of(2));
+    Scalar a = N.in(100).apply(RealScalar.of(2));
     System.out.println(Sqrt.FUNCTION.apply(a));
   }
 

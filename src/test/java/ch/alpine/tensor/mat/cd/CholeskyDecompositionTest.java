@@ -139,7 +139,7 @@ class CholeskyDecompositionTest {
 
   @Test
   void testHilbertN1() {
-    checkDecomp(N.DOUBLE.of(HilbertMatrix.of(16)));
+    checkDecomp(HilbertMatrix.of(16).map(N.DOUBLE));
   }
 
   @Test
@@ -162,7 +162,7 @@ class CholeskyDecompositionTest {
   @Test
   void testComplex() {
     checkDecomp(Tensors.fromString("{{10, I}, {-I, 10}}"));
-    checkDecomp(N.DOUBLE.of(Tensors.fromString("{{10, I}, {-I, 10}}")));
+    checkDecomp(Tensors.fromString("{{10, I}, {-I, 10}}").map(N.DOUBLE));
   }
 
   @Test

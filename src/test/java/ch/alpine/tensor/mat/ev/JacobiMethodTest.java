@@ -105,7 +105,7 @@ class JacobiMethodTest {
     expEigvc.append(Tensors.vector(0.31354840524937794336, -0.75632770019948717296, 0.041096194862756938126, 0.57268395319262161336));
     expEigvc.append(Tensors.vector(-0.13313246690429592645, 0.30157797376766923332, -0.78307519514730625756, 0.52737056301918462298));
     checkEquation(tensor, eigensystem);
-    assertEquals(Tolerance.CHOP.of(expEigvl.subtract(eigensystem.values())), Array.zeros(4));
+    Tolerance.CHOP.requireClose(expEigvl, eigensystem.values());
   }
 
   @Test

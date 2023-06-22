@@ -52,7 +52,7 @@ class ClipPointTest {
     Scalar value = Quantity.of(2, "m*s^-1");
     Clip clip = Clips.interval(value, value);
     Tensor vector = Tensors.fromString("{1[m*s^-1], 5[m*s^-1], 2[m*s^-1]}");
-    Tensor result = clip.of(vector);
+    Tensor result = vector.map(clip);
     assertEquals(result, Tensors.fromString("{2[m*s^-1], 2[m*s^-1], 2[m*s^-1]}"));
   }
 

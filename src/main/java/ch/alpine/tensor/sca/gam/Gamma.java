@@ -6,7 +6,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
@@ -61,12 +60,5 @@ public enum Gamma implements ScalarUnaryOperator {
     Scalar zp = RealScalar.ONE.subtract(z);
     return Exp.FUNCTION.apply(LogGammaRestricted.FUNCTION.apply(RealScalar.ONE.add(zp))) //
         .multiply(Sinc.FUNCTION.apply(Pi.VALUE.multiply(zp))).reciprocal();
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their gamma evaluation */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

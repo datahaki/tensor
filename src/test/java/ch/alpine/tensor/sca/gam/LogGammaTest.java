@@ -31,7 +31,6 @@ class LogGammaTest {
 
   private static void _check(Scalar z, Scalar expect) {
     Tolerance.CHOP.requireClose(LogGamma.FUNCTION.apply(z), expect);
-    Tolerance.CHOP.requireClose(LogGamma.of(z), expect);
   }
 
   @Test

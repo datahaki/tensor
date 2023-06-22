@@ -22,6 +22,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -94,7 +95,8 @@ class SingularValueDecompositionTest {
     assertEquals(MatrixRank.of(A), 3);
     Tensor nls = NullSpace.of(svd);
     Tensor nul = A.dot(nls.get(0));
-    assertEquals(Tolerance.CHOP.of(nul), Array.zeros(n));
+    Tolerance.CHOP.requireAllZero(nul);
+    VectorQ.requireLength(nul, n);
   }
 
   @Test

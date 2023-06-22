@@ -3,7 +3,6 @@ package ch.alpine.tensor.sca.gam;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Re;
@@ -31,12 +30,5 @@ public enum LogGamma implements ScalarUnaryOperator {
       return LogGammaRestricted.FUNCTION.apply(z);
     Scalar zp = RealScalar.ONE.subtract(z);
     return Log.FUNCTION.apply(Sinc.FUNCTION.apply(Pi.VALUE.multiply(zp))).add(LogGammaRestricted.FUNCTION.apply(RealScalar.ONE.add(zp))).negate();
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their gamma evaluation */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

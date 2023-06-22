@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -30,10 +29,6 @@ import ch.alpine.tensor.qty.Quantity;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Clip.html">Clip</a> */
 public interface Clip extends ScalarUnaryOperator {
-  /** @param tensor
-   * @return tensor with all entries of given tensor applied to clip function */
-  <T extends Tensor> T of(T tensor);
-
   /** @param scalar
    * @return true if given scalar is invariant under this clip, i.e. the evaluation
    * of the condition min <= scalar <= max. */

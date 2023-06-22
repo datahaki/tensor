@@ -42,11 +42,4 @@ public enum Factorial implements ScalarUnaryOperator {
       }
     return MEMO.Get(index);
   }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their factorial */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
-  }
 }

@@ -5,7 +5,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.Ramp;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -27,12 +26,5 @@ public enum Softplus implements ScalarUnaryOperator {
     if (Scalars.lessThan(scalar, LO))
       return scalar.zero();
     return Log.FUNCTION.apply(Exp.FUNCTION.apply(scalar).add(RealScalar.ONE));
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their softplus */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }
