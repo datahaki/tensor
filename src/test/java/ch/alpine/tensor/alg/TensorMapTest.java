@@ -4,7 +4,6 @@ package ch.alpine.tensor.alg;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 
@@ -24,15 +23,10 @@ class TensorMapTest {
   @Test
   void testUnmodifiable() {
     Tensor matrix = Array.zeros(3, 1).unmodifiable();
-    try {
-      TensorMap.of(s -> {
-        s.set(RealScalar.ONE, 0);
-        return s;
-      }, matrix, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> TensorMap.of(s -> {
+      s.set(RealScalar.ONE, 0);
+      return s;
+    }, matrix, 1));
     assertEquals(matrix, Array.zeros(3, 1));
   }
 

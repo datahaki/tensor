@@ -36,6 +36,11 @@ class ExtensionTest {
   }
 
   @Test
+  void testJavaFail() {
+    assertThrows(Exception.class, () -> Extension.valueOf("asd"));
+  }
+
+  @Test
   void testVisibility() {
     assertFalse(Modifier.isPublic(Extension.class.getModifiers()));
   }

@@ -15,8 +15,9 @@ class WavReaderTest {
   void test() throws IOException {
     File file = HomeDirectory.file("USERAUDIO001.WAV");
     if (file.isFile()) {
-      InputStream inputStream = new FileInputStream(file);
-      Tensor tensor = WavReader.read(inputStream);
+      try (InputStream inputStream = new FileInputStream(file)) {
+        Tensor tensor = WavReader.read(inputStream);
+      }
     }
   }
 }

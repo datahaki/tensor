@@ -60,12 +60,6 @@ class ImportHelperTest {
   void testSwitch() {
     Extension extension = null;
     try {
-      extension = Extension.valueOf("asd");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
       switch (extension) {
       default:
       }
