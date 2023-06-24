@@ -26,6 +26,15 @@ public class QuantityMagnitude implements Serializable {
     return SI;
   }
 
+  /** creates instance for quantity conversion and magnitude extraction
+   * that is backed by given unitSystem
+   * 
+   * @param unitSystem
+   * @throws Exception if given {@link UnitSystem} is null */
+  public static QuantityMagnitude of(UnitSystem unitSystem) {
+    return new QuantityMagnitude(unitSystem);
+  }
+
   /** @param unit
    * @return operator that extracts the value from a Quantity of given unit */
   public static ScalarUnaryOperator singleton(Unit unit) {
@@ -41,12 +50,7 @@ public class QuantityMagnitude implements Serializable {
   // ---
   private final UnitSystem unitSystem;
 
-  /** creates instance for quantity conversion and magnitude extraction
-   * that is backed by given unitSystem
-   * 
-   * @param unitSystem
-   * @throws Exception if given {@link UnitSystem} is null */
-  public QuantityMagnitude(UnitSystem unitSystem) {
+  private QuantityMagnitude(UnitSystem unitSystem) {
     this.unitSystem = Objects.requireNonNull(unitSystem);
   }
 

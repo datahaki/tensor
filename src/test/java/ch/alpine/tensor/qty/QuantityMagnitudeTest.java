@@ -184,6 +184,6 @@ class QuantityMagnitudeTest {
 
   @Test
   void testFailNull() {
-    assertThrows(NullPointerException.class, () -> new QuantityMagnitude(null));
+    assertThrows(NullPointerException.class, () -> QuantityMagnitude.of(null));
   }
 }
