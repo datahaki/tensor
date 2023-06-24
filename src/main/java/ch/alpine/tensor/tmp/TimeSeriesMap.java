@@ -45,7 +45,7 @@ public class TimeSeriesMap implements UnaryOperator<TimeSeries>, Serializable {
   public TimeSeries apply(TimeSeries timeSeries) {
     return TimeSeries.of(timeSeries.stream() //
         .map(entry -> new TsEntry(entry.key(), entry.value().map(function))), //
-        resamplingMethod == null //
+        Objects.isNull(resamplingMethod) //
             ? timeSeries.resamplingMethod()
             : resamplingMethod);
   }

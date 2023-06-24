@@ -7,6 +7,7 @@ import java.util.random.RandomGenerator;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
@@ -14,6 +15,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.StandardDeviationInterface;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -98,17 +101,22 @@ public class ExponentialDistribution implements UnivariateDistribution, //
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    // TODO TENSOR BUG unit check of x
-    return Sign.isPositiveOrZero(x) //
-        ? Exp.FUNCTION.apply(x.multiply(lambda_negate)).multiply(lambda)
-        : lambda.zero();
+    Scalar prod = x.multiply(lambda_negate);
+    if (QuantityUnit.of(prod).equals(Unit.ONE))
+      return Sign.isPositiveOrZero(x) //
+          ? Exp.FUNCTION.apply(prod).multiply(lambda)
+          : lambda.zero();
+    throw new Throw(x);
   }
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    return Sign.isPositive(x) //
-        ? RealScalar.ONE.subtract(Exp.FUNCTION.apply(x.multiply(lambda_negate)))
-        : RealScalar.ZERO;
+    Scalar prod = x.multiply(lambda_negate);
+    if (QuantityUnit.of(prod).equals(Unit.ONE))
+      return Sign.isPositive(x) //
+          ? RealScalar.ONE.subtract(Exp.FUNCTION.apply(prod))
+          : RealScalar.ZERO;
+    throw new Throw(x);
   }
 
   @Override // from CDF

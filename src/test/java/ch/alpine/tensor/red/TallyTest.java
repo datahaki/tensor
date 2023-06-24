@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Collections;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -52,6 +53,22 @@ class TallyTest {
     assertEquals((long) map.get(DoubleScalar.POSITIVE_INFINITY), 3);
     assertEquals((long) map.get(DoubleScalar.NEGATIVE_INFINITY), 1);
     assertEquals((long) map.get(RealScalar.of(1)), 1);
+  }
+
+  @Test
+  void testStringUnsorted() {
+    Map<String, Long> map = Tally.of(Stream.of("a", "b", "a"));
+    assertEquals(map.get("a"), 2);
+    assertEquals(map.get("b"), 1);
+    assertEquals(map.size(), 2);
+  }
+
+  @Test
+  void testStringSorted() {
+    NavigableMap<String, Long> map = Tally.sorted(Stream.of("a", "b", "a"));
+    assertEquals(map.get("a"), 2);
+    assertEquals(map.get("b"), 1);
+    assertEquals(map.size(), 2);
   }
 
   @Test

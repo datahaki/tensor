@@ -31,11 +31,11 @@ public enum Tally {
     return of(tensor.stream());
   }
 
-  /** Careful: the keys in the map are references to selected elements in the provided tensor.
+  /** Careful: the keys in the map are references to selected elements in the provided stream.
    * 
    * @param stream
    * @return map that assigns elements of the stream their multiplicity in given stream */
-  public static <T extends Tensor> Map<T, Long> of(Stream<T> stream) {
+  public static <T> Map<T, Long> of(Stream<T> stream) {
     return stream.collect(Collectors.groupingBy( //
         Function.identity(), LinkedHashMap::new, Collectors.counting()));
   }
@@ -56,11 +56,11 @@ public enum Tally {
     return sorted(tensor.stream());
   }
 
-  /** Careful: the keys in the map are references to selected elements in the provided tensor.
+  /** Careful: the keys in the map are references to selected elements in the provided stream.
    * 
    * @param stream
    * @return */
-  public static <T extends Tensor> NavigableMap<T, Long> sorted(Stream<T> stream) {
+  public static <T> NavigableMap<T, Long> sorted(Stream<T> stream) {
     return stream.collect(Collectors.groupingBy( //
         Function.identity(), TreeMap::new, Collectors.counting()));
   }

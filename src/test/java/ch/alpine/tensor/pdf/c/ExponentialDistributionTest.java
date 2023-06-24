@@ -160,6 +160,12 @@ class ExponentialDistributionTest {
     assertInstanceOf(Quantity.class, Expectation.mean(distribution));
     Scalar var = Expectation.variance(distribution);
     assertInstanceOf(Quantity.class, var);
+    PDF pdf = PDF.of(distribution);
+    assertThrows(Exception.class, () -> pdf.at(RealScalar.ONE));
+    assertThrows(Exception.class, () -> pdf.at(RealScalar.ONE.negate()));
+    CDF cdf = CDF.of(distribution);
+    assertThrows(Exception.class, () -> cdf.p_lessEquals(RealScalar.ONE));
+    assertThrows(Exception.class, () -> cdf.p_lessEquals(RealScalar.ONE.negate()));
   }
 
   @Test
