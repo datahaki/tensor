@@ -54,6 +54,7 @@ import ch.alpine.tensor.sca.Ceiling;
         y += size;
         graphics.drawString(csv(cdi.name()), 0, y);
       }
+      graphics.dispose();
     }
     large = ImageFormat.from(bufferedImage);
     int split = large.length() / 3;

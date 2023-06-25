@@ -3,6 +3,8 @@ package ch.alpine.tensor.io;
 
 import java.util.Objects;
 
+import ch.alpine.tensor.ext.FileExtension;
+
 /* package */ class Filename {
   private static final char DOT = '.';
   // ---
@@ -26,6 +28,6 @@ import java.util.Objects;
    * @return ultimate extension of file derived from the characters after the last '.'
    * @throws IllegalArgumentException if extension is not listed in {@link Extension} */
   public Extension extension() {
-    return Extension.of(string.substring(string.lastIndexOf(DOT) + 1));
+    return Extension.of(FileExtension.of(string));
   }
 }

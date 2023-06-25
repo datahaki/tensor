@@ -58,6 +58,7 @@ import ch.alpine.tensor.io.ImageFormat;
         String string = cdg.name();
         graphics.drawString(string, wid + 2, piy);
       }
+      graphics.dispose();
       image = ImageFormat.from(bufferedImage);
     }
     int half = image.length() / 2;

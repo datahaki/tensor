@@ -33,6 +33,18 @@ class CacheTest {
   }
 
   @Test
+  void testSizeZero() {
+    ScalarStringFunc scalarStringFunc = new ScalarStringFunc();
+    Cache<Scalar, String> cache = Cache.of(scalarStringFunc, 0);
+    assertEquals(cache.apply(RealScalar.ONE), "1");
+    assertEquals(scalarStringFunc.count, 1);
+    assertEquals(cache.apply(RealScalar.ONE), "1");
+    assertEquals(scalarStringFunc.count, 2);
+    assertEquals(cache.apply(RealScalar.ONE), "1");
+    assertEquals(scalarStringFunc.count, 3);
+  }
+
+  @Test
   void testMap() {
     Function<String, Integer> function = Cache.of(k -> 1, 768);
     IntStream.range(0, 26).parallel().forEach(c1 -> {

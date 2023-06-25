@@ -38,6 +38,7 @@ public enum Thumbnail {
         : new Dimension(size, s.divide(r).number().intValue());
     BufferedImage result = new BufferedImage(size, size, StaticHelper.type(bufferedImage.getType()));
     Graphics2D graphics = result.createGraphics();
+    // TODO TENSOR IMPL improve results
     Image image = bufferedImage.getScaledInstance(dimension.width, dimension.height, Image.SCALE_AREA_AVERAGING);
     graphics.drawImage(image, (size - dimension.width) / 2, (size - dimension.height) / 2, null);
     graphics.dispose();

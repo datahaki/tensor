@@ -18,8 +18,11 @@ import java.util.function.Function;
  * 
  * Used in: Unit, CirclePoints, Binomial, GaussScalar, ... */
 public class Cache<K, V> implements Function<K, V>, Serializable {
-  /** @param function non-null, may also return null
-   * @param maxSize non-negative
+  /** in the special case when maxSize == 0, the given function
+   * is invoked for every cache query
+   * 
+   * @param function non-null, may also return null
+   * @param maxSize non-negative, zero is permitted
    * @return
    * @throws Exception if given function is instance of Cache */
   public static <K, V> Cache<K, V> of(Function<K, V> function, int maxSize) {
