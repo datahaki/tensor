@@ -11,7 +11,7 @@ import ch.alpine.tensor.ext.FileExtension;
   /** name of file */
   private final String string;
 
-  /** @param string */
+  /** @param string for instance "/home/user/info.txt.gz" */
   public Filename(String string) {
     this.string = Objects.requireNonNull(string);
   }
