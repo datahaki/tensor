@@ -7,10 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
-import java.io.File;
 import java.util.Arrays;
-
-import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +17,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
@@ -29,8 +27,7 @@ class ImageFormatTest {
   void testRGBAFile() throws Exception {
     Tensor tensor = TransposedImageFormatTest._readRGBA();
     String string = "/ch/alpine/tensor/img/rgba15x33.png";
-    File file = new File(getClass().getResource(string).getFile());
-    BufferedImage bufferedImage = ImageIO.read(file);
+    BufferedImage bufferedImage = ResourceData.bufferedImage(string);
     Tensor image = ImageFormat.from(bufferedImage);
     assertEquals(image, Import.of(string));
     assertEquals(Transpose.of(tensor), image);
@@ -57,8 +54,7 @@ class ImageFormatTest {
   @Test
   void testGrayFile() throws Exception {
     String string = "/ch/alpine/tensor/img/gray15x9.png";
-    File file = new File(getClass().getResource(string).getFile());
-    BufferedImage bufferedImage = ImageIO.read(file);
+    BufferedImage bufferedImage = ResourceData.bufferedImage(string);
     Tensor tensor = ImageFormat.from(bufferedImage);
     assertEquals(tensor, Import.of(string));
     // confirmed with gimp

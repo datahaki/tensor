@@ -26,13 +26,18 @@ import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.qty.Quantity;
 
 class ImportTest {
+  private static Tensor load(String string) throws IOException {
+    File file = new File(ResourceData.class.getResource(string).getFile());
+    Tensor tensor = Import.of(file);
+    assertEquals(tensor, Import.of(string));
+    return tensor;
+  }
+
   @Test
   void testCsv() throws Exception {
     String string = "/ch/alpine/tensor/io/libreoffice_calc.csv";
-    File file = new File(getClass().getResource(string).getFile());
-    Tensor table = Import.of(file);
+    Tensor table = load(string);
     assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
-    assertEquals(Import.of(string), table);
   }
 
   @Test
@@ -61,8 +66,7 @@ class ImportTest {
   @Test
   void testCsvGz() throws Exception {
     String string = "/ch/alpine/tensor/io/mathematica23.csv.gz";
-    File file = new File(getClass().getResource(string).getFile());
-    Tensor table = Import.of(file);
+    Tensor table = load(string);
     assertEquals(table, Tensors.fromString("{{123/875+I, 9.3}, {-9, 5/8123123123123123, 1010101}}"));
   }
 
@@ -72,10 +76,12 @@ class ImportTest {
   @Test
   void testCsvClosed(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.csv");
-    Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}}"));
+    Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4}}");
+    Export.of(file, tensor);
     assertTrue(file.isFile());
     assertTrue(8 <= file.length());
-    Import.of(file);
+    Tensor result = Import.of(file);
+    assertEquals(tensor, result);
   }
 
   @Test
@@ -100,8 +106,8 @@ class ImportTest {
 
   @Test
   void testPng() throws Exception {
-    File file = new File(getClass().getResource("/ch/alpine/tensor/img/rgba15x33.png").getFile());
-    Tensor tensor = Import.of(file);
+    String string = "/ch/alpine/tensor/img/rgba15x33.png";
+    Tensor tensor = load(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
   }
 
@@ -117,8 +123,8 @@ class ImportTest {
 
   @Test
   void testJpg() throws Exception {
-    File file = new File(getClass().getResource("/ch/alpine/tensor/img/rgb15x33.jpg").getFile());
-    Tensor tensor = Import.of(file);
+    String string = "/ch/alpine/tensor/img/rgb15x33.jpg";
+    Tensor tensor = load(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     assertEquals(Tensors.vector(180, 46, 47, 255), tensor.get(21, 3)); // verified with gimp
   }

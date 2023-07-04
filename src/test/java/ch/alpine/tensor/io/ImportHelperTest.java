@@ -21,6 +21,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.OrderedQ;
+import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Unitize;
 
@@ -28,8 +29,10 @@ class ImportHelperTest {
   @Test
   void testGif() throws Exception {
     String string = "/ch/alpine/tensor/img/rgba7x3.gif"; // file consist of a single line break character
-    File file = new File(getClass().getResource(string).getFile());
+    Tensor tempor = Import.of(string);
+    File file = ResourceData.file(string);
     Tensor tensor = Import.of(file);
+    assertEquals(tensor, tempor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 7, 4));
     assertEquals(tensor.get(0, 0), Tensors.vector(0, 0, 0, 255));
     assertEquals(tensor.get(0, 1, 3), RealScalar.ZERO);

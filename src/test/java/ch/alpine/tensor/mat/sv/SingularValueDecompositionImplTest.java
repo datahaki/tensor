@@ -14,9 +14,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.chq.FiniteTensorQ;
+import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.io.Get;
 import ch.alpine.tensor.io.Import;
-import ch.alpine.tensor.io.OperatingSystem;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.NullSpace;
@@ -36,7 +36,7 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testResource() throws Exception {
-    _check(Get.of(OperatingSystem.fileOfResource("/ch/alpine/tensor/mat/sv/svd0.mathematica")));
+    _check(Get.of(ResourceData.file("/ch/alpine/tensor/mat/sv/svd0.mathematica")));
   }
 
   @Test

@@ -2,11 +2,13 @@
 package ch.alpine.tensor.ext;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -67,7 +69,7 @@ public enum ResourceData {
    * @return instance of {@link Properties} from parsing resource in UTF-8 encoding
    * @throws Exception if resource could not be loaded */
   public static Properties properties(String string) {
-    return properties(string, StaticHelper.CHARSET);
+    return properties(string, StandardCharsets.UTF_8);
   }
 
   /** @param string as path to resource, typically starts with the slash character '/'
@@ -93,5 +95,20 @@ public enum ResourceData {
     } catch (Exception exception) {
       throw new RuntimeException(exception);
     }
+  }
+
+  /** Hint: mainly useful in tests to access a resource as a file
+   * 
+   * TODO TENSOR only works in linux !? see operatingSystem
+   * 
+   * @param string
+   * @return
+   * @throws Exception if string does not correspond to a resource file, or directory */
+  public static File file(String string) {
+    File file = new File(ResourceData.class.getResource(string).getFile());
+    System.out.println(string + " -> " + file);
+    if (file.exists())
+      return file;
+    throw new IllegalArgumentException(string);
   }
 }

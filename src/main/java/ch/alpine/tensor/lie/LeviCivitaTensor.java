@@ -39,7 +39,7 @@ public enum LeviCivitaTensor {
       return Signature.of(Tensors.empty());
     Tensor tensor = SparseArray.of(RealScalar.ZERO, IntStream.generate(() -> d).limit(d).toArray());
     Permutations.stream(Range.of(0, d)) //
-        .forEach(perm -> tensor.set(Signature.of(perm), Primitives.toIntArray(perm)));
+        .forEach(perm -> tensor.set(Signature.of(perm), Primitives.toListInteger(perm)));
     return tensor;
   }
 }

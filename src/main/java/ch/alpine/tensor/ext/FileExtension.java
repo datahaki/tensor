@@ -4,7 +4,9 @@ package ch.alpine.tensor.ext;
 import java.io.File;
 
 /** inspired by
- * <a href="https://reference.wolfram.com/language/ref/FileExtension.html">FileExtension</a> */
+ * <a href="https://reference.wolfram.com/language/ref/FileExtension.html">FileExtension</a>
+ * 
+ * @see FileBaseName */
 public enum FileExtension {
   ;
   private static final char DOT = '.';
