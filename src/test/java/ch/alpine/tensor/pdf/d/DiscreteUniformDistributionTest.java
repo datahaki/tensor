@@ -186,9 +186,9 @@ class DiscreteUniformDistributionTest {
     assertEquals(distribution.quantile(RealScalar.of(0)), RealScalar.of(10));
   }
 
-  @RepeatedTest(5)
+  @RepeatedTest(10)
   void testRandom() {
-    BigInteger bigInteger = DiscreteUniformDistribution.random(new BigInteger("11"), RANDOM);
+    BigInteger bigInteger = DiscreteUniformDistribution.random(new BigInteger("10"), RANDOM);
     Clips.interval(0, 10).requireInside(RealScalar.of(bigInteger));
   }
 }

@@ -8,34 +8,42 @@ import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.Numel;
 
 /** the extraction of primitive data types from a {@link Tensor}
  * only works for tensors with {@link Scalar} entries
  * that all support the operation {@link Scalar#number()} */
 public enum Primitives {
   ;
-  /** @param tensor
+  /** @param vector
    * @return stream of all scalars in tensor mapped to {@link Number} */
-  public static Stream<Number> toStreamNumber(Tensor tensor) {
-    return tensor.flatten(-1).map(Scalar.class::cast).map(Scalar::number);
+  public static Stream<Number> toNumberStream(Tensor vector) {
+    return vector.stream().map(Scalar.class::cast).map(Scalar::number);
   }
-
   // ---
-  /** @param tensor
-   * @return list of double values of all scalars in tensor */
-  public static List<Double> toListDouble(Tensor tensor) {
-    return toStreamNumber(tensor).map(Number::doubleValue).collect(Collectors.toList());
+
+  /** @param vector
+   * @return */
+  public static DoubleStream toDoubleStream(Tensor vector) {
+    return toNumberStream(vector).mapToDouble(Number::doubleValue);
   }
 
-  /** @param tensor
+  /** @param vector
+   * @return list of double values of all scalars in given vector */
+  public static List<Double> toListDouble(Tensor vector) {
+    return toNumberStream(vector).map(Number::doubleValue).collect(Collectors.toList());
+  }
+
+  /** @param vector
    * @return array of double values of all scalars in tensor */
-  public static double[] toDoubleArray(Tensor tensor) {
-    return toStreamNumber(tensor).mapToDouble(Number::doubleValue).toArray();
+  public static double[] toDoubleArray(Tensor vector) {
+    return toDoubleStream(vector).toArray();
   }
 
   /** @param tensor
@@ -48,26 +56,26 @@ public enum Primitives {
     return array;
   }
 
-  /** @param tensor
+  /** @param vector
    * @return */
-  public static DoubleBuffer toDoubleBuffer(Tensor tensor) {
-    DoubleBuffer doubleBuffer = DoubleBuffer.allocate(Numel.of(tensor));
-    toStreamNumber(tensor).mapToDouble(Number::doubleValue).forEach(doubleBuffer::put);
+  public static DoubleBuffer toDoubleBuffer(Tensor vector) {
+    DoubleBuffer doubleBuffer = DoubleBuffer.allocate(vector.length());
+    toDoubleStream(vector).forEach(doubleBuffer::put);
     ((java.nio.Buffer) doubleBuffer).flip();
     return doubleBuffer;
   }
 
   // ---
-  /** @param tensor
+  /** @param vector
    * @return list of double values of all scalars in tensor */
-  public static List<Float> toListFloat(Tensor tensor) {
-    return toStreamNumber(tensor).map(Number::floatValue).collect(Collectors.toList());
+  public static List<Float> toListFloat(Tensor vector) {
+    return toNumberStream(vector).map(Number::floatValue).collect(Collectors.toList());
   }
 
-  /** @param tensor
+  /** @param vector
    * @return array of double values of all scalars in tensor */
-  public static float[] toFloatArray(Tensor tensor) {
-    return toFloatBuffer(tensor).array();
+  public static float[] toFloatArray(Tensor vector) {
+    return toFloatBuffer(vector).array();
   }
 
   /** @param tensor
@@ -80,48 +88,56 @@ public enum Primitives {
     return array;
   }
 
-  /** @param tensor
+  /** @param vector
    * @return */
-  public static FloatBuffer toFloatBuffer(Tensor tensor) {
-    FloatBuffer floatBuffer = FloatBuffer.allocate(Numel.of(tensor));
-    toStreamNumber(tensor).map(Number::floatValue).forEach(floatBuffer::put);
+  public static FloatBuffer toFloatBuffer(Tensor vector) {
+    FloatBuffer floatBuffer = FloatBuffer.allocate(vector.length());
+    toNumberStream(vector).map(Number::floatValue).forEach(floatBuffer::put);
     ((java.nio.Buffer) floatBuffer).flip();
     return floatBuffer;
   }
 
   // ---
-  /** does not perform rounding, but uses Scalar::number().longValue()
-   * 
-   * @param tensor
-   * @return list of long values of all scalars in tensor */
-  public static List<Long> toListLong(Tensor tensor) {
-    return toStreamNumber(tensor).map(Number::longValue).collect(Collectors.toList());
+  public static LongStream toLongStream(Tensor vector) {
+    return toNumberStream(vector).mapToLong(Number::longValue);
   }
 
   /** does not perform rounding, but uses Scalar::number().longValue()
    * 
-   * @param tensor
+   * @param vector
+   * @return list of long values of all scalars in given vector */
+  public static List<Long> toListLong(Tensor vector) {
+    return toNumberStream(vector).map(Number::longValue).collect(Collectors.toList());
+  }
+
+  /** does not perform rounding, but uses Scalar::number().longValue()
+   * 
+   * @param vector
    * @return array of long values of all scalars in tensor */
-  public static long[] toLongArray(Tensor tensor) {
-    return toStreamNumber(tensor).mapToLong(Number::longValue).toArray();
+  public static long[] toLongArray(Tensor vector) {
+    return toLongStream(vector).toArray();
   }
 
-  /** @param tensor
+  /** @param vector
    * @return */
-  public static LongBuffer toLongBuffer(Tensor tensor) {
-    LongBuffer longBuffer = LongBuffer.allocate(Numel.of(tensor));
-    toStreamNumber(tensor).mapToLong(Number::longValue).forEach(longBuffer::put);
+  public static LongBuffer toLongBuffer(Tensor vector) {
+    LongBuffer longBuffer = LongBuffer.allocate(vector.length());
+    toLongStream(vector).forEach(longBuffer::put);
     ((java.nio.Buffer) longBuffer).flip();
     return longBuffer;
   }
 
   // ---
+  public static IntStream toIntStream(Tensor vector) {
+    return toNumberStream(vector).mapToInt(Number::intValue);
+  }
+
   /** does not perform rounding, but uses Scalar::number().intValue()
    * 
-   * @param tensor
+   * @param vector
    * @return list of int values of all scalars in tensor */
-  public static List<Integer> toListInteger(Tensor tensor) {
-    return toStreamNumber(tensor).map(Number::intValue).collect(Collectors.toList());
+  public static List<Integer> toListInteger(Tensor vector) {
+    return toNumberStream(vector).map(Number::intValue).collect(Collectors.toList());
   }
 
   /** does not perform rounding, but uses Scalar::number().intValue()
@@ -129,7 +145,7 @@ public enum Primitives {
    * @param tensor
    * @return array of int values of all scalars in tensor */
   public static int[] toIntArray(Tensor tensor) {
-    return toStreamNumber(tensor).mapToInt(Number::intValue).toArray();
+    return toIntStream(tensor).toArray();
   }
 
   /** does not perform rounding, but uses Scalar::number().intValue()
@@ -147,8 +163,8 @@ public enum Primitives {
   /** @param tensor
    * @return */
   public static IntBuffer toIntBuffer(Tensor tensor) {
-    IntBuffer intBuffer = IntBuffer.allocate(Numel.of(tensor));
-    toStreamNumber(tensor).mapToInt(Number::intValue).forEach(intBuffer::put);
+    IntBuffer intBuffer = IntBuffer.allocate(tensor.length());
+    toIntStream(tensor).forEach(intBuffer::put);
     ((java.nio.Buffer) intBuffer).flip();
     return intBuffer;
   }
@@ -163,8 +179,8 @@ public enum Primitives {
   /** @param tensor
    * @return byte buffer containing byte values of all scalars in given tensor */
   public static ByteBuffer toByteBuffer(Tensor tensor) {
-    ByteBuffer byteBuffer = ByteBuffer.allocate(Numel.of(tensor));
-    toStreamNumber(tensor).forEach(number -> byteBuffer.put(number.byteValue()));
+    ByteBuffer byteBuffer = ByteBuffer.allocate(tensor.length());
+    toNumberStream(tensor).forEach(number -> byteBuffer.put(number.byteValue()));
     ((java.nio.Buffer) byteBuffer).flip();
     return byteBuffer;
   }

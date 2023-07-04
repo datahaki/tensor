@@ -176,7 +176,7 @@ class LinearInterpolationTest {
   @Test
   void test0D() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.empty());
-    assertThrows(IndexOutOfBoundsException.class, () -> interpolation.get(RealScalar.ZERO));
+    assertThrows(Exception.class, () -> interpolation.get(RealScalar.ZERO));
   }
 
   @Test

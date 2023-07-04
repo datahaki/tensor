@@ -13,6 +13,7 @@ import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Subsets;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
@@ -58,11 +59,7 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
     NavigableMap<Scalar, Tensor> map = new TreeMap<>();
     Tensor At = Transpose.of(A);
     for (Tensor subset : Subsets.of(Range.of(0, n), m)) {
-      int[] cols = subset.stream() //
-          .map(Scalar.class::cast) //
-          .map(Scalar::number) //
-          .mapToInt(Number::intValue) //
-          .toArray();
+      int[] cols = Primitives.toIntArray(subset);
       Tensor matrix = Transpose.of(Tensor.of(IntStream.of(cols).mapToObj(At::get)));
       try {
         Tensor X = LinearSolve.of(matrix, b);

@@ -9,11 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Flatten;
 
 class PrimitivesTest {
   @Test
   void testByteArray() {
-    Tensor tensor = Tensors.fromString("{{1, 2, 3}, -1, {{256}}}");
+    Tensor tensor = Flatten.of(Tensors.fromString("{{1, 2, 3}, -1, {{256}}}"));
     byte[] array = Primitives.toByteArray(tensor);
     assertEquals(array[0], 1);
     assertEquals(array[1], 2);
@@ -24,7 +25,7 @@ class PrimitivesTest {
 
   @Test
   void testByteBuffer() {
-    Tensor tensor = Tensors.fromString("{{1, 2, 3}, -1, {{256}}}");
+    Tensor tensor = Flatten.of(Tensors.fromString("{{1, 2, 3}, -1, {{256}}}"));
     ByteBuffer byteBuffer = Primitives.toByteBuffer(tensor);
     assertEquals(byteBuffer.get() & 0xff, 1);
     assertEquals(byteBuffer.get() & 0xff, 2);

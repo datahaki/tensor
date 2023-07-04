@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Join;
 
 class PrimitivesLongTest {
   @Test
@@ -36,7 +37,7 @@ class PrimitivesLongTest {
   void testToLongBuffer() {
     Tensor a = Tensors.vector(-2, -27, Math.PI);
     Tensor b = Tensors.vector(43, 54, 62, 105);
-    LongBuffer longBuffer = Primitives.toLongBuffer(Tensors.of(a, b));
+    LongBuffer longBuffer = Primitives.toLongBuffer(Join.of(a, b));
     assertEquals(longBuffer.get(), -2);
     assertEquals(longBuffer.get(), -27);
     assertEquals(longBuffer.get(), 3);

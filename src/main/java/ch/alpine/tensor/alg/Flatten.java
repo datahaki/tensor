@@ -2,7 +2,9 @@
 package ch.alpine.tensor.alg;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
 /** {@link Flatten} is for convenience to collect the stream of tensors
@@ -33,6 +35,11 @@ public enum Flatten {
     // input and output share references to scalar instances only
     // therefore Tensor::copy is not necessary
     return Tensor.of(Arrays.stream(tensors).flatMap(tensor -> tensor.flatten(-1)));
+  }
+
+  @Deprecated
+  public static Stream<Scalar> scalars(Tensor tensor) {
+    return tensor.flatten(-1).map(Scalar.class::cast);
   }
 
   /** Special case of {@link Flatten#of(Tensor...)}

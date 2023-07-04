@@ -14,7 +14,9 @@ import ch.alpine.tensor.ext.BigIntegerMath;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.sca.Ceiling;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
@@ -56,87 +58,84 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
   }
 
   // ---
-  private final BigInteger min; // inclusive
-  private final Scalar _min;
-  private final BigInteger max; // exclusive
-  private final BigInteger max_1; // exclusive
-  private final Scalar p; // precomputed
+  private final Clip clip;
+  private final Scalar max_1; // exclusive
+  private final BigInteger width_1; // exclusive
+  private final Scalar p;
 
   private DiscreteUniformDistribution(BigInteger min, BigInteger max) {
-    this.min = min;
-    this._min = RealScalar.of(min);
-    this.max = max;
-    max_1 = max.subtract(BigInteger.ONE);
-    p = RationalScalar.of(BigInteger.ONE, max.subtract(min));
+    clip = Clips.interval(min, max);
+    max_1 = clip.max().subtract(RealScalar.ONE);
+    width_1 = max.subtract(min).subtract(BigInteger.ONE);
+    p = clip.width().reciprocal();
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return RationalScalar.of(max_1.add(min), BigInteger.TWO);
+    return max_1.add(clip.min()).multiply(RationalScalar.HALF);
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    Scalar width = RealScalar.of(max_1.subtract(min));
+    Scalar width = RealScalar.of(width_1);
     return RealScalar.TWO.add(width).multiply(width).divide(_12);
   }
 
   @Override // from DiscreteDistribution
   public BigInteger lowerBound() {
-    return min;
+    return Scalars.bigIntegerValueExact(clip.min());
   }
 
   @Override // from RandomVariateInterface
   public Scalar randomVariate(RandomGenerator randomGenerator) {
-    return RealScalar.of(min.add(random(max.subtract(min), randomGenerator)));
+    return clip.min().add(RealScalar.of(random(width_1, randomGenerator)));
   }
 
-  /** @param limit
+  /** @param max_inclusive
    * @param randomGenerator
-   * @return random BigInteger from 0, 1, ..., limit - 1 */
+   * @return random BigInteger from 0, 1, ..., max_inclusive */
   @PackageTestAccess
-  /* package */ static BigInteger random(BigInteger limit, RandomGenerator randomGenerator) {
-    BigInteger max = limit.subtract(BigInteger.ONE);
+  /* package */ static BigInteger random(BigInteger max_inclusive, RandomGenerator randomGenerator) {
     BigInteger bigInteger;
     do {
-      bigInteger = BigIntegerMath.random(max.bitLength(), randomGenerator);
-    } while (0 < bigInteger.compareTo(max));
+      bigInteger = BigIntegerMath.random(max_inclusive.bitLength(), randomGenerator);
+    } while (0 < bigInteger.compareTo(max_inclusive));
     return bigInteger;
   }
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
     return p.equals(RealScalar.ONE) //
-        ? RealScalar.of(max_1) // consistent with Mathematica
+        ? clip.max().subtract(RealScalar.ONE) // consistent with Mathematica
         : protected_quantile(Clips.unit().requireInside(p));
   }
 
   @Override // from InverseCDF
   protected Scalar protected_quantile(Scalar q) {
-    return _min.add(Floor.FUNCTION.apply(q.multiply(p.reciprocal()))); // do not simplify
+    return clip.min().add(Max.of(RealScalar.ONE, Ceiling.FUNCTION.apply(clip.width().multiply(q)))).subtract(RealScalar.ONE);
   }
 
   @Override // from AbstractDiscreteDistribution
   protected Scalar protected_p_equals(BigInteger x) {
-    return x.compareTo(max) < 0 // x < max //
+    return Scalars.lessThan(RealScalar.of(x), clip.max()) //
         ? p
         : RealScalar.ZERO;
   }
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    Scalar num = Ceiling.FUNCTION.apply(x).subtract(_min);
+    Scalar num = Ceiling.FUNCTION.apply(x).subtract(clip.min());
     return Clips.unit().apply(num.multiply(p));
   }
 
   @Override // from CDF
   public Scalar p_lessEquals(Scalar x) {
-    Scalar num = RealScalar.ONE.add(Floor.FUNCTION.apply(x)).subtract(_min);
+    Scalar num = RealScalar.ONE.add(Floor.FUNCTION.apply(x)).subtract(clip.min());
     return Clips.unit().apply(num.multiply(p));
   }
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("DiscreteUniformDistribution", min, max);
+    return MathematicaFormat.concise("DiscreteUniformDistribution", clip.min(), clip.max());
   }
 }

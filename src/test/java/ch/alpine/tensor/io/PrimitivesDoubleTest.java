@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Join;
 
 class PrimitivesDoubleTest {
   @Test
@@ -34,7 +35,7 @@ class PrimitivesDoubleTest {
 
   @Test
   void testToDoubleArray2D() {
-    Tensor tensor = Tensors.fromString("{{1, 2}, {3, {4}, 5}, {6}}");
+    Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}, {6}}");
     double[][] array = Primitives.toDoubleArray2D(tensor);
     assertEquals(Tensors.vectorDouble(array[0]), Tensors.vector(1, 2));
     assertEquals(Tensors.vectorDouble(array[1]), Tensors.vector(3, 4, 5));
@@ -44,7 +45,7 @@ class PrimitivesDoubleTest {
 
   @Test
   void testToDoubleArray2Dvector() {
-    Tensor tensor = Tensors.fromString("{1, 2, {3, {4}, 5}, {{6}, 7}}");
+    Tensor tensor = Tensors.fromString("{{1}, {2}, {3, 4, 5}, {6, 7}}");
     double[][] array = Primitives.toDoubleArray2D(tensor);
     assertEquals(Tensors.vectorDouble(array[0]), Tensors.vector(1));
     assertEquals(Tensors.vectorDouble(array[1]), Tensors.vector(2));
@@ -57,7 +58,7 @@ class PrimitivesDoubleTest {
   void testToDoubleBuffer() {
     Tensor a = Tensors.vector(-2.5, -2.7, Math.PI);
     Tensor b = Tensors.vector(4.3, 5.4, 6.2, 10.5);
-    DoubleBuffer doubleBuffer = Primitives.toDoubleBuffer(Tensors.of(a, b));
+    DoubleBuffer doubleBuffer = Primitives.toDoubleBuffer(Join.of(a, b));
     assertEquals(doubleBuffer.get(), -2.5);
     assertEquals(doubleBuffer.get(), -2.7);
     assertEquals(doubleBuffer.get(), Math.PI);

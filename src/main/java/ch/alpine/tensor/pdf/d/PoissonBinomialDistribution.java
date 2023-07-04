@@ -11,6 +11,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.RandomVariateInterface;
@@ -62,10 +63,7 @@ public class PoissonBinomialDistribution implements Distribution, //
 
   @Override // from RandomVariateInterface
   public Scalar randomVariate(RandomGenerator randomGenerator) {
-    return RealScalar.of(lowerBound + p_vector.stream() //
-        .map(Scalar.class::cast) //
-        .map(Scalar::number) //
-        .mapToDouble(Number::doubleValue) //
+    return RealScalar.of(lowerBound + Primitives.toDoubleStream(p_vector) //
         .filter(p -> randomGenerator.nextDouble() < p) //
         .count());
   }

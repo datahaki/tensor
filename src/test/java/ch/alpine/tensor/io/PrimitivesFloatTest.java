@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Join;
 
 class PrimitivesFloatTest {
   @Test
@@ -27,7 +28,7 @@ class PrimitivesFloatTest {
   void testToFloatArray() {
     Tensor a = Tensors.vector(-2.5f, -2.7f);
     Tensor b = Tensors.vector(4.3f, 5.4f, 6.2f, 10.5f);
-    float[] array = Primitives.toFloatArray(Tensors.of(a, b));
+    float[] array = Primitives.toFloatArray(Join.of(a, b));
     assertEquals(array[0], -2.5f);
     assertEquals(array[1], -2.7f);
     assertEquals(array[2], 4.3f);
@@ -57,7 +58,7 @@ class PrimitivesFloatTest {
   void testToFloatBuffer() {
     Tensor a = Tensors.vector(-2.5f, -2.7f);
     Tensor b = Tensors.vector(4.3f, 5.4f, 6.2f, 10.5f);
-    FloatBuffer floatBuffer = Primitives.toFloatBuffer(Tensors.of(a, b));
+    FloatBuffer floatBuffer = Primitives.toFloatBuffer(Join.of(a, b));
     assertEquals(floatBuffer.get(), -2.5f);
     assertEquals(floatBuffer.get(), -2.7f);
     assertEquals(floatBuffer.get(), 4.3f);

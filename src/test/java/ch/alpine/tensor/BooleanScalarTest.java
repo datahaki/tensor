@@ -93,7 +93,7 @@ class BooleanScalarTest {
     Tensor result = Tensor.of(values.stream() //
         .map(Scalar.class::cast) //
         .map(s -> Scalars.lessThan(s, RealScalar.of(5))).map(BooleanScalar::of));
-    Tensor zeroOne = Tensors.vector(Primitives.toStreamNumber(result).collect(Collectors.toList()));
+    Tensor zeroOne = Tensors.vector(Primitives.toNumberStream(result).collect(Collectors.toList()));
     assertTrue(10 < Total.ofVector(zeroOne).number().intValue());
   }
 

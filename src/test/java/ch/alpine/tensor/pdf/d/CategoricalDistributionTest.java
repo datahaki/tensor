@@ -149,6 +149,19 @@ class CategoricalDistributionTest {
   }
 
   @Test
+  void testInverseCDF2() {
+    InverseCDF inverseCDF = InverseCDF.of(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 3, 0, 0)));
+    Scalar x0 = inverseCDF.quantile(RealScalar.ZERO);
+    Scalar x1 = inverseCDF.quantile(RealScalar.of(0.5));
+    Scalar x2 = inverseCDF.quantile(RealScalar.of(0.8));
+    Scalar x3 = inverseCDF.quantile(RealScalar.of(1));
+    assertEquals(x0, RealScalar.TWO);
+    assertEquals(x1, RealScalar.TWO);
+    assertEquals(x2, RealScalar.TWO);
+    assertEquals(x3, RealScalar.TWO);
+  }
+
+  @Test
   void testInverseCDFOne() {
     AbstractDiscreteDistribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0, 0, 0));

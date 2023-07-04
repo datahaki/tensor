@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.HexFormat;
 
 /** hash for the contents of the specified file
  * 
@@ -40,9 +39,6 @@ public enum FileHash {
    * @throws FileNotFoundException
    * @throws IOException */
   public static String string(File file, MessageDigest messageDigest) throws FileNotFoundException, IOException {
-    byte[] data = of(file, messageDigest);
-    return IntStream.range(0, data.length) //
-        .mapToObj(i -> String.format("%02x", data[i])) //
-        .collect(Collectors.joining());
+    return HexFormat.of().formatHex(of(file, messageDigest));
   }
 }
