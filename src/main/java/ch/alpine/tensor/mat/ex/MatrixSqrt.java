@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.ex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -26,7 +27,7 @@ public interface MatrixSqrt {
    * @return sqrt of given matrix */
   static MatrixSqrt of(Tensor matrix) {
     if (SymmetricMatrixQ.of(matrix) && //
-        matrix.flatten(1) //
+        Flatten.stream(matrix, 1) //
             .map(Scalar.class::cast) //
             .map(Im.FUNCTION) //
             .allMatch(Scalars::isZero))

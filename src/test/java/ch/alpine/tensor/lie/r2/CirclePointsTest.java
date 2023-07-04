@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.alg.UnitVector;
@@ -47,9 +47,9 @@ class CirclePointsTest {
     Tolerance.CHOP.requireClose(CirclePoints.of(4), numeric(4));
     Tolerance.CHOP.requireClose(CirclePoints.of(6), numeric(6));
     Tolerance.CHOP.requireClose(CirclePoints.of(12), numeric(12));
-    assertEquals(CirclePoints.of(6).flatten(-1).map(Scalar.class::cast).filter(ExactScalarQ::of).count(), 8);
-    assertEquals(CirclePoints.of(9).flatten(-1).map(Scalar.class::cast).filter(ExactScalarQ::of).count(), 4);
-    assertEquals(CirclePoints.of(12).flatten(-1).map(Scalar.class::cast).filter(ExactScalarQ::of).count(), 16);
+    assertEquals(Flatten.scalars(CirclePoints.of(6)).filter(ExactScalarQ::of).count(), 8);
+    assertEquals(Flatten.scalars(CirclePoints.of(9)).filter(ExactScalarQ::of).count(), 4);
+    assertEquals(Flatten.scalars(CirclePoints.of(12)).filter(ExactScalarQ::of).count(), 16);
   }
 
   @Test

@@ -67,8 +67,7 @@ public class Rescale {
   /** @param tensor of rank at least 1
    * @throws Exception if given tensor is a scalar */
   public Rescale(Tensor tensor) {
-    this(tensor, tensor.flatten(-1) //
-        .map(Scalar.class::cast) //
+    this(tensor, Flatten.scalars(tensor) //
         .filter(FiniteScalarQ::of) //
         .collect(MinMax.toClip()));
   }

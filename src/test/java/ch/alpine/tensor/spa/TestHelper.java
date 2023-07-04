@@ -6,6 +6,7 @@ import java.util.List;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 
 /* package */ enum TestHelper {
   ;
@@ -17,7 +18,7 @@ import ch.alpine.tensor.alg.Dimensions;
     List<Integer> size = dimensions.list();
     if (0 == size.size()) // tensor is a scalar
       return tensor;
-    Scalar fallback = tensor.flatten(-1).map(Scalar.class::cast).limit(1).findFirst().get().zero();
+    Scalar fallback = Flatten.scalars(tensor).limit(1).findFirst().get().zero();
     return StaticHelper.of(fallback, size, tensor);
   }
 }

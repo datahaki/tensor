@@ -12,6 +12,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Outer;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.InexactScalarMarker;
@@ -143,7 +144,7 @@ public class CenteredInterval extends AbstractScalar implements //
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
     return scalar instanceof CenteredInterval centeredInterval //
-        ? new CenteredInterval(Outer.of(Scalar::multiply, flat(), centeredInterval.flat()).flatten(1).map(Scalar.class::cast).collect(MinMax.toClip()))
+        ? new CenteredInterval(Flatten.stream(Outer.of(Scalar::multiply, flat(), centeredInterval.flat()), 1).map(Scalar.class::cast).collect(MinMax.toClip()))
         : of(flat().multiply(scalar).stream().map(Scalar.class::cast).collect(MinMax.toClip()));
   }
 

@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -52,7 +53,7 @@ public class ImageCrop implements TensorUnaryOperator {
     int level = Math.max(0, depth - 2);
     for (int count = 0; count < depth; ++count) {
       Tensor ftensor = tensor;
-      IntPredicate intPredicate = i -> !ftensor.get(i).flatten(level).allMatch(predicate);
+      IntPredicate intPredicate = i -> !Flatten.stream(ftensor.get(i), level).allMatch(predicate);
       int length = tensor.length();
       OptionalInt optionalInt = IntStream.range(0, length).filter(intPredicate).findFirst();
       if (optionalInt.isEmpty())

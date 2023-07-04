@@ -11,6 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.ExactTensorQ;
 
 class MinFilterTest {
@@ -68,7 +69,7 @@ class MinFilterTest {
   @Test
   void testNonArray() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
-    matrix.flatten(-1).forEach(RationalScalar.class::cast); // test if parsing went ok
+    Flatten.scalars(matrix).forEach(RationalScalar.class::cast); // test if parsing went ok
     MinFilter.of(matrix, 0);
     assertThrows(IllegalArgumentException.class, () -> MinFilter.of(matrix, 1));
   }

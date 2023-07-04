@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.io.TableBuilder;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -86,8 +87,7 @@ public enum Unprotect {
    * @param tensor
    * @return whether scalar entries are quantities of identical unit */
   public static boolean isUnitUnique(Tensor tensor) {
-    return tensor.flatten(-1) //
-        .map(Scalar.class::cast) //
+    return Flatten.scalars(tensor) //
         .map(QuantityUnit::of) //
         .distinct() //
         .skip(1) //

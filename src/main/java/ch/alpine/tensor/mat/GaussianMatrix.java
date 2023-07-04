@@ -6,6 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -26,6 +27,6 @@ public enum GaussianMatrix {
     Tensor offset = Tensors.vector(-r, -r);
     Tensor matrix = Array.of(list -> Vector2NormSquared.of(Tensors.vector(list).add(offset)), m, m) //
         .divide(factor).map(Exp.FUNCTION);
-    return matrix.divide((Scalar) matrix.flatten(1).reduce(Tensor::add).orElseThrow());
+    return matrix.divide((Scalar) Flatten.stream(matrix, 1).reduce(Tensor::add).orElseThrow());
   }
 }

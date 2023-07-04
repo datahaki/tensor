@@ -21,6 +21,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.img.MeanFilter;
 import ch.alpine.tensor.pdf.Distribution;
@@ -76,7 +77,7 @@ class ExportTest {
     image.set(Array.of(f -> RealScalar.of(255), 7, 11), Tensor.ALL, Tensor.ALL, 3);
     Export.of(file, image);
     Tensor diff = image.subtract(Import.of(file));
-    Scalar total = (Scalar) diff.map(Abs.FUNCTION).flatten(-1).reduce(Tensor::add).get();
+    Scalar total = Flatten.scalars(diff.map(Abs.FUNCTION)).reduce(Scalar::add).get();
     Scalar pixel = total.divide(RealScalar.of(4 * 77.0));
     assertTrue(Scalars.lessEquals(pixel, RealScalar.of(6)));
   }
@@ -88,7 +89,7 @@ class ExportTest {
     Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11), 4);
     Export.of(file, image);
     Tensor diff = image.subtract(Import.of(file));
-    Scalar total = (Scalar) diff.map(Abs.FUNCTION).flatten(-1).reduce(Tensor::add).get();
+    Scalar total = Flatten.scalars(diff.map(Abs.FUNCTION)).reduce(Scalar::add).get();
     Scalar pixel = total.divide(RealScalar.of(77.0));
     assertTrue(Scalars.lessEquals(pixel, RealScalar.of(5)));
   }

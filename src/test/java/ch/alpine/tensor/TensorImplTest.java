@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -23,7 +24,7 @@ class TensorImplTest {
   @Test
   void testUnmodifiable() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
-    assertThrows(UnsupportedOperationException.class, () -> eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2)));
+    assertThrows(UnsupportedOperationException.class, () -> Flatten.stream(eye, 0).forEach(e -> e.set(RealScalar.of(4), 2)));
   }
 
   @Test
@@ -39,7 +40,7 @@ class TensorImplTest {
   @Test
   void testCopy() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable().copy();
-    eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2));
+    Flatten.stream(eye, 0).forEach(e -> e.set(RealScalar.of(4), 2));
     assertEquals(eye.get(Tensor.ALL, 2), Tensors.vector(4, 4, 4, 4));
   }
 

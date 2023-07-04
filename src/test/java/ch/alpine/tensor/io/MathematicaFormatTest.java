@@ -26,6 +26,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
@@ -44,8 +45,7 @@ class MathematicaFormatTest {
   }
 
   private static void checkNonString(Tensor tensor) {
-    Optional<Scalar> optional = tensor.flatten(-1) //
-        .map(Scalar.class::cast) //
+    Optional<Scalar> optional = Flatten.scalars(tensor) //
         .filter(scalar -> scalar instanceof StringScalar) //
         .findAny();
     boolean containsStringScalar = optional.isPresent();

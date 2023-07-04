@@ -5,6 +5,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.PackageTestAccess;
@@ -59,7 +60,7 @@ public enum PseudoInverse {
       } catch (Exception exception) {
         // matrix does not have maximal rank
       }
-    boolean complex = matrix.flatten(1) //
+    boolean complex = Flatten.stream(matrix, 1) //
         .map(Scalar.class::cast) //
         .map(Im.FUNCTION) //
         .anyMatch(Scalars::nonZero);

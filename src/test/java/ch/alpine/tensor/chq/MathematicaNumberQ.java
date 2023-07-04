@@ -5,6 +5,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.qty.Quantity;
 
 /** implementation consistent with Mathematica
@@ -60,6 +61,6 @@ import ch.alpine.tensor.qty.Quantity;
   /** @param tensor
    * @return whether all scalar entries in given tensor satisfy the predicate {@link #of(Scalar)}} */
   public static boolean all(Tensor tensor) {
-    return tensor.flatten(-1).map(Scalar.class::cast).allMatch(MathematicaNumberQ::of);
+    return Flatten.scalars(tensor).allMatch(MathematicaNumberQ::of);
   }
 }

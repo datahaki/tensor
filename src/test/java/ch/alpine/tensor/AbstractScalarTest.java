@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
@@ -74,6 +75,13 @@ class AbstractScalarTest {
     assertThrows(Throw.class, () -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] { 2 })));
     assertThrows(Throw.class, () -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] {})));
     assertThrows(Throw.class, () -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] { 2 })));
+  }
+
+  @Test
+  void testFlatten() {
+    assertEquals(Flatten.scalars(Pi.VALUE).count(), 1L);
+    assertEquals(Flatten.stream(Pi.VALUE, -1).count(), 1L);
+    assertEquals(Flatten.stream(Pi.VALUE, 0).count(), 1L);
   }
 
   @Test

@@ -15,6 +15,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
@@ -36,7 +37,7 @@ class ImportHelperTest {
     assertEquals(tensor.get(2, 5), Tensors.vector(145, 74, 198, 255));
     Tensor tensor2 = tensor.get(Tensor.ALL, Tensor.ALL, 3);
     Tensor units = tensor2.map(Unitize.FUNCTION);
-    assertEquals(units.flatten(-1).reduce(Tensor::add).get(), RealScalar.of(9));
+    assertEquals(Flatten.scalars(units).reduce(Scalar::add).get(), RealScalar.of(9));
   }
 
   @Test

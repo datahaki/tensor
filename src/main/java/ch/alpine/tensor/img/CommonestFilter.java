@@ -3,6 +3,7 @@ package ch.alpine.tensor.img;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.red.Commonest;
 
 /** Careful:
@@ -25,6 +26,6 @@ public enum CommonestFilter {
 
   // helper function
   private static Tensor flatten(Tensor tensor) {
-    return Commonest.of(tensor.flatten(-1)).get(0);
+    return Commonest.of(Flatten.stream(tensor, -1)).get(0);
   }
 }

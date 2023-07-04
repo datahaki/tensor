@@ -18,6 +18,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.io.Import;
@@ -68,7 +69,7 @@ class ImageResizeTest {
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);
     Tensor diff = t1.subtract(t2);
-    NavigableMap<Scalar, Long> navigableMap = Tally.sorted(diff.flatten(-1).map(Scalar.class::cast));
+    NavigableMap<Scalar, Long> navigableMap = Tally.sorted(Flatten.scalars(diff));
     Clip clip = Clips.absolute(25);
     clip.requireInside(navigableMap.firstKey());
     clip.requireInside(navigableMap.lastKey());
@@ -105,7 +106,7 @@ class ImageResizeTest {
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);
     Tensor diff = t1.subtract(t2);
-    Scalar norm = Vector1Norm.of(diff.flatten(-1).map(Scalar.class::cast)); // 812636
+    Scalar norm = Vector1Norm.of(Flatten.scalars(diff)); // 812636
     Sign.requirePositiveOrZero(norm);
     // System.out.println(norm);
   }

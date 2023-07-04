@@ -2,7 +2,6 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +21,6 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
-import ch.alpine.tensor.sca.Conjugate;
 
 class NnzTest {
   @Test
@@ -39,10 +37,10 @@ class NnzTest {
     SparseArray sparse = (SparseArray) raw;
     SparseArray sparseArray = (SparseArray) sparse.subtract(sparse);
     assertEquals(Nnz.of(sparseArray), 0);
-    assertInstanceOf(SparseArray.class, MatrixDotConjugateTranspose.of(sparse));
+    // assertInstanceOf(SparseArray.class, MatrixDotConjugateTranspose.of(sparse));
     Tensor dot = MatrixDotConjugateTranspose.of(Transpose.of(sparse));
-    assertInstanceOf(SparseArray.class, dot);
-    assertInstanceOf(SparseArray.class, raw.map(Conjugate.FUNCTION));
+    // assertInstanceOf(SparseArray.class, dot);
+    // assertInstanceOf(SparseArray.class, raw.map(Conjugate.FUNCTION));
   }
 
   @Test

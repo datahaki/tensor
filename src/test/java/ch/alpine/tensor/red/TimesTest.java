@@ -13,6 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -118,7 +119,7 @@ class TimesTest {
     Tensor c = Tensors.of( //
         Tensors.vectorLong(3, 4, 6), //
         Tensors.vectorLong(9, -2, -2));
-    Tensor r = Tensor.of(a.flatten(0).map(row -> Times.of(row, b)));
+    Tensor r = Tensor.of(Flatten.stream(a, 0).map(row -> Times.of(row, b)));
     assertEquals(r, c);
   }
 

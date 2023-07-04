@@ -13,6 +13,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.img.ColorFormat;
 
 /** ImageFormat uses the data alignment of {@link BufferedImage}.
@@ -101,7 +102,7 @@ public enum ImageFormat {
     DataBufferByte dataBufferByte = (DataBufferByte) writableRaster.getDataBuffer();
     byte[] bytes = dataBufferByte.getData();
     ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
-    tensor.flatten(1).map(Scalar.class::cast).map(Scalar::number) //
+    Flatten.stream(tensor, 1).map(Scalar.class::cast).map(Scalar::number) //
         .forEach(number -> byteBuffer.put(number.byteValue()));
     return bufferedImage;
   }
@@ -109,7 +110,7 @@ public enum ImageFormat {
   // fast extraction of color information to buffered image
   private static BufferedImage toTYPE_INT(Tensor tensor, int width, int height, int imageType) {
     BufferedImage bufferedImage = new BufferedImage(width, height, imageType);
-    int[] array = tensor.flatten(1).mapToInt(ColorFormat::toInt).toArray();
+    int[] array = Flatten.stream(tensor, 1).mapToInt(ColorFormat::toInt).toArray();
     bufferedImage.setRGB(0, 0, width, height, array, 0, width);
     return bufferedImage;
   }

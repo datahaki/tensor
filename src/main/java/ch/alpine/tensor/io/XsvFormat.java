@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Flatten;
 
 /** implementation for comma- or tab- separated values file format */
 /* package */ enum XsvFormat {
@@ -43,7 +44,7 @@ import ch.alpine.tensor.Tensors;
    * @return stream of lines that make up the csv format */
   public Stream<String> of(Tensor tensor) {
     // flatten(0) handles scalars as opposed to stream()
-    return tensor.flatten(0).map(this::row);
+    return Flatten.stream(tensor, 0).map(this::row);
   }
 
   /** Example: The stream of the following strings
@@ -75,7 +76,7 @@ import ch.alpine.tensor.Tensors;
   // helper function
   private String row(Tensor tensor) {
     // flatten(0) handles scalars as opposed to stream()
-    return tensor.flatten(0).map(Tensor::toString).collect(collector);
+    return Flatten.stream(tensor, 0).map(Tensor::toString).collect(collector);
   }
 
   // helper function

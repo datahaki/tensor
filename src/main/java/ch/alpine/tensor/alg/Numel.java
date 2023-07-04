@@ -17,6 +17,6 @@ public enum Numel {
    * @param tensor
    * @return number of {@link Scalar}s in tensor */
   public static int of(Tensor tensor) {
-    return Math.toIntExact(tensor.flatten(-1).count());
+    return Math.toIntExact(Flatten.stream(tensor, -1).count());
   }
 }

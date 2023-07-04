@@ -7,6 +7,7 @@ import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.mat.re.RowReduce;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
@@ -63,6 +64,6 @@ public enum ExactScalarQ {
   /** @param tensor
    * @return true if any scalar entry in given tensor satisfies the predicate {@link #of(Scalar)} */
   public static boolean any(Tensor tensor) {
-    return tensor.flatten(-1).map(Scalar.class::cast).anyMatch(ExactScalarQ::of);
+    return Flatten.scalars(tensor).anyMatch(ExactScalarQ::of);
   }
 }

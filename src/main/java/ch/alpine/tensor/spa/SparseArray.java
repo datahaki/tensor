@@ -252,22 +252,16 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor map(Function<Scalar, ? extends Tensor> function) {
-    Tensor map_fallback = function.apply(fallback);
-    Dimensions dimensions = new Dimensions(map_fallback);
-    if (dimensions.isArray()) {
-      List<Scalar> elements = map_fallback.flatten(-1) //
-          .map(Scalar.class::cast) //
-          .filter(Scalars::isZero) //
-          .distinct() //
-          .limit(2) //
-          .collect(Collectors.toList());
-      if (elements.size() == 1) {
-        List<Integer> result = Stream.concat(size.stream(), dimensions.list().stream()).collect(Collectors.toList());
-        SparseArray sparseArray = new SparseArray(elements.get(0), result);
-        visit((list, scalar) -> sparseArray.set(function.apply(scalar), list));
-        return sparseArray;
-      }
-    }
+    // TODO TENSOR enhance
+    // Tensor map_fallback = function.apply(fallback);
+    // Dimensions dimensions = new Dimensions(map_fallback);
+    // if (dimensions.isArray()) {
+    // Scalar zero = EqualsReduce.zero(map_fallback);
+    // List<Integer> result = Stream.concat(size.stream(), dimensions.list().stream()).collect(Collectors.toList());
+    // SparseArray sparseArray = new SparseArray(zero, result);
+    // visit((list, scalar) -> sparseArray.set(function.apply(scalar), list));
+    // return sparseArray;
+    // }
     return new Normal(function).apply(this);
   }
 

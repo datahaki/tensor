@@ -3,7 +3,6 @@ package ch.alpine.tensor;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.ext.Integers;
 
@@ -40,14 +39,6 @@ public abstract class AbstractTensor implements Tensor {
   @Override // from Tensor
   public final <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index) {
     set(function, Integers.asList(index));
-  }
-
-  @Override // from Tensor
-  public final Stream<Tensor> flatten(int level) {
-    if (level == 0)
-      return stream(); // UnmodifiableTensor overrides stream()
-    int ldecr = level - 1;
-    return stream().flatMap(tensor -> tensor.flatten(ldecr));
   }
 
   @Override // from Object

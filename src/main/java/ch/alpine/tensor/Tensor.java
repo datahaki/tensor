@@ -332,23 +332,6 @@ public interface Tensor extends Iterable<Tensor> {
    * a scalar does not contain a list of tensors */
   Stream<Tensor> stream();
 
-  /** stream access to the entries at given level of this tensor.
-   * entries at given level can be tensors or scalars.
-   * 
-   * <p>For the input <code>level == -1</code>, the return stream consists
-   * of all {@link Scalar}s in this tensor.
-   * 
-   * <p>If this tensor has been marked as unmodifiable, the elements of
-   * the stream are unmodifiable as well.
-   * 
-   * <p>Unlike {@link #stream()}, function {@link #flatten(int)} may be
-   * invoked on a {@link Scalar}. In that case the return value is the
-   * stream with the scalar as single element.
-   * 
-   * @param level
-   * @return non-parallel stream, the user may invoke .parallel() */
-  Stream<Tensor> flatten(int level);
-
   /** iterator of list of entries.
    * The operation remove() is supported.
    * 

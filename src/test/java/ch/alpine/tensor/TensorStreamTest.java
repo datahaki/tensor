@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Abs;
@@ -20,8 +21,7 @@ class TensorStreamTest {
   @Test
   void testReduction() {
     Tensor a = Tensors.vectorDouble(2., 1.123, 0.3123);
-    assertTrue(a.flatten(-1) //
-        .map(Scalar.class::cast) //
+    assertTrue(Flatten.scalars(a) //
         .map(Scalar::number) //
         .map(Number::doubleValue) //
         .allMatch(d -> d > 0));
@@ -30,7 +30,7 @@ class TensorStreamTest {
   @Test
   void testNorm3() {
     Tensor a = Tensors.vectorLong(2, -3, 4, -1);
-    double ods = a.flatten(0) //
+    double ods = Flatten.stream(a, 0) //
         .map(Scalar.class::cast) //
         .map(Abs.FUNCTION) //
         .map(Scalar::number) //
@@ -43,7 +43,7 @@ class TensorStreamTest {
   @Test
   void testNorm4() {
     Tensor a = Tensors.vectorLong(2, -3, 4, -1);
-    double ods = a.flatten(0) //
+    double ods = Flatten.stream(a, 0) //
         .map(s -> (Scalar) s) //
         .map(Abs.FUNCTION) //
         .map(Scalar::number) //

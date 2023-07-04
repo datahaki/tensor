@@ -7,6 +7,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -68,7 +69,7 @@ public enum NullSpace {
       return usingRowReduce(matrix);
     int rows = matrix.length();
     int cols = Unprotect.dimension1Hint(matrix);
-    boolean isComplex = matrix.flatten(1) //
+    boolean isComplex = Flatten.stream(matrix, 1) //
         .anyMatch(scalar -> scalar instanceof ComplexScalar);
     return rows < cols || isComplex //
         ? usingQR(matrix)

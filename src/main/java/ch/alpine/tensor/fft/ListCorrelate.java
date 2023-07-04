@@ -10,6 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.ext.Integers;
@@ -65,7 +66,7 @@ public class ListCorrelate implements TensorUnaryOperator {
         .map(index -> size.get(index) - mask.get(index) + 1) //
         .mapToObj(Integers::requirePositive) //
         .collect(Collectors.toList());
-    return Array.of(index -> Times.of(kernel, tensor.block(index, mask)).flatten(level) //
+    return Array.of(index -> Flatten.stream(Times.of(kernel, tensor.block(index, mask)), level) //
         .reduce(Tensor::add).orElseThrow(), dimensions);
   }
 

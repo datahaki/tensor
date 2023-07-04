@@ -3,6 +3,7 @@ package ch.alpine.tensor.nrm;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.Flatten;
 
 /** implementation is consistent with Mathematica
  * Norm[{3, 4}, "Frobenius"] == 5
@@ -13,7 +14,7 @@ public enum FrobeniusNorm {
   /** @param tensor of arbitrary rank
    * @return Frobenius norm of given tensor */
   public static Scalar of(Tensor tensor) {
-    return Vector2Norm.of(Tensor.of(tensor.flatten(-1)));
+    return Vector2Norm.of(Flatten.of(tensor));
   }
 
   /** @param t1

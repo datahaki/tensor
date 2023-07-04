@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.ev;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
@@ -59,7 +60,7 @@ public interface Eigensystem {
    * @param matrix
    * @return */
   static Eigensystem of(Tensor matrix) {
-    boolean isComplex = matrix.flatten(1) //
+    boolean isComplex = Flatten.stream(matrix, 1) //
         .anyMatch(scalar -> scalar instanceof ComplexScalar);
     if (!isComplex)
       return SymmetricMatrixQ.of(matrix) //

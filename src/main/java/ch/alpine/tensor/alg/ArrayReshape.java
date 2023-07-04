@@ -54,7 +54,7 @@ public enum ArrayReshape {
    * @throws Exception if the product of the elements in dimensions
    * does not equal the number of scalars in given tensor */
   public static Tensor of(Tensor tensor, List<Integer> dimensions) {
-    return of(tensor.flatten(-1), dimensions);
+    return of(Flatten.scalars(tensor), dimensions);
   }
 
   /** @param tensor

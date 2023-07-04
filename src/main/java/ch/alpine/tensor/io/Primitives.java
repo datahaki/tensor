@@ -22,7 +22,7 @@ import ch.alpine.tensor.Tensor;
 public enum Primitives {
   ;
   /** @param vector
-   * @return stream of all scalars in tensor mapped to {@link Number} */
+   * @return stream of all scalars in vector mapped to {@link Number} */
   public static Stream<Number> toNumberStream(Tensor vector) {
     return vector.stream().map(Scalar.class::cast).map(Scalar::number);
   }
@@ -41,7 +41,7 @@ public enum Primitives {
   }
 
   /** @param vector
-   * @return array of double values of all scalars in tensor */
+   * @return array of double values of all scalars in given vector */
   public static double[] toDoubleArray(Tensor vector) {
     return toDoubleStream(vector).toArray();
   }

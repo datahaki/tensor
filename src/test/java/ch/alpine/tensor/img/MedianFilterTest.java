@@ -11,6 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.ExactTensorQ;
 
 class MedianFilterTest {
@@ -77,7 +78,7 @@ class MedianFilterTest {
   void testNonArray() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
     ExactTensorQ.require(matrix);
-    matrix.flatten(-1).forEach(RationalScalar.class::cast); // test if parsing went ok
+    Flatten.scalars(matrix).forEach(RationalScalar.class::cast); // test if parsing went ok
     // Tensor res0 =
     // MedianFilter.of(matrix, 0);
     // try {

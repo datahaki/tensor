@@ -6,6 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Rescale;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.pdf.CDF;
@@ -21,7 +22,7 @@ public enum HistogramTransform {
    * @return */
   public static Tensor of(Tensor matrix) {
     int[] values = new int[256];
-    MatrixQ.require(matrix).flatten(1) //
+    Flatten.stream(MatrixQ.require(matrix), 1) //
         .map(Scalar.class::cast) //
         .mapToInt(Scalars::intValueExact) //
         .forEach(index -> ++values[index]);

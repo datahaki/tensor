@@ -30,6 +30,6 @@ public enum Tuples {
     Tensor array = Array.of(list -> Tensor.of(list.stream().map(tensor::get)), Collections.nCopies(n, tensor.length()));
     return n <= 1 //
         ? array
-        : Tensor.of(array.flatten(n - 1));
+        : Tensor.of(Flatten.stream(array, n - 1));
   }
 }

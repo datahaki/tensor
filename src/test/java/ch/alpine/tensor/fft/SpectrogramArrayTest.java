@@ -18,12 +18,12 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -52,8 +52,7 @@ class SpectrogramArrayTest {
   @Test
   void testMathematica() {
     Tensor tensor = CepstrogramArray.Real.apply(signal());
-    boolean status = tensor.flatten(-1) //
-        .map(Scalar.class::cast) //
+    boolean status = Flatten.scalars(tensor) //
         .allMatch(DeterminateScalarQ::of);
     assertTrue(status);
   }
@@ -62,8 +61,7 @@ class SpectrogramArrayTest {
   void testMathematicaUnits() {
     Tensor vector = signal().extract(0, 100).map(s -> Quantity.of(s, "s"));
     Tensor tensor = new SpectrogramArray(Fourier.FORWARD::transform, 10, 3, DirichletWindow.FUNCTION).apply(vector);
-    boolean status = tensor.flatten(-1) //
-        .map(Scalar.class::cast) //
+    boolean status = Flatten.scalars(tensor) //
         .allMatch(DeterminateScalarQ::of);
     assertTrue(status);
   }

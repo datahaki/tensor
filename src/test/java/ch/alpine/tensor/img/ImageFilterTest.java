@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -19,8 +19,8 @@ import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
 
 class ImageFilterTest {
-  private static final TensorScalarFunction MIN = block -> (Scalar) block.flatten(-1).reduce(Min::of).get();
-  private static final TensorScalarFunction MAX = block -> (Scalar) block.flatten(-1).reduce(Max::of).get();
+  private static final TensorScalarFunction MIN = block -> Flatten.scalars(block).reduce(Min::of).get();
+  private static final TensorScalarFunction MAX = block -> Flatten.scalars(block).reduce(Max::of).get();
 
   @Test
   void testMin() {

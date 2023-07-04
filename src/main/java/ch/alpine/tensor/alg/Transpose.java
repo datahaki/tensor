@@ -84,7 +84,7 @@ public enum Transpose {
     }
     if (dimensions.isArrayWith(list -> list.size() == sigma.length)) {
       Size size = Size.of(dimensions_list);
-      Scalar[] data = tensor.flatten(sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
+      Scalar[] data = Flatten.stream(tensor, sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
       return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));
     }
     return Array.of( //

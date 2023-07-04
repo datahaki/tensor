@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.ArrayQ;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.TensorRank;
 
 /** Pretty helps to format tensors for easy reading in the console.
@@ -30,7 +31,7 @@ public class Pretty {
   private int level = 0;
 
   private Pretty(Tensor tensor) {
-    int max = tensor.flatten(-1) //
+    int max = Flatten.stream(tensor, -1) //
         .map(Object::toString) //
         .mapToInt(String::length) //
         .max().orElse(0);

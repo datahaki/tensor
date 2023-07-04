@@ -9,6 +9,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
@@ -116,8 +117,7 @@ public class Chop implements ScalarUnaryOperator {
   /** @param tensor
    * @return true, if all entries of Chop.of(tensor) equal to {@link Scalar#zero()} */
   public boolean allZero(Tensor tensor) {
-    return tensor.flatten(-1) //
-        .map(Scalar.class::cast) //
+    return Flatten.scalars(tensor) //
         .map(this) //
         .allMatch(Scalars::isZero);
   }

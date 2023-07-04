@@ -63,11 +63,10 @@ public abstract class AbstractScalar implements Scalar {
   public final Stream<Tensor> stream() {
     throw new Throw(this);
   }
-
-  @Override // from Tensor
-  public final Stream<Tensor> flatten(int level) {
-    return Stream.of(this);
-  }
+  // @Override // from Tensor
+  // public final Stream<Tensor> flatten(int level) {
+  // return Stream.of(this);
+  // }
 
   @Override // from Tensor
   public final void set(Tensor tensor, int... index) {

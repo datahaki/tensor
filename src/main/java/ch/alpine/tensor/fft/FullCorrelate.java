@@ -10,6 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.ext.Integers;
@@ -68,7 +69,7 @@ public class FullCorrelate implements TensorUnaryOperator {
       List<Integer> tofs = IntStream.range(0, index.size()).mapToObj(i -> Math.max(0, index.get(i) - mask.get(i) + 1)).toList();
       List<Integer> widt = IntStream.range(0, index.size()) //
           .mapToObj(i -> Math.min(mask.get(i) - kofs.get(i), size.get(i) - tofs.get(i))).toList();
-      return Times.of(kernel.block(kofs, widt), tensor.block(tofs, widt)).flatten(level) //
+      return Flatten.stream(Times.of(kernel.block(kofs, widt), tensor.block(tofs, widt)), level) //
           .reduce(Tensor::add).orElseThrow();
     }, dimensions);
   }

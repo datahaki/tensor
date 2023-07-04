@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -67,8 +68,8 @@ class TensorTest {
     Tensor d = Tensors.of(a, b, c);
     Tensor e = Tensors.of(a, b);
     Tensor f = Tensors.of(d, e);
-    assertEquals(f.flatten(0).count(), 2);
-    assertEquals(f.flatten(1).count(), 5);
+    assertEquals(Flatten.stream(f, 0).count(), 2);
+    assertEquals(Flatten.stream(f, 1).count(), 5);
   }
 
   @Test

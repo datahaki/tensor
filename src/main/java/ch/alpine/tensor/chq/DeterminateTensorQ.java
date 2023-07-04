@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 
 /** @see DeterminateScalarQ */
 public enum DeterminateTensorQ {
@@ -14,7 +15,7 @@ public enum DeterminateTensorQ {
   /** @param tensor
    * @return whether all scalars in tensor satisfy {@link DeterminateScalarQ} */
   public static boolean of(Tensor tensor) {
-    return tensor.flatten(-1).map(Scalar.class::cast).allMatch(DeterminateScalarQ::of);
+    return Flatten.scalars(tensor).allMatch(DeterminateScalarQ::of);
   }
 
   /** @param tensor
@@ -23,8 +24,7 @@ public enum DeterminateTensorQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    Optional<Scalar> optional = tensor.flatten(-1) //
-        .map(Scalar.class::cast) //
+    Optional<Scalar> optional = Flatten.scalars(tensor) //
         .filter(Predicate.not(DeterminateScalarQ::of)) //
         .findFirst();
     throw new Throw(tensor, optional.orElseThrow());
