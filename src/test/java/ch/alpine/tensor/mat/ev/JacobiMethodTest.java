@@ -23,7 +23,7 @@ import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -158,14 +158,14 @@ class JacobiMethodTest {
 
   @Test
   void testChallenge1() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/ev/jacobi1.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/ev/jacobi1.csv");
     Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
     checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
   void testChallenge2() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/ev/jacobi2.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/ev/jacobi2.csv");
     Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
     checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
   }

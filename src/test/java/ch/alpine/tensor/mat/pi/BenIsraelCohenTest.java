@@ -19,7 +19,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -53,8 +53,8 @@ class BenIsraelCohenTest {
 
   @Test
   void testMathematica() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/pi/bic1.csv");
-    Tensor mathem = ResourceData.of("/ch/alpine/tensor/mat/pi/bic1pinv.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/pi/bic1.csv");
+    Tensor mathem = Import.of("/ch/alpine/tensor/mat/pi/bic1pinv.csv");
     Tensor pinv = BenIsraelCohen.of(matrix);
     Tolerance.CHOP.requireClose(pinv, mathem);
     SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
@@ -113,7 +113,7 @@ class BenIsraelCohenTest {
 
   @Test
   void testExceedIters() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/pi/bic_fail.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/pi/bic_fail.csv");
     MatrixQ.require(matrix);
     assertThrows(Throw.class, () -> BenIsraelCohen.of(matrix));
   }

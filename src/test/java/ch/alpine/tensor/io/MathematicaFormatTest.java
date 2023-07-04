@@ -87,7 +87,7 @@ class MathematicaFormatTest {
 
   @Test
   void testBasicResource() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/io/basic.mathematica");
+    Tensor tensor = Import.of("/ch/alpine/tensor/io/basic.mathematica");
     checkNonString(tensor);
   }
 
@@ -96,7 +96,7 @@ class MathematicaFormatTest {
     File file = OperatingSystem.fileOfResource("/ch/alpine/tensor/io/exponent.mathematica");
     Tensor tensor = Get.of(file);
     checkNonString(tensor);
-    assertEquals(tensor, ResourceData.of("/ch/alpine/tensor/io/exponent.mathematica"));
+    assertEquals(tensor, Import.of("/ch/alpine/tensor/io/exponent.mathematica"));
   }
 
   @Test

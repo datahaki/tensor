@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.num.Pi;
 
 class UnitSimplifyTest {

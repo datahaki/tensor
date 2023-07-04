@@ -18,6 +18,7 @@ import java.util.zip.DataFormatException;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.ObjectFormat;
+import ch.alpine.tensor.ext.ResourceData;
 
 /** supported file formats are: CSV, GIF, JPG, PNG, etc.
  * 
@@ -52,6 +53,20 @@ public enum Import {
     }
   }
 
+  /** Example use:
+   * Interpolation interpolation = LinearInterpolation.of(Import.of("/colorscheme/classic.csv"));
+   * 
+   * @param string as path to resource
+   * @return imported tensor
+   * @throws Exception if resource could not be loaded */
+  public static Tensor of(String string) {
+    try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
+      return ImportHelper.of(new Filename(string), inputStream);
+    } catch (Exception exception) {
+      throw new RuntimeException(exception);
+    }
+  }
+
   /** import function for Java objects that implement {@link Serializable}
    * and were stored with {@link Export#object(File, Object)}.
    * 
@@ -80,7 +95,7 @@ public enum Import {
    * @throws IOException */
   public static Properties properties(File file, Charset charset) throws FileNotFoundException, IOException {
     try (Reader reader = new BufferedReader(new FileReader(file, charset))) {
-      return ImportHelper.properties(reader);
+      return ResourceData.properties(reader);
     }
   }
 }

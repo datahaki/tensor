@@ -15,7 +15,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -201,7 +201,7 @@ class FourierDCTTest {
   @ParameterizedTest
   @EnumSource
   void testFromResource(FourierDCT fourierDCT) {
-    Tensor expect = ResourceData.of("/ch/alpine/tensor/fft/dctmatrix" + fourierDCT + ".csv");
+    Tensor expect = Import.of("/ch/alpine/tensor/fft/dctmatrix" + fourierDCT + ".csv");
     Tensor actual = fourierDCT.matrix(5);
     Tolerance.CHOP.requireClose(expect, actual);
   }

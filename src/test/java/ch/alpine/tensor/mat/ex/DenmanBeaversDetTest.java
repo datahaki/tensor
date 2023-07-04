@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
@@ -51,7 +51,7 @@ class DenmanBeaversDetTest {
   @SuppressWarnings("unused")
   @Test
   void testFail() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/ex/dbd_fail.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/ex/dbd_fail.csv");
     try {
       new DenmanBeaversDet(matrix, Tolerance.CHOP);
     } catch (Exception exception) {

@@ -9,8 +9,8 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.ResourceData;
 
 class KnownUnitQTest {
   @Test

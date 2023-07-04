@@ -26,7 +26,7 @@ import ch.alpine.tensor.spa.SparseArray;
 class MatrixMarketTest {
   @Test
   void testCoordinate() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/io/mtx/well1033.mtx.gz");
+    Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/well1033.mtx.gz");
     Tensor block = matrix.block(List.of(0, 0), List.of(7, 10));
     assertFalse(Chop._04.allZero(block));
     assertEquals(block.get(0), block.get(1));
@@ -40,13 +40,13 @@ class MatrixMarketTest {
 
   @Test
   void testCoordinateSymmetric() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/io/mtx/bcsstk13.mtx.gz");
+    Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/bcsstk13.mtx.gz");
     SymmetricMatrixQ.require(matrix);
   }
 
   @Test
   void testArray() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/io/mtx/well1033_rhs1.mtx.gz");
+    Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/well1033_rhs1.mtx.gz");
     assertEquals(Dimensions.of(matrix), List.of(1033, 1));
     assertFalse(Chop._04.allZero(matrix));
   }
@@ -54,8 +54,8 @@ class MatrixMarketTest {
   @Test
   @Disabled
   void testLeastSquares() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/io/mtx/well1033.mtx.gz");
-    Tensor rhs = Flatten.of(ResourceData.of("/ch/alpine/tensor/io/mtx/well1033_rhs1.mtx.gz"));
+    Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/well1033.mtx.gz");
+    Tensor rhs = Flatten.of(Import.of("/ch/alpine/tensor/io/mtx/well1033_rhs1.mtx.gz"));
     // TODO TENSOR IMPL for some reason slows down at k=192
     LeastSquares.of(matrix, rhs);
   }

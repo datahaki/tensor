@@ -12,13 +12,13 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.num.Pi;
 
 class HistogramTransformTest {
   @Test
   void testSimple() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/album_au_gray.jpg");
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
     Tensor result = HistogramTransform.of(tensor);
     assertEquals(Dimensions.of(tensor), Dimensions.of(result));
   }

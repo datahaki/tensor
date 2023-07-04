@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.ReadLine;
+import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.SquareMatrixQ;
 
@@ -36,7 +37,7 @@ class LowercaseETest {
 
   @Test
   void testConventional() {
-    Tensor tensor = ResourceData.of(RESOURCE);
+    Tensor tensor = Import.of(RESOURCE);
     assertTrue(StringScalarQ.any(tensor));
     assertEquals(tensor.length(), 6);
     assertEquals(tensor.get(0).length(), 3);

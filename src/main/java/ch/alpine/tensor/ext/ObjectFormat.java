@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.DataFormatException;
 
 /** ObjectFormat is the serialization of objects in deflated form.
@@ -30,7 +31,20 @@ public enum ObjectFormat {
    * @throws DataFormatException
    * @throws IOException */
   public static <T> T parse(byte[] bytes) //
-      throws ClassNotFoundException, DataFormatException, IOException {
+      throws ClassNotFoundException, IOException, DataFormatException {
     return Serialization.parse(Compression.inflate(bytes));
+  }
+
+  /** @param inputStream
+   * @return
+   * @throws IOException
+   * @throws ClassNotFoundException
+   * @throws DataFormatException */
+  public static <T> T parse(InputStream inputStream) //
+      throws ClassNotFoundException, IOException, DataFormatException {
+    int length = inputStream.available();
+    byte[] bytes = new byte[length];
+    inputStream.read(bytes);
+    return parse(bytes);
   }
 }

@@ -26,7 +26,7 @@ import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
@@ -135,7 +135,7 @@ class InfluenceMatrixTest {
 
   @Test
   void testBicChallenge() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/pi/bic_fail.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/pi/bic_fail.csv");
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(matrix);
     influenceMatrix.leverages();
   }
@@ -202,7 +202,7 @@ class InfluenceMatrixTest {
 
   @Test
   void testSvdWithUnits() {
-    Tensor design = ResourceData.of("/ch/alpine/tensor/mat/sv/svd1.csv");
+    Tensor design = Import.of("/ch/alpine/tensor/mat/sv/svd1.csv");
     SingularValueDecomposition.of(design);
     InfluenceMatrix.of(design);
   }

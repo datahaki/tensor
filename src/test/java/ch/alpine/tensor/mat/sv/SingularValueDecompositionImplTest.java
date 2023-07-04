@@ -15,8 +15,8 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.chq.FiniteTensorQ;
 import ch.alpine.tensor.io.Get;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.OperatingSystem;
-import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.NullSpace;
@@ -41,38 +41,38 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testCondition1() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd3.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd3.csv");
     InitTest.svd(matrix);
   }
 
   @Test
   void testCondition2() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd2.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv");
     InitTest.svd(matrix);
   }
 
   @Test
   void testCondition1UnitA() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd3.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd3.csv");
     InitTest.svd(matrix.map(s -> Quantity.of(s, "m")));
   }
 
   @Test
   void testCondition1UnitB() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd3.csv").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd3.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     InitTest.svd(matrix);
   }
 
   @Test
   void testCondition2UnitA() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
     InitTest.svd(matrix);
   }
 
   @Test
   void testCondition2UnitB() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     InitTest.svd(matrix);
   }

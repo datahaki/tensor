@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.ext.ResourceData;
 
 /** Initialization On Demand Holder Idiom */
 /* package */ enum SiUnitSystem {

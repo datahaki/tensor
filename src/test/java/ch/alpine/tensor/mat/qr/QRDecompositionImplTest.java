@@ -18,7 +18,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -114,7 +114,7 @@ class QRDecompositionImplTest {
 
   @Test
   void testBic() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/pi/bic1.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/pi/bic1.csv");
     QRDecompositionImpl qrDecomposition = (QRDecompositionImpl) QRDecomposition.of(matrix);
     Tensor rs = Diagonal.of(qrDecomposition.getR()).map(Abs.FUNCTION);
     Scalar max = (Scalar) rs.stream().reduce(Max::of).get();

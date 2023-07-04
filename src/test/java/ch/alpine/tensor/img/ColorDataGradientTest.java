@@ -14,27 +14,27 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.num.GaussScalar;
 
 class ColorDataGradientTest {
   @Test
   void testDimensions() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     assertEquals(Dimensions.of(tensor).get(1), Integer.valueOf(4));
     LinearColorDataGradient.of(tensor);
   }
 
   @Test
   void testSerializable() throws Exception {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     ColorDataGradient cdg = LinearColorDataGradient.of(tensor);
     Serialization.copy(cdg);
   }
 
   @Test
   void testModifiable() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     ColorDataGradient cdg = LinearColorDataGradient.of(tensor);
     cdg.apply(RealScalar.ONE).set(RealScalar.ONE, 1);
     cdg.apply(RealScalar.ZERO).set(RealScalar.ONE, 1);

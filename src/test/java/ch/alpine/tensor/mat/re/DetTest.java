@@ -23,7 +23,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.chq.ExactScalarQ;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -195,7 +195,7 @@ class DetTest {
   // https://ch.mathworks.com/help/matlab/ref/det.html
   @Test
   void testMatlabEx() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/re/det0-matlab.csv");
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/re/det0-matlab.csv");
     Scalar det = Det.of(matrix);
     assertEquals(det, RealScalar.ZERO);
     // Matlab gives num == 1.0597e+05 !

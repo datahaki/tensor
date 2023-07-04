@@ -16,7 +16,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
@@ -90,7 +90,7 @@ class TsReduceTest {
 
   @Test
   void testTable() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/io/dateobject.csv");
+    Tensor tensor = Import.of("/ch/alpine/tensor/io/dateobject.csv");
     TimeSeries timeSeries = TimeSeries.table(tensor.stream(), ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     Optional<Tensor> value = TsReduce.lastValue(timeSeries);
     assertEquals(value.orElseThrow(), Tensors.fromString("{2398749, 2233.2[m]}"));

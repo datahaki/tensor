@@ -2,12 +2,14 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.zip.DataFormatException;
 
@@ -18,6 +20,9 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.ext.ResourceData;
+import ch.alpine.tensor.itp.Interpolation;
+import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.qty.Quantity;
 
 class ImportTest {
@@ -27,7 +32,7 @@ class ImportTest {
     File file = new File(getClass().getResource(string).getFile());
     Tensor table = Import.of(file);
     assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
-    assertEquals(ResourceData.of(string), table);
+    assertEquals(Import.of(string), table);
   }
 
   @Test
@@ -35,7 +40,7 @@ class ImportTest {
     String string = "/ch/alpine/tensor/io/empty.csv"; // file has byte length 0
     File file = new File(getClass().getResource(string).getFile());
     assertTrue(Tensors.isEmpty(Import.of(file)));
-    assertTrue(Tensors.isEmpty(ResourceData.of(string)));
+    assertTrue(Tensors.isEmpty(Import.of(string)));
   }
 
   @Test
@@ -44,7 +49,7 @@ class ImportTest {
     File file = new File(getClass().getResource(string).getFile());
     Tensor expected = Tensors.fromString("{{}}").unmodifiable();
     assertEquals(Import.of(file), expected);
-    assertEquals(ResourceData.of(string), expected);
+    assertEquals(Import.of(string), expected);
   }
 
   @Test
@@ -102,7 +107,7 @@ class ImportTest {
 
   @Test
   void testPngClose(@TempDir File tempDir) throws Exception {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/rgba15x33.png");
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/rgba15x33.png");
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     File file = new File(tempDir, "file.png");
     Export.of(file, tensor);
@@ -116,6 +121,30 @@ class ImportTest {
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     assertEquals(Tensors.vector(180, 46, 47, 255), tensor.get(21, 3)); // verified with gimp
+  }
+
+  private static void _checkColorscheme(Interpolation interpolation) {
+    assertThrows(IndexOutOfBoundsException.class, () -> interpolation.get(Tensors.vector(256)));
+  }
+
+  @Test
+  void testColorschemeClassic() {
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/colorscheme/classic.csv");
+    assertNotNull(tensor);
+    assertEquals(Dimensions.of(tensor), Arrays.asList(256, 4));
+    Interpolation interpolation = LinearInterpolation.of(tensor);
+    assertEquals(interpolation.get(Tensors.vector(255)), Tensors.vector(255, 237, 237, 255));
+    _checkColorscheme(interpolation);
+  }
+
+  @Test
+  void testHue() {
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
+    assertNotNull(tensor);
+    assertEquals(Dimensions.of(tensor), Arrays.asList(7, 4));
+    Interpolation interpolation = LinearInterpolation.of(tensor);
+    assertEquals(interpolation.get(Tensors.vector(0)), Tensors.vector(255, 0, 0, 255));
+    _checkColorscheme(interpolation);
   }
 
   @Test
@@ -162,5 +191,57 @@ class ImportTest {
     File file = new File(getClass().getResource("/ch/alpine/tensor/io/simple.properties").getFile());
     Properties properties = Import.properties(file);
     assertEquals(Scalars.fromString(properties.get("maxTor").toString()), Quantity.of(3, "m*s"));
+  }
+
+  @Test
+  void testPrimes() {
+    Tensor primes = Import.of("/ch/alpine/tensor/num/primes.vector");
+    List<Integer> dimensions = Dimensions.of(primes);
+    assertEquals(dimensions.size(), 1);
+    assertTrue(500 < dimensions.get(0));
+    assertEquals(primes.Get(5), Scalars.fromString("13"));
+  }
+
+  @Test
+  void testPrimesLines() {
+    Tensor linesp = Tensor.of(ResourceData.lines("/ch/alpine/tensor/num/primes.vector").stream().map(Scalars::fromString));
+    Tensor vector = Import.of("/ch/alpine/tensor/num/primes.vector");
+    assertEquals(linesp, vector);
+  }
+
+  @Test
+  void testCsvGz2() {
+    Tensor actual = Import.of("/ch/alpine/tensor/io/mathematica23.csv.gz");
+    Tensor expected = Tensors.fromString("{{123/875+I, 9.3}, {-9, 5/8123123123123123, 1010101}}");
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void testJpg2() {
+    Tensor image = Import.of("/ch/alpine/tensor/img/rgb15x33.jpg");
+    assertEquals(Dimensions.of(image), Arrays.asList(33, 15, 4));
+  }
+
+  @Test
+  void testBmp() {
+    Tensor image = Import.of("/ch/alpine/tensor/img/rgb7x11.bmp");
+    assertEquals(Dimensions.of(image), Arrays.asList(11, 7, 4));
+    assertEquals(image.get(10, 4), Tensors.vector(0, 7, 95, 255));
+  }
+
+  @Test
+  void testFailNull() {
+    assertThrows(RuntimeException.class, () -> Import.of("/ch/alpine/tensor/number/exists.fail"));
+    assertThrows(RuntimeException.class, () -> Import.of("/ch/alpine/tensor/number/exists.fail.bmp"));
+  }
+
+  @Test
+  void testUnknownExtension() {
+    assertThrows(RuntimeException.class, () -> Import.of("/ch/alpine/tensor/io/extension.unknown"));
+  }
+
+  @Test
+  void testCorruptContent() {
+    assertThrows(RuntimeException.class, () -> Import.of("/ch/alpine/tensor/io/corrupt.png"));
   }
 }

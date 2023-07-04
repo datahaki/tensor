@@ -16,7 +16,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -48,7 +48,7 @@ class LanczosInterpolationTest {
   @Test
   void testImage() {
     String string = "/ch/alpine/tensor/img/gray15x9.png";
-    Tensor tensor = ResourceData.of(string);
+    Tensor tensor = Import.of(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
     Interpolation interpolation = LanczosInterpolation.of(tensor, 2);
     Tensor result = interpolation.get(Tensors.vector(6.2));
@@ -60,7 +60,7 @@ class LanczosInterpolationTest {
   @Test
   void testImage3() {
     String string = "/ch/alpine/tensor/img/gray15x9.png";
-    Tensor tensor = ResourceData.of(string);
+    Tensor tensor = Import.of(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
     Interpolation interpolation = LanczosInterpolation.of(tensor);
     Tensor result = interpolation.get(Tensors.vector(6.2));

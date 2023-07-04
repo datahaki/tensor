@@ -1,7 +1,8 @@
 // code by jph
-package ch.alpine.tensor.io;
+package ch.alpine.tensor.ext;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -11,9 +12,6 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
-
-import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.ext.ReadLine;
 
 /** access to resource data in jar files, for instance,
  * the content included in the tensor library.
@@ -29,34 +27,27 @@ import ch.alpine.tensor.ext.ReadLine;
  * </pre>
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/ResourceData.html">ResourceData</a>
- * 
- * @see Import */
+ * <a href="https://reference.wolfram.com/language/ref/ResourceData.html">ResourceData</a> */
 public enum ResourceData {
   ;
-  /** Example use:
-   * Interpolation interpolation = LinearInterpolation.of(ResourceData.of("/colorscheme/classic.csv"));
-   * 
-   * @param string as path to resource
-   * @return imported tensor
-   * @throws Exception if resource could not be loaded */
-  public static Tensor of(String string) {
-    try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ImportHelper.of(new Filename(string), inputStream);
-    } catch (Exception exception) {
-      throw new RuntimeException(exception);
-    }
-  }
-
   /** @param string as path to resource
    * @return imported object
    * @throws Exception if resource could not be loaded */
   public static <T> T object(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ImportHelper.object(inputStream);
+      return ObjectFormat.parse(inputStream);
     } catch (Exception exception) {
       throw new RuntimeException(exception);
     }
+  }
+
+  /** @param reader
+   * @return
+   * @throws IOException */
+  public static Properties properties(Reader reader) throws IOException {
+    Properties properties = new Properties();
+    properties.load(reader);
+    return properties;
   }
 
   /** @param string as path to resource
@@ -65,7 +56,7 @@ public enum ResourceData {
   public static Properties properties(String string, Charset charset) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
       try (Reader reader = new InputStreamReader(inputStream, charset)) {
-        return ImportHelper.properties(reader);
+        return properties(reader);
       }
     } catch (Exception exception) {
       throw new RuntimeException(exception);
@@ -79,10 +70,7 @@ public enum ResourceData {
     return properties(string, StaticHelper.CHARSET);
   }
 
-  /** Hint: function bypasses conversion of image to tensor. When the
-   * image is needed as a {@link Tensor}, rather use {@link #of(String)}
-   * 
-   * @param string as path to resource, typically starts with the slash character '/'
+  /** @param string as path to resource, typically starts with the slash character '/'
    * @return imported image
    * @throws Exception if resource could not be loaded */
   public static BufferedImage bufferedImage(String string) {

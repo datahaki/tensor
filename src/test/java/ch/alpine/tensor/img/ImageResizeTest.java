@@ -20,10 +20,10 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.OperatingSystem;
-import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.num.Pi;
@@ -77,7 +77,7 @@ class ImageResizeTest {
 
   @Test
   void testFactor() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/album_au_gray.jpg");
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
     Tensor dimens = ImageResize.of(tensor, Pi.VALUE);
     assertEquals(Dimensions.of(dimens), Arrays.asList(314, 418));
     ImageResize.of(tensor, Pi.HALF);
@@ -86,7 +86,7 @@ class ImageResizeTest {
 
   @Test
   void testFactorNegativeFail() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/album_au_gray.jpg");
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
     assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, Pi.VALUE.negate()));
   }
 

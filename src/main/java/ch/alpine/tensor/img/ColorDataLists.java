@@ -2,7 +2,7 @@
 package ch.alpine.tensor.img;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ColorData.html">ColorData</a>
@@ -56,7 +56,7 @@ public enum ColorDataLists {
   _251, //
   ;
 
-  private final Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorlist/" + name().substring(1) + ".csv");
+  private final Tensor tensor = Import.of("/ch/alpine/tensor/img/colorlist/" + name().substring(1) + ".csv");
   private final ColorDataIndexed cyclic = new CyclicColorDataIndexed(tensor);
   private final ColorDataIndexed strict = new StrictColorDataIndexed(tensor);
 

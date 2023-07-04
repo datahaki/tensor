@@ -14,12 +14,12 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 
 class PrimeQTest {
   @Test
   void testPrimes() {
-    for (Tensor _x : ResourceData.of("/ch/alpine/tensor/num/primes.vector")) {
+    for (Tensor _x : Import.of("/ch/alpine/tensor/num/primes.vector")) {
       RationalScalar x = (RationalScalar) _x;
       assertTrue(x.numerator().isProbablePrime(100));
       assertTrue(PrimeQ.of(x));

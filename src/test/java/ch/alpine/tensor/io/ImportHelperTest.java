@@ -42,7 +42,7 @@ class ImportHelperTest {
 
   @Test
   void testTiff() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/rgb14x11.tiff");
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/rgb14x11.tiff");
     assertEquals(Dimensions.of(tensor), Arrays.asList(11, 14, 4));
     Tensor rgba = Flatten.of(tensor, 1);
     assertEquals(Dimensions.of(rgba), Arrays.asList(11 * 14, 4));

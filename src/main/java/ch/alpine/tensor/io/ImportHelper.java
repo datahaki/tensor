@@ -3,16 +3,13 @@ package ch.alpine.tensor.io;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.util.Properties;
-import java.util.zip.DataFormatException;
 import java.util.zip.GZIPInputStream;
 
 import javax.imageio.ImageIO;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.ext.ObjectFormat;
 import ch.alpine.tensor.ext.ReadLine;
+import ch.alpine.tensor.ext.ResourceData;
 
 /** functionality used in {@link Import} and {@link ResourceData} */
 /* package */ enum ImportHelper {
@@ -40,26 +37,5 @@ import ch.alpine.tensor.ext.ReadLine;
     case BMP, GIF, JPG, PNG, TIFF -> ImageFormat.from(ImageIO.read(inputStream));
     default -> throw new UnsupportedOperationException(extension.name());
     };
-  }
-
-  /** @param inputStream
-   * @return
-   * @throws IOException
-   * @throws ClassNotFoundException
-   * @throws DataFormatException */
-  public static <T> T object(InputStream inputStream) throws IOException, ClassNotFoundException, DataFormatException {
-    int length = inputStream.available();
-    byte[] bytes = new byte[length];
-    inputStream.read(bytes);
-    return ObjectFormat.parse(bytes);
-  }
-
-  /** @param reader
-   * @return
-   * @throws IOException */
-  public static Properties properties(Reader reader) throws IOException {
-    Properties properties = new Properties();
-    properties.load(reader);
-    return properties;
   }
 }

@@ -21,8 +21,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.red.Total;
 
 class UnitSystemTest {

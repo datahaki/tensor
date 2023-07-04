@@ -23,7 +23,7 @@ import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.fft.Fourier;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
@@ -106,7 +106,7 @@ class InverseTest {
 
   @Test
   void testDet0() {
-    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
     assertThrows(Throw.class, () -> Inverse.of(matrix));
     assertThrows(Throw.class, () -> Inverse.of(matrix.map(N.DOUBLE)));

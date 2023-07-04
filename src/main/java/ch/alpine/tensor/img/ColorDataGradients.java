@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 
 /** To obtain a single color value use
  * <pre>
@@ -129,7 +129,7 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** @return n x 4 table with entries between 0 and 255
    * @throws Exception if this color data gradient is not backed by such a table */
   private Tensor _tableRgba() {
-    return ResourceData.of("/ch/alpine/tensor/img/colorscheme/" + name().toLowerCase() + ".csv");
+    return Import.of("/ch/alpine/tensor/img/colorscheme/" + name().toLowerCase() + ".csv");
   }
 
   /** @return n x 4 table with entries between 0 and 255, or empty

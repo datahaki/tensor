@@ -18,7 +18,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
 
@@ -178,7 +178,7 @@ class BinomialTest {
   @Test
   void testBinomialTable() {
     Tensor tableb = Tensors.matrix((i, j) -> Binomial.of(i - 5, j - 5), 11, 11);
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/num/binomial11.csv");
+    Tensor tensor = Import.of("/ch/alpine/tensor/num/binomial11.csv");
     assertEquals(tableb, tensor);
   }
 

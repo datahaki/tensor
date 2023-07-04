@@ -32,7 +32,7 @@ class ImageFormatTest {
     File file = new File(getClass().getResource(string).getFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor image = ImageFormat.from(bufferedImage);
-    assertEquals(image, ResourceData.of(string));
+    assertEquals(image, Import.of(string));
     assertEquals(Transpose.of(tensor), image);
     // confirmed with gimp
     assertEquals(image.get(32, 0), Tensors.vector(126, 120, 94, 255));
@@ -60,7 +60,7 @@ class ImageFormatTest {
     File file = new File(getClass().getResource(string).getFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = ImageFormat.from(bufferedImage);
-    assertEquals(tensor, ResourceData.of(string));
+    assertEquals(tensor, Import.of(string));
     // confirmed with gimp
     assertEquals(tensor.Get(0, 2), RealScalar.of(175));
     assertEquals(tensor.Get(1, 2), RealScalar.of(109));

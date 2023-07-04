@@ -27,7 +27,7 @@ import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.ArgMax;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
@@ -313,7 +313,7 @@ class GaussScalarTest {
 
   @Test
   void testPrimes() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/num/primes.vector");
+    Tensor tensor = Import.of("/ch/alpine/tensor/num/primes.vector");
     tensor.extract(3, tensor.length()).stream() //
         .parallel() //
         .map(Scalar.class::cast) //

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.ext.ResourceData;
 
 /** function exists to export expressions from the tensor library to a string
  * that can be parsed by Mathematica */

@@ -10,14 +10,14 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
 class TimeSeriesWindowTest {
   @Test
   void testCut() {
-    Tensor tensor = ResourceData.of("/ch/alpine/tensor/io/dateobject.csv");
+    Tensor tensor = Import.of("/ch/alpine/tensor/io/dateobject.csv");
     TimeSeries timeSeries = //
         TimeSeries.table(tensor.stream(), ResamplingMethod.HOLD_VALUE_FROM_LEFT).unmodifiable();
     Clip clip = Clips.interval(Scalars.fromString("2022-01-11T10:30"), Scalars.fromString("2022-03-03T12:30"));
