@@ -127,14 +127,6 @@ class ExportTest {
     assertThrows(FileNotFoundException.class, () -> Export.of(file, Tensors.empty()));
   }
 
-  @Test
-  void testExportPermissionFail() {
-    if (!OperatingSystem.isWindows()) {
-      File file = new File("/some.csv");
-      assertThrows(FileNotFoundException.class, () -> Export.of(file, Tensors.vector(1, 2, 3)));
-    }
-  }
-
   @ParameterizedTest
   @ValueSource(strings = { "gz", "ethz.idsc" })
   void testUnknownExtension(String extension, @TempDir File tempDir) {

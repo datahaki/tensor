@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Modifier;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -30,6 +30,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Partition;
+import ch.alpine.tensor.ext.ReadLine;
 import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
@@ -79,15 +80,17 @@ class XsvFormatTest {
 
   @Test
   void testImport() throws Exception {
-    Path path = OperatingSystem.pathOfResource("/ch/alpine/tensor/io/qty/quantity0.csv");
-    Tensor tensor = XsvFormat.parse( //
-        Files.readAllLines(path).stream(), //
-        string -> Tensors.fromString("{" + string + "}"));
-    assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
-    assertInstanceOf(Quantity.class, tensor.Get(0, 0));
-    assertInstanceOf(Quantity.class, tensor.Get(0, 1));
-    assertInstanceOf(Quantity.class, tensor.Get(1, 0));
-    assertInstanceOf(RealScalar.class, tensor.Get(1, 1));
+    File file = ResourceData.file("/ch/alpine/tensor/io/qty/quantity0.csv");
+    try (InputStream inputStream = new FileInputStream(file)) {
+      Tensor tensor = XsvFormat.parse( //
+          ReadLine.of(inputStream), //
+          string -> Tensors.fromString("{" + string + "}"));
+      assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
+      assertInstanceOf(Quantity.class, tensor.Get(0, 0));
+      assertInstanceOf(Quantity.class, tensor.Get(0, 1));
+      assertInstanceOf(Quantity.class, tensor.Get(1, 0));
+      assertInstanceOf(RealScalar.class, tensor.Get(1, 1));
+    }
   }
 
   @ParameterizedTest

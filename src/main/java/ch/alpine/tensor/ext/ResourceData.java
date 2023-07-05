@@ -97,16 +97,15 @@ public enum ResourceData {
     }
   }
 
-  /** Hint: mainly useful in tests to access a resource as a file
+  /** Careful: do not use function for accessing resources in jar files!
    * 
-   * TODO TENSOR only works in linux !? see operatingSystem
+   * Hint: mainly useful in tests to access a resource as a file
    * 
    * @param string
    * @return
    * @throws Exception if string does not correspond to a resource file, or directory */
   public static File file(String string) {
     File file = new File(ResourceData.class.getResource(string).getFile());
-    System.out.println(string + " -> " + file);
     if (file.exists())
       return file;
     throw new IllegalArgumentException(string);

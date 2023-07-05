@@ -4,11 +4,13 @@ package ch.alpine.tensor.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -38,10 +40,13 @@ class VectorFormatTest {
     Tensor tensor = IdentityMatrix.of(3);
     ExportHelper.of(Extension.VECTOR, tensor, outputStream);
     byte[] array = outputStream.toByteArray();
-    String expect = OperatingSystem.isWindows() //
-        ? "{1, 0, 0}\r\n{0, 1, 0}\r\n{0, 0, 1}\r\n"
-        : "{1, 0, 0}\n{0, 1, 0}\n{0, 0, 1}\n";
-    assertEquals(new String(array), expect);
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
+    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+    try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+      assertEquals(bufferedReader.readLine(), "{1, 0, 0}");
+      assertEquals(bufferedReader.readLine(), "{0, 1, 0}");
+      assertEquals(bufferedReader.readLine(), "{0, 0, 1}");
+    }
   }
 
   @Test

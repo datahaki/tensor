@@ -23,7 +23,6 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.io.Import;
-import ch.alpine.tensor.io.OperatingSystem;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.num.Pi;

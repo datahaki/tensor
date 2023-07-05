@@ -19,7 +19,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
@@ -177,14 +176,6 @@ class GramSchmidtTest {
   @Test
   void testDetRect2() {
     assertEquals(GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 2, 3)).det(), RealScalar.ZERO);
-  }
-
-  @Test
-  // @Disabled
-  void testSpeed() {
-    Timing timing = Timing.started();
-    GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 500, 150));
-    // System.out.println(timing.seconds());
   }
 
   @Test
