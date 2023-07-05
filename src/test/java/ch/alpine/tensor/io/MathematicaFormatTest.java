@@ -26,8 +26,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Flatten;
-import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
@@ -81,7 +81,7 @@ class MathematicaFormatTest {
 
   @Test
   void testBasic() throws IOException {
-    File file = ResourceData.file("/ch/alpine/tensor/io/basic.mathematica");
+    File file = Unprotect.file("/ch/alpine/tensor/io/basic.mathematica");
     Tensor tensor = Get.of(file);
     checkNonString(tensor);
   }
@@ -94,7 +94,7 @@ class MathematicaFormatTest {
 
   @Test
   void testExponent() throws IOException {
-    File file = ResourceData.file("/ch/alpine/tensor/io/exponent.mathematica");
+    File file = Unprotect.file("/ch/alpine/tensor/io/exponent.mathematica");
     Tensor tensor = Get.of(file);
     checkNonString(tensor);
     assertEquals(tensor, Import.of("/ch/alpine/tensor/io/exponent.mathematica"));
@@ -111,7 +111,7 @@ class MathematicaFormatTest {
 
   @Test
   void testPrime() throws IOException {
-    File file = ResourceData.file("/ch/alpine/tensor/io/decimals.mathematica");
+    File file = Unprotect.file("/ch/alpine/tensor/io/decimals.mathematica");
     Tensor tensor = Get.of(file);
     assertTrue(tensor.stream().anyMatch(scalar -> scalar instanceof DecimalScalar));
     checkNonString(tensor);

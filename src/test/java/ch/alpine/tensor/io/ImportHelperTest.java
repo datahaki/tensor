@@ -18,10 +18,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.OrderedQ;
-import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Unitize;
 
@@ -30,7 +30,7 @@ class ImportHelperTest {
   void testGif() throws Exception {
     String string = "/ch/alpine/tensor/img/rgba7x3.gif"; // file consist of a single line break character
     Tensor tempor = Import.of(string);
-    File file = ResourceData.file(string);
+    File file = Unprotect.file(string);
     Tensor tensor = Import.of(file);
     assertEquals(tensor, tempor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 7, 4));

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -93,5 +94,20 @@ public enum Unprotect {
         .skip(1) //
         .findAny() //
         .isEmpty();
+  }
+
+  // ---
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
+   * useful in the test scope to access a resource as a file
+   * 
+   * @param string
+   * @return
+   * @throws Exception if string does not correspond to a resource file, or directory */
+  public static File file(String string) {
+    File file = new File(Unprotect.class.getResource(string).getFile());
+    if (file.exists())
+      return file;
+    throw new IllegalArgumentException(string);
   }
 }

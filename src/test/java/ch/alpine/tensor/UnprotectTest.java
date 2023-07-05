@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -171,5 +172,18 @@ class UnprotectTest {
   void testDimension1HintFail() {
     assertThrows(Throw.class, () -> Unprotect.dimension1(RealScalar.ONE));
     assertThrows(Throw.class, () -> Unprotect.dimension1Hint(RealScalar.ONE));
+  }
+
+  @Test
+  void testFile() {
+    File file = Unprotect.file("/ch/alpine/tensor/io/basic.mathematica");
+    assertTrue(file.isFile());
+    File dir = Unprotect.file("/ch/alpine/tensor/io/");
+    assertTrue(dir.isDirectory());
+  }
+
+  @Test
+  void testFileFail() {
+    assertThrows(Exception.class, () -> Unprotect.file("/does/not/exist.txt"));
   }
 }

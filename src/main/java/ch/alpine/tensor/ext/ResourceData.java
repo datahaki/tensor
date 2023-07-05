@@ -2,7 +2,6 @@
 package ch.alpine.tensor.ext;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -95,19 +94,5 @@ public enum ResourceData {
     } catch (Exception exception) {
       throw new RuntimeException(exception);
     }
-  }
-
-  /** Careful: do not use function for accessing resources in jar files!
-   * 
-   * Hint: mainly useful in tests to access a resource as a file
-   * 
-   * @param string
-   * @return
-   * @throws Exception if string does not correspond to a resource file, or directory */
-  public static File file(String string) {
-    File file = new File(ResourceData.class.getResource(string).getFile());
-    if (file.exists())
-      return file;
-    throw new IllegalArgumentException(string);
   }
 }

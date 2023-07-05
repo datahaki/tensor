@@ -3,10 +3,8 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -57,19 +55,6 @@ class ResourceDataTest {
   void testLines() {
     List<String> lines = ResourceData.lines("/ch/alpine/tensor/io/basic.mathematica");
     assertEquals(lines.size(), 7);
-  }
-
-  @Test
-  void testFile() {
-    File file = ResourceData.file("/ch/alpine/tensor/io/basic.mathematica");
-    assertTrue(file.isFile());
-    File dir = ResourceData.file("/ch/alpine/tensor/io/");
-    assertTrue(dir.isDirectory());
-  }
-
-  @Test
-  void testFileFail() {
-    assertThrows(Exception.class, () -> ResourceData.file("/does/not/exist.txt"));
   }
 
   @Test

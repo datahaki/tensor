@@ -16,15 +16,15 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.VectorQ;
-import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Chop;
 
 class GetTest {
   @Test
   void testResource() throws IOException {
-    File file = ResourceData.file("/ch/alpine/tensor/io/basic.mathematica");
+    File file = Unprotect.file("/ch/alpine/tensor/io/basic.mathematica");
     Tensor tensor = Get.of(file);
     assertNotNull(tensor);
     assertFalse(tensor instanceof Scalar);
@@ -34,7 +34,7 @@ class GetTest {
 
   @Test
   void testBinary() throws IOException { // this use is not as intended
-    File file = ResourceData.file("/ch/alpine/tensor/img/rgb7x11.bmp");
+    File file = Unprotect.file("/ch/alpine/tensor/img/rgb7x11.bmp");
     Tensor tensor = Get.of(file);
     assertInstanceOf(StringScalar.class, tensor);
   }
@@ -47,7 +47,7 @@ class GetTest {
 
   @Test
   void testHanzi() throws IOException {
-    File file = ResourceData.file("/ch/alpine/tensor/io/hanzi.mathematica");
+    File file = Unprotect.file("/ch/alpine/tensor/io/hanzi.mathematica");
     Tensor tensor = Get.of(file);
     String string = tensor.Get(2).toString();
     assertEquals(string.charAt(0), '\u6C49');

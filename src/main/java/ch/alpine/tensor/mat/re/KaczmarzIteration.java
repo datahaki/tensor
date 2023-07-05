@@ -45,6 +45,7 @@ public class KaczmarzIteration {
     return new KaczmarzIteration(mat, rhs);
   }
 
+  // ---
   private final Tensor[] rows;
   private final Tensor b;
   private final Tensor normsq;

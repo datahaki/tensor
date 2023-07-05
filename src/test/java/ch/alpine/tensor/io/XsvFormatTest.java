@@ -28,10 +28,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.ext.ReadLine;
-import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
@@ -80,7 +80,7 @@ class XsvFormatTest {
 
   @Test
   void testImport() throws Exception {
-    File file = ResourceData.file("/ch/alpine/tensor/io/qty/quantity0.csv");
+    File file = Unprotect.file("/ch/alpine/tensor/io/qty/quantity0.csv");
     try (InputStream inputStream = new FileInputStream(file)) {
       Tensor tensor = XsvFormat.parse( //
           ReadLine.of(inputStream), //
@@ -96,7 +96,7 @@ class XsvFormatTest {
   @ParameterizedTest
   @ValueSource(strings = { "csv", "tsv" })
   void testImport(String ext, @TempDir File folder) throws Exception {
-    File read = ResourceData.file("/ch/alpine/tensor/io/chinese.csv");
+    File read = Unprotect.file("/ch/alpine/tensor/io/chinese.csv");
     Tensor tensor = Import.of(read);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
     assertEquals(tensor.Get(0, 0).toString().length(), 2);

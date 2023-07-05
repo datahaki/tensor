@@ -18,12 +18,12 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarTensorFunction;
-import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.fft.ListConvolve;
 import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.img.Raster;
@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.Round;
 
 class TransposedImageFormatTest {
   static Tensor _readRGBA() throws IOException {
-    File file = ResourceData.file("/ch/alpine/tensor/img/rgba15x33.png");
+    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
     assertTrue(file.isFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     return TransposedImageFormat.from(bufferedImage);
@@ -51,7 +51,7 @@ class TransposedImageFormatTest {
   @Test
   void testGrayFile() throws Exception {
     
-    File file = ResourceData.file("/ch/alpine/tensor/img/gray15x9.png");
+    File file = Unprotect.file("/ch/alpine/tensor/img/gray15x9.png");
     assertTrue(file.isFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
@@ -64,7 +64,7 @@ class TransposedImageFormatTest {
 
   @Test
   void testGrayJpg() throws Exception {
-    File file = ResourceData.file("/ch/alpine/tensor/img/gray15x9.jpg");
+    File file = Unprotect.file("/ch/alpine/tensor/img/gray15x9.jpg");
     assertTrue(file.isFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
@@ -92,7 +92,7 @@ class TransposedImageFormatTest {
 
   @Test
   void testRGBAConvert() throws Exception {
-    File file = ResourceData.file("/ch/alpine/tensor/img/rgba15x33.png");
+    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
     assertEquals(tensor, TransposedImageFormat.from(TransposedImageFormat.of(tensor)));
@@ -100,7 +100,7 @@ class TransposedImageFormatTest {
 
   @Test
   void testRGBASmooth() throws Exception {
-    File file = ResourceData.file("/ch/alpine/tensor/img/rgba15x33.png");
+    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
     Tensor kernel = Array.of(l -> RationalScalar.of(1, 6), 3, 2, 1);
@@ -110,7 +110,7 @@ class TransposedImageFormatTest {
 
   @Test
   void testRGBAInvalid() throws Exception {
-    File file = ResourceData.file("/ch/alpine/tensor/img/rgba15x33.png");
+    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
     Tensor kernel = Array.of(l -> RationalScalar.of(1, 1), 3, 5, 1);
