@@ -180,6 +180,12 @@ class CacheTest {
   }
 
   @Test
+  void testNullKeyFail() {
+    Cache<Object, Object> cache = Cache.of(Function.identity(), 5);
+    assertThrows(Exception.class, () -> cache.apply(null));
+  }
+
+  @Test
   void testFailNull() {
     assertThrows(NullPointerException.class, () -> Cache.of(null, 32));
   }

@@ -40,8 +40,9 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
     map = new LruCache<>(maxSize);
   }
 
-  /** @param key
-   * @return the result of applying function to given key */
+  /** @param key non-null
+   * @return the result of applying function to given key
+   * @throws Exception if key is null */
   @Override
   public V apply(K key) {
     V value = map.get(key);

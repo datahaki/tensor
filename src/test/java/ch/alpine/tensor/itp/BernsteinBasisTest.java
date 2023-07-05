@@ -25,6 +25,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.red.Total;
+import ch.alpine.tensor.sca.Clips;
 
 class BernsteinBasisTest {
   @Test
@@ -137,6 +138,14 @@ class BernsteinBasisTest {
   void testQuaternion() {
     Quaternion quaternion = Quaternion.of(2, 3, 4, 5);
     assertThrows(ClassCastException.class, () -> BernsteinBasis.of(5, quaternion));
+  }
+
+  @Test
+  void testTheory() {
+    int n = 1207;
+    Scalar p = RationalScalar.of(2, 3);
+    Tensor table = BernsteinBasis.of(n, Clips.unit().requireInside(p));
+    assertEquals(Total.of(table), RealScalar.ONE);
   }
 
   @Test

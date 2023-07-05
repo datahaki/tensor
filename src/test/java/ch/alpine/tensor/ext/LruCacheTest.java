@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -89,5 +90,19 @@ class LruCacheTest {
     assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10, -0.2f));
     assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10, 0f));
     assertThrows(ArithmeticException.class, () -> new LruCache<>(Integer.MAX_VALUE));
+  }
+
+  @Test
+  void testNullKey() {
+    LruCache<String, Integer> lruCache = new LruCache<>(10);
+    assertThrows(Exception.class, () -> lruCache.get(null));
+    assertThrows(Exception.class, () -> lruCache.put(null, 3));
+    HashMap<String, Integer> map = new HashMap<>();
+    map.put(null, 5);
+    assertThrows(Exception.class, () -> lruCache.putAll(map));
+    assertThrows(Exception.class, () -> lruCache.putIfAbsent(null, 1));
+    assertThrows(Exception.class, () -> lruCache.compute(null, (k, v) -> 20));
+    assertThrows(Exception.class, () -> lruCache.computeIfPresent(null, (k, v) -> 30));
+    assertThrows(Exception.class, () -> lruCache.computeIfAbsent(null, v -> 10));
   }
 }
