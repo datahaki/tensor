@@ -77,6 +77,13 @@ class IntegersTest {
     assertTrue(Integers.isPowerOf2(4));
     assertTrue(Integers.isPowerOf2(1 << 29));
     assertTrue(Integers.isPowerOf2(1 << 30));
+    assertEquals(Integers.requirePowerOf2(4), 4);
+  }
+
+  @Test
+  void testRequirePowerOf2() {
+    assertThrows(Exception.class, () -> Integers.requirePowerOf2(0));
+    assertThrows(Exception.class, () -> Integers.requirePowerOf2(3));
   }
 
   @Test
@@ -211,5 +218,44 @@ class IntegersTest {
   @Test
   void testAsListNullFail() {
     assertThrows(NullPointerException.class, () -> Integers.asList(null));
+  }
+
+  @Test
+  void testLog2Floor() {
+    assertEquals(Integers.log2Floor(1), 0);
+    assertEquals(Integers.log2Floor(2), 1);
+    assertEquals(Integers.log2Floor(3), 1);
+    assertEquals(Integers.log2Floor(4), 2);
+    assertEquals(Integers.log2Floor(5), 2);
+    assertEquals(Integers.log2Floor(1024 + 123), 10);
+  }
+
+  @Test
+  void testLog2Exact() {
+    assertEquals(Integers.log2Exact(1), 0);
+    assertEquals(Integers.log2Exact(2), 1);
+    assertEquals(Integers.log2Exact(4), 2);
+    assertThrows(Exception.class, () -> Integers.log2Exact(0));
+    assertThrows(Exception.class, () -> Integers.log2Exact(3));
+  }
+
+  @Test
+  void testLog2Ceil() {
+    assertEquals(Integers.log2Ceiling(1), 0);
+    assertEquals(Integers.log2Ceiling(2), 1);
+    assertEquals(Integers.log2Ceiling(3), 2);
+    assertEquals(Integers.log2Ceiling(4), 2);
+    assertEquals(Integers.log2Ceiling(5), 3);
+    assertEquals(Integers.log2Ceiling(1024 + 123), 11);
+  }
+
+  @Test
+  void testFailZero() {
+    assertThrows(Exception.class, () -> Integers.log2Ceiling(0));
+  }
+
+  @Test
+  void testFailNegative() {
+    assertThrows(Exception.class, () -> Integers.log2Ceiling(-1));
   }
 }

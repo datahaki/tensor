@@ -18,7 +18,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -81,7 +80,7 @@ class FourierTest {
   void testFailScalar(Fourier fourier) {
     assertThrows(Exception.class, () -> fourier.transform(RealScalar.ONE));
     assertThrows(Exception.class, () -> fourier.transform(Tensors.empty()));
-    assertThrows(Throw.class, () -> fourier.transform(Tensors.vector(1, 2, 0)));
+    assertThrows(Exception.class, () -> fourier.transform(Tensors.vector(1, 2, 0)));
     assertThrows(ClassCastException.class, () -> fourier.transform(HilbertMatrix.of(4)));
   }
 

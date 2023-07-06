@@ -8,7 +8,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.mat.ConjugateTranspose;
@@ -69,9 +68,7 @@ public enum Fourier implements DiscreteFourierTransform {
    * @param b is +1 for forward, and -1 for inverse transform
    * @return discrete Fourier transform of given vector */
   private static Tensor fft(Tensor vector, int b) {
-    int n = vector.length();
-    if (!Integers.isPowerOf2(n))
-      throw new Throw(vector); // vector length is not a power of two
+    int n = Integers.requirePowerOf2(vector.length());
     Scalar[] array = ScalarArray.ofVector(vector);
     for (int j = 0, i = 0; i < n; ++i) {
       if (j > i) {

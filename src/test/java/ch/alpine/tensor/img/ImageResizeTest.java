@@ -38,7 +38,6 @@ import ch.alpine.tensor.sca.Sign;
 class ImageResizeTest {
   @Test
   void testImage1() throws Exception {
-    
     File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));

@@ -50,9 +50,7 @@ public enum WindowFunctions implements Supplier<ScalarUnaryOperator> {
   /** default alpha == 1/3 */
   TUKEY(TukeyWindow.FUNCTION),
   /** default alpha == 1 */
-  WELCH(WelchWindow.FUNCTION),
-  //
-  ;
+  WELCH(WelchWindow.FUNCTION);
 
   private final ScalarUnaryOperator scalarUnaryOperator;
 

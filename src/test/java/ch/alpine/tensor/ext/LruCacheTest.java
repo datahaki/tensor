@@ -20,6 +20,9 @@ class LruCacheTest {
     Map<Integer, String> map = new LruCache<>(2);
     map.put(3, "1");
     map.put(4, "2");
+    assertEquals(map.get(4), "2");
+    map.putIfAbsent(4, "5");
+    assertEquals(map.get(4), "2");
     {
       int v = map.keySet().iterator().next();
       assertEquals(v, 3);
@@ -58,6 +61,9 @@ class LruCacheTest {
     map.put(5, "5");
     map.keySet().containsAll(Arrays.asList(4, 5));
     assertFalse(map.containsKey(3));
+    Map<Integer, String> map2 = new LruCache<>(1);
+    map2.putAll(map);
+    assertFalse(map2.containsKey(4));
   }
 
   @Test
@@ -69,6 +75,19 @@ class LruCacheTest {
     map.put(5, "5");
     map.keySet().containsAll(Arrays.asList(3, 5));
     assertFalse(map.containsKey(4));
+  }
+
+  @Test
+  void testLruAccessOrder3() {
+    Map<Integer, String> map = new LruCache<>(3);
+    map.put(3, "3");
+    map.compute(4, (k, v) -> "" + k);
+    map.computeIfPresent(3, (k, v) -> v.repeat(k));
+    assertEquals(map.get(3), "333");
+    map.computeIfAbsent(3, (k) -> "abc".repeat(k));
+    assertEquals(map.get(3), "333");
+    map.computeIfAbsent(2, k -> "ab".repeat(k));
+    assertEquals(map.get(2), "abab");
   }
 
   @Test

@@ -73,6 +73,15 @@ public enum Integers {
         && 0 == (value & (value - 1));
   }
 
+  /** @param value
+   * @return value
+   * @throws Exception if given value is not a power of 2 */
+  public static int requirePowerOf2(int value) {
+    if (isPowerOf2(value))
+      return value;
+    throw new IllegalArgumentException(Integer.toString(value));
+  }
+
   /** @param min inclusive
    * @param max inclusive
    * @return function that maps an integer x into the closed interval [min, max] */
@@ -139,5 +148,34 @@ public enum Integers {
    * @see Arrays#asList(Object...) */
   public static List<Integer> asList(int[] array) {
     return IntList.wrap(array);
+  }
+
+  /** Quote from Java Integer:
+   * "Note that this method is closely related to the logarithm base 2.
+   * For all positive {@code int} values x:
+   * floor(log<sub>2</sub>(x)) = {@code 31 - numberOfLeadingZeros(x)}
+   * ceil(log<sub>2</sub>(x)) = {@code 32 - numberOfLeadingZeros(x - 1)}
+   * 
+   * Reference:
+   * https://stackoverflow.com/questions/3305059/how-do-you-calculate-log-base-2-in-java-for-integers
+   * 
+   * @param value positive
+   * @return floor(log<sub>2</sub>(value))
+   * @throws Exception if value is negative or zero */
+  public static int log2Floor(int value) {
+    return 31 - Integer.numberOfLeadingZeros(requirePositive(value));
+  }
+
+  /** @param value positive
+   * @return ceil(log<sub>2</sub>(value)) */
+  public static int log2Ceiling(int value) {
+    return 32 - Integer.numberOfLeadingZeros(requirePositive(value) - 1);
+  }
+
+  /** @param value
+   * @return
+   * @throws Exception if given value is not an exact power of 2 */
+  public static int log2Exact(int value) {
+    return 31 - Integer.numberOfLeadingZeros(requirePowerOf2(value));
   }
 }

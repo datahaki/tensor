@@ -50,7 +50,6 @@ class TransposedImageFormatTest {
 
   @Test
   void testGrayFile() throws Exception {
-    
     File file = Unprotect.file("/ch/alpine/tensor/img/gray15x9.png");
     assertTrue(file.isFile());
     BufferedImage bufferedImage = ImageIO.read(file);
