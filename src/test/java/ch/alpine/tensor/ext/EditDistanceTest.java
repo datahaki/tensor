@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,8 @@ class EditDistanceTest {
   private static void symm(int exp, String s1, String s2) {
     assertEquals(exp, EditDistance.of(s1, s2));
     assertEquals(exp, EditDistance.of(s2, s1));
+    assertEquals(exp, EditDistance.function(s1).apply(s2));
+    assertEquals(exp, EditDistance.function(s2).apply(s1));
   }
 
   @Test
@@ -27,5 +30,10 @@ class EditDistanceTest {
     symm(1, "a", "");
     symm(3, "lotti", "karotti");
     symm(7, "gatacagataca", "acggcctata");
+  }
+
+  @Test
+  void testNullFail() {
+    assertThrows(Exception.class, () -> EditDistance.function(null));
   }
 }

@@ -14,7 +14,7 @@ import java.util.function.Function;
  * later f[1] = "def" then the function is not suitable for caching!
  * 
  * The values should be immutable to ensure that the receiver cannot modify the content
- * that may be queried by the next caller. A value may also be null.
+ * that may be queried by the next caller. A value may not be null.
  * 
  * Used in: Unit, CirclePoints, Binomial, GaussScalar, ... */
 public class Cache<K, V> implements Function<K, V>, Serializable {
@@ -47,7 +47,7 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
   public V apply(K key) {
     V value = map.get(key);
     if (Objects.isNull(value)) {
-      value = function.apply(key);
+      value = Objects.requireNonNull(function.apply(key));
       synchronized (map) {
         map.put(key, value);
       }

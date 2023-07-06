@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/EditDistance.html">EditDistance</a> */
@@ -60,5 +61,12 @@ public enum EditDistance {
     // for (trace seed : list)
     // System.out.println(seed.cost() + " " + seed.info() + " " + seed.chr());
     return Lists.last(list).cost();
+  }
+
+  /** @param origin
+   * @return */
+  public static Function<String, Integer> function(String origin) {
+    Objects.requireNonNull(origin);
+    return target -> of(origin, target);
   }
 }

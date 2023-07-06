@@ -5,6 +5,7 @@ import java.math.BigInteger;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.sca.Abs;
 
@@ -19,7 +20,7 @@ import ch.alpine.tensor.sca.Abs;
         index = index.add(BigInteger.ONE))
       if (index.multiply(index).mod(gaussScalar.prime()).equals(gaussScalar.number()))
         return GaussScalar.of(index, gaussScalar.prime());
-    return null;
+    throw new Throw(gaussScalar);
   }
 
   // ---
