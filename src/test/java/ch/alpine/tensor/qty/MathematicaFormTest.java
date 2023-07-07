@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Map;
 
@@ -47,7 +48,7 @@ class MathematicaFormTest {
     Map<String, String> map = MathematicaForm.INSTANCE.getMap();
     for (String string : UnitSystem.SI().map().keySet())
       if (!map.containsKey(string))
-        throw new IllegalArgumentException(string);
+        fail();
   }
 
   @Test

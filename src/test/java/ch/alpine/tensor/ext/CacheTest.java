@@ -4,6 +4,7 @@ package ch.alpine.tensor.ext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -158,7 +159,7 @@ class CacheTest {
       try {
         Thread.sleep(1);
       } catch (InterruptedException interruptedException) {
-        throw new RuntimeException(interruptedException);
+        fail();
       }
       ++count;
       return t.toString();

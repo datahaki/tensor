@@ -69,6 +69,8 @@ public enum Flatten {
     return tensor.stream().flatMap(entry -> stream(entry, ldecr));
   }
 
+  /** @param tensor
+   * @return Flatten[tensor, -1].stream().map(Scalar.class::cast) */
   public static Stream<Scalar> scalars(Tensor tensor) {
     return stream(tensor, -1).map(Scalar.class::cast);
   }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.security.SecureRandom;
 import java.util.random.RandomGenerator;
@@ -26,7 +27,7 @@ class CompressionTest {
       byte[] deco = Compression.inflate(comp);
       assertArrayEquals(bytes, deco);
     } catch (Exception exception) {
-      throw new RuntimeException(exception);
+      fail();
     }
   }
 
@@ -38,7 +39,7 @@ class CompressionTest {
       byte[] deco = Compression.inflate(comp);
       assertArrayEquals(bytes, deco);
     } catch (Exception exception) {
-      throw new RuntimeException(exception);
+      fail();
     }
   }
 
