@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-/** <p>inspired by
+/** CAREFUL: not suitable for strings of length 10k and above
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/EditDistance.html">EditDistance</a> */
 public enum EditDistanceTraced {
   ;

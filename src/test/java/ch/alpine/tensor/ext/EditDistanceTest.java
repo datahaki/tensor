@@ -4,6 +4,7 @@ package ch.alpine.tensor.ext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
@@ -44,6 +45,16 @@ class EditDistanceTest {
     String s2 = RandomVariate.of(UniformDistribution.unit(), 4).toString();
     assertEquals(EditDistance.of(s1, s2), EditDistanceTraced.of(s1, s2));
     assertEquals(EditDistance.of(s2, s1), EditDistanceTraced.of(s2, s1));
+  }
+
+  @Disabled
+  @Test
+  void testLarge() {
+    String s1 = RandomVariate.of(UniformDistribution.unit(), 500).toString();
+    String s2 = RandomVariate.of(UniformDistribution.unit(), 500).toString();
+    System.out.println(s1.length());
+    System.out.println(s2.length());
+    EditDistance.of(s1, s2);
   }
 
   @Test
