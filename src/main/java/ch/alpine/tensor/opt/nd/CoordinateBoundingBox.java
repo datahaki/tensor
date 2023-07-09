@@ -4,7 +4,6 @@ package ch.alpine.tensor.opt.nd;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -30,7 +29,7 @@ public class CoordinateBoundingBox implements Serializable {
   /** @param stream of clip instances
    * @return */
   public static CoordinateBoundingBox of(Stream<Clip> stream) {
-    return new CoordinateBoundingBox(stream.collect(Collectors.toList()));
+    return new CoordinateBoundingBox(stream.toList());
   }
 
   /** @param clips

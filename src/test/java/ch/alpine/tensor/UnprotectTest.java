@@ -178,12 +178,21 @@ class UnprotectTest {
   void testFile() {
     File file = Unprotect.file("/ch/alpine/tensor/io/basic.mathematica");
     assertTrue(file.isFile());
-    File dir = Unprotect.file("/ch/alpine/tensor/io/");
-    assertTrue(dir.isDirectory());
+  }
+
+  @Test
+  void testDirectory() {
+    File file = Unprotect.file("/ch/alpine/tensor/io");
+    assertTrue(file.isDirectory());
   }
 
   @Test
   void testFileFail() {
     assertThrows(Exception.class, () -> Unprotect.file("/does/not/exist.txt"));
+  }
+
+  @Test
+  void testFile2Fail() {
+    assertThrows(Exception.class, () -> Unprotect.class.getResource("/does/not/exist.txt").getFile());
   }
 }

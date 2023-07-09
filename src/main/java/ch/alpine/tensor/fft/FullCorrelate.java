@@ -2,7 +2,6 @@
 package ch.alpine.tensor.fft;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
@@ -60,10 +59,10 @@ public class FullCorrelate implements TensorUnaryOperator {
     List<Integer> size = Dimensions.of(tensor);
     if (size.size() <= level)
       throw new Throw(kernel, tensor);
-    List<Integer> dimensions = IntStream.range(0, mask.size()) //
+    int[] dimensions = IntStream.range(0, mask.size()) //
         .map(index -> size.get(index) + mask.get(index) - 1) //
-        .mapToObj(Integers::requirePositive) //
-        .collect(Collectors.toList());
+        .map(Integers::requirePositive) //
+        .toArray();
     return Array.of(index -> {
       List<Integer> kofs = IntStream.range(0, index.size()).mapToObj(i -> Math.max(0, mask.get(i) - 1 - index.get(i))).toList();
       List<Integer> tofs = IntStream.range(0, index.size()).mapToObj(i -> Math.max(0, index.get(i) - mask.get(i) + 1)).toList();

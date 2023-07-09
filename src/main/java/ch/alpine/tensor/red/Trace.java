@@ -2,7 +2,6 @@
 package ch.alpine.tensor.red;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -36,11 +35,11 @@ public enum Trace {
     if (d0 == d1)
       throw new IllegalArgumentException(d0 + " == " + d1);
     List<Integer> list = Dimensions.of(tensor);
-    List<Integer> index = Stream.generate(() -> Tensor.ALL).limit(Math.max(d0, d1) + 1).collect(Collectors.toList());
+    int[] index = IntStream.generate(() -> Tensor.ALL).limit(Math.max(d0, d1) + 1).toArray();
     return IntStream.range(0, Integers.requireEquals(list.get(d0), list.get(d1))) //
         .mapToObj(count -> {
-          index.set(d0, count);
-          index.set(d1, count);
+          index[d0] = count;
+          index[d1] = count;
           return tensor.get(index);
         });
   }

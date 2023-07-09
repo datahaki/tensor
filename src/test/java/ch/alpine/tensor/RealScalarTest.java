@@ -138,6 +138,26 @@ class RealScalarTest {
   }
 
   @Test
+  void testToIntMax() {
+    long value = Integer.MAX_VALUE;
+    for (int delta = -3; delta < 4; ++delta) {
+      long target = value + delta;
+      Scalar scalar = RealScalar.of(target);
+      assertEquals(scalar.number().longValue(), target);
+    }
+  }
+
+  @Test
+  void testToIntMin() {
+    long value = Integer.MAX_VALUE;
+    for (int delta = -3; delta < 4; ++delta) {
+      long target = value + delta;
+      Scalar scalar = RealScalar.of(target);
+      assertEquals(scalar.number().longValue(), target);
+    }
+  }
+
+  @Test
   void testCreateFail() {
     Number number = new AtomicInteger(123);
     Scalar scalar = RealScalar.of(number.intValue());

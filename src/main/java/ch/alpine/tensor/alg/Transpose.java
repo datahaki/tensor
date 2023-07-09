@@ -3,7 +3,6 @@ package ch.alpine.tensor.alg;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
@@ -88,7 +87,7 @@ public enum Transpose {
       return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));
     }
     return Array.of( //
-        list -> tensor.get(Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList())), // extraction
+        list -> tensor.get(Arrays.stream(sigma).mapToObj(list::get).toList()), // extraction
         Size.of(dimensions_list.subList(0, sigma.length)).permute(sigma)); // dimensions
   }
 }

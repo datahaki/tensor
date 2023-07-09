@@ -3,7 +3,6 @@ package ch.alpine.tensor.alg;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
@@ -42,6 +41,6 @@ public enum MapThread {
 
   // helper function
   private static List<Tensor> extract(int index, List<Tensor> list) {
-    return list.stream().map(tensor -> tensor.get(index)).collect(Collectors.toList());
+    return list.stream().map(tensor -> tensor.get(index)).toList();
   }
 }

@@ -10,6 +10,7 @@ import java.io.File;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.io.TempDir;
 
 class RenameDirectoryTest {
   private static void wrap(File src, File dst) {
@@ -31,22 +32,23 @@ class RenameDirectoryTest {
   }
 
   @Test
-  void testSimple() {
-    File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
+  void testSimple(@TempDir File folder) {
+    File folder1 = new File(folder, getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
-    File folder2 = HomeDirectory.Pictures(getClass().getSimpleName());
+    File folder2 = new File(folder, getClass().getSimpleName() + "3");
     RenameDirectory.of(folder1, folder2);
     assertTrue(folder2.isDirectory());
     folder2.delete();
   }
 
   @Test
-  void testCreateParent() {
-    File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
+  void testCreateParent(@TempDir File folder) {
+    File folder1 = new File(folder, getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
-    File folder2 = HomeDirectory.Pictures(getClass().getSimpleName(), "sub");
+    File folder2 = new File(new File(folder, getClass().getSimpleName() + 2), "sub");
+    assertFalse(folder2.exists());
     RenameDirectory.of(folder1, folder2);
     assertTrue(folder2.isDirectory());
     folder2.delete();
@@ -56,8 +58,8 @@ class RenameDirectoryTest {
 
   @Test
   @EnabledOnOs(OS.LINUX)
-  void testRenameToFail() {
-    File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
+  void testRenameToFail(@TempDir File folder) {
+    File folder1 = new File(folder, getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
     File folder2 = new File("/etc", getClass().getSimpleName());
@@ -67,8 +69,8 @@ class RenameDirectoryTest {
 
   @Test
   @EnabledOnOs(OS.LINUX)
-  void testCreateParentFail() {
-    File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
+  void testCreateParentFail(@TempDir File folder) {
+    File folder1 = new File(folder, getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
     File folder2 = new File("/etc", getClass().getSimpleName() + "/sub");

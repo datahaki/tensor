@@ -3,7 +3,6 @@ package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -38,7 +37,7 @@ public class MappedInterpolation extends AbstractInterpolation implements Serial
         .map(Scalar.class::cast) //
         .map(function) //
         .map(Scalars::intValueExact) //
-        .collect(Collectors.toList()));
+        .toList());
   }
 
   @Override // from Interpolation

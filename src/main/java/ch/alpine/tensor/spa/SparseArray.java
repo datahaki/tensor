@@ -101,7 +101,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
       List<Integer> list = IntStream.range(0, size.size()) //
           .filter(i -> index.size() <= i || index.get(i) == ALL) //
           .map(size::get) //
-          .boxed().collect(Collectors.toList());
+          .boxed().toList();
       return new SparseArray(fallback, list, navigableMap.entrySet().stream() //
           .collect(_map(Entry::getKey, entry -> entry.getValue().get(_index)))); //
     }
@@ -277,7 +277,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
     List<Integer> _ofs = Lists.rest(ofs);
     List<Integer> _len = Lists.rest(len);
     return new SparseArray(fallback, //
-        Stream.concat(len.stream(), size.stream().skip(depth)).collect(Collectors.toList()), //
+        Stream.concat(len.stream(), size.stream().skip(depth)).toList(), //
         navigableMap.subMap(head, head + len0).entrySet().stream() //
             .collect(_map(entry -> entry.getKey() - head, entry -> entry.getValue().block(_ofs, _len))));
   }

@@ -2,7 +2,6 @@
 package ch.alpine.tensor.fft;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
@@ -62,10 +61,10 @@ public class ListCorrelate implements TensorUnaryOperator {
     List<Integer> size = Dimensions.of(tensor);
     if (size.size() <= level)
       throw new Throw(kernel, tensor);
-    List<Integer> dimensions = IntStream.range(0, mask.size()) //
+    int[] dimensions = IntStream.range(0, mask.size()) //
         .map(index -> size.get(index) - mask.get(index) + 1) //
-        .mapToObj(Integers::requirePositive) //
-        .collect(Collectors.toList());
+        .map(Integers::requirePositive) //
+        .toArray();
     return Array.of(index -> Flatten.stream(Times.of(kernel, tensor.block(index, mask)), level) //
         .reduce(Tensor::add).orElseThrow(), dimensions);
   }
