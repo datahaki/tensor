@@ -4,7 +4,11 @@ package ch.alpine.tensor.ext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class EditDistanceTest {
   private static void symm(int exp, String s1, String s2) {
@@ -12,6 +16,8 @@ class EditDistanceTest {
     assertEquals(exp, EditDistance.of(s2, s1));
     assertEquals(exp, EditDistance.function(s1).apply(s2));
     assertEquals(exp, EditDistance.function(s2).apply(s1));
+    assertEquals(exp, EditDistanceTraced.of(s1, s2));
+    assertEquals(exp, EditDistanceTraced.of(s2, s1));
   }
 
   @Test
@@ -30,6 +36,14 @@ class EditDistanceTest {
     symm(1, "a", "");
     symm(3, "lotti", "karotti");
     symm(7, "gatacagataca", "acggcctata");
+  }
+
+  @RepeatedTest(10)
+  void testRandom() {
+    String s1 = RandomVariate.of(UniformDistribution.unit(), 6).toString();
+    String s2 = RandomVariate.of(UniformDistribution.unit(), 4).toString();
+    assertEquals(EditDistance.of(s1, s2), EditDistanceTraced.of(s1, s2));
+    assertEquals(EditDistance.of(s2, s1), EditDistanceTraced.of(s2, s1));
   }
 
   @Test

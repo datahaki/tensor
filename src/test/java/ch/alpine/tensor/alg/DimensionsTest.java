@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -93,7 +94,7 @@ class DimensionsTest {
   @Test
   void testIntEquality() {
     List<Integer> list = Dimensions.of(HilbertMatrix.of(3));
-    assertTrue(list.get(0) == list.get(1));
+    assertSame(list.get(0), list.get(1));
   }
 
   @Test
