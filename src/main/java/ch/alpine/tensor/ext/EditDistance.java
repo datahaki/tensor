@@ -9,7 +9,7 @@ import java.util.function.Function;
  * where n and m are the lengths of the two given strings.
  * 
  * in the test scope there is code that tracks the best edit solution,
- * see EditDistanceTraced, that requires O(n*m) memory
+ * "EditDistanceTraced" which in turn requires O(n*m) memory (!)
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/EditDistance.html">EditDistance</a> */

@@ -24,7 +24,9 @@ public enum Primitives {
   /** @param vector
    * @return stream of all scalars in vector mapped to {@link Number} */
   public static Stream<Number> toNumberStream(Tensor vector) {
-    return vector.stream().map(Scalar.class::cast).map(Scalar::number);
+    return vector.stream() //
+        .map(Scalar.class::cast) //
+        .map(Scalar::number);
   }
   // ---
 
@@ -142,10 +144,10 @@ public enum Primitives {
 
   /** does not perform rounding, but uses Scalar::number().intValue()
    * 
-   * @param tensor
+   * @param vector
    * @return array of int values of all scalars in tensor */
-  public static int[] toIntArray(Tensor tensor) {
-    return toIntStream(tensor).toArray();
+  public static int[] toIntArray(Tensor vector) {
+    return toIntStream(vector).toArray();
   }
 
   /** does not perform rounding, but uses Scalar::number().intValue()
@@ -160,27 +162,27 @@ public enum Primitives {
     return array;
   }
 
-  /** @param tensor
+  /** @param vector
    * @return */
-  public static IntBuffer toIntBuffer(Tensor tensor) {
-    IntBuffer intBuffer = IntBuffer.allocate(tensor.length());
-    toIntStream(tensor).forEach(intBuffer::put);
+  public static IntBuffer toIntBuffer(Tensor vector) {
+    IntBuffer intBuffer = IntBuffer.allocate(vector.length());
+    toIntStream(vector).forEach(intBuffer::put);
     ((java.nio.Buffer) intBuffer).flip();
     return intBuffer;
   }
 
   // ---
-  /** @param tensor
-   * @return array of byte values of all scalars in given tensor */
-  public static byte[] toByteArray(Tensor tensor) {
-    return toByteBuffer(tensor).array();
+  /** @param vector
+   * @return array of byte values of all scalars in given vector */
+  public static byte[] toByteArray(Tensor vector) {
+    return toByteBuffer(vector).array();
   }
 
-  /** @param tensor
+  /** @param vector
    * @return byte buffer containing byte values of all scalars in given tensor */
-  public static ByteBuffer toByteBuffer(Tensor tensor) {
-    ByteBuffer byteBuffer = ByteBuffer.allocate(tensor.length());
-    toNumberStream(tensor).forEach(number -> byteBuffer.put(number.byteValue()));
+  public static ByteBuffer toByteBuffer(Tensor vector) {
+    ByteBuffer byteBuffer = ByteBuffer.allocate(vector.length());
+    toNumberStream(vector).forEach(number -> byteBuffer.put(number.byteValue()));
     ((java.nio.Buffer) byteBuffer).flip();
     return byteBuffer;
   }

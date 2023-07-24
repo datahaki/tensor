@@ -10,8 +10,13 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 /** Remark: implementation is not consistent with Mathematica
  * for complex numbers.
  * 
+ * For any scalar:
+ * Numerator[scalar] / Denominator[scalar] == scalar
+ * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/Denominator.html">Denominator</a> */
+ * <a href="https://reference.wolfram.com/language/ref/Denominator.html">Denominator</a>
+ * 
+ * @see Numerator */
 public enum Denominator implements ScalarUnaryOperator {
   FUNCTION;
 
