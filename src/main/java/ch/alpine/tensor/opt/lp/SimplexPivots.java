@@ -6,6 +6,7 @@ import java.util.Objects;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Sign;
 
 /** implementation is specific for
@@ -24,7 +25,8 @@ public enum SimplexPivots implements SimplexPivot {
       int m = tab.length() - 1;
       for (int i = 0; i < m; ++i) {
         Scalar tab_ij = tab.Get(i, j);
-        if (Sign.isPositive(tab_ij)) {
+        
+        if (Sign.isPositive(Tolerance.CHOP.apply(tab_ij))) {
           Scalar ratio = tab.Get(i, n).divide(tab_ij);
           if (Objects.isNull(min) || Scalars.lessThan(ratio, min)) {
             min = ratio;

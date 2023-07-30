@@ -18,6 +18,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.ArgMax;
 import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.LenientAdd;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Sign;
@@ -72,7 +73,7 @@ import ch.alpine.tensor.sca.Sign;
       /* the tests pass for "c = tab.get(m)" as well!? */
       Tensor c = tab.get(m).extract(0, n);
       int j = ArgMin.of(withoutUnits(c)); // "entering variable"
-      if (Sign.isNegative(c.Get(j))) {
+      if (Sign.isNegative(Tolerance.CHOP.apply(c.Get(j)))) {
         { // check if unbounded
           int argmax = ArgMax.of(withoutUnits(tab.get(Tensor.ALL, j).extract(0, m)));
           Sign.requirePositive(tab.Get(argmax, j)); // otherwise problem unbounded

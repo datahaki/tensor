@@ -14,6 +14,7 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.LenientAdd;
 
 /** definition of a linear program
@@ -172,10 +173,10 @@ public class LinearProgram implements Serializable {
         !StaticHelper.isNonNegative(x))
       throw new Throw(c, A, b, x);
     if (constraintType.equals(ConstraintType.LESS_EQUALS) && //
-        !StaticHelper.isNonNegative(b.subtract(A.dot(x))))
+        !StaticHelper.isNonNegative(b.subtract(A.dot(x)).map(Tolerance.CHOP)))
       throw new Throw(c, A, b, x);
     if (constraintType.equals(ConstraintType.GREATER_EQUALS) && //
-        !StaticHelper.isNonNegative(A.dot(x).subtract(b)))
+        !StaticHelper.isNonNegative(A.dot(x).subtract(b).map(Tolerance.CHOP)))
       throw new Throw(c, A, b, x);
     return x;
   }
