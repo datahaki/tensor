@@ -31,7 +31,7 @@ import ch.alpine.tensor.qty.LenientAdd;
  * Tensors.vector(40, 20, 12), RegionType.NON_NEGATIVE);
  * </pre>
  * 
- * @see LinearProgramming */
+ * @see LinearOptimization */
 public class LinearProgram implements Serializable {
   /** @param objective
    * @param c

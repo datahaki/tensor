@@ -68,7 +68,7 @@ class SimplexPivotsTest {
     Tensor A = Tensors.matrixInt(new int[][] { { 3, -1 }, { -3, 2 }, { 1, -1 } });
     Tensor b = Tensors.vector(-1, 2, -1);
     LinearProgram linearProgram = LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, A, b, Variables.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram);
+    Tensor x = LinearOptimization.of(linearProgram);
     assertEquals(x, Tensors.vector(0, 1));
   }
 
@@ -79,7 +79,7 @@ class SimplexPivotsTest {
     Tensor b = Tensors.vector(-1, 2, -1);
     LinearProgram linearProgram = //
         LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, A, b, Variables.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram);
+    Tensor x = LinearOptimization.of(linearProgram);
     assertEquals(x, Tensors.vector(0, 1));
   }
 
@@ -117,7 +117,7 @@ class SimplexPivotsTest {
     Tensor b = Tensors.vector(8, 7, 9, 13, 6, 10, 5, 12, 14, 15, 9, 11, 9, 8, 4, 7); //
     Tensor c = Tensors.vector(i -> KroneckerDelta.of(i, 0), 5);
     LinearProgram linearProgram = LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram);
+    Tensor x = LinearOptimization.of(linearProgram);
     Tensor x51 = Tensors.vector(6.5, 0.5, 0, 2.5, 0);
     Tensor x52 = Tensors.fromString("{13/2, 1/2, 0, 6, 3/2}");
     assertEquals(c.dot(x), c.dot(x51));
@@ -142,7 +142,7 @@ class SimplexPivotsTest {
     Tensor c = Tensors.vector(0, 2, 0, 1, 0, 0, 5);
     LinearProgram linearProgram = //
         LinearProgram.of(Objective.MIN, c, ConstraintType.EQUALS, m, b, Variables.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram);
+    Tensor x = LinearOptimization.of(linearProgram);
     Tensor X = Tensors.vector(0, 1, 3, 0, 2, 0, 0);
     assertEquals(x, X);
   }

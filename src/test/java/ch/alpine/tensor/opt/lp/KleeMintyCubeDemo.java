@@ -9,7 +9,7 @@ enum KleeMintyCubeDemo {
     KleeMintyCube kmc = KleeMintyCube.of(3);
     // kmc.show();
     Tensor x = // LinearProgramming.maxLessEquals(kmc.c, kmc.m, kmc.b);
-        LinearProgramming.of(kmc.linearProgram);
+        LinearOptimization.of(kmc.linearProgram);
     System.out.println("LP" + x + " <- solution");
   }
 }

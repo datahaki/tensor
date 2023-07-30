@@ -14,7 +14,7 @@ import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 
-class LinearProgrammingTest {
+class LinearOptimizationTest {
   @Test
   void testCase4() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 5, 1, 0, 0 }, { 2, 1, 0, 1, 0 }, { 1, 1, 0, 0, 1 } });
@@ -23,7 +23,7 @@ class LinearProgrammingTest {
         Objective.MIN, Tensors.vector(-3, -5, 0, 0, 0), //
         ConstraintType.EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(linearProgram.isStandardPrimal());
-    Tensor x = LinearProgramming.of(linearProgram);
+    Tensor x = LinearOptimization.of(linearProgram);
     // Mathematica {5, 7, 0, 3, 0}
     assertEquals(x, Tensors.vector(5, 7, 0, 3, 0));
     Tensor tensor = SimplexCorners.of(linearProgram);
@@ -40,7 +40,7 @@ class LinearProgrammingTest {
     assertTrue(lpd.isCanonicDual());
     // TODO TENSOR LP primal vs dual
     TestHelper.check(lpd, false);
-    Tensor x = LinearProgramming.of(lpd);
+    Tensor x = LinearOptimization.of(lpd);
     assertEquals(x, Tensors.vector(5, 7));
     Tensor tensor = SimplexCorners.of(lpd);
     assertEquals(x, tensor.get(0));
@@ -55,7 +55,7 @@ class LinearProgrammingTest {
         Objective.MAX, Tensors.fromString("{1, 1/3}"), //
         ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    Tensor x = LinearProgramming.of(lpd);
+    Tensor x = LinearOptimization.of(lpd);
     assertEquals(x, Tensors.fromString("{2/3, 4/3}"));
     Tensor tensor = SimplexCorners.of(lpd);
     assertEquals(x, tensor.get(0));
@@ -81,7 +81,7 @@ class LinearProgrammingTest {
         ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
     // TestHelper.check(lpd, false);
-    Tensor xp = LinearProgramming.of(lpd);
+    Tensor xp = LinearOptimization.of(lpd);
     assertEquals(xp, Tensors.fromString("{2/3, 4/3}"));
     Tensor solp = SimplexCorners.of(lpd);
     assertEquals(solp.dot(lpd.c).Get(0), RationalScalar.of(10, 9));
@@ -108,7 +108,7 @@ class LinearProgrammingTest {
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
     TestHelper.check(lpp, lpd);
-    Tensor x = LinearProgramming.of(lpd);
+    Tensor x = LinearOptimization.of(lpd);
     assertEquals(x, Tensors.vector(0, 2));
     Tensor solp = SimplexCorners.of(lpd);
     assertEquals(x, solp.get(0));

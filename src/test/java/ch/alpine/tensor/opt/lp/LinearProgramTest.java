@@ -74,7 +74,7 @@ class LinearProgramTest {
     Tensor b = Tensors.fromString("{2[m], 1[m], 2[m], 1[m], -1[m], 2[m]}");
     LinearProgram linearProgram = LinearProgram.of( //
         Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram);
+    Tensor x = LinearOptimization.of(linearProgram);
     assertEquals(x, Tensors.fromString("{2/3[m], 4/3[m]}"));
     Tensor solp = SimplexCorners.of(linearProgram);
     assertEquals(solp.get(0), x);
@@ -90,7 +90,7 @@ class LinearProgramTest {
         Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     Tensor solp = SimplexCorners.of(linearProgram);
     assertEquals(solp, Tensors.fromString("{{2/3[m^-1], 4/3[s^-1]}}"));
-    Tensor x = LinearProgramming.of(linearProgram);
+    Tensor x = LinearOptimization.of(linearProgram);
     assertEquals(solp.get(0), x);
   }
 

@@ -53,7 +53,7 @@ class HuKahngTest {
     assertTrue(lpp.isCanonicPrimal());
     Tensor sold = SimplexCorners.of(lpp);
     assertEquals(sold, Tensors.fromString("{{1/10[USD*Wood^-1], 7/15[Iron^-1*USD]}}"));
-    Tensor xd = LinearProgramming.of(lpp);
+    Tensor xd = LinearOptimization.of(lpp);
     assertEquals(sold.get(0), xd);
   }
 
@@ -70,11 +70,11 @@ class HuKahngTest {
     assertTrue(lpd.isCanonicDual());
     Tensor sol2 = SimplexCorners.of(lpd);
     assertEquals(sol1, sol2);
-    Tensor xp = LinearProgramming.of(lpd);
+    Tensor xp = LinearOptimization.of(lpd);
     assertEquals(sol1.get(0), xp);
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
-    Tensor xd = LinearProgramming.of(lpp);
+    Tensor xd = LinearOptimization.of(lpp);
     assertEquals(xp.dot(lpd.c), xd.dot(lpp.c));
   }
 
@@ -109,7 +109,7 @@ class HuKahngTest {
     Tensor sold = SimplexCorners.of(lpp);
     assertEquals(sold, Tensors.fromString("{{1/5[USD*ap^-1], 1/5[USD*or^-1]}}"));
     assertEquals(sold.dot(lpp.c), Tensors.fromString("{6[USD]}"));
-    Tensor xd = LinearProgramming.of(lpp);
+    Tensor xd = LinearOptimization.of(lpp);
     assertEquals(sold.get(0), xd);
   }
 
@@ -159,7 +159,7 @@ class HuKahngTest {
     assertTrue(lpp.isStandardPrimal());
     Tensor cp = SimplexCorners.of(lpp);
     assertEquals(tensor, cp);
-    Tensor xp = LinearProgramming.of(lpp);
+    Tensor xp = LinearOptimization.of(lpp);
     assertEquals(xp, Tensors.vector(0, 0, 2, 1)); // as stated on p.45
   }
 
@@ -245,7 +245,7 @@ class HuKahngTest {
         ConstraintType.GREATER_EQUALS, //
         Tensors.matrixInt(new int[][] { { 1, 3, 0 }, { 0, 2, 2 } }), //
         Tensors.vector(3, 5), Variables.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(lpd);
+    Tensor x = LinearOptimization.of(lpd);
     lpd.requireFeasible(x);
     // System.out.println(x);
     // System.out.println(x.dot(lpd.c));

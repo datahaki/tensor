@@ -34,11 +34,11 @@ class SimplexMethodTest {
     LinearProgram lpd = lpp.toggle();
     assertTrue(lpd.isCanonicDual());
     TestHelper.check(lpp, lpd);
-    Tensor xp = LinearProgramming.of(lpp);
+    Tensor xp = LinearOptimization.of(lpp);
     // TODO TENSOR LP solver does not find optimal solution of primal problem!
     NavigableMap<Scalar, Tensor> map = SimplexCorners.of(lpp.c, lpp.A, lpp.b, true);
     assertTrue(map.values().contains(Tensors.of(xp)));
-    Tensor xd = LinearProgramming.of(lpd);
+    Tensor xd = LinearOptimization.of(lpd);
     Tensor xdc = SimplexCorners.of(lpd);
     assertEquals(xd, xdc.get(0));
     assertEquals(map.firstKey(), xd.dot(lpd.c));
@@ -58,7 +58,7 @@ class SimplexMethodTest {
     assertTrue(lpd.isCanonicDual());
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
-    Tensor xp = LinearProgramming.of(lpd);
+    Tensor xp = LinearOptimization.of(lpd);
     TestHelper.check(lpd, true);
     assertEquals(xp, Tensors.vector(2, 6)); // see page 847
     lpd.requireFeasible(Array.zeros(2));
@@ -68,7 +68,7 @@ class SimplexMethodTest {
     lpd.requireFeasible(Tensors.vector(0, 1));
     assertThrows(Throw.class, () -> lpd.requireFeasible(Tensors.vector(-3, 3)));
     assertThrows(Throw.class, () -> lpd.requireFeasible(Tensors.vector(3, 3)));
-    Tensor xd = LinearProgramming.of(lpp);
+    Tensor xd = LinearOptimization.of(lpp);
     assertEquals(xp.dot(lpd.c), xd.dot(lpp.c));
   }
 
@@ -84,7 +84,7 @@ class SimplexMethodTest {
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
     TestHelper.check(lpp, lpd);
-    Tensor x = LinearProgramming.of(lpd);
+    Tensor x = LinearOptimization.of(lpd);
     // Mathematica {2, 6}
     assertEquals(x, Tensors.vector(2, 6)); // see page 847
     lpd.requireFeasible(Tensors.vector(3, 4));
@@ -106,7 +106,7 @@ class SimplexMethodTest {
         Tensors.vector(7, -7, 4), Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
     Scalar opt = TestHelper.check(lpd.toggle(), lpd);
-    Tensor x = LinearProgramming.of(lpd);
+    Tensor x = LinearOptimization.of(lpd);
     assertEquals(opt, x.dot(lpd.c));
     // TestHelper.check(lpd, false);
   }
@@ -126,7 +126,7 @@ class SimplexMethodTest {
     // TestHelper.check(lpp, lpd);
     Tensor sols = SimplexCorners.of(lpd);
     assertEquals(sols, Tensors.empty());
-    assertThrows(Throw.class, () -> LinearProgramming.of(lpd));
+    assertThrows(Throw.class, () -> LinearOptimization.of(lpd));
   }
 
   // unbounded
@@ -138,7 +138,7 @@ class SimplexMethodTest {
         Objective.MAX, Tensors.vector(1, -1), //
         ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    assertThrows(Throw.class, () -> LinearProgramming.of(lpd));
+    assertThrows(Throw.class, () -> LinearOptimization.of(lpd));
   }
 
   @Test
@@ -153,7 +153,7 @@ class SimplexMethodTest {
         Tensors.vector(30, 24, 36), Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
     Scalar opt = TestHelper.check(lpd.toggle(), lpd);
-    Tensor x = LinearProgramming.of(lpd);
+    Tensor x = LinearOptimization.of(lpd);
     assertEquals(x, Tensors.vector(8, 4, 0)); // p868
     assertEquals(opt, x.dot(lpd.c));
     TestHelper.check(lpd, true);
@@ -167,14 +167,14 @@ class SimplexMethodTest {
         Objective.MAX, Tensors.vector(18, 12.5), //
         ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    Tensor x = LinearProgramming.of(lpd);
+    Tensor x = LinearOptimization.of(lpd);
     assertEquals(x, Tensors.vector(12, 8)); // confirmed with linprog
     Tensor cp = x.dot(lpd.c);
     Tensor solp = SimplexCorners.of(lpd);
     assertEquals(x, solp.get(0));
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
-    Tensor xd = LinearProgramming.of(lpp);
+    Tensor xd = LinearOptimization.of(lpp);
     Tensor cd = xd.dot(lpp.c);
     assertEquals(cp, cd);
     TestHelper.check(lpd, true);
@@ -188,7 +188,7 @@ class SimplexMethodTest {
         Objective.MAX, Tensors.vector(5, -3), //
         ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    Tensor x = LinearProgramming.of(lpd);
+    Tensor x = LinearOptimization.of(lpd);
     assertEquals(x, Tensors.vector(1, 0)); // confirmed with linprog
     Tensor sold = SimplexCorners.of(lpd);
     assertEquals(x, sold.get(0));
@@ -202,7 +202,7 @@ class SimplexMethodTest {
     Tensor b = Tensors.vector(-10000, -30000);
     LinearProgram linearProgram = //
         LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
-    assertThrows(Throw.class, () -> LinearProgramming.of(linearProgram));
+    assertThrows(Throw.class, () -> LinearOptimization.of(linearProgram));
     // MATLAB
     // A=[[-2, -7.5, -3];[-20, -5, -10]];
     // b=[-10000;-30000]

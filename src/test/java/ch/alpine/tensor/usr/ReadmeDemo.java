@@ -16,11 +16,11 @@ import ch.alpine.tensor.mat.NullSpace;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
+import ch.alpine.tensor.opt.lp.LinearOptimization;
 import ch.alpine.tensor.opt.lp.LinearProgram;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
-import ch.alpine.tensor.opt.lp.LinearProgramming;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -56,7 +56,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
     LinearProgram linearProgram = LinearProgram.of(Objective.MAX, Tensors.vector(1, 1), ConstraintType.LESS_EQUALS, //
         Tensors.fromString("{{4, -1},{2, 1},{-5, 2}}"), //
         Tensors.vector(8, 7, 2), Variables.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram);
+    Tensor x = LinearOptimization.of(linearProgram);
     System.out.println(x);
   }
 

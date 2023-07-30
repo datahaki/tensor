@@ -21,7 +21,7 @@ class KleeMintyCubeTest {
   private static void _callKlee(int n) {
     KleeMintyCube kleeMintyCube = KleeMintyCube.of(n);
     assertTrue(kleeMintyCube.linearProgram.isCanonicDual());
-    Tensor x = LinearProgramming.of(kleeMintyCube.linearProgram);
+    Tensor x = LinearOptimization.of(kleeMintyCube.linearProgram);
     assertEquals(x, kleeMintyCube.x);
   }
 
@@ -35,7 +35,7 @@ class KleeMintyCubeTest {
         kleeMintyCube.linearProgram.A.map(N.DOUBLE), //
         kleeMintyCube.linearProgram.b.map(N.DOUBLE), //
         Variables.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram);
+    Tensor x = LinearOptimization.of(linearProgram);
     assertEquals(x, kleeMintyCube.x);
   }
 

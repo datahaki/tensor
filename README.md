@@ -110,7 +110,7 @@ System.out.println(Pretty.of(Inverse.of(matrix)));
 Linear programming
 
 ```java
-Tensor x = LinearProgramming.maxLessEquals( //
+Tensor x = LinearOptimization.maxLessEquals( //
     Tensors.vector(1, 1), // rewards
     Tensors.fromString("{{4, -1}, {2, 1}, {-5, 2}}"), // matrix
     Tensors.vector(8, 7, 2)); // rhs

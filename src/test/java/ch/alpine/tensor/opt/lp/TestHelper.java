@@ -25,8 +25,8 @@ import ch.alpine.tensor.Tensor;
     LinearProgram lpd = lpp.toggle();
     Scalar optimal_value = check(lpp, lpd);
     // ---
-    Tensor xp = LinearProgramming.of(lpp);
-    Tensor xd = LinearProgramming.of(lpd);
+    Tensor xp = LinearOptimization.of(lpp);
+    Tensor xd = LinearOptimization.of(lpd);
     if (check_both)
       assertEquals(xp.dot(lpp.c), xd.dot(lpd.c));
     else {

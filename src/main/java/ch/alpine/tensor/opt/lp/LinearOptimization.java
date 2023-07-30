@@ -12,8 +12,8 @@ import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
  * <p>syntax mostly compatible to MATLAB::linprog
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/LinearProgramming.html">LinearProgramming</a> */
-public enum LinearProgramming {
+ * <a href="https://reference.wolfram.com/language/ref/LinearOptimization.html">LinearOptimization</a> */
+public enum LinearOptimization {
   ;
   /** @param linearProgram
    * @param simplexPivot
