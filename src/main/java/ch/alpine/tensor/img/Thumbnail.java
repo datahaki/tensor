@@ -29,6 +29,7 @@ public enum Thumbnail {
    * @param size
    * @return square image with dimensions size x size */
   public static BufferedImage of(BufferedImage bufferedImage, int size) {
+    // TODO TENSOR CbbFit
     int w = bufferedImage.getWidth();
     int h = bufferedImage.getHeight();
     Scalar s = RealScalar.of(size);

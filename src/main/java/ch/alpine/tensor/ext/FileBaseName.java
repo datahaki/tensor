@@ -9,8 +9,6 @@ import java.io.File;
  * @see FileExtension */
 public enum FileBaseName {
   ;
-  private static final char DOT = '.';
-
   /** Example:
    * "/home/user/info.txt" returns "info"
    * "/home/user/info.txt.gz" returns "info.txt"
@@ -28,7 +26,7 @@ public enum FileBaseName {
   }
 
   private static String fromName(String string) {
-    int index = string.lastIndexOf(DOT);
+    int index = string.lastIndexOf(FileExtension.DOT);
     return 0 < index //
         ? string.substring(0, index)
         : string;

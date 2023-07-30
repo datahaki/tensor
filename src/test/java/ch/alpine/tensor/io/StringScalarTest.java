@@ -85,7 +85,7 @@ class StringScalarTest {
   void testExact() {
     assertTrue(ExactScalarQ.of(StringScalar.of("abc")));
   }
-  
+
   @Test
   void testParseEmpty() {
     Tensor tensor = Tensors.fromString("");

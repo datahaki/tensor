@@ -9,7 +9,7 @@ import java.io.File;
  * @see FileBaseName */
 public enum FileExtension {
   ;
-  private static final char DOT = '.';
+  public static final char DOT = '.';
 
   /** @param file
    * @return extension of given file name */

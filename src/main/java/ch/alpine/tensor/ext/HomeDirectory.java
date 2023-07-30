@@ -23,7 +23,7 @@ public enum HomeDirectory {
    * @param strings
    * @return $user.home/string[0]/string[1]/... */
   public static File file(String... strings) {
-    return concat(USER_HOME, strings);
+    return FileNameJoin.of(USER_HOME, strings);
   }
 
   /** On linux, the directory has the form
@@ -84,12 +84,6 @@ public enum HomeDirectory {
   private static File subfolder(String folder, String... strings) {
     File file = file(folder);
     file.mkdir();
-    return concat(file, strings);
-  }
-
-  private static File concat(File file, String[] strings) {
-    for (String string : strings)
-      file = new File(file, string);
-    return file;
+    return FileNameJoin.of(file, strings);
   }
 }
