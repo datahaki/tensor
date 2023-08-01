@@ -68,7 +68,7 @@ class LinearOptimizationTest {
     assertEquals(lpd.var_count(), lpc.var_count());
     // TODO TENSOR LP primal vs dual, strictly speaking the lp in its
     // current form is not covered by the duality theorem
-//     TestHelper.check(lpd, false);
+    // TestHelper.check(lpd, false);
   }
 
   // MATLAB linprog example
@@ -93,7 +93,7 @@ class LinearOptimizationTest {
     assertEquals(sold.dot(lpp.c).Get(0), RationalScalar.of(10, 9));
     assertThrows(IllegalArgumentException.class, () -> lpp.requireFeasible(Tensors.vector(1, 1)));
     // TODO TENSOR LP primal vs dual
-//     TestHelper.check(lpp, false);
+    // TestHelper.check(lpp, false);
   }
 
   // MATLAB linprog example
@@ -113,6 +113,6 @@ class LinearOptimizationTest {
     Tensor solp = SimplexCorners.of(lpd);
     assertEquals(x, solp.get(0));
     // TODO TENSOR LP primal vs dual
-//     TestHelper.check(lpp);
+    // TestHelper.check(lpp);
   }
 }

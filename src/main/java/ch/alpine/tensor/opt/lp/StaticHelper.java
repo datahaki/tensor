@@ -12,7 +12,10 @@ import ch.alpine.tensor.sca.Sign;
   /** @param vector
    * @return true if all entries in vector are non-negative */
   public static boolean isNonNegative(Tensor vector) {
-    return vector.stream().map(Scalar.class::cast).map(Tolerance.CHOP).allMatch(Sign::isPositiveOrZero);
+    return vector.stream() //
+        .map(Scalar.class::cast) //
+        .map(Tolerance.CHOP) //
+        .allMatch(Sign::isPositiveOrZero);
   }
 
   /** @param ind

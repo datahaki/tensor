@@ -7,13 +7,10 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Matrix2Norm;
-import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.InvertUnlessZero;
 import ch.alpine.tensor.sca.N;
 
 /** implementation also operates on matrices with mixed units, for example:
@@ -44,7 +41,7 @@ import ch.alpine.tensor.sca.N;
     Scalar sigma = N.DOUBLE.apply(Matrix2Norm.bound(matrix.map(Unprotect::withoutUnit)));
     FiniteScalarQ.require(sigma); // fail fast
     Scalar sigma2 = sigma.multiply(sigma);
-    Tensor ai = ConjugateTranspose.of(matrix.map(UnitNegate.FUNCTION));
+    Tensor ai = ConjugateTranspose.of(matrix.map(Unprotect::negateUnit));
     if (Scalars.isZero(sigma2)) // special case that all entries of matrix are zero
       return ai;
     ai = ai.divide(sigma2);
@@ -61,18 +58,5 @@ import ch.alpine.tensor.sca.N;
         ? ai.dot(matrix).dot(ai)
         : ai.dot(matrix.dot(ai));
     return ai.subtract(dots).add(ai);
-  }
-
-  /** UnitNegate also appears in {@link InvertUnlessZero}
-   * yet we do not place the function in the global scope */
-  private enum UnitNegate implements ScalarUnaryOperator {
-    FUNCTION;
-
-    @Override
-    public Scalar apply(Scalar scalar) {
-      return scalar instanceof Quantity quantity //
-          ? Quantity.of(quantity.value(), quantity.unit().negate())
-          : scalar;
-    }
   }
 }

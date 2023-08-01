@@ -9,6 +9,7 @@ import java.util.random.RandomGenerator;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -16,7 +17,6 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.InvertUnlessZero;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -50,8 +50,8 @@ public class WienerProcess implements RandomProcess, Serializable {
   public static RandomProcess of(Scalar mu, Scalar sigma) {
     Scalar ratio = mu.divide(N.DOUBLE.apply(sigma)); // switch to numeric for division
     return of(mu, sigma, //
-        InvertUnlessZero.FUNCTION.apply(ratio.multiply(ratio)).zero(), //
-        InvertUnlessZero.FUNCTION.apply(ratio.divide(sigma)).zero());
+        Unprotect.zero_negateUnit(ratio.multiply(ratio)), //
+        Unprotect.zero_negateUnit(ratio.divide(sigma)));
   }
 
   /** @param mu drift

@@ -97,6 +97,26 @@ public enum Unprotect {
         .isEmpty();
   }
 
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
+   * @param scalar
+   * @return */
+  public static Scalar negateUnit(Scalar scalar) {
+    return scalar instanceof Quantity quantity //
+        ? Quantity.of(quantity.value(), quantity.unit().negate())
+        : Objects.requireNonNull(scalar);
+  }
+
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
+   * @param scalar
+   * @return */
+  public static Scalar zero_negateUnit(Scalar scalar) {
+    return scalar instanceof Quantity quantity //
+        ? Quantity.of(quantity.value().zero(), quantity.unit().negate())
+        : scalar.zero();
+  }
+
   // ---
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 

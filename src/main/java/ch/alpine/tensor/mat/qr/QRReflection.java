@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.qr;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.lie.TensorProduct;
@@ -11,7 +12,6 @@ import ch.alpine.tensor.nrm.NormalizeUnlessZero;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.sca.Conjugate;
-import ch.alpine.tensor.sca.InvertUnlessZero;
 
 /** computes dot product {I - TensorProduct[vc, vr]) . tensor
  * followed by negating the k-th row */
@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.InvertUnlessZero;
       Scalar norm2squared = Vector2NormSquared.of(x);
       if (Scalars.isZero(norm2squared)) {
         vc = x;
-        vr = x.map(InvertUnlessZero.FUNCTION);
+        vr = x.map(Unprotect::negateUnit);
       } else {
         vc = x;
         vr = x.add(x).map(Conjugate.FUNCTION).divide(norm2squared);

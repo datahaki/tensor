@@ -33,10 +33,12 @@ import ch.alpine.tensor.sca.Sign;
   public static Tensor of(Tensor c, Tensor A, Tensor b, SimplexPivot simplexPivot) {
     int m = b.length();
     int n = c.length();
-    SimplexMethod simplexMethod = new SimplexMethod(ArrayFlatten.of(new Tensor[][] { //
+    Tensor tab = ArrayFlatten.of(new Tensor[][] { //
         { A, IdentityMatrix.of(m), Partition.of(b, 1) }, //
         { Tensors.of(Total.of(A).negate()), Array.zeros(1, m), Tensors.of(Tensors.of(Total.ofVector(b).zero())) }, //
-    }), Range.of(n, n + m), simplexPivot); // phase 1
+    });
+    // System.out.println(Pretty.of(tab));
+    SimplexMethod simplexMethod = new SimplexMethod(tab, Range.of(n, n + m), simplexPivot); // phase 1
     /* set bottom corner to 0, column generally does not have uniform unit */
     return new SimplexMethod(Tensor.of(simplexMethod.tab.stream().limit(m) //
         .map(row -> row.extract(0, n).append(Last.of(row)))) //
@@ -96,9 +98,11 @@ import ch.alpine.tensor.sca.Sign;
   }
 
   private Tensor getX() {
-    Tensor x = Array.zeros(n);
+    // System.out.println(Pretty.of(tab));
+    Tensor x = Array.zeros(n); // FIXME TENSOR not generic
     for (int index = 0; index < ind.length(); ++index)
       x.set(tab.Get(index, n), ind.Get(index).number().intValue());
+    // System.out.println("x="+x);
     return x;
   }
 
