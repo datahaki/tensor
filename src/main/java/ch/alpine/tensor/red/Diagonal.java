@@ -39,6 +39,16 @@ public enum Diagonal {
   }
 
   /** @param tensor
+   * @param k
+   * @return */
+  public static Tensor of(Tensor tensor, int k) {
+    int cols = Unprotect.dimension1(tensor);
+    return 0 <= k //
+        ? Tensors.vector(i -> tensor.get(i, i + k), Math.min(tensor.length(), cols - k))
+        : Tensors.vector(i -> tensor.get(i - k, i), Math.min(tensor.length() + k, cols));
+  }
+
+  /** @param tensor
    * @return */
   public static Tensor mathematica(Tensor tensor) {
     Tensor vector = Tensors.empty();

@@ -5,18 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.File;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.ExactTensorQ;
-import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.sca.Chop;
@@ -61,9 +62,9 @@ class MatrixMarketTest {
   }
 
   @Test
-  void testExportFail() {
+  void testExportFail(@TempDir File folder) {
     Tensor matrix = Array.zeros(2, 3);
-    assertThrows(UnsupportedOperationException.class, () -> Export.of(HomeDirectory.file("matrix.mtx"), matrix));
+    assertThrows(UnsupportedOperationException.class, () -> Export.of(new File(folder, "matrix.mtx"), matrix));
   }
 
   @Test

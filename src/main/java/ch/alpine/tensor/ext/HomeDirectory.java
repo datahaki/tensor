@@ -80,6 +80,15 @@ public enum HomeDirectory {
     return subfolder("Videos", strings);
   }
 
+  /** On linux, the filename has the form
+   * /home/$USERNAME/Videos/string[0]/string[1]/...
+   * 
+   * @param strings
+   * @return $user.home/Videos/string[0]/string[1]/... */
+  public static File Templates(String... strings) {
+    return subfolder("Templates", strings);
+  }
+
   // helper function
   private static File subfolder(String folder, String... strings) {
     File file = file(folder);

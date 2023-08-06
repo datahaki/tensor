@@ -65,6 +65,13 @@ class HomeDirectoryTest {
   }
 
   @Test
+  void testTemplates() {
+    assertTrue(HomeDirectory.Templates().isDirectory());
+    assertEquals(HomeDirectory.Templates(), HomeDirectory.file("Templates"));
+    assertEquals(HomeDirectory.Templates("test.png"), HomeDirectory.file("Templates", "test.png"));
+  }
+
+  @Test
   void testFreeSpace() {
     File file = HomeDirectory.file();
     assertTrue(0 < file.getFreeSpace());

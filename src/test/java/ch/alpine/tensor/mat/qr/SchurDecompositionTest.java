@@ -21,7 +21,6 @@ import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
 import ch.alpine.tensor.mat.ConjugateTranspose;
-import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.UpperTriangularize;
@@ -33,6 +32,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.red.Total;
+import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
@@ -136,9 +136,11 @@ class SchurDecompositionTest {
     Tensor matrix = Tensors.fromString("{{0, 1, 2, 3}, {-1, 0, 4, 5}, {-2, -4, 0, 6}, {-3, -5, -6, 0}}");
     SchurDecomposition sd = _check(matrix);
     Tensor t = sd.getT();
-    SquareMatrixQ.require(t);
-    // confirmed with mathematica
-    // System.out.println(Pretty.of(t.map(Round._4)));
+    Tolerance.CHOP.requireZero(Trace.of(t));
+    AntisymmetricMatrixQ.require(t);
+    Tolerance.CHOP.requireAllZero(UpperTriangularize.of(t, 2));
+    Tensor exp = Tensors.vector(-9.502167235316495, 0, -0.8419131974721066);
+    Tolerance.CHOP.requireClose(exp, Diagonal.of(t, 1));
   }
 
   @Test
