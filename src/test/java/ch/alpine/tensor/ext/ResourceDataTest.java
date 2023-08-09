@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.io;
+package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,8 +8,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.ext.ResourceData;
 
 class ResourceDataTest {
   @Test

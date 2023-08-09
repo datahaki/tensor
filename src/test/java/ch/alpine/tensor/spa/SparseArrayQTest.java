@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
@@ -68,6 +69,7 @@ class SparseArrayQTest {
   void testMapUnit() {
     Tensor tensor = LeviCivitaTensor.of(3);
     Tensor result = tensor.map(s -> Tensors.of(Quantity.of(s, "m"), Quantity.of(s, "m")));
+    result.map(Scalar::zero);
     // SparseArray sparse = (SparseArray) result;
     // assertEquals(sparse.fallback(), Quantity.of(0, "m"));
     // assertSame(SparseArrayQ.require(sparse), sparse);

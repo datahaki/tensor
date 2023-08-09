@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
@@ -39,6 +40,7 @@ class NnzTest {
     assertEquals(Nnz.of(sparseArray), 0);
     // assertInstanceOf(SparseArray.class, MatrixDotConjugateTranspose.of(sparse));
     Tensor dot = MatrixDotConjugateTranspose.of(Transpose.of(sparse));
+    dot.map(Scalar::zero);
     // assertInstanceOf(SparseArray.class, dot);
     // assertInstanceOf(SparseArray.class, raw.map(Conjugate.FUNCTION));
   }

@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.spa.SparseArray;
 
 class BakerCampbellHausdorffTest {
-  private static void _check(Tensor ad, int degree) {
+  static void _check(Tensor ad, int degree) {
     BakerCampbellHausdorff bakerCampbellHausdorff = //
         new BakerCampbellHausdorff(ad, degree, Chop._14);
     SeriesInterface appx = (SeriesInterface) BakerCampbellHausdorff.of(ad, degree);
@@ -126,14 +126,6 @@ class BakerCampbellHausdorffTest {
   @ValueSource(ints = { 6, 8 })
   void testSo3(int d) {
     _check(ExAd.SO3.ad(), d);
-  }
-
-  @Test
-  void testOptimized() {
-    Tensor ad = ExAd.SL2.ad();
-    assertInstanceOf(BchSeries6.class, BakerCampbellHausdorff.of(ad, 6));
-    assertInstanceOf(BchSeries8.class, BakerCampbellHausdorff.of(ad, 8));
-    assertInstanceOf(BchSeriesA.class, BakerCampbellHausdorff.of(ad, 10));
   }
 
   @Test

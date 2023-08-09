@@ -52,7 +52,7 @@ class ImageFormatTest {
   }
 
   @Test
-  void testGrayFile() throws Exception {
+  void testGrayFile() {
     String string = "/ch/alpine/tensor/img/gray15x9.png";
     BufferedImage bufferedImage = ResourceData.bufferedImage(string);
     Tensor tensor = ImageFormat.from(bufferedImage);
