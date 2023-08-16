@@ -20,7 +20,7 @@ public enum FileBaseName {
   }
 
   /** @param string
-   * @return extension of file name specified by given string */
+   * @return file name specified by given string without extension */
   public static String of(String string) {
     return of(new File(string));
   }

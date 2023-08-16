@@ -256,6 +256,7 @@ public class DateTime extends AbstractScalar implements //
     return localDateTime.getDayOfMonth();
   }
 
+  /** @return the day-of-week, i.e. Monday, Tuesday, ..., or Sunday */
   public DayOfWeek dayOfWeek() {
     return localDateTime.getDayOfWeek();
   }

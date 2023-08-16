@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.io.TempDir;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.nrm.FrobeniusNorm;
 
 class ExportHelperTest {
@@ -64,6 +66,30 @@ class ExportHelperTest {
   void testGzFail() {
     OutputStream outputStream = new ByteArrayOutputStream(512);
     assertThrows(Exception.class, () -> ExportHelper.of(Extension.GZ, Tensors.empty(), outputStream));
+  }
+
+  @Test
+  void testSomeGz(@TempDir File tempDir) {
+    File file = new File(tempDir, "some.unknown.gz");
+    try {
+      Export.of(file, Array.zeros(4, 4, 4));
+      fail();
+    } catch (Exception e) {
+      // ---
+    }
+    assertEquals(tempDir.listFiles().length, 0);
+  }
+
+  @Test
+  void testGzGz(@TempDir File tempDir) {
+    File file = new File(tempDir, "some.gz.gz");
+    try {
+      Export.of(file, Array.zeros(4, 4, 4));
+      fail();
+    } catch (Exception e) {
+      // ---
+    }
+    assertEquals(tempDir.listFiles().length, 0);
   }
 
   @Test

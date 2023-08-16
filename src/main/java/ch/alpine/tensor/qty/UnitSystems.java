@@ -42,7 +42,8 @@ public enum UnitSystems {
    * @param unitSystem
    * @param prev a base unit of the given unitSystem
    * @param next not a base unit of the given unitSystem, unless next equals prev
-   * @return */
+   * @return
+   * @see UnitSystems#base(UnitSystem) */
   public static UnitSystem rotate(UnitSystem unitSystem, String prev, String next) {
     Scalar value = StaticHelper.conversion(unitSystem, prev, next);
     if (prev.equals(next))

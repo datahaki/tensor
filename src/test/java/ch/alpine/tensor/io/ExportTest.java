@@ -50,7 +50,7 @@ class ExportTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "csv", "csv.gz", "tsv", "tsv.gz" })
+  @ValueSource(strings = { "csv", "csv.gz", "gz.csv", "tsv", "tsv.gz" })
   void testCsv(String extension, @TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file." + extension);
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I[V]}, {34.1231`32, 556, 3/456, -323/2}}");
@@ -83,7 +83,7 @@ class ExportTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "jpg", "jpg.gz", "jpg.gz.gz" })
+  @ValueSource(strings = { "jpg", "jpg.gz", "jpg.gz.gz", "gz.jpg" })
   void testJpgGray(String extension, @TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file." + extension);
     Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11), 4);
@@ -95,7 +95,7 @@ class ExportTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "bmp", "bmp.gz", "bmp.gz.gz", "png", "png.gz" })
+  @ValueSource(strings = { "bmp", "bmp.gz", "bmp.gz.gz", "png", "png.gz", "gz.png" })
   void testExactColor(String extension, @TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file." + extension);
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11, 4);

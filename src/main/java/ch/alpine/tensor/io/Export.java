@@ -40,11 +40,19 @@ public enum Export {
    * to a supported file format */
   public static void of(File file, Tensor tensor) throws IOException {
     Filename filename = new Filename(file.getName());
-    filename.extension(); // known extension
+    _check(filename);
     Objects.requireNonNull(tensor); // tensor non-null
     try (OutputStream outputStream = new FileOutputStream(file)) {
       ExportHelper.of(filename, tensor, outputStream);
     }
+  }
+
+  /** @param filename
+   * @return
+   * @throws Exception if sequence of file extensions is invalid */
+  private static void _check(Filename filename) {
+    while (filename.extension().equals(Extension.GZ))
+      filename = filename.truncate();
   }
 
   /** export function for Java objects that implement {@link Serializable}.
