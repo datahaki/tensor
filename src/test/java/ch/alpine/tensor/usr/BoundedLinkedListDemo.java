@@ -1,8 +1,11 @@
 // code by jph
-package ch.alpine.tensor.ext;
+package ch.alpine.tensor.usr;
 
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.random.RandomGenerator;
+
+import ch.alpine.tensor.ext.BoundedLinkedList;
+import ch.alpine.tensor.ext.Timing;
 
 public enum BoundedLinkedListDemo {
   ;
@@ -10,7 +13,7 @@ public enum BoundedLinkedListDemo {
     Timing timing = Timing.started();
     double timeout = 3;
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(12);
-    RandomGenerator randomGenerator = new Random();
+    RandomGenerator randomGenerator = new SecureRandom();
     new Thread(() -> {
       System.out.println("runA1");
       while (timing.seconds() < timeout)

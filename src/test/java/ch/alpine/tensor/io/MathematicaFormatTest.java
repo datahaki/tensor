@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,7 +36,7 @@ class MathematicaFormatTest {
   void testMathematica() {
     int n = 20;
     int m = 10;
-    RandomGenerator randomGenerator = new Random();
+    RandomGenerator randomGenerator = new SecureRandom();
     Tensor a = Tensors.matrix((i, j) -> //
     randomGenerator.nextInt(3) == 0 ? //
         DoubleScalar.of(randomGenerator.nextDouble()) : //

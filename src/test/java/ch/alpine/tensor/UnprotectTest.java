@@ -16,16 +16,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.io.StringScalarQ;
-import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.qty.Unit;
-import ch.alpine.tensor.qty.UnitQ;
 
 class UnprotectTest {
   @Test
@@ -133,32 +128,6 @@ class UnprotectTest {
     assertTrue(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")));
     assertFalse(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2,3[m]}}")));
     assertFalse(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2[kg],3[m]}}")));
-  }
-
-  @Test
-  void testGetUnitUnique() {
-    assertEquals(UnprotectDepr.getUnitUnique(Range.of(1, 10)), Unit.of(""));
-    assertEquals(UnprotectDepr.getUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")), Unit.of("m"));
-    assertEquals(UnprotectDepr.getUnitUnique(DiagonalMatrix.of(3, Quantity.of(1, "s^2*m^-1"))), Unit.of("s^2*m^-1"));
-  }
-
-  @Test
-  void testOne() {
-    Tensor tensor = Tensors.vector(2, 3, 4);
-    Unit unit = UnprotectDepr.getUnitUnique(tensor);
-    assertTrue(UnitQ.isOne(unit));
-  }
-
-  @Test
-  void testGetUnitUniqueFail1() {
-    assertThrows(IllegalArgumentException.class, () -> UnprotectDepr.getUnitUnique(Tensors.fromString("{{1[m],2[s],3[m]}}")));
-  }
-
-  @Test
-  void testGetUnitUniqueFail2() {
-    Tensor tensor = Tensors.fromString("{1[m], 2[s]}");
-    assertFalse(StringScalarQ.any(tensor));
-    assertThrows(IllegalArgumentException.class, () -> UnprotectDepr.getUnitUnique(tensor));
   }
 
   @Test

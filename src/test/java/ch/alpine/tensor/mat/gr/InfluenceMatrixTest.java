@@ -16,10 +16,10 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.UnprotectDepr;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dot;
@@ -46,8 +46,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Entrywise;
+import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
@@ -255,8 +255,8 @@ class InfluenceMatrixTest {
   void testZeroQuantity() {
     Tensor design = ConstantArray.of(Quantity.of(0, "m"), 4, 3);
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-    assertEquals(UnprotectDepr.getUnitUnique(svd.getU()), Unit.ONE);
-    assertEquals(UnprotectDepr.getUnitUnique(svd.values()), Unit.of("m"));
+    assertEquals(EqualsReduce.zero(svd.getU()), RealScalar.ZERO);
+    assertEquals(EqualsReduce.zero(svd.values()), Quantity.of(0, "m"));
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     Tensor matrix = SymmetricMatrixQ.require(influenceMatrix.matrix());
     ExactTensorQ.require(matrix);
@@ -274,8 +274,8 @@ class InfluenceMatrixTest {
     Tensor matrix = SymmetricMatrixQ.require(influenceMatrix.matrix());
     assertEquals(matrix, Array.zeros(4, 4));
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-    assertEquals(UnprotectDepr.getUnitUnique(svd.getU()), Unit.ONE);
-    assertEquals(UnprotectDepr.getUnitUnique(svd.values()), Unit.of("m"));
+    assertEquals(EqualsReduce.zero(svd.getU()), RealScalar.ZERO);
+    assertEquals(EqualsReduce.zero(svd.values()), Quantity.of(0, "m"));
   }
 
   @Test

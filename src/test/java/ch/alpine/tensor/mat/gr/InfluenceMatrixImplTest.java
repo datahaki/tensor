@@ -17,7 +17,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.UnprotectDepr;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -35,7 +34,7 @@ import ch.alpine.tensor.pdf.c.LogNormalDistribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
@@ -68,8 +67,8 @@ class InfluenceMatrixImplTest {
         String string = influenceMatrix.toString();
         assertTrue(string.startsWith("InfluenceMatrix["));
         SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-        assertEquals(UnprotectDepr.getUnitUnique(svd.getU()), Unit.ONE);
-        assertEquals(UnprotectDepr.getUnitUnique(svd.values()), Unit.of("m"));
+        assertEquals(EqualsReduce.zero(svd.getU()), RealScalar.ZERO);
+        assertEquals(EqualsReduce.zero(svd.values()), Quantity.of(0, "m"));
       }
   }
 
@@ -109,7 +108,7 @@ class InfluenceMatrixImplTest {
       assertTrue(string.startsWith("InfluenceMatrix["));
     }
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-    assertEquals(UnprotectDepr.getUnitUnique(svd.getU()), Unit.ONE);
+    assertEquals(EqualsReduce.zero(svd.getU()), RealScalar.ZERO);
   }
 
   @Test
@@ -131,7 +130,7 @@ class InfluenceMatrixImplTest {
       assertTrue(string.startsWith("InfluenceMatrix["));
     }
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-    assertEquals(UnprotectDepr.getUnitUnique(svd.getU()), Unit.ONE);
+    assertEquals(EqualsReduce.zero(svd.getU()), RealScalar.ZERO);
   }
 
   @Test

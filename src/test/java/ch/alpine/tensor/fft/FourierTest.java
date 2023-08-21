@@ -4,7 +4,7 @@ package ch.alpine.tensor.fft;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
@@ -97,7 +97,7 @@ class FourierTest {
 
   @Test
   void testSeveral() {
-    RandomGenerator randomGenerator = new Random();
+    RandomGenerator randomGenerator = new SecureRandom();
     int n = 1 + randomGenerator.nextInt(20);
     checkFormat(n);
   }
