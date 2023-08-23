@@ -135,6 +135,11 @@ class ArrayTest {
   }
 
   @Test
+  void testSameNullThrows() {
+    assertThrows(Exception.class, () -> Array.same(null, 3));
+  }
+
+  @Test
   void testForEachFail() {
     Set<List<Integer>> set = new HashSet<>();
     assertThrows(IllegalArgumentException.class, () -> Array.stream(2, -1, 4).forEach(set::add));

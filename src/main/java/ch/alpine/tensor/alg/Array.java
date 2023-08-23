@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -94,7 +95,7 @@ public enum Array {
    * @return modifiable array of given dimensions with all entries equal to given scalar
    * @see ConstantArray */
   public static Tensor same(Scalar scalar, int... dimensions) {
-    return fill(() -> scalar, Integers.asList(dimensions));
+    return same(scalar, Integers.asList(dimensions));
   }
 
   /** function is equivalent to ConstantArray[scalar, dimensions].copy()
@@ -104,6 +105,7 @@ public enum Array {
    * @return modifiable array of given dimensions with all entries equal to given scalar
    * @see ConstantArray */
   public static Tensor same(Scalar scalar, List<Integer> dimensions) {
+    Objects.requireNonNull(scalar);
     return fill(() -> scalar, dimensions);
   }
   // ---

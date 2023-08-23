@@ -43,6 +43,7 @@ public enum Parallelize {
    * @param cols
    * @return (rows x cols)-matrix with (i, j)th-entry == bifunction.apply(i, j) */
   public static Tensor matrix(BiFunction<Integer, Integer, ? extends Tensor> biFunction, int rows, int cols) {
+    // TODO TENSOR check which rows/cols is larger
     return Tensor.of(IntStream.range(0, rows).parallel().mapToObj( //
         i -> Tensor.of(IntStream.range(0, cols).mapToObj(j -> biFunction.apply(i, j)))));
   }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.alpine.tensor.alg.Flatten;
+import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.TableBuilder;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -133,5 +134,13 @@ public enum Unprotect {
         return file;
     }
     throw new IllegalArgumentException(string);
+  }
+
+  public static void _export(File file, Tensor tensor) {
+    try {
+      Export.of(file, tensor);
+    } catch (Exception exception) {
+      throw new RuntimeException(exception);
+    }
   }
 }

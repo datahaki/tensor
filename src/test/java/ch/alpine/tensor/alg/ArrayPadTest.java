@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.qty.Quantity;
 
 class ArrayPadTest {
   @Test
@@ -23,11 +24,32 @@ class ArrayPadTest {
   }
 
   @Test
+  void testVectorQantity() {
+    Tensor vec = Tensors.fromString("{0[m],0.0[m]}");
+    Tensor res = ArrayPad.of(vec, List.of(1), List.of(1));
+    assertEquals(res.toString(), "{0.0[m], 0[m], 0.0[m], 0.0[m]}");
+  }
+
+  @Test
+  void testVectorQantityFail() {
+    Tensor vec = Tensors.fromString("{0[m], 2[s]}");
+    assertThrows(Exception.class, () -> ArrayPad.of(vec, List.of(1), List.of(1)));
+  }
+
+  @Test
   void testMatrix() {
     Tensor matrix = Tensors.of(Tensors.vector(2, 3, 1), Tensors.vector(7, 8, 9));
     assertEquals(Dimensions.of(matrix), Arrays.asList(2, 3));
     Tensor pad = ArrayPad.of(matrix, Arrays.asList(1, 2), Arrays.asList(3, 4));
     assertEquals(Dimensions.of(pad), Arrays.asList(1 + 2 + 3, 2 + 3 + 4));
+  }
+
+  @Test
+  void testMatrixQuantity() {
+    Tensor tensor = HilbertMatrix.of(2, 3).map(s -> Quantity.of(s, "K"));
+    Tensor result = ArrayPad.of(tensor, List.of(3, 4), List.of(5, 6));
+    List<Integer> list = Dimensions.of(result);
+    assertEquals(list, List.of(10, 13));
   }
 
   @Test
