@@ -25,11 +25,13 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 /** The addition of quantities with different units is not resolved by Mathematica.
  * 
  * Mathematica 12 does not resolve
+ * <pre>
  * Quantity[1, "Meters"] + Quantity[1, "Seconds"]
  * Quantity[1, "Meters"] + Quantity[0, "Seconds"]
  * Quantity[0, "Meters"] + Quantity[0, "Seconds"]
+ * </pre>
  * 
- * Consequently the tensor library also throws an exception when quantities
+ * <p>Consequently the tensor library also throws an exception when quantities
  * of unequal unit are added. That is even the case, when the magnitude of both
  * quantities is zero:
  * <pre>
@@ -50,13 +52,16 @@ import ch.alpine.tensor.sca.tri.ArcTan;
  * Quantity[0, "Meters"] + 0 == Quantity[0, "Meters"]
  * </pre>
  * 
+ * <p>An instance of {@link DateTime} and a Quantity with temporal unit, for instance
+ * "s", or "h" are compatible for addition.
+ * 
  * <p>Extracting the value of a Quantity to a primitive goes against the spirit
  * of using units in the first place. For instance, 3[s] and 3[h] are from the
  * same scale, but are not identical, despite their value part being identical.
  * The function #number() is available for instances of RealScalar`s, which can
  * be obtained from a Quantity via QuantityMagnitude.
  * 
- * Hint: use
+ * <p>Hint: use
  * scalar -> QuantityMagnitude.SI().in(unit).apply(scalar).number();
  * where unit is the desired reference for instance "kW*h^-1"
  * 
@@ -67,6 +72,9 @@ import ch.alpine.tensor.sca.tri.ArcTan;
  * ExactScalarQ[ 10 [m^2.0] ] == true
  * ExactScalarQ[ 10 [m^2.5] ] == true
  * </pre>
+ * 
+ * @see DateTime
+ * @see QuantityCompatibleScalar
  * 
  * @implSpec
  * This class is immutable and thread-safe. */

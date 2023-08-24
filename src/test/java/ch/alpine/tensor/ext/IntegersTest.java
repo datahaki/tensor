@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 
@@ -45,6 +46,12 @@ class IntegersTest {
   void testRequireLessEquals() {
     Integers.requireLessEquals(3, 3);
     assertThrows(IllegalArgumentException.class, () -> Integers.requireLessEquals(4, 3));
+    try {
+      Integers.requireLessEquals(4, 3);
+      fail();
+    } catch (Exception e) {
+      assertEquals(e.getMessage(), "4 > 3");
+    }
   }
 
   @Test
