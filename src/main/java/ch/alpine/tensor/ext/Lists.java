@@ -16,15 +16,4 @@ public enum Lists {
   public static <T> List<T> rest(List<T> list) {
     return list.subList(1, list.size());
   }
-
-  /** "Last[expr] gives the last element in expr."
-   * <p>inspired by
-   * <a href="https://reference.wolfram.com/language/ref/Last.html">Last</a>
-   * 
-   * @param list
-   * @return last element in given list
-   * @throws Exception list is empty */
-  public static <T> T last(List<T> list) {
-    return list.get(list.size() - 1);
-  }
 }

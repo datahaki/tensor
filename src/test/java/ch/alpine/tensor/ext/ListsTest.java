@@ -19,14 +19,4 @@ class ListsTest {
   void testWithoutHeadFail() {
     assertThrows(IllegalArgumentException.class, () -> Lists.rest(new LinkedList<>()));
   }
-
-  @Test
-  void testLast() {
-    assertEquals(Lists.last(Arrays.asList(3, 2, 8)), (Integer) 8);
-  }
-
-  @Test
-  void testLastFail() {
-    assertThrows(IndexOutOfBoundsException.class, () -> Lists.last(new LinkedList<>()));
-  }
 }

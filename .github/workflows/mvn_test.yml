@@ -1,4 +1,4 @@
-name: mvn test with JDK 20
+name: mvn test with JDK 21
 on:
   push:
     paths:
@@ -12,10 +12,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 20
+      - name: Set up JDK 21
         uses: actions/setup-java@v2
         with:
-          java-version: '20'
+          java-version: '21'
           distribution: 'temurin'
       - name: mvn test
         working-directory: .

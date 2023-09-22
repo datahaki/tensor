@@ -26,10 +26,4 @@ class UnitSystemDemoTest {
     assertFalse(unitSystem.map().containsKey("h"));
     assertEquals(unitSystem.map().size(), 22);
   }
-
-  @Test
-  void testFrame() {
-    UnitSystemDemo unitSystemDemo = new UnitSystemDemo();
-    unitSystemDemo.dispose();
-  }
 }

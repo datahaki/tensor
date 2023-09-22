@@ -64,7 +64,8 @@ public enum EditDistanceTraced {
     // System.out.println("[" + origin + "] -> [" + target + "]");
     // for (trace seed : list)
     // System.out.println(seed.cost() + " " + seed.info() + " " + seed.chr());
-    return Lists.last(list).cost();
+    // Lists.last(null);
+    return list.getLast().cost();
   }
 
   /** @param origin
