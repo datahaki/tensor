@@ -44,6 +44,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.11.0</version>
 				<configuration>
+<!--					TODO veriable-->
 					<release>21</release>
 				</configuration>
 			</plugin>
