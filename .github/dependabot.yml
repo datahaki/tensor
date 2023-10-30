@@ -1,0 +1,13 @@
+version: 2
+registries:
+  github-maven:
+    type: maven-repository
+    url: https://maven.pkg.github.com/grzhe/*/
+    username: ${{secrets.DEPENDABOT_USER}}
+    password: ${{secrets.DEPENDABOT_PASSWORD}}
+updates:
+  - package-ecosystem: maven
+    registries: "*"
+    directory: /
+    schedule:
+      interval: daily

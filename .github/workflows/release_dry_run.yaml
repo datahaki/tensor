@@ -1,0 +1,29 @@
+name: Release Dry Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Define the release version'
+        required: true
+        type: string
+      developmentVersion:
+        description: 'Define the development version'
+        required: true
+        type: string
+        default: '-SNAPSHOT'
+      releaseBranch:
+        description: 'Create or replace release branch'
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  call-workflow:
+    name: "Release Dry Run"
+    uses: grzhe/workflows/.github/workflows/release_dry_run.yaml@main
+    with:
+      releaseVersion: ${{inputs.releaseVersion}}
+      developmentVersion: ${{inputs.developmentVersion}}
+      releaseBranch: ${{inputs.releaseBranch}}
+    secrets: inherit
