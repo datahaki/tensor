@@ -247,17 +247,6 @@ class IntListTest {
   }
 
   @Test
-  void testSequential() {
-    List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 });
-    assertThrows(Exception.class, () -> intList.removeFirst());
-    assertThrows(Exception.class, () -> intList.removeLast());
-    List<Integer> reverse = intList.reversed();
-    assertThrows(Exception.class, () -> reverse.removeFirst());
-    assertThrows(Exception.class, () -> reverse.removeLast());
-    assertEquals(reverse.getFirst(), 5);
-  }
-
-  @Test
   void testToString() {
     String s1 = Arrays.asList(10, 2, 0, -4).toString();
     String s2 = Integers.asList(new int[] { 10, 2, 0, -4 }).toString();

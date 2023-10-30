@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.alpine.tensor.RationalScalar;
@@ -43,6 +44,8 @@ public enum BernsteinBasis {
     Scalar pratio = p.divide(_1_p);
     for (int k = 1; k <= n; ++k)
       list.add(last = last.multiply(RationalScalar.of(n - k + 1, k).multiply(pratio)));
-    return Unprotect.using(reverse ? list.reversed() : list);
+    if (reverse)
+      Collections.reverse(list);
+    return Unprotect.using(list);
   }
 }
