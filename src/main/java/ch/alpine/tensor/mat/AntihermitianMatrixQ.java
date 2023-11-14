@@ -29,7 +29,7 @@ public enum AntihermitianMatrixQ {
   /** @param tensor
    * @param chop
    * @return
-   * @throws Exception if given tensor is not a anti-hermitian matrix with given tolerance */
+   * @throws Exception if given tensor is not an anti-hermitian matrix with given tolerance */
   public static Tensor require(Tensor tensor, Chop chop) {
     if (of(tensor, chop))
       return tensor;
@@ -38,7 +38,7 @@ public enum AntihermitianMatrixQ {
 
   /** @param tensor
    * @return
-   * @throws Exception if given tensor is not a anti-hermitian matrix */
+   * @throws Exception if given tensor is not an anti-hermitian matrix */
   public static Tensor require(Tensor tensor) {
     return require(tensor, Tolerance.CHOP);
   }

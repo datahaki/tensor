@@ -31,7 +31,7 @@ public class Rescale {
   private static final ScalarUnaryOperator FINITE_NUMBER_ZERO = //
       scalar -> FiniteScalarQ.of(scalar) ? RealScalar.ZERO : scalar;
 
-  /** The scalar entries of the given tensor may also be instance of
+  /** The scalar entries of the given tensor may also be an instance of
    * {@link Quantity} with identical unit.
    * 
    * <p>Example:

@@ -28,7 +28,7 @@ import ch.alpine.tensor.mat.pi.LeastSquares;
  * 
  * @see LeastSquares */
 public interface QRDecomposition {
-  /** householder reflections with highest numerical stability
+  /** householder reflections with the highest numerical stability
    * 
    * @param matrix of dimensions n x m
    * @return qr-decomposition of given matrix

@@ -57,7 +57,7 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
 
   /** @return (design^H . design)^+ that is symmetric positive definite if sequence contains
    * sufficient points and parameterization of tangent space is tight, for example SE(2).
-   * Otherwise symmetric positive semidefinite matrix, for example S^d as embedded in R^(d+1).
+   * Otherwise, symmetric positive semi-definite matrix, for example S^d as embedded in R^(d+1).
    * @see PositiveDefiniteMatrixQ
    * @see PositiveSemidefiniteMatrixQ */
   public Tensor sigma_inverse() {

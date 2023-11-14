@@ -60,7 +60,7 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
     return map.size();
   }
 
-  /** removes all of the mappings from this cache */
+  /** removes all the mappings from this cache */
   public void clear() {
     synchronized (map) {
       map.clear();

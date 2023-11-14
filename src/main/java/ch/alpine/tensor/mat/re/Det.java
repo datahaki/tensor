@@ -38,7 +38,7 @@ public class Det extends AbstractReduce {
   }
 
   /** Careful: do not call function for large matrix
-   * Hint: function is exists for testing on small matrices
+   * Hint: function exists for testing of small matrices
    * 
    * @param matrix
    * @return */

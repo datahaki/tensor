@@ -23,7 +23,7 @@ public class TruncatedDistribution extends AbstractContinuousDistribution implem
   private static final int MAX_ITERATIONS = 100;
 
   /** @param distribution non-null
-   * @param clip outside of which the distribution is truncated to zero
+   * @param clip outside which the distribution is truncated to zero
    * @return
    * @throws Exception if either parameter is null
    * @throws if CDF of given distribution is not monotonous over given interval */

@@ -92,7 +92,7 @@ import ch.alpine.tensor.sca.Floor;
  * <p>However, we deviate from the name, because DateObject allows a single year
  * DateObject[{2000}] == Year: 2000
  * whereas DateTime/LocalDateTime requires everything from year down to a minute,
- * after which seconds and nano-seconds are assumed to be zero.
+ * after which seconds and nanoseconds are assumed to be zero.
  * Also, the term "Object" does not add meaning in Java.
  * 
  * <p>Remark:
@@ -155,7 +155,7 @@ public class DateTime extends AbstractScalar implements //
     return new DateTime(LocalDateTime.now());
   }
 
-  /** When applications log timestamps as epoch long either in milli-seconds, or micro-seconds
+  /** When applications log timestamps as epoch long either in milliseconds, or micro-seconds
    * resolution, this function transforms the time stamp to a human-readable date-time stamp
    * based on the given time zone.
    * 

@@ -3,7 +3,7 @@ package ch.alpine.tensor.ext;
 
 import java.util.Objects;
 
-/** Timing with nano-seconds precision.
+/** Timing with nanoseconds precision.
  * 
  * <p>The implementation behaves like a standard digital stopwatch:
  * <ul>
@@ -60,7 +60,7 @@ public class Timing {
     tic = null;
   }
 
-  /** @return what is on the display of the timing in nano-seconds:
+  /** @return what is on the display of the timing in nanoseconds:
    * total of all start-until-stop intervals including start-until-now if instance is started */
   public long nanoSeconds() {
     return frozen + (isStopped() ? 0 : current());

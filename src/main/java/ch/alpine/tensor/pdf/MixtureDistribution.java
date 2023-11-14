@@ -28,7 +28,7 @@ public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterfac
   /** @param weights vector with non-negative entries
    * @param list non-empty
    * @return
-   * @throws Exception if weights vectors not not have the same length as list */
+   * @throws Exception if weights vectors not have the same length as list */
   public static Distribution of(Tensor weights, List<Distribution> list) {
     Integers.requireEquals(weights.length(), list.size());
     if (list.isEmpty())

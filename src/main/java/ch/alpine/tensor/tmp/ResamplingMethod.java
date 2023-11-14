@@ -30,7 +30,7 @@ public interface ResamplingMethod {
    * @param x
    * @return result of resampling method at location x taking account the keys in the vicinity of x
    * and their corresponding values
-   * @throws Exception if parameter x is is outside the interval
+   * @throws Exception if parameter x is outside the interval
    * [navigableSet.first(), navigableSet.last()] */
   Tensor evaluate(NavigableSet<Scalar> navigableSet, ScalarTensorFunction function, Scalar x);
 
@@ -43,7 +43,7 @@ public interface ResamplingMethod {
    * @param x
    * @return result of resampling method at location x taking account the keys in the vicinity of x
    * and their corresponding values
-   * @throws Exception if parameter x is is outside the interval
+   * @throws Exception if parameter x is outside the interval
    * [navigableMap.firstKey(), navigableMap.lastKey()] */
   Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x);
 

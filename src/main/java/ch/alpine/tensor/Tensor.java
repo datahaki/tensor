@@ -26,7 +26,7 @@ import ch.alpine.tensor.fft.ListCorrelate;
  * Tensor stateAction = {state, action}
  * </pre>
  * 
- * <p>If a {@link Tensor} is a multi-dimensional array, then the dot product
+ * <p>If a {@link Tensor} is a multidimensional array, then the dot product
  * {@link #dot(Tensor)} is supported.
  * 
  * <p>Example of a tensor with regular array structure:
@@ -72,7 +72,7 @@ public interface Tensor extends Iterable<Tensor> {
    * </pre>
    * as implemented in {@link Tensors#isUnmodifiable(Tensor)}.
    * 
-   * <p>The function is idemponent with regards to equality by reference, i.e.
+   * <p>The function is idemponent in regard to equality by reference, i.e.
    * <pre>
    * tensor.unmodifiable() == tensor.unmodifiable().unmodifiable() == ...
    * </pre>
@@ -92,7 +92,7 @@ public interface Tensor extends Iterable<Tensor> {
   Tensor unmodifiable();
 
   /** duplicate mutable content of this tensor into new instance.
-   * Modifications to the copy do not effect the original instance.
+   * Modifications to the copy do not affect the original instance.
    * A copy of an unmodifiable tensor is modifiable
    * 
    * <p>Remark: the call tensor.get(), i.e. tensor.get(List.of()) with
@@ -102,7 +102,7 @@ public interface Tensor extends Iterable<Tensor> {
   Tensor copy();
 
   /** Remark: the parameter i == Tensor.ALL is <b>not</b> permitted, because
-   * get(ALL) should be implemented as copy(). Therefore the function is <b>not</b>
+   * get(ALL) should be implemented as copy(). Therefore, the function is <b>not</b>
    * a special case of the more general function {@link #get(int...)}.
    * 
    * @param i in the range 0 and length() - 1
@@ -310,7 +310,7 @@ public interface Tensor extends Iterable<Tensor> {
    * Tensor b = a.block(List.of(2), List.of(3));
    * b.set(Array.zeros(3), Tensor.ALL);
    * </pre>
-   * Afterwards the tensor a == {1, 2, 0, 0, 0, 6}.
+   * Afterwards, the tensor a == {1, 2, 0, 0, 0, 6}.
    * 
    * @param ofs location of return tensor in this tensor
    * @param len of return tensor

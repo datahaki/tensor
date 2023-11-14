@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.Clips;
  * pass over a stream of {@link Scalar}s.
  * 
  * <p>The scalars are required to be comparable. For instance, complex numbers do
- * not have a natural ordering, therefore the minimum/maximum are not well defined.
+ * not have a natural ordering, therefore the minimum/maximum are not well-defined.
  * MinMax does not operate on complex numbers, or quaternions.
  * 
  * <p>The string expression of an instance of MinMax is of the form

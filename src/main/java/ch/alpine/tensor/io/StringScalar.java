@@ -25,7 +25,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
  * <p>That means StringScalar is <em>not</em> compatible with Mathematica !
  * In Mathematica string expressions begin and terminate with quotes.
  * For example, Mathematica::{"Hello", "World"}.
- * Whether this convention will adopted in the tensor library at some point
+ * Whether this convention will be adopted in the tensor library at some point
  * in the future is open for discussion.
  * 
  * Any instance of StringScalar satisfies the predicate {@link ExactScalarQ}.

@@ -8,7 +8,7 @@ import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Sign;
 
 public enum QRSignOperators implements QRSignOperator {
-  /** householder reflections with highest numerical stability */
+  /** householder reflections with the highest numerical stability */
   STABILITY {
     @Override // from QRSignOperator
     public Scalar sign(Scalar xk) {

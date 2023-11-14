@@ -21,8 +21,8 @@ import ch.alpine.tensor.sca.Clips;
  * over a stream of {@link Scalar}s. The stream may be processed in parallel.
  * 
  * <p>The scalars are required to be comparable. For instance, complex numbers do
- * not have a natural ordering, therefore the minimum is not well defined.
- * ScalarSummaryStatistics does not operate on complex numbers or quaterions.
+ * not have a natural ordering, therefore the minimum is not well-defined.
+ * ScalarSummaryStatistics does not operate on complex numbers or quaternions.
  * 
  * <p>The string expression of an instance of ScalarSummaryStatistics is of the form
  * <pre>

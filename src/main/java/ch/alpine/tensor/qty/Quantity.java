@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
  * MachineNumberQ[Quantity[3.123, "Meters"]] == False
  * </pre>
  * 
- * <p>The sum of two quantities is well defined whenever the units are identical.
+ * <p>The sum of two quantities is well-defined whenever the units are identical.
  * Two quantities with different units are added if one of the values equals to
  * zero. In that case, the result carries the unit of the non-zero input quantity.
  * 
@@ -42,7 +42,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
  * <p>For export and import of tensors with scalars of type {@link Quantity} use
  * {@link ObjectFormat} and {@link CsvFormat}.
  * 
- * <p>Two quantities are comparable only if they have the same unit. Otherwise an
+ * <p>Two quantities are comparable only if they have the same unit. Otherwise, an
  * exception is thrown.
  * 
  * <p>Different units should be mapped to a common unit system before carrying out

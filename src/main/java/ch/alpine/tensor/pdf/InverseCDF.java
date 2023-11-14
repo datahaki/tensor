@@ -49,6 +49,6 @@ public interface InverseCDF {
    * 
    * @param p in the closed interval [0, 1]
    * @return x
-   * @throws Exception if given p is outside of the interval [0, 1] */
+   * @throws Exception if given p is outside the interval [0, 1] */
   Scalar quantile(Scalar p);
 }

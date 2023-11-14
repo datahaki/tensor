@@ -13,7 +13,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-/** unmodifiable view to an external data base for interpolation purposes */
+/** unmodifiable view to an external database for interpolation purposes */
 /* package */ class TimeSeriesWrap implements TimeSeries {
   private final NavigableSet<Scalar> navigableSet;
   private final ScalarTensorFunction function;

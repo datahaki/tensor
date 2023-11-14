@@ -5,7 +5,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.sca.Chop;
 
-/** Mathematica definition:
+/** Mathematica's definition:
  * "A matrix m is unitary if m.ConjugateTranspose[m] is the identity matrix."
  * 
  * <p>inspired by

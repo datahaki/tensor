@@ -71,7 +71,7 @@ public enum PseudoInverse {
 
   // ---
   /** Quote: "A^+ could also be computed directly from A by modifying the elimination steps
-   * that usually produce A^-1. However each step of arithmetic would have to be exact! You
+   * that usually produce A^-1. However, each step of arithmetic would have to be exact! You
    * need to distinguish exact zeros from small nonzeros. That is the hard part of A^+."
    * 
    * @param matrix with maximal rank

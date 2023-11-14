@@ -11,7 +11,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.sca.Abs;
 
 public enum Pivots implements Pivot {
-  /** selects entry with largest absolute value
+  /** selects entry with the largest absolute value
    * 
    * in order to compute the inverse of matrices with mixed unit, for instance:
    * {{1[m^2], 6[m*rad]}, {6[m*rad], 16[rad^2]}}

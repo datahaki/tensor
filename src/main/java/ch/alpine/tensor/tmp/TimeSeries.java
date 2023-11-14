@@ -114,7 +114,7 @@ public interface TimeSeries {
    * timeSeries.unmodifiable() == timeSeries // equal by reference intended
    * </pre>
    * 
-   * <p>The function is idemponent with regards to equality by reference, i.e.
+   * <p>The function is idemponent in regard to equality by reference, i.e.
    * <pre>
    * timeSeries.unmodifiable() == timeSeries.unmodifiable().unmodifiable() == ...
    * </pre>

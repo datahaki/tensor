@@ -32,7 +32,7 @@ public class UniformDistribution extends AbstractContinuousDistribution //
   private static final Scalar _1_12 = RationalScalar.of(1, 12);
   private static final Distribution UNIT = new UniformDistribution(Clips.unit());
 
-  /** the input parameters may be instance of {@link Quantity} of identical unit
+  /** the input parameters may be an instance of {@link Quantity} of identical unit
    * 
    * @param min < max
    * @param max

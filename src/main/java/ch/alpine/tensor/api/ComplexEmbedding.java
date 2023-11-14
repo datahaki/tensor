@@ -8,7 +8,7 @@ import ch.alpine.tensor.sca.Re;
 
 /** interface defines the embedding of a {@link Scalar} in the complex plane
  * 
- * <p>the interface is allows to extract the imaginary part of general instances
+ * <p>the interface allows to extract the imaginary part of general instances
  * of {@link Scalar}s, such as {@link Quantity}.
  * 
  * @see Re

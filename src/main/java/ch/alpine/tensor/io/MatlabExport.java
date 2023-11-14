@@ -29,7 +29,7 @@ import ch.alpine.tensor.qty.Quantity;
  * import of these values.
  * 
  * <p>Scalars of type {@link Quantity} also require a custom conversion to string.
- * The tests contains an example.
+ * The tests contain an example.
  * 
  * <p>Hint:
  * for the export of vectors and matrices, {@link Pretty} may also be a solution.

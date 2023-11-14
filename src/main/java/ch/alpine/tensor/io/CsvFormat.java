@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.Quantity;
  * 
  * <p>If possible, only use {@link CsvFormat} for export of
  * vectors or matrices to other applications such as MATLAB.
- * {@link MatlabExport} preserves dimensions of multi-dimensional arrays.
+ * {@link MatlabExport} preserves dimensions of multidimensional arrays.
  * 
  * <p>Careful: ensure that decimal numbers adhere to the java format.
  * The letter for the exponent has to be capitalized:

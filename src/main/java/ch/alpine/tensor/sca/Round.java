@@ -80,7 +80,7 @@ public enum Round implements ScalarUnaryOperator {
     return Scalars.longValueExact(FUNCTION.apply(scalar));
   }
 
-  /** for best results, the parameter increment should be a instance of
+  /** for best results, the parameter increment should be an instance of
    * {@link DecimalScalar}, or {@link RationalScalar}
    * Examples:
    * DecimalScalar.of(0.1), or RationalScalar.of(1, 10)

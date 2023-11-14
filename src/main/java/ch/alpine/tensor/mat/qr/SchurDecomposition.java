@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** Quote from SchurTransformer:
  * "A m &times; m matrix A can be written as the product of three matrices:
- * A = P . T . P' with P an orthogonal matrix and T an quasi-triangular
+ * A = P . T . P' with P an orthogonal matrix and T a quasi-triangular
  * matrix. Both P and T are m &times; m matrices."
  * 
  * For the special case of symmetric matrices the result corresponds to

@@ -14,13 +14,13 @@ public enum AntisymmetricMatrixQ {
   ;
   /** @param tensor
    * @param chop
-   * @return true if tensor is an anti-symmetric matrix */
+   * @return true if tensor is an antisymmetric matrix */
   public static boolean of(Tensor tensor, Chop chop) {
     return StaticHelper.addId(tensor, chop, matrix -> Transpose.of(matrix).negate());
   }
 
   /** @param tensor
-   * @return true if tensor is an anti-symmetric matrix */
+   * @return true if tensor is an antisymmetric matrix */
   public static boolean of(Tensor tensor) {
     return of(tensor, Tolerance.CHOP);
   }
@@ -28,7 +28,7 @@ public enum AntisymmetricMatrixQ {
   /** @param tensor
    * @param chop
    * @return
-   * @throws Exception if given tensor is not a anti-symmetric matrix with given tolerance */
+   * @throws Exception if given tensor is not an antisymmetric matrix with given tolerance */
   public static Tensor require(Tensor tensor, Chop chop) {
     if (of(tensor, chop))
       return tensor;
@@ -37,7 +37,7 @@ public enum AntisymmetricMatrixQ {
 
   /** @param tensor
    * @return
-   * @throws Exception if given tensor is not a anti-symmetric matrix */
+   * @throws Exception if given tensor is not an antisymmetric matrix */
   public static Tensor require(Tensor tensor) {
     return require(tensor, Tolerance.CHOP);
   }

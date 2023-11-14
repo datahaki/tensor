@@ -31,7 +31,7 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
    * @param p in the interval [0, 1]
    * @return an instance of {@link BinomialDistribution} if the CDF could be computed correctly,
    * otherwise an instance of {@link BinomialRandomVariate}, which has the capability to
-   * generate random variates, but is neither PDF, or CDF. */
+   * generate random variates, but is neither PDF, nor CDF. */
   public static Distribution of(int n, Scalar p) {
     Tensor table = BernsteinBasis.of(n, Clips.unit().requireInside(p));
     return Tolerance.CHOP.isClose(Total.of(table), RealScalar.ONE) //

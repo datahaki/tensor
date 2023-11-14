@@ -5,7 +5,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.sca.Chop;
 
-/** Mathematica definition:
+/** Mathematica's definition:
  * "A matrix m is orthogonal if m.Transpose[m] is the identity matrix."
  * 
  * If the matrix has more rows than columns, Mathematica checks whether

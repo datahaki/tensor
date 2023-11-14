@@ -7,7 +7,7 @@ import ch.alpine.tensor.red.Mean;
 
 /** the implementation is consistent with Mathematica.
  * 
- * <p>{@link MeanFilter} requires less operations for computation than {@link MedianFilter}.
+ * <p>{@link MeanFilter} requires fewer operations for computation than {@link MedianFilter}.
  * 
  * <p>The concept of averaging values from a square block is also using in {@link ImageResize}.
  * However, for images the mean filter is applied to each of the RGBA channels separately.

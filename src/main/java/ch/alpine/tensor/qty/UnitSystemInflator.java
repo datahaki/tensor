@@ -52,7 +52,7 @@ import ch.alpine.tensor.ext.PackageTestAccess;
   }
 
   /** Example:
-   * in the unit system system defined by the tensor library
+   * in the unit system defined by the tensor library
    * the set of atoms consists of [cd, A, B, s, K, mol, kg, m]
    * 
    * @return */
@@ -61,7 +61,7 @@ import ch.alpine.tensor.ext.PackageTestAccess;
   }
 
   /** Example:
-   * in the unit system system defined by the tensor library
+   * in the unit system defined by the tensor library
    * the collisions are "PS", "pt", or "ft"
    * 
    * @return */

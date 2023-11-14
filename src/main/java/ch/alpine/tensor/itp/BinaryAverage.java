@@ -17,7 +17,7 @@ public interface BinaryAverage {
    * </pre>
    * 
    * @implSpec the function treats the parameters p and q as unmodifiable.
-   * That means, the calling entity may passes in the parameters by reference and has
+   * That means, the calling entity may pass in the parameters by reference and has
    * the guarantee that the content is not altered after the call.
    * 
    * @param p

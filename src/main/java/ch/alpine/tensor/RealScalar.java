@@ -78,7 +78,7 @@ public interface RealScalar extends Scalar, //
    * {@link DoubleScalar}, or {@link DecimalScalar}.
    * 
    * @param number non-null
-   * @return scalar with best possible accuracy to encode given number
+   * @return scalar with the best possible accuracy to encode given number
    * @throws Exception if number is null, or instance of an unsupported type */
   static Scalar of(Number number) {
     if (number instanceof Integer || //
