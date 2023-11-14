@@ -3,6 +3,8 @@ package ch.alpine.tensor.usr;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -13,7 +15,7 @@ import javax.net.ssl.X509TrustManager;
 
 /* package */ enum HttpsFetch {
   ;
-  public static void main(String[] args) throws IOException, InterruptedException {
+  public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
     // Create a new trust manager that trust all certificates
     TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
       @Override
@@ -40,7 +42,8 @@ import javax.net.ssl.X509TrustManager;
     } catch (Exception e) {
       // ---
     }
-    URL url = new URL("https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=data/ert_bil_eur_d.tsv.gz");
+    URL url = new URI( //
+        "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=data/ert_bil_eur_d.tsv.gz").toURL();
     URLConnection connection = url.openConnection();
     try (InputStream is = connection.getInputStream()) {
       Thread.sleep(1000);
