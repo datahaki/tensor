@@ -40,10 +40,9 @@ public enum ImageResize {
    * @param bufferedImage
    * @param width of rescaled image
    * @param height of rescaled image
-   * @return scaled instance of given buffered image with given dimensions and type
-   * either BufferedImage.TYPE_BYTE_GRAY or BufferedImage.TYPE_INT_ARGB */
+   * @return scaled instance of given buffered image with given dimensions */
   public static BufferedImage of(BufferedImage bufferedImage, int width, int height) {
-    BufferedImage result = new BufferedImage(width, height, StaticHelper.type(bufferedImage.getType()));
+    BufferedImage result = new BufferedImage(width, height, bufferedImage.getType());
     Graphics graphics = result.createGraphics();
     // TODO TENSOR IMPL improve results
     Image image = bufferedImage.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);

@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import java.awt.image.BufferedImage;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
@@ -40,5 +42,17 @@ public enum ImageRotate {
 
   private static int cols(Tensor tensor) {
     return Integers.requirePositive(Unprotect.dimension1(tensor));
+  }
+
+  /** @param bufferedImage
+   * @return */
+  public static BufferedImage cw(BufferedImage bufferedImage) {
+    int width = bufferedImage.getWidth();
+    int height = bufferedImage.getHeight();
+    BufferedImage result = new BufferedImage(height, width, bufferedImage.getType());
+    for (int i = 0; i < width; ++i)
+      for (int j = 0; j < height; ++j)
+        result.setRGB(height - 1 - j, i, bufferedImage.getRGB(i, j));
+    return result;
   }
 }

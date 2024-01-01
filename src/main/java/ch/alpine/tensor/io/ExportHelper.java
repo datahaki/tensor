@@ -11,6 +11,7 @@ import java.util.zip.GZIPOutputStream;
 import javax.imageio.ImageIO;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Jpeg;
 
 /* package */ enum ExportHelper {
   ;
@@ -28,6 +29,8 @@ import ch.alpine.tensor.Tensor;
       of(extension, tensor, outputStream);
   }
 
+  private static final float JPG_QUALITY = 0.98f;
+
   /** @param extension
    * @param tensor
    * @param outputStream
@@ -38,7 +41,8 @@ import ch.alpine.tensor.Tensor;
     case CSV -> lines(XsvFormat.CSV.of(tensor), outputStream);
     case TSV -> lines(XsvFormat.TSV.of(tensor), outputStream);
     case VECTOR -> lines(VectorFormat.of(tensor), outputStream);
-    case BMP, JPG -> ImageIO.write(ImageFormat.bgr(tensor), extension.name(), outputStream);
+    case BMP -> ImageIO.write(ImageFormat.bgr(tensor), extension.name(), outputStream);
+    case JPG -> Jpeg.put(ImageFormat.bgr(tensor), outputStream, JPG_QUALITY);
     case GIF, PNG, TIFF -> ImageIO.write(ImageFormat.of(tensor), extension.name(), outputStream);
     case M -> lines(MatlabExport.of(tensor), outputStream);
     default -> throw new UnsupportedOperationException(extension.name());
