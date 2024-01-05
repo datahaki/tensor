@@ -30,11 +30,14 @@ import ch.alpine.tensor.ext.ResourceData;
   private static Tensor of(Extension extension, InputStream inputStream) throws IOException {
     return switch (extension) {
     case MATHEMATICA -> Get.of(inputStream);
-    case MTX -> MatrixMarket.of(inputStream);
+    case VECTOR -> VectorFormat.parse(ReadLine.of(inputStream));
+    // ---
     case CSV -> XsvFormat.CSV.parse(ReadLine.of(inputStream));
     case TSV -> XsvFormat.TSV.parse(ReadLine.of(inputStream));
-    case VECTOR -> VectorFormat.parse(ReadLine.of(inputStream));
-    case BMP, GIF, JPG, PNG, TIFF -> ImageFormat.from(ImageIO.read(inputStream));
+    // ---
+    case BMP, GIF, JPEG, JPG, PNG, TIF, TIFF -> ImageFormat.from(ImageIO.read(inputStream));
+    // ---
+    case MTX -> MatrixMarket.of(inputStream);
     default -> throw new UnsupportedOperationException(extension.name());
     };
   }

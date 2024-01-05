@@ -17,6 +17,7 @@ package ch.alpine.tensor.io;
   /** compressed version of another format, for instance csv.gz */
   GZ,
   /** compressed, lossy image format */
+  JPEG,
   JPG,
   /** MATLAB m file, export only */
   M,
@@ -30,6 +31,7 @@ package ch.alpine.tensor.io;
   /** compressed image format with alpha channel */
   PNG,
   /** Tag Image File Format */
+  TIF,
   TIFF,
   /** tab separated values */
   TSV,

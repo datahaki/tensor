@@ -38,12 +38,15 @@ import ch.alpine.tensor.ext.Jpeg;
   public static void of(Extension extension, Tensor tensor, OutputStream outputStream) throws IOException {
     switch (extension) {
     case MATHEMATICA -> Put.of(outputStream, tensor);
+    case VECTOR -> lines(VectorFormat.of(tensor), outputStream);
+    // ---
     case CSV -> lines(XsvFormat.CSV.of(tensor), outputStream);
     case TSV -> lines(XsvFormat.TSV.of(tensor), outputStream);
-    case VECTOR -> lines(VectorFormat.of(tensor), outputStream);
+    // --- images
     case BMP -> ImageIO.write(ImageFormat.bgr(tensor), extension.name(), outputStream);
-    case JPG -> Jpeg.put(ImageFormat.bgr(tensor), outputStream, JPG_QUALITY);
-    case GIF, PNG, TIFF -> ImageIO.write(ImageFormat.of(tensor), extension.name(), outputStream);
+    case JPEG, JPG -> Jpeg.put(ImageFormat.bgr(tensor), outputStream, JPG_QUALITY);
+    case GIF, PNG, TIF, TIFF -> ImageIO.write(ImageFormat.of(tensor), extension.name(), outputStream);
+    // ---
     case M -> lines(MatlabExport.of(tensor), outputStream);
     default -> throw new UnsupportedOperationException(extension.name());
     }
