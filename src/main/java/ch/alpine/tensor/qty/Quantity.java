@@ -33,11 +33,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
  * </pre>
  * 
  * <p>The sum of two quantities is well-defined whenever the units are identical.
- * Two quantities with different units are added if one of the values equals to
- * zero. In that case, the result carries the unit of the non-zero input quantity.
- * 
- * <p>Addition is symmetric and associative. In particular, if both magnitudes
- * are zero but the units don't match, then the result is unitless.
+ * Addition is symmetric. Addition is associative subject to numerical precision.
  * 
  * <p>For export and import of tensors with scalars of type {@link Quantity} use
  * {@link ObjectFormat} and {@link CsvFormat}.

@@ -43,9 +43,9 @@ import ch.alpine.tensor.ext.Jpeg;
     case CSV -> lines(XsvFormat.CSV.of(tensor), outputStream);
     case TSV -> lines(XsvFormat.TSV.of(tensor), outputStream);
     // --- images
-    case BMP -> ImageIO.write(ImageFormat.bgr(tensor), extension.name(), outputStream);
-    case JPEG, JPG -> Jpeg.put(ImageFormat.bgr(tensor), outputStream, JPG_QUALITY);
-    case GIF, PNG, TIF, TIFF -> ImageIO.write(ImageFormat.of(tensor), extension.name(), outputStream);
+    case BMP -> ImageIO.write(ImageFormat._of(tensor, extension), extension.name(), outputStream);
+    case JPEG, JPG -> Jpeg.put(ImageFormat._of(tensor, extension), outputStream, JPG_QUALITY);
+    case GIF, PNG, TIF, TIFF -> ImageIO.write(ImageFormat._of(tensor, extension), extension.name(), outputStream);
     // ---
     case M -> lines(MatlabExport.of(tensor), outputStream);
     default -> throw new UnsupportedOperationException(extension.name());

@@ -24,8 +24,8 @@ public enum ConstantArray {
    * @return unmodifiable tensor with given dimensions and entries as given entry */
   public static Tensor of(Tensor entry, List<Integer> dimensions) {
     Tensor tensor = entry.copy();
-    for (int index = dimensions.size() - 1; 0 <= index; --index)
-      tensor = Unprotect.using(Collections.nCopies(dimensions.get(index), tensor));
+    for (int index : dimensions.reversed())
+      tensor = Unprotect.using(Collections.nCopies(index, tensor));
     return tensor.unmodifiable();
   }
 

@@ -3,6 +3,7 @@ package ch.alpine.tensor.opt.hun;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,11 +14,13 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
@@ -108,6 +111,17 @@ class BipartiteMatchingTest {
         ExactScalarQ.require(min);
         assertEquals(QuantityUnit.of(min), Unit.of("MYR"));
       }
+  }
+
+  @Test
+  void testLarge() {
+    Distribution distribution = UniformDistribution.unit();
+    Tensor tensor = RandomVariate.of(distribution, 100, 100);
+    BipartiteMatching b1 = BipartiteMatching.of(tensor);
+    BipartiteMatching b2 = BipartiteMatching.of(Transpose.of(tensor));
+    Tolerance.CHOP.requireClose(b1.minimum(), b2.minimum());
+    Scalar result = b1.minimum();
+    assertTrue(Scalars.lessThan(result, RealScalar.of(10)));
   }
 
   @Test

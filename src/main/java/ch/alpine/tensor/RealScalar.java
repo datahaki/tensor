@@ -4,6 +4,8 @@ package ch.alpine.tensor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ArgInterface;
@@ -84,7 +86,9 @@ public interface RealScalar extends Scalar, //
     if (number instanceof Integer || //
         number instanceof Long || //
         number instanceof Short || //
-        number instanceof Byte)
+        number instanceof Byte || //
+        number instanceof AtomicInteger || //
+        number instanceof AtomicLong)
       return RationalScalar.integer(number.longValue());
     if (number instanceof Double || //
         number instanceof Float)

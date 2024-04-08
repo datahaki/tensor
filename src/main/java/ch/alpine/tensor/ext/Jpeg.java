@@ -1,6 +1,7 @@
 // adapted by jph
 package ch.alpine.tensor.ext;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Iterator;
@@ -21,6 +22,14 @@ public enum Jpeg {
    * @param quality
    * @throws IOException */
   public static void put(BufferedImage bufferedImage, Object object, float quality) throws IOException {
+    System.out.println("type=" + bufferedImage.getType());
+    if (bufferedImage.getType() != BufferedImage.TYPE_3BYTE_BGR) {
+      BufferedImage im = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+      Graphics2D graphics = im.createGraphics();
+      graphics.drawImage(bufferedImage, 0, 0, null);
+      graphics.dispose();
+      bufferedImage = im;
+    }
     try (ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(object)) {
       Iterator<ImageWriter> iterator = ImageIO.getImageWritersByFormatName("jpeg");
       ImageWriter imageWriter = iterator.next();

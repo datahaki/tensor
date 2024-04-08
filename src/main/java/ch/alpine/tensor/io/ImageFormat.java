@@ -66,16 +66,19 @@ public enum ImageFormat {
     return of(tensor, BufferedImage.TYPE_INT_ARGB);
   }
 
+  /* package */ static BufferedImage _of(Tensor tensor, Extension extension) {
+    return of(tensor, extension.imageType());
+  }
+
   /** functionality for export a color image to bmp and jpg format
    * 
    * @param tensor
    * @return image of type BufferedImage.TYPE_BYTE_GRAY or BufferedImage.TYPE_INT_BGR */
-  public static BufferedImage bgr(Tensor tensor) {
-    return of(tensor, BufferedImage.TYPE_INT_BGR);
-  }
-
+  // public static BufferedImage bgr(Tensor tensor) {
+  // return of(tensor, BufferedImage.TYPE_INT_BGR);
+  // }
   // ---
-  private static BufferedImage of(Tensor tensor, int imageType) {
+  /* package */ static BufferedImage of(Tensor tensor, int imageType) {
     List<Integer> dims = Dimensions.of(tensor);
     int width = dims.get(1);
     int height = dims.get(0);

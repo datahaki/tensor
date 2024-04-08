@@ -35,6 +35,7 @@ import ch.alpine.tensor.ext.ResourceData;
  * @see Get */
 public enum Import {
   ;
+  // TODO TENSOR import GPX
   /** Supported extensions include
    * <ul>
    * <li>bmp for {@link ImageFormat}

@@ -103,6 +103,8 @@ public enum ColorDataGradients implements ColorDataGradient {
   ROSE,
   /** yellow, orange, red, magenta */
   NEON,
+  /** TODO TENSOR DOC */
+  FRUIT_PUNCH,
   /** dark-gray, dark-yellow, magenta */
   AURORA;
 

@@ -16,7 +16,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -43,9 +45,14 @@ class InfluenceMatrixSvdTest {
     Tensor zeros = Dot.of(influenceMatrix.residualMaker(), matrix);
     Tolerance.CHOP.requireAllZero(zeros);
     InfluenceMatrixSvd influenceMatrixSvd = new InfluenceMatrixSvd(SingularValueDecomposition.of(design));
-    Tolerance.CHOP.requireClose(influenceMatrix.matrix(), influenceMatrixSvd.matrix());
+    Tolerance.CHOP.requireClose(matrix, influenceMatrixSvd.matrix());
+    // System.out.println(matrix.length());
+    Tensor x = TensorWedge.of(RandomVariate.of(distribution, n, n));
+    Tensor a = MatrixExp.of(x);
+    // Tolerance.CHOP.requireClose(matrix, Dot.of(a,matrix,Inverse.of(a)));
   }
 
+  @Test
   void testSvdWithQuantity() {
     int n = 4;
     int _m = 4;

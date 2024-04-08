@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.jupiter.api.Test;
 
@@ -158,11 +159,19 @@ class RealScalarTest {
   }
 
   @Test
+  void testAtomicFail() {
+    AtomicLong number = new AtomicLong(12345678901234L);
+    RealScalar.of(number);
+    // assertThrows(IllegalArgumentException.class, () -> RealScalar.of(number));
+  }
+
+  @Test
   void testCreateFail() {
     Number number = new AtomicInteger(123);
     Scalar scalar = RealScalar.of(number.intValue());
     assertEquals(scalar, RealScalar.of(123));
-    assertThrows(IllegalArgumentException.class, () -> RealScalar.of(number));
+    RealScalar.of(number);
+    // assertThrows(IllegalArgumentException.class, () -> RealScalar.of(number));
   }
 
   @Test

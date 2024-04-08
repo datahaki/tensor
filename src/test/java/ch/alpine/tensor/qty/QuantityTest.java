@@ -59,6 +59,16 @@ class QuantityTest {
   }
 
   @Test
+  void testAddZero() {
+    Scalar a = Quantity.of(0, "m");
+    Scalar b = Quantity.of(0, "n");
+    Scalar c = Quantity.of(0, "");
+    assertThrows(Exception.class, () -> a.add(b));
+    assertThrows(Exception.class, () -> b.add(c));
+    assertThrows(Exception.class, () -> c.add(a));
+  }
+
+  @Test
   void testPercent() {
     Scalar of = Quantity.of(50, "%");
     assertTrue(FiniteScalarQ.of(of));

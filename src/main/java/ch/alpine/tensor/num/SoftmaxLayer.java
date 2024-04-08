@@ -1,8 +1,10 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.nrm.Vector1Norm;
+import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.sca.exp.Exp;
 
 /** inspired by
@@ -13,6 +15,7 @@ public enum SoftmaxLayer {
    * @return
    * @throws Exception if vector is empty */
   public static Tensor of(Tensor vector) {
-    return Vector1Norm.NORMALIZE.apply(vector.map(Exp.FUNCTION));
+    Scalar n_max = vector.stream().reduce(Max::of).map(Scalar.class::cast).orElseThrow().negate();
+    return Vector1Norm.NORMALIZE.apply(vector.map(s -> Exp.FUNCTION.apply(s.add(n_max))));
   }
 }

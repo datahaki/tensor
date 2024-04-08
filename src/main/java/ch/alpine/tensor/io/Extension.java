@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import java.awt.image.BufferedImage;
+
 /** file extensions used by the tensor library
  * 
  * @see ImportHelper
@@ -46,5 +48,22 @@ package ch.alpine.tensor.io;
    * any known file types */
   public static Extension of(String string) {
     return valueOf(string.toUpperCase());
+  }
+
+  // TODO TENSOR API
+  public int imageType() {
+    return switch (this) {
+    case BMP, JPG, JPEG -> BufferedImage.TYPE_INT_BGR;
+    case GIF, PNG, TIF, TIFF -> BufferedImage.TYPE_INT_ARGB;
+    default -> throw new IllegalArgumentException("Unexpected value: " + this);
+    };
+  }
+
+  public static int imageType(String extension) {
+    return switch (extension) {
+    case "BMP", "JPG", "JPEG" -> BufferedImage.TYPE_INT_BGR;
+    case "GIF", "PNG", "TIF", "TIFF" -> BufferedImage.TYPE_INT_ARGB;
+    default -> throw new IllegalArgumentException("Unexpected value: " + extension);
+    };
   }
 }
