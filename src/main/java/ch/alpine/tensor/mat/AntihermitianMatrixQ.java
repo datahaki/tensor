@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.chq.ConstraintSquareMatrixQ;
+import ch.alpine.tensor.chq.ZeroDefectSquareMatrixQ;
 import ch.alpine.tensor.sca.Chop;
 
 /** A is anti-hermitian if A = -ConjugateTranspose[A]
@@ -11,8 +11,8 @@ import ch.alpine.tensor.sca.Chop;
  * <a href="https://reference.wolfram.com/language/ref/AntihermitianMatrixQ.html">AntihermitianMatrixQ</a>
  * 
  * https://en.wikipedia.org/wiki/Skew-Hermitian_matrix */
-public class AntihermitianMatrixQ extends ConstraintSquareMatrixQ {
-  public static final ConstraintSquareMatrixQ INSTANCE = new AntihermitianMatrixQ(Tolerance.CHOP);
+public class AntihermitianMatrixQ extends ZeroDefectSquareMatrixQ {
+  public static final ZeroDefectSquareMatrixQ INSTANCE = new AntihermitianMatrixQ(Tolerance.CHOP);
 
   public AntihermitianMatrixQ(Chop chop) {
     super(chop);

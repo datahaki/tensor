@@ -11,18 +11,18 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Chop;
 
-public abstract class ConstraintMemberQ implements MemberQ, Serializable {
+public abstract class ZeroDefectArrayQ implements MemberQ, Serializable {
   private final int rank;
   private final Chop chop;
 
-  /** @param rank
+  /** @param rank non-negative
    * @param chop */
-  public ConstraintMemberQ(int rank, Chop chop) {
+  public ZeroDefectArrayQ(int rank, Chop chop) {
     this.rank = Integers.requirePositiveOrZero(rank);
     this.chop = Objects.requireNonNull(chop);
   }
 
-  @Override
+  @Override // from MemberQ
   public final boolean isMember(Tensor tensor) {
     Dimensions dimensions = new Dimensions(tensor);
     return dimensions.list().size() == rank //
@@ -30,7 +30,7 @@ public abstract class ConstraintMemberQ implements MemberQ, Serializable {
         && chop.allZero(defect(tensor));
   }
 
-  @Override
+  @Override // from MemberQ
   public final Tensor requireMember(Tensor tensor) {
     if (isMember(tensor))
       return tensor;
@@ -45,7 +45,7 @@ public abstract class ConstraintMemberQ implements MemberQ, Serializable {
   }
 
   /** @param tensor with appropriate array dimensions
-   * @return result that determines subject to {@link Chop#allZero(Tensor)}
-   * whether tensor is member */
+   * @return defect that determines whether tensor is member subject to
+   * {@link Chop#allZero(Tensor)} */
   public abstract Tensor defect(Tensor tensor);
 }

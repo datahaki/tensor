@@ -3,7 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Join;
-import ch.alpine.tensor.chq.ConstraintSquareMatrixQ;
+import ch.alpine.tensor.chq.ZeroDefectSquareMatrixQ;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
@@ -16,8 +16,8 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * @see HermitianMatrixQ
  * @see IdempotentMatrixQ */
-public class InfluenceMatrixQ extends ConstraintSquareMatrixQ {
-  public static final ConstraintSquareMatrixQ INSTANCE = new InfluenceMatrixQ(Tolerance.CHOP);
+public class InfluenceMatrixQ extends ZeroDefectSquareMatrixQ {
+  public static final ZeroDefectSquareMatrixQ INSTANCE = new InfluenceMatrixQ(Tolerance.CHOP);
 
   public InfluenceMatrixQ(Chop chop) {
     super(chop);

@@ -5,8 +5,8 @@ import java.util.List;
 
 import ch.alpine.tensor.sca.Chop;
 
-public abstract class ConstraintSquareMatrixQ extends ConstraintMemberQ {
-  public ConstraintSquareMatrixQ(Chop chop) {
+public abstract class ZeroDefectSquareMatrixQ extends ZeroDefectArrayQ {
+  public ZeroDefectSquareMatrixQ(Chop chop) {
     super(2, chop);
   }
 

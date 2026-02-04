@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.chq.ConstraintSquareMatrixQ;
+import ch.alpine.tensor.chq.ZeroDefectSquareMatrixQ;
 import ch.alpine.tensor.sca.Chop;
 
 /** Quote from Wikipedia: A Hermitian matrix (or self-adjoint matrix) is
@@ -13,8 +13,8 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * @see SymmetricMatrixQ
  * @see AntisymmetricMatrixQ */
-public class HermitianMatrixQ extends ConstraintSquareMatrixQ {
-  public static final ConstraintSquareMatrixQ INSTANCE = new HermitianMatrixQ(Tolerance.CHOP);
+public class HermitianMatrixQ extends ZeroDefectSquareMatrixQ {
+  public static final ZeroDefectSquareMatrixQ INSTANCE = new HermitianMatrixQ(Tolerance.CHOP);
 
   public HermitianMatrixQ(Chop chop) {
     super(chop);

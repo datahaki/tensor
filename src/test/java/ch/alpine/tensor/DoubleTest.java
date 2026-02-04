@@ -63,6 +63,6 @@ class DoubleTest {
   @Test
   void testNextAfter() {
     long countSteps = countSteps(2.0, Math.nextDown(2.0));
-    IO.println(countSteps);
+    assertEquals(countSteps, 1);
   }
 }

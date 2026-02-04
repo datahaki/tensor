@@ -3,7 +3,7 @@ package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.chq.ConstraintSquareMatrixQ;
+import ch.alpine.tensor.chq.ZeroDefectSquareMatrixQ;
 import ch.alpine.tensor.sca.Chop;
 
 /** consistent with Mathematica:
@@ -15,8 +15,8 @@ import ch.alpine.tensor.sca.Chop;
  * @see HermitianMatrixQ
  * @see UnitaryMatrixQ
  * @see AntisymmetricMatrixQ */
-public class SymmetricMatrixQ extends ConstraintSquareMatrixQ {
-  public static final ConstraintSquareMatrixQ INSTANCE = new SymmetricMatrixQ(Tolerance.CHOP);
+public class SymmetricMatrixQ extends ZeroDefectSquareMatrixQ {
+  public static final ZeroDefectSquareMatrixQ INSTANCE = new SymmetricMatrixQ(Tolerance.CHOP);
 
   public SymmetricMatrixQ(Chop chop) {
     super(chop);

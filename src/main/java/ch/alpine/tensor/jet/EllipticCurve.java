@@ -14,8 +14,8 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.GroupInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.chq.ConstraintMemberQ;
 import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ZeroDefectArrayQ;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.BinaryPower;
@@ -30,7 +30,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * y^2 == x^3 + a*x + b
  * 
  * https://bugs.java.com/bugdatabase/JDK-8374189/description */
-public class EllipticCurve extends ConstraintMemberQ implements GroupInterface<Tensor>, ScalarUnaryOperator {
+public class EllipticCurve extends ZeroDefectArrayQ implements GroupInterface<Tensor>, ScalarUnaryOperator {
   public static final Tensor NEUTRAL = Tensors.unmodifiableEmpty();
 
   /** Hint: also works for parameters of type {@link Quantity}

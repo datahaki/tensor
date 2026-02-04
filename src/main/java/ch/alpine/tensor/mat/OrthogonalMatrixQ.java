@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.chq.ConstraintMemberQ;
+import ch.alpine.tensor.chq.ZeroDefectArrayQ;
 import ch.alpine.tensor.sca.Chop;
 
 /** Mathematica's definition:
@@ -18,8 +18,8 @@ import ch.alpine.tensor.sca.Chop;
  * <a href="https://reference.wolfram.com/language/ref/OrthogonalMatrixQ.html">OrthogonalMatrixQ</a>
  * 
  * @see UnitaryMatrixQ */
-public class OrthogonalMatrixQ extends ConstraintMemberQ {
-  public static final ConstraintMemberQ INSTANCE = new OrthogonalMatrixQ(Tolerance.CHOP);
+public class OrthogonalMatrixQ extends ZeroDefectArrayQ {
+  public static final ZeroDefectArrayQ INSTANCE = new OrthogonalMatrixQ(Tolerance.CHOP);
 
   public OrthogonalMatrixQ(Chop chop) {
     super(2, chop);
