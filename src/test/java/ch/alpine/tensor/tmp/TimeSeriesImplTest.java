@@ -52,7 +52,7 @@ class TimeSeriesImplTest {
   }
 
   @Test
-  void testHoldLo() throws ClassNotFoundException, IOException {
+  void testHoldLo() {
     TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.Properties;
 
@@ -29,14 +28,14 @@ class QuantityComparatorTest {
   }
 
   @Test
-  void testUnitless() throws ClassNotFoundException, IOException {
+  void testUnitless() {
     Comparator<Scalar> comparator = QuantityComparator.SI();
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[rad], 300[deg], 2, 180[rad], -1[rad]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{-1[rad], 2, 4[rad], 300[deg], 180[rad]}"));
   }
 
   @Test
-  void testUnknown() throws ClassNotFoundException, IOException {
+  void testUnknown() {
     Comparator<Scalar> comparator = QuantityComparator.SI();
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[fun], 300[fun], 2[fun], 180[fun]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{2[fun], 4[fun], 180[fun], 300[fun]}"));

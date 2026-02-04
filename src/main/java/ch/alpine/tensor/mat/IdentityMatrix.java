@@ -67,13 +67,25 @@ public enum IdentityMatrix {
         : matrix.Get(i, j).one().zero(), n, n);
   }
 
+  /** Careful: the function alters the input matrix !
+   * 
+   * @param matrix
+   * @return given matrix with diagonal elements incremented by {@link Scalar#one()}
+   * @throws Exception if matrix is {@link Tensor#unmodifiable()} */
   public static Tensor inplaceAdd(Tensor matrix) {
+    SquareMatrixQ.INSTANCE.requireMember(matrix);
     int n = matrix.length();
     IntStream.range(0, n).forEach(i -> matrix.set(s -> s.add(Scalar.class.cast(s).one()), i, i));
     return matrix;
   }
 
+  /** Careful: the function alters the input matrix !
+   * 
+   * @param matrix
+   * @return given matrix with diagonal elements decremented by {@link Scalar#one()}
+   * @throws Exception if matrix is {@link Tensor#unmodifiable()} */
   public static Tensor inplaceSub(Tensor matrix) {
+    SquareMatrixQ.INSTANCE.requireMember(matrix);
     int n = matrix.length();
     IntStream.range(0, n).forEach(i -> matrix.set(s -> s.subtract(Scalar.class.cast(s).one()), i, i));
     return matrix;

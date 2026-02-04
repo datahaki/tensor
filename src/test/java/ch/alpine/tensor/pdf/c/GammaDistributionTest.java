@@ -59,7 +59,7 @@ class GammaDistributionTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "0.7", "1.1", "1.3" })
-  void testRandom(String string) throws ClassNotFoundException, IOException {
+  void testRandom(String string) {
     Scalar alpha = Scalars.fromString(string);
     Distribution d1 = GammaDistribution.of(alpha, RealScalar.of(2.3));
     Tensor r1 = RandomVariate.of(d1, new Random(3), 10);

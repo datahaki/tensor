@@ -3,8 +3,6 @@ package ch.alpine.tensor.sca.var;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -16,7 +14,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class SphericalVariogramTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     ScalarUnaryOperator variogram = SphericalVariogram.of(5, 3);
     Scalar lo = variogram.apply(RealScalar.of(4.9999));
     Scalar hi = variogram.apply(RealScalar.of(5.0001));

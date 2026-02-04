@@ -120,7 +120,7 @@ public abstract class AbstractScalar implements Scalar {
 
   @Override // from Scalar
   public final Tensor map(Function<Scalar, ? extends Tensor> function) {
-    /* copy of result is inserted to avoid hard to debug issues */
+    /* copy of result is inserted to avoid hard-to-debug issues */
     return function.apply(this).copy();
   }
 

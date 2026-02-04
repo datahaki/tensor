@@ -14,7 +14,6 @@ import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.exp.Exp;
-import ch.alpine.tensor.sca.exp.ExpInterface;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.SqrtInterface;
 import ch.alpine.tensor.sca.tri.ArcTan;
@@ -27,7 +26,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 /** @implSpec
  * This class is immutable and thread-safe. */
 /* package */ class ComplexScalarImpl extends MultiplexScalar implements ComplexScalar, //
-    SqrtInterface, ExpInterface, TrigonometryInterface, Serializable {
+    SqrtInterface, TrigonometryInterface, Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarGroups.MUL);
 
   /** creator with package visibility

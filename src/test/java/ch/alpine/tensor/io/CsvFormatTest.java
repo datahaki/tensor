@@ -82,7 +82,7 @@ class CsvFormatTest {
 
   @ParameterizedTest
   @CsvFileSource(resources = "/ch/alpine/tensor/io/libreoffice_calc.csv")
-  void testCountCsv(double v1, double v2) throws IOException {
+  void testCountCsv(double v1, double v2) {
     v1 += v2;
   }
 

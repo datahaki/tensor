@@ -46,7 +46,7 @@ class StudentTDistributionTest {
   }
 
   @Test
-  void testRandom() throws ClassNotFoundException, IOException {
+  void testRandom() {
     Distribution distribution = StudentTDistribution.of(2, 1, 5);
     Tensor r1 = RandomVariate.of(distribution, new Random(10), 10);
     Tensor r2 = RandomVariate.of(distribution, new Random(10), 10);

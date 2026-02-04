@@ -183,12 +183,6 @@ public class DecimalScalar extends AbstractRealScalar implements //
   public Scalar floor() {
     return RationalScalar.integer(StaticHelper.floor(value));
   }
-  // @Override // from ExpInterface
-  // public Scalar exp() {
-  // MathContext mathContext = mathContext();
-  // BigDecimal bigDecimal = BigDecimalMath.exp(value, mathContext);
-  // return new DecimalScalar(bigDecimal, mathContext.getPrecision());
-  // }
 
   @Override // from NInterface
   public Scalar n() {
@@ -221,43 +215,6 @@ public class DecimalScalar extends AbstractRealScalar implements //
   protected int signum() {
     return value.signum();
   }
-  // @Override // from SqrtInterface
-  // public Scalar sqrt() {
-  // if (isNonNegative()) {
-  // MathContext mathContext = mathContext();
-  // BigDecimal bigDecimal = BigDecimalMath.sqrt(value, mathContext);
-  // return new DecimalScalar(bigDecimal, mathContext.getPrecision());
-  // }
-  // return ComplexScalarImpl.of(zero(), negate().sqrt());
-  // }
-  //
-  // @Override // from TrigonometryInterface
-  // public DecimalScalar cos() {
-  // MathContext mathContext = mathContext();
-  // BigDecimal bigDecimal = BigDecimalMath.cos(value, mathContext);
-  // return new DecimalScalar(bigDecimal, mathContext.getPrecision());
-  // }
-  //
-  // @Override // from TrigonometryInterface
-  // public DecimalScalar cosh() {
-  // MathContext mathContext = mathContext();
-  // BigDecimal bigDecimal = BigDecimalMath.cosh(value, mathContext);
-  // return new DecimalScalar(bigDecimal, mathContext.getPrecision());
-  // }
-  //
-  // @Override // from TrigonometryInterface
-  // public DecimalScalar sin() {
-  // MathContext mathContext = mathContext();
-  // BigDecimal bigDecimal = BigDecimalMath.sin(value, mathContext);
-  // return new DecimalScalar(bigDecimal, mathContext.getPrecision());
-  // }
-  //
-  // @Override // from TrigonometryInterface
-  // public DecimalScalar sinh() {
-  // MathContext mathContext = mathContext();
-  // BigDecimal bigDecimal = BigDecimalMath.sinh(value, mathContext);
-  // return new DecimalScalar(bigDecimal, mathContext.getPrecision());
-  // }
 
   @Override // from InexactScalarMarker
   public boolean isFinite() {

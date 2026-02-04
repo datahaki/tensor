@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.mat.cd;
 
 import java.io.Serializable;

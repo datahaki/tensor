@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Hue;
 import ch.alpine.tensor.io.Import;
 
 /** To obtain a single color value use

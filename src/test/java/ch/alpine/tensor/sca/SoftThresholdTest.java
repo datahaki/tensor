@@ -26,7 +26,7 @@ class SoftThresholdTest {
   }
 
   @Test
-  void testRadius() throws ClassNotFoundException, IOException {
+  void testRadius() {
     ScalarUnaryOperator deadzone = SoftThreshold.of(3);
     assertEquals(deadzone.apply(RealScalar.of(5)), RealScalar.of(2));
     assertEquals(deadzone.apply(RealScalar.of(-5)), RealScalar.of(-2));
