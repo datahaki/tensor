@@ -2,7 +2,7 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java.
+Library for tensor computations in Java 25.
 
 ![](https://github.com/datahaki/tensor/actions/workflows/mvn_test.yml/badge.svg)
 
@@ -328,10 +328,4 @@ From time to time, a version is deployed and made available for maven integratio
 </repositories>
 ```
 
-For Java 17, for `version` use `1.0.6` .
-
-For Java 11, for `version` use `1.1.1-jdk-11`.
-
 The source code is attached to every release.
-
-The branch `master` always contains the latest features for Java 17, and does not correspond to the most recent deployed version generally.
