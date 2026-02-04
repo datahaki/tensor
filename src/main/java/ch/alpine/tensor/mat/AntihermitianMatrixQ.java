@@ -19,7 +19,7 @@ public class AntihermitianMatrixQ extends ConstraintSquareMatrixQ {
   }
 
   @Override
-  public Tensor constraint(Tensor v) {
+  public Tensor defect(Tensor v) {
     return ConjugateTranspose.of(v).add(v);
   }
 }

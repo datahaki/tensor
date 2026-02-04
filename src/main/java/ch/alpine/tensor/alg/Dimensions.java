@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.PackageTestAccess;
 
 /** implementation consistent with Mathematica
  * 
@@ -78,8 +79,11 @@ public class Dimensions implements Serializable {
         && predicate.test(list());
   }
 
-  /** @return 0 for a scalar, 1 for a vector, 2 for a matrix, etc. */
-  public int maxDepth() {
+  /** Careful: for an empty tensor {} the function returns 0 !
+   * 
+   * @return 0 for a scalar, 1 for a (non-empty) vector, 2 for a matrix, etc. */
+  @PackageTestAccess
+  int maxDepth() {
     return lengths.size() - 1;
   }
 

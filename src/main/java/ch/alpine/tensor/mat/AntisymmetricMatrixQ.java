@@ -18,7 +18,7 @@ public class AntisymmetricMatrixQ extends ConstraintSquareMatrixQ {
   }
 
   @Override
-  public Tensor constraint(Tensor v) {
+  public Tensor defect(Tensor v) {
     return Transpose.of(v).add(v);
   }
 }

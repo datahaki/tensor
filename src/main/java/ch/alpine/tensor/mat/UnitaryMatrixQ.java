@@ -18,7 +18,7 @@ public class UnitaryMatrixQ extends ConstraintMemberQ {
   }
 
   @Override
-  public Tensor constraint(Tensor p) {
+  public Tensor defect(Tensor p) {
     return IdentityMatrix.inplaceSub(MatrixDotConjugateTranspose.self(p));
   }
 }

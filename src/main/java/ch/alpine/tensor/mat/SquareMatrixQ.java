@@ -15,7 +15,7 @@ public enum SquareMatrixQ {
   ;
   public static final MemberQ INSTANCE = new ConstraintSquareMatrixQ(Chop.NONE) {
     @Override
-    public Tensor constraint(Tensor tensor) {
+    public Tensor defect(Tensor tensor) {
       return RealScalar.ZERO;
     }
   };

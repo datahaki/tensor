@@ -3,6 +3,7 @@
 package ch.alpine.tensor.jet;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -11,22 +12,25 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.GroupInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.chq.ConstraintMemberQ;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.ply.Polynomial;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** using exact arithmetics to perform group operations on an elliptic curve of the from
  * 
- * y^2 == x^3 + a*x + b */
-public class EllipticCurve implements GroupInterface<Tensor>, ScalarUnaryOperator {
+ * y^2 == x^3 + a*x + b
+ * 
+ * https://bugs.java.com/bugdatabase/JDK-8374189/description */
+public class EllipticCurve extends ConstraintMemberQ implements GroupInterface<Tensor>, ScalarUnaryOperator {
   public static final Tensor NEUTRAL = Tensors.unmodifiableEmpty();
 
   /** Hint: also works for parameters of type {@link Quantity}
@@ -77,6 +81,7 @@ public class EllipticCurve implements GroupInterface<Tensor>, ScalarUnaryOperato
   private final BinaryPower<Tensor> binaryPower = new BinaryPower<>(this);
 
   private EllipticCurve(Scalar a, Scalar b) {
+    super(1, Chop.NONE);
     Scalar one = a.one();
     polynomial = Polynomial.of(Tensors.of(b, a, Unprotect.zero_negateUnit(a).multiply(b), one));
     derivative = polynomial.derivative();
@@ -84,6 +89,22 @@ public class EllipticCurve implements GroupInterface<Tensor>, ScalarUnaryOperato
     Scalar P27 = Scalars.add().raise(one, 27);
     Scalar N16 = Scalars.add().raise(one, -16);
     discriminant = Times.of(P04, a, a, a).add(Times.of(P27, b, b)).multiply(N16);
+  }
+
+  @Override // from ConstraintMemberQ
+  protected boolean isArrayWith(List<Integer> list) {
+    int n = list.getFirst();
+    return n == 0 //
+        || n == 2;
+  }
+
+  @Override // from ConstraintMemberQ
+  public Tensor defect(Tensor p) {
+    if (isNeutral(p))
+      return RealScalar.ZERO;
+    Scalar xp = ExactScalarQ.require(p.Get(0));
+    Scalar yp = ExactScalarQ.require(p.Get(1));
+    return polynomial.apply(xp).subtract(yp.multiply(yp));
   }
 
   /** @return y^2 == polynomial(x) */
@@ -126,14 +147,14 @@ public class EllipticCurve implements GroupInterface<Tensor>, ScalarUnaryOperato
   public Tensor invert(Tensor element) {
     if (isNeutral(element))
       return NEUTRAL;
-    requirePoint(element);
+    requireMember(element);
     return Tensors.of(element.Get(0), element.Get(1).negate());
   }
 
   @Override // from GroupInterface
   public Tensor combine(Tensor p, Tensor q) {
-    requirePoint(p);
-    requirePoint(q);
+    requireMember(p);
+    requireMember(q);
     if (isNeutral(p))
       return q;
     if (isNeutral(q))
@@ -150,30 +171,14 @@ public class EllipticCurve implements GroupInterface<Tensor>, ScalarUnaryOperato
         : py.subtract(qy).divide(px.subtract(qx));
     Scalar rx = s.multiply(s).subtract(px.add(qx));
     Scalar ry = px.subtract(rx).multiply(s).subtract(py);
-    return requirePoint(Tensors.of(rx, ry));
+    return requireMember(Tensors.of(rx, ry));
   }
 
   /** @param x
    * @return
    * @throws Exception if x cannot be completed to a point on the curve */
   public Tensor complete(Scalar x) {
-    return requirePoint(Tensors.of(x, apply(x)));
-  }
-
-  public boolean isPoint(Tensor p) {
-    if (Tensors.isEmpty(p))
-      return true;
-    VectorQ.requireLength(p, 2);
-    ExactTensorQ.require(p);
-    Scalar xp = p.Get(0);
-    Scalar yp = p.Get(1);
-    return polynomial.apply(xp).equals(yp.multiply(yp));
-  }
-
-  public Tensor requirePoint(Tensor p) {
-    if (isPoint(p))
-      return p;
-    throw new Throw(p);
+    return requireMember(Tensors.of(x, apply(x)));
   }
 
   @Override // from Object

@@ -8,23 +8,26 @@ import java.util.Objects;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Chop;
 
 public abstract class ConstraintMemberQ implements MemberQ, Serializable {
   private final int rank;
   private final Chop chop;
 
+  /** @param rank
+   * @param chop */
   public ConstraintMemberQ(int rank, Chop chop) {
-    this.rank = rank;
+    this.rank = Integers.requirePositiveOrZero(rank);
     this.chop = Objects.requireNonNull(chop);
   }
 
   @Override
   public final boolean isMember(Tensor tensor) {
     Dimensions dimensions = new Dimensions(tensor);
-    return dimensions.maxDepth() == rank //
+    return dimensions.list().size() == rank //
         && dimensions.isArrayWith(this::isArrayWith) //
-        && chop.allZero(constraint(tensor));
+        && chop.allZero(defect(tensor));
   }
 
   @Override
@@ -37,12 +40,12 @@ public abstract class ConstraintMemberQ implements MemberQ, Serializable {
   /** @param list
    * @return
    * @implNote override for instance to check that all dimensions are equal */
-  public boolean isArrayWith(List<Integer> list) {
+  protected boolean isArrayWith(List<Integer> list) {
     return true;
   }
 
   /** @param tensor with appropriate array dimensions
    * @return result that determines subject to {@link Chop#allZero(Tensor)}
    * whether tensor is member */
-  public abstract Tensor constraint(Tensor tensor);
+  public abstract Tensor defect(Tensor tensor);
 }

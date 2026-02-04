@@ -26,7 +26,7 @@ public class OrthogonalMatrixQ extends ConstraintMemberQ {
   }
 
   @Override
-  public Tensor constraint(Tensor p) {
+  public Tensor defect(Tensor p) {
     return IdentityMatrix.inplaceSub(MatrixDotTranspose.self(p));
   }
 }

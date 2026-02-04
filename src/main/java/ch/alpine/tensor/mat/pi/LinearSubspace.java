@@ -17,6 +17,7 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.LeftNullSpace;
 
+// TODO TENSOR an empty LinearSubspace could also implement this interface
 public class LinearSubspace implements Serializable {
   /** @param constraint as homogeneous equations
    * @param size

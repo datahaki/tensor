@@ -27,7 +27,7 @@ class LinearSubspaceTest {
   @ParameterizedTest
   @ValueSource(ints = { 2, 3, 8 })
   void testAntiSymm(int n) {
-    LinearSubspace linearSubspace = LinearSubspace.of(AntisymmetricMatrixQ.INSTANCE::constraint, n, n);
+    LinearSubspace linearSubspace = LinearSubspace.of(AntisymmetricMatrixQ.INSTANCE::defect, n, n);
     assertEquals(linearSubspace.dimensions(), n * (n - 1) / 2);
     ExactTensorQ.require(linearSubspace.basis());
   }

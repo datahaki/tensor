@@ -21,7 +21,7 @@ public class HermitianMatrixQ extends ConstraintSquareMatrixQ {
   }
 
   @Override
-  public Tensor constraint(Tensor v) {
+  public Tensor defect(Tensor v) {
     return ConjugateTranspose.of(v).subtract(v);
   }
 }

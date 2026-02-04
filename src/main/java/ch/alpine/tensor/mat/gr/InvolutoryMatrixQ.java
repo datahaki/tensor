@@ -17,7 +17,7 @@ public class InvolutoryMatrixQ extends ConstraintSquareMatrixQ {
   }
 
   @Override
-  public Tensor constraint(Tensor matrix) {
+  public Tensor defect(Tensor matrix) {
     return IdentityMatrix.inplaceSub(matrix.dot(matrix));
   }
 }

@@ -23,7 +23,7 @@ public class IdempotentMatrixQ extends ConstraintSquareMatrixQ {
   }
 
   @Override
-  public Tensor constraint(Tensor matrix) {
+  public Tensor defect(Tensor matrix) {
     return matrix.dot(matrix).subtract(matrix);
   }
 }

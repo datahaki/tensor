@@ -24,9 +24,9 @@ public class InfluenceMatrixQ extends ConstraintSquareMatrixQ {
   }
 
   @Override
-  public Tensor constraint(Tensor p) {
+  public Tensor defect(Tensor p) {
     return Join.of( //
-        HermitianMatrixQ.INSTANCE.constraint(p), // P == ConjugateTranspose[P]
-        IdempotentMatrixQ.INSTANCE.constraint(p)); // P . P == P
+        HermitianMatrixQ.INSTANCE.defect(p), // P == ConjugateTranspose[P]
+        IdempotentMatrixQ.INSTANCE.defect(p)); // P . P == P
   }
 }
