@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,8 +27,8 @@ class MeanTest {
 
   @Test
   void testLimitTheorem() {
-    Random random = new Random();
-    Tensor tensor = Array.of(l -> RealScalar.of(100 + 100 * random.nextGaussian()), 10000);
+    Random random = ThreadLocalRandom.current();
+    Tensor tensor = Array.of(_ -> RealScalar.of(100 + 100 * random.nextGaussian()), 10000);
     Scalar mean1 = Mean.ofVector(tensor);
     Scalar mean2 = Total.ofVector(tensor.multiply(RealScalar.of(tensor.length()).reciprocal()));
     // possibly use error relative to magnitude

@@ -1,11 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
-import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.PackageTestAccess;
@@ -50,6 +47,8 @@ import ch.alpine.tensor.sca.Im;
  * @see LeastSquares */
 public enum PseudoInverse {
   ;
+  public static final ThreadLocal<Integer> MAX_ITERATIONS = ThreadLocal.withInitial(() -> 128);
+
   /** @param matrix of dimensions n x m
    * @return pseudo inverse of dimensions m x n */
   public static Tensor of(Tensor matrix) {
@@ -60,13 +59,9 @@ public enum PseudoInverse {
       } catch (Exception exception) {
         // matrix does not have maximal rank
       }
-    boolean complex = Flatten.stream(matrix, 1) //
-        .map(Scalar.class::cast) //
-        .map(Im.FUNCTION) //
-        .anyMatch(Scalars::nonZero);
-    if (complex)
-      return BenIsraelCohen.of(matrix);
-    return usingSvd(matrix);
+    if (Im.allZero(matrix))
+      return usingSvd(matrix);
+    return BenIsraelCohen.of(matrix);
   }
 
   // ---
@@ -85,7 +80,7 @@ public enum PseudoInverse {
       return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt);
     }
     return ConjugateTranspose.of(CholeskyDecomposition.of( //
-        MatrixDotConjugateTranspose.of(matrix)).solve(matrix));
+        MatrixDotConjugateTranspose.self(matrix)).solve(matrix));
   }
 
   // ---

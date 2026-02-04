@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Clips;
 
 class RangeTest {
@@ -28,6 +29,12 @@ class RangeTest {
     Tensor r = Tensors.vector(2, 3, 4, 5, 6);
     assertEquals(t, r);
     assertEquals(t.toString(), r.toString());
+  }
+
+  @Test
+  void testGauss() {
+    Tensor tensor = Range.of(GaussScalar.of(1, 17), 4);
+    assertEquals(tensor.length(), 4);
   }
 
   @Test

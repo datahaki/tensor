@@ -3,12 +3,15 @@ package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Floor;
 
@@ -49,6 +52,25 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
   public Tensor get(Tensor index) {
     if (Tensors.isEmpty(index))
       return tensor.copy();
+    if (index.length() == 2) {
+      IntUnaryOperator clipx = Integers.clip(0, tensor.length() - 1);
+      int m = Unprotect.dimension1(tensor);
+      IntUnaryOperator clipy = Integers.clip(0, m - 1);
+      Tensor fi = index.map(Floor.FUNCTION);
+      Tensor nuind = index.subtract(fi);
+      int fx = Scalars.intValueExact(fi.Get(0));
+      int fy = Scalars.intValueExact(fi.Get(1));
+      Tensor sum = tensor.get(0, 0).map(Scalar::zero);
+      for (int i = -lanczosKernel.semi() + 1; i < lanczosKernel.semi(); ++i) {
+        for (int j = -lanczosKernel.semi() + 1; j < lanczosKernel.semi(); ++j) {
+          Scalar mi = lanczosKernel.apply(nuind.Get(0).subtract(RealScalar.of(i)));
+          Scalar mj = lanczosKernel.apply(nuind.Get(1).subtract(RealScalar.of(j)));
+          Tensor value = tensor.get(clipx.applyAsInt(fx + i), clipy.applyAsInt(fy + j));
+          sum = sum.add(value.multiply(mi.multiply(mj)));
+        }
+      }
+      return sum;
+    }
     Tensor sum = tensor;
     for (Tensor value : index)
       sum = at(sum, (Scalar) value);
@@ -68,6 +90,7 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
   }
 
   private Tensor flow(Tensor tensor, int count, Scalar value) {
+    // TODO TENSOR IMPL not efficient, too many multiplications
     return tensor.get(Integers.clip(0, tensor.length() - 1).applyAsInt(count)) //
         .multiply(lanczosKernel.apply(value.subtract(RealScalar.of(count))));
   }

@@ -32,4 +32,10 @@ public enum MatrixDotTranspose {
         ? matrix.dot(Transpose.of(tensor))
         : Tensor.of(matrix.stream().map(row -> Tensor.of(tensor.stream().map(row::dot))));
   }
+
+  /** @param matrix
+   * @return matrix . ConjugateTranspose(matrix) */
+  public static Tensor self(Tensor matrix) {
+    return of(matrix, matrix);
+  }
 }

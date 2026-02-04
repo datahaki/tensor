@@ -10,9 +10,10 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Reverse;
-import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.ext.RomanNumeral;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -40,13 +41,13 @@ public enum FourierDST implements DiscreteFourierTransform {
       if (Integers.isPowerOf2(m)) {
         Tensor zero = Array.same(EqualsReduce.zero(vector), 1);
         // the book Matrix Computations uses a scaling factor of I/2 instead of just I
-        return Fourier.FORWARD.transform(Join.of( //
+        return StaticHelper.re_re(vector, Fourier.FORWARD.transform(Join.of( //
             zero, //
             vector, //
             zero, //
-            Reverse.of(vector.negate()))).extract(1, m).divide(ComplexScalar.I).map(Tolerance.CHOP);
+            Reverse.of(vector.negate()))).extract(1, m).divide(ComplexScalar.I));
       }
-      return VectorQ.require(vector).dot(matrix(vector.length()));
+      return super.transform(vector);
     }
 
     @Override
@@ -56,6 +57,11 @@ public enum FourierDST implements DiscreteFourierTransform {
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + 1));
       return Tensors.matrix((i, j) -> //
       Sin.FUNCTION.apply(RealScalar.of((i + 1) * (j + 1)).multiply(factor)).multiply(scalar), n, n);
+    }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return this;
     }
   },
   _2 {
@@ -71,8 +77,13 @@ public enum FourierDST implements DiscreteFourierTransform {
     public Tensor matrix(int n) {
       Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + n));
-      return Tensors.matrix((i, j) -> //
+      return Tensors.matrix((j, i) -> //
       Sin.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + 1)).multiply(factor)).multiply(scalar), n, n);
+    }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return _3;
     }
   },
   _3 {
@@ -92,7 +103,12 @@ public enum FourierDST implements DiscreteFourierTransform {
       Tensor matrix = Tensors.matrix((i, j) -> //
       Sin.FUNCTION.apply(RealScalar.of((i + 1) * (j + j + 1)).multiply(factor)).multiply(s2), n - 1, n);
       matrix.append(Tensors.vector(i -> i % 2 == 0 ? s1 : s1.negate(), n));
-      return matrix;
+      return Transpose.of(matrix);
+    }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return _2;
     }
   },
   _4 {
@@ -111,5 +127,15 @@ public enum FourierDST implements DiscreteFourierTransform {
       return Tensors.matrix((i, j) -> //
       Sin.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + j + 1)).multiply(factor)).multiply(scalar), n, n);
     }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return this;
+    }
+  };
+
+  @Override
+  public String toString() {
+    return MathematicaFormat.concise("FourierDST", RomanNumeral.of(ordinal() + 1));
   }
 }

@@ -11,6 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 
 class HoytDistributionTest {
@@ -25,7 +26,9 @@ class HoytDistributionTest {
 
   @Test
   void testMonotonous() {
-    TestMarkovChebyshev.monotonous(HoytDistribution.of(0.7, 2.3));
+    Distribution distribution = HoytDistribution.of(0.7, 2.3);
+    RandomVariate.of(distribution);
+    TestMarkovChebyshev.monotonous(distribution);
   }
 
   @Test

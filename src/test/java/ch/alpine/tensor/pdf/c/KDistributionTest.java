@@ -25,6 +25,7 @@ import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clips;
 
 class KDistributionTest {
   @Test
@@ -37,10 +38,11 @@ class KDistributionTest {
     CDF cdf = CDF.of(kDistribution);
     Scalar c = cdf.p_lessEquals(RealScalar.of(0.3));
     Chop._08.requireClose(c, RealScalar.of(0.1243115934496789));
-    Scalar max = kDistribution.support.max();
+    Scalar max = kDistribution.mean().add(kDistribution.variance().multiply(RealScalar.of(50)));
     Scalar scalar = pdf.at(max);
     Chop._20.requireZero(scalar);
     assertEquals(cdf.p_lessEquals(max), RealScalar.ONE);
+    assertEquals(kDistribution.support(), Clips.positive(Double.POSITIVE_INFINITY));
   }
 
   @Test

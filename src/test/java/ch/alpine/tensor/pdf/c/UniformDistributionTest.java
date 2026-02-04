@@ -4,13 +4,17 @@ package ch.alpine.tensor.pdf.c;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -20,6 +24,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -64,6 +69,13 @@ class UniformDistributionTest {
       Scalar uni = CentralMoment.of(d1, order);
       Scalar tra = CentralMoment.of(d2, order);
       assertEquals(uni, tra);
+      PDF pdf = PDF.of(d1);
+      Scalar value = pdf.at(clip.min());
+      Tensor coeffs = Tensors.of(value, value.multiply(Unprotect.zero_negateUnit(clip.min())));
+      Polynomial polynomial = Polynomial.of(coeffs);
+      Clip center = Clips.absolute(clip.width().multiply(RationalScalar.HALF));
+      Scalar moment = polynomial.moment(order, center);
+      assertEquals(uni, moment);
     }
   }
 
@@ -148,7 +160,7 @@ class UniformDistributionTest {
 
   @Test
   void testMarkov() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Distribution distribution = UniformDistribution.of(random.nextDouble(), 1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);
@@ -249,9 +261,31 @@ class UniformDistributionTest {
     }
   }
 
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 4 })
+  void testSmall(int digits) {
+    int length = digits + 2;
+    assertTrue(RandomVariate.stream(UniformDistribution.unit(digits)).limit(100) //
+        .map(Object::toString).allMatch(s -> s.length() == length));
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 40, 80 })
+  void testMedium(int digits) {
+    int length = digits + 2 + 3; // ´40
+    assertTrue(RandomVariate.stream(UniformDistribution.unit(digits)).limit(100) //
+        .map(Object::toString).allMatch(s -> s.length() == length));
+  }
+
   @Test
   void testClipNullFail() {
     assertThrows(NullPointerException.class, () -> UniformDistribution.of(null));
+  }
+
+  @Test
+  void testUnitFail() {
+    assertThrows(Exception.class, () -> UniformDistribution.unit(0));
+    assertThrows(Exception.class, () -> UniformDistribution.unit(-1));
   }
 
   @Test

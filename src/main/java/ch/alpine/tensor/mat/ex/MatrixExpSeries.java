@@ -5,14 +5,12 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
 /* package */ enum MatrixExpSeries implements TensorUnaryOperator {
   FUNCTION;
-
-  /** with scaling the series typically converges in few steps */
-  private static final int MAX_ITERATIONS = 128;
 
   /** @param matrix square
    * @return
@@ -21,7 +19,7 @@ import ch.alpine.tensor.sca.N;
   public Tensor apply(Tensor matrix) {
     int n = matrix.length();
     Tensor nxt = matrix;
-    Tensor sum = StaticHelper.IDENTITY_MATRIX.apply(n).add(nxt);
+    Tensor sum = IdentityMatrix.inplaceAdd(nxt.copy());
     for (int k = 2; k <= n; ++k) {
       nxt = nxt.dot(matrix).divide(RealScalar.of(k));
       sum = sum.add(nxt);
@@ -29,7 +27,9 @@ import ch.alpine.tensor.sca.N;
         return sum;
     }
     sum = sum.map(N.DOUBLE); // switch to numeric precision
-    for (int k = n + 1; k < MAX_ITERATIONS; ++k) {
+    /* with scaling the series typically converges in few steps */
+    int max = MatrixExp.MAX_ITERATIONS.get();
+    for (int k = n + 1; k < max; ++k) {
       nxt = nxt.dot(matrix).divide(RealScalar.of(k));
       if (sum.equals(sum = sum.add(nxt)))
         return sum;

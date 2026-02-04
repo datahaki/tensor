@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.ext.Serialization;
@@ -199,6 +201,12 @@ class RationalScalarTest {
     assertInstanceOf(Long.class, RealScalar.of(BigInteger.valueOf(Long.MIN_VALUE)).number());
     assertInstanceOf(BigInteger.class, RealScalar.of(BigInteger.valueOf(Long.MAX_VALUE).add(BigInteger.ONE)).number());
     assertInstanceOf(BigInteger.class, RealScalar.of(BigInteger.valueOf(Long.MIN_VALUE).subtract(BigInteger.ONE)).number());
+  }
+
+  @ParameterizedTest
+  @CsvSource({ "0/990, true", "0/(-10), true" })
+  void testIsIntegerCsv(String string, boolean isInteger) {
+    assertEquals(((RationalScalar) Scalars.fromString(string)).isInteger(), isInteger);
   }
 
   @Test

@@ -1,8 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.ply;
 
-import java.security.SecureRandom;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
@@ -11,9 +10,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.chq.FiniteTensorQ;
-import ch.alpine.tensor.itp.FindRoot;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.VectorInfinityNorm;
+import ch.alpine.tensor.opt.fnd.FindRoot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.ComplexDiskUniformDistribution;
@@ -25,13 +25,12 @@ import ch.alpine.tensor.sca.Abs;
 public class AberthEhrlich {
   private static final int MAX_ATTEMPTS = 5;
   private static final int MAX_ITERATIONS = 32;
-  private static final RandomGenerator RANDOM_GENERATOR = new SecureRandom();
 
   /** @param polynomial of degree at least 2
    * @return unsorted roots of polynomial
    * @throws Exception if convergence fail */
   public static Tensor of(Polynomial polynomial) {
-    return of(polynomial, RANDOM_GENERATOR);
+    return of(polynomial, ThreadLocalRandom.current());
   }
 
   /** @param polynomial of degree at least 2
@@ -62,7 +61,6 @@ public class AberthEhrlich {
           FiniteTensorQ.require(eval);
           Scalar err = VectorInfinityNorm.of(eval);
           if (Tolerance.CHOP.isZero(err)) {
-            // System.out.println("ERROR["+attempt+"/" + index + "]=" + err);
             return aberthEhrlich.vector;
           }
         }
@@ -92,10 +90,10 @@ public class AberthEhrlich {
       Scalar zk = vector.Get(k);
       Scalar p1 = derivative.apply(zk);
       Scalar p0 = polynomial.apply(zk);
-      AtomicInteger atomicInteger = new AtomicInteger();
+      Int i = new Int();
       Scalar push = vector.map(zk::subtract).stream() //
           .map(Scalar.class::cast) //
-          .filter(scalar -> atomicInteger.getAndIncrement() != fi) //
+          .filter(_ -> i.getAndIncrement() != fi) //
           .map(Scalar::reciprocal) //
           .reduce(Scalar::add) //
           .orElseThrow();

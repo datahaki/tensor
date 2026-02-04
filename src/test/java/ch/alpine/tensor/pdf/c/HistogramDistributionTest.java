@@ -12,6 +12,8 @@ import java.util.Random;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -20,9 +22,11 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.OrderedQ;
+import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.pdf.BinningMethod;
+import ch.alpine.tensor.pdf.BinningMethods;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
@@ -30,11 +34,13 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Sign;
 
 class HistogramDistributionTest {
   @Test
@@ -61,10 +67,10 @@ class HistogramDistributionTest {
   @Test
   void testFreedman() {
     Tensor samples = Tensors.vector(-4, -3, -3, -2, -2, 10);
-    Distribution distribution = HistogramDistribution.of(samples, BinningMethod.IQR);
+    Distribution distribution = HistogramDistribution.of(samples, BinningMethods.IQR);
     PDF pdf = PDF.of(distribution);
     assertTrue(Scalars.nonZero(pdf.at(RealScalar.of(-3))));
-    assertTrue(Scalars.lessThan(RealScalar.ONE, BinningMethod.IQR.apply(samples)));
+    assertTrue(Scalars.lessThan(RealScalar.ONE, BinningMethods.IQR.apply(samples)));
   }
 
   @Test
@@ -77,10 +83,40 @@ class HistogramDistributionTest {
   @Test
   void testScott() {
     Tensor samples = Tensors.vector(-4, -3, -3, -2, -2, 10);
-    Distribution distribution = HistogramDistribution.of(samples, BinningMethod.VARIANCE);
+    Distribution distribution = HistogramDistribution.of(samples, BinningMethods.VARIANCE);
     PDF pdf = PDF.of(distribution);
     assertTrue(Scalars.nonZero(pdf.at(RealScalar.of(-3))));
-    assertTrue(Scalars.lessThan(RealScalar.ONE, BinningMethod.VARIANCE.apply(samples)));
+    assertTrue(Scalars.lessThan(RealScalar.ONE, BinningMethods.VARIANCE.apply(samples)));
+  }
+
+  @ParameterizedTest
+  @ValueSource(doubles = { 0.7, 1, 1.4 })
+  void testStrictlyMonotonous(double alpha) {
+    Distribution d1 = GammaDistribution.of(alpha, 1);
+    Distribution d2 = HistogramDistribution.of(RandomVariate.of(d1, new Random(3), 1000));
+    Clip domain = Clips.positive(3);
+    Tensor samples = Subdivide.increasing(domain, 1234);
+    Tensor pdfs = samples.map(PDF.of(d2)::at);
+    assertTrue(pdfs.stream().map(Scalar.class::cast).allMatch(Sign::isPositive));
+    Tensor cdfs = samples.map(CDF.of(d2)::p_lessThan);
+    assertTrue(OrderedQ.of(cdfs));
+    assertEquals(cdfs.stream().distinct().count(), cdfs.length());
+  }
+
+  @ParameterizedTest
+  @ValueSource(doubles = { 0.7, 1, 1.1 })
+  void testStrictlyMonotonousExp(double alpha) {
+    Distribution d1 = ExponentialDistribution.of(alpha);
+    Distribution d2 = HistogramDistribution.of(RandomVariate.of(d1, 1000));
+    Clip domain = Clips.positive(3);
+    Tensor samples = Subdivide.increasing(domain, 1234);
+    Tensor pdfs = samples.map(PDF.of(d2)::at);
+    assertTrue(pdfs.stream().map(Scalar.class::cast).allMatch(Sign::isPositive));
+    Tensor cdfs = samples.map(CDF.of(d2)::p_lessThan);
+    assertTrue(OrderedQ.of(cdfs));
+    assertEquals(cdfs.stream().distinct().count(), cdfs.length());
+    UnivariateDistribution ud = (UnivariateDistribution) d2;
+    assertEquals(ud.support().min(), RealScalar.ZERO);
   }
 
   @Test
@@ -102,6 +138,9 @@ class HistogramDistributionTest {
       set.add(scalar);
     }
     assertTrue(90 < set.size());
+    assertTrue(distribution.toString().startsWith("HistogramDistribution["));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.interval(Quantity.of(0.7, "m"), Quantity.of(4.2, "m")));
   }
 
   @Test

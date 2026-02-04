@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -16,7 +18,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class DotTest {
@@ -185,9 +186,9 @@ class DotTest {
     assertEquals(Dot.combine(Arrays.asList(1, 2, 3), Arrays.asList(3, 4, 5)), Arrays.asList(1, 2, 4, 5));
   }
 
-  @Test
-  void testComparison() {
-    Distribution distribution = NormalDistribution.standard();
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testComparison(Distribution distribution) {
     Tensor v = RandomVariate.of(distribution, 50);
     Tensor m1 = RandomVariate.of(distribution, 50, 3);
     Tensor m2 = RandomVariate.of(distribution, 3, 50);

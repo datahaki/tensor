@@ -2,12 +2,14 @@
 package ch.alpine.tensor.sca.ply;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -15,10 +17,12 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
@@ -68,6 +72,21 @@ class ClenshawChebyshevTest {
       result = result.add(coeffs.Get(k).multiply(Chebyshev.T.of(k).apply(x)));
     assertEquals(expect, result);
     ExactScalarQ.require(result);
+  }
+
+  @Test
+  void testCoeff0() {
+    ScalarUnaryOperator suo = ClenshawChebyshev.of(Tensors.vector(1));
+    Scalar z = RandomVariate.of(UniformDistribution.unit(20));
+    Tolerance.CHOP.requireClose(RealScalar.ONE, suo.apply(z));
+  }
+
+  @Test
+  void testCoeff1() {
+    ScalarUnaryOperator suo = ClenshawChebyshev.of(Tensors.vector(0, 1));
+    Scalar z = RandomVariate.of(UniformDistribution.unit(20));
+    assertInstanceOf(DecimalScalar.class, suo.apply(z));
+    Tolerance.CHOP.requireClose(z, suo.apply(z));
   }
 
   @Test

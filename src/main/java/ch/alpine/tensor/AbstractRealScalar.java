@@ -14,12 +14,22 @@ import ch.alpine.tensor.sca.exp.Log;
 public abstract class AbstractRealScalar extends AbstractScalar implements RealScalar {
   static final double LOG_LO = 0.75;
   static final double LOG_HI = 1.3;
-
   // ---
-  // methods in this section are final
+
   /** @return true if this scalar is zero, or strictly greater zero, false otherwise */
   protected final boolean isNonNegative() {
     return 0 <= signum();
+  }
+
+  // methods in this section are final
+  @Override // from Scalar
+  public final Scalar zero() {
+    return ZERO;
+  }
+
+  @Override // from Scalar
+  public final Scalar one() {
+    return ONE;
   }
 
   @Override // from AbsInterface
@@ -73,11 +83,6 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
     return isNonNegative() ? ZERO : Pi.VALUE;
   }
 
-  @Override // from ExpInterface
-  public Scalar exp() {
-    return DoubleScalar.of(Math.exp(number().doubleValue()));
-  }
-
   @Override // from LogInterface
   public Scalar log() {
     if (isNonNegative()) {
@@ -116,30 +121,9 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
    * and is a fallback option for {@link RationalScalar}
    * 
    * @return {@link ComplexScalar} if negative */
-  @Override // from SqrtInterface
-  public Scalar sqrt() {
+  protected Scalar _sqrt() {
     if (isNonNegative())
       return DoubleScalar.of(Math.sqrt(number().doubleValue()));
     return ComplexScalarImpl.of(zero(), DoubleScalar.of(Math.sqrt(-number().doubleValue())));
-  }
-
-  @Override // from TrigonometryInterface
-  public Scalar cos() {
-    return DoubleScalar.of(Math.cos(number().doubleValue()));
-  }
-
-  @Override // from TrigonometryInterface
-  public Scalar cosh() {
-    return DoubleScalar.of(Math.cosh(number().doubleValue()));
-  }
-
-  @Override // from TrigonometryInterface
-  public Scalar sin() {
-    return DoubleScalar.of(Math.sin(number().doubleValue()));
-  }
-
-  @Override // from TrigonometryInterface
-  public Scalar sinh() {
-    return DoubleScalar.of(Math.sinh(number().doubleValue()));
   }
 }

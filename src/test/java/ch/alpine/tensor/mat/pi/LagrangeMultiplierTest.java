@@ -30,7 +30,7 @@ class LagrangeMultiplierTest {
     Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
     Tensor rhs = RandomVariate.of(distribution, 3);
     LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), eqs);
-    HermitianMatrixQ.require(lagrangeMultiplier.matrix());
+    HermitianMatrixQ.INSTANCE.requireMember(lagrangeMultiplier.matrix());
     VectorQ.require(lagrangeMultiplier.b(target, rhs));
     Tensor sol1 = lagrangeMultiplier.usingCholesky(target, rhs);
     Tensor sol2 = lagrangeMultiplier.usingSvd(target, rhs);
@@ -51,7 +51,7 @@ class LagrangeMultiplierTest {
     Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
     Tensor rhs = RandomVariate.of(distribution, 3);
     LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), eqs);
-    HermitianMatrixQ.require(lagrangeMultiplier.matrix());
+    HermitianMatrixQ.INSTANCE.requireMember(lagrangeMultiplier.matrix());
     VectorQ.require(lagrangeMultiplier.b(target, rhs));
     assertThrows(Exception.class, () -> lagrangeMultiplier.usingCholesky(target, rhs));
     Tensor sol2 = lagrangeMultiplier.usingSvd(target, rhs);

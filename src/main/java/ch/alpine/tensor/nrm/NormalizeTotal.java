@@ -25,7 +25,7 @@ public enum NormalizeTotal implements TensorUnaryOperator {
   public Tensor apply(Tensor vector) {
     OptionalInt optionalInt = indeterminate(vector);
     return optionalInt.isPresent() //
-        ? UnitVector.of(vector.length(), optionalInt.getAsInt())
+        ? UnitVector.of(vector.length(), optionalInt.orElseThrow())
         : NORMALIZE.apply(vector);
   }
 

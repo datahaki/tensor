@@ -76,9 +76,9 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** red, orange, yellow */
   SOLAR,
   /** black, gray, white */
-  GRAYSCALE(StaticHelper.GRAYSCALE),
+  GRAYSCALE(LookupColorData.GRAYSCALE),
   /** Mathematica default in ArrayPlot */
-  GRAYSCALE_REVERSED(StaticHelper.GRAYSCALE_REVERSED),
+  GRAYSCALE_REVERSED(LookupColorData.GRAYSCALE_REVERSED),
   /** black, blue-gray, white */
   BONE,
   /** purple, blue, white */
@@ -103,7 +103,7 @@ public enum ColorDataGradients implements ColorDataGradient {
   ROSE,
   /** yellow, orange, red, magenta */
   NEON,
-  /** TODO TENSOR DOC */
+  /** orange, yellow, purple, red */
   FRUIT_PUNCH,
   /** dark-gray, dark-yellow, magenta */
   AURORA;

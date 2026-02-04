@@ -8,14 +8,16 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ext.Serialization;
 
 class QRSignOperatorsTest {
-  @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
-    for (QRSignOperator qrSignOperator : QRSignOperators.values())
-      Serialization.copy(qrSignOperator);
+  @ParameterizedTest
+  @EnumSource
+  void testSerializable(QRSignOperators qrSignOperators) throws ClassNotFoundException, IOException {
+    Serialization.copy(qrSignOperators);
   }
 
   @Test

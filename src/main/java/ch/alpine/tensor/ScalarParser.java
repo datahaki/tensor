@@ -61,7 +61,7 @@ import java.util.regex.Pattern;
       }
     }
     if (!plusMinus.isEmpty()) {
-      int first = plusMinus.get(0);
+      int first = plusMinus.getFirst();
       Scalar sum = first == 0 //
           ? RealScalar.ZERO
           : of(string.substring(0, first));

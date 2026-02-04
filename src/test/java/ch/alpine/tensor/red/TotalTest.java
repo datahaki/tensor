@@ -3,6 +3,7 @@ package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -29,8 +31,6 @@ class TotalTest {
     assertEquals(Total.of(d), Tensors.vectorLong(12, 8));
     Tensor e = Tensors.vectorLong(0, 2, 6);
     assertEquals(Total.of(e), DoubleScalar.of(2 + 6));
-    assertEquals(Total.of(Tensors.empty()), DoubleScalar.of(0));
-    assertEquals(DoubleScalar.of(0), Total.of(Tensors.empty()));
   }
 
   @Test
@@ -54,8 +54,7 @@ class TotalTest {
 
   @Test
   void testOfVectorEmpty() {
-    Scalar scalar = Total.ofVector(Tensors.empty());
-    assertEquals(scalar, RealScalar.ZERO);
+    assertTrue(Scalars.isZero((Scalar) Total.of(Tensors.empty())));
   }
 
   @Test

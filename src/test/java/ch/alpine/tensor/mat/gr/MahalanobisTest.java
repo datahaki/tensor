@@ -39,10 +39,9 @@ class MahalanobisTest {
     Tensor m1 = RandomVariate.of(distribution, n, r).map(s -> Quantity.of(s, "m"));
     Tensor m2 = RandomVariate.of(distribution, r, _m);
     Tensor design = m1.dot(m2);
-    // System.out.println(Pretty.of(design.map(Round._2)));
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     Mahalanobis mahalanobis = new Mahalanobis(design);
-    SymmetricMatrixQ.require(influenceMatrix.matrix());
+    SymmetricMatrixQ.INSTANCE.requireMember(influenceMatrix.matrix());
     influenceMatrix.image(RandomVariate.of(distribution, n));
     Chop._07.requireClose(influenceMatrix.leverages(), mahalanobis.leverages());
     Chop._07.requireClose(influenceMatrix.leverages_sqrt(), mahalanobis.leverages_sqrt());

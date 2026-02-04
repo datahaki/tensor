@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -14,6 +15,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.gam.Beta;
 import ch.alpine.tensor.sca.pow.Power;
 
@@ -43,6 +45,7 @@ public class FisherZDistribution implements Distribution, //
   private final Scalar m;
   private final Scalar scale;
   private final ScalarUnaryOperator power;
+  private final Distribution rvi;
 
   private FisherZDistribution(Scalar n, Scalar m) {
     this.n = n;
@@ -51,6 +54,7 @@ public class FisherZDistribution implements Distribution, //
     Scalar m_2 = m.multiply(RationalScalar.HALF);
     scale = Times.of(RealScalar.TWO, Power.of(n, n_2), Power.of(m, m_2)).divide(Beta.of(n_2, m_2));
     power = Power.function(n_2.add(m_2).negate());
+    rvi = FRatioDistribution.of(n, m);
   }
 
   @Override // from PDF
@@ -59,6 +63,11 @@ public class FisherZDistribution implements Distribution, //
     return Scalars.isZero(factor) //
         ? RealScalar.ZERO
         : Times.of(scale, Exp.FUNCTION.apply(n.multiply(x)), factor);
+  }
+
+  @Override // from Distribution
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return Log.FUNCTION.apply(rvi.randomVariate(randomGenerator)).multiply(RationalScalar.HALF);
   }
 
   @Override // from Object

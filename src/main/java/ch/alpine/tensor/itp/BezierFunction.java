@@ -21,6 +21,7 @@ import ch.alpine.tensor.ext.Integers;
  * <a href="https://reference.wolfram.com/language/ref/BezierFunction.html">BezierFunction</a>
  * 
  * @see BernsteinBasis */
+// TODO TENSOR it's dubious that sequence is public to the outside...
 public record BezierFunction(BinaryAverage binaryAverage, Tensor sequence) implements ScalarTensorFunction {
   /** De Casteljau's algorithm for the evaluation of Bezier curves, i.e. the splitting operation
    * is between two elements (not a weighted average between many). The binary split is provided

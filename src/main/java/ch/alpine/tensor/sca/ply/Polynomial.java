@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
@@ -21,8 +21,6 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.re.LinearSolve;
-import ch.alpine.tensor.qty.DateTime;
-import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Times;
@@ -117,10 +115,12 @@ public class Polynomial extends HornerScheme {
     return lastNonZero(coeffs);
   }
 
-  /** @return unit of domain
-   * @throws Exception if {@link #coeffs} has length 1 */
-  public Unit getUnitDomain() {
-    return StaticHelper.getDomainUnit(coeffs);
+  public Scalar getZeroDomain() {
+    Scalar a = coeffs.Get(0);
+    if (coeffs.length() == 1)
+      return a.one().zero();
+    Scalar b = coeffs.Get(1);
+    return Unprotect.zero_negateUnit(b).multiply(a.zero()); // a.zero() is required for DateTime
   }
 
   /** @return unit of values */
@@ -149,6 +149,11 @@ public class Polynomial extends HornerScheme {
    * {0.27[K^-1*bar], 0.0[K^-2*bar]}
    * in order to preserve the units of the domain.
    * 
+   * Another example is position is p == p0 + v * t + a * t^2
+   * {3[m], 2[m*s^-1], 1/2[m*s^-2]}
+   * then the derivative is
+   * {2[m*s^-1], 1[m*s^-2]}
+   * 
    * @return polynomial that is the derivative of this polynomial */
   public Polynomial derivative() {
     int length = coeffs.length();
@@ -157,25 +162,22 @@ public class Polynomial extends HornerScheme {
        * this ensures that the unit of the argument in the polynomial evaluation
        * is checked. */
       Scalar b = coeffs.Get(1);
-      Unit unit = getUnitDomain().negate(); // of domain
-      return of(Tensors.of(b, zero(b, unit)));
+      Scalar i = Unprotect.zero_negateUnit(getZeroDomain());
+      return of(Tensors.of(b, b.multiply(i)));
     }
-    return of(length == 1 //
-        ? Tensors.of(coeffs.Get(0).zero())
-        : Times.of(coeffs.extract(1, length), Range.of(1, length)));
+    if (length == 1)
+      return of(Tensors.of(coeffs.Get(0).zero()));
+    Scalar one = coeffs.Get(0).one();
+    return of(Times.of(coeffs.extract(1, length), Range.of(one, length - 1)));
   }
 
   /** @return polynomial that is an indefinite integral of this polynomial */
   public Polynomial antiderivative() {
     Scalar a = coeffs.Get(0);
-    if (a instanceof DateTime)
-      throw new Throw(coeffs);
     int length = coeffs.length();
+    Scalar zero = getZeroDomain();
     Tensor tensor = Tensors.reserve(length + 1);
-    Unit unit = coeffs.length() == 1 //
-        ? Unit.ONE
-        : getUnitDomain();
-    tensor.append(zero(a, unit));
+    tensor.append(a.multiply(zero));
     for (int index = 0; index < length; ++index)
       tensor.append(coeffs.Get(index).multiply(RationalScalar.of(1, index + 1)));
     return of(tensor);
@@ -191,21 +193,11 @@ public class Polynomial extends HornerScheme {
    * @throws Exception if given order is negative
    * @see #moment(int, Scalar, Scalar) */
   public Polynomial gain(int order) {
-    Unit unit = coeffs.length() == 1 //
-        ? Unit.ONE
-        : getUnitDomain();
+    Scalar zero = getZeroDomain();
     Tensor _coeffs = Join.of(Array.zeros(order), coeffs);
     for (int index = order; 0 < index; --index)
-      _coeffs.set(zero(_coeffs.Get(index), unit), index - 1);
+      _coeffs.set(_coeffs.Get(index).multiply(zero), index - 1);
     return of(_coeffs);
-  }
-
-  /** @param scalar
-   * @param unit
-   * @return scalar.zero() * Quantity(scalar.one(), unit) */
-  private static Scalar zero(Scalar scalar, Unit unit) {
-    // return scalar.zero().multiply(Quantity.of(scalar.one(), unit));
-    return Quantity.of(scalar.one().zero(), QuantityUnit.of(scalar).add(unit));
   }
 
   /** @param order non-negative
@@ -306,6 +298,6 @@ public class Polynomial extends HornerScheme {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("Polynomial", coeffs);
+    return MathematicaFormat.concise("Polynomial", coeffs.toString());
   }
 }

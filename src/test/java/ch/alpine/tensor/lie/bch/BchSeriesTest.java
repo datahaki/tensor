@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
 class BchSeriesTest {
-  private static final Distribution DISTRIBUTION = DiscreteUniformDistribution.of(-100, 101);
+  private final Distribution distribution = DiscreteUniformDistribution.of(-100, 101);
 
   @ParameterizedTest
   @EnumSource
@@ -27,8 +27,8 @@ class BchSeriesTest {
     BchSeries6 bchSeries6 = Serialization.copy(new BchSeries6(ad));
     BakerCampbellHausdorff bakerCampbellHausdorff = new BakerCampbellHausdorff(ad, 6, Chop.NONE);
     int n = ad.length();
-    Tensor x = RandomVariate.of(DISTRIBUTION, n);
-    Tensor y = RandomVariate.of(DISTRIBUTION, n);
+    Tensor x = RandomVariate.of(distribution, n);
+    Tensor y = RandomVariate.of(distribution, n);
     assertEquals(bchSeries6.series(x, y), bakerCampbellHausdorff.series(x, y));
   }
 
@@ -39,8 +39,8 @@ class BchSeriesTest {
     BchSeries8 bchSeries8 = new BchSeries8(ad);
     BakerCampbellHausdorff bakerCampbellHausdorff = new BakerCampbellHausdorff(ad, 8, Chop.NONE);
     int n = ad.length();
-    Tensor x = RandomVariate.of(DISTRIBUTION, n);
-    Tensor y = RandomVariate.of(DISTRIBUTION, n);
+    Tensor x = RandomVariate.of(distribution, n);
+    Tensor y = RandomVariate.of(distribution, n);
     assertEquals(bchSeries8.series(x, y), bakerCampbellHausdorff.series(x, y));
   }
 
@@ -49,8 +49,8 @@ class BchSeriesTest {
   void testQuad(ExAd exAd) {
     Tensor ad = exAd.ad();
     int n = ad.length();
-    Tensor x = RandomVariate.of(DISTRIBUTION, n);
-    Tensor y = RandomVariate.of(DISTRIBUTION, n);
+    Tensor x = RandomVariate.of(distribution, n);
+    Tensor y = RandomVariate.of(distribution, n);
     Tensor adx = ad.dot(x);
     Tensor ady = ad.dot(y);
     Tensor r1 = Dot.of(adx, ady, adx, y);

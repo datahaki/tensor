@@ -22,6 +22,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
@@ -57,6 +58,13 @@ class CauchyDistributionTest {
     assertEquals(Mean.of(distribution).toString(), "NaN");
     assertEquals(Variance.of(distribution).toString(), "NaN");
     assertEquals(StandardDeviation.of(distribution).toString(), "NaN");
+  }
+
+  @Test
+  void testQuantity() {
+    Distribution distribution = CauchyDistribution.of(Quantity.of(3, "s"), Quantity.of(3, "s"));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.absolute(Quantity.of(Double.POSITIVE_INFINITY, "s")));
   }
 
   @Test

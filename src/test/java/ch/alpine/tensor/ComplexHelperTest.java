@@ -8,12 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 
@@ -101,17 +102,15 @@ class ComplexHelperTest {
     assertThrows(Throw.class, () -> c.add(q));
   }
 
-  @Test
-  void testSqrt() {
-    Distribution distribution = NormalDistribution.standard();
-    for (int count = 0; count < 100; ++count) {
-      Scalar re = RandomVariate.of(distribution);
-      Scalar im = RandomVariate.of(distribution);
-      Scalar scalar = ComplexScalar.of(re, im);
-      Scalar ref = ComplexHelper.sqrtPolar(scalar);
-      Scalar cmp = ComplexHelper.sqrt(re, im);
-      Tolerance.CHOP.requireClose(ref, cmp);
-    }
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testSqrt(Distribution distribution) {
+    Scalar re = RandomVariate.of(distribution);
+    Scalar im = RandomVariate.of(distribution);
+    Scalar scalar = ComplexScalar.of(re, im);
+    Scalar ref = ComplexHelper.sqrtPolar(scalar);
+    Scalar cmp = ComplexHelper.sqrt(re, im);
+    Tolerance.CHOP.requireClose(ref, cmp);
   }
 
   @Test

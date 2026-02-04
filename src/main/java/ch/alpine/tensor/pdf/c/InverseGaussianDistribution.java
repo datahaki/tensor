@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -10,7 +11,11 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.erf.Erfc;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -46,8 +51,13 @@ public class InverseGaussianDistribution extends AbstractContinuousDistribution 
   }
 
   @Override
+  public Clip support() {
+    return Clips.positive(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(mu)));
+  }
+
+  @Override
   public Scalar at(Scalar x) {
-    Scalar d = x.subtract(mu);
+    Scalar d = x.subtract(mu); // unit compatibility check
     if (Sign.isPositive(x)) {
       Scalar exp = Times.of(d, d, lambda).divide(Times.of(x.add(x), mu, mu)).negate();
       return Exp.FUNCTION.apply(exp).multiply(Sqrt.FUNCTION.apply(lambda.divide(x))).divide(Sqrt.FUNCTION.apply(Pi.TWO).multiply(x));

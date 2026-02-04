@@ -47,7 +47,7 @@ class PolarDecompositionSvdTest {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
     PolarDecompositionSvd polarDecompositionSvd = Serialization.copy(PolarDecompositionSvd.up(matrix));
     Tensor q = polarDecompositionSvd.getUnitary();
-    OrthogonalMatrixQ.require(q);
+    OrthogonalMatrixQ.INSTANCE.requireMember(q);
     Tensor qe = Tensors.fromString("{{2, -1}, {1, 2}}").divide(Sqrt.FUNCTION.apply(RealScalar.of(5)));
     Tolerance.CHOP.requireClose(q, qe);
     Tensor s = polarDecompositionSvd.getPositiveSemidefinite();
@@ -65,7 +65,7 @@ class PolarDecompositionSvdTest {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
     PolarDecompositionSvd polarDecompositionSvd = PolarDecompositionSvd.pu(matrix);
     Tensor result = polarDecompositionSvd.getUnitary();
-    OrthogonalMatrixQ.require(Transpose.of(result));
+    OrthogonalMatrixQ.INSTANCE.requireMember(Transpose.of(result));
     assertEquals(Dimensions.of(result), Dimensions.of(matrix));
   }
 
@@ -73,7 +73,7 @@ class PolarDecompositionSvdTest {
   @ValueSource(ints = { 2, 3, 4 })
   void testMatrixExp(int d) {
     Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
-    OrthogonalMatrixQ.require(matrix);
+    OrthogonalMatrixQ.INSTANCE.requireMember(matrix);
     PolarDecompositionSvd polarDecompositionSvd = PolarDecompositionSvd.pu(matrix);
     Tolerance.CHOP.requireClose(matrix, polarDecompositionSvd.getUnitaryWithDetOne());
     Tolerance.CHOP.requireClose(matrix, polarDecompositionSvd.getUnitaryWithDetOne2());
@@ -96,8 +96,8 @@ class PolarDecompositionSvdTest {
     Tensor u1 = polarDecompositionSvd.getUnitaryWithDetOne();
     Tensor u2 = polarDecompositionSvd.getUnitaryWithDetOne2();
     Tolerance.CHOP.requireClose(u1, u2);
-    OrthogonalMatrixQ.require(u1);
-    OrthogonalMatrixQ.require(Transpose.of(u1));
-    UnitaryMatrixQ.require(u1);
+    OrthogonalMatrixQ.INSTANCE.requireMember(u1);
+    OrthogonalMatrixQ.INSTANCE.requireMember(Transpose.of(u1));
+    UnitaryMatrixQ.INSTANCE.requireMember(u1);
   }
 }

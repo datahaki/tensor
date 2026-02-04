@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
-import java.io.Serializable;
+import java.util.OptionalInt;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RationalScalar;
@@ -10,28 +10,31 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.MeanInterface;
-import ch.alpine.tensor.pdf.PDF;
-import ch.alpine.tensor.pdf.RandomVariateInterface;
-import ch.alpine.tensor.pdf.VarianceInterface;
-import ch.alpine.tensor.sca.exp.Exp;
-import ch.alpine.tensor.sca.exp.Log;
-import ch.alpine.tensor.sca.gam.LogGamma;
-import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.pdf.RandomVariate;
 
 /** Quote: "If x has the standard N(0, 1) distribution, then x^2 has a chi-squared distribution."
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ChiSquareDistribution.html">ChiSquareDistribution</a> */
-public class ChiSquareDistribution implements Distribution, //
-    PDF, RandomVariateInterface, MeanInterface, VarianceInterface, Serializable {
+public class ChiSquareDistribution extends GammaDistribution {
+  private static final Scalar TWO = RealScalar.TWO;
+  private static final int LIMIT = 10;
+
   /** @param nu positive real
    * @return
    * @throws Exception if nu is not positive or not an instance of {@link RealScalar} */
   public static Distribution of(Scalar nu) {
-    if (Scalars.lessThan(RealScalar.ZERO, nu))
-      return new ChiSquareDistribution(nu);
+    if (Scalars.lessThan(RealScalar.ZERO, nu)) {
+      OptionalInt optionalInt = Scalars.optionalInt(nu);
+      if (optionalInt.isPresent()) {
+        int n = optionalInt.orElseThrow();
+        if (n <= LIMIT)
+          return new ChiSquareDistribution(n);
+      }
+      return GammaDistribution.of(nu.divide(TWO), TWO);
+    }
     throw new Throw(nu);
   }
 
@@ -42,42 +45,22 @@ public class ChiSquareDistribution implements Distribution, //
   }
 
   // ---
-  private final Scalar nu;
-  private final Scalar nu2;
-  private final Scalar log;
+  private final int n;
 
-  private ChiSquareDistribution(Scalar nu) {
-    this.nu = nu;
-    nu2 = nu.multiply(RationalScalar.HALF);
-    log = Log.FUNCTION.apply(RealScalar.TWO).multiply(nu2).add(LogGamma.FUNCTION.apply(nu2));
-  }
-
-  @Override // from PDF
-  public Scalar at(Scalar x) {
-    if (Scalars.lessThan(RealScalar.ZERO, x))
-      return Exp.FUNCTION.apply(log.add(x.multiply(RationalScalar.HALF)).negate()) //
-          .multiply(Power.of(x, nu2.subtract(RealScalar.ONE)));
-    return RealScalar.ZERO;
+  private ChiSquareDistribution(int n) {
+    super(RationalScalar.of(n, 2), TWO);
+    this.n = n;
   }
 
   // CDF requires GammaRegularized
-  @Override // from RandomVariateInterface
+  @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override // from MeanInterface
-  public Scalar mean() {
-    return nu;
-  }
-
-  @Override // from VarianceInterface
-  public Scalar variance() {
-    return nu.add(nu);
+    return Vector2NormSquared.of(RandomVariate.stream(NormalDistribution.standard(), randomGenerator) //
+        .limit(n));
   }
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("ChiSquareDistribution", nu);
+    return MathematicaFormat.concise("ChiSquareDistribution", n);
   }
 }

@@ -49,6 +49,11 @@ public enum Fourier implements DiscreteFourierTransform {
       return Tensors.matrix((i, j) -> //
       ComplexScalar.unit(RationalScalar.of(i * j, n).multiply(Pi.TWO)).multiply(scalar), n, n);
     }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return INVERSE;
+    }
   },
   INVERSE {
     @Override
@@ -59,6 +64,11 @@ public enum Fourier implements DiscreteFourierTransform {
     @Override
     public Tensor matrix(int n) {
       return ConjugateTranspose.of(FORWARD.matrix(n));
+    }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return FORWARD;
     }
   };
 

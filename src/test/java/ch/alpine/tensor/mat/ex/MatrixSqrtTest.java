@@ -9,6 +9,8 @@ import java.util.Random;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -19,6 +21,7 @@ import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -76,27 +79,35 @@ class MatrixSqrtTest {
     }
   }
 
-  @Test
-  void testRandomSymmetric() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 4 })
+  void testRandomSymmetric(int n) {
     Random random = new Random(1);
-    for (int n = 1; n < 5; ++n) {
-      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.of(0, 0.2), random, n, n));
-      Tensor x2 = x.dot(x);
-      _check(x2, MatrixSqrt.of(x2));
-      _check(x2, MatrixSqrt.ofSymmetric(x2));
-    }
+    Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.of(0, 0.2), random, n, n));
+    Tensor x2 = x.dot(x);
+    _check(x2, MatrixSqrt.of(x2));
+    _check(x2, MatrixSqrt.ofSymmetric(x2));
   }
 
-  @Test
-  void testRandomSymmetricQuantity() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 4 })
+  void testRandomSymmetricQuantity(int n) {
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(0.2, "m"));
     Random random = new Random(1);
-    for (int n = 1; n < 5; ++n) {
-      Tensor matrix = RandomVariate.of(distribution, random, n, n);
-      Tensor x = Symmetrize.of(matrix);
-      Tensor x2 = x.dot(x);
-      _check(x2, MatrixSqrt.ofSymmetric(x2));
-    }
+    Tensor matrix = RandomVariate.of(distribution, random, n, n);
+    Tensor x = Symmetrize.of(matrix);
+    Tensor x2 = x.dot(x);
+    _check(x2, MatrixSqrt.ofSymmetric(x2));
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 4 })
+  void testRandomDecimal(int n) {
+    Random random = new Random(1);
+    Tensor prelim = RandomVariate.of(UniformDistribution.unit(20), random, n, n);
+    Tensor matrix = MatrixDotTranspose.of(prelim, prelim);
+    MatrixSqrt matrixSqrt = MatrixSqrt.ofSymmetric(matrix);
+    _check(matrix, matrixSqrt);
   }
 
   @Test
@@ -139,9 +150,9 @@ class MatrixSqrtTest {
   @Test
   void testComplexFail() {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
-    SymmetricMatrixQ.require(matrix);
-    MatrixSqrt.of(matrix);
-    assertThrows(ClassCastException.class, () -> MatrixSqrt.ofSymmetric(matrix));
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    _check(matrix, MatrixSqrt.of(matrix));
+    _check(matrix, MatrixSqrt.ofSymmetric(matrix));
   }
 
   @Test

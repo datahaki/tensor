@@ -35,7 +35,7 @@ public enum MapThread {
       throw new Throw(list.toArray(Object[]::new));
     return list.isEmpty() //
         ? Tensors.empty()
-        : Tensor.of(IntStream.range(0, list.get(0).length()) //
+        : Tensor.of(IntStream.range(0, list.getFirst().length()) //
             .mapToObj(index -> of(function, extract(index, list), level - 1)));
   }
 

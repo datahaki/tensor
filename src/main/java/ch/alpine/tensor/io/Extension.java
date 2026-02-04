@@ -50,20 +50,12 @@ import java.awt.image.BufferedImage;
     return valueOf(string.toUpperCase());
   }
 
-  // TODO TENSOR API
-  public int imageType() {
+  /** @return */
+  public int colorType() {
     return switch (this) {
-    case BMP, JPG, JPEG -> BufferedImage.TYPE_INT_BGR;
+    case BMP, JPG, JPEG -> BufferedImage.TYPE_3BYTE_BGR;
     case GIF, PNG, TIF, TIFF -> BufferedImage.TYPE_INT_ARGB;
     default -> throw new IllegalArgumentException("Unexpected value: " + this);
-    };
-  }
-
-  public static int imageType(String extension) {
-    return switch (extension) {
-    case "BMP", "JPG", "JPEG" -> BufferedImage.TYPE_INT_BGR;
-    case "GIF", "PNG", "TIF", "TIFF" -> BufferedImage.TYPE_INT_ARGB;
-    default -> throw new IllegalArgumentException("Unexpected value: " + extension);
     };
   }
 }

@@ -7,7 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ArgInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.lie.Quaternion;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.qty.Quantity;
 
 /** Arg is consistent with Mathematica for {@link RealScalar}, {@link ComplexScalar},

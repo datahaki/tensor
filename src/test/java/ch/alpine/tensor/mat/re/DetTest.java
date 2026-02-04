@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigInteger;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -225,8 +226,8 @@ class DetTest {
   void testGaussScalar() {
     int n = 7;
     int prime = 7879;
-    Random random = new Random();
-    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, n);
+    Random random = ThreadLocalRandom.current();
+    Tensor matrix = Tensors.matrix((_, _) -> GaussScalar.of(random.nextInt(), prime), n, n);
     assertInstanceOf(GaussScalar.class, Det.of(matrix));
   }
 
@@ -268,8 +269,7 @@ class DetTest {
     Tensor mat = Tensors.of(ve1, ve2);
     Scalar det = Det.of(mat);
     assertEquals(det, Quantity.of(0, "m^2*rad^2"));
-    // System.out.println(det);
-    // System.out.println(Pretty.of(mat));
+    ExactScalarQ.require(det);
   }
 
   @Test

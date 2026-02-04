@@ -13,11 +13,9 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.ExpInterface;
 import ch.alpine.tensor.sca.exp.LogInterface;
 import ch.alpine.tensor.sca.pow.PowerInterface;
-import ch.alpine.tensor.sca.pow.SqrtInterface;
 import ch.alpine.tensor.sca.tri.ArcTanInterface;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Sin;
-import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** complex number
  * 
@@ -26,8 +24,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * <p>interface {@link Comparable} is not implemented */
 public interface ComplexScalar extends Scalar, //
     AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, //
-    ExpInterface, LogInterface, PowerInterface, SignInterface, //
-    SqrtInterface, TrigonometryInterface {
+    ExpInterface, LogInterface, PowerInterface, SignInterface {
   /** complex number I == 0+1*I */
   Scalar I = of(0, 1);
 

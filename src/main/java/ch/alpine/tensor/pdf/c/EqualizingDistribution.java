@@ -12,6 +12,7 @@ import ch.alpine.tensor.itp.LinearBinaryAverage;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
@@ -33,6 +34,12 @@ public class EqualizingDistribution extends AbstractContinuousDistribution imple
     categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
   }
 
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    Clip clip = categoricalDistribution.support();
+    return Clips.interval(clip.min(), clip.max().add(RealScalar.ONE));
+  }
+
   @Override // from PDF
   public Scalar at(Scalar x) {
     return categoricalDistribution.at(Floor.FUNCTION.apply(x));
@@ -50,6 +57,7 @@ public class EqualizingDistribution extends AbstractContinuousDistribution imple
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
+    // TODO use new ClipsBijection(null, null);
     Scalar xlo = Floor.FUNCTION.apply(x);
     Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(x);
     return (Scalar) LinearBinaryAverage.INSTANCE.split( //

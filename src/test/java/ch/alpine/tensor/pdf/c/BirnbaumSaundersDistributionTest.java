@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,9 +20,11 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 class BirnbaumSaundersDistributionTest {
@@ -46,6 +49,15 @@ class BirnbaumSaundersDistributionTest {
     Tolerance.CHOP.requireClose( //
         StandardDeviation.of(distribution), //
         Sqrt.FUNCTION.apply(Variance.of(distribution)));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Double.POSITIVE_INFINITY));
+  }
+
+  @Test
+  void testMean() throws ClassNotFoundException, IOException {
+    Distribution distribution = Serialization.copy(BirnbaumSaundersDistribution.standard());
+    assertEquals(Mean.of(distribution), RealScalar.ONE);
+    assertEquals(Variance.of(distribution), RealScalar.ONE);
   }
 
   @Test

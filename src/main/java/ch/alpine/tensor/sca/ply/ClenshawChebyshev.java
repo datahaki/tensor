@@ -8,20 +8,12 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 
-/** Evaluates the series of Chebyshev polynomials Ti at argument x/2.
+/** Evaluates the series of Chebyshev polynomials T_i at argument x.
  * The series is given by
- * <pre>
- * N-1
- * - '
- * y = > coef[i] T (x/2)
- * - i
- * i=0
- * </pre>
- * Coefficients are stored in reverse order, i.e. the zero
- * order term is last in the array. Note N is the number of
- * coefficients, not the order.
+ * y = sum_i=0...N-1 coeffs[i] T_i(x)
  * <p>
  * If coefficients are for the interval a to b, x must
  * have been transformed to x -> 2(2x - b - a)/(b-a) before
@@ -32,8 +24,6 @@ import ch.alpine.tensor.sca.Clip;
  * which (a, b) is mapped to (1/b, 1/a), the transformation
  * required is x -> 2(2ab/x - b - a)/(b-a). If b is infinity,
  * this becomes x -> 4a/x - 1.
- * <p>
- * SPEED:
  * <p>
  * Taking advantage of the recurrence properties of the
  * Chebyshev polynomials, the routine requires one more
@@ -53,7 +43,7 @@ public class ClenshawChebyshev implements ScalarUnaryOperator {
    * @param coeffs vector coefficients of the polynomial
    * @return */
   public static ScalarUnaryOperator of(Tensor coeffs) {
-    return new ClenshawChebyshev(ScalarUnaryOperator.IDENTITY, coeffs);
+    return new ClenshawChebyshev(s -> s, coeffs);
   }
 
   public static ScalarUnaryOperator forward(Clip clip, Tensor coef) {
@@ -72,6 +62,7 @@ public class ClenshawChebyshev implements ScalarUnaryOperator {
 
   // ---
   private final ScalarUnaryOperator suo;
+  /** coeffs in reversed order */
   private final Scalar[] a;
 
   private ClenshawChebyshev(ScalarUnaryOperator suo, Tensor coeffs) {
@@ -83,15 +74,19 @@ public class ClenshawChebyshev implements ScalarUnaryOperator {
   public Scalar apply(Scalar _x) {
     Scalar x1 = suo.apply(_x);
     Scalar x2 = x1.add(x1);
-    int k = 0;
-    Scalar bk0 = a[k++];
+    int k = -1;
+    Scalar bk0 = a[++k];
+    Scalar bk1 = bk0.zero();
     Scalar bk2 = bk0.zero();
-    Scalar bk1 = bk2;
-    for (; k < a.length; ++k) {
+    while (k < a.length - 1) {
       bk2 = bk1;
       bk1 = bk0;
-      bk0 = x2.multiply(bk1).subtract(bk2).add(a[k]);
+      bk0 = x2.multiply(bk1).subtract(bk2).add(a[++k]);
     }
-    return bk0.subtract(bk2).add(a[--k]).multiply(RationalScalar.HALF);
+    // TODO TENSOR non permanent
+    Scalar r1 = bk0.subtract(bk2).add(a[k]).multiply(RationalScalar.HALF);
+    Scalar r2 = x1.multiply(bk1).subtract(bk2).add(a[k]);
+    Chop._08.requireClose(r1, r2);
+    return r1;
   }
 }

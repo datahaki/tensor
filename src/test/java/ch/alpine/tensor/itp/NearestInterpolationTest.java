@@ -14,6 +14,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import test.InterpolationQ;
 
 class NearestInterpolationTest {
   @Test
@@ -37,18 +38,14 @@ class NearestInterpolationTest {
   @Test
   void test1D() {
     Interpolation interpolation = NearestInterpolation.of(Tensors.vector(10, 20, 30, 40));
-    TestHelper.checkMatch(interpolation);
-    TestHelper.checkMatchExact(interpolation);
-    TestHelper.getScalarFail(interpolation);
+    new InterpolationQ(interpolation).checkAll();
   }
 
   @Test
   void test2D() {
     Distribution distribution = UniformDistribution.unit();
     Interpolation interpolation = NearestInterpolation.of(RandomVariate.of(distribution, 3, 5));
-    TestHelper.checkMatch(interpolation);
-    TestHelper.checkMatchExact(interpolation);
-    TestHelper.getScalarFail(interpolation);
+    new InterpolationQ(interpolation).checkAll();
   }
 
   @Test

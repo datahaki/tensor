@@ -114,9 +114,7 @@ public enum Unprotect {
    * @param scalar
    * @return */
   public static Scalar zero_negateUnit(Scalar scalar) {
-    return scalar instanceof Quantity quantity //
-        ? Quantity.of(quantity.value().zero(), quantity.unit().negate())
-        : scalar.zero();
+    return negateUnit(scalar.zero());
   }
 
   // ---

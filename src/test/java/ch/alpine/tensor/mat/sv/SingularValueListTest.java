@@ -24,7 +24,7 @@ class SingularValueListTest {
     Distribution distribution = UniformDistribution.of(-1, 1);
     Tensor x = RandomVariate.of(distribution, 3, 4);
     Tensor matrix = MatrixDotTranspose.of(x, x);
-    Tensor values1 = Eigensystem.ofSymmetric(matrix).values();
+    Tensor values1 = Eigensystem.ofSymmetric(matrix).decreasing().values();
     Tensor values2 = SingularValueList.of(matrix);
     Tolerance.CHOP.requireClose(values1, values2);
     OrderedQ.require(Reverse.of(values2));

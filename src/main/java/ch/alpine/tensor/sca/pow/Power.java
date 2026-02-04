@@ -3,10 +3,12 @@ package ch.alpine.tensor.sca.pow;
 
 import java.math.BigInteger;
 import java.util.Objects;
+import java.util.Optional;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
@@ -68,7 +70,8 @@ public enum Power {
    * @return function that maps a scalar to scalar ^ exponent */
   public static ScalarUnaryOperator function(Scalar exponent) {
     if (exponent.equals(RealScalar.ONE))
-      return ScalarUnaryOperator.IDENTITY;
+      return s -> s;
+    // TODO TENSOR exponents of the form 1/4, etc. could also be valid
     if (exponent instanceof RationalScalar rationalScalar && //
         rationalScalar.denominator().equals(TWO))
       return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rationalScalar.numerator()));
@@ -89,6 +92,9 @@ public enum Power {
   private static Scalar evaluate(Scalar scalar, Scalar exponent) {
     if (scalar instanceof PowerInterface powerInterface)
       return powerInterface.power(exponent);
+    Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
+    if (optional.isPresent())
+      return Scalars.mul().raise(scalar, optional.orElseThrow());
     throw new Throw(scalar, exponent);
   }
 }

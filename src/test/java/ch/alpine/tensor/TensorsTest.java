@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.random.RandomGenerator;
 
@@ -61,12 +61,12 @@ class TensorsTest {
   void testNorm5() {
     int n = 6;
     int m = 12;
-    RandomGenerator random = new Random();
-    Tensor A = Tensors.matrix((i, j) -> //
+    RandomGenerator random = ThreadLocalRandom.current();
+    Tensor A = Tensors.matrix((_, _) -> //
     RationalScalar.of( //
         random.nextInt(100) - 50, //
         random.nextInt(100) + 1), n, m);
-    Tensor c = Tensors.vector(i -> RationalScalar.of(1, 1), n);
+    Tensor c = Tensors.vector(_ -> RationalScalar.of(1, 1), n);
     assertEquals(Total.of(A), c.dot(A));
   }
 

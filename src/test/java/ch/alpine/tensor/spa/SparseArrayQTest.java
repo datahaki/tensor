@@ -61,7 +61,7 @@ class SparseArrayQTest {
   @Test
   void testUnit() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}").map(s -> Quantity.of(s, "m"));
-    SparseArray sparse = (SparseArray) TestHelper.of(tensor);
+    SparseArray sparse = (SparseArray) TensorToSparseArray.of(tensor);
     assertEquals(sparse.fallback(), Quantity.of(0, "m"));
   }
 

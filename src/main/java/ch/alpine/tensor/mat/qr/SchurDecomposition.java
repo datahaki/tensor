@@ -3,6 +3,8 @@
 package ch.alpine.tensor.mat.qr;
 
 import java.io.Serializable;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -10,16 +12,24 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Dot;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ev.Eigensystem;
+import ch.alpine.tensor.mat.ex.MatrixExp;
+import ch.alpine.tensor.mat.ex.MatrixLog;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** Quote from SchurTransformer:
@@ -35,8 +45,8 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SchurDecomposition.html">SchurDecomposition</a> */
 public class SchurDecomposition implements Serializable {
-  /** Maximum allowed iterations for convergence of the transformation. */
-  private static final int MAX_ITERATIONS = 100;
+  public static final ThreadLocal<Integer> MAX_ITERATIONS = ThreadLocal.withInitial(() -> 100);
+  // ---
   private static final Scalar EPSILON = RealScalar.of(1 - Math.nextDown(1.0));
   private static final Chop CHOP = Chop.below(Math.nextUp(1 - Math.nextDown(1.0)));
 
@@ -63,6 +73,7 @@ public class SchurDecomposition implements Serializable {
     // Outer loop over eigenvalue index
     int iteration = 0;
     int iu = n - 1;
+    int max = SchurDecomposition.MAX_ITERATIONS.get();
     while (0 <= iu) {
       // Look for single small sub-diagonal element
       final int il = findSmallSubDiagonalElement(iu, norm);
@@ -115,9 +126,9 @@ public class SchurDecomposition implements Serializable {
       } else {
         // No convergence yet
         computeShift(il, iu, iteration, shift);
-        // stop transformation after too many iterations
+        /* Maximum allowed iterations for convergence of the transformation. */
         ++iteration;
-        if (MAX_ITERATIONS < iteration)
+        if (max < iteration)
           throw new Throw();
         // the initial houseHolder vector for the QR step
         final Scalar[] hVec = new Scalar[3]; // {RealScalar.ZERO,RealScalar.ZERO,RealScalar.ZERO};
@@ -308,6 +319,47 @@ public class SchurDecomposition implements Serializable {
    * the latter of which are 2x2 rotation matrices */
   public Tensor getT() {
     return Tensors.matrix(hmt);
+  }
+
+  public boolean isUpperTriangular() {
+    return IntStream.range(1, hmt.length) //
+        .allMatch(k -> Tolerance.CHOP.isZero(hmt[k][k - 1]));
+  }
+
+  /** code inspired by gemini
+   * 
+   * @param suo
+   * @return */
+  private Optional<Tensor> parlett(ScalarUnaryOperator suo) {
+    if (!isUpperTriangular())
+      return Optional.empty();
+    Tensor u = getT();
+    Tensor r = u.map(Scalar::zero);
+    int n = u.length();
+    for (int i = 0; i < n; ++i)
+      r.set(suo.apply(u.Get(i, i)), i, i);
+    for (int a = 1; a < n; ++a) // off diagonal
+      for (int i = 0; i < n - a; ++i) { // along side diagonal
+        int j = a + i;
+        Scalar div = u.Get(i, i).subtract(u.Get(j, j));
+        if (Tolerance.CHOP.isZero(div))
+          return Optional.empty();
+        Scalar sum = r.Get(i, i).subtract(r.Get(j, j)).multiply(u.Get(i, j));
+        for (int k = i + 1; k < j; ++k)
+          sum = sum.add(r.Get(i, k).multiply(u.Get(k, j)).subtract(u.Get(i, k).multiply(r.Get(k, j))));
+        r.set(sum.divide(div), i, j);
+      }
+    return Optional.of(r);
+  }
+
+  public Tensor exp() {
+    Tensor p = getUnitary();
+    return Dot.of(p, parlett(Exp.FUNCTION).orElseGet(() -> MatrixExp.of(getT())), ConjugateTranspose.of(p));
+  }
+
+  public Tensor log() {
+    Tensor p = getUnitary();
+    return Dot.of(p, parlett(Log.FUNCTION).orElseGet(() -> MatrixLog.of(getT())), ConjugateTranspose.of(p));
   }
 
   @Override

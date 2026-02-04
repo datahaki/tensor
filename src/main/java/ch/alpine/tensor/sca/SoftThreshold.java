@@ -4,6 +4,7 @@ package ch.alpine.tensor.sca;
 
 import java.util.Objects;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
@@ -23,6 +24,14 @@ import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
 public class SoftThreshold implements ScalarUnaryOperator {
   /** @param clip
    * @return */
+  public static ScalarUnaryOperator of(Scalar radius) {
+    return of(Clips.absolute(radius));
+  }
+
+  public static ScalarUnaryOperator of(Number radius) {
+    return of(RealScalar.of(radius));
+  }
+
   public static ScalarUnaryOperator of(Clip clip) {
     return new SoftThreshold(Objects.requireNonNull(clip));
   }

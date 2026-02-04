@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.d;
 
 import java.math.BigInteger;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -11,6 +12,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.pow.Power;
 
@@ -50,9 +52,9 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution {
     build(Chop._14);
   }
 
-  @Override // from DiscreteDistribution
-  public BigInteger lowerBound() {
-    return BigInteger.valueOf(n);
+  @Override
+  public Clip support() {
+    return Clips.interval(RealScalar.of(n), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Override // from MeanInterface

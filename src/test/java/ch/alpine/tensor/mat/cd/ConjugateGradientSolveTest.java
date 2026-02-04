@@ -62,8 +62,8 @@ class ConjugateGradientSolveTest {
     Tensor matrix = Tensors.fromString("{{10[m^2], 1[m*kg]}, {1[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     Tensor b = Tensors.fromString("{4[m], 3[kg]}");
-    // Tensor x =
-    CholeskyDecomposition.of(matrix).solve(b);
+    Tensor x = CholeskyDecompositionWrap.of(matrix).solve(b);
+    assertEquals(x, Tensors.fromString("{37/99[m^-1], 26/99[kg^-1]}"));
     // Tensor x2 = ConjugateGradientSolve.of(matrix, b);
     // ExactTensorQ.require(x2);
     // assertEquals(x, x2);
@@ -74,7 +74,7 @@ class ConjugateGradientSolveTest {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     Tensor b = Tensors.fromString("{4[m], 3[kg]}");
-    Tensor x = CholeskyDecomposition.of(matrix).solve(b);
+    Tensor x = CholeskyDecompositionWrap.of(matrix).solve(b);
     assertEquals(matrix.dot(x), b);
     Tensor x1 = LinearSolve.of(matrix, b);
     assertEquals(x, x1);
@@ -88,7 +88,7 @@ class ConjugateGradientSolveTest {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     Tensor b = Tensors.fromString("{2+I/5[m], 3-I[kg]}");
-    Tensor x = CholeskyDecomposition.of(matrix).solve(b);
+    Tensor x = CholeskyDecompositionWrap.of(matrix).solve(b);
     Tensor x1 = LinearSolve.of(matrix, b);
     assertEquals(x, x1);
     // Tensor x2 = ConjugateGradientSolve.of(matrix, b);

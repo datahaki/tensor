@@ -11,9 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 class AnimatedGifWriterTest {
+  @TempDir
+  File tempDir;
+
   @Test
-  void testColor(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.gif");
+  void testColor() throws IOException {
+    File file = File.createTempFile("file", ".gif", tempDir);
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
@@ -27,8 +30,8 @@ class AnimatedGifWriterTest {
   }
 
   @Test
-  void testColorNonLoop(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.gif");
+  void testColorNonLoop() throws IOException {
+    File file = File.createTempFile("file", ".gif", tempDir);
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, false)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
@@ -42,8 +45,8 @@ class AnimatedGifWriterTest {
   }
 
   @Test
-  void testGray(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.gif");
+  void testGray() throws IOException {
+    File file = File.createTempFile("file", ".gif", tempDir);
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
@@ -52,9 +55,9 @@ class AnimatedGifWriterTest {
   }
 
   @Test
-  void testEmpty(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.gif");
-    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
+  void testEmpty() throws IOException {
+    File file = File.createTempFile("file", ".gif", tempDir);
+    try (AnimatedGifWriter _ = AnimatedGifWriter.of(file, 100, true)) {
       // ---
     }
     assertTrue(file.isFile());

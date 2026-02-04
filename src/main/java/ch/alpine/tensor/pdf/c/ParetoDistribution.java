@@ -10,6 +10,8 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 
@@ -41,6 +43,11 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
     this.k = k;
     this.alpha = alpha;
     k_alpha = Power.of(k, alpha);
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.positive(DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Override // from CDF

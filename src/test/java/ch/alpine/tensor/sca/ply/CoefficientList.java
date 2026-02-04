@@ -1,16 +1,9 @@
 // code by jph
 package ch.alpine.tensor.sca.ply;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.FoldList;
-import ch.alpine.tensor.alg.Reverse;
-import ch.alpine.tensor.lie.TensorProduct;
-import ch.alpine.tensor.red.Times;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CoefficientList.html">CoefficientList</a> */
@@ -24,18 +17,15 @@ import ch.alpine.tensor.red.Times;
    * @param roots vector of length 1, 2, or 3
    * @return coefficients of polynomial */
   public static Tensor of(Tensor roots) {
-    Scalar first = roots.Get(0);
-    Tensor box = roots.stream() //
-        .map(CoefficientList::linear) //
-        .reduce(TensorProduct::of) //
-        .orElseThrow();
-    Tensor coeffs = Reverse.of(FoldList.of(Times::of, roots.map(Scalar::zero))).append(first.one().zero());
-    Array.stream(Dimensions.of(box)) //
-        .forEach(list -> coeffs.set(box.get(list)::add, list.stream().mapToInt(i -> i).sum()));
-    return coeffs;
+    return polynomial(roots).coeffs();
   }
 
-  private static Tensor linear(Tensor scalar) {
-    return Tensors.of(scalar.negate(), RealScalar.ONE);
+  public static Polynomial polynomial(Tensor roots) {
+    return roots.stream() //
+        .map(Scalar.class::cast) //
+        .map(zero -> Tensors.of(zero.negate(), zero.one())) //
+        .map(Polynomial::of) //
+        .reduce(Polynomial::times) //
+        .orElseThrow();
   }
 }

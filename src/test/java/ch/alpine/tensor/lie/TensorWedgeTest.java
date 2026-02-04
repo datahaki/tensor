@@ -6,17 +6,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.lie.rot.Cross;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.re.MatrixRank;
+import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.c.NormalDistribution;
 
 class TensorWedgeTest {
   @Test
@@ -50,11 +53,12 @@ class TensorWedgeTest {
     assertEquals(xyz.get(2, 0), Tensors.vector(0, 2, 0));
   }
 
-  @Test
-  void testAntisymmetric() {
-    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 4);
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testAntisymmetric(Distribution distribution) {
+    Tensor matrix = RandomVariate.of(distribution, 4, 4);
     Tensor skewsy = TensorWedge.of(matrix);
-    assertTrue(AntisymmetricMatrixQ.of(skewsy));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(skewsy));
     assertEquals(MatrixRank.of(matrix), 4);
   }
 
@@ -65,9 +69,10 @@ class TensorWedgeTest {
     assertEquals(wedged, Tensors.fromString("{{0, 1}, {-1, 0}}"));
   }
 
-  @Test
-  void testVector() {
-    Tensor vector = RandomVariate.of(NormalDistribution.standard(), 10);
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testVector(Distribution distribution) {
+    Tensor vector = RandomVariate.of(distribution, 10);
     Tensor skewsy = TensorWedge.of(vector);
     assertEquals(vector, skewsy);
   }
@@ -91,14 +96,14 @@ class TensorWedgeTest {
     Tensor xy = TensorWedge.of(x, y);
     Tensor expected = Tensors.fromString("{{0, -1, -2}, {1, 0, -1}, {2, 1, 0}}"); // mathematica
     assertEquals(xy, expected);
-    assertTrue(AntisymmetricMatrixQ.of(xy));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(xy));
   }
 
   @Test
   void testCross() {
     Tensor vector = Tensors.vector(2, 3, 4);
     Tensor matrix = Cross.skew3(vector);
-    assertTrue(AntisymmetricMatrixQ.of(matrix));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(matrix));
     assertEquals(matrix, TensorWedge.of(matrix));
   }
 

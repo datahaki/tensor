@@ -4,12 +4,12 @@ package ch.alpine.tensor.opt.nd;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.ext.Integers;
 
 /** Density-based spatial clustering of applications with noise
@@ -34,8 +34,8 @@ public enum Dbscan {
   public static Integer[] of(Tensor points, Function<Tensor, NdCenterInterface> function, Scalar radius, int minPts) {
     Integers.requirePositive(minPts);
     NdMap<Integer> ndMap = NdTreeMap.of(CoordinateBounds.of(points));
-    AtomicInteger atomicInteger = new AtomicInteger();
-    points.forEach(point -> ndMap.insert(point, atomicInteger.getAndIncrement()));
+    Int i = new Int();
+    points.forEach(point -> ndMap.insert(point, i.getAndIncrement()));
     // ---
     Integer[] labels = new Integer[points.length()];
     int index = 0;

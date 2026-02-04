@@ -2,8 +2,8 @@
 package ch.alpine.tensor.img;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -19,10 +19,7 @@ import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.itp.MappedInterpolation;
 import ch.alpine.tensor.sca.Round;
 
-/** the general implementation {@link ImageResize#of(Tensor, Scalar)} uses
- * {@link Image#SCALE_AREA_AVERAGING} with emphasis on quality.
- * 
- * <p>inspired by
+/** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ImageResize.html">ImageResize</a>
  * 
  * @see MappedInterpolation */
@@ -37,26 +34,30 @@ public enum ImageResize {
    * the function is particularly suitable for down-sizing a given image to a smaller
    * resolution. The implementation uses the SCALE_AREA_AVERAGING algorithm.
    * 
+   * Careful: width and height may be constrained to be less equal to {@link Short#MAX_VALUE}
+   * 
    * @param bufferedImage
    * @param width of rescaled image
    * @param height of rescaled image
+   * @param interpolationType {@link AffineTransformOp#TYPE_NEAREST_NEIGHBOR} etc.
    * @return scaled instance of given buffered image with given dimensions */
-  public static BufferedImage of(BufferedImage bufferedImage, int width, int height) {
-    BufferedImage result = new BufferedImage(width, height, bufferedImage.getType());
-    Graphics graphics = result.createGraphics();
-    // TODO TENSOR IMPL improve results
-    Image image = bufferedImage.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
-    graphics.drawImage(image, 0, 0, null);
-    graphics.dispose();
-    return result;
+  public static BufferedImage of(BufferedImage bufferedImage, int width, int height, int interpolationType) {
+    AffineTransform affineTransform = AffineTransform.getScaleInstance( //
+        width / (double) bufferedImage.getWidth(), //
+        height / (double) bufferedImage.getHeight());
+    return new AffineTransformOp(affineTransform, interpolationType).filter( //
+        bufferedImage, //
+        new BufferedImage(width, height, bufferedImage.getType()));
   }
 
-  /** @param tensor of rank 2 or 3
-   * @param dim0 height of image
-   * @param dim1 width of image
+  /** Careful: width and height may be constrained to be less equal to {@link Short#MAX_VALUE}
+   * 
+   * @param tensor of rank 2 or 3
+   * @param height of image
+   * @param width of image
    * @return */
-  public static Tensor of(Tensor tensor, int dim0, int dim1) {
-    return ImageFormat.from(of(ImageFormat.of(tensor), dim1, dim0));
+  public static Tensor of(Tensor tensor, int height, int width) {
+    return ImageFormat.from(of(ImageFormat.of(tensor), width, height, AffineTransformOp.TYPE_BILINEAR));
   }
 
   /** Remark: for a factor of one the width and height of the image remain identical

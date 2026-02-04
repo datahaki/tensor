@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,10 +26,12 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clips;
 
 class ParetoDistributionTest {
   @Test
@@ -43,6 +46,8 @@ class ParetoDistributionTest {
     Tolerance.CHOP.requireZero(cdf.p_lessEquals(RealScalar.of(2.3)));
     Tolerance.CHOP.requireZero(cdf.p_lessEquals(RealScalar.of(2.2)));
     TestMarkovChebyshev.markov(distribution);
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Double.POSITIVE_INFINITY));
   }
 
   @Test
@@ -73,7 +78,7 @@ class ParetoDistributionTest {
 
   @Test
   void testMarkov() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Distribution distribution = ParetoDistribution.of(1.1 + random.nextDouble(), 1.1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
   }

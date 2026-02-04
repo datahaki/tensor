@@ -175,6 +175,11 @@ class RealScalarTest {
   }
 
   @Test
+  void testUnknownNumberFail() {
+    assertThrows(Exception.class, () -> RealScalar.of(new DummyNumber()));
+  }
+
+  @Test
   void testNullFail() {
     assertThrows(NullPointerException.class, () -> RealScalar.of((Number) null));
   }

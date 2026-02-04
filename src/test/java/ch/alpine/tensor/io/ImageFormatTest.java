@@ -3,7 +3,9 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
@@ -16,7 +18,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
-import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -25,30 +26,41 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 class ImageFormatTest {
   @Test
   void testRGBAFile() throws Exception {
-    Tensor tensor = TransposedImageFormatTest._readRGBA();
+    Tensor tensor = ExportHelperTest._readRGBA();
     String string = "/ch/alpine/tensor/img/rgba15x33.png";
     BufferedImage bufferedImage = ResourceData.bufferedImage(string);
     Tensor image = ImageFormat.from(bufferedImage);
     assertEquals(image, Import.of(string));
-    assertEquals(Transpose.of(tensor), image);
+    assertEquals(tensor, image);
     // confirmed with gimp
     assertEquals(image.get(32, 0), Tensors.vector(126, 120, 94, 255));
   }
 
   @Test
   void testGray() {
-    Distribution distribution = DiscreteUniformDistribution.of(0, 256);
+    Distribution distribution = DiscreteUniformDistribution.forArray(256);
     Tensor image = RandomVariate.of(distribution, 100, 200);
     Tensor bimap = ImageFormat.from(ImageFormat.of(image));
     assertEquals(image, bimap);
   }
 
+  // code by chatgpt
+  public static BufferedImage toGrayscale(BufferedImage src) {
+    BufferedImage gray = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    ColorConvertOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+    op.filter(src, gray);
+    return gray;
+  }
+
   @Test
   void testColor() {
-    Distribution distribution = DiscreteUniformDistribution.of(0, 256);
+    Distribution distribution = DiscreteUniformDistribution.forArray(256);
     Tensor image = RandomVariate.of(distribution, 100, 200, 4);
-    Tensor bimap = ImageFormat.from(ImageFormat.of(image));
+    BufferedImage bufferedImage = ImageFormat.of(image);
+    Tensor bimap = ImageFormat.from(bufferedImage);
     assertEquals(image, bimap);
+    BufferedImage gray = toGrayscale(bufferedImage);
+    assertEquals(gray.getType(), BufferedImage.TYPE_INT_ARGB); // not yet GRAYSCALE
   }
 
   @Test

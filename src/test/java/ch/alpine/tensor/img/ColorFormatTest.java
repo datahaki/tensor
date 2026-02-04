@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
-import java.security.SecureRandom;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import ch.alpine.tensor.alg.Array;
 class ColorFormatTest {
   @Test
   void testRandom() {
-    RandomGenerator randomGenerator = new SecureRandom();
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
     for (int index = 0; index < 10; ++index) {
       int red = randomGenerator.nextInt(256);
       int green = randomGenerator.nextInt(256);

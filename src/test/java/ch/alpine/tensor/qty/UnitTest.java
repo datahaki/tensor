@@ -2,7 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,7 +28,7 @@ import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.num.GaussScalar;
 
 class UnitTest {
-  public static Scalar requireNonZero(Scalar scalar) {
+  private static Scalar requireNonZero(Scalar scalar) {
     if (scalar instanceof Quantity || //
         Scalars.isZero(scalar))
       throw new Throw(scalar);
@@ -77,8 +77,8 @@ class UnitTest {
     Unit m = Unit.of("m");
     assertEquals(kg1, kg2.add(m.negate()));
     assertEquals(kg1.hashCode(), kg2.add(m.negate()).hashCode());
-    assertFalse(kg1.equals(m));
-    assertFalse(kg1.equals(new Object()));
+    assertNotEquals(kg1, m);
+    assertNotEquals(kg1, new Object());
   }
 
   @Test

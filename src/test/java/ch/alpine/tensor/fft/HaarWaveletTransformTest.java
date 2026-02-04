@@ -27,6 +27,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.pow.Power;
+import test.DFTConsistency;
 
 class HaarWaveletTransformTest {
   @Test
@@ -57,7 +58,7 @@ class HaarWaveletTransformTest {
       Scalar scalar = Power.of(2, n - 1);
       assertEquals(scalar, Det.of(matrix));
       Tensor inverse = Inverse.of(matrix);
-      SquareMatrixQ.require(inverse);
+      SquareMatrixQ.INSTANCE.requireMember(inverse);
     }
   }
 
@@ -77,6 +78,18 @@ class HaarWaveletTransformTest {
     Tensor m2 = ArrayFlatten.of(new Tensor[][] { { wm, ze }, { ze, id } });
     Tensor rhs = m1.dot(m2);
     assertEquals(lhs, rhs); // (1.4.13)
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testConsistency(HaarWaveletTransform haarWaveletTransform) {
+    DFTConsistency.checkComplex(haarWaveletTransform, false);
+  }
+
+  @Test
+  void testInverse() {
+    assertEquals(HaarWaveletTransform.FORWARD.inverse(), HaarWaveletTransform.INVERSE);
+    assertEquals(HaarWaveletTransform.INVERSE.inverse(), HaarWaveletTransform.FORWARD);
   }
 
   @Test

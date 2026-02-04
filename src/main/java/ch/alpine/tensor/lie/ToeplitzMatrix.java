@@ -3,7 +3,6 @@ package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.ext.Integers;
 
@@ -28,9 +27,7 @@ public enum ToeplitzMatrix {
    * @throws Exception if given vector has even length, or is not a vector */
   public static Tensor of(Tensor vector) {
     ScalarQ.thenThrow(vector);
-    if (Integers.isEven(vector.length()))
-      throw new Throw(vector);
-    int n = (vector.length() + 1) / 2;
+    int n = (Integers.requireOdd(vector.length()) + 1) / 2;
     int semi = n - 1;
     return Tensors.matrix((i, j) -> vector.Get(semi - i + j), n, n);
   }

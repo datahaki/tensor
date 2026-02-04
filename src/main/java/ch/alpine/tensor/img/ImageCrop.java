@@ -58,9 +58,9 @@ public class ImageCrop implements TensorUnaryOperator {
       OptionalInt optionalInt = IntStream.range(0, length).filter(intPredicate).findFirst();
       if (optionalInt.isEmpty())
         return Tensors.empty();
-      int lo = optionalInt.getAsInt();
+      int lo = optionalInt.orElseThrow();
       int hi = IntStream.range(0, length - lo).map(i -> length - i - 1) //
-          .filter(intPredicate).findFirst().getAsInt();
+          .filter(intPredicate).findFirst().orElseThrow();
       tensor = Transpose.of(tensor.block(List.of(lo), List.of(hi - lo + 1)), sigma);
     }
     return tensor;

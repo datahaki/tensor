@@ -75,7 +75,7 @@ class TensorGetTest {
     matrix.get(new int[] { Tensor.ALL }).set(Tensors.vector(1, 2, 3), Tensor.ALL);
     matrix.get(Tensor.ALL, 2).set(RealScalar.ONE, 1);
     matrix.get(2, Tensor.ALL).set(Tensors.vector(1, 2, 3, 4), Tensor.ALL);
-    matrix.get(Tensor.ALL, Tensor.ALL).set(Array.of(l -> RealScalar.ONE, 3, 4), Tensor.ALL, Tensor.ALL);
+    matrix.get(Tensor.ALL, Tensor.ALL).set(Array.of(_ -> RealScalar.ONE, 3, 4), Tensor.ALL, Tensor.ALL);
     assertEquals(matrix, Array.zeros(3, 4));
   }
 

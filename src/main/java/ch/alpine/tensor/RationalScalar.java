@@ -12,8 +12,9 @@ import java.util.OptionalInt;
 
 import ch.alpine.tensor.api.NInterface;
 import ch.alpine.tensor.chq.IntegerQ;
-import ch.alpine.tensor.ext.BigFraction;
-import ch.alpine.tensor.ext.BigIntegerMath;
+import ch.alpine.tensor.sca.exp.ExpInterface;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
+import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** a RationalScalar corresponds to an element from the field of rational numbers.
  * 
@@ -24,9 +25,10 @@ import ch.alpine.tensor.ext.BigIntegerMath;
  * @implSpec
  * This class is immutable and thread-safe. */
 public final class RationalScalar extends AbstractRealScalar implements //
-    NInterface, Serializable {
+    NInterface, SqrtInterface, ExpInterface, TrigonometryInterface, Serializable {
   /** rational number {@code 1/2} with decimal value {@code 0.5} */
   public static final Scalar HALF = of(1, 2);
+  public static final Scalar THIRD = of(1, 3);
 
   /** @param num numerator
    * @param den denominator
@@ -98,18 +100,8 @@ public final class RationalScalar extends AbstractRealScalar implements //
   }
 
   @Override // from Scalar
-  public Scalar zero() {
-    return ZERO;
-  }
-
-  @Override // from Scalar
-  public Scalar one() {
-    return ONE;
-  }
-
-  @Override // from Scalar
   public Number number() {
-    if (bigFraction.isInteger()) {
+    if (isInteger()) {
       BigInteger bigInteger = numerator();
       if (bigInteger.bitLength() < 32) // quick hint
         try {
@@ -170,7 +162,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
   public Scalar power(Scalar exponent) {
     OptionalInt optionalInt = Scalars.optionalInt(exponent);
     if (optionalInt.isPresent()) {
-      int expInt = optionalInt.getAsInt();
+      int expInt = optionalInt.orElseThrow();
       return 0 <= expInt //
           ? of(numerator().pow(expInt), denominator().pow(expInt))
           : of(denominator().pow(-expInt), numerator().pow(-expInt));
@@ -194,15 +186,40 @@ public final class RationalScalar extends AbstractRealScalar implements //
   @Override // from AbstractRealScalar
   public Scalar sqrt() {
     boolean isNonNegative = isNonNegative();
-    Optional<BigInteger> sqrtnum = BigIntegerMath.sqrt(isNonNegative ? numerator() : numerator().negate());
+    Optional<BigInteger> sqrtnum = StaticHelper.sqrt(isNonNegative ? numerator() : numerator().negate());
     if (sqrtnum.isPresent()) {
-      Optional<BigInteger> sqrtden = BigIntegerMath.sqrt(denominator());
+      Optional<BigInteger> sqrtden = StaticHelper.sqrt(denominator());
       if (sqrtden.isPresent()) {
         Scalar sqrt = of(sqrtnum.orElseThrow(), sqrtden.orElseThrow());
         return isNonNegative ? sqrt : ComplexScalarImpl.of(ZERO, sqrt);
       }
     }
-    return super.sqrt();
+    return _sqrt();
+  }
+
+  @Override // from ExpInterface
+  public Scalar exp() {
+    return DoubleScalar.of(Math.exp(number().doubleValue()));
+  }
+
+  @Override // from TrigonometryInterface
+  public Scalar cos() {
+    return DoubleScalar.of(Math.cos(number().doubleValue()));
+  }
+
+  @Override // from TrigonometryInterface
+  public Scalar cosh() {
+    return DoubleScalar.of(Math.cosh(number().doubleValue()));
+  }
+
+  @Override // from TrigonometryInterface
+  public Scalar sin() {
+    return DoubleScalar.of(Math.sin(number().doubleValue()));
+  }
+
+  @Override // from TrigonometryInterface
+  public Scalar sinh() {
+    return DoubleScalar.of(Math.sinh(number().doubleValue()));
   }
 
   // ---

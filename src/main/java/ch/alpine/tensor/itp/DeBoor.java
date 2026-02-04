@@ -7,7 +7,6 @@ import java.util.Objects;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.ext.Integers;
@@ -26,12 +25,10 @@ public record DeBoor(BinaryAverage binaryAverage, int degree, Tensor knots, Tens
    * @return
    * @throws Exception if given knots is not a vector, or degree cannot be established */
   public static DeBoor of(BinaryAverage binaryAverage, Tensor knots, Tensor control) {
-    int length = knots.length();
+    int length = Integers.requireEven(knots.length());
     int degree = length / 2;
     Integers.requireEquals(control.length(), degree + 1);
-    if (Integers.isEven(length))
-      return new DeBoor(Objects.requireNonNull(binaryAverage), degree, VectorQ.require(knots), control);
-    throw new Throw(knots, control);
+    return new DeBoor(Objects.requireNonNull(binaryAverage), degree, VectorQ.require(knots), control);
   }
 
   @Override

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.lie.Quaternion;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -163,6 +163,12 @@ class ComplexScalarTest {
     Scalar r2 = Quantity.of(withIm(RealScalar.of(4)), "m");
     assertEquals(r1, r2);
     assertEquals(r1.toString(), "4*I[m]");
+  }
+
+  @Test
+  void testString() {
+    assertEquals(ComplexScalar.of(0, 1).toString(), "I");
+    assertEquals(ComplexScalar.of(0, 1.0).toString(), "1.0*I");
   }
 
   @Test

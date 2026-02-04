@@ -19,7 +19,7 @@ import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.lie.Quaternion;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;

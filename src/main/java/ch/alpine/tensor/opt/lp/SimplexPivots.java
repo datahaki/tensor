@@ -17,7 +17,6 @@ public enum SimplexPivots implements SimplexPivot {
    * <p>pivot designed by G. B. Dantzig that works decent for most practical problems
    * but performs poorly on the Klee-Minty cube */
   NONBASIC_GRADIENT {
-    @SuppressWarnings("null")
     @Override // from SimplexPivot
     public int get(Tensor tab, int j, int n) {
       Integer pivot = null;

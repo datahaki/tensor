@@ -62,7 +62,7 @@ class TsReduceTest {
   @Test
   void testMultidim() {
     int n = 50;
-    Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(3, 5), n, 4);
+    Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(3, 4), n, 4);
     matrix.set(Range.of(0, n), Tensor.ALL, 0);
     TimeSeries timeSeries = TimeSeries.table(matrix.stream(), ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     Optional<Tensor> min = TsReduce.min(timeSeries);

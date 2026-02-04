@@ -18,14 +18,14 @@ import ch.alpine.tensor.pdf.RandomVariate;
 class MatrixDotConjugateTransposeTest {
   @Test
   void testDimensions() {
-    Tensor tensor = MatrixDotConjugateTranspose.of(HilbertMatrix.of(2, 3));
+    Tensor tensor = MatrixDotConjugateTranspose.self(HilbertMatrix.of(2, 3));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
   }
 
   @Test
   void testDotIdentity() {
     Tensor tensor = RandomVariate.of(ComplexNormalDistribution.STANDARD, 2, 4);
-    Tensor result = MatrixDotConjugateTranspose.of(tensor);
+    Tensor result = MatrixDotConjugateTranspose.self(tensor);
     Tensor expect = Dot.of(tensor, ConjugateTranspose.of(tensor));
     Tolerance.CHOP.requireClose(result, expect);
     assertEquals(result, expect);
@@ -35,23 +35,23 @@ class MatrixDotConjugateTransposeTest {
   void testComplexSquare(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n);
-    Tensor polard = MatrixDotConjugateTranspose.of(matrix);
-    HermitianMatrixQ.require(polard);
+    Tensor polard = MatrixDotConjugateTranspose.self(matrix);
+    HermitianMatrixQ.INSTANCE.requireMember(polard);
   }
 
   @RepeatedTest(8)
   void testComplex1(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n + 2);
-    Tensor polard = MatrixDotConjugateTranspose.of(matrix);
-    HermitianMatrixQ.require(polard);
+    Tensor polard = MatrixDotConjugateTranspose.self(matrix);
+    HermitianMatrixQ.INSTANCE.requireMember(polard);
   }
 
   @RepeatedTest(8)
   void testComplex2(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n + 2, n);
-    Tensor polard = MatrixDotConjugateTranspose.of(matrix);
-    HermitianMatrixQ.require(polard);
+    Tensor polard = MatrixDotConjugateTranspose.self(matrix);
+    HermitianMatrixQ.INSTANCE.requireMember(polard);
   }
 }

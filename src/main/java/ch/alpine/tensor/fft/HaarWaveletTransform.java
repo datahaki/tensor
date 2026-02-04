@@ -53,6 +53,11 @@ public enum HaarWaveletTransform implements DiscreteFourierTransform {
       }
       throw new IllegalArgumentException(Integer.toString(n));
     }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return INVERSE;
+    }
   },
   INVERSE {
     /** @param vector with length equals to a power of two
@@ -79,6 +84,11 @@ public enum HaarWaveletTransform implements DiscreteFourierTransform {
     @Override
     public Tensor matrix(int n) {
       return Inverse.of(FORWARD.matrix(n));
+    }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return FORWARD;
     }
   }
 }

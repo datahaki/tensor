@@ -8,6 +8,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.nrm.Hypot;
+import ch.alpine.tensor.num.ReIm;
 import ch.alpine.tensor.red.CopySign;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
@@ -15,8 +16,6 @@ import ch.alpine.tensor.sca.Sign;
 /** implements "thin" svd, i.e. u has the same format as given matrix
  * instead of being square */
 /* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
-  private static final int MAX_ITERATIONS = 28;
-  // ---
   /** rows x cols */
   private final Tensor u;
   private final Tensor w;
@@ -30,14 +29,15 @@ import ch.alpine.tensor.sca.Sign;
     v = init.v;
     w = init.w;
     r = init.r;
+    int max = SingularValueDecomposition.MAX_ITERATIONS.get();
     for (int i = w.length() - 1; 0 <= i; --i) {
-      for (int iteration = 0; iteration <= MAX_ITERATIONS; ++iteration) {
+      for (int iteration = 0; iteration <= max; ++iteration) {
         int l = levelW(i, init.chop);
         // if (!Unprotect.getUnitUnique(w).equals(Unprotect.getUnitUnique(r)))
         // throw new Throw(w, r);
         if (l == i)
           break;
-        if (iteration == MAX_ITERATIONS)
+        if (iteration == max)
           throw new RuntimeException("no convergence");
         rotateUV(l, i);
       }
@@ -121,9 +121,9 @@ import ch.alpine.tensor.sca.Sign;
       s = h.divide(z);
       rotate(v, c, s, jp1, j);
       {
-        Rotate rotate = new Rotate(p, x, c, s);
-        p = rotate.re();
-        f = rotate.im();
+        ReIm reIm = ReIm.product(p, x, c, s);
+        p = reIm.re();
+        f = reIm.im();
       }
       h = y.multiply(s);
       y = y.multiply(c);
@@ -135,9 +135,9 @@ import ch.alpine.tensor.sca.Sign;
       }
       rotate(u, c, s, jp1, j);
       {
-        Rotate rotate = new Rotate(y, p, c, s);
-        x = rotate.re();
-        f = rotate.im();
+        ReIm reIm = ReIm.product(y, p, c, s);
+        x = reIm.re();
+        f = reIm.im();
       }
     }
     r.set(Scalar::zero, l);
@@ -147,9 +147,9 @@ import ch.alpine.tensor.sca.Sign;
 
   private static void rotate(Tensor m, Scalar c, Scalar s, int i, int j) {
     m.forEach(mk -> {
-      Rotate rotate = new Rotate(mk.Get(i), mk.Get(j), c, s);
-      mk.set(rotate.re(), i);
-      mk.set(rotate.im(), j);
+      ReIm reIm = ReIm.product(mk.Get(i), mk.Get(j), c, s);
+      mk.set(reIm.re(), i);
+      mk.set(reIm.im(), j);
     });
   }
 

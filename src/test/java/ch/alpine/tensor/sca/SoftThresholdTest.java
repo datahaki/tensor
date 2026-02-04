@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 
@@ -25,7 +26,15 @@ class SoftThresholdTest {
   }
 
   @Test
+  void testRadius() throws ClassNotFoundException, IOException {
+    ScalarUnaryOperator deadzone = SoftThreshold.of(3);
+    assertEquals(deadzone.apply(RealScalar.of(5)), RealScalar.of(2));
+    assertEquals(deadzone.apply(RealScalar.of(-5)), RealScalar.of(-2));
+  }
+
+  @Test
   void testNullFail() {
-    assertThrows(NullPointerException.class, () -> SoftThreshold.of(null));
+    assertThrows(NullPointerException.class, () -> SoftThreshold.of((Scalar) null));
+    assertThrows(NullPointerException.class, () -> SoftThreshold.of((Clip) null));
   }
 }

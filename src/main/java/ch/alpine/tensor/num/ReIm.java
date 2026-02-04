@@ -2,44 +2,50 @@
 package ch.alpine.tensor.num;
 
 import java.io.Serializable;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Re;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ReIm.html">ReIm</a> */
-public class ReIm implements Serializable {
+public record ReIm(Scalar re, Scalar im) implements Serializable {
   /** @param z
-   * @return vector {Re[z], Im[z]} */
-  public static Tensor of(Scalar z) {
-    return Tensor.of(stream(z));
-  }
-
-  /** @param z
-   * @return stream consisting of the two scalars Re[z], and Im[z] */
-  public static Stream<Tensor> stream(Scalar z) {
-    return Stream.of( //
+   * @return */
+  public static ReIm of(Scalar z) {
+    return new ReIm( //
         Re.FUNCTION.apply(z), //
         Im.FUNCTION.apply(z));
   }
 
+  /** @param re
+   * @param im
+   * @param z_re
+   * @param z_im
+   * @return emulation of complex multiplication (x + y*i) (c + s*i) */
+  public static ReIm product(Scalar re, Scalar im, Scalar z_re, Scalar z_im) {
+    return new ReIm( //
+        re.multiply(z_re).subtract(im.multiply(z_im)), //
+        im.multiply(z_re).add(re.multiply(z_im)));
+  }
+
   // ---
-  private final Scalar re;
-  private final Scalar im;
-
-  public ReIm(Scalar scalar) {
-    re = Re.FUNCTION.apply(scalar);
-    im = Im.FUNCTION.apply(scalar);
+  /** complex multiplication between z and vector[0]+i*vector[1]
+   * 
+   * @param vector of length 2 with entries that may be {@link Quantity}
+   * @return vector of length 2 with real entries corresponding to real and imag of result */
+  public Tensor rotate(Tensor vector) {
+    return product(re, im, vector.Get(0), vector.Get(1)).vector();
   }
 
-  public Scalar re() {
-    return re;
-  }
-
-  public Scalar im() {
-    return im;
+  /** function recreates API of Mathematica
+   * however, not used in Java programs
+   * 
+   * @return vector {Re[z], Im[z]} */
+  public Tensor vector() {
+    return Tensors.of(re, im);
   }
 }

@@ -26,6 +26,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.gr.InfluenceMatrixQ;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
+import ch.alpine.tensor.mat.sv.SingularValueDecompositionWrap;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.LogisticDistribution;
@@ -48,7 +49,7 @@ class BenIsraelCohenTest {
     Tensor design = p1.dot(p2);
     Tensor pinv = BenIsraelCohen.of(design);
     suo.apply(pinv.Get(0, 0));
-    InfluenceMatrixQ.require(design.dot(pinv), Chop._10); // 1e-12 does not always work
+    new InfluenceMatrixQ(Chop._10).requireMember(design.dot(pinv)); // 1e-12 does not always work
   }
 
   @Test
@@ -57,7 +58,7 @@ class BenIsraelCohenTest {
     Tensor mathem = Import.of("/ch/alpine/tensor/mat/pi/bic1pinv.csv");
     Tensor pinv = BenIsraelCohen.of(matrix);
     Tolerance.CHOP.requireClose(pinv, mathem);
-    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
+    SingularValueDecomposition svd = SingularValueDecompositionWrap.of(matrix);
     Chop._08.requireClose(pinv, PseudoInverse.of(svd));
   }
 
@@ -77,7 +78,7 @@ class BenIsraelCohenTest {
     Tensor pinv1 = BenIsraelCohen.of(matrix);
     Tensor pinv2 = BenIsraelCohen.of(Transpose.of(matrix));
     Tolerance.CHOP.requireClose(Transpose.of(pinv1), pinv2);
-    InfluenceMatrixQ.require(pinv1.dot(matrix));
+    InfluenceMatrixQ.INSTANCE.requireMember(pinv1.dot(matrix));
   }
 
   @Test
@@ -108,7 +109,7 @@ class BenIsraelCohenTest {
     Tensor matrix = p1.dot(p2);
     Tensor refine = BenIsraelCohen.of(matrix);
     Chop._09.requireClose(PseudoInverse.of(matrix), refine);
-    InfluenceMatrixQ.require(refine.dot(matrix));
+    InfluenceMatrixQ.INSTANCE.requireMember(refine.dot(matrix));
   }
 
   @Test
@@ -145,6 +146,18 @@ class BenIsraelCohenTest {
     Tensor refine = BenIsraelCohen.of(matrix);
     Scalar rank = Trace.of(matrix.dot(refine));
     Tolerance.CHOP.requireClose(rank, RealScalar.of(r));
+  }
+
+  @Test
+  void testThreadLocal() {
+    ThreadLocal<Integer> threadLocal = ThreadLocal.withInitial(() -> 128);
+    assertEquals(threadLocal.get(), 128);
+    threadLocal.remove();
+    assertEquals(threadLocal.get(), 128);
+    threadLocal.set(12);
+    threadLocal.remove();
+    threadLocal.remove();
+    assertEquals(threadLocal.get(), 128);
   }
 
   @Test

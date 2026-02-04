@@ -3,7 +3,7 @@ package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
 
@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.pow.Power;
 public enum TestMarkovChebyshev {
   ;
   public static void markov(Distribution distribution) {
-    RandomGenerator random = new Random();
+    RandomGenerator random = ThreadLocalRandom.current();
     Scalar xbar = Mean.of(distribution);
     Sign.requirePositiveOrZero(xbar);
     Scalar a = Sign.isPositive(xbar) //
@@ -39,7 +39,7 @@ public enum TestMarkovChebyshev {
   }
 
   public static void chebyshev(Distribution distribution) {
-    RandomGenerator random = new Random();
+    RandomGenerator random = ThreadLocalRandom.current();
     Scalar xbar = Mean.of(distribution);
     Scalar a = Scalars.nonZero(xbar) //
         ? RealScalar.of(2 * random.nextDouble()).multiply(xbar)
@@ -82,7 +82,7 @@ public enum TestMarkovChebyshev {
             if (distribution instanceof CDF) {
               CDF cdf = CDF.of(distribution);
               Tensor ref = x.map(cdf::p_lessThan);
-              Tolerance.CHOP.requireClose(ref, Reverse.of(ref.map(r -> RealScalar.ONE.subtract(r))));
+              Tolerance.CHOP.requireClose(ref, Reverse.of(ref.map(RealScalar.ONE::subtract)));
             }
           }
           if (distribution instanceof InverseCDF) {

@@ -15,13 +15,13 @@ public enum MatrixAbs {
    * @return matrix with eigenvalues as absolute values of eigenvalues of given matrix
    * @see Abs */
   public static Tensor ofSymmetric(Tensor matrix) {
-    return StaticHelper.mapEv(Eigensystem.ofSymmetric(matrix, Tolerance.CHOP), Abs.FUNCTION);
+    return Eigensystem.ofSymmetric(matrix, Tolerance.CHOP).map(Abs.FUNCTION);
   }
 
   /** @param matrix
    * @return matrix with eigenvalues as absolute values of eigenvalues of given matrix
    * @see Abs */
   public static Tensor ofHermitian(Tensor matrix) {
-    return StaticHelper.mapEv(Eigensystem.ofHermitian(matrix, Tolerance.CHOP), Abs.FUNCTION);
+    return Eigensystem.ofHermitian(matrix, Tolerance.CHOP).map(Abs.FUNCTION);
   }
 }

@@ -8,6 +8,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 class DoubleTest {
+  public static long countSteps(double start, double end) {
+    // Handle cases where the numbers are the same
+    if (Double.compare(start, end) == 0)
+      return 0;
+    // Convert to bit patterns
+    long startBits = Double.doubleToRawLongBits(start);
+    long endBits = Double.doubleToRawLongBits(end);
+    // Adjust for negative numbers
+    // In IEEE 754, the most significant bit is the sign bit.
+    // We convert to a "lexicographical" long where values increase monotonically.
+    startBits = adjustSign(startBits);
+    endBits = adjustSign(endBits);
+    return Math.abs(endBits - startBits);
+  }
+
+  private static long adjustSign(long bits) {
+    // If negative, flip the bits to align with the positive scale
+    if (bits < 0) {
+      return 0x8000000000000000L - bits;
+    }
+    return bits;
+  }
+
   @Test
   void testZeros() {
     final double d1 = 0.0;
@@ -35,5 +58,11 @@ class DoubleTest {
     assertTrue(Double.isFinite(r1));
     assertTrue(Double.isFinite(rb));
     assertFalse(Double.isFinite(r2));
+  }
+
+  @Test
+  void testNextAfter() {
+    long countSteps = countSteps(2.0, Math.nextDown(2.0));
+    IO.println(countSteps);
   }
 }

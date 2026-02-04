@@ -10,8 +10,15 @@ import ch.alpine.tensor.sca.Conjugate;
 public enum MatrixDotConjugateTranspose {
   ;
   /** @param matrix
+   * @param tensor
+   * @return */
+  public static Tensor of(Tensor matrix, Tensor tensor) {
+    return MatrixDotTranspose.of(matrix, tensor.map(Conjugate.FUNCTION));
+  }
+
+  /** @param matrix
    * @return matrix . ConjugateTranspose(matrix) */
-  public static Tensor of(Tensor matrix) {
-    return MatrixDotTranspose.of(matrix, matrix.map(Conjugate.FUNCTION));
+  public static Tensor self(Tensor matrix) {
+    return of(matrix, matrix);
   }
 }

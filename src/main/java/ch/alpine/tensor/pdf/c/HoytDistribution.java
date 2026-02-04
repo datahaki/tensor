@@ -2,18 +2,21 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.bes.BesselI;
 import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** CDF requires MarcumQ
  * Mean requires EllipticE */
@@ -40,11 +43,18 @@ public class HoytDistribution implements Distribution, //
   private final Scalar q;
   private final Scalar w;
   private final Scalar q2;
+  private final Distribution d1;
+  private final Distribution d2;
 
   private HoytDistribution(Scalar q, Scalar w) {
     this.q = q;
     this.w = w;
     q2 = q.multiply(q);
+    Scalar den = q2.add(q2.one());
+    Scalar s1 = Sqrt.FUNCTION.apply(w.divide(den));
+    Scalar s2 = Sqrt.FUNCTION.apply(q2.multiply(w).divide(den));
+    d1 = NormalDistribution.of(s1.zero(), s1);
+    d2 = NormalDistribution.of(s2.zero(), s2);
   }
 
   @Override
@@ -60,6 +70,11 @@ public class HoytDistribution implements Distribution, //
       }
     }
     return RealScalar.ZERO;
+  }
+
+  @Override // from Distribution
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return Hypot.of(d1.randomVariate(randomGenerator), d2.randomVariate(randomGenerator));
   }
 
   @Override // from Object

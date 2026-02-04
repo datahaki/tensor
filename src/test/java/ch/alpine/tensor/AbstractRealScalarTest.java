@@ -15,6 +15,7 @@ import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.Primitives;
+import ch.alpine.tensor.jet.Hold;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
@@ -25,10 +26,12 @@ import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
 class AbstractRealScalarTest {
-  private static final List<Scalar> SCALARS = Arrays.asList( //
+  private final List<Scalar> SCALARS = Arrays.asList( //
       RealScalar.ZERO, RealScalar.ONE, //
       RationalScalar.of(-7, 3), //
+      // Quex.of(3, 4, 2), // TODO TENSOR
       RealScalar.of(-3.4), //
+      Hold.zero(), //
       DecimalScalar.of(new BigDecimal("4.123"), 34), //
       Pi.in(50), //
       ComplexScalar.of(2, 3), //
@@ -40,11 +43,15 @@ class AbstractRealScalarTest {
 
   private static void _checkAdd(Scalar a, Scalar b) {
     {
+      // IO.println(a + " + " + b);
+      // IO.println(a.getClass());
+      // IO.println(b.getClass());
       Scalar ab = a.add(b);
       Scalar ba = b.add(a);
       assertEquals(ab, ba);
       assertEquals(ab.toString(), ba.toString());
       assertEquals(ab.getClass(), ba.getClass());
+      // IO.println("ok");
     }
     {
       Scalar ab = a.subtract(b);
@@ -99,7 +106,7 @@ class AbstractRealScalarTest {
     Tensor vector = Tensors.of(RealScalar.ZERO, Quantity.of(0, "m"), Quantity.of(0, "s"));
     Tensor produc = Tensor.of(Permutations.stream(Range.of(0, vector.length())) //
         .map(Primitives::toIntArray) //
-        .map(array -> IntStream.of(array).mapToObj(vector::Get).reduce(Scalar::multiply).get()));
+        .map(array -> IntStream.of(array).mapToObj(vector::Get).reduce(Scalar::multiply).orElseThrow()));
     assertEquals(produc, ConstantArray.of(Quantity.of(0, "m*s"), 6));
   }
 

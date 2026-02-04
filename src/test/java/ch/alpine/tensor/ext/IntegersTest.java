@@ -3,6 +3,7 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -10,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class IntegersTest {
   @Test
@@ -54,21 +57,22 @@ class IntegersTest {
     }
   }
 
-  @Test
-  void testIsEven() {
-    assertTrue(Integers.isEven(-2));
-    assertTrue(Integers.isEven(0));
-    assertTrue(Integers.isEven(2));
-    assertTrue(Integers.isEven(Integer.MIN_VALUE));
+  @ParameterizedTest
+  @ValueSource(ints = { -2, 0, 2, Integer.MIN_VALUE })
+  void testEven(int value) {
+    assertTrue(Integers.isEven(value));
+    assertFalse(Integers.isOdd(value));
+    Integers.requireEven(value);
+    assertThrows(Exception.class, () -> Integers.requireOdd(value));
   }
 
-  @Test
-  void testIsEvenFalse() {
-    assertFalse(Integers.isEven(-3));
-    assertFalse(Integers.isEven(-1));
-    assertFalse(Integers.isEven(1));
-    assertFalse(Integers.isEven(3));
-    assertFalse(Integers.isEven(Integer.MAX_VALUE));
+  @ParameterizedTest
+  @ValueSource(ints = { -3, -1, 1, 3, Integer.MAX_VALUE })
+  void testOdd(int value) {
+    assertFalse(Integers.isEven(value));
+    assertTrue(Integers.isOdd(value));
+    Integers.requireOdd(value);
+    assertThrows(Exception.class, () -> Integers.requireEven(value));
   }
 
   @Test
@@ -264,5 +268,15 @@ class IntegersTest {
   @Test
   void testFailNegative() {
     assertThrows(Exception.class, () -> Integers.log2Ceiling(-1));
+  }
+
+  @Test
+  void testEllipticCurveHashCode() {
+    int field = 123;
+    int a = 13;
+    int b = 23;
+    int c1 = (field << 6 + (a << 4) + (b << 2));
+    int c2 = (field << 6) + (a << 4) + (b << 2);
+    assertNotEquals(c1, c2);
   }
 }

@@ -10,6 +10,9 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
@@ -48,6 +51,11 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
   private GumbelDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;
     this.beta = beta;
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.absolute(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(alpha)));
   }
 
   @Override // from PDF

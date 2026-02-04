@@ -25,10 +25,9 @@ public abstract class AbstractContinuousDistribution implements UnivariateDistri
    * @return */
   protected abstract Scalar protected_quantile(Scalar p);
 
-  /* non-final only because FrechetDistribution requires override */
-  @Override // from RandomVariateInterface
+  /* non-final only because FrechetDistribution, ErlangDistribution, etc. require override */
+  @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
-    // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
     return protected_quantile(DoubleScalar.of(randomGenerator.nextDouble()));
   }
 }

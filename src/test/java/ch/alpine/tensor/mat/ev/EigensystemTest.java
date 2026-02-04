@@ -42,8 +42,17 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.N;
+import test.EigensystemQ;
 
 class EigensystemTest {
+  @Test
+  void testSingle() {
+    Tensor matrix = Tensors.fromString("{{I}}");
+    Eigensystem eigensystem = Eigensystem.of(matrix);
+    new EigensystemQ(matrix).require(eigensystem);
+    assertEquals(eigensystem.toString(), "Eigensystem[{I}, {{1}}]");
+  }
+
   @Test
   void testExact() {
     // QUEST TENSOR ALG tune iterations of phase 1 based on cross checking accuracy to exact result
@@ -53,7 +62,7 @@ class EigensystemTest {
     Tensor diag = DiagonalMatrix.with(vector);
     Tensor v = Orthogonalize.of(RandomVariate.of(NormalDistribution.standard(), n, n));
     Tensor matrix = BasisTransform.ofMatrix(diag, v);
-    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix).decreasing();
     Tolerance.CHOP.requireClose(Reverse.of(eigensystem.values()), Sort.of(vector));
   }
 
@@ -65,7 +74,7 @@ class EigensystemTest {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor vectors = eigensystem.vectors();
     Tensor values = eigensystem.values();
-    OrthogonalMatrixQ.require(vectors);
+    OrthogonalMatrixQ.INSTANCE.requireMember(vectors);
     Tensor recons = Transpose.of(vectors).dot(Times.of(values, vectors));
     Scalar err = MatrixInfinityNorm.of(matrix.subtract(recons));
     if (!Tolerance.CHOP.isClose(matrix, recons)) {
@@ -73,6 +82,7 @@ class EigensystemTest {
       // System.err.println("error");
       System.out.println("n=" + n);
       System.out.println(matrix);
+      // TODO TENSOR store somewhere consistent
       Export.of(HomeDirectory.file("eigensystem_fail_" + System.currentTimeMillis() + ".csv"), matrix);
       fail();
     }
@@ -81,7 +91,7 @@ class EigensystemTest {
   @Test
   void testQuantity() {
     Tensor matrix = Tensors.fromString("{{10[m], -2[m]}, {-2[m], 4[m]}}");
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
     {
       Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
       assertInstanceOf(Quantity.class, eigensystem.values().Get(0));
@@ -120,7 +130,9 @@ class EigensystemTest {
   @Test
   void testQuantityMixed() {
     Tensor matrix = Tensors.fromString("{{10[m^2], 2[m*kg]}, {2[m*kg], 4[kg^2]}}");
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    assertThrows(Throw.class, () -> Eigensystem.of(matrix));
+    assertThrows(Throw.class, () -> Eigensystems._2(matrix));
     assertThrows(Throw.class, () -> Eigensystem.ofSymmetric(matrix));
   }
 
@@ -137,18 +149,30 @@ class EigensystemTest {
   @Test
   void testComplexFail() {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    Eigensystem eigensystem = Eigensystem.of(matrix);
+    new EigensystemQ(matrix).require(eigensystem);
+    Eigensystem ofSymmetric = Eigensystem.ofSymmetric(matrix);
+    new EigensystemQ(matrix).require(ofSymmetric);
+    // assertThrows(Exception.class, () -> Eigensystem.ofSymmetric(matrix));
+    // assertThrows(Exception.class, () -> Eigensystem.ofHermitian(matrix));
+  }
+
+  @Test
+  void testFallthroughFail() {
+    Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 10, 10);
     assertThrows(Exception.class, () -> Eigensystem.of(matrix));
-    assertThrows(Exception.class, () -> Eigensystem.ofSymmetric(matrix));
-    assertThrows(Exception.class, () -> Eigensystem.ofHermitian(matrix));
   }
 
   @Test
   void testComplex2Fail() {
     Tensor matrix = Tensors.fromString("{{0, I}, {I, 0}}");
-    SymmetricMatrixQ.require(matrix);
-    assertThrows(Exception.class, () -> Eigensystem.of(matrix));
-    assertThrows(Exception.class, () -> Eigensystem.ofSymmetric(matrix));
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    Eigensystem eigensystem = Eigensystem.of(matrix);
+    new EigensystemQ(matrix).require(eigensystem);
+    Eigensystem ofSymmetric = Eigensystem.ofSymmetric(matrix);
+    new EigensystemQ(matrix).require(ofSymmetric);
+    // assertThrows(Exception.class, () -> );
     assertThrows(Exception.class, () -> Eigensystem.ofHermitian(matrix));
   }
 

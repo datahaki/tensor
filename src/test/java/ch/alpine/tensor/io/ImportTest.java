@@ -33,6 +33,9 @@ class ImportTest {
     return tensor;
   }
 
+  @TempDir
+  File tempDir;
+
   @Test
   void testCsv() throws Exception {
     String string = "/ch/alpine/tensor/io/libreoffice_calc.csv";
@@ -74,8 +77,8 @@ class ImportTest {
    * Import::of the file was not closed sufficiently fast to allow the deletion of
    * the file. */
   @Test
-  void testCsvClosed(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.csv");
+  void testCsvClosed() throws IOException {
+    File file = File.createTempFile("file", ".csv", tempDir);
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4}}");
     Export.of(file, tensor);
     assertTrue(file.isFile());
@@ -85,9 +88,9 @@ class ImportTest {
   }
 
   @Test
-  void testImageClose(@TempDir File tempDir) throws Exception {
+  void testImageClose() throws Exception {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4}}");
-    File file = new File(tempDir, "file.png");
+    File file = File.createTempFile("file", ".png", tempDir);
     Export.of(file, tensor);
     assertTrue(file.isFile());
     Tensor image = Import.of(file);
@@ -95,8 +98,8 @@ class ImportTest {
   }
 
   @Test
-  void testFolderCsvClosed(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.csv");
+  void testFolderCsvClosed() throws IOException {
+    File file = File.createTempFile("file", ".csv", tempDir);
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
     assertTrue(file.isFile());
     assertTrue(12 <= file.length());
@@ -112,10 +115,10 @@ class ImportTest {
   }
 
   @Test
-  void testPngClose(@TempDir File tempDir) throws Exception {
+  void testPngClose() throws Exception {
     Tensor tensor = Import.of("/ch/alpine/tensor/img/rgba15x33.png");
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
-    File file = new File(tempDir, "file.png");
+    File file = File.createTempFile("file", ".png", tempDir);
     Export.of(file, tensor);
     assertTrue(file.isFile());
     Import.of(file);
@@ -161,17 +164,6 @@ class ImportTest {
     assertEquals(string, "tensorlib.importtest");
   }
 
-  public void _testSerialization1() throws ClassNotFoundException, IOException, DataFormatException {
-    Tensor tensor = Import.object(ImportPublic.IO_OBJECT_TENSOR);
-    assertEquals(tensor, ImportPublic.CONTENT);
-  }
-
-  public void _testSerialization2() throws ClassNotFoundException, IOException, DataFormatException {
-    Tensor tensor = Import.object(ImportPublic.IO_OBJECT_UNMODIFIABLE);
-    assertTrue(Tensors.isUnmodifiable(tensor));
-    assertEquals(tensor, ImportPublic.CONTENT);
-  }
-
   @Test
   void testUnknownFail() {
     File file = new File(getClass().getResource("/ch/alpine/tensor/io/extension.unknown").getFile());
@@ -185,8 +177,8 @@ class ImportTest {
   }
 
   @Test
-  void testTensor(@TempDir File tempDir) throws Exception {
-    File file = new File(tempDir, "file.object");
+  void testTensor() throws Exception {
+    File file = File.createTempFile("file", ".object", tempDir);
     Export.object(file, Tensors.vector(1, 2, 3, 4));
     Tensor vector = Import.object(file);
     assertEquals(vector, Tensors.vector(1, 2, 3, 4));

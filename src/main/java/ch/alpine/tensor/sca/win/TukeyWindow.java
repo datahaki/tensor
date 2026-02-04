@@ -13,7 +13,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TukeyWindow.html">TukeyWindow</a> */
 public class TukeyWindow extends ParameterizedWindow {
-  public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.of(1, 3));
+  public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.THIRD);
 
   /** @param alpha
    * @return */

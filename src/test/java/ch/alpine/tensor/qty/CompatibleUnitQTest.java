@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Predicate;
@@ -15,8 +14,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.GaussScalar;
+import test.SerializableQ;
 
 class CompatibleUnitQTest {
   @Test
@@ -29,16 +28,18 @@ class CompatibleUnitQTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
-    Predicate<Scalar> predicate = Serialization.copy(CompatibleUnitQ.SI().with(Unit.of("N*s")));
+  void testSerializable() {
+    Predicate<Scalar> predicate = CompatibleUnitQ.SI().with(Unit.of("N*s"));
+    SerializableQ.require(predicate);
     String string = predicate.toString();
     assertTrue(string.startsWith("CompatibleUnitQ["));
     assertTrue(string.contains("*s"));
   }
 
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
-    CompatibleUnitQ compatibleUnitQ = Serialization.copy(CompatibleUnitQ.SI());
+  void testSimple() {
+    CompatibleUnitQ compatibleUnitQ = CompatibleUnitQ.SI();
+    SerializableQ.require(compatibleUnitQ);
     assertTrue(compatibleUnitQ.with(Unit.of("m*s^-1")).test(Quantity.of(2, "km*ms^-1")));
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("PS^2")).test(Quantity.of(2, "W^2")));
     assertFalse(CompatibleUnitQ.SI().with("m*s^-1").test(Quantity.of(2, "m*s")));

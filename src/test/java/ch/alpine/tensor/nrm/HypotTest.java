@@ -19,9 +19,11 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
@@ -41,6 +43,12 @@ class HypotTest {
     _checkPair(-y, x);
     _checkPair(-x, -y);
     _checkPair(-y, -x);
+  }
+
+  @Test
+  void testDecimal() {
+    Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
+    matrix.map(Hypot::withOne);
   }
 
   @Test

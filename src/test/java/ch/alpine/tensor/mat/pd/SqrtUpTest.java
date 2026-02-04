@@ -25,7 +25,7 @@ class SqrtUpTest {
     Tensor u = polarDecomposition.getUnitary();
     Tensor tensor = polarDecomposition.getUnitary().dot(s);
     PositiveSemidefiniteMatrixQ.ofHermitian(s);
-    UnitaryMatrixQ.require(u);
+    UnitaryMatrixQ.INSTANCE.requireMember(u);
     Chop._10.requireClose(tensor, matrix);
   }
 
@@ -39,7 +39,7 @@ class SqrtUpTest {
     Tensor u = polarDecomposition.getUnitary();
     Tensor tensor = polarDecomposition.getUnitary().dot(s);
     PositiveSemidefiniteMatrixQ.ofHermitian(s);
-    UnitaryMatrixQ.require(u);
+    UnitaryMatrixQ.INSTANCE.requireMember(u);
     Chop._10.requireClose(tensor, matrix);
   }
 }

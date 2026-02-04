@@ -18,18 +18,31 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.ResourceData;
+import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.io.Import;
 
 class ThumbnailTest {
+  @TempDir
+  File tempDir;
+
   @Test
   void testSimple() {
     Tensor tensor = Import.of("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor square = Thumbnail.of(tensor, 7);
     List<Integer> list = Dimensions.of(square);
     assertEquals(list, Arrays.asList(7, 7, 4));
+  }
+
+  @Test
+  void testSingle() {
+    Tensor image = Tensors.fromString("{{1,2,3,4,5,6,7}}");
+    BufferedImage bufferedImage = Thumbnail.of(ImageFormat.of(image), 1);
+    Tensor from = ImageFormat.from(bufferedImage);
+    assertEquals(from, Tensors.fromString("{{4}}"));
   }
 
   @Test
@@ -47,7 +60,7 @@ class ThumbnailTest {
   }
 
   @Test
-  void testAuGrayBufferedImage(@TempDir File tempDir) throws IOException {
+  void testAuGrayBufferedImage() throws IOException {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
     BufferedImage expected = Thumbnail.of(original, 64);
     File file = new File(tempDir, "file.jpg");

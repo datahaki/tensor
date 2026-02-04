@@ -16,15 +16,15 @@ import ch.alpine.tensor.sca.Sign;
 /** <a href="https://en.wikipedia.org/wiki/Jacobi_identity">Jacobi identity</a> */
 public enum BchCode {
   ;
-  public static void main(String[] args) {
+  static void main() {
     int n = 6;
     BchTrace bchTrace = new BchTrace(n);
     Set<String> set1 = new HashSet<>();
     Set<Scalar> setConst = new LinkedHashSet<>();
-    System.out.println("// d = " + 1);
-    System.out.println("Tensor t1 = x.add(y);");
+    IO.println("// d = " + 1);
+    IO.println("Tensor t1 = x.add(y);");
     for (int d = 2; d <= n; ++d) {
-      System.out.println("// d = " + d);
+      IO.println("// d = " + d);
       int cnt = 0;
       StringBuilder stringBuilder = new StringBuilder();
       for (Entry<String, Scalar> entry : bchTrace.navigableMap.entrySet()) {
@@ -35,7 +35,7 @@ public enum BchCode {
             String sub = key.substring(l, key.length());
             boolean add = set1.add(sub);
             if (add) {
-              System.out.println("Tensor " + sub + " = ad" + sub.charAt(0) + ".dot(" + sub.substring(1) + ");");
+              IO.println("Tensor " + sub + " = ad" + sub.charAt(0) + ".dot(" + sub.substring(1) + ");");
             }
           }
           String var = "t" + d + "_" + cnt;
@@ -52,22 +52,22 @@ public enum BchCode {
           // Scalar num = Numerator.FUNCTION.apply(value);
           // Scalar den = Denominator.FUNCTION.apply(value);
           if (value.equals(RealScalar.ONE))
-            System.out.println("Tensor " + var + " = " + key + ";");
+            IO.println("Tensor " + var + " = " + key + ";");
           else
-            System.out.println("Tensor " + var + " = " + key + ".multiply(" + cns(value) + ");");
+            IO.println("Tensor " + var + " = " + key + ".multiply(" + cns(value) + ");");
           ++cnt;
         }
       }
-      System.out.println("Tensor t" + d + " = " + stringBuilder + ";");
+      IO.println("Tensor t" + d + " = " + stringBuilder + ";");
     }
-    System.out.println("// ---");
+    IO.println("// ---");
     for (Scalar value : setConst)
       if (!value.equals(RealScalar.ONE)) {
         Scalar num = Numerator.FUNCTION.apply(value);
         Scalar den = Denominator.FUNCTION.apply(value);
         String cns = (Sign.isPositiveOrZero(num) ? "P" + num : "N" + num.negate()) + "_" + den;
         String rat = "private static final Scalar " + cns + " = RationalScalar.of(" + num + ", " + den + ");";
-        System.out.println(rat);
+        IO.println(rat);
       }
   }
 

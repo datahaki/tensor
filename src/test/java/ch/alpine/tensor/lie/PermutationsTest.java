@@ -5,10 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
-import java.util.List;
 
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -17,9 +14,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.Range;
-import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.io.StringTensor;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -93,18 +89,6 @@ class PermutationsTest {
   void testMatrix() {
     assertEquals(Dimensions.of(Permutations.of(IdentityMatrix.of(3))), Arrays.asList(6, 3, 3));
     assertEquals(Dimensions.of(Permutations.of(IdentityMatrix.of(3).extract(0, 2))), Arrays.asList(2, 2, 3));
-  }
-
-  private static List<List<Integer>> getAlt(int index) {
-    return Permutations.of(Range.of(0, index)).stream() //
-        .map(Primitives::toListInteger) //
-        .toList();
-  }
-
-  @RepeatedTest(7)
-  void testSamples(RepetitionInfo repetitionInfo) {
-    int c = repetitionInfo.getCurrentRepetition() - 1;
-    assertEquals(TestHelper.INSTANCE.LIST.get(c), getAlt(c));
   }
 
   @Test

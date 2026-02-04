@@ -11,6 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -36,7 +37,9 @@ class NakagamiDistributionTest {
 
   @Test
   void testMonotonous() {
-    TestMarkovChebyshev.monotonous(NakagamiDistribution.of(0.3, 2.5));
+    Distribution distribution = NakagamiDistribution.of(0.3, 2.5);
+    RandomVariate.of(distribution);
+    TestMarkovChebyshev.monotonous(distribution);
   }
 
   @Test

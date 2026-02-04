@@ -2,7 +2,6 @@
 package ch.alpine.tensor.sca.ply;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -11,6 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Drop;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.VectorInfinityNorm;
 import ch.alpine.tensor.qty.Quantity;
@@ -47,11 +47,11 @@ public enum RootsBounds {
     @Override
     Scalar ofMonic(Tensor monic) {
       int last = monic.length();
-      AtomicInteger atomicInteger = new AtomicInteger(last);
+      Int i = new Int(last);
       return Total.ofVector(Tensor.of(monic.stream() //
           .map(Scalar.class::cast) //
           .map(Abs.FUNCTION) //
-          .map(ratio -> Power.of(ratio, RationalScalar.of(1, atomicInteger.getAndDecrement()))) //
+          .map(ratio -> Power.of(ratio, RationalScalar.of(1, i.getAndDecrement()))) //
           .sorted() //
           .skip(last - 2)));
     }
@@ -61,12 +61,12 @@ public enum RootsBounds {
     @Override
     Scalar ofMonic(Tensor monic) {
       AtomicBoolean atomicBoolean = new AtomicBoolean();
-      AtomicInteger atomicInteger = new AtomicInteger(monic.length());
+      Int i = new Int(monic.length());
       return monic.stream() //
           .map(Scalar.class::cast) //
           .map(Abs.FUNCTION) //
           .map(ratio -> atomicBoolean.getAndSet(true) ? ratio : ratio.multiply(RationalScalar.HALF))
-          .map(ratio -> Power.of(ratio, RationalScalar.of(1, atomicInteger.getAndDecrement()))) //
+          .map(ratio -> Power.of(ratio, RationalScalar.of(1, i.getAndDecrement()))) //
           .reduce(Max::of) //
           .map(max -> max.add(max)) //
           .orElseThrow();

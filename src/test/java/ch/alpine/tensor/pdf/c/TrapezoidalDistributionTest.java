@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,6 +31,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
@@ -37,11 +39,12 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Clips;
 
 class TrapezoidalDistributionTest {
   @Test
   void testPositive() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Scalar a = RationalScalar.of(random.nextInt(100), 1);
     Scalar b = a.add(RealScalar.of(random.nextDouble() * 10));
     Scalar c = b.add(RealScalar.of(random.nextDouble() * 10));
@@ -238,7 +241,7 @@ class TrapezoidalDistributionTest {
 
   @Test
   void testMarkov() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Distribution distribution = TrapezoidalDistribution.of( //
         0 + random.nextDouble(), //
         1 + random.nextDouble(), //
@@ -304,6 +307,8 @@ class TrapezoidalDistributionTest {
     Scalar p_lessEquals = cdf.p_lessEquals(t);
     assertEquals(p_lessEquals, RationalScalar.of(8225, 13026));
     // Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.interval(a, d));
   }
 
   @Test

@@ -18,12 +18,14 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
+import test.InterpolationQ;
 
 class LanczosInterpolationTest {
   @Test
@@ -54,7 +56,7 @@ class LanczosInterpolationTest {
     Tensor result = interpolation.get(Tensors.vector(6.2));
     assertEquals(Dimensions.of(result), List.of(15));
     Scalar scalar = interpolation.Get(Tensors.vector(4.4, 7.2));
-    Chop._14.requireClose(scalar, RealScalar.of(105.27240539882584));
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(105.27240539882584));
   }
 
   @Test
@@ -66,7 +68,7 @@ class LanczosInterpolationTest {
     Tensor result = interpolation.get(Tensors.vector(6.2));
     assertEquals(Dimensions.of(result), List.of(15));
     Scalar scalar = interpolation.Get(Tensors.vector(4.4, 7.2));
-    Chop._14.requireClose(scalar, RealScalar.of(94.24810834850828));
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(94.24810834850828));
   }
 
   @Test
@@ -87,18 +89,14 @@ class LanczosInterpolationTest {
   @Test
   void test1D() {
     Interpolation interpolation = LanczosInterpolation.of(Tensors.vector(10, 20, 30, 40));
-    TestHelper.checkMatch(interpolation);
-    TestHelper.checkMatchExact(interpolation);
-    TestHelper.getScalarFail(interpolation);
+    new InterpolationQ(interpolation).checkAll();
   }
 
   @Test
   void test2D() {
     Distribution distribution = UniformDistribution.unit();
     Interpolation interpolation = LanczosInterpolation.of(RandomVariate.of(distribution, 3, 5));
-    TestHelper.checkMatch(interpolation);
-    TestHelper.checkMatchExact(interpolation);
-    TestHelper.getScalarFail(interpolation);
+    new InterpolationQ(interpolation).checkAll();
   }
 
   @Test

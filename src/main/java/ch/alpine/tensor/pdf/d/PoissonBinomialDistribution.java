@@ -14,7 +14,6 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
-import ch.alpine.tensor.pdf.RandomVariateInterface;
 import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Clips;
@@ -24,7 +23,7 @@ import ch.alpine.tensor.sca.Clips;
  * @see BinomialDistribution
  * @see BinomialRandomVariate */
 public class PoissonBinomialDistribution implements Distribution, //
-    RandomVariateInterface, MeanInterface, VarianceInterface, Serializable {
+    MeanInterface, VarianceInterface, Serializable {
   /** Hint:
    * if p_vector consists of identical entries, the {@link BinomialDistribution}
    * or {@link BinomialRandomVariate} should be used instead.
@@ -61,7 +60,7 @@ public class PoissonBinomialDistribution implements Distribution, //
     return RealScalar.of(lowerBound).add(Total.of(p_vector));
   }
 
-  @Override // from RandomVariateInterface
+  @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     return RealScalar.of(lowerBound + Primitives.toDoubleStream(p_vector) //
         .filter(p -> randomGenerator.nextDouble() < p) //

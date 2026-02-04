@@ -24,6 +24,7 @@ class PadRightTest {
     Tensor result = tuo.apply(vector);
     assertEquals(result.extract(0, 6), vector);
     assertEquals(result.extract(6, 10), Array.zeros(4));
+    assertEquals(result, Tensors.vector(1, 2, 3, 4, 5, 6, 0, 0, 0, 0));
   }
 
   @Test

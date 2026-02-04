@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -71,5 +72,11 @@ class ThrowTest {
     } catch (Exception exception) {
       assertEquals(exception.getMessage(), "Throw[null, {4, 7, 1, 1}, null, 1]");
     }
+  }
+
+  @Test
+  void testUnless() {
+    Throw.unless(true);
+    assertThrows(Exception.class, () -> Throw.unless(false));
   }
 }

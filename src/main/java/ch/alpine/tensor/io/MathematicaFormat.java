@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -88,7 +89,7 @@ public enum MathematicaFormat {
         .map(object -> object instanceof Tensor tensor //
             ? MathematicaFormat.format(tensor)
             : String.valueOf(object)) //
-        .collect(Collectors.joining(", ", string.toString() + "[", "]"));
+        .collect(Collectors.joining(", ", Objects.requireNonNull(string) + "[", "]"));
   }
 
   // ---

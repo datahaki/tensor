@@ -3,7 +3,6 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -38,7 +36,6 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
-import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Ceiling;
@@ -47,14 +44,15 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
+import test.SerializableQ;
 
 class DateTimeTest {
   @Test
-  void test1() throws ClassNotFoundException, IOException {
+  void test1() {
     Scalar dt1 = DateTime.of(2020, 12, 20, 4, 30);
     ExactScalarQ.require(dt1);
     Scalar dt2 = DateTime.of(2021, 1, 10, 6, 30);
-    Serialization.copy(dt1);
+    SerializableQ.require(dt1);
     Scalar scalar2 = dt2.subtract(dt1);
     assertInstanceOf(Quantity.class, scalar2);
     assertEquals(dt1.add(scalar2), dt2);
@@ -86,6 +84,8 @@ class DateTimeTest {
     assertNotEquals("asd", oneDay);
     assertNotEquals(oneDay, "asd");
     assertNotEquals(dt1.hashCode(), dt2.hashCode());
+    assertEquals(dt1.divide(RealScalar.ONE), dt1);
+    assertThrows(Exception.class, () -> dt1.divide(RealScalar.TWO));
   }
 
   @Test
@@ -151,6 +151,14 @@ class DateTimeTest {
   void testNowNanos() {
     LocalDateTime localDateTime = LocalDateTime.now();
     assertDoesNotThrow(localDateTime::toLocalTime);
+  }
+
+  @Test
+  void testTemporalAmount() {
+    DateTime dt1 = DateTime.of(2017, 12, 20, 4, 30);
+    DateTime dt2 = dt1.plus(Duration.ofHours(3));
+    DateTime dt3 = DateTime.of(2017, 12, 20, 7, 30);
+    assertEquals(dt2, dt3);
   }
 
   @Test
@@ -290,8 +298,8 @@ class DateTimeTest {
   void testAddFail1() {
     DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30);
     DateTime dt2 = DateTime.of(2020, 12, 21, 4, 30);
-    assertFalse(dt1.equals(RealScalar.ONE));
-    assertFalse(dt1.equals(dt2));
+    assertNotEquals(dt1, RealScalar.ONE);
+    assertNotEquals(dt1, dt2);
     assertEquals(dt1.compareTo(dt2), -1);
     assertEquals(dt2.compareTo(dt1), +1);
     assertThrows(Throw.class, () -> dt1.add(dt2));
@@ -511,6 +519,11 @@ class DateTimeTest {
       Scalar dor = Quantity.of(3, "m");
       assertThrows(Exception.class, () -> dom.add(dor));
     }
+  }
+
+  @Test
+  void testOfEpochFail() {
+    assertThrows(Exception.class, () -> DateTime.ofEpoch(Quantity.of(1e100, "s"), ZoneOffset.UTC));
   }
 
   @Test

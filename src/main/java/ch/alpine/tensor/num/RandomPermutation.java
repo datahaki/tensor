@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.num;
 
-import java.security.SecureRandom;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.alg.Ordering;
@@ -13,15 +13,13 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
  * <a href="https://reference.wolfram.com/language/ref/RandomPermutation.html">RandomPermutation</a> */
 public enum RandomPermutation {
   ;
-  private static final RandomGenerator RANDOM_GENERATOR = new SecureRandom();
-
   /** @param n non-negative
-   * @param random
+   * @param randomGenerator
    * @return
    * @see Integers#isPermutation(int[])
    * @throws Exception if n is negative */
-  public static int[] of(int n, RandomGenerator random) {
-    return Ordering.INCREASING.of(RandomVariate.of(UniformDistribution.unit(), random, n));
+  public static int[] of(int n, RandomGenerator randomGenerator) {
+    return Ordering.INCREASING.of(RandomVariate.of(UniformDistribution.unit(), randomGenerator, n));
   }
 
   /** Example:
@@ -33,15 +31,15 @@ public enum RandomPermutation {
    * @return array of length n
    * @throws Exception if n is negative */
   public static int[] of(int n) {
-    return of(n, RANDOM_GENERATOR);
+    return of(n, ThreadLocalRandom.current());
   }
 
   /** @param n non-negative
-   * @param random
+   * @param randomGenerator
    * @return
    * @throws Exception if n is negative */
-  public static Cycles cycles(int n, RandomGenerator random) {
-    return PermutationCycles.unsafe(of(n, random));
+  public static Cycles cycles(int n, RandomGenerator randomGenerator) {
+    return PermutationCycles.unsafe(of(n, randomGenerator));
   }
 
   /** Example:
@@ -53,6 +51,6 @@ public enum RandomPermutation {
    * @return random cycles from symmetric group S_n
    * @throws Exception if n is negative */
   public static Cycles cycles(int n) {
-    return cycles(n, RANDOM_GENERATOR);
+    return cycles(n, ThreadLocalRandom.current());
   }
 }

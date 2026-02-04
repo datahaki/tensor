@@ -53,7 +53,7 @@ class AberthEhrlichTest {
     Random random = new Random(degree);
     Distribution distribution = ComplexNormalDistribution.STANDARD;
     Tensor zeros1 = RandomVariate.of(distribution, random, degree);
-    Polynomial polynomial = TestHelper.fromZeros(zeros1);
+    Polynomial polynomial = CoefficientList.polynomial(zeros1);
     Tensor zeros = AberthEhrlich.of(polynomial, random);
     Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
   }
@@ -64,21 +64,21 @@ class AberthEhrlichTest {
     Random random = new Random(degree);
     Distribution distribution = ComplexDiskUniformDistribution.of(3);
     Tensor zeros1 = RandomVariate.of(distribution, random, degree);
-    Polynomial polynomial = TestHelper.fromZeros(zeros1);
+    Polynomial polynomial = CoefficientList.polynomial(zeros1);
     Tensor zeros = AberthEhrlich.of(polynomial, random);
     Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
   }
 
   @Test
   void testMultiplicity2() {
-    Polynomial polynomial = TestHelper.fromZeros(Tensors.fromString("{3,3,1+I}"));
+    Polynomial polynomial = CoefficientList.polynomial(Tensors.fromString("{3,3,1+I}"));
     Tensor zeros = AberthEhrlich.of(polynomial);
     Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
   }
 
   @Test
   void testMultiplicity3() {
-    Polynomial polynomial = TestHelper.fromZeros(Tensors.fromString("{3,3,3,1+I,-2-I}"));
+    Polynomial polynomial = CoefficientList.polynomial(Tensors.fromString("{3,3,3,1+I,-2-I}"));
     Tensor zeros = AberthEhrlich.of(polynomial);
     Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
   }

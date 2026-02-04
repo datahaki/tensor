@@ -8,6 +8,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -48,15 +50,27 @@ class MatrixLogTest {
     }
   }
 
+  @RepeatedTest(6)
+  void testExp(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
+    Tensor exp = MatrixExp.of(x);
+    Tensor log = MatrixLog.of(exp);
+    Tensor cmp = MatrixExp.of(log);
+    Chop._04.requireClose(exp, cmp);
+  }
+
   @Test
-  void testExp() {
-    for (int n = 2; n < 7; ++n) {
-      Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
-      Tensor exp = MatrixExp.of(x);
-      Tensor log = MatrixLog.of(exp);
-      Tensor cmp = MatrixExp.of(log);
-      Chop._04.requireClose(exp, cmp);
-    }
+  void testFail2() {
+    int n = 5;
+    Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
+    Tensor exp = MatrixExp.of(x);
+    Tensor log = MatrixLog.of(exp);
+    Tensor cmp = MatrixExp.of(log);
+    Chop._04.requireClose(exp, cmp);
+    MatrixLog.MatrixLog_MAX_EXPONENT.set(1);
+    assertThrows(Exception.class, () -> MatrixLog.of(exp));
+    MatrixLog.MatrixLog_MAX_EXPONENT.remove();
   }
 
   @Test

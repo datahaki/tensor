@@ -37,7 +37,7 @@ public enum TensorWedge {
         .map(permutation -> signed(tensor, Primitives.toIntArray(permutation))) //
         .reduce(Tensor::add) //
         .map(sum -> sum.divide(Factorial.of(rank))) //
-        .get();
+        .orElseThrow();
   }
 
   private static Tensor signed(Tensor tensor, int[] sigma) {

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -40,6 +43,8 @@ class TruncatedDistributionTest {
     Distribution distribution = Serialization.copy(TruncatedDistribution.of(NormalDistribution.of(10, 2), clip));
     Scalar scalar = RandomVariate.of(distribution);
     assertTrue(clip.isInside(scalar));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), clip);
   }
 
   @Test
@@ -147,11 +152,19 @@ class TruncatedDistributionTest {
         "TruncatedDistribution[PoissonDistribution[7], Clip[5, 10]]");
   }
 
+  static class ArtificalDistribution implements Distribution {
+    @Override
+    public Scalar randomVariate(RandomGenerator randomGenerator) {
+      return RealScalar.of(10 + randomGenerator.nextInt(5));
+    }
+  }
+
   @Test
   void testArtifical() {
     Distribution distribution = new ArtificalDistribution();
     Distribution truncated = TruncatedDistribution.of(distribution, Clips.interval(0, 10));
-    RandomVariate.of(truncated, 10);
+    Tensor tensor = RandomVariate.of(truncated, 5);
+    assertEquals(tensor, ConstantArray.of(RealScalar.of(10), 5));
   }
 
   @Test

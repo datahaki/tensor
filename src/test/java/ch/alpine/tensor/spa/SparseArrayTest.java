@@ -2,6 +2,7 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -13,10 +14,12 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -77,6 +80,34 @@ class SparseArrayTest {
     s_mat1.dot(s_mat2);
     f_mat1.dot(f_mat2);
     f_mat1.dot(s_mat2);
+  }
+
+  @Test
+  void testMap1() {
+    Tensor sparse = SparseArray.of(RealScalar.ZERO, 5, 4);
+    sparse.set(RealScalar.of(2), 2, 1);
+    Tensor tensor = sparse.map(s -> GaussScalar.of(s.number().intValue(), 7));
+    assertInstanceOf(SparseArray.class, tensor);
+    SparseArray casted = (SparseArray) tensor;
+    assertEquals(casted.fallback(), GaussScalar.of(0, 7));
+  }
+
+  @Test
+  void testMap2() {
+    Tensor sparse = SparseArray.of(RealScalar.ZERO, 5, 4);
+    sparse.set(RealScalar.of(2), 2, 1);
+    Tensor tensor = sparse.map(s -> Scalars.isZero(s) ? s : Tensors.vector(1, 2));
+    assertFalse(tensor instanceof SparseArray);
+    assertFalse(ArrayQ.of(tensor));
+  }
+
+  @Test
+  void testMap3() {
+    Tensor sparse = SparseArray.of(RealScalar.ZERO, 5, 4);
+    String string = sparse.toString();
+    sparse.set(RealScalar.of(2), 2, 1);
+    sparse.set(RealScalar.of(0), 2, 1);
+    assertEquals(sparse.toString(), string);
   }
 
   @Test
@@ -152,13 +183,13 @@ class SparseArrayTest {
 
   @Test
   void testCreateScalar() {
-    assertEquals(TestHelper.of(Pi.VALUE), Pi.VALUE);
+    assertEquals(TensorToSparseArray.of(Pi.VALUE), Pi.VALUE);
   }
 
   @Test
   void testCreate() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     assertEquals(Dimensions.of(sparse), Arrays.asList(3, 5));
     assertEquals(Pretty.of(sparse), Pretty.of(tensor));
     sparse.toString();
@@ -171,7 +202,7 @@ class SparseArrayTest {
   @Test
   void testBlock0() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     assertEquals(Normal.of(sparse), tensor);
     Tensor result = sparse.block(Arrays.asList(1, 0), Arrays.asList(2, 3));
     Tensor expect = Tensors.fromString("{{5, 6, 8}, {0, 2, 9}}");
@@ -186,7 +217,7 @@ class SparseArrayTest {
   @Test
   void testBlock1() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     Tensor result = sparse.block(Arrays.asList(1, 0), Arrays.asList(0, 0));
     assertEquals(result, Tensors.empty());
     assertEquals(Dimensions.of(result), List.of(0));
@@ -195,7 +226,7 @@ class SparseArrayTest {
   @Test
   void testBlock2() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     Tensor result = sparse.block(List.of(2), List.of(1));
     assertEquals(result, tensor.block(List.of(2), List.of(1)));
     assertEquals(Dimensions.of(result), Arrays.asList(1, 5));
@@ -204,15 +235,15 @@ class SparseArrayTest {
 
   @Test
   void testCreateId() {
-    Tensor sparse = TestHelper.of(IdentityMatrix.of(5));
-    SquareMatrixQ.require(sparse);
+    Tensor sparse = TensorToSparseArray.of(IdentityMatrix.of(5));
+    SquareMatrixQ.INSTANCE.requireMember(sparse);
     assertEquals(Inverse.of(sparse), IdentityMatrix.of(5));
   }
 
   @Test
   void testSetSimple() {
     Tensor tensor = Tensors.vector(1, 0, 3, 0, 0);
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     assertEquals(Normal.of(sparse), tensor);
     sparse.set(RealScalar.ONE::add, Tensor.ALL);
     assertEquals(sparse, Tensors.vector(2, 1, 4, 1, 1));
@@ -225,7 +256,7 @@ class SparseArrayTest {
   @Test
   void testSet1All() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     tensor.set(Tensors.vector(-1, -2, -3, -4, -5), 1, Tensor.ALL);
     sparse.set(Tensors.vector(-1, -2, -3, -4, -5), 1, Tensor.ALL);
     assertEquals(tensor, sparse);
@@ -236,7 +267,7 @@ class SparseArrayTest {
   @Test
   void testSetAll4() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     tensor.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
     sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
     assertEquals(tensor, sparse);
@@ -260,7 +291,7 @@ class SparseArrayTest {
   @Test
   void testSetRemove() {
     Tensor tensor = Tensors.vector(1, 0, 3, 0, 0);
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     sparse.set(RealScalar.of(-3)::add, 2);
     assertEquals(sparse, Tensors.vector(1, 0, 0, 0, 0));
     assertInstanceOf(SparseArray.class, sparse);
@@ -269,7 +300,7 @@ class SparseArrayTest {
   @Test
   void testSetMatrix() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4},{0,0,0,0,0}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     sparse.set(RealScalar.ONE::add, 1, Tensor.ALL);
     Tensor expect = Tensors.fromString("{{1,0,3,0,0},{6,7,9,1,1},{0,2,9,0,4},{0,0,0,0,0}}");
     assertEquals(sparse, expect);
@@ -281,7 +312,7 @@ class SparseArrayTest {
   @Test
   void testSetMatrixAll() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4},{0,0,0,0,0}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     sparse.set(RealScalar.TWO::add, Tensor.ALL, 1);
     Tensor expect = Tensors.fromString("{{1,2,3,0,0},{5,8,8,0,0},{0,4,9,0,4},{0,2,0,0,0}}");
     assertEquals(sparse, expect);
@@ -290,7 +321,7 @@ class SparseArrayTest {
   @Test
   void testSetMatrixVector() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4},{0,0,0,0,0}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     sparse.set(tensor.get(2)::add, 1);
     Tensor expect = Tensors.fromString("{{1,0,3,0,0},{5,8,17,0,4},{0,2,9,0,4},{0,0,0,0,0}}");
     assertEquals(sparse, expect);
@@ -299,7 +330,7 @@ class SparseArrayTest {
   @Test
   void testSetMatrixRemove() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4},{0,0,0,0,0}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     sparse.set(tensor.get(2).negate()::add, 2);
     Tensor expect = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,0,0,0,0},{0,0,0,0,0}}");
     assertEquals(sparse, expect);
@@ -308,7 +339,7 @@ class SparseArrayTest {
   @Test
   void testSetMatrixFull() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4},{0,0,0,0,0}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 2);
     Tensor expect = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{1,2,3,4,5},{0,0,0,0,0}}");
     assertEquals(sparse, expect);
@@ -320,7 +351,7 @@ class SparseArrayTest {
   @Test
   void testSetFail() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4},{0,0,0,0,0}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 2);
     sparse.set(Array.zeros(5), 2);
     assertThrows(Throw.class, () -> sparse.set(Array.zeros(5, 2), 2));
@@ -346,7 +377,7 @@ class SparseArrayTest {
   void testQuantityOps() {
     String string = "{{3[m], 7[m], 0[m]}, {1[m], 0[m], 0[m]}}";
     Tensor full = Tensors.fromString(string);
-    SparseArray sparseArray = (SparseArray) TestHelper.of(full);
+    SparseArray sparseArray = (SparseArray) TensorToSparseArray.of(full);
     assertEquals(full, sparseArray);
     int nnz = Nnz.of(sparseArray);
     assertEquals(nnz, 3);
@@ -365,6 +396,6 @@ class SparseArrayTest {
   @Test
   void testFail() {
     Tensor tensor = Tensors.fromString("{1,0,{3},0,0}");
-    assertThrows(ClassCastException.class, () -> TestHelper.of(tensor));
+    assertThrows(Exception.class, () -> TensorToSparseArray.of(tensor));
   }
 }

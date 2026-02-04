@@ -40,7 +40,7 @@ class FoldTest {
 
   @Test
   void testSingletonStream() {
-    assertEquals(Stream.of(Pi.VALUE).reduce(Scalar::add).get(), Pi.VALUE);
+    assertEquals(Stream.of(Pi.VALUE).reduce(Scalar::add).orElseThrow(), Pi.VALUE);
   }
 
   @Test

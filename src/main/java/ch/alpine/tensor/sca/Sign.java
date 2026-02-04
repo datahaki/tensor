@@ -10,7 +10,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.SignInterface;
-import ch.alpine.tensor.lie.Quaternion;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.qty.Quantity;
 
 /** Sign is consistent with Mathematica for {@link RealScalar}, {@link ComplexScalar},

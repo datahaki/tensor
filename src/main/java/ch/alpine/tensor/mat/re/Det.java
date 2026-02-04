@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
@@ -9,6 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.lie.Signature;
@@ -34,7 +34,7 @@ public class Det extends AbstractReduce {
    * @return determinant of matrix
    * @throws Exception if matrix is not square */
   public static Scalar of(Tensor matrix, Pivot pivot) {
-    return new Det(SquareMatrixQ.require(matrix), pivot).override_det();
+    return new Det(SquareMatrixQ.INSTANCE.requireMember(matrix), pivot).override_det();
   }
 
   /** Careful: do not call function for large matrix
@@ -43,12 +43,12 @@ public class Det extends AbstractReduce {
    * @param matrix
    * @return */
   public static Scalar withoutDivision(Tensor matrix) {
-    int n = SquareMatrixQ.require(matrix).length();
+    int n = SquareMatrixQ.INSTANCE.requireMember(matrix).length();
     return Permutations.stream(Range.of(0, n)).map(sigma -> {
-      AtomicInteger atomicInteger = new AtomicInteger();
+      Int i = new Int();
       int[] index = Primitives.toIntArray(sigma);
       return matrix.stream() //
-          .map(row -> row.Get(index[atomicInteger.getAndIncrement()])) //
+          .map(row -> row.Get(index[i.getAndIncrement()])) //
           .reduce(Scalar::multiply) //
           .map(Signature.of(sigma)::multiply) //
           .orElseThrow();

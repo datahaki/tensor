@@ -33,7 +33,7 @@ import ch.alpine.tensor.mat.SquareMatrixQ;
  * After importing the csv file using {@link Import}
  * the check StringScalarQ.any(tensor) should return false. */
 class LowercaseETest {
-  private static final String RESOURCE = "/ch/alpine/tensor/io/lowercase_e.csv";
+  private final String RESOURCE = "/ch/alpine/tensor/io/lowercase_e.csv";
 
   @Test
   void testConventional() {
@@ -42,7 +42,7 @@ class LowercaseETest {
     assertEquals(tensor.length(), 6);
     assertEquals(tensor.get(0).length(), 3);
     MatrixQ.require(tensor.extract(0, 3));
-    assertTrue(SquareMatrixQ.of(tensor.extract(0, 3)));
+    assertTrue(SquareMatrixQ.INSTANCE.isMember(tensor.extract(0, 3)));
     assertEquals(Dimensions.of(tensor.extract(3, 6)), Arrays.asList(3, 2));
   }
 
@@ -59,7 +59,7 @@ class LowercaseETest {
     assertEquals(tensor.length(), 6);
     assertEquals(tensor.get(0).length(), 3);
     MatrixQ.require(tensor.extract(0, 3));
-    assertTrue(SquareMatrixQ.of(tensor.extract(0, 3)));
+    assertTrue(SquareMatrixQ.INSTANCE.isMember(tensor.extract(0, 3)));
     assertEquals(Dimensions.of(tensor.extract(3, 6)), Arrays.asList(3, 2));
   }
 }

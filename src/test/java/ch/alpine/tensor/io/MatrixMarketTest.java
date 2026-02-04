@@ -3,6 +3,7 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
@@ -18,10 +19,12 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.spa.Nnz;
+import ch.alpine.tensor.spa.Normal;
 import ch.alpine.tensor.spa.SparseArray;
 
 class MatrixMarketTest {
@@ -42,7 +45,7 @@ class MatrixMarketTest {
   @Test
   void testCoordinateSymmetric() {
     Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/bcsstk13.mtx.gz");
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
   }
 
   @Test
@@ -52,19 +55,29 @@ class MatrixMarketTest {
     assertFalse(Chop._04.allZero(matrix));
   }
 
-  @Test
   @Disabled
+  @Test
   void testLeastSquares() {
+    // [1033, 320] matrix
     Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/well1033.mtx.gz");
+    assertInstanceOf(SparseArray.class, matrix);
     Tensor rhs = Flatten.of(Import.of("/ch/alpine/tensor/io/mtx/well1033_rhs1.mtx.gz"));
-    // TODO TENSOR IMPL for some reason slows down at k=192
-    LeastSquares.of(matrix, rhs);
+    {
+      Timing t1 = Timing.started();
+      LeastSquares.of(matrix, rhs);
+      IO.println(t1.nanoSeconds());
+    }
+    {
+      Timing t1 = Timing.started();
+      LeastSquares.of(Normal.of(matrix), rhs);
+      IO.println(t1.nanoSeconds());
+    }
   }
 
   @Test
-  void testExportFail(@TempDir File folder) {
+  void testExportFail(@TempDir File tempDir) {
     Tensor matrix = Array.zeros(2, 3);
-    assertThrows(UnsupportedOperationException.class, () -> Export.of(new File(folder, "matrix.mtx"), matrix));
+    assertThrows(UnsupportedOperationException.class, () -> Export.of(new File(tempDir, "matrix.mtx"), matrix));
   }
 
   @Test

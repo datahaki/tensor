@@ -25,7 +25,6 @@ import ch.alpine.tensor.sca.pow.Power;
  * "Approximating the Logarithm of a Matrix to Specified Accuracy"
  * by Sheung Hun Cheng, Nicholas J. Higham, Charles S. Kenny, Alan J. Laub, 2001 */
 /* package */ class DenmanBeaversDet implements MatrixSqrt, Serializable {
-  private static final int MAX_ITERATIONS = 100;
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Scalar _1_4 = RealScalar.of(0.25);
   // ---
@@ -45,7 +44,8 @@ import ch.alpine.tensor.sca.pow.Power;
     Tensor id2 = id.multiply(HALF);
     ScalarUnaryOperator power = Power.function(RationalScalar.of(-1, n << 1));
     // Incomplete square root cascade
-    for (; iteration < MAX_ITERATIONS; ++iteration) {
+    int max = MatrixSqrt.MAX_ITERATIONS.get();
+    for (; iteration < max; ++iteration) {
       /* the publication suggests to use |Det(mk)^(-1/2n)|
        * which would just take a detour via complex numbers!? */
       GaussianElimination gaussianElimination = new GaussianElimination(mk, id, Pivots.ARGMAX_ABS);
@@ -79,7 +79,7 @@ import ch.alpine.tensor.sca.pow.Power;
   }
 
   @PackageTestAccess
-  /* package */ int count() {
+  int count() {
     return iteration;
   }
 }

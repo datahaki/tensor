@@ -206,12 +206,12 @@ class TensorSetTest {
   @Test
   void testSetTensorLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
-    assertThrows(IllegalArgumentException.class, () -> vector.set(RealScalar.ONE));
+    assertThrows(Exception.class, () -> vector.set(RealScalar.ONE));
   }
 
   @Test
   void testSetFunctionLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
-    assertThrows(IllegalArgumentException.class, () -> vector.set(t -> RealScalar.ONE));
+    assertThrows(Exception.class, () -> vector.set(_ -> RealScalar.ONE));
   }
 }

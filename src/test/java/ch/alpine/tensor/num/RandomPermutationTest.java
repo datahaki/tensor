@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -87,7 +88,7 @@ class RandomPermutationTest {
 
   @Test
   void testSameCycles() {
-    int seed = new Random().nextInt();
+    int seed = ThreadLocalRandom.current().nextInt();
     Cycles c1 = RandomPermutation.cycles(123, new Random(seed));
     Cycles c2 = RandomPermutation.cycles(123, new Random(seed));
     assertEquals(c1, c2);
@@ -95,7 +96,7 @@ class RandomPermutationTest {
 
   @Test
   void testSameArrays() {
-    int seed = new Random().nextInt();
+    int seed = ThreadLocalRandom.current().nextInt();
     int[] c1 = RandomPermutation.of(123, new Random(seed));
     int[] c2 = RandomPermutation.of(123, new Random(seed));
     assertArrayEquals(c1, c2);

@@ -3,6 +3,7 @@ package ch.alpine.tensor.img;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Hue;
 import ch.alpine.tensor.sca.Clips;
 
 /* package */ class HueColorData implements ColorDataGradient {

@@ -11,7 +11,7 @@ enum WavReader {
     byte[] d4 = new byte[4];
     inputStream.read(d4);
     String string = new String(d4);
-    System.out.println(string);
+    IO.println(string);
     // ByteBuffer.wrap(d4).;
     return null;
   }

@@ -253,7 +253,7 @@ class DeBoorTest {
   void testKnotsLengthOdd() {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2), Range.of(0, 2));
     assertEquals(deBoor.degree(), 1);
-    assertThrows(Throw.class, () -> DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3), Range.of(0, 2)));
+    assertThrows(Exception.class, () -> DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3), Range.of(0, 2)));
   }
 
   @Test

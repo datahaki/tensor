@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Abs;
 class TensorStreamTest {
   @Test
   void testStream() {
-    Tensor row = IdentityMatrix.of(5).stream().skip(2).findFirst().get();
+    Tensor row = IdentityMatrix.of(5).stream().skip(2).findFirst().orElseThrow();
     assertEquals(row, UnitVector.of(5, 2));
   }
 

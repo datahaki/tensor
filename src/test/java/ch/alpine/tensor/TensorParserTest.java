@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -154,12 +154,12 @@ class TensorParserTest {
 
   @Test
   void testFromStringFunction() {
-    assertEquals(Tensors.fromString("{ 2 ,-3   , 4}", string -> RealScalar.of(3)), Tensors.vector(3, 3, 3));
+    assertEquals(Tensors.fromString("{ 2 ,-3   , 4}", _ -> RealScalar.of(3)), Tensors.vector(3, 3, 3));
   }
 
   @Test
   void testFromStringFunctionNested() {
-    assertEquals(Tensors.fromString("{ 2 ,{-3   , 4} }", string -> RealScalar.of(3)), Tensors.fromString("{3, {3, 3}}"));
+    assertEquals(Tensors.fromString("{ 2 ,{-3   , 4} }", _ -> RealScalar.of(3)), Tensors.fromString("{3, {3, 3}}"));
   }
 
   @Test
@@ -176,12 +176,11 @@ class TensorParserTest {
     assertTrue(pattern.matcher("  \t \n ").matches());
   }
 
-  private static final RandomGenerator RANDOM_GENERATOR = new Random();
-
-  private static Tensor generate(int level, int max) {
-    if (level < max && 0.2 < RANDOM_GENERATOR.nextDouble())
-      return Tensor.of(IntStream.range(0, RANDOM_GENERATOR.nextInt(4)).mapToObj(i -> generate(level + 1, max)));
-    return RealScalar.of(RANDOM_GENERATOR.nextInt(100));
+  private Tensor generate(int level, int max) {
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
+    if (level < max && 0.2 < randomGenerator.nextDouble())
+      return Tensor.of(IntStream.range(0, randomGenerator.nextInt(4)).mapToObj(_ -> generate(level + 1, max)));
+    return RealScalar.of(randomGenerator.nextInt(100));
   }
 
   @Test

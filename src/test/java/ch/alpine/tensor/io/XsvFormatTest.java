@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
@@ -44,11 +44,11 @@ class XsvFormatTest {
 
   @Test
   void testCsvR() {
-    RandomGenerator randomGenerator = new Random();
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
     convertCheck( //
-        Tensors.matrix((i, j) -> RationalScalar.of(randomGenerator.nextInt(100) - 50, randomGenerator.nextInt(100) + 1), 20, 4));
-    convertCheck(Tensors.matrix((i, j) -> DoubleScalar.of(randomGenerator.nextGaussian() * 1e-50), 20, 10));
-    convertCheck(Tensors.matrix((i, j) -> DoubleScalar.of(randomGenerator.nextGaussian() * 1e+50), 20, 10));
+        Tensors.matrix((_, _) -> RationalScalar.of(randomGenerator.nextInt(100) - 50, randomGenerator.nextInt(100) + 1), 20, 4));
+    convertCheck(Tensors.matrix((_, _) -> DoubleScalar.of(randomGenerator.nextGaussian() * 1e-50), 20, 10));
+    convertCheck(Tensors.matrix((_, _) -> DoubleScalar.of(randomGenerator.nextGaussian() * 1e+50), 20, 10));
   }
 
   @Test

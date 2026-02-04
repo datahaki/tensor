@@ -27,7 +27,7 @@ class ArrayPadTest {
   void testVectorQantity() {
     Tensor vec = Tensors.fromString("{0[m],0.0[m]}");
     Tensor res = ArrayPad.of(vec, List.of(1), List.of(1));
-    assertEquals(res.toString(), "{0.0[m], 0[m], 0.0[m], 0.0[m]}");
+    assertEquals(res.toString(), "{0[m], 0[m], 0.0[m], 0[m]}");
   }
 
   @Test

@@ -17,7 +17,7 @@ class ChebyshevInterpolationTest {
     ScalarUnaryOperator suo = Exp.FUNCTION;
     int n = 13;
     // ScalarUnaryOperator apx1 = ChebyshevInterpolation.of(suo, chebyshevNodes, n);
-    ScalarUnaryOperator apx2 = ChebyshevInterpolation.alt(suo, chebyshevNodes, n);
+    ScalarUnaryOperator apx2 = ChebyshevInterpolation.of(suo, chebyshevNodes, n);
     Tensor knots = chebyshevNodes.of(n);
     InterpolatingPolynomial ip = InterpolatingPolynomial.of(knots);
     ScalarUnaryOperator suo3 = ip.scalarUnaryOperator(knots.map(suo));

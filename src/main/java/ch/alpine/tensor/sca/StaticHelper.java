@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Scalar;
 
+/** reviewed */
 /* package */ enum StaticHelper {
   ;
   public static final Scalar _1 = DecimalScalar.of(new BigDecimal("0.1"));

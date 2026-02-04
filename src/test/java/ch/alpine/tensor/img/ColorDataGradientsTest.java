@@ -3,7 +3,8 @@ package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -70,20 +71,13 @@ class ColorDataGradientsTest {
     Serialization.copy(colorDataGradient.deriveWithOpacity(RealScalar.of(0.2)));
   }
 
-  @Test
-  void testStrict() {
-    int count = 0;
-    for (ColorDataGradients colorDataGradients : ColorDataGradients.values()) {
-      Optional<Tensor> optional = colorDataGradients.queryTableRgba();
-      if (optional.isPresent()) {
-        Tensor tableRgba = optional.get();
-        LinearColorDataGradient.of(tableRgba);
-        ++count;
-      }
-      // else
-      // System.out.println(colorDataGradients);
-    }
-    assertTrue(34 <= count);
+  @ParameterizedTest
+  @EnumSource
+  void testStrict(ColorDataGradients colorDataGradients) {
+    Optional<Tensor> optional = colorDataGradients.queryTableRgba();
+    assumeTrue(optional.isPresent());
+    Tensor tableRgba = optional.orElseThrow();
+    LinearColorDataGradient.of(tableRgba);
   }
 
   @Test
@@ -110,12 +104,10 @@ class ColorDataGradientsTest {
   void testFail(ColorDataGradient colorDataGradient) {
     colorDataGradient.apply(RealScalar.of(0.5));
     colorDataGradient.apply(RealScalar.of(0.99));
-    if (colorDataGradient.equals(ColorDataGradients.HUE)) {
-      // hue is implemented periodically [0, 1) == [1, 2) == ...
-    } else {
-      assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(-0.1)));
-      assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(1.1)));
-      assertThrows(Throw.class, () -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
-    }
+    // hue is implemented periodically [0, 1) == [1, 2) == ...
+    assumeFalse(colorDataGradient.equals(ColorDataGradients.HUE));
+    assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(-0.1)));
+    assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(1.1)));
+    assertThrows(Throw.class, () -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
   }
 }

@@ -36,7 +36,7 @@ public class Binomial implements Serializable {
     OptionalInt _n = Scalars.optionalInt(n);
     OptionalInt _m = Scalars.optionalInt(m);
     if (_n.isPresent() && _m.isPresent())
-      return of(_n.getAsInt(), _m.getAsInt());
+      return of(_n.orElseThrow(), _m.orElseThrow());
     Scalar np1 = n.add(RealScalar.ONE);
     return Gamma.FUNCTION.apply(np1).divide( //
         Gamma.FUNCTION.apply(m.add(RealScalar.ONE)).multiply(Gamma.FUNCTION.apply(np1.subtract(m))));

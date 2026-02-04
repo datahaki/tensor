@@ -15,13 +15,14 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.fft.ListCorrelate;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Tan;
 
 class TensorUnaryOperatorTest {
   @Test
   void testChain() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator tuo = TensorUnaryOperator.chain(ListCorrelate.with(Tensors.vector(1, 2)), ListCorrelate.with(Tensors.vector(3, 4)));
+    TensorUnaryOperator tuo = ListCorrelate.with(Tensors.vector(1, 2)).andThen(ListCorrelate.with(Tensors.vector(3, 4)));
     Serialization.copy(tuo);
     tuo.apply(Tensors.vector(1, 2, 3, 4, 5, 6, 7, 8));
   }
@@ -40,7 +41,7 @@ class TensorUnaryOperatorTest {
 
   @Test
   void testSerializableId() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator tensorUnaryOperator = TensorUnaryOperator.chain();
+    TensorUnaryOperator tensorUnaryOperator = t -> t;
     TensorUnaryOperator copy = Serialization.copy(tensorUnaryOperator);
     assertEquals(copy.apply(Tensors.vector(1, 2, 4)), Tensors.vector(1, 2, 4));
   }
@@ -56,20 +57,19 @@ class TensorUnaryOperatorTest {
   }
 
   @Test
+  void testSlash() {
+    TensorUnaryOperator tuo = t -> t;
+    assertEquals(IdentityMatrix.of(3), tuo.slash(IdentityMatrix.of(3)));
+  }
+
+  @Test
   void testComposeFail() {
     assertThrows(Exception.class, () -> ListCorrelate.with(Tensors.vector(1, 2)).compose(null));
     assertThrows(Exception.class, () -> ListCorrelate.with(Tensors.vector(1, 2)).andThen(null));
   }
 
   @Test
-  void testChainEmpty() {
-    TensorUnaryOperator tuo1 = TensorUnaryOperator.chain();
-    TensorUnaryOperator tuo2 = TensorUnaryOperator.chain();
-    assertEquals(tuo1, tuo2);
-  }
-
-  @Test
   void testChainFail() {
-    assertThrows(Exception.class, () -> TensorUnaryOperator.chain(ListCorrelate.with(Tensors.vector(1, 2)), null));
+    assertThrows(Exception.class, () -> ListCorrelate.with(Tensors.vector(1, 2)).andThen(null));
   }
 }

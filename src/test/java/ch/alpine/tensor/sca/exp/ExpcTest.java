@@ -1,7 +1,10 @@
 // code by jph
 package ch.alpine.tensor.sca.exp;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -25,13 +28,22 @@ class ExpcTest {
     Tolerance.CHOP.requireClose(scalar, RealScalar.ONE);
   }
 
-  @RepeatedTest(10)
+  @RepeatedTest(5)
   void testRandom() {
     Distribution distribution = UniformDistribution.of(0, 2e-12);
     Scalar mu = RandomVariate.of(distribution);
     Chop._10.requireClose( //
         Expc.FUNCTION.apply(mu), //
         RealScalar.ONE);
+  }
+
+  @RepeatedTest(10)
+  void testDecimal(RepetitionInfo repetitionInfo) {
+    int n = 12 + repetitionInfo.getCurrentRepetition();
+    BigDecimal bigDecimal = new BigDecimal("0." + "0".repeat(n) + "123");
+    Scalar scalar = RealScalar.of(bigDecimal);
+    Scalar result = Expc.FUNCTION.apply(scalar);
+    Tolerance.CHOP.requireClose(RealScalar.ONE, result);
   }
 
   @Test

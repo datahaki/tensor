@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.NavigableMap;
 
@@ -22,23 +21,24 @@ import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.nrm.VectorInfinityNorm;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.RandomSample;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
+import test.SerializableQ;
 
 class NdTreeMapTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     CoordinateBoundingBox box = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[m], 3[m]}"), //
         Tensors.fromString("{2[m], 3[m], 4[m]}"));
     NdMap<Void> ndMap = NdTreeMap.of(box);
-    for (int count = 0; count < 50; ++count)
-      ndMap.insert(TestHelper.sample(box), null);
-    ndMap = Serialization.copy(ndMap);
+    RandomSample.of(new BoxRandomSample(box), 50).forEach(rs -> ndMap.insert(rs, null));
+    SerializableQ.require(ndMap);
     Tensor center = Tensors.fromString("{3/2[m], 5/2[m], 4[m]}");
     NdCenterInterface ndCenterInterface = NdCenters.VECTOR_2_NORM.apply(center);
     {
@@ -140,10 +140,10 @@ class NdTreeMapTest {
         Tensors.fromString("{2[m], 3[s], 4[A]}"));
     NdMap<String> ndMap = NdTreeMap.of(box);
     for (int c = 0; c < 100; ++c) {
-      Tensor tensor = TestHelper.sample(box);
+      Tensor tensor = RandomSample.of(new BoxRandomSample(box));
       ndMap.insert(tensor, "" + c);
     }
-    Tensor center = TestHelper.sample(box);
+    Tensor center = RandomSample.of(new BoxRandomSample(box));
     NdCenterBase ndCenterBase = new NdCenterBase(center) {
       @Override
       public Scalar distance(Tensor point) {

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
@@ -79,7 +79,7 @@ class PoissonDistributionTest {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(10.5));
     CDF cdf = CDF.of(distribution);
     Scalar scalar = cdf.p_lessThan(RealScalar.of(50));
-    Chop._12.requireClose(scalar, RealScalar.ONE);
+    Tolerance.CHOP.requireClose(scalar, RealScalar.ONE);
   }
 
   @Test
@@ -87,7 +87,7 @@ class PoissonDistributionTest {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(1.5));
     CDF cdf = CDF.of(distribution);
     Scalar scalar = cdf.p_lessThan(RealScalar.of(50));
-    Chop._12.requireClose(scalar, RealScalar.ONE);
+    Tolerance.CHOP.requireClose(scalar, RealScalar.ONE);
   }
 
   @Test
@@ -122,7 +122,7 @@ class PoissonDistributionTest {
 
   @Test
   void testMarkov() {
-    RandomGenerator random = new Random();
+    RandomGenerator random = ThreadLocalRandom.current();
     Distribution distribution = PoissonDistribution.of(0.1 + 10 * random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);

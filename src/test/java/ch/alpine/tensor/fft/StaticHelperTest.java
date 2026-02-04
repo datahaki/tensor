@@ -29,28 +29,28 @@ class StaticHelperTest {
   void testSimple(WindowFunctions windowFunctions) {
     int[] lengths = new int[] { 1, 2, 3, 4, 10, 32 };
     for (int windowLength : lengths) {
-      Tensor weights = StaticHelper.weights(windowLength, windowFunctions.get());
+      Tensor weights = SlidingWindow.weights(windowLength, windowFunctions.get());
       Tolerance.CHOP.requireClose(Total.of(weights), RealScalar.of(windowLength));
     }
   }
 
   @Test
   void testDirichlet() {
-    Tensor weights = StaticHelper.weights(13, DirichletWindow.FUNCTION);
+    Tensor weights = SlidingWindow.weights(13, DirichletWindow.FUNCTION);
     Tolerance.CHOP.requireClose(weights, ConstantArray.of(RealScalar.ONE, 13));
   }
 
   @Test
   void testSamples() {
-    assertEquals(StaticHelper.samples(2), Tensors.fromString("{-1/4, 1/4}"));
-    assertEquals(StaticHelper.samples(3), Tensors.fromString("{-1/3, 0, 1/3}"));
-    assertEquals(StaticHelper.samples(4), Tensors.fromString("{-3/8, -1/8, 1/8, 3/8}"));
+    assertEquals(SlidingWindow.samples(2), Tensors.fromString("{-1/4, 1/4}"));
+    assertEquals(SlidingWindow.samples(3), Tensors.fromString("{-1/3, 0, 1/3}"));
+    assertEquals(SlidingWindow.samples(4), Tensors.fromString("{-3/8, -1/8, 1/8, 3/8}"));
   }
 
   @Test
   void testSamplesDifferences() {
     for (int n = 2; n < 8; ++n) {
-      Tensor vector = StaticHelper.samples(n);
+      Tensor vector = SlidingWindow.samples(n);
       Tensor result = Join.of(vector, vector.map(RealScalar.ONE::add));
       assertEquals(Tally.of(Differences.of(result)).size(), 1);
     }
@@ -58,7 +58,7 @@ class StaticHelperTest {
 
   @Test
   void testZeroFail() {
-    assertThrows(ArithmeticException.class, () -> StaticHelper.weights(0, s -> s));
+    assertThrows(ArithmeticException.class, () -> SlidingWindow.weights(0, s -> s));
   }
 
   @Test

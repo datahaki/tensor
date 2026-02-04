@@ -3,7 +3,6 @@
 package ch.alpine.tensor.lie.bch;
 
 import java.util.Objects;
-import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
@@ -12,6 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.gam.Factorial;
@@ -45,7 +45,7 @@ public class BakerCampbellHausdorff extends BchSeries {
    * @param degree strictly positive, depth of series
    * @param chop tolerance for truncation of recursive calls
    * @return */
-  public static BinaryOperator<Tensor> of(Tensor ad, int degree, Chop chop) {
+  public static TensorBinaryOperator of(Tensor ad, int degree, Chop chop) {
     Objects.requireNonNull(chop);
     return switch (degree) {
     case 0x6 -> new BchSeries6(ad);
@@ -58,7 +58,7 @@ public class BakerCampbellHausdorff extends BchSeries {
   /** @param ad tensor of rank 3 that satisfies the Jacobi identity
    * @param degree strictly positive
    * @return */
-  public static BinaryOperator<Tensor> of(Tensor ad, int degree) {
+  public static TensorBinaryOperator of(Tensor ad, int degree) {
     return of(ad, degree, Chop._14);
   }
 

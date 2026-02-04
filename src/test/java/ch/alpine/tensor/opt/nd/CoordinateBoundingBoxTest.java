@@ -2,7 +2,6 @@
 package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,6 +17,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.pdf.RandomSample;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -73,7 +73,7 @@ class CoordinateBoundingBoxTest {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[m], 3[m]}"), //
         Tensors.fromString("{2[m], 3[m], 4[m]}"));
-    Tensor tensor = TestHelper.sample(coordinateBoundingBox);
+    Tensor tensor = RandomSample.of(new BoxRandomSample(coordinateBoundingBox));
     assertTrue(coordinateBoundingBox.isInside(tensor));
     coordinateBoundingBox.requireInside(tensor);
   }
@@ -83,7 +83,7 @@ class CoordinateBoundingBoxTest {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[s], 3[A]}"), //
         Tensors.fromString("{2[m], 3[s], 4[A]}"));
-    Tensor tensor = TestHelper.sample(coordinateBoundingBox);
+    Tensor tensor = RandomSample.of(new BoxRandomSample(coordinateBoundingBox));
     assertTrue(coordinateBoundingBox.isInside(tensor));
     coordinateBoundingBox.requireInside(tensor);
   }
@@ -93,7 +93,7 @@ class CoordinateBoundingBoxTest {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[m], 4[m]}"), //
         Tensors.fromString("{2[m], 3[m], 4[m]}"));
-    Tensor tensor = TestHelper.sample(coordinateBoundingBox);
+    Tensor tensor = RandomSample.of(new BoxRandomSample(coordinateBoundingBox));
     assertEquals(ExactScalarQ.require(tensor.Get(2)), Quantity.of(4, "m"));
     assertTrue(coordinateBoundingBox.isInside(tensor));
     coordinateBoundingBox.requireInside(tensor);
@@ -113,11 +113,11 @@ class CoordinateBoundingBoxTest {
     CoordinateBoundingBox box3 = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[m], 4[m]}"), //
         Tensors.fromString("{2[m], 3[m], 5[m]}"));
-    assertFalse(box1.equals(box3));
+    assertNotEquals(box1, box3);
     assertNotEquals(box1.hashCode(), box3.hashCode());
-    assertFalse(box1.toString().equals(box3.toString()));
-    assertFalse(((Object) box1).equals(RealScalar.ONE));
-    assertFalse(((Object) box1).equals("abc"));
+    assertNotEquals(box1.toString(), box3.toString());
+    assertNotEquals(box1, RealScalar.ONE);
+    assertNotEquals(box1, "abc");
   }
 
   @Test

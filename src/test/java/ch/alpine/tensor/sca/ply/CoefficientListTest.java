@@ -26,6 +26,13 @@ class CoefficientListTest {
   }
 
   @Test
+  void testChatGpt() {
+    Tensor zeros = Tensors.vector(1, 2, 3);
+    Tensor tensor = CoefficientList.of(zeros);
+    assertEquals(tensor, Tensors.vector(-6, 11, -6, 1));
+  }
+
+  @Test
   void testQuantityD1() {
     Tensor zeros = Tensors.fromString("{3[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
@@ -61,6 +68,6 @@ class CoefficientListTest {
 
   @Test
   void testEmptyFail() {
-    assertThrows(IndexOutOfBoundsException.class, () -> CoefficientList.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> CoefficientList.of(Tensors.empty()));
   }
 }

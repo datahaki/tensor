@@ -57,7 +57,7 @@ public enum LaguerreL {
     }
     OptionalInt optionalInt = Scalars.optionalInt(n);
     if (optionalInt.isPresent()) {
-      int _n = optionalInt.getAsInt();
+      int _n = optionalInt.orElseThrow();
       if (0 <= _n)
         return of(_n).apply(x);
     }

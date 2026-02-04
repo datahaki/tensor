@@ -175,6 +175,15 @@ class RoundTest {
   }
 
   @Test
+  void testSome() {
+    Scalar value = RealScalar.of(1e100);
+    assertInstanceOf(DoubleScalar.class, value);
+    Scalar exact = Round.FUNCTION.apply(value);
+    assertInstanceOf(RationalScalar.class, exact);
+    assertThrows(Exception.class, () -> Scalars.longValueExact(exact));
+  }
+
+  @Test
   void testNonFailInfPos() {
     Scalar scalar = DoubleScalar.POSITIVE_INFINITY;
     assertEquals(Round.FUNCTION.apply(scalar), scalar);

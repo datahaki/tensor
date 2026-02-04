@@ -6,8 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -87,8 +86,7 @@ class QuantileTest {
 
   @Test
   void testLimitTheorem() {
-    Random random = new SecureRandom();
-    Tensor tensor = Array.of(l -> RealScalar.of(random.nextDouble()), 2000);
+    Tensor tensor = Array.of(_ -> RealScalar.of(ThreadLocalRandom.current().nextDouble()), 2000);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
     Tensor weight = Tensors.vector(0.76, 0.1, 0.25, 0.5, 0.05, 0.95, 0, 0.5, 0.99, 1);
     Tensor quantile = weight.map(scalarUnaryOperator);

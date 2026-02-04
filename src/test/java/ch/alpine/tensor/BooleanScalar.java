@@ -65,28 +65,22 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof BooleanScalar) {
-      BooleanScalar booleanScalar = (BooleanScalar) scalar;
+    if (scalar instanceof BooleanScalar booleanScalar)
       return of(Boolean.logicalAnd(value, booleanScalar.value));
-    }
     throw new Throw(this, scalar);
   }
 
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof BooleanScalar) {
-      BooleanScalar booleanScalar = (BooleanScalar) scalar;
+    if (scalar instanceof BooleanScalar booleanScalar)
       return of(Boolean.logicalXor(value, booleanScalar.value));
-    }
     throw new Throw(this, scalar);
   }
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof BooleanScalar) {
-      BooleanScalar booleanScalar = (BooleanScalar) scalar;
+    if (scalar instanceof BooleanScalar booleanScalar)
       return Boolean.compare(value, booleanScalar.value);
-    }
     throw new Throw(this, scalar);
   }
 
@@ -102,10 +96,8 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
 
   @Override // from Object
   public boolean equals(Object object) {
-    if (object instanceof BooleanScalar) {
-      BooleanScalar booleanScalar = (BooleanScalar) object;
+    if (object instanceof BooleanScalar booleanScalar)
       return value == booleanScalar.value;
-    }
     return false;
   }
 

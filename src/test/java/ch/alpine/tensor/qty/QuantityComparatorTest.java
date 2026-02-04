@@ -17,34 +17,37 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Sort;
-import ch.alpine.tensor.ext.Serialization;
+import test.SerializableQ;
 
 class QuantityComparatorTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
-    Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());
+  void testSimple() {
+    Comparator<Scalar> comparator = QuantityComparator.SI();
+    SerializableQ.require(comparator);
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[h], 300[s], 2[min], 180[s]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{2[min], 180[s], 300[s], 4[h]}"));
   }
 
   @Test
   void testUnitless() throws ClassNotFoundException, IOException {
-    Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());
+    Comparator<Scalar> comparator = QuantityComparator.SI();
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[rad], 300[deg], 2, 180[rad], -1[rad]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{-1[rad], 2, 4[rad], 300[deg], 180[rad]}"));
   }
 
   @Test
   void testUnknown() throws ClassNotFoundException, IOException {
-    Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());
+    Comparator<Scalar> comparator = QuantityComparator.SI();
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[fun], 300[fun], 2[fun], 180[fun]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{2[fun], 4[fun], 180[fun], 300[fun]}"));
   }
 
   @Test
-  void testEmpty() throws ClassNotFoundException, IOException {
-    UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(new Properties()));
-    Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.of(unitSystem));
+  void testEmpty() {
+    UnitSystem unitSystem = SimpleUnitSystem.from(new Properties());
+    SerializableQ.require(unitSystem);
+    Comparator<Scalar> comparator = QuantityComparator.of(unitSystem);
+    SerializableQ.require(comparator);
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[fun], 300[fun], 2[fun], 180[fun]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{2[fun], 4[fun], 180[fun], 300[fun]}"));
   }

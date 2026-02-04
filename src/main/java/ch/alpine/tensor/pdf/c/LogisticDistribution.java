@@ -14,6 +14,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
@@ -45,6 +47,11 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
   private LogisticDistribution(Scalar a, Scalar b) {
     this.a = a;
     this.b = b;
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.absolute(DoubleScalar.POSITIVE_INFINITY);
   }
 
   private Scalar transform(Scalar x) {

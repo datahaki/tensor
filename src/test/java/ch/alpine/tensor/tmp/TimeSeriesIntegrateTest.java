@@ -63,7 +63,6 @@ class TimeSeriesIntegrateTest {
   void testSinglePoint(ResamplingMethods resamplingMethods) {
     ResamplingMethod resamplingMethod = resamplingMethods.get();
     Tensor path = Tensors.fromString("{{1[s], 3[m]}}");
-    // for (ResamplingMethod resamplingMethod : TestHelper.list()) {
     TimeSeries timeSeries = TimeSeries.path(path, resamplingMethod);
     TimeSeries integrate = TimeSeriesIntegrate.of(timeSeries);
     Tensor result = integrate.evaluate(Quantity.of(1, "s"));
@@ -77,9 +76,7 @@ class TimeSeriesIntegrateTest {
   @EnumSource
   void testException(ResamplingMethods resamplingMethods) {
     ResamplingMethod resamplingMethod = resamplingMethods.get();
-    // for (ResamplingMethod resamplingMethod : TestHelper.list()) {
     TimeSeries timeSeries = TimeSeries.empty(resamplingMethod);
     assertThrows(Throw.class, () -> TimeSeriesIntegrate.of(timeSeries, Clips.interval(0, 1)));
-    // }
   }
 }

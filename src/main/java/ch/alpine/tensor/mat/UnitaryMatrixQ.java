@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.ConstraintMemberQ;
 import ch.alpine.tensor.sca.Chop;
 
 /** Mathematica's definition:
@@ -10,36 +10,15 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UnitaryMatrixQ.html">UnitaryMatrixQ</a> */
-public enum UnitaryMatrixQ {
-  ;
-  /** @param tensor
-   * @param chop precision
-   * @return true, if tensor is a matrix and tensor.ConjugateTranspose[tensor] is the identity matrix */
-  public static boolean of(Tensor tensor, Chop chop) {
-    return MatrixQ.of(tensor) //
-        && chop.isClose(MatrixDotConjugateTranspose.of(tensor), IdentityMatrix.of(tensor.length()));
+public class UnitaryMatrixQ extends ConstraintMemberQ {
+  public static final ConstraintMemberQ INSTANCE = new UnitaryMatrixQ(Tolerance.CHOP);
+
+  public UnitaryMatrixQ(Chop chop) {
+    super(2, chop);
   }
 
-  /** @param tensor
-   * @return true, if tensor is a matrix and tensor.ConjugateTranspose[tensor] is the identity matrix */
-  public static boolean of(Tensor tensor) {
-    return of(tensor, Tolerance.CHOP);
-  }
-
-  /** @param tensor
-   * @param chop
-   * @return
-   * @return whether tensor is a matrix and tensor.ConjugateTranspose[tensor] is the identity matrix */
-  public static Tensor require(Tensor tensor, Chop chop) {
-    if (of(tensor, chop))
-      return tensor;
-    throw new Throw(tensor, chop);
-  }
-
-  /** @param tensor
-   * @return
-   * @return whether tensor is a matrix and tensor.ConjugateTranspose[tensor] is the identity matrix */
-  public static Tensor require(Tensor tensor) {
-    return require(tensor, Tolerance.CHOP);
+  @Override
+  public Tensor constraint(Tensor p) {
+    return IdentityMatrix.inplaceSub(MatrixDotConjugateTranspose.self(p));
   }
 }

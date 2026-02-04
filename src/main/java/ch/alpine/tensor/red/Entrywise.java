@@ -1,12 +1,10 @@
 // code by jph
 package ch.alpine.tensor.red;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -14,6 +12,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarBinaryOperator;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.ext.Integers;
 
 /** Entrywise applies a BinaryOperator<Scalar> across multiple tensors.
@@ -39,8 +38,10 @@ import ch.alpine.tensor.ext.Integers;
  * <pre>
  * Entrywise.with(Scalar::add).of(Tensors.of(a, b, c)) == a.add(b).add(c)
  * Entrywise.with(Scalar::multiply).of(Tensors.of(a, b, c)) == Times.of(a, b, c)
- * </pre> */
-public class Entrywise implements BinaryOperator<Tensor>, Serializable {
+ * </pre>
+ * 
+ * @see Times#of(Tensor...) */
+public class Entrywise implements TensorBinaryOperator {
   /** @param scalarBinaryOperator non-null
    * @return
    * @throws Exception if given binaryOperator is null */
@@ -49,8 +50,9 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
   }
 
   // shorthand Min::of does not result in serializable operator, due to template arguments
-  private static final Entrywise MIN = with((a, b) -> Min.of(a, b));
-  private static final Entrywise MAX = with((a, b) -> Max.of(a, b));
+  private static final Entrywise MIN = with(Min::of);
+  private static final Entrywise MAX = with(Max::of);
+  private static final Entrywise MUL = with(Scalar::multiply);
 
   /** @return entrywise minimum operator */
   public static Entrywise min() {
@@ -60,6 +62,12 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
   /** @return entrywise maximum operator */
   public static Entrywise max() {
     return MAX;
+  }
+
+  /** @return pointwise multiplication
+   * @see Times */
+  public static Entrywise mul() {
+    return MUL;
   }
 
   // ---

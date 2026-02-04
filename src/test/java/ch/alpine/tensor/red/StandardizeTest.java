@@ -12,15 +12,15 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.mat.Tolerance;
 
 class StandardizeTest {
   @Test
   void testNumeric() {
     Tensor tensor = Standardize.ofVector(Tensors.vector(6.5, 3.8, 6.6, 5.7, 6.0, 6.4, 5.3));
-    Chop._12.requireAllZero(Mean.of(tensor));
-    Chop._12.requireClose(Variance.ofVector(tensor), RealScalar.ONE);
-    Chop._12.requireClose(StandardDeviation.ofVector(tensor), RealScalar.ONE);
+    Tolerance.CHOP.requireAllZero(Mean.of(tensor));
+    Tolerance.CHOP.requireClose(Variance.ofVector(tensor), RealScalar.ONE);
+    Tolerance.CHOP.requireClose(StandardDeviation.ofVector(tensor), RealScalar.ONE);
   }
 
   @Test

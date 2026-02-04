@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.Month;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -23,6 +25,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
@@ -35,6 +38,7 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Sign;
 
 class NormalDistributionTest {
@@ -64,7 +68,7 @@ class NormalDistributionTest {
     Distribution distribution = BinomialDistribution.of(1000, RealScalar.of(1 / 3.));
     Distribution normal = NormalDistribution.fit(distribution);
     assertEquals(Expectation.mean(distribution), Expectation.mean(normal));
-    Chop._12.requireClose(Expectation.variance(distribution), Expectation.variance(normal));
+    Tolerance.CHOP.requireClose(Expectation.variance(distribution), Expectation.variance(normal));
   }
 
   @Test
@@ -93,6 +97,12 @@ class NormalDistributionTest {
         CDF.of(distribution).p_lessEquals(mean), //
         RationalScalar.of(1, 2));
     TestMarkovChebyshev.symmetricAroundMean(distribution);
+    {
+      UnivariateDistribution univariateDistribution = (UnivariateDistribution) distribution;
+      Clip clip = univariateDistribution.support();
+      assertEquals(clip.max(), Quantity.of(Double.POSITIVE_INFINITY, "m"));
+      assertEquals(clip.min(), Quantity.of(Double.NEGATIVE_INFINITY, "m"));
+    }
   }
 
   @Test
@@ -191,6 +201,16 @@ class NormalDistributionTest {
     Distribution distribution = NormalDistribution.of(3, 0);
     assertEquals(Mean.of(distribution), RealScalar.of(3));
     assertEquals(RandomVariate.of(distribution), RealScalar.of(3));
+  }
+
+  @Test
+  void testMeanSigma() {
+    Scalar mean = DateTime.of(2022, Month.FEBRUARY, 28, 12, 00);
+    Scalar sigma = Quantity.of(30, "h");
+    Distribution distribution = NormalDistribution.of(mean, sigma);
+    Scalar guess = RandomVariate.of(distribution);
+    assertInstanceOf(DateTime.class, guess);
+    assertInstanceOf(DateTime.class, mean.add(sigma));
   }
 
   @Test

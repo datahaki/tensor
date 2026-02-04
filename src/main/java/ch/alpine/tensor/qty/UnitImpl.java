@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -43,7 +44,7 @@ import ch.alpine.tensor.ext.MergeIllegal;
   private UnitImpl(NavigableMap<String, Scalar> navigableMap) {
     this.navigableMap = navigableMap;
     hashCode = navigableMap.hashCode();
-    string = StaticHelper.toString(navigableMap);
+    string = toString(navigableMap);
   }
 
   @Override // from Unit
@@ -92,5 +93,20 @@ import ch.alpine.tensor.ext.MergeIllegal;
   @Override // from Object
   public String toString() {
     return string;
+  }
+
+  /** @param map
+   * @return for instance "m*s^-2" */
+  private static String toString(Map<String, Scalar> map) {
+    return map.entrySet().stream() //
+        .map(entry -> entry.getKey() + exponentString(entry.getValue())) //
+        .collect(Collectors.joining(JOIN_DELIMITER)); // delimited by '*'
+  }
+
+  private static String exponentString(Scalar exponent) {
+    String string = exponent.toString();
+    return string.equals("1") //
+        ? ""
+        : POWER_DELIMITER + string; // delimited by '^'
   }
 }

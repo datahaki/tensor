@@ -73,11 +73,11 @@ class ExportTest {
   @Test
   void testJpgColor(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.jpg");
-    Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11, 4), 2);
-    image.set(Array.of(f -> RealScalar.of(255), 7, 11), Tensor.ALL, Tensor.ALL, 3);
+    Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.forArray(256), 7, 11, 4), 2);
+    image.set(Array.of(_ -> RealScalar.of(255), 7, 11), Tensor.ALL, Tensor.ALL, 3);
     Export.of(file, image);
     Tensor diff = image.subtract(Import.of(file));
-    Scalar total = Flatten.scalars(diff.map(Abs.FUNCTION)).reduce(Scalar::add).get();
+    Scalar total = Flatten.scalars(diff.map(Abs.FUNCTION)).reduce(Scalar::add).orElseThrow();
     Scalar pixel = total.divide(RealScalar.of(4 * 77.0));
     assertTrue(Scalars.lessEquals(pixel, RealScalar.of(6)));
   }
@@ -86,10 +86,11 @@ class ExportTest {
   @ValueSource(strings = { "jpg", "jpg.gz", "jpg.gz.gz", "gz.jpg" })
   void testJpgGray(String extension, @TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file." + extension);
-    Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11), 4);
+    Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.forArray(256), 7, 11), 4);
     Export.of(file, image);
-    Tensor diff = image.subtract(Import.of(file));
-    Scalar total = Flatten.scalars(diff.map(Abs.FUNCTION)).reduce(Scalar::add).get();
+    Tensor retry = Import.of(file);
+    Tensor diff = image.subtract(retry);
+    Scalar total = Flatten.scalars(diff.map(Abs.FUNCTION)).reduce(Scalar::add).orElseThrow();
     Scalar pixel = total.divide(RealScalar.of(77.0));
     assertTrue(Scalars.lessEquals(pixel, RealScalar.of(5)));
   }
@@ -98,8 +99,8 @@ class ExportTest {
   @ValueSource(strings = { "bmp", "bmp.gz", "bmp.gz.gz", "png", "png.gz", "gz.png" })
   void testExactColor(String extension, @TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file." + extension);
-    Tensor image = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11, 4);
-    image.set(Array.of(f -> RealScalar.of(255), 7, 11), Tensor.ALL, Tensor.ALL, 3);
+    Tensor image = RandomVariate.of(DiscreteUniformDistribution.forArray(256), 7, 11, 4);
+    image.set(Array.of(_ -> RealScalar.of(255), 7, 11), Tensor.ALL, Tensor.ALL, 3);
     Export.of(file, image);
     assertEquals(image, Import.of(file));
   }
@@ -108,7 +109,7 @@ class ExportTest {
   @ValueSource(strings = { "bmp", "bmp.gz", "bmp.gz.gz", "png", "png.gz" })
   void testExactGray(String extension, @TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file." + extension);
-    Tensor image = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11);
+    Tensor image = RandomVariate.of(DiscreteUniformDistribution.forArray(256), 7, 11);
     Export.of(file, image);
     assertEquals(image, Import.of(file));
   }

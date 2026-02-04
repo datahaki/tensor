@@ -29,8 +29,6 @@ import ch.alpine.tensor.ext.Jpeg;
       of(extension, tensor, outputStream);
   }
 
-  private static final float JPG_QUALITY = 0.98f;
-
   /** @param extension
    * @param tensor
    * @param outputStream
@@ -44,7 +42,7 @@ import ch.alpine.tensor.ext.Jpeg;
     case TSV -> lines(XsvFormat.TSV.of(tensor), outputStream);
     // --- images
     case BMP -> ImageIO.write(ImageFormat._of(tensor, extension), extension.name(), outputStream);
-    case JPEG, JPG -> Jpeg.put(ImageFormat._of(tensor, extension), outputStream, JPG_QUALITY);
+    case JPEG, JPG -> Jpeg.put(ImageFormat._of(tensor, extension), outputStream, Export.JPEG_QUALITY.get());
     case GIF, PNG, TIF, TIFF -> ImageIO.write(ImageFormat._of(tensor, extension), extension.name(), outputStream);
     // ---
     case M -> lines(MatlabExport.of(tensor), outputStream);

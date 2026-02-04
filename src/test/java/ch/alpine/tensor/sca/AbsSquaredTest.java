@@ -17,7 +17,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.lie.Quaternion;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;

@@ -11,8 +11,8 @@ import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 record Givens1(int n, Scalar theta, int p, int q) {
-
   private static final Scalar SQRT2 = Sqrt.FUNCTION.apply(RealScalar.TWO);
+
   public Tensor matrix() {
     Chop.NONE.requireZero(Im.FUNCTION.apply(theta));
     Tensor tensor = IdentityMatrix.of(n);

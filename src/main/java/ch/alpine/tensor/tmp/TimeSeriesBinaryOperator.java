@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
@@ -29,7 +29,7 @@ public class TimeSeriesBinaryOperator implements BinaryOperator<TimeSeries>, Ser
   /** @param binaryOperator
    * @param resamplingMethod fallback may be null */
   public static BinaryOperator<TimeSeries> of( //
-      BinaryOperator<Tensor> binaryOperator, //
+      TensorBinaryOperator binaryOperator, //
       ResamplingMethod resamplingMethod) {
     return new TimeSeriesBinaryOperator( //
         Objects.requireNonNull(binaryOperator), //
@@ -37,12 +37,12 @@ public class TimeSeriesBinaryOperator implements BinaryOperator<TimeSeries>, Ser
   }
 
   // ---
-  private final BinaryOperator<Tensor> binaryOperator;
+  private final TensorBinaryOperator binaryOperator;
   private final ResamplingMethod resamplingMethod;
 
   /** @param binaryOperator
    * @param resamplingMethod fallback may be null */
-  private TimeSeriesBinaryOperator(BinaryOperator<Tensor> binaryOperator, ResamplingMethod resamplingMethod) {
+  private TimeSeriesBinaryOperator(TensorBinaryOperator binaryOperator, ResamplingMethod resamplingMethod) {
     this.binaryOperator = binaryOperator;
     this.resamplingMethod = resamplingMethod;
   }

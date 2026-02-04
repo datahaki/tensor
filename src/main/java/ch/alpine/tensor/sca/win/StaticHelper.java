@@ -8,7 +8,8 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.tri.Cos;
 
-/** helper functions to evaluate window functions */
+/** helper functions to evaluate window functions
+ * reviewed */
 /* package */ enum StaticHelper {
   ;
   public static final Clip SEMI = Clips.absolute(RationalScalar.HALF);

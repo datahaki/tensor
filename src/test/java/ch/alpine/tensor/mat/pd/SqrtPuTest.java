@@ -19,7 +19,7 @@ class SqrtPuTest {
   @Test
   void testSimple() {
     PolarDecompositionSqrt sqrtPu = SqrtPu.of(HilbertMatrix.of(3));
-    UnitaryMatrixQ.require(sqrtPu.getUnitary());
+    UnitaryMatrixQ.INSTANCE.requireMember(sqrtPu.getUnitary());
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));
   }
 
@@ -28,7 +28,7 @@ class SqrtPuTest {
   void testReal1(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n + 2);
     PolarDecompositionSqrt sqrtPu = SqrtPu.of(matrix);
-    UnitaryMatrixQ.require(sqrtPu.getUnitary());
+    UnitaryMatrixQ.INSTANCE.requireMember(sqrtPu.getUnitary());
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));
   }
 
@@ -37,7 +37,7 @@ class SqrtPuTest {
   void testComplex(int n) {
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n);
     PolarDecompositionSqrt sqrtPu = SqrtPu.of(matrix);
-    UnitaryMatrixQ.require(sqrtPu.getUnitary());
+    UnitaryMatrixQ.INSTANCE.requireMember(sqrtPu.getUnitary());
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));
   }
 
@@ -46,7 +46,7 @@ class SqrtPuTest {
   void testComplex1(int n) {
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n + 2);
     PolarDecompositionSqrt sqrtPu = SqrtPu.of(matrix);
-    UnitaryMatrixQ.require(sqrtPu.getUnitary());
+    UnitaryMatrixQ.INSTANCE.requireMember(sqrtPu.getUnitary());
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));
   }
 }

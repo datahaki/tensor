@@ -1,10 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.ex;
 
-import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -23,16 +20,15 @@ import ch.alpine.tensor.sca.Im;
  * for instance MatrixSqrt[{{-10[m^2], -2[m^2]}, {-2[m^2], 4[m^2]}}] is handled
  * successfully. */
 public interface MatrixSqrt {
+  ThreadLocal<Integer> MAX_ITERATIONS = ThreadLocal.withInitial(() -> 100);
+
   /** @param matrix square
    * @return sqrt of given matrix */
   static MatrixSqrt of(Tensor matrix) {
-    if (SymmetricMatrixQ.of(matrix) && //
-        Flatten.stream(matrix, 1) //
-            .map(Scalar.class::cast) //
-            .map(Im.FUNCTION) //
-            .allMatch(Scalars::isZero))
+    if (Im.allZero(matrix) && //
+        SymmetricMatrixQ.INSTANCE.isMember(matrix))
       return ofSymmetric(matrix);
-    if (HermitianMatrixQ.of(matrix))
+    if (HermitianMatrixQ.INSTANCE.isMember(matrix))
       return ofHermitian(matrix);
     return new DenmanBeaversDet(matrix, Tolerance.CHOP);
   }
@@ -54,9 +50,11 @@ public interface MatrixSqrt {
   }
 
   // ---
-  /** @return square root of a given matrix */
+  /** @return square root of a given matrix
+   * @implSpec implementation may recompute return value each invocation */
   Tensor sqrt();
 
-  /** @return inverse of square root of a given matrix */
+  /** @return inverse of square root of a given matrix
+   * @implSpec implementation may recompute return value each invocation */
   Tensor sqrt_inverse();
 }

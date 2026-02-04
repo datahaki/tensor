@@ -31,7 +31,7 @@ public enum GaborMatrix {
     Scalar factor = sigmas.add(sigmas).negate();
     int m = 2 * r + 1;
     Scalar center = RealScalar.of(-r);
-    Tensor offset = k.map(scalar -> center);
+    Tensor offset = k.map(_ -> center);
     List<Integer> dimensions = Collections.nCopies(k.length(), m);
     Tensor matrix = Array.of(list -> Vector2NormSquared.of(Tensors.vector(list).add(offset)), dimensions) //
         .divide(factor).map(Exp.FUNCTION);

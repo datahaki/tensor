@@ -19,4 +19,9 @@ public class Throw extends RuntimeException {
   private Throw(String string) {
     super(string);
   }
+
+  public static void unless(boolean enforce) {
+    if (!enforce)
+      throw new Throw();
+  }
 }

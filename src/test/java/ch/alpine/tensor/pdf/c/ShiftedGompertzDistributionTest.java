@@ -15,9 +15,11 @@ import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clips;
 
 class ShiftedGompertzDistributionTest {
   @Test
@@ -34,6 +36,8 @@ class ShiftedGompertzDistributionTest {
     Tolerance.CHOP.requireClose(quantile, RealScalar.of(1.037510735992861));
     assertTrue(distribution.toString().startsWith("ShiftedGompertzDistribution["));
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Double.POSITIVE_INFINITY));
   }
 
   @Test
@@ -46,6 +50,8 @@ class ShiftedGompertzDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(RealScalar.of(0.6));
     Tolerance.CHOP.requireClose(quantile, Quantity.of(1.037510735992861, "s"));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Quantity.of(Double.POSITIVE_INFINITY, "s")));
   }
 
   @Test

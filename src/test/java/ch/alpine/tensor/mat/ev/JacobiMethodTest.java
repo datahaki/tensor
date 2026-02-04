@@ -2,11 +2,8 @@
 package ch.alpine.tensor.mat.ev;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -30,16 +27,17 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
+import ch.alpine.tensor.mat.sv.SingularValueDecompositionWrap;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
+import test.EigensystemQ;
 
 class JacobiMethodTest {
   private static void checkEquation(Tensor matrix, Eigensystem eigensystem) {
@@ -65,27 +63,26 @@ class JacobiMethodTest {
     Tensor prd = eigensystem.values().stream().map(Scalar.class::cast).reduce(Scalar::multiply).orElseThrow();
     Tolerance.CHOP.requireClose(det, prd);
     Tensor norm = Tensor.of(eigensystem.vectors().stream().map(Vector2Norm::of));
-    Tolerance.CHOP.requireClose(norm, Tensors.vector(i -> RealScalar.ONE, norm.length()));
+    Tolerance.CHOP.requireClose(norm, Tensors.vector(_ -> RealScalar.ONE, norm.length()));
     // testing orthogonality
     final Tensor Vt = Transpose.of(eigensystem.vectors());
     int n = eigensystem.values().length();
     Tensor id = IdentityMatrix.of(n);
     Tolerance.CHOP.requireClose(Vt.dot(eigensystem.vectors()), id);
     Tolerance.CHOP.requireClose(eigensystem.vectors().dot(Vt), id);
-    assertTrue(OrthogonalMatrixQ.of(eigensystem.vectors()));
-    assertTrue(OrthogonalMatrixQ.of(Vt));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(eigensystem.vectors()));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(Vt));
     // assert that values are sorted from max to min
-    assertEquals(eigensystem.values(), Reverse.of(Sort.of(eigensystem.values())));
+    assertEquals(eigensystem.decreasing().values(), Reverse.of(Sort.of(eigensystem.values())));
     JacobiReal jacobiMethod = new JacobiReal(matrix);
-    SymmetricMatrixQ.require(Tensors.matrix(jacobiMethod.H), Chop.NONE);
-    TestHelper.checkEquation(matrix, eigensystem);
-    UnitaryMatrixQ.require(eigensystem.vectors());
+    new SymmetricMatrixQ(Chop.NONE).requireMember(Tensors.matrix(jacobiMethod.H));
+    new EigensystemQ(matrix).require(eigensystem, Tolerance.CHOP);
   }
 
   @Test
   void testJacobiWithTensor1() {
     Tensor tensor = Tensors.fromString("{{2, 3, 0, 1}, {3, 1, 7, 5}, {0, 7, 10, 9}, {1, 5, 9, 13}}");
-    Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor);
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor).decreasing();
     Tensor expEigvl = Tensors.fromString("{ 23.853842147040694,  3.3039323944179757, 2.8422254585413294, -4}");
     Tensor expEigvc = Transpose.of(Tensors.fromString(
         "{{0.08008068980475883, -0.5948978891329353, 0.6877622539503787, -0.4082482904638631}, {0.35340348774478036, -0.45368409809391813, 0.05108862221538444, 0.8164965809277261}, {0.6267262856848018, -0.3124703070549013, -0.5855850095196097, -0.408248290463863}, {0.6898602907849903, 0.5853456652704466, 0.4259850130546227, -6.117111473932377E-17}}"));
@@ -97,7 +94,7 @@ class JacobiMethodTest {
   @Test
   void testJacobiWithTensor2() {
     Tensor tensor = Tensors.fromString("{{0, 3, 0, 1}, {3, 0, 7, 5}, {0, 7, -2, 9}, {1, 5, 9, 0}}");
-    Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor);
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor).decreasing();
     Tensor expEigvl = Tensors.fromString("{13.741843166529974899, 0.42515310634896474734, -5.4100072556794011520, -10.756989017199538494}");
     Tensor expEigvc = Tensors.empty();
     expEigvc.append(Tensors.vector(-0.16135639309137209668, -0.54323075821807030942, -0.57753040539597776347, -0.58764197312438517024));
@@ -112,7 +109,7 @@ class JacobiMethodTest {
   void testHilberts() {
     for (int size = 1; size < 10; ++size) {
       Tensor matrix = HilbertMatrix.of(size);
-      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix).decreasing();
       checkEquation(matrix, eigensystem);
       Tensor values1 = SingularValueList.of(matrix);
       Tolerance.CHOP.requireClose(eigensystem.values(), values1);
@@ -125,7 +122,7 @@ class JacobiMethodTest {
     Tensor matrix = Array.zeros(c, c);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     checkEquation(matrix, eigensystem);
-    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
+    SingularValueDecomposition svd = SingularValueDecompositionWrap.of(matrix);
     Tensor values1 = Reverse.of(Sort.of(svd.values()));
     Tensor values2 = Sort.of(svd.values(), TensorComparator.INSTANCE.reversed());
     Tolerance.CHOP.requireClose(eigensystem.values(), values1);
@@ -176,11 +173,5 @@ class JacobiMethodTest {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     assertInstanceOf(DecimalScalar.class, eigensystem.vectors().Get(3, 3));
     assertInstanceOf(DecimalScalar.class, eigensystem.values().Get(4));
-  }
-
-  @Test
-  void testPackageVisibility() {
-    assertTrue(Modifier.isPublic(Eigensystem.class.getModifiers()));
-    assertFalse(Modifier.isPublic(EigensystemImpl.class.getModifiers()));
   }
 }

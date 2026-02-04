@@ -20,8 +20,10 @@ import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clips;
 
 class InverseGammaDistributionTest {
   @Test
@@ -48,6 +50,8 @@ class InverseGammaDistributionTest {
     Distribution distribution = Serialization.copy(InverseGammaDistribution.of(2.2, 2.3));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(18.368055555555532));
     assertThrows(Exception.class, () -> RandomVariate.of(distribution));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Double.POSITIVE_INFINITY));
   }
 
   @Test

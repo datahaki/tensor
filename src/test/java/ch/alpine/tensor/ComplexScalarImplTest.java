@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,6 @@ class ComplexScalarImplTest {
     Scalar c1 = ComplexScalar.of(3, -4);
     Scalar c2 = ComplexScalar.of(-2, 9);
     Scalar c3 = ComplexScalar.of(c1, c2);
-    // System.out.println(c3);
     assertEquals(c3, ComplexScalar.of(-6, -6));
     // Scalar r1 = RealScalar.of(7);
     // assertThrows(Throw.class, () -> ComplexScalar.of(r1, c2));
@@ -86,12 +85,12 @@ class ComplexScalarImplTest {
   @Test
   void testSolveCR() {
     int n = 8;
-    RandomGenerator random = new Random();
-    Tensor A = Tensors.matrix((i, j) -> //
+    RandomGenerator random = ThreadLocalRandom.current();
+    Tensor A = Tensors.matrix((_, _) -> //
     ComplexScalar.of( //
         RealScalar.of(random.nextInt(35)), //
         RealScalar.of(random.nextInt(35))), n, n);
-    Tensor b = Tensors.matrix((i, j) -> ComplexScalar.of(//
+    Tensor b = Tensors.matrix((_, _) -> ComplexScalar.of(//
         random.nextInt(15), //
         random.nextInt(15)), n, n + 3);
     Tensor X = LinearSolve.of(A, b);

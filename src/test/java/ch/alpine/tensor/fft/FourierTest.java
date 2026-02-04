@@ -4,7 +4,7 @@ package ch.alpine.tensor.fft;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.security.SecureRandom;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
@@ -34,6 +34,7 @@ import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Sqrt;
+import test.DFTConsistency;
 
 class FourierTest {
   @Test
@@ -86,18 +87,18 @@ class FourierTest {
 
   public void checkFormat(int n) {
     Tensor original = Fourier.FORWARD.matrix(n);
-    SymmetricMatrixQ.require(original);
+    SymmetricMatrixQ.INSTANCE.requireMember(original);
     Tensor matrix = original.map(Tolerance.CHOP);
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
     Tensor invert = ConjugateTranspose.of(matrix);
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
     Tolerance.CHOP.requireClose(matrix.dot(invert), IdentityMatrix.of(n));
     Tolerance.CHOP.requireClose(Inverse.of(matrix), invert);
   }
 
   @Test
   void testSeveral() {
-    RandomGenerator randomGenerator = new SecureRandom();
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
     int n = 1 + randomGenerator.nextInt(20);
     checkFormat(n);
   }
@@ -127,11 +128,23 @@ class FourierTest {
     Tolerance.CHOP.requireClose(matrix.dot(inverse), IdentityMatrix.of(n));
   }
 
+  @ParameterizedTest
+  @EnumSource
+  void testConsistency(Fourier fourier) {
+    DFTConsistency.checkComplex(fourier, false);
+  }
+
   @Test
   void testInverse() {
     _check(8);
     _check(10);
     _check(11);
+  }
+
+  @Test
+  void testInverse2() {
+    assertEquals(Fourier.FORWARD.inverse(), Fourier.INVERSE);
+    assertEquals(Fourier.INVERSE.inverse(), Fourier.FORWARD);
   }
 
   @ParameterizedTest

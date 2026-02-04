@@ -19,11 +19,11 @@ class FirstPositionTest {
   @Test
   void testSimple() {
     Tensor tensor = Tensors.vector(5, 6, 7, 8, 9);
-    assertEquals(FirstPosition.of(tensor, RealScalar.of(5)).getAsInt(), 0);
-    assertEquals(FirstPosition.of(tensor, RealScalar.of(6)).getAsInt(), 1);
-    assertEquals(FirstPosition.of(tensor, RealScalar.of(7)).getAsInt(), 2);
-    assertEquals(FirstPosition.of(tensor, RealScalar.of(8)).getAsInt(), 3);
-    assertEquals(FirstPosition.of(tensor, RealScalar.of(9)).getAsInt(), 4);
+    assertEquals(FirstPosition.of(tensor, RealScalar.of(5)).orElseThrow(), 0);
+    assertEquals(FirstPosition.of(tensor, RealScalar.of(6)).orElseThrow(), 1);
+    assertEquals(FirstPosition.of(tensor, RealScalar.of(7)).orElseThrow(), 2);
+    assertEquals(FirstPosition.of(tensor, RealScalar.of(8)).orElseThrow(), 3);
+    assertEquals(FirstPosition.of(tensor, RealScalar.of(9)).orElseThrow(), 4);
     assertFalse(FirstPosition.of(tensor, RealScalar.of(10)).isPresent());
   }
 
@@ -31,15 +31,15 @@ class FirstPositionTest {
   void testQuantity() {
     Tensor tensor = Tensors.vector(5, 6, 7, 8, 9.0).map(s -> Quantity.of(s, "km"));
     assertFalse(FirstPosition.of(tensor, RealScalar.of(5)).isPresent());
-    assertEquals(FirstPosition.of(tensor, Quantity.of(8, "km")).getAsInt(), 3);
-    assertEquals(FirstPosition.of(tensor, Quantity.of(9, "km")).getAsInt(), 4);
+    assertEquals(FirstPosition.of(tensor, Quantity.of(8, "km")).orElseThrow(), 3);
+    assertEquals(FirstPosition.of(tensor, Quantity.of(9, "km")).orElseThrow(), 4);
     assertFalse(FirstPosition.of(tensor, RealScalar.of(10)).isPresent());
   }
 
   @Test
   void testMatrix() {
     Tensor tensor = HilbertMatrix.of(10);
-    assertEquals(FirstPosition.of(tensor, tensor.get(3)).getAsInt(), 3);
+    assertEquals(FirstPosition.of(tensor, tensor.get(3)).orElseThrow(), 3);
   }
 
   @Test

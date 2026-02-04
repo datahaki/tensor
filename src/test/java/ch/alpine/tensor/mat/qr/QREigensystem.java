@@ -1,22 +1,24 @@
 // code by jph
 package ch.alpine.tensor.mat.qr;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.DiagonalMatrixQ;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.sca.Chop;
 
-/* package */ class QREigensystem implements Eigensystem, Serializable {
+/* package */ enum QREigensystem {
+  ;
   private static final int MAX_ITERATIONS = 20;
   // ---
-  QRDecomposition qrDecomposition;
-  Tensor qn;
 
-  public QREigensystem(Tensor matrix, Chop chop) {
+  public static Eigensystem of(Tensor matrix, Chop chop) {
+    QRDecomposition qrDecomposition;
+    Tensor qn = null;
     int max = matrix.length() * MAX_ITERATIONS;
     qrDecomposition = QRDecomposition.of(matrix);
     int index = 0;
@@ -32,20 +34,8 @@ import ch.alpine.tensor.sca.Chop;
       matrix = r.dot(q);
       qrDecomposition = QRDecomposition.of(matrix);
     }
-  }
-
-  @Override
-  public Tensor values() {
-    return qrDecomposition.getR();
-  }
-
-  @Override
-  public Tensor diagonalMatrix() {
-    return DiagonalMatrix.with(values());
-  }
-
-  @Override
-  public Tensor vectors() {
-    return qn;
+    return new Eigensystem( //
+        Diagonal.of(DiagonalMatrixQ.require(qrDecomposition.getR())), //
+        Transpose.of(qn));
   }
 }

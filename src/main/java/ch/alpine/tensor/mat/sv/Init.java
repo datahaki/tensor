@@ -1,7 +1,6 @@
 // code adapted by jph
 package ch.alpine.tensor.mat.sv;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -12,6 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.nrm.Matrix1Norm;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
@@ -122,7 +122,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
       Tensor ui = u.get(i);
       Scalar ui_ip1 = ui.Get(ip1).multiply(p);
       {
-        AtomicInteger aj = new AtomicInteger(ip1);
+        Int aj = new Int(ip1);
         v.stream().skip(ip1).forEach(vj -> vj.set(ui.Get(aj.getAndIncrement()).divide(ui_ip1), i));
       }
       Tensor uiEx = ui.extract(ip1, cols);

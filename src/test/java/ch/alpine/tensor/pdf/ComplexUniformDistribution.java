@@ -10,7 +10,7 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
 /** test scope only */
-public class ComplexUniformDistribution implements Distribution, RandomVariateInterface {
+public class ComplexUniformDistribution implements Distribution {
   private static final Distribution UNIT = of(Clips.unit(), Clips.unit());
 
   public static Distribution of(Clip clip_re, Clip clip_im) {
@@ -30,10 +30,10 @@ public class ComplexUniformDistribution implements Distribution, RandomVariateIn
     distribution_im = UniformDistribution.of(clip_im);
   }
 
-  @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
+  @Override // from Distribution
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
     return ComplexScalar.of( //
-        RandomVariate.of(distribution_re, random), //
-        RandomVariate.of(distribution_im, random));
+        RandomVariate.of(distribution_re, randomGenerator), //
+        RandomVariate.of(distribution_im, randomGenerator));
   }
 }

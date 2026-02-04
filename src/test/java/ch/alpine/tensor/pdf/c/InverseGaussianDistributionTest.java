@@ -17,9 +17,11 @@ import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clips;
 
 class InverseGaussianDistributionTest {
   @Test
@@ -55,6 +57,8 @@ class InverseGaussianDistributionTest {
       Scalar p = cdf.p_lessThan(Quantity.of(3.5, "m"));
       Tolerance.CHOP.requireClose(p, RealScalar.of(0.816346681938743));
     }
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Quantity.of(Double.POSITIVE_INFINITY, "m")));
   }
 
   @Test

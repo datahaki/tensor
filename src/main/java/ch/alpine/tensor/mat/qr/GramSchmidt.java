@@ -25,6 +25,10 @@ import ch.alpine.tensor.sca.Conjugate;
  * in "Linear Algebra and Learning from Data", p. 129
  * by Gilbert Strang, 2019
  * 
+ * Careful: if the input matrix has MatrixRank == 0 then
+ * 1) QConjugateTranspose is empty
+ * 2) getQ() throws an Exception
+ * 
  * @see InfluenceMatrix
  * @see MatrixRank */
 public class GramSchmidt extends QRDecompositionBase implements Serializable {

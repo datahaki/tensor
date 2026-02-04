@@ -8,6 +8,7 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.mat.pd.Orthogonalize;
 
 /** @see Orthogonalize */
+// TODO TENSOR "Thin QR"
 public class QRMathematica extends QRDecompositionBase implements Serializable {
   /** @param qrDecomposition of matrix with dimensions n x m
    * @return */

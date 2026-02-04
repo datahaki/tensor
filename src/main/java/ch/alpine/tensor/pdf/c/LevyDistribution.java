@@ -14,6 +14,8 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.erf.Erfc;
 import ch.alpine.tensor.sca.erf.InverseErfc;
@@ -21,6 +23,8 @@ import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
+/** inspired by
+ * <a href="https://reference.wolfram.com/language/ref/LevyDistribution.html">LevyDistribution</a> */
 public class LevyDistribution extends AbstractContinuousDistribution implements Serializable {
   /** @param mu
    * @param sigma positive
@@ -47,6 +51,11 @@ public class LevyDistribution extends AbstractContinuousDistribution implements 
     this.mu = mu;
     this.sigma = sigma;
     power = Power.function(RationalScalar.of(3, 2));
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.positive(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(mu)));
   }
 
   @Override

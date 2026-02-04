@@ -26,6 +26,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
@@ -35,6 +36,7 @@ import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clips;
 
 class GumbelDistributionTest {
   @Test
@@ -88,6 +90,8 @@ class GumbelDistributionTest {
       assertInstanceOf(DoubleScalar.class, prob);
       assertTrue(FiniteScalarQ.of(prob));
     }
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.absolute(Quantity.of(Double.POSITIVE_INFINITY, "m^-1")));
   }
 
   @Test

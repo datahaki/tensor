@@ -8,6 +8,7 @@ import java.util.OptionalInt;
 
 import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.num.Divisible;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.DateTime;
@@ -120,6 +121,16 @@ public enum Scalars {
    * @see Divisible */
   public static boolean divides(Scalar m, Scalar n) {
     return Divisible.of(n, m);
+  }
+
+  /** @return */
+  public static BinaryPower<Scalar> add() {
+    return ScalarGroups.ADD.binaryPower();
+  }
+
+  /** @return */
+  public static BinaryPower<Scalar> mul() {
+    return ScalarGroups.MUL.binaryPower();
   }
 
   // ---

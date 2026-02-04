@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,11 +27,13 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clips;
 
 class FrechetDistributionTest {
   @Test
@@ -82,6 +85,8 @@ class FrechetDistributionTest {
         FrechetDistribution.of(Quantity.of(1.3, ""), Quantity.of(2.4, "m^-1"));
     Scalar mean = Expectation.mean(distribution);
     Chop._13.requireClose(mean, Quantity.of(9.470020440153482, "m^-1"));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Quantity.of(Double.POSITIVE_INFINITY, "m^-1")));
   }
 
   @Test
@@ -126,7 +131,7 @@ class FrechetDistributionTest {
 
   @Test
   void testMarkov() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Distribution distribution = FrechetDistribution.of(1.1 + random.nextDouble(), 0.1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);

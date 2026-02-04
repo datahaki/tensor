@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -26,6 +28,7 @@ import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.NegativeDefiniteMatrixQ;
 import ch.alpine.tensor.mat.NegativeSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
@@ -33,6 +36,7 @@ import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UpperTriangularize;
+import ch.alpine.tensor.mat.ex.MatrixSqrt;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.Det;
@@ -42,6 +46,7 @@ import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.LenientAdd;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
@@ -50,15 +55,6 @@ import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 class CholeskyDecompositionTest {
-  static CholeskyDecomposition checkDecomp(Tensor matrix) {
-    int n = matrix.length();
-    CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
-    Tensor res = choleskyDecomposition.getL().dot(Times.of(choleskyDecomposition.diagonal(), ConjugateTranspose.of(choleskyDecomposition.getL())));
-    Tolerance.CHOP.requireClose(matrix.subtract(res), Array.zeros(n, n));
-    Tolerance.CHOP.requireClose(choleskyDecomposition.det(), Det.of(matrix));
-    return choleskyDecomposition;
-  }
-
   @Test
   void testRosetta1() {
     // +5 0 0
@@ -70,7 +66,7 @@ class CholeskyDecompositionTest {
         { 15, 18, 0 }, //
         { -5, 0, 11 } //
     });
-    CholeskyDecomposition choleskyDecomposition = checkDecomp(matrix);
+    CholeskyDecomposition choleskyDecomposition = CholeskyDecompositionWrap.of(matrix);
     {
       Tensor b = Tensors.vector(1, 2, 3);
       Tensor actual = choleskyDecomposition.solve(b);
@@ -86,12 +82,15 @@ class CholeskyDecompositionTest {
     assertThrows(IllegalArgumentException.class, () -> choleskyDecomposition.solve(Tensors.vector(1, 2, 3, 4)));
     assertThrows(IllegalArgumentException.class, () -> choleskyDecomposition.solve(Tensors.vector(1, 2)));
     assertThrows(IllegalArgumentException.class, () -> choleskyDecomposition.solve(RealScalar.ONE));
+    // IO.println(choleskyDecomposition.diagonal());
+    MatrixSqrt matrixSqrt = MatrixSqrt.of(matrix);
+    Tolerance.CHOP.requireClose(matrix, matrixSqrt.sqrt().dot(matrixSqrt.sqrt()));
   }
 
   @Test
   void testWikiEn() throws Exception {
     CholeskyDecomposition cd = //
-        checkDecomp(Tensors.matrix(new Number[][] { //
+        CholeskyDecompositionWrap.of(Tensors.matrix(new Number[][] { //
             { 4, 12, -16 }, //
             { 12, 37, -43 }, //
             { -16, -43, 98 } //
@@ -109,7 +108,7 @@ class CholeskyDecompositionTest {
 
   @Test
   void testMathematica1() {
-    checkDecomp(Tensors.matrix(new Number[][] { //
+    CholeskyDecompositionWrap.of(Tensors.matrix(new Number[][] { //
         { 2, 1 }, //
         { 1, 2 } //
     }));
@@ -117,52 +116,52 @@ class CholeskyDecompositionTest {
 
   @Test
   void testMathematica2() {
-    checkDecomp(Tensors.fromString("{{4, 3, 2, 1}, {3, 4, 3, 2}, {2, 3, 4, 3}, {+1, 2, 3, 4}}"));
-    checkDecomp(Tensors.fromString("{{4, 3, 2, I}, {3, 4, 3, 2}, {2, 3, 4, 3}, {-I, 2, 3, 4}}"));
-    checkDecomp(Tensors.fromString("{{4, 3, 2, I}, {3, 4, 3, 2}, {2, 3, 4, 3}, {-I, 2, 3, 0}}"));
+    CholeskyDecompositionWrap.of(Tensors.fromString("{{4, 3, 2, 1}, {3, 4, 3, 2}, {2, 3, 4, 3}, {+1, 2, 3, 4}}"));
+    CholeskyDecompositionWrap.of(Tensors.fromString("{{4, 3, 2, I}, {3, 4, 3, 2}, {2, 3, 4, 3}, {-I, 2, 3, 4}}"));
+    CholeskyDecompositionWrap.of(Tensors.fromString("{{4, 3, 2, I}, {3, 4, 3, 2}, {2, 3, 4, 3}, {-I, 2, 3, 0}}"));
   }
 
   @Test
   void testFail1() {
-    assertThrows(Throw.class, () -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
+    assertThrows(Throw.class, () -> CholeskyDecompositionWrap.of(Tensors.fromString("{{4, 2}, {1, 4}}")));
   }
 
   @Test
   void testFail2() {
-    assertThrows(Throw.class, () -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
+    assertThrows(Throw.class, () -> CholeskyDecompositionWrap.of(Tensors.fromString("{{4, I}, {I, 4}}")));
   }
 
   @Test
   void testHilbert1() {
-    checkDecomp(HilbertMatrix.of(10));
+    CholeskyDecompositionWrap.of(HilbertMatrix.of(10));
   }
 
   @Test
   void testHilbertN1() {
-    checkDecomp(HilbertMatrix.of(16).map(N.DOUBLE));
+    CholeskyDecompositionWrap.of(HilbertMatrix.of(16).map(N.DOUBLE));
   }
 
   @Test
   void testDiag() {
-    checkDecomp(DiagonalMatrix.of(1, -2, 3, -4));
-    checkDecomp(DiagonalMatrix.of(0, -2, 3, -4));
-    checkDecomp(DiagonalMatrix.of(0, -2, 3, -4));
-    checkDecomp(DiagonalMatrix.of(0, -2, 0, -4));
-    checkDecomp(DiagonalMatrix.of(1, 0, 3, -4));
-    checkDecomp(DiagonalMatrix.of(1, -2, 3, 0));
-    checkDecomp(DiagonalMatrix.of(1, 0, 3, 0));
+    CholeskyDecompositionWrap.of(DiagonalMatrix.of(1, -2, 3, -4));
+    CholeskyDecompositionWrap.of(DiagonalMatrix.of(0, -2, 3, -4));
+    CholeskyDecompositionWrap.of(DiagonalMatrix.of(0, -2, 3, -4));
+    CholeskyDecompositionWrap.of(DiagonalMatrix.of(0, -2, 0, -4));
+    CholeskyDecompositionWrap.of(DiagonalMatrix.of(1, 0, 3, -4));
+    CholeskyDecompositionWrap.of(DiagonalMatrix.of(1, -2, 3, 0));
+    CholeskyDecompositionWrap.of(DiagonalMatrix.of(1, 0, 3, 0));
   }
 
   @Test
   void testZeros1() {
-    checkDecomp(Array.zeros(1, 1));
-    checkDecomp(Array.zeros(5, 5));
+    CholeskyDecompositionWrap.of(Array.zeros(1, 1));
+    CholeskyDecompositionWrap.of(Array.zeros(5, 5));
   }
 
   @Test
   void testComplex() {
-    checkDecomp(Tensors.fromString("{{10, I}, {-I, 10}}"));
-    checkDecomp(Tensors.fromString("{{10, I}, {-I, 10}}").map(N.DOUBLE));
+    CholeskyDecompositionWrap.of(Tensors.fromString("{{10, I}, {-I, 10}}"));
+    CholeskyDecompositionWrap.of(Tensors.fromString("{{10, I}, {-I, 10}}").map(N.DOUBLE));
   }
 
   @Test
@@ -172,11 +171,11 @@ class CholeskyDecompositionTest {
     Tensor ve1 = Tensors.of(qs2, qs1);
     Tensor ve2 = Tensors.of(qs1, qs2);
     Tensor mat = Tensors.of(ve1, ve2);
-    CholeskyDecomposition cd = CholeskyDecomposition.of(mat);
+    CholeskyDecomposition cd = CholeskyDecompositionWrap.of(mat);
     assertTrue(Scalars.nonZero(cd.det()));
     assertEquals(cd.diagonal().toString(), "{2[m], 3/2[m]}");
-    SymmetricMatrixQ.require(mat);
-    assertTrue(HermitianMatrixQ.of(mat));
+    SymmetricMatrixQ.INSTANCE.requireMember(mat);
+    assertTrue(HermitianMatrixQ.INSTANCE.isMember(mat));
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(mat));
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(mat));
     assertFalse(NegativeDefiniteMatrixQ.ofHermitian(mat));
@@ -194,7 +193,7 @@ class CholeskyDecompositionTest {
       Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
       assertEquals(res, expect);
     }
-    CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
+    CholeskyDecomposition cd = CholeskyDecompositionWrap.of(matrix);
     {
       assertEquals(Det.of(matrix), cd.det()); // 100[kg^2, m^2, rad^2]
       Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal().map(Sqrt.FUNCTION));
@@ -209,8 +208,8 @@ class CholeskyDecompositionTest {
       ExactTensorQ.require(res);
       assertEquals(res, matrix);
     }
-    SymmetricMatrixQ.require(matrix);
-    assertTrue(HermitianMatrixQ.of(matrix));
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    assertTrue(HermitianMatrixQ.INSTANCE.isMember(matrix));
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(matrix));
     assertFalse(NegativeDefiniteMatrixQ.ofHermitian(matrix));
@@ -230,8 +229,7 @@ class CholeskyDecompositionTest {
   void testQuantityComplex() {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
-    // System.out.println(MathematicaForm.of(matrix));
-    CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
+    CholeskyDecomposition cd = CholeskyDecompositionWrap.of(matrix);
     Tensor sdiag = cd.diagonal().map(Sqrt.FUNCTION);
     Times.of(sdiag, ConjugateTranspose.of(cd.getL()));
     {
@@ -272,6 +270,15 @@ class CholeskyDecompositionTest {
       Tensor ls2 = PseudoInverse.of(m).dot(b);
       Tolerance.CHOP.requireClose(ls1, ls2);
     }
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 5, 10 })
+  void testBigDecimal(int n) {
+    Tensor rnd = RandomVariate.of(UniformDistribution.unit(50), new Random(3), n, n);
+    Tensor mat = MatrixDotTranspose.of(rnd, rnd);
+    assertTrue(HermitianMatrixQ.INSTANCE.isMember(mat));
+    CholeskyDecompositionWrap.of(mat, Chop._40);
   }
 
   @Test

@@ -12,6 +12,7 @@ import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
+import test.HessenbergDecompositionQ;
 
 class HessenbergDecompositionImplTest {
   @ParameterizedTest
@@ -20,7 +21,7 @@ class HessenbergDecompositionImplTest {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
     matrix.set(Scalar::zero, 1, 0);
     HessenbergDecompositionImpl hessenbergDecompositionWiki = new HessenbergDecompositionImpl(matrix);
-    TestHelper.check(matrix, hessenbergDecompositionWiki);
+    HessenbergDecompositionQ.check(matrix, hessenbergDecompositionWiki);
   }
 
   @ParameterizedTest
@@ -28,7 +29,7 @@ class HessenbergDecompositionImplTest {
   void testComplex(int n) {
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n);
     HessenbergDecompositionImpl hessenbergDecompositionWiki = new HessenbergDecompositionImpl(matrix);
-    TestHelper.check(matrix, hessenbergDecompositionWiki);
+    HessenbergDecompositionQ.check(matrix, hessenbergDecompositionWiki);
   }
 
   @ParameterizedTest
@@ -36,13 +37,13 @@ class HessenbergDecompositionImplTest {
   void testRandomUnits(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m")), n, n);
     HessenbergDecompositionImpl hessenbergDecompositionWiki = new HessenbergDecompositionImpl(matrix);
-    TestHelper.check(matrix, hessenbergDecompositionWiki);
+    HessenbergDecompositionQ.check(matrix, hessenbergDecompositionWiki);
   }
 
   @Test
   void testIdMat() {
     Tensor matrix = IdentityMatrix.of(5);
     HessenbergDecompositionImpl hessenbergDecompositionWiki = new HessenbergDecompositionImpl(matrix);
-    TestHelper.check(matrix, hessenbergDecompositionWiki);
+    HessenbergDecompositionQ.check(matrix, hessenbergDecompositionWiki);
   }
 }

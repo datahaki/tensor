@@ -31,7 +31,7 @@ class TsPredicateTest {
 
   @Test
   void testPredicate() {
-    TimeSeries timeSeries = TimeSeries.wrap(new TreeSet<>(), s -> null, ResamplingMethod.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.wrap(new TreeSet<>(), _ -> null, ResamplingMethod.LINEAR_INTERPOLATION);
     assertTrue(TsPredicate.isUnmodifiable(timeSeries));
   }
 

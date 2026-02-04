@@ -32,6 +32,7 @@ class ExtensionTest {
 
   @Test
   void testFail() {
+    assertThrows(Exception.class, () -> Extension.CSV.colorType());
     assertThrows(IllegalArgumentException.class, () -> Extension.of("unknown"));
   }
 

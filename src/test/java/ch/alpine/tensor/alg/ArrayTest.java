@@ -86,7 +86,7 @@ class ArrayTest {
   @Test
   void testZeros() {
     Tensor zeros = Array.zeros(3, 5, 2, 7);
-    Tensor table = Array.of(l -> RealScalar.ZERO, 3, 5, 2, 7);
+    Tensor table = Array.of(_ -> RealScalar.ZERO, 3, 5, 2, 7);
     assertEquals(zeros, table);
     zeros.set(RealScalar.ONE, 0, 1, 0, 2);
     Map<Tensor, Long> map = Tally.of(Flatten.of(zeros));

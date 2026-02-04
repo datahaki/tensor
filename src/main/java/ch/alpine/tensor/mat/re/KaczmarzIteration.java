@@ -61,7 +61,6 @@ public class KaczmarzIteration {
     int m = Unprotect.dimension1(matrix);
     x = Tensors.vector(i -> Quantity.of(0, //
         QuantityUnit.of(b.Get(0)).add(QuantityUnit.of(matrix.Get(0, i)).negate())), m);
-    // System.out.println(x);
   }
   // TODO TENSOR also relaxation parameter
 

@@ -92,7 +92,11 @@ public enum HomeDirectory {
   // helper function
   private static File subfolder(String folder, String... strings) {
     File file = file(folder);
-    file.mkdir();
+    if (!file.isDirectory()) {
+      boolean created = file.mkdir();
+      if (!created)
+        throw new RuntimeException("unable to create folder: " + file);
+    }
     return FileNameJoin.of(file, strings);
   }
 }

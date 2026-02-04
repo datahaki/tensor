@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -57,15 +59,14 @@ class Matrix2NormTest {
     }
   }
 
-  @Test
-  void testQuantity() {
+  @RepeatedTest(5)
+  void testQuantity(RepetitionInfo repetitionInfo) {
     Unit unit = Unit.of("m*K^1/2");
-    for (int n = 2; n < 6; ++n) {
-      _check(HilbertMatrix.of(n));
-      _check(RandomVariate.of(NormalDistribution.standard(), n, n).map(s -> Quantity.of(s, "m")));
-      _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n, n).map(s -> Quantity.of(s, "m")));
-      _check(RandomVariate.of(UniformDistribution.of(-5, 5), n, n).map(s -> Quantity.of(s, unit)));
-    }
+    int n = repetitionInfo.getCurrentRepetition();
+    _check(HilbertMatrix.of(n));
+    _check(RandomVariate.of(NormalDistribution.standard(), n, n).map(s -> Quantity.of(s, "m")));
+    _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n, n).map(s -> Quantity.of(s, "m")));
+    _check(RandomVariate.of(UniformDistribution.of(-5, 5), n, n).map(s -> Quantity.of(s, unit)));
   }
 
   @Test

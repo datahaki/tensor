@@ -14,7 +14,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.qr.SchurDecomposition;
@@ -33,9 +32,22 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.spa.SparseArray;
 
-/* package */ class RealEigensystem implements Eigensystem, Serializable {
+public class RealEigensystem implements Serializable {
   private static final Scalar DEFAULT_EPSILON = RealScalar.of(1e-12);
   private static final Scalar EPSILON = RealScalar.of(1e-16);
+
+  public static RealEigensystem of(Tensor matrix) {
+    return new RealEigensystem(matrix);
+  }
+
+  private static record ComplexWrap(Scalar[][] matrixT) {
+    public void set(int i, int idx, Scalar z) {
+      ReIm reIm = ReIm.of(z);
+      matrixT[i][idx - 1] = reIm.re();
+      matrixT[i][idx] = reIm.im();
+    }
+  }
+
   // ---
   private final Scalar zero;
   private final Tensor eigenvectors;
@@ -47,7 +59,7 @@ import ch.alpine.tensor.spa.SparseArray;
     final int n = matrix.length();
     eigenvalues = ScalarArray.ofVector(Array.zeros(n));
     final Scalar[][] matrixT = ScalarArray.ofMatrix(schurDecomposition.getT());
-    ComplexWrap cmplxWrp = new ComplexWrap(matrixT);
+    ComplexWrap complexWrap = new ComplexWrap(matrixT);
     {
       Scalar norm = Matrix1Norm.of(matrix);
       for (int i = 0; i < n; ++i)
@@ -79,8 +91,9 @@ import ch.alpine.tensor.spa.SparseArray;
       Scalar zr = RealScalar.ZERO;
       Scalar zi = RealScalar.ZERO;
       Scalar z = RealScalar.ZERO;
-      final Scalar p = Re.FUNCTION.apply(eigenvalues[idx]);
-      final Scalar q = Im.FUNCTION.apply(eigenvalues[idx]);
+      ReIm reImD = ReIm.of(eigenvalues[idx]);
+      final Scalar p = reImD.re();
+      final Scalar q = reImD.im();
       if (Tolerance.CHOP.isZero(q)) {
         // Real vector
         int l = idx;
@@ -90,8 +103,7 @@ import ch.alpine.tensor.spa.SparseArray;
           zr = zero;
           for (int j = l; j <= idx; ++j)
             zr = zr.add(matrixT[i][j].multiply(matrixT[j][idx]));
-          Scalar chopped = Tolerance.CHOP.apply(Im.FUNCTION.apply(eigenvalues[i]));
-          if (Sign.isNegative(chopped)) {
+          if (Sign.isNegative(Tolerance.CHOP.apply(Im.FUNCTION.apply(eigenvalues[i])))) {
             z = w;
             zi = zr;
           } else {
@@ -124,7 +136,7 @@ import ch.alpine.tensor.spa.SparseArray;
         int l = idx - 1;
         // Last vector component imaginary so matrix is triangular
         {
-          ReIm reIm = new ReIm(Scalars.lessThan( //
+          ReIm reIm = ReIm.of(Scalars.lessThan( //
               Abs.FUNCTION.apply(matrixT[idx - 1][idx]), //
               Abs.FUNCTION.apply(matrixT[idx][idx - 1])) //
                   ? eigenvalues[idx].subtract(matrixT[idx][idx]).divide(matrixT[idx][idx - 1])
@@ -142,8 +154,7 @@ import ch.alpine.tensor.spa.SparseArray;
             sa = sa.add(matrixT[i][j].multiply(matrixT[j][idx]));
           }
           Scalar w = matrixT[i][i].subtract(p);
-          Scalar chopped = Tolerance.CHOP.apply(Im.FUNCTION.apply(eigenvalues[i]));
-          if (Sign.FUNCTION.apply(chopped).equals(RealScalar.of(-1))) {
+          if (Sign.isNegative(Tolerance.CHOP.apply(Im.FUNCTION.apply(eigenvalues[i])))) {
             z = w;
             zr = ra;
             zi = sa;
@@ -152,7 +163,7 @@ import ch.alpine.tensor.spa.SparseArray;
             Scalar rsa = ComplexScalar.of(ra, sa);
             Scalar wq = ComplexScalar.of(w, q);
             if (Scalars.isZero(Im.FUNCTION.apply(eigenvalues[i]))) {
-              cmplxWrp.set(i, idx, rsa.divide(wq).negate());
+              complexWrap.set(i, idx, rsa.divide(wq).negate());
             } else {
               // Solve complex equations
               Scalar x = matrixT[i][i + 1];
@@ -166,14 +177,14 @@ import ch.alpine.tensor.spa.SparseArray;
               {
                 Scalar rs = ComplexScalar.of(zr, zi);
                 Scalar vz = ComplexScalar.of(vr, vi);
-                cmplxWrp.set(i, idx, x.multiply(rs).subtract(zq.multiply(rsa)).divide(vz));
+                complexWrap.set(i, idx, x.multiply(rs).subtract(zq.multiply(rsa)).divide(vz));
               }
               Scalar cc = ComplexScalar.of(matrixT[i][idx - 1], matrixT[i][idx]);
               if (Scalars.lessThan(Abs.FUNCTION.apply(z).add(Abs.FUNCTION.apply(q)), Abs.FUNCTION.apply(x)))
-                cmplxWrp.set(i + 1, idx, wq.multiply(cc).add(rsa).divide(x).negate());
+                complexWrap.set(i + 1, idx, wq.multiply(cc).add(rsa).divide(x).negate());
               else {
                 Scalar rs = ComplexScalar.of(zr, zi);
-                cmplxWrp.set(i + 1, idx, rs.add(y.multiply(cc)).divide(zq).negate());
+                complexWrap.set(i + 1, idx, rs.add(y.multiply(cc)).divide(zq).negate());
               }
             }
             // Overflow control
@@ -183,7 +194,7 @@ import ch.alpine.tensor.spa.SparseArray;
             if (Scalars.lessThan(RealScalar.ONE, Times.of(EPSILON, t, t)))
               // case not covered by tests
               for (int j = i; j <= idx; ++j)
-                cmplxWrp.set(j, idx, ComplexScalar.of(matrixT[j][idx - 1], matrixT[j][idx]).divide(t));
+                complexWrap.set(j, idx, ComplexScalar.of(matrixT[j][idx - 1], matrixT[j][idx]).divide(t));
           }
         }
       }
@@ -196,17 +207,16 @@ import ch.alpine.tensor.spa.SparseArray;
     eigenvectors = Transpose.of(Tensors.matrix(matrixP).dot(Tensors.matrix(matrixT)));
   }
 
-  @Override // from Eigensystem
+  /** @return vector of potentially complex eigenvalues */
   public Tensor values() {
     return Tensors.of(eigenvalues);
   }
 
-  @Override // from Eigensystem
   public Tensor diagonalMatrix() {
     int n = eigenvalues.length;
     Tensor values = SparseArray.of(zero, n, n);
     for (int i = 0; i < n; ++i) {
-      ReIm reIm = new ReIm(eigenvalues[i]);
+      ReIm reIm = ReIm.of(eigenvalues[i]);
       values.set(reIm.re(), i, i);
       Scalar chopped = Tolerance.CHOP.apply(reIm.im());
       if (Sign.isPositive(chopped))
@@ -218,13 +228,7 @@ import ch.alpine.tensor.spa.SparseArray;
     return values;
   }
 
-  @Override // from Eigensystem
   public Tensor vectors() {
     return eigenvectors;
-  }
-
-  @Override // from Object
-  public String toString() {
-    return MathematicaFormat.concise("Eigensystem", values(), vectors());
   }
 }

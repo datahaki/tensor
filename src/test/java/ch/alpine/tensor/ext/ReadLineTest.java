@@ -38,7 +38,7 @@ class ReadLineTest {
 
   @Test
   void testFail() {
-    try (InputStream inputStream = getClass().getResource("/ch/alpine/tensor/io/doesnotexist.csv").openStream()) {
+    try (InputStream _ = getClass().getResource("/ch/alpine/tensor/io/doesnotexist.csv").openStream()) {
       fail();
     } catch (Exception exception) {
       // ---

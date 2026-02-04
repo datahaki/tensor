@@ -202,7 +202,7 @@ public enum BesselK {
 
   /** 1.11022302462515654042E-16; */
   private static final double EPS = (Math.nextUp(1.0) - 1.0) * 0.5;
-  protected static final double MAXLOG = 700.09782712893383996732;
+  private static final double MAXLOG = 700.09782712893383996732;
 
   /** Returns the modified Bessel function of the third kind
    * of order <tt>nn</tt> of the argument.

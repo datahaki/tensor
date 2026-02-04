@@ -45,7 +45,7 @@ class ConjugateTransposeTest {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n + 2);
     Tensor polard = ConjugateTranspose.of(matrix).dot(matrix);
-    HermitianMatrixQ.require(polard);
+    HermitianMatrixQ.INSTANCE.requireMember(polard);
   }
 
   @RepeatedTest(6)
@@ -53,7 +53,7 @@ class ConjugateTransposeTest {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n + 2, n);
     Tensor polard = ConjugateTranspose.of(matrix).dot(matrix);
-    HermitianMatrixQ.require(polard);
+    HermitianMatrixQ.INSTANCE.requireMember(polard);
   }
 
   @Test

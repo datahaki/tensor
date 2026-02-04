@@ -81,7 +81,7 @@ class LruCacheTest {
   void testLruAccessOrder3() {
     Map<Integer, String> map = new LruCache<>(3);
     map.put(3, "3");
-    map.compute(4, (k, v) -> "" + k);
+    map.compute(4, (k, _) -> "" + k);
     map.computeIfPresent(3, (k, v) -> v.repeat(k));
     assertEquals(map.get(3), "333");
     map.computeIfAbsent(3, (k) -> "abc".repeat(k));
@@ -120,8 +120,8 @@ class LruCacheTest {
     map.put(null, 5);
     assertThrows(Exception.class, () -> lruCache.putAll(map));
     assertThrows(Exception.class, () -> lruCache.putIfAbsent(null, 1));
-    assertThrows(Exception.class, () -> lruCache.compute(null, (k, v) -> 20));
-    assertThrows(Exception.class, () -> lruCache.computeIfPresent(null, (k, v) -> 30));
-    assertThrows(Exception.class, () -> lruCache.computeIfAbsent(null, v -> 10));
+    assertThrows(Exception.class, () -> lruCache.compute(null, (_, _) -> 20));
+    assertThrows(Exception.class, () -> lruCache.computeIfPresent(null, (_, _) -> 30));
+    assertThrows(Exception.class, () -> lruCache.computeIfAbsent(null, _ -> 10));
   }
 }

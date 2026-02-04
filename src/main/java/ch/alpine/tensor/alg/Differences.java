@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 
 /** simplified version of Mathematica::Differences
  * 
@@ -21,6 +22,9 @@ import ch.alpine.tensor.Tensor;
  * <a href="https://reference.wolfram.com/language/ref/Differences.html">Differences</a> */
 public enum Differences {
   ;
+  private static final TensorUnaryOperator ADJACENT_REDUCE = //
+      new AdjacentReduce((prev, next) -> next.subtract(prev));
+
   /** <pre>
    * Differences[{a, b, c, d, e}] == {b - a, c - b, d - c, e - d}
    * </pre>
@@ -31,11 +35,4 @@ public enum Differences {
   public static Tensor of(Tensor tensor) {
     return ADJACENT_REDUCE.apply(tensor);
   }
-
-  private static final AdjacentReduce ADJACENT_REDUCE = new AdjacentReduce() {
-    @Override // from AdjacentReduce
-    protected Tensor reduce(Tensor prev, Tensor next) {
-      return next.subtract(prev);
-    }
-  };
 }

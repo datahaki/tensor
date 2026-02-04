@@ -9,7 +9,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
-import ch.alpine.tensor.pdf.RandomVariateInterface;
 import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 
@@ -23,7 +22,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
  * @see BinomialDistribution
  * @author Claudio Ruch */
 /* package */ class BinomialRandomVariate implements Distribution, //
-    MeanInterface, RandomVariateInterface, VarianceInterface, Serializable {
+    MeanInterface, VarianceInterface, Serializable {
   private final int n;
   private final Scalar p;
   private final double p_success;
@@ -34,7 +33,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
     p_success = p.number().doubleValue();
   }
 
-  @Override // from RandomVariateInterface
+  @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     return RealScalar.of(DoubleStream.generate(randomGenerator::nextDouble) //
         .limit(n) //

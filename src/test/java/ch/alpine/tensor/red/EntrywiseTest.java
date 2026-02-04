@@ -4,7 +4,6 @@ package ch.alpine.tensor.red;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
@@ -14,10 +13,10 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import test.SerializableQ;
 
 class EntrywiseTest {
   @Test
@@ -52,19 +51,29 @@ class EntrywiseTest {
   }
 
   @Test
-  void testMinSimple() throws ClassNotFoundException, IOException {
-    Entrywise entrywise = Serialization.copy(Entrywise.min());
+  void testMinSimple() {
+    Entrywise entrywise = Entrywise.min();
+    SerializableQ.require(entrywise);
     Tensor result = entrywise.apply( //
         Tensors.vector(3, 2, 3), Tensors.vector(-2, 1, 4));
     assertEquals(result, Tensors.vector(-2, 1, 3));
   }
 
   @Test
-  void testMaxScalar() throws ClassNotFoundException, IOException {
-    Entrywise entrywise = Serialization.copy(Entrywise.max());
+  void testMaxScalar() {
+    Entrywise entrywise = Entrywise.max();
+    SerializableQ.require(entrywise);
     Tensor result = entrywise.apply( //
         RealScalar.of(3), RealScalar.of(5));
     assertEquals(result, RealScalar.of(5));
+  }
+
+  @Test
+  void testMulSimple() {
+    Entrywise entrywise = Entrywise.mul();
+    SerializableQ.require(entrywise);
+    Tensor result = entrywise.apply(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3));
+    assertEquals(result, Tensors.vector(1, 4, 9));
   }
 
   @Test

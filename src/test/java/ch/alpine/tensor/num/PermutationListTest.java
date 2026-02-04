@@ -28,7 +28,7 @@ class PermutationListTest {
 
   @Test
   void testMore() {
-    Cycles cycles = TestHelper.of("{{2, 1}, {0, 5, 6}}");
+    Cycles cycles = Cycles.of("{{2, 1}, {0, 5, 6}}");
     List<Integer> list = Integers.asList(PermutationList.of(cycles, 9));
     assertEquals(list, Arrays.asList(5, 2, 1, 3, 4, 6, 0, 7, 8));
     int parity = Integers.parity(PermutationList.of(cycles, 9));
@@ -37,21 +37,21 @@ class PermutationListTest {
 
   @Test
   void testExceeds() {
-    Cycles cycles = TestHelper.of("{{2, 1}, {0, 5, 6}}");
+    Cycles cycles = Cycles.of("{{2, 1}, {0, 5, 6}}");
     List<Integer> list = Integers.asList(PermutationList.of(cycles, 7));
     assertEquals(list, Arrays.asList(5, 2, 1, 3, 4, 6, 0));
   }
 
   @Test
   void testLengthFail() {
-    Cycles cycles = TestHelper.of("{{2, 1}, {0, 5, 6}}");
+    Cycles cycles = Cycles.of("{{2, 1}, {0, 5, 6}}");
     assertThrows(IllegalArgumentException.class, () -> PermutationList.of(cycles, 0));
     assertThrows(IllegalArgumentException.class, () -> PermutationList.of(cycles, 6));
   }
 
   @Test
   void testMinLength2() {
-    Cycles cycles = TestHelper.of("{{0, 1}}");
+    Cycles cycles = Cycles.of("{{0, 1}}");
     PermutationList.of(cycles, 2);
     assertThrows(IllegalArgumentException.class, () -> PermutationList.of(cycles, 1));
   }

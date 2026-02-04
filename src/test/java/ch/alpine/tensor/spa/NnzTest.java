@@ -27,19 +27,19 @@ class NnzTest {
   @Test
   void testSimple() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    SparseArray sparseArray = (SparseArray) TestHelper.of(tensor);
+    SparseArray sparseArray = (SparseArray) TensorToSparseArray.of(tensor);
     assertEquals(Nnz.of(sparseArray), 8);
   }
 
   @Test
   void testSubtraction() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    Tensor raw = TestHelper.of(tensor);
+    Tensor raw = TensorToSparseArray.of(tensor);
     SparseArray sparse = (SparseArray) raw;
     SparseArray sparseArray = (SparseArray) sparse.subtract(sparse);
     assertEquals(Nnz.of(sparseArray), 0);
     // assertInstanceOf(SparseArray.class, MatrixDotConjugateTranspose.of(sparse));
-    Tensor dot = MatrixDotConjugateTranspose.of(Transpose.of(sparse));
+    Tensor dot = MatrixDotConjugateTranspose.self(Transpose.of(sparse));
     dot.map(Scalar::zero);
     // assertInstanceOf(SparseArray.class, dot);
     // assertInstanceOf(SparseArray.class, raw.map(Conjugate.FUNCTION));
@@ -48,7 +48,7 @@ class NnzTest {
   @Test
   void testSome() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
-    Tensor sparse = TestHelper.of(tensor);
+    Tensor sparse = TensorToSparseArray.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 1);
     sparse.toString();
   }
@@ -66,7 +66,7 @@ class NnzTest {
   @Test
   void testObject(@TempDir File folder) throws IOException, ClassNotFoundException, DataFormatException {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    Tensor raw = TestHelper.of(tensor);
+    Tensor raw = TensorToSparseArray.of(tensor);
     SparseArray sparse = (SparseArray) raw;
     File file = new File(folder, "sparse.object");
     Export.object(file, sparse);

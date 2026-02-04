@@ -8,11 +8,12 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
-import ch.alpine.tensor.itp.FindRoot;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.opt.fnd.FindRoot;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -26,7 +27,6 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/KDistribution.html">KDistribution</a> */
 public class KDistribution extends AbstractContinuousDistribution implements Serializable {
-  private static final Scalar EXTENT = RealScalar.of(50.0); // at mean + EXTENT * variance -> cdf == 1.0
   private static final Scalar _4 = RealScalar.of(4.0);
 
   /** @param v positive
@@ -53,8 +53,6 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
   private final Scalar pow2;
   private final Scalar mean;
   private final Scalar variance;
-  @PackageTestAccess
-  /* package */ final Clip support;
 
   private KDistribution(Scalar v, Scalar w) {
     this.v = v;
@@ -69,7 +67,11 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
         Sqrt.FUNCTION.apply(v_w.reciprocal()), //
         p);
     variance = RealScalar.ONE.subtract(p.multiply(p).multiply(Pi.VALUE).divide(_4.multiply(v))).multiply(w);
-    support = Clips.positive(mean.add(variance.multiply(EXTENT)));
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.positive(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(mean)));
   }
 
   @Override // from PDF
@@ -98,7 +100,7 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
   protected Scalar protected_quantile(Scalar p) {
     if (p.equals(RealScalar.ONE))
       return DoubleScalar.POSITIVE_INFINITY;
-    return FindRoot.of(x -> p_lessThan(x).subtract(p)).inside(support);
+    return FindRoot.of(x -> p_lessThan(x).subtract(p)).above(mean.zero(), mean);
   }
 
   @Override // from MeanInterface

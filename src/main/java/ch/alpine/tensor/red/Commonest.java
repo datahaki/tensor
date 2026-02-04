@@ -25,7 +25,7 @@ public enum Commonest {
     Map<Tensor, Long> map = Tally.of(stream);
     Optional<Long> optional = map.values().stream().reduce(Math::max);
     if (optional.isPresent()) {
-      long value = optional.get();
+      long value = optional.orElseThrow();
       return Tensor.of(map.entrySet().stream() //
           .filter(entry -> entry.getValue() == value) //
           .map(Entry::getKey) //

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
@@ -278,8 +279,8 @@ class NullSpaceTest {
   @Test
   void testGaussScalar() {
     int prime = 7879;
-    RandomGenerator random = new Random();
-    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 3, 7);
+    RandomGenerator random = ThreadLocalRandom.current();
+    Tensor matrix = Tensors.matrix((_, _) -> GaussScalar.of(random.nextInt(), prime), 3, 7);
     Tensor nullsp = NullSpace.of(matrix);
     assertEquals(nullsp.length(), 4);
     for (Tensor vector : nullsp)

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -42,6 +43,7 @@ import ch.alpine.tensor.sca.tri.Sinc;
 import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.sca.tri.Tan;
 import ch.alpine.tensor.sca.tri.Tanh;
+import test.SerializableQ;
 
 /** the purpose of the test is to demonstrate that
  * none of the special input cases: NaN, Infty
@@ -180,27 +182,40 @@ class ScalarUnaryOperatorTest {
 
   @Test
   void testChain() throws ClassNotFoundException, IOException {
-    ScalarUnaryOperator suo = ScalarUnaryOperator.chain(Sin.FUNCTION, Tan.FUNCTION);
+    ScalarUnaryOperator suo = ScalarUnaryOperatorTest.chain(Sin.FUNCTION, Tan.FUNCTION);
     Serialization.copy(suo);
     suo.apply(RealScalar.of(0.2));
   }
 
   @Test
   void testChainEmpty() {
-    ScalarUnaryOperator suo1 = ScalarUnaryOperator.chain();
-    ScalarUnaryOperator suo2 = ScalarUnaryOperator.chain();
+    ScalarUnaryOperator suo1 = ScalarUnaryOperatorTest.chain();
+    ScalarUnaryOperator suo2 = ScalarUnaryOperatorTest.chain();
     assertEquals(suo1, suo2);
+    SerializableQ.require(suo1);
   }
 
   @Test
   void testChainFail() {
-    assertThrows(Exception.class, () -> ScalarUnaryOperator.chain(Sin.FUNCTION, null));
+    assertThrows(Exception.class, () -> ScalarUnaryOperatorTest.chain(Sin.FUNCTION, null));
   }
 
   @Test
   void test() {
-    ScalarUnaryOperator suo = ScalarUnaryOperator.chain(RealScalar.of(3)::add, RealScalar.of(5)::multiply);
+    ScalarUnaryOperator suo = ScalarUnaryOperatorTest.chain(RealScalar.of(3)::add, RealScalar.of(5)::multiply);
     Scalar scalar = suo.apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.of((2 + 3) * 5));
+  }
+
+  /** Remark:
+   * The empty chain ScalarUnaryOperator.chain() returns
+   * the instance {@link #IDENTITY}
+   * 
+   * @param scalarUnaryOperators
+   * @return operator that nests given operators with execution from left to right
+   * @throws Exception if any given operator is null */
+  public static ScalarUnaryOperator chain(ScalarUnaryOperator... scalarUnaryOperators) {
+    return Stream.of(scalarUnaryOperators) //
+        .reduce(s -> s, ScalarUnaryOperator::andThen);
   }
 }

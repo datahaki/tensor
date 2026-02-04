@@ -4,10 +4,17 @@ package ch.alpine.tensor.sca.pow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -20,8 +27,12 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Rationalize;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.AbsSquared;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
 
 class SqrtTest {
   @Test
@@ -60,6 +71,7 @@ class SqrtTest {
   @Test
   void testZero() {
     assertEquals(RealScalar.ZERO, Sqrt.FUNCTION.apply(RealScalar.ZERO));
+    assertEquals(RealScalar.ZERO, Sqrt.series(RealScalar.ZERO));
   }
 
   @Test
@@ -114,6 +126,57 @@ class SqrtTest {
   @Test
   void testNaN() {
     assertEquals(Sqrt.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+  }
+
+  @RepeatedTest(10)
+  void testDoubleDec() {
+    Scalar s1 = RandomVariate.of(UniformDistribution.of(0, 10));
+    Scalar s2 = DecimalScalar.of(new BigDecimal(s1.toString()));
+    Scalar r1 = Sqrt.FUNCTION.apply(s1);
+    Scalar r2 = Sqrt.series(s2);
+    Tolerance.CHOP.requireClose(r1, r2);
+  }
+
+  @Test
+  void testBlock() {
+    Scalar s1 = DecimalScalar.of(new BigDecimal("7.64158148097664"));
+    Sqrt.series(s1);
+  }
+
+  @Test
+  void testSqrtTwo() {
+    // difficult to start with "2" and ask for 100 digits
+    BigDecimal bd1 = new BigDecimal("2.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        new MathContext(100, RoundingMode.HALF_EVEN));
+    DecimalScalar ds1 = (DecimalScalar) DecimalScalar.of(bd1);
+    Scalar rt1 = Sqrt.FUNCTION.apply(ds1);
+    // mathematica N[Sqrt[2], 100] gives
+    String m = "1.414213562373095048801688724209698078569671875376948073176679737990732478462107038850387534327641573";
+    assertEquals(rt1.toString().substring(0, 70), m.substring(0, 70));
+  }
+
+  @Test
+  void testSqrtNTwo() {
+    // difficult to start with "2" and ask for 100 digits
+    BigDecimal bd1 = new BigDecimal("-2.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        new MathContext(100, RoundingMode.HALF_EVEN));
+    DecimalScalar ds1 = (DecimalScalar) DecimalScalar.of(bd1);
+    Scalar rt1 = Sqrt.FUNCTION.apply(ds1);
+    assertInstanceOf(ComplexScalar.class, rt1);
+    // mathematica N[Sqrt[2], 100] gives
+    String m = "1.414213562373095048801688724209698078569671875376948073176679737990732478462107038850387534327641573";
+    assertEquals(Im.FUNCTION.apply(rt1).toString().substring(0, 70), m.substring(0, 70));
+    assertTrue(Scalars.isZero(Re.FUNCTION.apply(rt1)));
+  }
+
+  @Test
+  void testSqrt() {
+    String string = "29.1373503383756545452223278558123399996876";
+    BigDecimal b = new BigDecimal(string);
+    assertEquals(b.precision(), 42);
+    Scalar sqrt = Sqrt.series(DecimalScalar.of(b));
+    Scalar r1 = sqrt.multiply(sqrt);
+    assertEquals(r1.toString().substring(0, string.length()), string);
   }
 
   @Test

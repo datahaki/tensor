@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.lang.reflect.Modifier;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -21,16 +22,16 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class BipartitionImplTest {
-  private static final int REPEAT = 5;
+  private final int REPEAT = 5;
 
   @Test
   void testPermutationsDiscrete() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Distribution distribution = DiscreteUniformDistribution.of(2, 10);
     for (int n = 9; n < 12; ++n) {
       int ofs = 5 + random.nextInt(10);
       for (int m = ofs; m < ofs + 3; ++m) {
-        Tensor matrix = RandomVariate.of(distribution, random, n, m);
+        Tensor matrix = RandomVariate.of(distribution, n, m);
         Scalar minimum = BipartiteMatching.of(matrix).minimum();
         for (int index = 0; index < REPEAT; ++index) {
           Tensor tensor = Tensor.of(IntStream.of(RandomPermutation.of(n)).mapToObj(matrix::get));
@@ -49,12 +50,12 @@ class BipartitionImplTest {
 
   @Test
   void testPermutationsContinuous() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Distribution distribution = UniformDistribution.of(0, 1);
     for (int n = 9; n < 12; ++n) {
       int ofs = 5 + random.nextInt(10);
       for (int m = ofs; m < ofs + 3; ++m) {
-        Tensor matrix = RandomVariate.of(distribution, random, n, m);
+        Tensor matrix = RandomVariate.of(distribution, n, m);
         BipartiteMatching bm = BipartiteMatching.of(matrix);
         Scalar minimum = bm.minimum();
         int[] solution = bm.matching();

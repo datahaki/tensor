@@ -11,6 +11,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -27,9 +28,13 @@ class ImageRotateTest {
 
   @Test
   void testCw() {
-    Tensor tensor = ImageRotate.cw(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
-    assertEquals(tensor, Tensors.fromString("{{4, 1}, {5, 2}, {6, 3}}"));
+    Tensor origin = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}");
+    Tensor tensor = ImageRotate.cw(origin);
+    Tensor expect = Tensors.fromString("{{4, 1}, {5, 2}, {6, 3}}");
+    assertEquals(tensor, expect);
     assertEquals(ImageRotate.cw(tensor), Tensors.fromString("{{6, 5, 4}, {3, 2, 1}}"));
+    Tensor result = ImageFormat.from(ImageRotate.cw(ImageFormat.of(origin)));
+    assertEquals(result, expect);
   }
 
   @Test

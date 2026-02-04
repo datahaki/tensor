@@ -28,9 +28,9 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Serialization;
 
 class CyclesGroupTest {
-  private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
+  private final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
 
-  private static void _check(Cycles arg, BigInteger exponent, Cycles expexted) throws ClassNotFoundException, IOException {
+  private void _check(Cycles arg, BigInteger exponent, Cycles expexted) throws ClassNotFoundException, IOException {
     assertEquals(Serialization.copy(BINARY_POWER).raise(arg, exponent), expexted);
     assertEquals(arg.power(exponent), expexted);
     assertEquals(arg.power(RealScalar.of(exponent)), expexted);
@@ -38,11 +38,11 @@ class CyclesGroupTest {
 
   @Test
   void testSimple() throws ClassNotFoundException, IOException {
-    _check(Cycles.of(Tensors.fromString("{{4, 2, 5}, {6, 3, 1, 7}}")), BigInteger.valueOf(6), //
-        Cycles.of(Tensors.fromString("{{1, 6}, {3, 7}}")));
-    _check(Cycles.of(Tensors.fromString("{{4, 2, 5}, {6, 3, 1, 7}}")), BigInteger.valueOf(-2), //
-        Cycles.of(Tensors.fromString("{{1, 6}, {2, 5, 4}, {3, 7}}")));
-    _check(Cycles.of(Tensors.fromString("{{4, 2, 5}, {6, 3, 1, 7}}")), BigInteger.valueOf(12), //
+    _check(Cycles.of("{{4, 2, 5}, {6, 3, 1, 7}}"), BigInteger.valueOf(6), //
+        Cycles.of("{{1, 6}, {3, 7}}"));
+    _check(Cycles.of("{{4, 2, 5}, {6, 3, 1, 7}}"), BigInteger.valueOf(-2), //
+        Cycles.of("{{1, 6}, {2, 5, 4}, {3, 7}}"));
+    _check(Cycles.of("{{4, 2, 5}, {6, 3, 1, 7}}"), BigInteger.valueOf(12), //
         Cycles.identity());
   }
 
@@ -83,11 +83,11 @@ class CyclesGroupTest {
   @Test
   void testOrbit3() {
     Set<Cycles> set = new HashSet<>();
-    set.add(TestHelper.of("{{0, 1}}"));
-    set.add(TestHelper.of("{{0, 1, 2}}"));
+    set.add(Cycles.of("{{0, 1}}"));
+    set.add(Cycles.of("{{0, 1, 2}}"));
     Set<Cycles> group = _group(set);
     assertEquals(group.size(), 6);
-    Cycles other = TestHelper.of("{{2, 3}}");
+    Cycles other = Cycles.of("{{2, 3}}");
     assertEquals(6, group.stream().map(other::combine).distinct().count());
     assertEquals(6, group.stream().map(e -> e.combine(other)).distinct().count());
     assertEquals(6, group.stream().map(Cycles::inverse).distinct().count());
@@ -103,11 +103,11 @@ class CyclesGroupTest {
   @Test
   void testOrbit4() {
     Set<Cycles> set = new HashSet<>();
-    set.add(TestHelper.of("{{0, 1}}"));
-    set.add(TestHelper.of("{{0, 1, 2, 3}}"));
+    set.add(Cycles.of("{{0, 1}}"));
+    set.add(Cycles.of("{{0, 1, 2, 3}}"));
     Set<Cycles> group = _group(set);
     assertEquals(group.size(), 24);
-    Cycles other = TestHelper.of("{{2, 3}}");
+    Cycles other = Cycles.of("{{2, 3}}");
     assertEquals(24, group.stream().map(other::combine).distinct().count());
     assertEquals(24, group.stream().map(e -> e.combine(other)).distinct().count());
     Map<Integer, Long> map = group.stream() //
@@ -127,14 +127,14 @@ class CyclesGroupTest {
   @Test
   void testGroupEx1() {
     Set<Cycles> gen = new HashSet<>();
-    gen.add(TestHelper.of("{{2, 10}, {4, 11}, {5, 7}}"));
-    gen.add(TestHelper.of("{{1, 4, 3}, {2, 5, 6}}"));
+    gen.add(Cycles.of("{{2, 10}, {4, 11}, {5, 7}}"));
+    gen.add(Cycles.of("{{1, 4, 3}, {2, 5, 6}}"));
     assertEquals(_group(gen).size(), 1440);
   }
 
   @Test
   void testGroupEx2() {
-    Cycles cycles = TestHelper.of( //
+    Cycles cycles = Cycles.of( //
         "{{1, 18, 25, 8, 11, 33, 45, 34, 19, 39, 4, 35, 46, 37, 10, 48, 7, 31, 6, 42, 36, 15, 29}, {2, 21, 14, 38, 26, 24, 41, 22, 12, 49}, {3, 28,  20, 50, 43, 23, 9, 5, 16, 44, 30, 27, 17}, {13, 40, 32, 47}}");
     int[] array = cycles.toTensor().stream().mapToInt(Tensor::length).toArray();
     Scalar scalar = Tensors.vectorInt(array).stream().map(Scalar.class::cast).reduce(LCM::of).get();

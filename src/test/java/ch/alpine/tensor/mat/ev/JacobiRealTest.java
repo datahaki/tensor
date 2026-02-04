@@ -8,6 +8,8 @@ import java.lang.reflect.Modifier;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
@@ -28,20 +30,22 @@ import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import test.EigensystemQ;
 
 class JacobiRealTest {
-  @Test
-  void testRandom() {
+  @RepeatedTest(10)
+  void testRandom(RepetitionInfo repetitionInfo) {
     RandomGenerator randomGenerator = new Random(1);
     Distribution distribution = UniformDistribution.of(-10, 10);
-    for (int d = 2; d < 10; ++d)
-      for (int count = 0; count < 5; ++count) {
-        Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, randomGenerator, d, d));
-        Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-        Tensor diagon = DiagonalMatrix.with(eigensystem.values());
-        Tensor m1 = BasisTransform.ofMatrix(diagon, eigensystem.vectors());
-        Tolerance.CHOP.requireClose(m1, matrix);
-      }
+    int d = repetitionInfo.getCurrentRepetition();
+    for (int count = 0; count < 5; ++count) {
+      Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, randomGenerator, d, d));
+      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+      Tensor diagon = DiagonalMatrix.with(eigensystem.values());
+      Tensor m1 = BasisTransform.ofMatrix(diagon, eigensystem.vectors());
+      Tolerance.CHOP.requireClose(m1, matrix);
+      new EigensystemQ(matrix).require(eigensystem);
+    }
   }
 
   @Test
@@ -53,13 +57,18 @@ class JacobiRealTest {
     Tensor v = Transpose.of(vs);
     Tolerance.CHOP.requireClose(Dot.of(v, D, vs), matrix);
     Tolerance.CHOP.requireClose(Dot.of(vs, matrix, v), D);
-    TestHelper.checkEquation(matrix, eigensystem);
+    new EigensystemQ(matrix).require(eigensystem);
   }
 
+  /** allows to consistency check each step of jacobi real
+   * 
+   * @param matrix
+   * @param A
+   * @param Vs */
   private static void _check(Tensor matrix, Scalar[][] A, Tensor[] Vs) {
     Tensor V = Unprotect.byRef(Vs);
     Tensor a = Tensors.matrix(A);
-    SymmetricMatrixQ.require(a);
+    SymmetricMatrixQ.INSTANCE.requireMember(a);
     Tensor Vt = Transpose.of(V);
     Tolerance.CHOP.requireClose(matrix, Dot.of(Vt, a, V));
     Tolerance.CHOP.requireClose(matrix, BasisTransform.ofMatrix(a, V));
@@ -120,7 +129,8 @@ class JacobiRealTest {
     Tolerance.CHOP.requireClose( //
         Tensors.matrix(A), //
         BasisTransform.of(matrix, 1, r));
-    Eigensystem eigensystem = jacobiReal;
+    Eigensystem eigensystem = JacobiReal.of(matrix);
+    new EigensystemQ(matrix).require(eigensystem);
     // solve was not called
     assertTrue(eigensystem.toString().startsWith("Eigensystem["));
   }

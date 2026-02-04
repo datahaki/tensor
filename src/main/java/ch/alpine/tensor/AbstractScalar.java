@@ -39,7 +39,7 @@ public abstract class AbstractScalar implements Scalar {
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
   @Override // from Tensor
   public final Tensor get(List<Integer> index) {
-    if (index.size() == 0)
+    if (index.isEmpty())
       return this;
     throw new Throw(this, index);
   }
@@ -63,10 +63,6 @@ public abstract class AbstractScalar implements Scalar {
   public final Stream<Tensor> stream() {
     throw new Throw(this);
   }
-  // @Override // from Tensor
-  // public final Stream<Tensor> flatten(int level) {
-  // return Stream.of(this);
-  // }
 
   @Override // from Tensor
   public final void set(Tensor tensor, int... index) {
@@ -124,6 +120,7 @@ public abstract class AbstractScalar implements Scalar {
 
   @Override // from Scalar
   public final Tensor map(Function<Scalar, ? extends Tensor> function) {
+    /* copy of result is inserted to avoid hard to debug issues */
     return function.apply(this).copy();
   }
 

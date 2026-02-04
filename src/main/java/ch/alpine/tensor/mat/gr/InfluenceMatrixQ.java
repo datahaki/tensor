@@ -2,44 +2,31 @@
 package ch.alpine.tensor.mat.gr;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Join;
+import ch.alpine.tensor.chq.ConstraintSquareMatrixQ;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
 /** checks if matrix is hermitian and idempotent
+ * whether given matrix is an influence matrix, i.e. whether given matrix equals
+ * to ConjugateTranspose of matrix and satisfies the {@link IdempotentMatrixQ} predicate
+ * 
+ * the matrix {{1,1},{0,0}} is idempotent but not hermitian
  * 
  * @see HermitianMatrixQ
- * @see IdempotentQ */
-public enum InfluenceMatrixQ {
-  ;
-  /** @param matrix square
-   * @param chop
-   * @return whether given matrix is an influence matrix, i.e. whether given matrix equals
-   * to ConjugateTranspose of matrix and satisfies the {@link IdempotentQ} predicate */
-  public static boolean of(Tensor matrix, Chop chop) {
-    return HermitianMatrixQ.of(matrix, chop) // P == ConjugateTranspose[P]
-        && IdempotentQ.of(matrix, chop); // P . P == P
+ * @see IdempotentMatrixQ */
+public class InfluenceMatrixQ extends ConstraintSquareMatrixQ {
+  public static final ConstraintSquareMatrixQ INSTANCE = new InfluenceMatrixQ(Tolerance.CHOP);
+
+  public InfluenceMatrixQ(Chop chop) {
+    super(chop);
   }
 
-  /** @param matrix square
-   * @return */
-  public static boolean of(Tensor matrix) {
-    return of(matrix, Tolerance.CHOP);
-  }
-
-  /** @param matrix square
-   * @param chop
-   * @return */
-  public static Tensor require(Tensor matrix, Chop chop) {
-    if (of(matrix, chop))
-      return matrix;
-    throw new Throw(matrix, chop);
-  }
-
-  /** @param matrix square
-   * @return */
-  public static Tensor require(Tensor matrix) {
-    return require(matrix, Tolerance.CHOP);
+  @Override
+  public Tensor constraint(Tensor p) {
+    return Join.of( //
+        HermitianMatrixQ.INSTANCE.constraint(p), // P == ConjugateTranspose[P]
+        IdempotentMatrixQ.INSTANCE.constraint(p)); // P . P == P
   }
 }

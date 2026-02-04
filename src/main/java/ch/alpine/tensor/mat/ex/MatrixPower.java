@@ -9,9 +9,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.chq.IntegerQ;
+import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
-import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.pow.Power;
 
@@ -31,14 +31,12 @@ import ch.alpine.tensor.sca.pow.Power;
  * <a href="https://reference.wolfram.com/language/ref/MatrixPower.html">MatrixPower</a> */
 public enum MatrixPower {
   ;
-  private static final BinaryPower<Tensor> BINARY_POWER = new BinaryPower<>(MatrixProduct.INSTANCE);
-
   /** @param matrix square
    * @param exponent
    * @return matrix ^ exponent
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, BigInteger exponent) {
-    return BINARY_POWER.raise(matrix, exponent);
+    return MatrixGroups.GENERAL_LINEAR.binaryPower().raise(SquareMatrixQ.INSTANCE.requireMember(matrix), exponent);
   }
 
   /** @param matrix square
@@ -81,13 +79,13 @@ public enum MatrixPower {
    * @param exponent
    * @return matrix ^ exponent */
   public static Tensor ofSymmetric(Tensor matrix, Scalar exponent) {
-    return StaticHelper.mapEv(Eigensystem.ofSymmetric(matrix, Tolerance.CHOP), Power.function(exponent));
+    return Eigensystem.ofSymmetric(matrix, Tolerance.CHOP).map(Power.function(exponent));
   }
 
   /** @param matrix
    * @param exponent
    * @return matrix ^ exponent */
   public static Tensor ofHermitian(Tensor matrix, Scalar exponent) {
-    return StaticHelper.mapEv(Eigensystem.ofHermitian(matrix, Tolerance.CHOP), Power.function(exponent));
+    return Eigensystem.ofHermitian(matrix, Tolerance.CHOP).map(Power.function(exponent));
   }
 }

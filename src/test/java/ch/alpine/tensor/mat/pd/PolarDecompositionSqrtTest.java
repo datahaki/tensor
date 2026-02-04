@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.pd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -39,10 +40,10 @@ class PolarDecompositionSqrtTest {
     int k = list.get(0);
     Tolerance.CHOP.requireClose(Dot.of(polarDecomposition.getUnitary(), polarDecomposition.getPositiveSemidefinite()), matrix);
     Tensor result = polarDecomposition.getUnitary();
-    UnitaryMatrixQ.require(result, Chop._06);
+    new UnitaryMatrixQ(Chop._06).requireMember(result);
     Tensor sym = polarDecomposition.getPositiveSemidefinite();
     assertEquals(Dimensions.of(sym), Arrays.asList(k, k));
-    HermitianMatrixQ.require(sym, Chop._06);
+    new HermitianMatrixQ(Chop._06).requireMember(sym);
     assertTrue(polarDecomposition.toString().startsWith("PolarDecomposition["));
     boolean hermitian = PositiveSemidefiniteMatrixQ.ofHermitian(polarDecomposition.getPositiveSemidefinite());
     assertTrue(hermitian);
@@ -66,15 +67,8 @@ class PolarDecompositionSqrtTest {
     _check(matrix, polarDecomposition);
     Tensor r1 = polarDecomposition.getUnitary();
     Tensor r2 = Orthogonalize.usingSvd(matrix);
-    if (Sign.isPositive(Det.of(matrix)) && Sign.isPositive(Det.of(r1))) {
-      Tolerance.CHOP.requireClose(r1, r2);
-    } else {
-      // System.out.println("---");
-      // System.out.println(Det.of(matrix));
-      // System.out.println(Det.of(r1));
-      // System.out.println(Pretty.of(r1.map(Round._4)));
-      // System.out.println(Pretty.of(r2.map(Round._4)));
-    }
+    assumeTrue(Sign.isPositive(Det.of(matrix)) && Sign.isPositive(Det.of(r1)));
+    Tolerance.CHOP.requireClose(r1, r2);
   }
 
   @ParameterizedTest
@@ -108,7 +102,6 @@ class PolarDecompositionSqrtTest {
   // Tensor result = polarDecomposition.getUnitary();
   // UnitaryMatrixQ.require(result, Chop._06);
   // _check(matrix, polarDecomposition);
-  // // System.out.println(Pretty.of(herm));
   // }
 
   @Test

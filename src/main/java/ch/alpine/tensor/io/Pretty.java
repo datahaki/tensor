@@ -19,7 +19,7 @@ public class Pretty {
   private static final String CLOSING = "]\n";
 
   /** @param tensor
-   * @return string expression of tensor for use in System.out.println
+   * @return string expression of tensor for use in IO.println
    * @see Put#string(Tensor) */
   public static String of(Tensor tensor) {
     return new Pretty(tensor).toString();

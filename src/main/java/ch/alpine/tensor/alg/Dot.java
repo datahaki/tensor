@@ -95,7 +95,7 @@ public class Dot {
    * @return
    * @throws Exception if tail and head are not equal */
   public static List<Integer> combine(List<Integer> dimensions1, List<Integer> dimensions2) {
-    Integers.requireEquals(dimensions1.get(dimensions1.size() - 1), dimensions2.get(0));
+    Integers.requireEquals(dimensions1.getLast(), dimensions2.getFirst());
     return Stream.concat( //
         dimensions1.stream().limit(dimensions1.size() - 1), //
         dimensions2.stream().skip(1)).collect(Collectors.toList());

@@ -9,7 +9,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ext.PackageTestAccess;
 
 /* package */ class UnitSystemInflator {
   public static final char INFLATOR = '_';
@@ -25,8 +24,7 @@ import ch.alpine.tensor.ext.PackageTestAccess;
   private final Set<String> skipped = new HashSet<>();
   private final Set<String> atoms;
 
-  @PackageTestAccess
-  UnitSystemInflator(Map<String, Scalar> input) {
+  public UnitSystemInflator(Map<String, Scalar> input) {
     atoms = StaticHelper.base(input.values());
     // give precedence to explicitly listed units: ft, pt, PS
     for (Entry<String, Scalar> entry : input.entrySet()) {

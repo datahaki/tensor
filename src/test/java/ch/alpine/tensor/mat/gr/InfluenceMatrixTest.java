@@ -6,10 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
@@ -38,6 +41,7 @@ import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
+import ch.alpine.tensor.mat.sv.SingularValueDecompositionWrap;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Rationalize;
 import ch.alpine.tensor.pdf.ComplexNormalDistribution;
@@ -64,6 +68,9 @@ class InfluenceMatrixTest {
     leverages_sqrt.stream() //
         .map(Scalar.class::cast) //
         .forEach(Clips.unit()::requireInside);
+    Tensor m = influenceMatrix.matrix();
+    Tolerance.CHOP.requireAllZero(m.dot(IdentityMatrix.of(m.length()).subtract(m)));
+    Tolerance.CHOP.requireAllZero(IdentityMatrix.of(m.length()).subtract(m).dot(m));
   }
 
   private static Tensor imageQR(Tensor design, Tensor vector) {
@@ -91,7 +98,7 @@ class InfluenceMatrixTest {
     Tolerance.CHOP.requireClose(x.dot(w1), w1);
     Tolerance.CHOP.requireClose(w2.dot(x), w2);
     Tensor w = w1.add(w2).multiply(RationalScalar.HALF);
-    SymmetricMatrixQ.require(w, Tolerance.CHOP);
+    SymmetricMatrixQ.INSTANCE.requireMember(w);
     return w;
   }
 
@@ -114,23 +121,10 @@ class InfluenceMatrixTest {
         vim1.dot(design));
     Tensor vim3 = imageQR(design, v1);
     Tolerance.CHOP.requireClose(vim1, vim3);
-    {
-      Tensor v = RandomVariate.of(distribution, n, n);
-      // Tensor w1 = Transpose.of(Tensor.of(v.stream().map(influenceMatrix::image)));
-      // Tensor w2 = Tensor.of(v.stream().map(influenceMatrix::image));
-      // Tolerance.CHOP.requireClose(x.dot(w1), w1);
-      // Tolerance.CHOP.requireClose(w2.dot(x), w2);
-      Tensor w = proj(influenceMatrix, v);
-      // w1.add(w2).multiply(RationalScalar.HALF);
-      // System.out.println(MatrixNorm2.bound(w.subtract(v)));
-      // System.out.println(MatrixNorm2.bound(w.subtract(x.dot(w).add(w.dot(x)))));
-      w = proj(influenceMatrix, v);
-      w.length();
-      // System.out.println(MatrixNorm2.bound(w.subtract(x.dot(w).add(w.dot(x)))));
-      // Chop._08.requireClose(x.dot(w).add(w.dot(x)),w);
-      // Chop._08.requireClose(w2.dot(x),w2);
-      // Chop._08.requireClose(w, x.dot(w).add(w.dot(x)));
-    }
+    Tensor v = RandomVariate.of(distribution, n, n);
+    Tensor w = proj(influenceMatrix, v);
+    w = proj(influenceMatrix, v);
+    w.length();
   }
 
   @Test
@@ -147,13 +141,13 @@ class InfluenceMatrixTest {
     Tensor design = VandermondeMatrix.of(vector, 3);
     {
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-      assertTrue(IdempotentQ.of(influenceMatrix.matrix()));
+      assertTrue(IdempotentMatrixQ.INSTANCE.isMember(influenceMatrix.matrix()));
       Scalar scalar = Total.ofVector(influenceMatrix.leverages());
       assertEquals(scalar, GaussScalar.of(4, prime));
     }
     {
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(Transpose.of(design));
-      assertTrue(IdempotentQ.of(influenceMatrix.matrix()));
+      assertTrue(IdempotentMatrixQ.INSTANCE.isMember(influenceMatrix.matrix()));
       Scalar scalar = Total.ofVector(influenceMatrix.leverages());
       assertEquals(scalar, GaussScalar.of(4, prime));
     }
@@ -164,18 +158,17 @@ class InfluenceMatrixTest {
     int n = 7;
     int m = 3;
     int prime = 6577;
-    Random random = new Random();
-    Tensor design = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, m);
-    if (MatrixRank.of(design) == m) {
-      InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
-      Tensor matrix = influenceMatrix.matrix();
-      SymmetricMatrixQ.require(matrix);
-      assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
-      Tensor zeros = Dot.of(influenceMatrix.residualMaker(), matrix);
-      Chop.NONE.requireAllZero(zeros);
-      assertEquals(zeros, Array.same(GaussScalar.of(0, prime), n, n));
-    }
+    Random random = ThreadLocalRandom.current();
+    Tensor design = Tensors.matrix((_, _) -> GaussScalar.of(random.nextInt(), prime), n, m);
+    assumeTrue(MatrixRank.of(design) == m);
+    InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
+    assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
+    Tensor matrix = influenceMatrix.matrix();
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
+    Tensor zeros = Dot.of(influenceMatrix.residualMaker(), matrix);
+    Chop.NONE.requireAllZero(zeros);
+    assertEquals(zeros, Array.same(GaussScalar.of(0, prime), n, n));
   }
 
   @Test
@@ -184,26 +177,25 @@ class InfluenceMatrixTest {
     int m = 5;
     int prime = 7919;
     Random random = new Random(1);
-    Tensor design = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, m);
+    Tensor design = Tensors.matrix((_, _) -> GaussScalar.of(random.nextInt(), prime), n, m);
     Tensor d_dt = MatrixDotTranspose.of(design, design);
     ExactTensorQ.require(d_dt);
-    if (MatrixRank.of(d_dt) == m) { // apparently rank(design) == m does not imply rank(d dt) == m !
-      PseudoInverse.usingCholesky(design);
-      InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
-      Tensor matrix = influenceMatrix.matrix();
-      SymmetricMatrixQ.require(matrix);
-      assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
-      Tensor zeros = Dot.of(influenceMatrix.residualMaker(), matrix);
-      Chop.NONE.requireAllZero(zeros);
-      assertEquals(zeros, Array.same(GaussScalar.of(0, prime), n, n));
-    }
+    assumeTrue(MatrixRank.of(d_dt) == m); // apparently rank(design) == m does not imply rank(d dt) == m !
+    PseudoInverse.usingCholesky(design);
+    InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
+    assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
+    Tensor matrix = influenceMatrix.matrix();
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
+    Tensor zeros = Dot.of(influenceMatrix.residualMaker(), matrix);
+    Chop.NONE.requireAllZero(zeros);
+    assertEquals(zeros, Array.same(GaussScalar.of(0, prime), n, n));
   }
 
   @Test
   void testSvdWithUnits() {
     Tensor design = Import.of("/ch/alpine/tensor/mat/sv/svd1.csv");
-    SingularValueDecomposition.of(design);
+    SingularValueDecompositionWrap.of(design);
     InfluenceMatrix.of(design);
   }
 
@@ -213,8 +205,8 @@ class InfluenceMatrixTest {
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     assertEquals(influenceMatrix.leverages().map(Im.FUNCTION), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();
-    InfluenceMatrixQ.require(matrix);
-    Eigensystem eigensystem = Eigensystem.ofHermitian(matrix);
+    InfluenceMatrixQ.INSTANCE.requireMember(matrix);
+    Eigensystem eigensystem = Eigensystem.ofHermitian(matrix).decreasing();
     Tolerance.CHOP.requireClose(eigensystem.values(), Tensors.vector(1, 1, 1, 0, 0));
   }
 
@@ -227,7 +219,7 @@ class InfluenceMatrixTest {
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     assertEquals(influenceMatrix.leverages().map(Im.FUNCTION), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();
-    InfluenceMatrixQ.require(matrix);
+    InfluenceMatrixQ.INSTANCE.requireMember(matrix);
     ExactTensorQ.require(matrix);
   }
 
@@ -237,8 +229,8 @@ class InfluenceMatrixTest {
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     assertEquals(influenceMatrix.leverages().map(Im.FUNCTION), Array.zeros(3));
     Tensor matrix = influenceMatrix.matrix();
-    assertTrue(HermitianMatrixQ.of(matrix));
-    InfluenceMatrixQ.require(matrix);
+    assertTrue(HermitianMatrixQ.INSTANCE.isMember(matrix));
+    InfluenceMatrixQ.INSTANCE.requireMember(matrix);
   }
 
   @Test
@@ -247,18 +239,18 @@ class InfluenceMatrixTest {
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     assertEquals(influenceMatrix.leverages().map(Im.FUNCTION), Array.zeros(3));
     Tensor matrix = influenceMatrix.matrix();
-    InfluenceMatrixQ.require(matrix);
+    InfluenceMatrixQ.INSTANCE.requireMember(matrix);
     ExactTensorQ.require(matrix);
   }
 
   @Test
   void testZeroQuantity() {
     Tensor design = ConstantArray.of(Quantity.of(0, "m"), 4, 3);
-    SingularValueDecomposition svd = SingularValueDecomposition.of(design);
+    SingularValueDecomposition svd = SingularValueDecompositionWrap.of(design);
     assertEquals(EqualsReduce.zero(svd.getU()), RealScalar.ZERO);
     assertEquals(EqualsReduce.zero(svd.values()), Quantity.of(0, "m"));
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    Tensor matrix = SymmetricMatrixQ.require(influenceMatrix.matrix());
+    Tensor matrix = SymmetricMatrixQ.INSTANCE.requireMember(influenceMatrix.matrix());
     ExactTensorQ.require(matrix);
     assertEquals(matrix, Array.zeros(4, 4));
     Tensor image = influenceMatrix.image(Tensors.vector(1, 2, 3, 4));
@@ -271,9 +263,9 @@ class InfluenceMatrixTest {
   void testNumericZeroQuantity() {
     Tensor design = ConstantArray.of(Quantity.of(0.0, "m"), 4, 3);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    Tensor matrix = SymmetricMatrixQ.require(influenceMatrix.matrix());
+    Tensor matrix = SymmetricMatrixQ.INSTANCE.requireMember(influenceMatrix.matrix());
     assertEquals(matrix, Array.zeros(4, 4));
-    SingularValueDecomposition svd = SingularValueDecomposition.of(design);
+    SingularValueDecomposition svd = SingularValueDecompositionWrap.of(design);
     assertEquals(EqualsReduce.zero(svd.getU()), RealScalar.ZERO);
     assertEquals(EqualsReduce.zero(svd.values()), Quantity.of(0, "m"));
   }

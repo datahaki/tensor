@@ -30,6 +30,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
@@ -84,6 +85,12 @@ class EqualizingDistributionTest {
   void testMonotonous() {
     Distribution distribution = EqualizingDistribution.fromUnscaledPDF(Tensors.vector(3, 2, 1));
     TestMarkovChebyshev.monotonous(distribution);
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.interval(0, 3));
+    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(1)), RationalScalar.of(3, 6));
+    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(2)), RationalScalar.of(5, 6));
+    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(3)), RationalScalar.of(6, 6));
+    assertEquals(CDF.of(distribution).p_lessThan(RealScalar.of(3)), RationalScalar.of(6, 6));
   }
 
   @Test

@@ -13,6 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.pdf.RandomSample;
 
 class NdCentersTest {
   @Test
@@ -21,8 +22,8 @@ class NdCentersTest {
     CoordinateBoundingBox inner = CoordinateBounds.of(Tensors.vector(1, 1), Tensors.vector(2, 3));
     for (NdCenters ndCenters : NdCenters.values())
       for (int count = 0; count < 100; ++count) {
-        NdCenterInterface ndCenterInterface = ndCenters.apply(TestHelper.sample(outer));
-        Tensor point = TestHelper.sample(inner);
+        NdCenterInterface ndCenterInterface = ndCenters.apply(RandomSample.of(new BoxRandomSample(outer)));
+        Tensor point = RandomSample.of(new BoxRandomSample(inner));
         assertTrue(Scalars.lessEquals(ndCenterInterface.distance(inner), ndCenterInterface.distance(point)));
       }
   }
@@ -33,8 +34,8 @@ class NdCentersTest {
     CoordinateBoundingBox inner = CoordinateBounds.of(Tensors.fromString("{1[m], 1[m]}"), Tensors.fromString("{2[m], 3[m]}"));
     for (NdCenters ndCenters : NdCenters.values())
       for (int count = 0; count < 100; ++count) {
-        NdCenterInterface ndCenterInterface = ndCenters.apply(TestHelper.sample(outer));
-        Tensor point = TestHelper.sample(inner);
+        NdCenterInterface ndCenterInterface = ndCenters.apply(RandomSample.of(new BoxRandomSample(outer)));
+        Tensor point = RandomSample.of(new BoxRandomSample(inner));
         assertTrue(Scalars.lessEquals(ndCenterInterface.distance(inner), ndCenterInterface.distance(point)));
       }
   }
@@ -44,7 +45,7 @@ class NdCentersTest {
     CoordinateBoundingBox inner = CoordinateBounds.of(Tensors.fromString("{1[m], 1[m]}"), Tensors.fromString("{2[m], 3[m]}"));
     for (NdCenters ndCenters : NdCenters.values())
       for (int count = 0; count < 10; ++count) {
-        NdCenterInterface ndCenterInterface = ndCenters.apply(TestHelper.sample(inner));
+        NdCenterInterface ndCenterInterface = ndCenters.apply(RandomSample.of(new BoxRandomSample(inner)));
         assertTrue(Scalars.isZero(ndCenterInterface.distance(inner)));
       }
   }

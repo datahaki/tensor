@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf.d;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,11 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -37,17 +41,29 @@ import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
+import test.DistributionEquality;
 
 class BinomialDistributionTest {
-  @Test
-  void testPdf() {
-    Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(1, 7));
+  @ParameterizedTest
+  @ValueSource(strings = { "1/7", "1/3", "4/9" })
+  void testPdf(String string) {
+    Distribution distribution = BinomialDistribution.of(10, Scalars.fromString(string));
     PDF pdf = PDF.of(distribution);
     Scalar prob = RealScalar.ZERO;
     for (int c = 0; c <= 10; ++c)
       prob = prob.add(pdf.at(RealScalar.of(c)));
     assertTrue(IntegerQ.of(prob));
     assertEquals(prob, RealScalar.ONE);
+    assertEquals(pdf.at(RealScalar.of(-1)), RealScalar.ZERO);
+    assertEquals(pdf.at(RealScalar.of(11)), RealScalar.ZERO);
+    assertEquals(pdf.at(RealScalar.of(12)), RealScalar.ZERO);
+  }
+
+  @Test
+  void testBinomial0() {
+    Distribution distribution = BinomialDistribution.of(0, RationalScalar.of(1, 2));
+    assertEquals(PDF.of(distribution).at(RealScalar.ZERO), RealScalar.ONE);
+    assertInstanceOf(BinomialDistribution.class, distribution);
   }
 
   @Test
@@ -68,15 +84,6 @@ class BinomialDistributionTest {
     assertEquals(pdf.at(RealScalar.of(1)), RationalScalar.of(5120, 59049));
     // PDF[BinomialDistribution[10, 1/3], 10] == 1/59049
     assertEquals(pdf.at(RealScalar.of(10)), RationalScalar.of(1, 59049));
-  }
-
-  @Test
-  void testValue3() {
-    Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(1, 3));
-    PDF pdf = PDF.of(distribution);
-    assertEquals(pdf.at(RealScalar.of(-1)), RealScalar.ZERO);
-    assertEquals(pdf.at(RealScalar.of(11)), RealScalar.ZERO);
-    assertEquals(pdf.at(RealScalar.of(12)), RealScalar.ZERO);
   }
 
   @Test
@@ -213,6 +220,13 @@ class BinomialDistributionTest {
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
       assertEquals(x, q);
     }
+  }
+
+  @Test
+  void testBinomial() {
+    Distribution d1 = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(1, 3, 3, 1));
+    Distribution d2 = BinomialDistribution.of(3, RationalScalar.HALF);
+    new DistributionEquality(d1, d2).checkRange(-4, 10);
   }
 
   @Test

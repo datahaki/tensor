@@ -3,7 +3,7 @@ package ch.alpine.tensor.num;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Objects;
+import java.util.Optional;
 
 import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.ComplexScalar;
@@ -40,6 +40,13 @@ public class GaussScalar extends AbstractScalar implements //
    * @throws Exception if given prime is not a prime number */
   public static GaussScalar of(long value, long prime) {
     return of(BigInteger.valueOf(value), BigInteger.valueOf(prime));
+  }
+
+  /** @param value
+   * @param prime
+   * @return */
+  public static Scalar of(long value, BigInteger prime) {
+    return of(BigInteger.valueOf(value), prime);
   }
 
   // helper function
@@ -160,7 +167,6 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from PowerInterface
   public GaussScalar power(Scalar exponent) {
-    // exponents of the form 1/2, 1/3, etc. could also be valid
     return new GaussScalar(value.modPow(Scalars.bigIntegerValueExact(exponent), prime), prime);
   }
 
@@ -181,15 +187,15 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from SignInterface
   public Scalar sign() {
-    return new GaussScalar(BigInteger.valueOf(value.signum()), prime);
+    return in(BigInteger.valueOf(value.signum()), prime);
   }
 
   @Override // from SqrtInterface
   public GaussScalar sqrt() {
-    GaussScalar gaussScalar = StaticHelper.SQRT.apply(this);
-    if (Objects.nonNull(gaussScalar))
-      return gaussScalar;
-    // examples of gauss scalars without sqrt: 2 mod 5, 3 mod 5, 6 mod 11, etc.
+    Optional<BigInteger> optional = TonelliShanks.of(value, prime);
+    if (optional.isPresent())
+      // there is another solutions prime-index == index.negate !!!
+      return new GaussScalar(optional.orElseThrow(), prime);
     throw new Throw(this); // sqrt of this does not exist
   }
 

@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf.d;
 import java.io.Serializable;
 import java.math.BigInteger;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -11,6 +12,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Ceiling;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.exp.Log;
@@ -49,6 +51,11 @@ public class GeometricDistribution extends AbstractDiscreteDistribution implemen
     this._1_p = RealScalar.ONE.subtract(p);
   }
 
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    return Clips.positive(DoubleScalar.POSITIVE_INFINITY);
+  }
+
   @Override // from MeanInterface
   public Scalar mean() {
     return p.reciprocal().subtract(RealScalar.ONE);
@@ -57,11 +64,6 @@ public class GeometricDistribution extends AbstractDiscreteDistribution implemen
   @Override // from VarianceInterface
   public Scalar variance() {
     return _1_p.divide(p.multiply(p));
-  }
-
-  @Override // from DiscreteDistribution
-  public BigInteger lowerBound() {
-    return BigInteger.ZERO;
   }
 
   @Override // from InverseCDF

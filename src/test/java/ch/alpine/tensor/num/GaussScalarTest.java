@@ -5,21 +5,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -41,6 +48,16 @@ import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 class GaussScalarTest {
+  @Test
+  void testSimple() {
+    BigInteger p1 = BigInteger.valueOf(7829);
+    BigInteger p2 = BigInteger.valueOf(7829);
+    assertNotSame(p1, p2);
+    GaussScalar gs1 = GaussScalar.of(BigInteger.valueOf(3), p1);
+    GaussScalar gs2 = GaussScalar.of(BigInteger.valueOf(4), p2);
+    assertSame(gs1.prime(), gs2.prime());
+  }
+
   @Test
   void testReciprocal() {
     long prime = 7919;
@@ -103,7 +120,10 @@ class GaussScalarTest {
   void testSqrt() {
     Scalar a = GaussScalar.of(4, 7);
     Scalar s = GaussScalar.of(2, 7);
-    assertEquals(Sqrt.FUNCTION.apply(a), s);
+    Scalar r1 = Sqrt.FUNCTION.apply(a);
+    Scalar r2 = Power.of(a, RationalScalar.HALF);
+    assertEquals(r1, s);
+    assertEquals(r2, s);
   }
 
   @Test
@@ -112,9 +132,10 @@ class GaussScalarTest {
     assertEquals(Sqrt.FUNCTION.apply(zero), zero);
   }
 
-  @Test
-  void testSqrt11() {
-    int prime = 11;
+  @ParameterizedTest
+  @ValueSource(ints = { 2, 11 })
+  void testSqrtSpec(int prime) {
+    // int prime = 11;
     int count = 0;
     for (int c = 0; c < prime; ++c) {
       Scalar s = GaussScalar.of(c, prime);
@@ -126,6 +147,7 @@ class GaussScalarTest {
         // ---
       }
     }
+    assumeTrue(prime == 11);
     assertEquals(count, 6);
     assertThrows(Throw.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(2, 11)));
   }
@@ -184,14 +206,13 @@ class GaussScalarTest {
   @Test
   void testPower2() {
     long prime = 59;
-    BinaryPower<Scalar> binaryPower = new BinaryPower<>(ScalarProduct.INSTANCE);
-    Random random = new SecureRandom();
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
     for (int index = 0; index < prime; ++index) {
-      GaussScalar gaussScalar = GaussScalar.of(random.nextInt(), prime);
+      GaussScalar gaussScalar = GaussScalar.of(randomGenerator.nextInt(), prime);
       if (!gaussScalar.number().equals(BigInteger.ZERO))
         for (int exponent = -10; exponent <= 10; ++exponent) {
           Scalar p1 = Power.of(gaussScalar, exponent);
-          Scalar p2 = binaryPower.raise(gaussScalar, BigInteger.valueOf(exponent));
+          Scalar p2 = Scalars.mul().raise(gaussScalar, BigInteger.valueOf(exponent));
           assertEquals(p1, p2);
         }
     }
@@ -280,8 +301,8 @@ class GaussScalarTest {
 
   @Test
   void testEquals() {
-    assertFalse(GaussScalar.of(3, 7).equals(GaussScalar.of(4, 7)));
-    assertFalse(GaussScalar.of(3, 7).equals(GaussScalar.of(3, 11)));
+    assertNotEquals(GaussScalar.of(3, 7), GaussScalar.of(4, 7));
+    assertNotEquals(GaussScalar.of(3, 7), GaussScalar.of(3, 11));
   }
 
   @Test
@@ -290,8 +311,14 @@ class GaussScalarTest {
   }
 
   @Test
+  void testFail() {
+    assertThrows(Exception.class, () -> GaussScalar.of(3, -17));
+  }
+
+  @Test
   void testEqualsMisc() {
     Object object = GaussScalar.of(3, 7);
+    assertNotEquals(object, "hello");
     assertFalse(object.equals("hello"));
   }
 

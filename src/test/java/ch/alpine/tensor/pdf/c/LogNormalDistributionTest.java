@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Kurtosis;
@@ -88,6 +90,8 @@ class LogNormalDistributionTest {
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
       Chop._10.requireClose(x, q);
     }
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.absolute(Double.POSITIVE_INFINITY));
   }
 
   @Test
@@ -98,7 +102,7 @@ class LogNormalDistributionTest {
 
   @Test
   void testMarkov() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Distribution distribution = LogNormalDistribution.of(random.nextDouble() - 0.5, 0.1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);

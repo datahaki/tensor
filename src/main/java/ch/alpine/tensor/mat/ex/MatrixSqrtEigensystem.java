@@ -3,11 +3,8 @@ package ch.alpine.tensor.mat.ex;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.ev.Eigensystem;
-import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** Determines the square root of a symmetric positive definite matrix.
@@ -20,25 +17,14 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * Edited by Xavier Pennec, Sommer, P. Thomas Fletcher, p. 80
  * 
  * @see MatrixPower */
-/* package */ class MatrixSqrtEigensystem implements MatrixSqrt, Serializable {
-  private final Tensor avec;
-  private final Tensor ainv;
-  private final Tensor sqrt;
-
-  /** @param eigensystem */
-  public MatrixSqrtEigensystem(Eigensystem eigensystem) {
-    avec = eigensystem.vectors();
-    ainv = ConjugateTranspose.of(avec);
-    sqrt = eigensystem.values().map(Sqrt.FUNCTION);
-  }
-
+/* package */ record MatrixSqrtEigensystem(Eigensystem eigensystem) implements MatrixSqrt, Serializable {
   @Override // from MatrixSqrt
   public Tensor sqrt() {
-    return ainv.dot(Times.of(sqrt, avec));
+    return eigensystem.map(Sqrt.FUNCTION);
   }
 
   @Override // from MatrixSqrt
   public Tensor sqrt_inverse() {
-    return ainv.dot(Times.of(sqrt.map(Scalar::reciprocal), avec));
+    return eigensystem.map(s -> Sqrt.FUNCTION.apply(s).reciprocal());
   }
 }

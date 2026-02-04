@@ -56,6 +56,12 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return new Cycles(map(check(tensor)));
   }
 
+  /** @param string e.g. "{{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}}"
+   * @return */
+  public static Cycles of(String string) {
+    return of(Tensors.fromString(string));
+  }
+
   /* package */ static Cycles single(int[] cycle) {
     IntStream.of(cycle).forEach(Integers::requirePositiveOrZero);
     if (cycle.length < 2)
@@ -106,7 +112,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     this.navigableMap = navigableMap;
   }
 
-  private void cycleInterate(Consumer<Tensor> consumer) {
+  private void cycleIterate(Consumer<Tensor> consumer) {
     Set<Integer> set = new HashSet<>();
     for (Entry<Integer, Integer> entry : navigableMap.entrySet()) {
       int seed = entry.getKey();
@@ -140,7 +146,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     for (Entry<Integer, Integer> entry : navigableMap.entrySet()) {
       int seed = entry.getKey();
       set.add(seed);
-      int dest = cycles.replace(entry.getValue());
+      int dest = cycles.unsafe_replace(entry.getValue());
       if (seed != dest)
         result.put(seed, dest);
     }
@@ -165,8 +171,8 @@ public class Cycles implements Comparable<Cycles>, Serializable {
    * @return */
   public Cycles power(BigInteger bigInteger) {
     Builder<Tensor> builder = Stream.builder();
-    cycleInterate(cycle -> BINARY_POWER.raise(new Cycles(map(Stream.of(cycle))), //
-        bigInteger.mod(BigInteger.valueOf(cycle.length()))).cycleInterate(builder));
+    cycleIterate(cycle -> BINARY_POWER.raise(new Cycles(map(Stream.of(cycle))), //
+        bigInteger.mod(BigInteger.valueOf(cycle.length()))).cycleIterate(builder));
     return new Cycles(map(builder.build())); // most efficient?
   }
 
@@ -175,14 +181,17 @@ public class Cycles implements Comparable<Cycles>, Serializable {
    * @param index
    * @return */
   public int replace(int index) {
-    Integers.requirePositiveOrZero(index);
+    return unsafe_replace(Integers.requirePositiveOrZero(index));
+  }
+
+  /* package */ int unsafe_replace(int index) {
     return navigableMap.getOrDefault(index, index);
   }
 
   /** @return smallest n where the permutation group S(n) contains this cycle */
   public int minLength() {
     return navigableMap.isEmpty() //
-        ? 0 // not sure is this is a good
+        ? 0 // not sure is this is a good fallback value
         : navigableMap.lastKey() + 1;
   }
 
@@ -198,7 +207,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
   /** @return for instance {{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}} */
   public Tensor toTensor() {
     Builder<Tensor> builder = Stream.builder();
-    cycleInterate(builder);
+    cycleIterate(builder);
     return Tensor.of(builder.build());
   }
 

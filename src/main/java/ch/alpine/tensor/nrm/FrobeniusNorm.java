@@ -17,10 +17,9 @@ public enum FrobeniusNorm {
     return Vector2Norm.of(Flatten.of(tensor));
   }
 
-  /** @param t1
-   * @param t2
-   * @return Frobenius norm of tensor difference || t1 - t2 || */
-  public static Scalar between(Tensor t1, Tensor t2) {
-    return of(t1.subtract(t2));
+  /** @param tensor of arbitrary rank
+   * @return Frobenius norm squared of given tensor */
+  public static Scalar squared(Tensor tensor) {
+    return Vector2NormSquared.of(Flatten.of(tensor));
   }
 }

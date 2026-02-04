@@ -10,14 +10,15 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.RandomVariateInterface;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** functionality for generation of complex valued random variates that are
  * uniformly distributed in a disk centered at zero with given radius */
-public class ComplexDiskUniformDistribution implements Distribution, RandomVariateInterface {
+public record ComplexDiskUniformDistribution(Scalar radius) implements Distribution {
+  private static final Distribution ARG = UniformDistribution.of(Clips.absolute(Pi.VALUE));
+
   /** @param radius positive
    * @return */
   public static Distribution of(Scalar radius) {
@@ -31,19 +32,11 @@ public class ComplexDiskUniformDistribution implements Distribution, RandomVaria
   }
 
   // ---
-  private final Scalar radius;
-  private final Distribution arg;
-
-  private ComplexDiskUniformDistribution(Scalar radius) {
-    this.radius = radius;
-    arg = UniformDistribution.of(Clips.absolute(Pi.VALUE));
-  }
-
   @Override
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     return ComplexScalar.fromPolar( //
         Sqrt.FUNCTION.apply(RandomVariate.of(UniformDistribution.unit(), randomGenerator)), //
-        RandomVariate.of(arg, randomGenerator)).multiply(radius);
+        RandomVariate.of(ARG, randomGenerator)).multiply(radius);
   }
 
   @Override

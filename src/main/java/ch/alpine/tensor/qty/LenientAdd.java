@@ -1,12 +1,11 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
-import java.util.function.BinaryOperator;
-
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 import ch.alpine.tensor.mat.re.GaussianElimination;
 import ch.alpine.tensor.mat.re.RowReduce;
@@ -28,7 +27,7 @@ import ch.alpine.tensor.red.Inner;
  * Remark: The computations throw an exception by {@link Quantity#add(Tensor)}. */
 public enum LenientAdd {
   ;
-  private static final BinaryOperator<Tensor> INNER = Inner.with((p, q) -> of(p, (Scalar) q));
+  private static final TensorBinaryOperator INNER = Inner.with((p, q) -> of(p, (Scalar) q));
 
   /** @param p
    * @param q

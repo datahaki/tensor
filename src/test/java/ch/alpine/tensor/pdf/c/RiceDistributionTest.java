@@ -12,6 +12,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -30,7 +31,9 @@ class RiceDistributionTest {
 
   @Test
   void testMonotonous() {
-    TestMarkovChebyshev.monotonous(RiceDistribution.of(1.2, 2.23));
+    Distribution distribution = RiceDistribution.of(1.2, 2.23);
+    RandomVariate.of(distribution);
+    TestMarkovChebyshev.monotonous(distribution);
   }
 
   @Test

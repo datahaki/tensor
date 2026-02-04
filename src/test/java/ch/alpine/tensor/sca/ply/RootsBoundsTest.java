@@ -59,7 +59,7 @@ class RootsBoundsTest {
     Tensor coeffs = Tensors.fromString("{3[m], 2[m*s^-1], 3[m*s^-2], -4[m*s^-3]}");
     Roots.bound(coeffs);
     Polynomial polynomial = Polynomial.of(coeffs);
-    assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
+    assertEquals(polynomial.getZeroDomain(), Quantity.of(0, "s"));
     assertEquals(polynomial.getUnitValues(), Unit.of("m"));
     polynomial.apply(Quantity.of(4, "s"));
     for (RootsBounds rootsBounds : RootsBounds.values())
@@ -75,7 +75,7 @@ class RootsBoundsTest {
     Tensor coeffs = Tensors.fromString("{3, 2[s^-1], 3[s^-2], -4[s^-3]}");
     Roots.bound(coeffs);
     Polynomial polynomial = Polynomial.of(coeffs);
-    assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
+    assertEquals(polynomial.getZeroDomain(), Quantity.of(0, "s"));
     assertEquals(polynomial.getUnitValues(), Unit.of(""));
     polynomial.apply(Quantity.of(4, "s"));
     for (RootsBounds rootsBounds : RootsBounds.values())
@@ -91,7 +91,7 @@ class RootsBoundsTest {
     Tensor coeffs = Tensors.fromString("{3[m], 2[m], 3[m], -4[m]}");
     Roots.bound(coeffs);
     Polynomial polynomial = Polynomial.of(coeffs);
-    assertEquals(polynomial.getUnitDomain(), Unit.of(""));
+    assertEquals(polynomial.getZeroDomain(), RealScalar.ZERO);
     assertEquals(polynomial.getUnitValues(), Unit.of("m"));
     polynomial.apply(RealScalar.of(4));
     for (RootsBounds rootsBounds : RootsBounds.values())

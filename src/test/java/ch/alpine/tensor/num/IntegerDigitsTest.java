@@ -11,9 +11,14 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Drop;
+import ch.alpine.tensor.red.Tally;
+import ch.alpine.tensor.sca.pow.Power;
 
 class IntegerDigitsTest {
   @Test
@@ -47,6 +52,23 @@ class IntegerDigitsTest {
   @Test
   void testZero() {
     assertEquals(IntegerDigits.of(RealScalar.ZERO), Tensors.vector(List.of()));
+  }
+
+  @Test
+  void testRiddle() {
+    int c = 10;
+    while (c < 1000) {
+      Scalar scalar = Power.of(c, 2);
+      Tensor tensor = IntegerDigits.of(scalar);
+      Tensor list = Drop.head(tensor, tensor.length() - 3);
+      if (Tally.of(list).size() == 1) {
+        assertEquals(c, 38);
+        assertEquals(scalar, RealScalar.of(1444));
+        assertEquals(list, Tensors.vector(4, 4, 4));
+        break;
+      }
+      ++c;
+    }
   }
 
   @Test

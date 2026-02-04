@@ -19,7 +19,7 @@ class LinearColorDataGradientTest {
   @Test
   void testRandom() {
     ColorDataGradient colorDataGradient = //
-        LinearColorDataGradient.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 123, 4));
+        LinearColorDataGradient.of(RandomVariate.of(DiscreteUniformDistribution.forArray(256), 123, 4));
     Subdivide.of(0, 1, 10).map(colorDataGradient);
   }
 

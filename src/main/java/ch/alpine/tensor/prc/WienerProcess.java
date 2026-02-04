@@ -91,7 +91,7 @@ public class WienerProcess implements RandomProcess, Serializable {
   @Override // from RandomProcess
   public Scalar evaluate(TimeSeries timeSeries, RandomGenerator randomGenerator, Scalar x) {
     Clip clip = timeSeries.domain();
-    Distribution distribution = null;
+    Distribution distribution;
     if (clip.isInside(x)) {
       NavigableSet<Scalar> navigableSet = timeSeries.keySet(clip, true);
       Clip interval = Clips.interval( //

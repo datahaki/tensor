@@ -27,6 +27,8 @@ import ch.alpine.tensor.ext.ObjectFormat;
  * @see Put */
 public enum Export {
   ;
+  public static final ThreadLocal<Float> JPEG_QUALITY = ThreadLocal.withInitial(() -> 0.98f);
+
   /** See the documentation of {@link XsvFormat}, {@link ImageFormat}, and {@link MatlabExport}
    * for information on how tensors are encoded in the respective format.
    * 

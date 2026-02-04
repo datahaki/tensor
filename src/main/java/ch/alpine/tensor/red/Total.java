@@ -1,11 +1,11 @@
 // code by jph
 package ch.alpine.tensor.red;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.jet.Hold;
 import ch.alpine.tensor.nrm.NormalizeTotal;
 
 /** implementation is consistent with Mathematica.
@@ -33,7 +33,7 @@ public enum Total {
    * @return total sum of tensor entries at first level, or 0 if tensor is empty
    * @throws Throw if input tensor is a scalar */
   public static Tensor of(Tensor tensor) {
-    return tensor.stream().reduce(Tensor::add).orElse(RealScalar.ZERO);
+    return tensor.stream().reduce(Tensor::add).orElse(Hold.zero());
   }
 
   /** The function {@link #ofVector(Tensor)} is consistent with {@link #of(Tensor)}

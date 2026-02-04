@@ -6,13 +6,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -25,6 +29,9 @@ class FRatioDistributionTest {
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(0.3)), RealScalar.of(0.6416415509425255));
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(2.6666666666666665));
     assertEquals(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
+    Tensor r1 = RandomVariate.of(distribution, new Random(3), 10);
+    Tensor r2 = RandomVariate.of(distribution, new Random(3), 10);
+    Tolerance.CHOP.requireClose(r1, r2);
   }
 
   @Test

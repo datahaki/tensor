@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.sca.Clips;
 
 class TimeSeriesTest {
@@ -28,9 +28,9 @@ class TimeSeriesTest {
 
   @Test
   void testPack() {
-    AtomicInteger atomicInteger = new AtomicInteger();
+    Int i = new Int();
     TimeSeries timeSeries = TimeSeries.of(Stream.generate(() -> new TsEntry( //
-        RealScalar.of(atomicInteger.getAndIncrement()), //
+        RealScalar.of(i.getAndIncrement()), //
         Tensors.vector(1, 2, 3))).limit(11), //
         ResamplingMethod.HOLD_VALUE_FROM_LEFT_SPARSE);
     assertEquals(timeSeries.path(), Tensors.fromString("{{0, {1, 2, 3}}, {10, {1, 2, 3}}}"));
@@ -54,9 +54,9 @@ class TimeSeriesTest {
 
   @Test
   void testNoPack() {
-    AtomicInteger atomicInteger = new AtomicInteger();
+    Int i = new Int();
     TimeSeries timeSeries = TimeSeries.of(Stream.generate(() -> new TsEntry( //
-        RealScalar.of(atomicInteger.getAndIncrement()), //
+        RealScalar.of(i.getAndIncrement()), //
         Tensors.vector(1, 2, 3))).limit(11), //
         ResamplingMethod.LINEAR_INTERPOLATION);
     assertEquals(timeSeries.size(), 11);

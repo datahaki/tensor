@@ -2,6 +2,7 @@
 package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
@@ -25,12 +27,14 @@ import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.ComplexUniformDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Im;
+import test.DFTConsistency;
 
 class FourierDSTTest {
   private static Tensor _consistent1(Tensor vector) {
     Tensor r1 = FourierDST._1.transform(vector);
     Tensor matrix = FourierDST._1.matrix(vector.length());
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
     Tensor r2 = matrix.dot(vector);
     Tolerance.CHOP.requireClose(r1, r2);
     Tolerance.CHOP.requireClose(vector, FourierDST._1.transform(r1));
@@ -89,7 +93,7 @@ class FourierDSTTest {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = FourierDST._1.matrix(n);
     Tolerance.CHOP.requireClose(matrix, Inverse.of(matrix));
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
   }
 
   @RepeatedTest(6)
@@ -120,40 +124,92 @@ class FourierDSTTest {
 
   @Test
   void testSpecific() {
-    Scalar scalar = FourierDST._2.matrix(7).Get(5, 6);
+    Scalar scalar = FourierDST._2.matrix(7).Get(6, 5);
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(-0.3779644730092272));
   }
 
   @ParameterizedTest
   @EnumSource
   void testDotR(FourierDST fourierDST) {
-    if (Set.of(0, 3).contains(fourierDST.ordinal())) {
-      Tensor vector = RandomVariate.of(ComplexUniformDistribution.unit(), 4);
-      Tensor r1 = fourierDST.transform(vector);
-      Tensor matrix = fourierDST.matrix(vector.length());
-      Tensor r2 = matrix.dot(vector);
-      Tolerance.CHOP.requireClose(r1, r2);
-    }
+    assumeTrue(Set.of(0, 3).contains(fourierDST.ordinal()));
+    Tensor vector = RandomVariate.of(ComplexUniformDistribution.unit(), 4);
+    Tensor r1 = fourierDST.transform(vector);
+    Tensor matrix = fourierDST.matrix(vector.length());
+    Tensor r2 = matrix.dot(vector);
+    Tolerance.CHOP.requireClose(r1, r2);
   }
 
   @ParameterizedTest
   @EnumSource
   void testDotL(FourierDST fourierDST) {
-    if (Set.of(0, 1, 2, 3).contains(fourierDST.ordinal())) {
-      Tensor vector = RandomVariate.of(ComplexUniformDistribution.unit(), 4);
-      Tensor r1 = fourierDST.transform(vector);
-      Tensor matrix = fourierDST.matrix(vector.length());
-      Tensor r2 = vector.dot(matrix);
-      Tolerance.CHOP.requireClose(r1, r2);
-    }
+    Tensor vector = RandomVariate.of(ComplexUniformDistribution.unit(), 4);
+    Tensor r1 = fourierDST.transform(vector);
+    Tensor matrix = fourierDST.matrix(vector.length());
+    Tensor r2 = matrix.dot(vector);
+    Tolerance.CHOP.requireClose(r1, r2);
   }
 
   @ParameterizedTest
   @EnumSource
   void testFromResource(FourierDST fourierDST) {
-    Tensor expect = Import.of("/ch/alpine/tensor/fft/dstmatrix" + fourierDST + ".csv");
+    Tensor expect = Transpose.of(Import.of("/ch/alpine/tensor/fft/dstmatrix" + fourierDST.name() + ".csv"));
     Tensor actual = fourierDST.matrix(5);
     Tolerance.CHOP.requireClose(expect, actual);
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testIsReal(FourierDST fourierDCT) {
+    for (int n = 1; n < 20; ++n)
+      assumeTrue(Im.allZero(fourierDCT.matrix(n)));
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testConsistencyComplex(FourierDST fourierDCT) {
+    DFTConsistency.checkComplex(fourierDCT, true);
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testConsistencyReal(FourierDST fourierDCT) {
+    DFTConsistency.checkReal(fourierDCT, true);
+  }
+
+  @RepeatedTest(8)
+  void testDST(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    for (FourierDST fourierDST : FourierDST.values()) {
+      Tensor mat = fourierDST.matrix(n);
+      Tensor inv = fourierDST.inverse().matrix(n);
+      Tolerance.CHOP.requireClose(inv, Inverse.of(mat));
+    }
+  }
+
+  @RepeatedTest(6)
+  void testDST_vectorDST(RepetitionInfo repetitionInfo) {
+    int n = 1 << repetitionInfo.getCurrentRepetition();
+    Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n);
+    Tensor r1 = FourierDST._2.transform(vector);
+    Tensor r2 = FourierDST._2.matrix(n).dot(vector);
+    Tolerance.CHOP.requireClose(r1, r2);
+    Tensor r3 = FourierDST._3.transform(r1);
+    Tolerance.CHOP.requireClose(r3, vector);
+    Tensor r4 = FourierDST._3.matrix(n).dot(r1);
+    Tolerance.CHOP.requireClose(r3, r4);
+  }
+
+  @RepeatedTest(6)
+  void testDST_vectorDSTUnit(RepetitionInfo repetitionInfo) {
+    int n = 1 << repetitionInfo.getCurrentRepetition();
+    Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).map(s -> Quantity.of(s, "m"));
+    Tensor r1 = FourierDST._2.transform(vector);
+    Tensor r2 = FourierDST._2.matrix(n).dot(vector);
+    Tolerance.CHOP.requireClose(r1, r2);
+    Tensor r3 = FourierDST._3.transform(r1);
+    Tolerance.CHOP.requireClose(r3, vector);
+    Tensor r4 = FourierDST._3.matrix(n).dot(r1);
+    Tolerance.CHOP.requireClose(r3, r4);
   }
 
   @ParameterizedTest

@@ -37,7 +37,7 @@ class QRDecompositionImplTest {
   @Test
   void testDegenerate0Square() {
     for (int n = 1; n < 6; ++n) {
-      QRDecomposition qrDecomposition = QRDecomposition.of(Array.zeros(n, n));
+      QRDecomposition qrDecomposition = QRDecompositionWrap.of(Array.zeros(n, n));
       assertEquals(qrDecomposition.getQConjugateTranspose(), IdentityMatrix.of(n));
       assertEquals(qrDecomposition.getR(), Array.zeros(n, n));
     }
@@ -47,7 +47,7 @@ class QRDecompositionImplTest {
   void testDegenerate1Square() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = DiagonalMatrix.with(UnitVector.of(n, 0));
-      QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
+      QRDecomposition qrDecomposition = QRDecompositionWrap.of(matrix);
       assertEquals(qrDecomposition.getQConjugateTranspose(), IdentityMatrix.of(n));
       assertEquals(qrDecomposition.getR(), matrix);
     }
@@ -57,7 +57,7 @@ class QRDecompositionImplTest {
   void testDegenerateRect() {
     for (int m = 1; m < 6; ++m) {
       int n = m + 2;
-      QRDecomposition qrDecomposition = QRDecomposition.of(Array.zeros(n, m));
+      QRDecomposition qrDecomposition = QRDecompositionWrap.of(Array.zeros(n, m));
       assertEquals(qrDecomposition.getQConjugateTranspose(), IdentityMatrix.of(n));
       assertEquals(qrDecomposition.getR(), Array.zeros(n, m));
     }
@@ -68,7 +68,7 @@ class QRDecompositionImplTest {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
-      QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
+      QRDecomposition qrDecomposition = QRDecompositionWrap.of(matrix);
       assertEquals(Dimensions.of(qrDecomposition.getQConjugateTranspose()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, n));
       Tensor r = qrDecomposition.getR();
@@ -83,10 +83,10 @@ class QRDecompositionImplTest {
     for (int m = 4; m < 7; ++m) {
       int n = m - 2;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
-      QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
+      QRDecomposition qrDecomposition = QRDecompositionWrap.of(matrix);
       Tolerance.CHOP.requireClose(qrDecomposition.getQ().dot(qrDecomposition.getR()), matrix);
-      assertTrue(OrthogonalMatrixQ.of(qrDecomposition.getQ()));
-      assertTrue(OrthogonalMatrixQ.of(qrDecomposition.getQConjugateTranspose()));
+      assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(qrDecomposition.getQ()));
+      assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(qrDecomposition.getQConjugateTranspose()));
       assertEquals(Dimensions.of(qrDecomposition.getQConjugateTranspose()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(n, m));
@@ -115,19 +115,19 @@ class QRDecompositionImplTest {
   @Test
   void testBic() {
     Tensor matrix = Import.of("/ch/alpine/tensor/mat/pi/bic1.csv");
-    QRDecompositionImpl qrDecomposition = (QRDecompositionImpl) QRDecomposition.of(matrix);
+    QRDecompositionImpl qrDecomposition = (QRDecompositionImpl) QRDecompositionWrap.of(matrix);
     Tensor rs = Diagonal.of(qrDecomposition.getR()).map(Abs.FUNCTION);
-    Scalar max = (Scalar) rs.stream().reduce(Max::of).get();
+    Scalar max = (Scalar) rs.stream().reduce(Max::of).orElseThrow();
     double thres = max.number().doubleValue() * 1e-12;
     Chop chop = Chop.below(thres);
-    chop.requireAllZero(rs.stream().reduce(Min::of).get());
+    chop.requireAllZero(rs.stream().reduce(Min::of).orElseThrow());
     assertThrows(Throw.class, qrDecomposition::pseudoInverse);
   }
 
   @Test
   void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
-    QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
+    QRDecomposition qrDecomposition = QRDecompositionWrap.of(matrix);
     Tensor tensor = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, tensor);
   }

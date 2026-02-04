@@ -9,7 +9,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
-import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Re;
 
@@ -23,6 +23,7 @@ import ch.alpine.tensor.sca.Re;
  * @see Polynomial */
 public enum Roots {
   ;
+  /** these work for polynomials with coefficients of type Quantity */
   private static final RootsBounds[] QUANTITY_ROOTS_BOUNDS = { //
       RootsBounds.LAGRANGE2, //
       RootsBounds.FUJIWARA };
@@ -56,9 +57,11 @@ public enum Roots {
    * @return upper bound on absolute value of any root of given polynomial
    * @throws Exception if coeffs has not length at least 2 */
   public static Scalar bound(Tensor coeffs) {
-    return Stream.of(StaticHelper.getDomainUnit(coeffs).equals(Unit.ONE) //
-        ? RootsBounds.values()
-        : QUANTITY_ROOTS_BOUNDS) //
+    Polynomial polynomial = Polynomial.of(coeffs);
+    Scalar zero = polynomial.getZeroDomain();
+    return Stream.of(zero instanceof Quantity //
+        ? QUANTITY_ROOTS_BOUNDS
+        : RootsBounds.values()) //
         .map(rootsBounds -> rootsBounds.of(coeffs)) //
         .min(Scalars::compare) //
         .orElseThrow();

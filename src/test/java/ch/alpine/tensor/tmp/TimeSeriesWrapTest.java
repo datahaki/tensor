@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Clips;
 class TimeSeriesWrapTest {
   @Test
   void testEmpty() {
-    TimeSeries timeSeries = TimeSeries.wrap(new TreeSet<>(), s -> null, ResamplingMethod.LINEAR_INTERPOLATION);
+    TimeSeries timeSeries = TimeSeries.wrap(new TreeSet<>(), _ -> null, ResamplingMethod.LINEAR_INTERPOLATION);
     assertEquals(timeSeries.toString(), "TimeSeries[LinearInterpolation, null, 0]");
   }
 

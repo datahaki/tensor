@@ -2,13 +2,13 @@
 package ch.alpine.tensor.mat.qr;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.UpperTriangularize;
 import ch.alpine.tensor.nrm.Vector2Norm;
@@ -31,21 +31,17 @@ import ch.alpine.tensor.nrm.Vector2Norm;
     Tensor r = matrix;
     Tensor qInv = qInv0;
     for (int k = 0; k < m; ++k) { // m reflections
-      // System.out.println(k);
-      AtomicInteger atomicInteger = new AtomicInteger(-k);
+      Int i = new Int(-k);
       Tensor x = Tensor.of(r.get(Tensor.ALL, k).stream() // k-th column of R
           .map(Scalar.class::cast) //
-          .map(scalar -> atomicInteger.getAndIncrement() < 0 ? scalar.zero() : scalar));
+          .map(scalar -> i.getAndIncrement() < 0 ? scalar.zero() : scalar));
       Scalar xn = Vector2Norm.of(x);
       if (Scalars.nonZero(xn)) { // else reflection reduces to identity, hopefully => det == 0
-        // System.out.println("---");
         Tensor signed = qrSignOperator.sign(x.Get(k)).multiply(xn);
         x.set(signed::add, k);
         QRReflection qrReflection = new QRReflection(k, x);
         qInv = qrReflection.forward(qInv);
         r = qrReflection.forward(r);
-        // if (!FiniteTensorQ.of(r) || !FiniteTensorQ.of(qInv))
-        // System.err.println("non-finite");
       }
     }
     this.r = r;

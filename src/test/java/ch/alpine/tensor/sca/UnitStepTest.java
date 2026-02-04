@@ -11,7 +11,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.lie.Quaternion;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 

@@ -21,7 +21,7 @@ import ch.alpine.tensor.ext.Lists;
   @Override // from TensorUnaryOperator
   public final Tensor apply(Tensor tensor) {
     int length = tensor.length();
-    final int dim0 = dimensions.get(0);
+    final int dim0 = dimensions.getFirst();
     if (1 < dimensions.size()) { // recur
       PadBase padBase = get(element, Lists.rest(dimensions));
       if (dim0 <= length)
@@ -35,7 +35,7 @@ import ch.alpine.tensor.ext.Lists;
         : join(tensor, ConstantArray.of(element, dim0 - length));
   }
 
-  protected abstract PadBase get(Tensor element, List<Integer> rest);
+  abstract PadBase get(Tensor element, List<Integer> rest);
 
   protected abstract Stream<Tensor> trim(Tensor tensor, int dim0);
 

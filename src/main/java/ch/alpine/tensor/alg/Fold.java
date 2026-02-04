@@ -2,11 +2,11 @@
 package ch.alpine.tensor.alg;
 
 import java.util.Objects;
-import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 
 /** Fold is identical to
  * <pre>
@@ -26,11 +26,10 @@ public enum Fold {
    * @param x
    * @param tensor {a, b, ...}
    * @return */
-  public static Tensor of(BinaryOperator<Tensor> binaryOperator, Tensor x, Tensor tensor) {
-    if (Tensors.isEmpty(tensor)) {
-      Objects.requireNonNull(binaryOperator);
+  public static Tensor of(TensorBinaryOperator binaryOperator, Tensor x, Tensor tensor) {
+    Objects.requireNonNull(binaryOperator);
+    if (Tensors.isEmpty(tensor))
       return x.copy();
-    }
     return Stream.concat(Stream.of(x), tensor.stream()).reduce(binaryOperator).orElseThrow();
   }
 }

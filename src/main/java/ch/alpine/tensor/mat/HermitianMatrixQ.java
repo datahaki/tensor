@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.ConstraintSquareMatrixQ;
 import ch.alpine.tensor.sca.Chop;
 
 /** Quote from Wikipedia: A Hermitian matrix (or self-adjoint matrix) is
@@ -13,35 +13,15 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * @see SymmetricMatrixQ
  * @see AntisymmetricMatrixQ */
-public enum HermitianMatrixQ {
-  ;
-  /** @param tensor
-   * @param chop
-   * @return true if tensor is a Hermitian matrix */
-  public static boolean of(Tensor tensor, Chop chop) {
-    return StaticHelper.addId(tensor, chop, ConjugateTranspose::of);
+public class HermitianMatrixQ extends ConstraintSquareMatrixQ {
+  public static final ConstraintSquareMatrixQ INSTANCE = new HermitianMatrixQ(Tolerance.CHOP);
+
+  public HermitianMatrixQ(Chop chop) {
+    super(chop);
   }
 
-  /** @param tensor
-   * @return true if tensor is a Hermitian matrix */
-  public static boolean of(Tensor tensor) {
-    return of(tensor, Tolerance.CHOP);
-  }
-
-  /** @param tensor
-   * @param chop
-   * @return
-   * @throws Exception if given tensor is not a Hermitian matrix with given tolerance */
-  public static Tensor require(Tensor tensor, Chop chop) {
-    if (of(tensor, chop))
-      return tensor;
-    throw new Throw(tensor, chop);
-  }
-
-  /** @param tensor
-   * @return
-   * @throws Exception if given tensor is not a Hermitian matrix */
-  public static Tensor require(Tensor tensor) {
-    return require(tensor, Tolerance.CHOP);
+  @Override
+  public Tensor constraint(Tensor v) {
+    return ConjugateTranspose.of(v).subtract(v);
   }
 }

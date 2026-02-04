@@ -75,11 +75,6 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
   }
 
   @Override // from InfluenceMatrix
-  public Tensor residualMaker() {
-    return StaticHelper.residualMaker(matrix());
-  }
-
-  @Override // from InfluenceMatrix
   public Tensor leverages() {
     return Tensor.of(design.stream().map(this::norm_squared));
   }

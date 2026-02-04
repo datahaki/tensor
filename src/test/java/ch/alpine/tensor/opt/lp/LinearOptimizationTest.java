@@ -61,7 +61,7 @@ class LinearOptimizationTest {
         Tensors.vector(40, 20, 12), Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
     // TODO TENSOR LP primal vs dual
-    TestHelper.check(lpd, false);
+    new LinearProgramQ(lpd).check(false);
     Tensor x = LinearOptimization.of(lpd);
     assertEquals(x, Tensors.vector(5, 7));
     Tensor tensor = SimplexCorners.of(lpd);
@@ -100,7 +100,7 @@ class LinearOptimizationTest {
     }
     // TODO TENSOR LP primal vs dual, strictly speaking the lp in its
     // current form is not covered by the duality theorem
-    // TestHelper.check(lpd, false);
+    // LinearProgramQ.check(lpd, false);
   }
 
   // MATLAB linprog example
@@ -112,7 +112,7 @@ class LinearOptimizationTest {
         Objective.MAX, Tensors.fromString("{1, 1/3}"), //
         ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    // TestHelper.check(lpd, false);
+    // LinearProgramQ.check(lpd, false);
     Tensor xp = LinearOptimization.of(lpd);
     assertEquals(xp, Tensors.fromString("{2/3, 4/3}"));
     Tensor solp = SimplexCorners.of(lpd);
@@ -125,7 +125,7 @@ class LinearOptimizationTest {
     assertEquals(sold.dot(lpp.c).Get(0), RationalScalar.of(10, 9));
     assertThrows(IllegalArgumentException.class, () -> lpp.requireFeasible(Tensors.vector(1, 1)));
     // TODO TENSOR LP primal vs dual
-    // TestHelper.check(lpp, false);
+    // LinearProgramQ.check(lpp, false);
   }
 
   // MATLAB linprog example
@@ -139,12 +139,12 @@ class LinearOptimizationTest {
     assertTrue(lpd.isCanonicDual());
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
-    TestHelper.check(lpp, lpd);
+    new LinearProgramQ(lpp).check(lpd);
     Tensor x = LinearOptimization.of(lpd);
     assertEquals(x, Tensors.vector(0, 2));
     Tensor solp = SimplexCorners.of(lpd);
     assertEquals(x, solp.get(0));
     // TODO TENSOR LP primal vs dual
-    // TestHelper.check(lpp);
+    // LinearProgramQ.check(lpp);
   }
 }

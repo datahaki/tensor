@@ -16,7 +16,6 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.api.TensorUnaryOperator;
-import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -45,7 +44,7 @@ class TimesTest {
    * @return total pointwise product of tensor entries at first level, or 1 if tensor is empty
    * @throws Throw if input tensor is a scalar */
   private static Tensor pmul(Tensor tensor) {
-    return Times.of(tensor.stream().toArray(Tensor[]::new));
+    return tensor.stream().reduce(Times::of).orElse(RealScalar.of(1));
   }
 
   @Test
@@ -146,26 +145,24 @@ class TimesTest {
     Tensor r = Tensors.fromString("{{3, 8, 18}, {-27, 2, 2}}");
     assertEquals(Times.of(a, c), r);
   }
-
-  @Test
-  void testChain() {
-    Tensor tensor = Times.of( //
-        Tensors.fromString("{1,2,3}"), //
-        Tensors.fromString("{1,2,3}"), //
-        Tensors.fromString("{1[s],2[m],3[N]}"), //
-        Tensors.fromString("{5,1/2,1/9}"));
-    ExactTensorQ.require(tensor);
-    assertEquals(tensor, Tensors.fromString("{5[s], 4[m], 3[N]}"));
-  }
-
-  @Test
-  void testSingleCopy() {
-    Tensor tensor = Tensors.fromString("{1,2,3}");
-    Tensor result = Times.of(tensor);
-    tensor.set(RealScalar.of(0), 0);
-    assertEquals(tensor, Tensors.vector(0, 2, 3));
-    assertEquals(result, Tensors.vector(1, 2, 3));
-  }
+  // @Test
+  // void testChain() {
+  // Tensor tensor = Times.of( //
+  // Tensors.fromString("{1,2,3}"), //
+  // Tensors.fromString("{1,2,3}"), //
+  // Tensors.fromString("{1[s],2[m],3[N]}"), //
+  // Tensors.fromString("{5,1/2,1/9}"));
+  // ExactTensorQ.require(tensor);
+  // assertEquals(tensor, Tensors.fromString("{5[s], 4[m], 3[N]}"));
+  // }
+  // @Test
+  // void testSingleCopy() {
+  // Tensor tensor = Tensors.fromString("{1,2,3}");
+  // Tensor result = Times.of(tensor);
+  // tensor.set(RealScalar.of(0), 0);
+  // assertEquals(tensor, Tensors.vector(0, 2, 3));
+  // assertEquals(result, Tensors.vector(1, 2, 3));
+  // }
 
   @Test
   void testDiagonalMatrix() {

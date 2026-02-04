@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -76,6 +78,12 @@ class CsvFormatTest {
       }
       assertEquals(inputStream.available(), 0);
     }
+  }
+
+  @ParameterizedTest
+  @CsvFileSource(resources = "/ch/alpine/tensor/io/libreoffice_calc.csv")
+  void testCountCsv(double v1, double v2) throws IOException {
+    v1 += v2;
   }
 
   @Test

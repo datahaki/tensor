@@ -12,6 +12,8 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.gam.Gamma;
@@ -47,6 +49,11 @@ public class InverseGammaDistribution extends AbstractContinuousDistribution imp
     this.beta = beta;
     power = Power.function(alpha);
     gamma = Gamma.FUNCTION.apply(alpha);
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.positive(DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Override

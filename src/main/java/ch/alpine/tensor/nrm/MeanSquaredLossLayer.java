@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.nrm;
 
 import ch.alpine.tensor.Scalar;
@@ -10,6 +11,7 @@ import ch.alpine.tensor.red.Mean;
 public enum MeanSquaredLossLayer {
   ;
   public static Scalar of(Tensor a, Tensor b) {
+    // TODO TENSOR not sure
     return Mean.ofVector(Flatten.of(a.subtract(b)).map(s -> s.multiply(s)));
   }
 }

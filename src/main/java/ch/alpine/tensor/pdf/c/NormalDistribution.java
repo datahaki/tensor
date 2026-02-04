@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 import java.util.random.RandomGenerator;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -15,6 +16,11 @@ import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.KurtosisInterface;
 import ch.alpine.tensor.pdf.StandardDeviationInterface;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.gam.Factorial2;
 import ch.alpine.tensor.sca.pow.Power;
@@ -71,6 +77,12 @@ public class NormalDistribution implements UnivariateDistribution, //
     this.sigma = Sign.requirePositive(sigma);
   }
 
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    Unit unit = QuantityUnit.of(mean);
+    return Clips.absolute(Quantity.of(DoubleScalar.POSITIVE_INFINITY, unit));
+  }
+
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     return StandardNormalDistribution.INSTANCE.p_lessThan(x.subtract(mean).divide(sigma));
@@ -97,7 +109,7 @@ public class NormalDistribution implements UnivariateDistribution, //
         x.subtract(mean).divide(sigma)).divide(sigma);
   }
 
-  @Override // from RandomVariateInterface
+  @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     return mean.add(StandardNormalDistribution.INSTANCE.randomVariate(randomGenerator).multiply(sigma));
   }

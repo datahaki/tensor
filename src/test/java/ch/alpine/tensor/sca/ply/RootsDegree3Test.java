@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
+import java.util.Random;
 
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -204,8 +206,9 @@ class RootsDegree3Test {
   }
 
   @RepeatedTest(100)
-  void testOneReal() {
-    Tensor coeffs = RandomVariate.of(NormalDistribution.standard(), 4);
+  void testOneReal(RepetitionInfo repetitionInfo) {
+    Random random = new Random(repetitionInfo.getCurrentRepetition());
+    Tensor coeffs = RandomVariate.of(NormalDistribution.standard(), random, 4);
     Tensor roots = Roots.of(coeffs);
     assertTrue(roots.stream() //
         .map(Scalar.class::cast) //
@@ -216,7 +219,7 @@ class RootsDegree3Test {
   @Test
   void testOrdering() {
     Tensor zeros = Tensors.fromString("{1, 2-I, 2+I}");
-    Polynomial polynomial = TestHelper.fromZeros(zeros);
+    Polynomial polynomial = CoefficientList.polynomial(zeros);
     Tolerance.CHOP.requireClose(zeros, polynomial.roots());
   }
 }

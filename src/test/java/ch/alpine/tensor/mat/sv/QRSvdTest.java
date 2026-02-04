@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -85,8 +86,8 @@ class QRSvdTest {
   }
 
   void testMatrix6x4NonTrivial() {
-    Random random = new Random(3);
-    Tensor matrix = RandomVariate.of(LogNormalDistribution.standard(), random, 6, 4);
+    RandomGenerator randomGenerator = new Random(3);
+    Tensor matrix = RandomVariate.of(LogNormalDistribution.standard(), randomGenerator, 6, 4);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     assertEquals(Tensors.vectorInt(qrDecomposition.sigma()), Tensors.vector(2, 0, 3, 1));
     SingularValueDecomposition svd = QRSvd.of(qrDecomposition);

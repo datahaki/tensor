@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.time.Duration;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -20,7 +21,7 @@ import ch.alpine.tensor.num.Pi;
 class CacheTest {
   @Test
   void testSimple() {
-    Function<Object, Double> function = Cache.of(k -> Math.random(), 3);
+    Function<Object, Double> function = Cache.of(_ -> Math.random(), 3);
     double double1 = function.apply("eth");
     double double2 = function.apply("eth");
     assertEquals(double1, double2);
@@ -28,7 +29,7 @@ class CacheTest {
 
   @Test
   void testInception() {
-    Function<Object, Double> memo1 = Cache.of(k -> Math.random(), 32);
+    Function<Object, Double> memo1 = Cache.of(_ -> Math.random(), 32);
     assertThrows(IllegalArgumentException.class, () -> Cache.of(memo1, 32));
   }
 
@@ -46,7 +47,7 @@ class CacheTest {
 
   @Test
   void testMap() {
-    Function<String, Integer> function = Cache.of(k -> 1, 768);
+    Function<String, Integer> function = Cache.of(_ -> 1, 768);
     IntStream.range(0, 26).parallel().forEach(c1 -> {
       char chr1 = (char) (65 + c1);
       for (int c2 = 0; c2 < 26; ++c2) {
@@ -147,7 +148,7 @@ class CacheTest {
     cache.apply(tensor.unmodifiable());
     assertEquals(cache.size(), 1);
     assertEquals(tensorStringFunc.count, 1);
-    IntStream.range(0, 26).parallel().forEach(c1 -> cache.apply(tensor));
+    IntStream.range(0, 26).parallel().forEach(_ -> cache.apply(tensor));
     assertEquals(tensorStringFunc.count, 1);
   }
 
@@ -157,7 +158,7 @@ class CacheTest {
     @Override
     public String apply(Tensor t) {
       try {
-        Thread.sleep(1);
+        Thread.sleep(Duration.ofMillis(1));
       } catch (InterruptedException interruptedException) {
         fail();
       }
@@ -173,7 +174,7 @@ class CacheTest {
         "{{-0.32499999999999907, 0.4708333333333343, 0.7853981633974483}, {+Infinity, 0, 1/3}, {-Infinity, abc, 1[m*K^1/2]}}");
     Cache<Tensor, String> cache = Cache.of(delayedStringFunc, 2);
     assertEquals(cache.size(), 0);
-    IntStream.range(0, 26).parallel().forEach(c1 -> cache.apply(tensor));
+    IntStream.range(0, 26).parallel().forEach(_ -> cache.apply(tensor));
     assertEquals(cache.size(), 1);
     // the function is typically called more than once
     assertTrue(0 <= delayedStringFunc.count);

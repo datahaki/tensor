@@ -11,6 +11,8 @@ import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TransformedDistribution.html">TransformedDistribution</a> */
@@ -29,6 +31,13 @@ public enum TransformedDistribution {
 
   private record Shifted(Distribution distribution, Scalar offset) implements UnivariateDistribution, //
       CentralMomentInterface, Serializable {
+    @Override
+    public Clip support() {
+      UnivariateDistribution univariateDistribution = (UnivariateDistribution) distribution;
+      Clip clip = univariateDistribution.support();
+      return Clips.translation(offset).apply(clip);
+    }
+
     @Override
     public Scalar at(Scalar x) {
       return PDF.of(distribution).at(x.subtract(offset));
@@ -49,7 +58,7 @@ public enum TransformedDistribution {
       return InverseCDF.of(distribution).quantile(p).add(offset);
     }
 
-    @Override // from RandomVariateInterface
+    @Override // from Distribution
     public Scalar randomVariate(RandomGenerator randomGenerator) {
       return RandomVariate.of(distribution, randomGenerator).add(offset);
     }

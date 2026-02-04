@@ -96,7 +96,7 @@ public class JetScalar extends MultiplexScalar implements //
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
     return scalar instanceof JetScalar jetScalar //
-        ? new JetScalar(StaticHelper.product(vector, jetScalar.vector))
+        ? new JetScalar(JetScalars.product(vector, jetScalar.vector))
         : new JetScalar(vector.multiply(scalar));
   }
 
@@ -107,7 +107,7 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from Scalar
   public Scalar reciprocal() {
-    return new JetScalar(StaticHelper.reciprocal(vector));
+    return new JetScalar(JetScalars.reciprocal(vector));
   }
 
   @Override // from Scalar
@@ -117,7 +117,7 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from Scalar
   public Scalar one() {
-    return StaticHelper.CACHE_ONE.apply(vector.length());
+    return JetScalars.CACHE_ONE.apply(vector.length());
   }
 
   @Override // from AbstractScalar
@@ -132,12 +132,12 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from AbsInterface
   public Scalar abs() {
-    return StaticHelper.chain(vector, Abs.FUNCTION, Sign.FUNCTION);
+    return JetScalars.chain(vector, Abs.FUNCTION, Sign.FUNCTION);
   }
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return StaticHelper.chain(vector, AbsSquared.FUNCTION, s -> {
+    return JetScalars.chain(vector, AbsSquared.FUNCTION, s -> {
       Scalar v1 = Abs.FUNCTION.apply(s);
       Scalar v2 = Sign.FUNCTION.apply(s);
       Scalar v3 = v1.multiply(v2);
@@ -152,29 +152,29 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from ExpInterface
   public Scalar exp() {
-    return StaticHelper.chain(vector, Exp.FUNCTION, Exp.FUNCTION);
+    return JetScalars.chain(vector, Exp.FUNCTION, Exp.FUNCTION);
   }
 
   @Override // from LogInterface
   public Scalar log() {
-    return StaticHelper.chain(vector, Log.FUNCTION, Scalar::reciprocal);
+    return JetScalars.chain(vector, Log.FUNCTION, Scalar::reciprocal);
   }
 
   @Override // from PowerInterface
   public JetScalar power(Scalar exponent) {
     OptionalInt optionalInt = Scalars.optionalInt(exponent);
     if (optionalInt.isPresent()) {
-      int expInt = optionalInt.getAsInt();
+      int expInt = optionalInt.orElseThrow();
       if (0 <= expInt) // TODO TENSOR JET exponent == zero!?
-        return new JetScalar(StaticHelper.power(vector, expInt));
+        return new JetScalar(JetScalars.power(vector, expInt));
     }
-    return StaticHelper.chain(vector, Power.function(exponent), //
+    return JetScalars.chain(vector, Power.function(exponent), //
         scalar -> Power.function(exponent.subtract(RealScalar.ONE)).apply(scalar).multiply(exponent));
   }
 
   @Override // from SignInterface
   public Scalar sign() {
-    return StaticHelper.chain(vector, Sign.FUNCTION, Scalar::zero);
+    return JetScalars.chain(vector, Sign.FUNCTION, Scalar::zero);
   }
 
   @Override // from SqrtInterface
@@ -184,22 +184,22 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from TrigonometryInterface
   public Scalar cos() {
-    return StaticHelper.chain(vector, Cos.FUNCTION, scalar -> Sin.FUNCTION.apply(scalar).negate());
+    return JetScalars.chain(vector, Cos.FUNCTION, scalar -> Sin.FUNCTION.apply(scalar).negate());
   }
 
   @Override // from TrigonometryInterface
   public Scalar cosh() {
-    return StaticHelper.chain(vector, Cosh.FUNCTION, Sinh.FUNCTION);
+    return JetScalars.chain(vector, Cosh.FUNCTION, Sinh.FUNCTION);
   }
 
   @Override // from TrigonometryInterface
   public Scalar sin() {
-    return StaticHelper.chain(vector, Sin.FUNCTION, Cos.FUNCTION);
+    return JetScalars.chain(vector, Sin.FUNCTION, Cos.FUNCTION);
   }
 
   @Override // from TrigonometryInterface
   public Scalar sinh() {
-    return StaticHelper.chain(vector, Sinh.FUNCTION, Cosh.FUNCTION);
+    return JetScalars.chain(vector, Sinh.FUNCTION, Cosh.FUNCTION);
   }
 
   @Override // from MultiplexScalar

@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -15,10 +17,12 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.ComplexUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -28,6 +32,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Im;
+import test.DFTConsistency;
 
 class FourierDCTTest {
   @Test
@@ -49,6 +54,8 @@ class FourierDCTTest {
         ComplexScalar.of(-1.224744871391589, -1.6329931618554523), //
         ComplexScalar.of(-2.041241452319315, 4.08248290463863), //
         ComplexScalar.of(1.224744871391589, -8.981462390204987));
+    // IO.println(r2);
+    // IO.println(r3);
     Tolerance.CHOP.requireClose(r2, r3);
   }
 
@@ -170,7 +177,7 @@ class FourierDCTTest {
 
   @Test
   void testSpecific() {
-    Scalar scalar = FourierDCT._2.matrix(7).Get(5, 6);
+    Scalar scalar = FourierDCT._2.matrix(7).Get(6, 5);
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(-0.2356569943861637));
   }
 
@@ -188,22 +195,58 @@ class FourierDCTTest {
 
   @ParameterizedTest
   @EnumSource
-  void testDotL(FourierDCT fourierDCT) {
-    if (Set.of(0, 1, 2, 3).contains(fourierDCT.ordinal())) {
-      Tensor vector = RandomVariate.of(ComplexUniformDistribution.unit(), 4);
-      Tensor r1 = fourierDCT.transform(vector);
-      Tensor matrix = fourierDCT.matrix(vector.length());
-      Tensor r2 = vector.dot(matrix);
-      Tolerance.CHOP.requireClose(r1, r2);
-    }
+  void testConsistencyComplex(FourierDCT fourierDCT) {
+    DFTConsistency.checkComplex(fourierDCT, true);
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testConsistencyReal(FourierDCT fourierDCT) {
+    DFTConsistency.checkReal(fourierDCT, true);
   }
 
   @ParameterizedTest
   @EnumSource
   void testFromResource(FourierDCT fourierDCT) {
-    Tensor expect = Import.of("/ch/alpine/tensor/fft/dctmatrix" + fourierDCT + ".csv");
+    Tensor expect = Transpose.of(Import.of("/ch/alpine/tensor/fft/dctmatrix" + fourierDCT.name() + ".csv"));
     Tensor actual = fourierDCT.matrix(5);
     Tolerance.CHOP.requireClose(expect, actual);
+  }
+
+  @RepeatedTest(8)
+  void testDCT(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    for (FourierDCT fourierDCT : FourierDCT.values()) {
+      Tensor mat = fourierDCT.matrix(n);
+      Tensor inv = fourierDCT.inverse().matrix(n);
+      Tolerance.CHOP.requireClose(inv, Inverse.of(mat));
+    }
+  }
+
+  @RepeatedTest(6)
+  void testDCT_vectorDCT(RepetitionInfo repetitionInfo) {
+    int n = 1 << repetitionInfo.getCurrentRepetition();
+    Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n);
+    Tensor r1 = FourierDCT._2.transform(vector);
+    Tensor r2 = FourierDCT._2.matrix(n).dot(vector);
+    Tolerance.CHOP.requireClose(r1, r2);
+    Tensor r3 = FourierDCT._3.transform(r1);
+    Tolerance.CHOP.requireClose(r3, vector);
+    Tensor r4 = FourierDCT._3.matrix(n).dot(r1);
+    Tolerance.CHOP.requireClose(r3, r4);
+  }
+
+  @RepeatedTest(6)
+  void testDCT_vectorDCTUnit(RepetitionInfo repetitionInfo) {
+    int n = 1 << repetitionInfo.getCurrentRepetition();
+    Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).map(s -> Quantity.of(s, "m"));
+    Tensor r1 = FourierDCT._2.transform(vector);
+    Tensor r2 = FourierDCT._2.matrix(n).dot(vector);
+    Tolerance.CHOP.requireClose(r1, r2);
+    Tensor r3 = FourierDCT._3.transform(r1);
+    Tolerance.CHOP.requireClose(r3, vector);
+    Tensor r4 = FourierDCT._3.matrix(n).dot(r1);
+    Tolerance.CHOP.requireClose(r3, r4);
   }
 
   @ParameterizedTest

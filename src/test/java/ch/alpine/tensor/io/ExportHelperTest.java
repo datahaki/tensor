@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -14,21 +13,42 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
+import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.api.ScalarTensorFunction;
+import ch.alpine.tensor.fft.ListConvolve;
+import ch.alpine.tensor.img.ColorDataGradients;
+import ch.alpine.tensor.img.Raster;
 import ch.alpine.tensor.nrm.FrobeniusNorm;
+import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
+import ch.alpine.tensor.sca.Round;
 
 class ExportHelperTest {
+  @TempDir
+  File tempDir;
+
   @Test
-  void testGif(@TempDir File tempDir) throws IOException {
+  void testGif() throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(128);
     Tensor image = Tensors.fromString("{{{255, 2, 3, 255}, {0, 0, 0, 0}, {91, 120, 230, 255}, {0, 0, 0, 0}}}");
     ExportHelper.of(Extension.GIF, image, byteArrayOutputStream);
@@ -51,7 +71,7 @@ class ExportHelperTest {
     byte[] array = byteArrayOutputStream.toByteArray(); // 56 bytes used
     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(array));
     Tensor tensor = ImageFormat.from(bufferedImage);
-    Scalar diff = FrobeniusNorm.between(image, tensor);
+    Scalar diff = FrobeniusNorm.of(image.subtract(tensor));
     diff.copy();
     // unfortunately there seems to be a problem with the java gif parser
   }
@@ -69,27 +89,138 @@ class ExportHelperTest {
   }
 
   @Test
-  void testSomeGz(@TempDir File tempDir) {
+  void testSomeGz() {
     File file = new File(tempDir, "some.unknown.gz");
-    try {
-      Export.of(file, Array.zeros(4, 4, 4));
-      fail();
-    } catch (Exception e) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Export.of(file, Array.zeros(4, 4, 4)));
     assertEquals(tempDir.listFiles().length, 0);
   }
 
   @Test
-  void testGzGz(@TempDir File tempDir) {
+  void testGzGz() {
     File file = new File(tempDir, "some.gz.gz");
-    try {
-      Export.of(file, Array.zeros(4, 4, 4));
-      fail();
-    } catch (Exception e) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Export.of(file, Array.zeros(4, 4, 4)));
     assertEquals(tempDir.listFiles().length, 0);
+  }
+
+  static Tensor _readRGBA() throws IOException {
+    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
+    assertTrue(file.isFile());
+    BufferedImage bufferedImage = ImageIO.read(file);
+    return ImageFormat.from(bufferedImage);
+  }
+
+  @Test
+  void testRGBAFile() throws Exception {
+    Tensor tensor = _readRGBA();
+    assertEquals(tensor.get(19, 12), Tensors.vector(118, 130, 146, 200));
+    assertEquals(tensor.get(0, 14), Tensors.vector(254, 0, 0, 255)); // almost red, fe0000
+    assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
+  }
+
+  @Test
+  void testGrayFile() throws Exception {
+    File file = Unprotect.file("/ch/alpine/tensor/img/gray15x9.png");
+    assertTrue(file.isFile());
+    BufferedImage bufferedImage = ImageIO.read(file);
+    Tensor tensor = ImageFormat.from(bufferedImage);
+    // confirmed with gimp
+    assertEquals(tensor.Get(0, 2), RealScalar.of(175));
+    assertEquals(tensor.Get(1, 2), RealScalar.of(109));
+    assertEquals(tensor.Get(2, 2), RealScalar.of(94));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
+  }
+
+  @Test
+  void testGrayJpg() throws Exception {
+    File file = Unprotect.file("/ch/alpine/tensor/img/gray15x9.jpg");
+    assertTrue(file.isFile());
+    BufferedImage bufferedImage = ImageIO.read(file);
+    Tensor tensor = ImageFormat.from(bufferedImage);
+    // confirmed with gimp
+    assertEquals(tensor.Get(0, 2), RealScalar.of(84));
+    assertEquals(tensor.Get(1, 2), RealScalar.of(66));
+    assertEquals(tensor.Get(2, 2), RealScalar.of(39));
+    assertEquals(tensor.Get(0, 14), RealScalar.ZERO);
+    assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
+  }
+
+  @Test
+  void testGrayJpg1() throws Exception {
+    File file = Unprotect.file("/ch/alpine/tensor/img/gray15x9.jpg");
+    assertTrue(file.isFile());
+    Tensor tensor = Import.of(file);
+    assertEquals(Dimensions.of(tensor), List.of(9, 15));
+    File target = new File(tempDir, "grayscale.jpg");
+    Export.of(target, tensor);
+    Tensor result = Import.of(target);
+    assertEquals(Dimensions.of(result), List.of(9, 15));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "jpg", "png" })
+  void testGray(String ext) throws Exception {
+    File file = Unprotect.file("/ch/alpine/tensor/img/gray5x3." + ext);
+    assertTrue(file.isFile());
+    Tensor tensor = Import.of(file);
+    assertEquals(Dimensions.of(tensor), List.of(5, 3));
+  }
+
+  @Test
+  void testGrayBimap1() {
+    Tensor scale = Array.of(list -> RealScalar.of(list.get(0)), 256, 20);
+    assertEquals(scale, ImageFormat.from(ImageFormat.of(scale)));
+  }
+
+  @Test
+  void testGrayBimap2() {
+    Distribution distribution = DiscreteUniformDistribution.forArray(256);
+    Tensor image = RandomVariate.of(distribution, 20, 30);
+    Tensor bimap = ImageFormat.from(ImageFormat.of(image));
+    assertEquals(image, bimap);
+  }
+
+  @Test
+  void testRGBAConvert() throws Exception {
+    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
+    BufferedImage bufferedImage = ImageIO.read(file);
+    Tensor tensor = ImageFormat.from(bufferedImage);
+    assertEquals(tensor, ImageFormat.from(ImageFormat.of(tensor)));
+  }
+
+  @Test
+  void testRGBASmooth() throws Exception {
+    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
+    BufferedImage bufferedImage = ImageIO.read(file);
+    Tensor tensor = ImageFormat.from(bufferedImage);
+    Tensor kernel = Array.of(_ -> RationalScalar.of(1, 6), 3, 2, 1);
+    Tensor array = ListConvolve.of(kernel, tensor);
+    ImageFormat.of(array); // succeeds
+  }
+
+  @Test
+  void testRGBAInvalid() throws Exception {
+    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
+    BufferedImage bufferedImage = ImageIO.read(file);
+    Tensor tensor = ImageFormat.from(bufferedImage);
+    Tensor kernel = Array.of(_ -> RationalScalar.of(1, 1), 3, 5, 1);
+    Tensor array = ListConvolve.of(kernel, tensor);
+    assertThrows(IllegalArgumentException.class, () -> ImageFormat.of(array));
+  }
+
+  private static Tensor _gradients() {
+    Tensor arr = Array.of(list -> RealScalar.of(list.get(1)), 3, 11);
+    Tensor image = Tensors.empty();
+    for (ScalarTensorFunction cdf : ColorDataGradients.values())
+      image.append(Raster.of(arr, cdf));
+    image = Flatten.of(image, 1);
+    image = Transpose.of(image, 1, 0, 2);
+    return image.map(Round.FUNCTION);
+  }
+
+  @Test
+  void testColorBimap() {
+    Tensor scale = _gradients();
+    assertEquals(scale, ImageFormat.from(ImageFormat.of(scale)));
   }
 
   @Test

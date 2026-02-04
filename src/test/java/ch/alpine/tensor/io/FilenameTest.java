@@ -24,8 +24,11 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class FilenameTest {
+  @TempDir
+  File tempDir;
+
   @Test
-  void testImageWriter(@TempDir File tempDir) throws IOException {
+  void testImageWriter() throws IOException {
     File file = new File(tempDir, "file.jpg");
     try (OutputStream outputStream = new FileOutputStream(file)) {
       Iterator<ImageWriter> iterator = ImageIO.getImageWritersByFormatName("jpeg");
@@ -33,7 +36,7 @@ class FilenameTest {
       ImageWriteParam imageWriteParam = imageWriter.getDefaultWriteParam();
       imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
       imageWriteParam.setCompressionQuality(0.85f);
-      BufferedImage bgr = ImageFormat._of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 10, 20, 4), Extension.BMP);
+      BufferedImage bgr = ImageFormat._of(RandomVariate.of(DiscreteUniformDistribution.forArray(256), 10, 20, 4), Extension.BMP);
       // BufferedImage bufferedImage = ImageFormat.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 10, 20));
       try (ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(outputStream)) {
         imageWriter.setOutput(imageOutputStream);

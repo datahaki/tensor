@@ -6,11 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.security.SecureRandom;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -25,6 +30,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.fft.Fourier;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -36,6 +42,7 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
@@ -56,14 +63,14 @@ class InverseTest {
   void testInverseNoAbs() {
     int n = 12;
     int p = 20357;
-    Random random = new SecureRandom();
-    Tensor A = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(p), p), n, n);
+    RandomGenerator random = ThreadLocalRandom.current();
+    Tensor A = Tensors.matrix((_, _) -> GaussScalar.of(random.nextInt(p), p), n, n);
     int iter = 0;
     while (Scalars.isZero(Det.of(A, Pivots.FIRST_NON_ZERO)) && iter < 5) {
-      A = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(p), p), n, n);
+      A = Tensors.matrix((_, _) -> GaussScalar.of(random.nextInt(p), p), n, n);
       ++iter;
     }
-    Tensor b = Tensors.vector(i -> GaussScalar.of(random.nextInt(p), p), n);
+    Tensor b = Tensors.vector(_ -> GaussScalar.of(random.nextInt(p), p), n);
     Tensor x = LinearSolve.of(A, b, Pivots.FIRST_NON_ZERO);
     assertEquals(A.dot(x), b);
     Tensor id = DiagonalMatrix.of(n, GaussScalar.of(1, p));
@@ -95,12 +102,12 @@ class InverseTest {
     Scalar one = GaussScalar.of(1, prime);
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
-      if (Scalars.nonZero(Det.of(matrix)))
-        for (Pivot pivot : Pivots.values()) {
-          Tensor revers = Inverse.of(matrix, pivot);
-          MatrixQ.requireSize(revers, n, n);
-          assertEquals(DiagonalMatrix.of(n, one), Dot.of(matrix, revers));
-        }
+      assumeTrue(Scalars.nonZero(Det.of(matrix)));
+      for (Pivot pivot : Pivots.values()) {
+        Tensor revers = Inverse.of(matrix, pivot);
+        MatrixQ.requireSize(revers, n, n);
+        assertEquals(DiagonalMatrix.of(n, one), Dot.of(matrix, revers));
+      }
     }
   }
 
@@ -165,8 +172,8 @@ class InverseTest {
     assertEquals(matrix.dot(inverse), expect);
     Tensor dual = Tensors.fromString("{{1, 0[m^-1*rad], 0[kg*m^-1]}, {0[m*rad^-1], 1, 0[kg*rad^-1]}, {0[kg^-1*m], 0[kg^-1*rad], 1}}");
     assertEquals(inverse.dot(matrix), dual);
-    assertFalse(HermitianMatrixQ.of(matrix));
-    assertFalse(SymmetricMatrixQ.of(matrix));
+    assertFalse(HermitianMatrixQ.INSTANCE.isMember(matrix));
+    assertFalse(SymmetricMatrixQ.INSTANCE.isMember(matrix));
   }
 
   @Test
@@ -207,7 +214,7 @@ class InverseTest {
   void testMixed3x3() {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
     Tensor inverse = Inverse.of(matrix);
     Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
     assertEquals(matrix.dot(inverse), expect);
@@ -227,5 +234,31 @@ class InverseTest {
     Scalar one = detmat.multiply(detinv);
     assertInstanceOf(DecimalScalar.class, one);
     Tolerance.CHOP.requireClose(one, RealScalar.ONE);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 5, 10 })
+  void testBigDecimal(int n) {
+    Tensor matrix = RandomVariate.of(UniformDistribution.unit(45), new Random(3), n, n);
+    Tensor invers = Inverse.of(matrix);
+    Chop._40.requireClose(matrix.dot(invers), IdentityMatrix.of(n));
+  }
+
+  /** Reference: NR 2007 eq. (2.7.2) */
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testShermanMorrison(Distribution distribution) {
+    RandomGenerator random = new Random(3);
+    for (int n = 3; n < 8; ++n) {
+      Tensor matrix = RandomVariate.of(distribution, random, n, n);
+      Tensor u = RandomVariate.of(distribution, random, n);
+      Tensor v = RandomVariate.of(distribution, random, n);
+      Tensor compar = Inverse.of(matrix.add(TensorProduct.of(u, v)));
+      Tensor invers = Inverse.of(matrix);
+      Tensor z = invers.dot(u);
+      Scalar lambda = (Scalar) v.dot(z);
+      Tensor altern = invers.subtract(TensorProduct.of(z, v.dot(invers)).divide(lambda.add(RealScalar.ONE)));
+      Tolerance.CHOP.requireClose(compar, altern);
+    }
   }
 }

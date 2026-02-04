@@ -15,7 +15,7 @@ class TimeSeriesBinaryOperatorTest {
   @Test
   void testSimple() {
     BinaryOperator<TimeSeries> binaryOperator = //
-        TimeSeriesBinaryOperator.of((t, b) -> b, ResamplingMethod.HOLD_VALUE_FROM_LEFT);
+        TimeSeriesBinaryOperator.of((_, b) -> b, ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
     TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethod.LINEAR_INTERPOLATION);
     assertEquals(ts1.resamplingMethod(), ResamplingMethod.LINEAR_INTERPOLATION);

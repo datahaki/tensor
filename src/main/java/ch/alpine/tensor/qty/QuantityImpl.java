@@ -259,13 +259,6 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 
   @Override // from AbstractScalar
   public String toString() {
-    String vs = value.toString();
-    String us = unit.toString();
-    StringBuilder stringBuilder = new StringBuilder(vs.length() + us.length() + 2);
-    stringBuilder.append(vs);
-    stringBuilder.append(UNIT_OPENING_BRACKET);
-    stringBuilder.append(us);
-    stringBuilder.append(UNIT_CLOSING_BRACKET);
-    return stringBuilder.toString();
+    return value.toString() + UNIT_OPENING_BRACKET + unit + UNIT_CLOSING_BRACKET;
   }
 }

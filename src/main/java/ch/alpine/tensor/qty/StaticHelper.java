@@ -15,23 +15,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.sca.pow.Power;
 
+/** reviewed */
 /* package */ enum StaticHelper {
   ;
-  private static String exponentString(Scalar exponent) {
-    String string = exponent.toString();
-    return string.equals("1") //
-        ? ""
-        : Unit.POWER_DELIMITER + string; // delimited by '^'
-  }
-
-  /** @param map
-   * @return for instance "m*s^-2" */
-  public static String toString(Map<String, Scalar> map) {
-    return map.entrySet().stream() //
-        .map(entry -> entry.getKey() + exponentString(entry.getValue())) //
-        .collect(Collectors.joining(Unit.JOIN_DELIMITER)); // delimited by '*'
-  }
-
   /** @param scalar
    * @param base
    * @return product of scalar and 1[base] where the multiplicative 1 is not used explicitly */
@@ -61,6 +47,8 @@ import ch.alpine.tensor.sca.pow.Power;
         rhs.map().get(prev).reciprocal());
   }
 
+  /** @param properties, e.g. kW=1000[m^2*kg*s^-3]
+   * @return */
   public static Map<String, Scalar> stringScalarMap(Properties properties) {
     return properties.stringPropertyNames().stream().collect(Collectors.toMap( //
         Function.identity(), // example: "kW"

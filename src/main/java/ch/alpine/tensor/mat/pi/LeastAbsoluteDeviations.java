@@ -1,16 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
-import java.util.Random;
-import java.util.random.RandomGenerator;
-
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.nrm.Vector1Norm;
-import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.sca.SoftThreshold;
 
 /** Reference:
@@ -18,34 +13,25 @@ import ch.alpine.tensor.sca.SoftThreshold;
  * Alternating Direction Method of Multipliers"
  * 6.1 Least Absolute Deviations
  * by Stephen Boyd, Neal Parikh, Eric Chu, Borja Peleato, and Jonathan Eckstein, 2011 */
-/* package */ class LeastAbsoluteDeviations {
+/* package */ enum LeastAbsoluteDeviations {
+  ;
   /** @param A
    * @param b
    * @param rho
    * @return x with small Vector1Norm[A.x - b] */
   public static Tensor of(Tensor A, Tensor b, Scalar rho) {
-    RandomGenerator randomGenerator = new Random(2);
-    Tensor pinv = PseudoInverse.of(A);
+    TensorUnaryOperator solver = LeastSquares.operator(SingularValueDecomposition.of(A));
+    // initialize
     Tensor u = b.map(Scalar::zero);
     Tensor z = b.map(Scalar::zero);
-    Tensor x = pinv.dot(b);
-    Tensor ax_b = A.dot(x).subtract(b);
-    Scalar min = Vector1Norm.of(ax_b);
-    Tensor x_bst = x;
-    // QUEST TENSOR MAT not final implementation
+    ScalarUnaryOperator suo = SoftThreshold.of(rho);
+    Tensor x = null;
     for (int i = 0; i < 100; ++i) {
-      x = pinv.dot(b.add(z).subtract(u));
-      ax_b = A.dot(x).subtract(b);
-      Scalar cmp = Vector1Norm.of(ax_b);
-      if (Scalars.lessThan(cmp, min)) {
-        min = cmp;
-        x_bst = x;
-      }
-      rho = RealScalar.of(randomGenerator.nextDouble() * 2);
-      ScalarUnaryOperator suo = SoftThreshold.of(Clips.absolute(rho));
-      z = ax_b.add(u).map(suo);
-      u = u.add(ax_b).subtract(z);
+      x = solver.apply(b.add(z).subtract(u));
+      // ---
+      z = A.dot(x).subtract(b).add(u).map(suo);
+      u = A.dot(x).add(u).subtract(z).subtract(b);
     }
-    return x_bst;
+    return x;
   }
 }

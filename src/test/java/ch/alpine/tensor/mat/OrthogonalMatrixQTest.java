@@ -23,36 +23,36 @@ class OrthogonalMatrixQTest {
   @Test
   void testExact() {
     Tensor matrix = Tensors.fromString("{{1, 1, 1, -1}, {-1, 1, 1, 1}}").multiply(RationalScalar.of(1, 2));
-    assertTrue(OrthogonalMatrixQ.of(matrix));
-    OrthogonalMatrixQ.require(matrix, Chop.NONE);
+    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(matrix));
+    new OrthogonalMatrixQ(Chop.NONE).requireMember(matrix);
   }
 
   @Test
   void testDetNegative() {
     Tensor matrix = DiagonalMatrix.of(-1, 1, 1, -1, -1);
-    OrthogonalMatrixQ.require(matrix);
+    OrthogonalMatrixQ.INSTANCE.requireMember(matrix);
     assertEquals(Det.of(matrix), RealScalar.ONE.negate());
   }
 
   @Test
   void testCornerCase() {
-    assertFalse(OrthogonalMatrixQ.of(RealScalar.of(1)));
-    assertFalse(OrthogonalMatrixQ.of(Tensors.vector(1, 0, 0)));
-    assertFalse(OrthogonalMatrixQ.of(Tensors.vector(1, 0, 2)));
-    assertFalse(OrthogonalMatrixQ.of(LeviCivitaTensor.of(3)));
-    assertFalse(OrthogonalMatrixQ.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
+    assertFalse(OrthogonalMatrixQ.INSTANCE.isMember(RealScalar.of(1)));
+    assertFalse(OrthogonalMatrixQ.INSTANCE.isMember(Tensors.vector(1, 0, 0)));
+    assertFalse(OrthogonalMatrixQ.INSTANCE.isMember(Tensors.vector(1, 0, 2)));
+    assertFalse(OrthogonalMatrixQ.INSTANCE.isMember(LeviCivitaTensor.of(3)));
+    assertFalse(OrthogonalMatrixQ.INSTANCE.isMember(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
   }
 
   @Test
   void testRequireChop() {
-    Tensor tensor = OrthogonalMatrixQ.require(IdentityMatrix.of(4), Chop.NONE);
+    Tensor tensor = new OrthogonalMatrixQ(Chop.NONE).requireMember(IdentityMatrix.of(4));
     assertEquals(tensor, IdentityMatrix.of(4));
-    assertThrows(Throw.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3), Chop.NONE));
+    assertThrows(Throw.class, () -> new OrthogonalMatrixQ(Chop.NONE).requireMember(HilbertMatrix.of(3)));
   }
 
   @Test
   void testRequire() {
-    OrthogonalMatrixQ.require(IdentityMatrix.of(4));
-    assertThrows(Throw.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3)));
+    OrthogonalMatrixQ.INSTANCE.requireMember(IdentityMatrix.of(4));
+    assertThrows(Throw.class, () -> OrthogonalMatrixQ.INSTANCE.requireMember(HilbertMatrix.of(3)));
   }
 }

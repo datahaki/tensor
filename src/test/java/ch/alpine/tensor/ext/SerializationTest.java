@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.security.SecureRandom;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +58,7 @@ class SerializationTest {
   @Test
   void testParseFail2() {
     byte[] bytes = new byte[100];
-    new SecureRandom().nextBytes(bytes);
+    ThreadLocalRandom.current().nextBytes(bytes);
     assertThrows(Exception.class, () -> Serialization.parse(bytes));
   }
 }

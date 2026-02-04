@@ -7,10 +7,13 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
-import ch.alpine.tensor.itp.FindRoot;
+import ch.alpine.tensor.opt.fnd.FindRoot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 
@@ -42,6 +45,11 @@ public class ShiftedGompertzDistribution extends AbstractContinuousDistribution 
     this.lambda = lambda;
     this.xi = xi;
     dl = lambda.reciprocal();
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.positive(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(lambda).negate()));
   }
 
   @Override // from PDF

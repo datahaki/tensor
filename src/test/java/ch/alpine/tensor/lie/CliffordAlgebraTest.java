@@ -22,6 +22,7 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;

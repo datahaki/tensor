@@ -86,6 +86,11 @@ class ScalarsTest {
   }
 
   @Test
+  void testDateTime() {
+    assertFalse(Scalars.isZero(DateTime.now()));
+  }
+
+  @Test
   void testRationalPattern() {
     String n1 = "-123/123";
     String n2 = "1231/23";
@@ -274,7 +279,6 @@ class ScalarsTest {
 
   @Test
   void testToStringDateObject1() {
-    // System.out.println("2020-12-20T04:30".length());
     DateTime dateTime = DateTime.of(2020, 12, 20, 4, 30);
     Scalar scalar = Scalars.fromString("2020-12-20T04:30");
     assertEquals(scalar, dateTime);
@@ -282,7 +286,6 @@ class ScalarsTest {
 
   @Test
   void testToStringDateObject2() {
-    // System.out.println("2020-12-20T04:30".length());
     DateTime dateTime = DateTime.of(2020, 12, 20, 4, 30, 3, 125_239_876);
     Scalar scalar = Scalars.fromString("2020-12-20T04:30:03.125239876");
     assertEquals(scalar, dateTime);
@@ -317,6 +320,6 @@ class ScalarsTest {
 
   @Test
   void testOptionalBigIntegerNullFail() {
-    assertThrows(NullPointerException.class, () -> Scalars.optionalBigInteger(null));
+    assertThrows(Exception.class, () -> Scalars.optionalBigInteger(null));
   }
 }

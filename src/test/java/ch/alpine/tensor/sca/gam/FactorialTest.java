@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -33,6 +34,12 @@ class FactorialTest {
   void testOf2() {
     Tensor result = Tensors.vector(0, 1, 2, 3, 4).map(Factorial.FUNCTION);
     assertEquals(result, Tensors.vector(1, 1, 2, 6, 24));
+  }
+
+  @Test
+  void testSilverman() {
+    Scalar factorial = Factorial.of(20);
+    assertEquals(factorial, Scalars.fromString("2432902008176640000"));
   }
 
   @Test

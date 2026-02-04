@@ -35,7 +35,7 @@ class CyclesTest {
   @Test
   void testSingle() {
     Cycles c1 = Cycles.single(new int[] { 2, 4, 5 });
-    Cycles c2 = TestHelper.of("{{2,4,5}}");
+    Cycles c2 = Cycles.of("{{2,4,5}}");
     assertEquals(c1, c2);
   }
 
@@ -71,14 +71,14 @@ class CyclesTest {
   }
 
   private static String _combo(String a, String b) {
-    Cycles ca = TestHelper.of(a);
+    Cycles ca = Cycles.of(a);
     assertTrue(1 < ca.navigableMap().size());
     Cycles ci = ca.inverse();
     assertEquals(ca.navigableMap().size(), ci.navigableMap().size());
     assertEquals(ca.toTensor().length(), ci.toTensor().length());
     assertEquals(ca.combine(ci), Cycles.identity());
     assertEquals(ci.combine(ca), Cycles.identity());
-    Cycles cb = TestHelper.of(b);
+    Cycles cb = Cycles.of(b);
     assertTrue(1 < cb.navigableMap().size());
     assertEquals(cb.combine(cb.inverse()), Cycles.identity());
     assertEquals(cb.inverse().combine(cb), Cycles.identity());

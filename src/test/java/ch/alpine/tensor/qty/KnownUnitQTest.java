@@ -5,12 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ext.ResourceData;
-import ch.alpine.tensor.ext.Serialization;
+import test.SerializableQ;
 
 class KnownUnitQTest {
   @Test
@@ -78,8 +76,9 @@ class KnownUnitQTest {
   }
 
   @Test
-  void testNullArgumentFail() throws ClassNotFoundException, IOException {
-    KnownUnitQ knownUnitQ = Serialization.copy(KnownUnitQ.SI());
+  void testNullArgumentFail() {
+    KnownUnitQ knownUnitQ = KnownUnitQ.SI();
+    SerializableQ.require(knownUnitQ);
     assertThrows(NullPointerException.class, () -> knownUnitQ.test(null));
     assertThrows(NullPointerException.class, () -> knownUnitQ.require(null));
   }

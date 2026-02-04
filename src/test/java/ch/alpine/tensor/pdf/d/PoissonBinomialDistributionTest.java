@@ -16,12 +16,12 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.sca.Chop;
 
 class PoissonBinomialDistributionTest {
   @Test
@@ -46,7 +46,7 @@ class PoissonBinomialDistributionTest {
   void testOnes() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1));
     Tensor samples = RandomVariate.of(distribution, 10);
-    assertEquals(samples, Array.of(l -> RealScalar.of(4), 10));
+    assertEquals(samples, Array.of(_ -> RealScalar.of(4), 10));
     assertEquals(Mean.of(distribution), RealScalar.of(4));
     assertEquals(Variance.of(distribution), RealScalar.ZERO);
   }
@@ -55,8 +55,8 @@ class PoissonBinomialDistributionTest {
   void testMixed() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 0, 0.2, 0.3, 0.4, 0.5, 1, 0, 0));
     RandomVariate.of(distribution, 10);
-    Chop._12.requireClose(Mean.of(distribution), RealScalar.of(3.4));
-    Chop._12.requireClose(Variance.of(distribution), RealScalar.of(0.86));
+    Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(3.4));
+    Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(0.86));
     // DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
     // assertEquals(discreteDistribution.lowerBound(), 2);
   }

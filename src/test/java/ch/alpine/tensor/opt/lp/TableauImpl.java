@@ -44,7 +44,6 @@ import ch.alpine.tensor.sca.Sign;
     return get_current_x(tab);
   }
 
-  @SuppressWarnings("null")
   private static Tensor simplex(Tensor tab) {
     int m = tab.length() - 1;
     int n = Unprotect.dimension1(tab) - 1;

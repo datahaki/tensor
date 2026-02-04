@@ -36,7 +36,7 @@ public class RowReduce extends AbstractReduce {
   private Tensor solve() {
     int m = Integers.requirePositiveOrZero(Arrays.stream(lhs) //
         .mapToInt(Tensor::length) //
-        .max().getAsInt());
+        .max().orElseThrow());
     for (int c0 = 0, j = 0; c0 < lhs.length && j < m; ++j) {
       pivot(c0, j);
       Scalar piv = lhs[ind(c0)].Get(j);

@@ -47,7 +47,7 @@ public enum MatrixForm {
     if (tensor.length() == 0)
       return "";
     String[] array = Transpose.of(tensor).stream() //
-        .map(col -> "%" + col.stream().map(Tensor::toString).mapToInt(String::length).max().getAsInt() + "s") //
+        .map(col -> "%" + col.stream().map(Tensor::toString).mapToInt(String::length).max().orElseThrow() + "s") //
         .toArray(String[]::new);
     return tensor.stream() //
         .map(row -> IntStream.range(0, row.length()) //

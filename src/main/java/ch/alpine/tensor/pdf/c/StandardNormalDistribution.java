@@ -10,6 +10,8 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.KurtosisInterface;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.erf.Erfc;
 import ch.alpine.tensor.sca.erf.InverseErfc;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -23,6 +25,11 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   private static final Scalar DEN = Sqrt.FUNCTION.apply(Pi.TWO);
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Scalar FACTOR = Sqrt.FUNCTION.apply(RealScalar.TWO).negate();
+
+  @Override
+  public Clip support() {
+    return Clips.absolute(DoubleScalar.POSITIVE_INFINITY);
+  }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
@@ -40,7 +47,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
     return p_lessThan(x);
   }
 
-  @Override // from RandomVariateInterface
+  @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     return DoubleScalar.of(randomGenerator.nextGaussian());
   }

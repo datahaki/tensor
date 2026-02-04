@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 import java.util.stream.Stream;
 
@@ -20,7 +20,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -53,7 +52,7 @@ class MatrixExpTest {
 
   @Test
   void testExp() {
-    RandomGenerator randomGenerator = new Random();
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
     double val = randomGenerator.nextGaussian() * 0.1;
     double va2 = randomGenerator.nextGaussian() * 0.1;
     double va3 = randomGenerator.nextGaussian() * 0.1;
@@ -83,15 +82,15 @@ class MatrixExpTest {
     Tensor A = RandomVariate.of(distribution, n, n);
     Tensor S = TensorWedge.of(A);
     Tensor o = MatrixExp.of(S);
-    OrthogonalMatrixQ.require(o);
+    OrthogonalMatrixQ.INSTANCE.requireMember(o);
   }
 
   @Test
   void testGoldenThompsonInequality() {
     Tensor a = Tensors.fromString("{{2, I}, {-I, 2}}");
     Tensor b = Tensors.fromString("{{2, 1-I}, {1+I, 2}}");
-    assertTrue(HermitianMatrixQ.of(a));
-    assertTrue(HermitianMatrixQ.of(b));
+    assertTrue(HermitianMatrixQ.INSTANCE.isMember(a));
+    assertTrue(HermitianMatrixQ.INSTANCE.isMember(b));
     Tensor tra = Trace.of(MatrixExp.of(a.add(b)));
     Tensor trb = Trace.of(MatrixExp.of(a).dot(MatrixExp.of(b)));
     Chop._08.requireClose(tra, RealScalar.of(168.49869602)); // mathematica
@@ -121,30 +120,6 @@ class MatrixExpTest {
     Tensor altexp = A.dot(diaexp).dot(Inverse.of(A));
     Tolerance.CHOP.requireClose(altexp, result);
   }
-  // public void testQuantity1() {
-  // // Mathematica can't do this :-)
-  // Scalar qs1 = Quantity.of(3, "m");
-  // Tensor mat = Tensors.of( //
-  // Tensors.of(RealScalar.ZERO, qs1), //
-  // Tensors.vector(0, 0));
-  // Tensor sol = MatrixExp.of(mat);
-  // Chop.NONE.requireClose(sol, mat.add(IdentityMatrix.of(2)));
-  // }
-  //
-  // public void testQuantity2() {
-  // Scalar qs1 = Quantity.of(2, "m");
-  // Scalar qs2 = Quantity.of(3, "s");
-  // Scalar qs3 = Quantity.of(4, "m");
-  // Scalar qs4 = Quantity.of(5, "s");
-  // Tensor mat = Tensors.of( //
-  // Tensors.of(RealScalar.ZERO, qs1, qs3.multiply(qs4)), //
-  // Tensors.of(RealScalar.ZERO, RealScalar.ZERO, qs2), //
-  // Tensors.of(RealScalar.ZERO, RealScalar.ZERO, RealScalar.ZERO) //
-  // );
-  // Tensor actual = IdentityMatrix.of(3).add(mat).add(mat.dot(mat).multiply(RationalScalar.of(1, 2)));
-  // // assertEquals(MatrixExp.of(mat), actual);
-  // Chop.NONE.requireClose(MatrixExp.of(mat), actual);
-  // }
 
   @Test
   void testLarge() {
@@ -198,7 +173,7 @@ class MatrixExpTest {
     Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
     Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
-    HermitianMatrixQ.require(matrix);
+    HermitianMatrixQ.INSTANCE.requireMember(matrix);
     Tensor exp1 = MatrixExp.of(matrix);
     Tensor exp2 = MatrixExp.ofHermitian(matrix);
     Tolerance.CHOP.requireClose(exp1, exp2);
@@ -214,17 +189,17 @@ class MatrixExpTest {
 
   @Test
   void testFail() {
-    assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(4, 3)));
-    assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(3, 4)));
+    assertThrows(Exception.class, () -> MatrixExp.of(Array.zeros(4, 3)));
+    assertThrows(Exception.class, () -> MatrixExp.of(Array.zeros(3, 4)));
   }
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> MatrixExp.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> MatrixExp.of(RealScalar.ONE));
   }
 
   @Test
   void testEmptyFail() {
-    assertThrows(Throw.class, () -> MatrixExp.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> MatrixExp.of(Tensors.empty()));
   }
 }

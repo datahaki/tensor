@@ -21,7 +21,7 @@ class AbstractScalarTest {
     Tensor c = Tensors.fromString("{{1}, {4}, {4}}");
     Tensor a = Tensors.vector(1, 2, 3);
     Tensor b = Tensors.vector(4).unmodifiable();
-    a = a.map(s -> b);
+    a = a.map(_ -> b);
     a.set(RealScalar.ONE, 0, 0); // requires copy() in AbstractScalar::map
     assertEquals(a, c);
   }
@@ -30,7 +30,7 @@ class AbstractScalarTest {
   void testSet() {
     Tensor a = Tensors.vector(1, 2, 3);
     Tensor b = Tensors.vector(4).unmodifiable();
-    a.set(s -> b, Tensor.ALL);
+    a.set(_ -> b, Tensor.ALL);
     a.set(RealScalar.ONE, 0, 0);
     Tensor c = Tensors.fromString("{{1}, {4}, {4}}");
     assertEquals(a, c);
@@ -43,7 +43,7 @@ class AbstractScalarTest {
     matrix.set(Tensor::negate, 3, Tensor.ALL);
     matrix.set(Tensor::negate, 1);
     matrix.set(Tensor::negate, Tensor.ALL, 3);
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
   }
 
   @Test
@@ -66,7 +66,7 @@ class AbstractScalarTest {
   @Test
   void testSetFail() {
     assertThrows(Throw.class, () -> RealScalar.ONE.set(RealScalar.ZERO));
-    assertThrows(Throw.class, () -> RealScalar.ONE.set(s -> RealScalar.ZERO));
+    assertThrows(Throw.class, () -> RealScalar.ONE.set(_ -> RealScalar.ZERO));
   }
 
   @Test

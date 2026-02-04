@@ -4,13 +4,7 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.NInterface;
 
-/* package */ class NDouble extends N {
-  static final N INSTANCE = new NDouble();
-
-  private NDouble() {
-    // ---
-  }
-
+/* package */ class NDouble extends NBase {
   @Override
   protected Scalar numeric(NInterface nInterface) {
     return nInterface.n();

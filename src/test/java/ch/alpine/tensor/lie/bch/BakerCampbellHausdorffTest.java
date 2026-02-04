@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Random;
-import java.util.function.BinaryOperator;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,9 +18,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.lie.CliffordAlgebra;
 import ch.alpine.tensor.lie.ExAd;
 import ch.alpine.tensor.lie.KillingForm;
@@ -36,10 +35,8 @@ class BakerCampbellHausdorffTest {
   static void _check(Tensor ad, int degree) {
     BakerCampbellHausdorff bakerCampbellHausdorff = //
         new BakerCampbellHausdorff(ad, degree, Chop._14);
-    SeriesInterface appx = (SeriesInterface) BakerCampbellHausdorff.of(ad, degree);
+    BchSeries appx = (BchSeries) BakerCampbellHausdorff.of(ad, degree);
     int n = ad.length();
-    Timing t_bch = Timing.stopped();
-    Timing t_apx = Timing.stopped();
     for (int c0 = 0; c0 < n; ++c0)
       for (int c1 = 0; c1 < n; ++c1)
       // Distribution distribution2 = DiscreteUniformDistribution.of(-10, 10);
@@ -52,12 +49,8 @@ class BakerCampbellHausdorffTest {
             // RandomVariate.of(distribution2, n);
             UnitVector.of(n, c1);
         {
-          t_bch.start();
           Tensor res1 = bakerCampbellHausdorff.apply(x, y);
-          t_bch.stop();
-          t_apx.start();
           Tensor res2 = appx.apply(x, y);
-          t_apx.stop();
           assertEquals(res1, res2);
           ExactTensorQ.require(res1);
         }
@@ -73,20 +66,14 @@ class BakerCampbellHausdorffTest {
       Tensor x = RandomVariate.of(distribution, n);
       Tensor y = RandomVariate.of(distribution, n);
       {
-        t_bch.start();
         Tensor res1 = bakerCampbellHausdorff.apply(x, y);
-        t_bch.stop();
-        t_apx.start();
         Tensor res2 = appx.apply(x, y);
-        t_apx.stop();
         assertEquals(res1, res2);
         ExactTensorQ.require(res1);
         Tensor res3 = bakerCampbellHausdorff.apply(y.negate(), x.negate()).negate();
         assertEquals(res1, res3);
       }
     }
-    // System.out.println(String.format("bch: %10d", t_bch.nanoSeconds()));
-    // System.out.println(String.format("apx: %10d", t_apx.nanoSeconds()));
   }
 
   @ParameterizedTest
@@ -141,7 +128,7 @@ class BakerCampbellHausdorffTest {
     CliffordAlgebra cliffordAlgebra = CliffordAlgebra.of(1, 2);
     Tensor cp = cliffordAlgebra.cp();
     assertInstanceOf(SparseArray.class, cp);
-    BinaryOperator<Tensor> binaryOperator = Serialization.copy(BakerCampbellHausdorff.of(cp, 3));
+    TensorBinaryOperator binaryOperator = Serialization.copy(BakerCampbellHausdorff.of(cp, 3));
     int n = cp.length();
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     Random random = new Random(1234);

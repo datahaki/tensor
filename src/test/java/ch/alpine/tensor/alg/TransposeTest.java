@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -95,7 +97,7 @@ class TransposeTest {
   void testModify() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 2 }, { 2, 4 } });
     Tensor mt = Transpose.of(m);
-    mt.set(i -> RealScalar.ZERO, 1, 1);
+    mt.set(_ -> RealScalar.ZERO, 1, 1);
     assertNotEquals(m, mt);
   }
 
@@ -130,8 +132,9 @@ class TransposeTest {
     assertEquals(Tensors.vector(1, 2, 3), Transpose.of(Tensors.vector(1, 2, 3), new int[] {}));
   }
 
-  @Test
-  void testComparison() {
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testComparison(Distribution distribution) {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 6, 5, 4);
     ArrayQ.require(randn);
     Tensor trans = Transpose.of(randn, 1, 2, 0);

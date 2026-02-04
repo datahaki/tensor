@@ -138,6 +138,16 @@ class UnprotectTest {
   }
 
   @Test
+  void testQuantity() {
+    Scalar p = Quantity.of(123, "");
+    Scalar q = Quantity.of(123, "m");
+    assertEquals(Unprotect.negateUnit(p), p);
+    assertEquals(Unprotect.negateUnit(q), Quantity.of(123, "m^-1"));
+    assertEquals(Unprotect.zero_negateUnit(p), p.zero());
+    assertEquals(Unprotect.zero_negateUnit(q), Quantity.of(0, "m^-1"));
+  }
+
+  @Test
   void testDimension1HintFail() {
     assertThrows(Throw.class, () -> Unprotect.dimension1(RealScalar.ONE));
     assertThrows(Throw.class, () -> Unprotect.dimension1Hint(RealScalar.ONE));

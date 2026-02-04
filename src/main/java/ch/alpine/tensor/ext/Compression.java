@@ -18,16 +18,16 @@ public enum Compression {
    * @param data
    * @return byte array that is typically smaller than the input data */
   public static byte[] deflate(byte[] data) {
-    Deflater deflater = new Deflater();
-    deflater.setInput(data);
-    deflater.finish();
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    for (byte[] buffer = new byte[BUFFER_SIZE]; !deflater.finished();) {
-      int length = deflater.deflate(buffer);
-      byteArrayOutputStream.write(buffer, 0, length);
+    try (Deflater deflater = new Deflater()) {
+      deflater.setInput(data);
+      deflater.finish();
+      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+      for (byte[] buffer = new byte[BUFFER_SIZE]; !deflater.finished();) {
+        int length = deflater.deflate(buffer);
+        byteArrayOutputStream.write(buffer, 0, length);
+      }
+      return byteArrayOutputStream.toByteArray();
     }
-    deflater.end();
-    return byteArrayOutputStream.toByteArray();
   }
 
   /** decompression
@@ -46,22 +46,22 @@ public enum Compression {
    * @param len
    * @return
    * @throws DataFormatException */
-  @PackageTestAccess // to test failure on inconsistent input parameters
+  @PackageTestAccess
   static byte[] inflate(byte[] data, int off, int len) throws DataFormatException {
-    Inflater inflater = new Inflater();
-    inflater.setInput(data, off, len);
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    byte[] buffer = new byte[BUFFER_SIZE];
-    while (true) {
-      int length = inflater.inflate(buffer);
-      byteArrayOutputStream.write(buffer, 0, length);
-      if (inflater.finished())
-        break;
-      else //
-      if (length == 0)
-        throw new DataFormatException();
+    try (Inflater inflater = new Inflater()) {
+      inflater.setInput(data, off, len);
+      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+      byte[] buffer = new byte[BUFFER_SIZE];
+      while (true) {
+        int length = inflater.inflate(buffer);
+        byteArrayOutputStream.write(buffer, 0, length);
+        if (inflater.finished())
+          break;
+        else //
+        if (length == 0)
+          throw new DataFormatException();
+      }
+      return byteArrayOutputStream.toByteArray();
     }
-    inflater.end();
-    return byteArrayOutputStream.toByteArray();
   }
 }

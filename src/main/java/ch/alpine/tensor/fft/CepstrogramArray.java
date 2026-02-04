@@ -12,21 +12,18 @@ import ch.alpine.tensor.sca.exp.Log;
 public enum CepstrogramArray {
   ;
   // TODO TENSOR API no good
-  public static final SpectrogramArray Power = new SpectrogramArray(vector -> {
-    return Fourier.INVERSE.transform(Fourier.FORWARD.transform(vector) //
-        .map(AbsSquared.FUNCTION) //
-        .map(Log.FUNCTION)).map(AbsSquared.FUNCTION);
-  });
-  public static final SpectrogramArray Real = new SpectrogramArray(vector -> {
-    return Fourier.INVERSE.transform(Fourier.FORWARD.transform(vector) //
-        .map(Abs.FUNCTION) //
-        .map(Log.FUNCTION)).map(Re.FUNCTION);
-  });
-  public static final SpectrogramArray Real1 = new SpectrogramArray(vector -> {
-    return Fourier.INVERSE.transform(Fourier.FORWARD.transform(vector) //
-        .map(Abs.FUNCTION) //
-        .map(RealScalar.of(1E-12)::add) //
-        .map(Log.FUNCTION)) //
-        .map(Re.FUNCTION);
-  });
+  public static final SpectrogramArray Power = new SpectrogramArray(vector -> //
+  Fourier.INVERSE.transform(Fourier.FORWARD.transform(vector) //
+      .map(AbsSquared.FUNCTION) //
+      .map(Log.FUNCTION)).map(AbsSquared.FUNCTION));
+  public static final SpectrogramArray Real = new SpectrogramArray(vector -> //
+  Fourier.INVERSE.transform(Fourier.FORWARD.transform(vector) //
+      .map(Abs.FUNCTION) //
+      .map(Log.FUNCTION)).map(Re.FUNCTION));
+  public static final SpectrogramArray Real1 = new SpectrogramArray(vector -> //
+  Fourier.INVERSE.transform(Fourier.FORWARD.transform(vector) //
+      .map(Abs.FUNCTION) //
+      .map(RealScalar.of(1E-12)::add) //
+      .map(Log.FUNCTION)) //
+      .map(Re.FUNCTION));
 }

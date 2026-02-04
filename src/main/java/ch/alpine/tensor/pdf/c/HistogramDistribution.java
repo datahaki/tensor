@@ -8,9 +8,11 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.api.TensorScalarFunction;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.LinearBinaryAverage;
 import ch.alpine.tensor.pdf.BinCounts;
-import ch.alpine.tensor.pdf.BinningMethod;
+import ch.alpine.tensor.pdf.BinningMethods;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
@@ -36,6 +38,7 @@ import ch.alpine.tensor.sca.Floor;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/HistogramDistribution.html">HistogramDistribution</a> */
+// TODO TENSOR in theory this could also work for DateTime
 public class HistogramDistribution extends AbstractContinuousDistribution implements Serializable {
   /** Example:
    * HistogramDistribution[{10.2, -1.6, 3.2, -0.4, 11.5, 7.3, 3.8, 9.8}, 2]
@@ -52,15 +55,16 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
 
   /** @param samples vector
    * @param binningMethod
-   * @return histogram distribution with bin width computed from given binning method */
-  public static Distribution of(Tensor samples, BinningMethod binningMethod) {
+   * @return histogram distribution with bin width computed from given binning method
+   * @see BinningMethods */
+  public static Distribution of(Tensor samples, TensorScalarFunction binningMethod) {
     return of(samples, binningMethod.apply(samples));
   }
 
   /** @param samples
    * @return histogram distribution with bin width computed from Freedman-Diaconis rule */
   public static Distribution of(Tensor samples) {
-    return of(samples, BinningMethod.IQR);
+    return of(samples, BinningMethods.IQR);
   }
 
   // ---
@@ -71,7 +75,10 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
   private final Scalar width_half;
   private final Clip clip;
 
+  /** @param samples
+   * @param width does not have to be of exact precision */
   private HistogramDistribution(Tensor samples, Scalar width) {
+    // establish left endpoint of domain
     Scalar min = Floor.toMultipleOf(width).apply((Scalar) samples.stream().reduce(Min::of).orElseThrow());
     discrete = scalar -> scalar.subtract(min).divide(width);
     original = scalar -> scalar.multiply(width).add(min);
@@ -82,20 +89,23 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
     clip = Clips.interval(min, min.add(width.multiply(RealScalar.of(unscaledPDF.length()))));
   }
 
-  /** @return support of distribution */
+  @Override
   public Clip support() {
     return clip;
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    return categoricalDistribution.at(Floor.FUNCTION.apply(discrete.apply(x))).divide(width);
+    Scalar dix = discrete.apply(x);
+    Scalar xlo = Floor.FUNCTION.apply(dix);
+    return categoricalDistribution.at(xlo).divide(width); // scale probability based on interval length
   }
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    Scalar xlo = discrete.apply(Floor.toMultipleOf(width).apply(x));
-    Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(discrete.apply(x));
+    Scalar dix = discrete.apply(x);
+    Scalar xlo = Floor.FUNCTION.apply(dix);
+    Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(dix);
     return (Scalar) LinearBinaryAverage.INSTANCE.split( //
         categoricalDistribution.p_lessThan(xlo), //
         categoricalDistribution.p_lessEquals(xlo), ofs);
@@ -103,10 +113,10 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
 
   @Override // from AbstractContinuousDistribution
   public Scalar protected_quantile(Scalar p) {
-    Scalar x_floor = categoricalDistribution.quantile(p);
-    return original.apply(x_floor.add(Clips.interval( //
-        categoricalDistribution.p_lessThan(x_floor), //
-        categoricalDistribution.p_lessEquals(x_floor)).rescale(p)));
+    Scalar xlo = categoricalDistribution.quantile(p);
+    return original.apply(xlo.add(Clips.interval( //
+        categoricalDistribution.p_lessThan(xlo), //
+        categoricalDistribution.p_lessEquals(xlo)).rescale(p)));
   }
 
   @Override // from MeanInterface
@@ -122,6 +132,6 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
 
   @Override // from Object
   public String toString() {
-    return "HistogramDistribution";
+    return MathematicaFormat.concise("HistogramDistribution", clip, width);
   }
 }

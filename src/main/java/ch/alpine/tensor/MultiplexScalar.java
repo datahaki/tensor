@@ -4,7 +4,7 @@ package ch.alpine.tensor;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.lie.Quaternion;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 

@@ -3,9 +3,11 @@
 package ch.alpine.tensor;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.util.Optional;
 
 import ch.alpine.tensor.api.ComplexEmbedding;
-import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.tri.ArcTan;
@@ -44,6 +46,29 @@ import ch.alpine.tensor.sca.tri.ArcTan;
   );
 
   // ---
+  /** @param value
+   * @return exact root of value
+   * @throws IllegalArgumentException if value is not a square number */
+  public static Optional<BigInteger> sqrt(BigInteger value) {
+    return Optional.of(sqrtApproximation(value)) //
+        .filter(root -> root.multiply(root).equals(value));
+  }
+
+  public static BigInteger sqrtApproximation(BigInteger n) {
+    if (n.signum() < 0)
+      throw new ArithmeticException();
+    if (n.equals(BigInteger.ZERO) || n.equals(BigInteger.ONE))
+      return n;
+    BigInteger x = n.shiftRight(n.bitLength() / 2); // initial guess
+    while (true) {
+      BigInteger y = x.add(n.divide(x)).shiftRight(1);
+      if (y.equals(x) || y.equals(x.subtract(BigInteger.ONE)))
+        return y;
+      x = y;
+    }
+  }
+
+  // ---
   /** @param x complex scalar
    * @param y complex scalar
    * @return Mathematica::ArcTan[x, y] */
@@ -60,8 +85,34 @@ import ch.alpine.tensor.sca.tri.ArcTan;
       RealScalar.ZERO, // 0
       RealScalar.ONE }; // +1
   // ---
-  public static final Cache<Integer, DecimalScalar> CACHE_0 = //
-      Cache.of(precision -> new DecimalScalar(BigDecimal.ZERO, precision), 32);
-  public static final Cache<Integer, DecimalScalar> CACHE_1 = //
-      Cache.of(precision -> new DecimalScalar(BigDecimal.ONE, precision), 32);
+
+  /** @param bigDecimal
+   * @return
+   * @throws Exception if value is Infinity */
+  public static BigInteger floor(BigDecimal bigDecimal) {
+    BigInteger bigInteger = bigDecimal.toBigInteger();
+    if (0 < new BigDecimal(bigInteger).compareTo(bigDecimal)) {
+      bigDecimal = bigDecimal.subtract(BigDecimal.ONE);
+      bigInteger = bigDecimal.toBigInteger();
+    }
+    return bigInteger;
+  }
+
+  /** @param bigDecimal
+   * @return
+   * @throws Exception if value is Infinity */
+  public static BigInteger ceiling(BigDecimal bigDecimal) {
+    BigInteger bigInteger = bigDecimal.toBigInteger();
+    if (new BigDecimal(bigInteger).compareTo(bigDecimal) < 0) {
+      bigDecimal = bigDecimal.add(BigDecimal.ONE);
+      bigInteger = bigDecimal.toBigInteger();
+    }
+    return bigInteger;
+  }
+
+  /** @param bigDecimal
+   * @return */
+  public static BigInteger round(BigDecimal bigDecimal) {
+    return bigDecimal.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact();
+  }
 }

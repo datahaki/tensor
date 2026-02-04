@@ -8,8 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -18,20 +21,24 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.OrderedQ;
+import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.num.FindInteger;
+import ch.alpine.tensor.opt.fnd.FindInteger;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Sign;
 
 class CategoricalDistributionTest {
   @Test
@@ -211,6 +218,19 @@ class CategoricalDistributionTest {
     TestMarkovChebyshev.monotonous(distribution);
   }
 
+  @ParameterizedTest
+  @ValueSource(ints = { 10, 100, 300 })
+  void testStrictlyMonotonousExp(int length) {
+    Tensor unscaledPdf = RandomVariate.of(UniformDistribution.unit(), new Random(3), length).map(RealScalar.of(0.1)::add);
+    Distribution distribution = CategoricalDistribution.fromUnscaledPDF(unscaledPdf);
+    Tensor samples = Range.of(0, length + 1);
+    Tensor pdfs = samples.map(PDF.of(distribution)::at);
+    assertTrue(pdfs.stream().limit(length).map(Scalar.class::cast).allMatch(Sign::isPositive));
+    Tensor cdfs = samples.map(CDF.of(distribution)::p_lessThan);
+    assertTrue(OrderedQ.of(cdfs));
+    assertEquals(cdfs.stream().distinct().count(), cdfs.length());
+  }
+
   @Test
   void testNegativeFail() {
     assertThrows(Throw.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
@@ -219,6 +239,7 @@ class CategoricalDistributionTest {
   @Test
   void testZeroFail() {
     assertThrows(ArithmeticException.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0)));
+    assertThrows(Throw.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0.0, 0, 0)));
   }
 
   @Test

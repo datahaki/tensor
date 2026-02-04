@@ -2,12 +2,12 @@
 package ch.alpine.tensor.red;
 
 import java.util.Arrays;
-import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 
 /** Hint: implementation covers the Hadamard product, i.e. entrywise/pointwise product
@@ -16,7 +16,7 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/Times.html">Times</a> */
 public enum Times {
   ;
-  private static final BinaryOperator<Tensor> BINARY_OPERATOR = Inner.with((s, t) -> t.multiply(s));
+  private static final TensorBinaryOperator BINARY_OPERATOR = Inner.with((s, t) -> t.multiply(s));
 
   /** point-wise multiplication of two tensors.
    * 
@@ -49,17 +49,10 @@ public enum Times {
    * 
    * @param a
    * @param b
-   * @return element-wise multiply tensor a and tensor b. */
+   * @return see description above
+   * @see Entrywise#mul() */
   public static Tensor of(Tensor a, Tensor b) {
     return BINARY_OPERATOR.apply(a, b);
-  }
-
-  /** @param tensors
-   * @return */
-  public static Tensor of(Tensor... tensors) {
-    if (tensors.length == 1)
-      return tensors[0].copy();
-    return Arrays.stream(tensors).reduce(BINARY_OPERATOR).orElse(RealScalar.ONE);
   }
 
   /** @param a
@@ -73,6 +66,8 @@ public enum Times {
    * @param scalars
    * @return product of scalars, or {@link RealScalar#ONE} if no scalars are present */
   public static Scalar of(Scalar... scalars) {
-    return Arrays.stream(scalars).reduce(Scalar::multiply).orElse(RealScalar.ONE);
+    return Arrays.stream(scalars) //
+        .reduce(Scalar::multiply) //
+        .orElse(RealScalar.ONE);
   }
 }

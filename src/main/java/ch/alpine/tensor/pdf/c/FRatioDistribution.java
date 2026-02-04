@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -43,6 +44,8 @@ public class FRatioDistribution implements Distribution, //
   private final Scalar f1;
   private final Scalar f2;
   private final ScalarUnaryOperator power;
+  private final Distribution rvin;
+  private final Distribution rvim;
 
   private FRatioDistribution(Scalar n, Scalar m) {
     this.n = n;
@@ -53,6 +56,8 @@ public class FRatioDistribution implements Distribution, //
     f1 = Power.of(n, n2);
     f2 = Power.of(m, m2);
     power = Power.function(n2.add(m2).negate());
+    rvin = ChiSquareDistribution.of(n);
+    rvim = ChiSquareDistribution.of(m);
   }
 
   @Override // from PDF
@@ -63,6 +68,13 @@ public class FRatioDistribution implements Distribution, //
       return Times.of(f1, f2, f3, f4).divide(scale);
     }
     return RealScalar.ZERO;
+  }
+
+  @Override // from Distribution
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    Scalar U = rvin.randomVariate(randomGenerator).divide(n);
+    Scalar V = rvim.randomVariate(randomGenerator).divide(m);
+    return U.divide(V);
   }
 
   @Override // from MeanInterface

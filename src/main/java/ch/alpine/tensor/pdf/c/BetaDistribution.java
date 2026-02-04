@@ -2,12 +2,14 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
@@ -17,7 +19,8 @@ import ch.alpine.tensor.sca.pow.Power;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/BetaDistribution.html">BetaDistribution</a> */
-public class BetaDistribution implements Distribution, MeanInterface, PDF, VarianceInterface, Serializable {
+public class BetaDistribution implements Distribution, //
+    PDF, MeanInterface, VarianceInterface, Serializable {
   /** Remark:
    * for a1 == 1 OR a2 == 1 the distribution does not require the beta function
    * 
@@ -44,6 +47,8 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
   private final Scalar factor;
   private final ScalarUnaryOperator power1;
   private final ScalarUnaryOperator power2;
+  private final Distribution rviA1;
+  private final Distribution rviA2;
 
   private BetaDistribution(Scalar a1, Scalar a2) {
     this.a1 = a1;
@@ -51,6 +56,8 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
     power1 = Power.function(a1.subtract(RealScalar.ONE));
     power2 = Power.function(a2.subtract(RealScalar.ONE));
     factor = Beta.of(a1, a2);
+    rviA1 = new Gamma1Distribution(a1);
+    rviA2 = new Gamma1Distribution(a2);
   }
 
   @Override // from PDF
@@ -59,6 +66,13 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
         && Scalars.lessThan(x, RealScalar.ONE) //
             ? power1.apply(x).multiply(power2.apply(RealScalar.ONE.subtract(x))).divide(factor)
             : RealScalar.ZERO;
+  }
+
+  @Override // from Distribution
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    Scalar x1 = rviA1.randomVariate(randomGenerator);
+    Scalar x2 = rviA2.randomVariate(randomGenerator);
+    return x1.divide(x1.add(x2));
   }
 
   // CDF requires BetaRegularized
@@ -71,5 +85,10 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
   public Scalar variance() {
     Scalar a12 = a1.add(a2);
     return a1.divide(a12).multiply(a2).divide(a12).divide(RealScalar.ONE.add(a12));
+  }
+
+  @Override
+  public String toString() {
+    return MathematicaFormat.concise("BetaDistribution", a1, a2);
   }
 }

@@ -4,17 +4,13 @@ package ch.alpine.tensor.pdf.c;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.ext.HomeDirectory;
-import ch.alpine.tensor.io.Put;
 import ch.alpine.tensor.nrm.VectorInfinityNorm;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -41,12 +37,5 @@ class ComplexDiskUniformDistributionTest {
     assertEquals( //
         RandomVariate.of(distribution, new Random(30), 10), //
         RandomVariate.of(distribution, new Random(30), 10));
-  }
-
-  @Test
-  @Disabled
-  void testExport() throws IOException {
-    Distribution distribution = ComplexDiskUniformDistribution.of(3);
-    Put.of(HomeDirectory.file("cdud"), RandomVariate.of(distribution, 10000));
   }
 }

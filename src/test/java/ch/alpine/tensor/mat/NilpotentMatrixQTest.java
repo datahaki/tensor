@@ -64,7 +64,6 @@ class NilpotentMatrixQTest {
     Scalar s2 = Matrix2Norm.bound(scaled.dot(scaled));
     Scalar s3 = Matrix2Norm.bound(scaled.dot(scaled).dot(scaled));
     Tensor vec = Tensors.of(n2, s1, s2, s3).map(Round._2);
-    // System.out.println(vec);
     Tensor tensor = MatrixPower.of(matrix, n);
     tensor.map(Scalar::zero);
     vec.map(Scalar::zero);

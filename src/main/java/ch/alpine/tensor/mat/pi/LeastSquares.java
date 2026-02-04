@@ -102,7 +102,7 @@ public enum LeastSquares {
   private static Tensor usingQR(Tensor matrix, Tensor b, int n, int m) {
     return m <= n //
         ? _usingQR(matrix, b)
-        : ConjugateTranspose.of(_usingQR(MatrixDotConjugateTranspose.of(matrix), matrix)).dot(b);
+        : ConjugateTranspose.of(_usingQR(MatrixDotConjugateTranspose.self(matrix), matrix)).dot(b);
   }
 
   private static Tensor _usingQR(Tensor matrix, Tensor b) {
@@ -124,11 +124,9 @@ public enum LeastSquares {
    * @param b
    * @return pseudo inverse of given matrix dot b */
   public static Tensor of(SingularValueDecomposition svd, Tensor b) {
-    if (VectorQ.of(b)) { // when b is vector then bypass construction of pseudo inverse matrix
-      Tensor wi = SingularValueList.inverted(svd, CHOP);
-      return svd.getV().dot(Times.of(wi, b.dot(svd.getU()))); // U^t . b == b . U
-    }
-    return PseudoInverse.of(svd, CHOP).dot(b);
+    return VectorQ.of(b) //
+        ? operator(svd).apply(b) // when b is vector then bypass construction of pseudo inverse matrix
+        : PseudoInverse.of(svd, CHOP).dot(b);
   }
 
   /** Remark: application is iterative target coordinate

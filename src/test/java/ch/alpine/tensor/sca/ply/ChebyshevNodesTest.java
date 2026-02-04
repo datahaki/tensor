@@ -12,6 +12,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.fft.FourierDCT;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -20,19 +21,22 @@ class ChebyshevNodesTest {
   @RepeatedTest(6)
   void testSymmetric(RepetitionInfo repetitionInfo) {
     Tensor matrix = ChebyshevNodes._0.matrix(repetitionInfo.getCurrentRepetition());
-    SymmetricMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
   }
 
   @RepeatedTest(10)
   void testDCT2(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
-    Tensor m1 = ChebyshevNodes._1.matrix(n);
-    Tensor m2 = FourierDCT._2.matrix(n);
-    Scalar ratio = m1.Get(0, 0).divide(m2.Get(0, 0));
-    Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+    final Tensor m1 = ChebyshevNodes._1.matrix(n);
+    final Tensor m2 = FourierDCT._2.matrix(n);
+    final Scalar ratio = m1.Get(0, 0).divide(m2.Get(0, 0));
+    final Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
     Tolerance.CHOP.requireClose(ratio, scalar.reciprocal());
-    m2 = m2.multiply(ratio);
-    Tolerance.CHOP.requireClose(m1, m2);
+    Tolerance.CHOP.requireClose(m1, m2.multiply(ratio));
+    final Tensor m3 = FourierDCT._3.matrix(n);
+    Tolerance.CHOP.requireClose(IdentityMatrix.of(n), m3.dot(m2));
+    final Tensor m1inv = m3.multiply(scalar);
+    Tolerance.CHOP.requireClose(IdentityMatrix.of(n), m1.dot(m1inv));
   }
 
   @Test

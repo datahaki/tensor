@@ -31,8 +31,7 @@ import ch.alpine.tensor.sca.Conjugate;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/HessenbergDecomposition.html">HessenbergDecomposition</a> */
-/* package */
-class HessenbergDecompositionImpl implements HessenbergDecomposition, Serializable {
+/* package */ class HessenbergDecompositionImpl implements HessenbergDecomposition, Serializable {
   private final Tensor u;
   private Tensor h;
 

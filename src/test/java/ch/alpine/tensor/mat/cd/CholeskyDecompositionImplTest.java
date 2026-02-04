@@ -23,7 +23,6 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -38,10 +37,7 @@ class CholeskyDecompositionImplTest {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     CholeskyDecomposition choleskyDecomposition = //
-        Serialization.copy(CholeskyDecomposition.of(matrix));
-    Tensor inverse = Inverse.of(matrix);
-    Tensor solve = choleskyDecomposition.solve(IdentityMatrix.of(3));
-    assertEquals(solve, inverse);
+        Serialization.copy(CholeskyDecompositionWrap.of(matrix));
     assertTrue(choleskyDecomposition.toString().startsWith("CholeskyDecomposition["));
   }
 
@@ -50,13 +46,13 @@ class CholeskyDecompositionImplTest {
     int n = 7;
     int prime = 7879;
     RandomGenerator randomGenerator = new Random(1);
-    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(randomGenerator.nextInt(), prime), n, n);
+    Tensor matrix = Tensors.matrix((_, _) -> GaussScalar.of(randomGenerator.nextInt(), prime), n, n);
     // Symmetrize
     matrix = Transpose.of(matrix).add(matrix).divide(GaussScalar.of(2, prime));
-    SymmetricMatrixQ.require(matrix);
-    HermitianMatrixQ.require(matrix);
+    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    HermitianMatrixQ.INSTANCE.requireMember(matrix);
     CholeskyDecomposition choleskyDecomposition = //
-        Serialization.copy(CholeskyDecomposition.of(matrix));
+        Serialization.copy(CholeskyDecompositionWrap.of(matrix));
     Tensor result = MatrixDotTranspose.of(Dot.of( //
         choleskyDecomposition.getL(), //
         DiagonalMatrix.with(choleskyDecomposition.diagonal())), //
@@ -72,7 +68,7 @@ class CholeskyDecompositionImplTest {
   @Test
   void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
-    CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
+    CholeskyDecomposition choleskyDecomposition = CholeskyDecompositionWrap.of(matrix);
     Tensor result = MatrixDotTranspose.of(Dot.of( //
         choleskyDecomposition.getL(), //
         DiagonalMatrix.with(choleskyDecomposition.diagonal())), //

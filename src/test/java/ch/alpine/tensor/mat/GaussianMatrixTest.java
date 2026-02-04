@@ -27,7 +27,7 @@ class GaussianMatrixTest {
     Tensor matrix = GaussianMatrix.of(n);
     int size = 2 * n + 1;
     assertEquals(Dimensions.of(matrix), Arrays.asList(size, size));
-    assertTrue(SymmetricMatrixQ.of(matrix));
+    assertTrue(SymmetricMatrixQ.INSTANCE.isMember(matrix));
     assertEquals(Reverse.of(matrix), matrix);
   }
 

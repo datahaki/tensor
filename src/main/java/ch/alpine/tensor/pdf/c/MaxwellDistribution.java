@@ -3,17 +3,17 @@ package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.pdf.CDF;
+import ch.alpine.tensor.opt.fnd.FindRoot;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.MeanInterface;
-import ch.alpine.tensor.pdf.PDF;
-import ch.alpine.tensor.pdf.VarianceInterface;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.erf.Erf;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/MaxwellDistribution.html">MaxwellDistribution</a> */
-public class MaxwellDistribution implements Distribution, CDF, PDF, MeanInterface, VarianceInterface, Serializable {
+public class MaxwellDistribution extends AbstractContinuousDistribution implements Serializable {
   private static final Scalar VAR = RealScalar.of(3).subtract(RealScalar.of(8).divide(Pi.VALUE));
   private static final Scalar SQRT_2 = Sqrt.FUNCTION.apply(RealScalar.TWO);
   private static final Scalar SQRT_PI_2 = Sqrt.FUNCTION.apply(Pi.HALF);
@@ -46,12 +46,20 @@ public class MaxwellDistribution implements Distribution, CDF, PDF, MeanInterfac
   private final Scalar s2;
   private final Scalar s2_n2;
   private final Scalar s3;
+  private final Scalar mean;
 
   private MaxwellDistribution(Scalar sigma) {
     this.sigma = sigma;
     s2 = sigma.multiply(sigma);
     s2_n2 = s2.add(s2).negate();
     s3 = s2.multiply(sigma);
+    Scalar scalar = sigma.divide(SQRT_PI_2);
+    mean = scalar.add(scalar);
+  }
+
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    return Clips.positive(DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Override // from PDF
@@ -70,15 +78,14 @@ public class MaxwellDistribution implements Distribution, CDF, PDF, MeanInterfac
         Exp.FUNCTION.apply(x.multiply(x).divide(s2_n2)).divide(SQRT_PI_2).multiply(x).divide(sigma));
   }
 
-  @Override // from CDF
-  public Scalar p_lessEquals(Scalar x) {
-    return p_lessThan(x);
+  @Override // from AbstractContinuousDistribution
+  public Scalar protected_quantile(Scalar p) {
+    return FindRoot.of(x -> p_lessThan(x).subtract(p)).above(mean.zero(), mean);
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    Scalar scalar = sigma.divide(SQRT_PI_2);
-    return scalar.add(scalar);
+    return mean;
   }
 
   @Override // from VarianceInterface

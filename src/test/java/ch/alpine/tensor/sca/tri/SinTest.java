@@ -3,14 +3,20 @@ package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigDecimal;
+import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -32,12 +38,33 @@ class SinTest {
   }
 
   @Test
+  void testBigDecimal() {
+    String mathematica = "0.9092974268256816953960198659117448427022549714478902683789730115";
+    Scalar x = DecimalScalar.of(BigDecimal.valueOf(2));
+    Scalar s0 = Sin.FUNCTION.apply(x);
+    assertTrue(Objects.toString(s0).startsWith(mathematica.substring(0, 30)));
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = { true, false })
+  void testToggle(boolean value) {
+    final boolean copy = value;
+    assertEquals(!value, value ^ true);
+    value ^= true;
+    assertEquals(value, !copy);
+    value ^= false;
+    assertEquals(value, !copy);
+    value ^= true;
+    assertEquals(value, copy);
+  }
+
+  @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> Sin.FUNCTION.apply(Quantity.of(1, "deg")));
+    assertThrows(Exception.class, () -> Sin.FUNCTION.apply(Quantity.of(1, "deg")));
   }
 
   @Test
   void testStringScalarFail() {
-    assertThrows(Throw.class, () -> Sin.FUNCTION.apply(StringScalar.of("some")));
+    assertThrows(Exception.class, () -> Sin.FUNCTION.apply(StringScalar.of("some")));
   }
 }

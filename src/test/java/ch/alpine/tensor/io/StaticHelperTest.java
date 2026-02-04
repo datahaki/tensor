@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
@@ -20,7 +20,7 @@ class StaticHelperTest {
 
   @RepeatedTest(10)
   void testUsAscii() {
-    RandomGenerator randomGenerator = new Random();
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
     byte[] data = new byte[randomGenerator.nextInt(567)];
     randomGenerator.nextBytes(data);
     String string = new String(data, StandardCharsets.US_ASCII);
@@ -29,7 +29,7 @@ class StaticHelperTest {
 
   @RepeatedTest(10)
   void testUtf8() {
-    RandomGenerator randomGenerator = new Random();
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
     byte[] data = new byte[randomGenerator.nextInt(567)];
     randomGenerator.nextBytes(data);
     String string = new String(data, StandardCharsets.ISO_8859_1);

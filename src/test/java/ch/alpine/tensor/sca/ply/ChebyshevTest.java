@@ -3,6 +3,9 @@ package ch.alpine.tensor.sca.ply;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -10,14 +13,26 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Re;
+import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.tmp.ResamplingMethod;
 import ch.alpine.tensor.tmp.TimeSeries;
@@ -45,13 +60,58 @@ class ChebyshevTest {
     assertEquals(Chebyshev.U.of(6).coeffs(), Tensors.vector(-1, 0, 24, 0, -80, 0, 64));
   }
 
-  @Test
+  @ParameterizedTest
+  @EnumSource
+  void testUAntider(Chebyshev chebyshev) {
+    for (int n = 0; n < 10; ++n) {
+      Polynomial polynomial = chebyshev.of(n).antiderivative();
+      Scalar ip1 = polynomial.apply(RealScalar.ONE);
+      Scalar in1 = polynomial.apply(RealScalar.ONE.negate());
+      ExactScalarQ.require(ip1);
+      ExactScalarQ.require(in1);
+      if (Integers.isOdd(n))
+        assertTrue(Scalars.isZero(ip1.subtract(in1)));
+    }
+  }
+
+  @RepeatedTest(10)
   void testProduct() {
-    int n = 4;
-    int m = 3;
+    int n = ThreadLocalRandom.current().nextInt(100);
+    int m = ThreadLocalRandom.current().nextInt(100);
     Polynomial p1 = Chebyshev.T.of(n).times(Chebyshev.T.of(m));
     Polynomial p2 = Chebyshev.T.of(n + m).plus(Chebyshev.T.of(Math.abs(m - n))).times(RationalScalar.HALF);
     assertEquals(p1, p2);
+  }
+
+  @RepeatedTest(10)
+  void testProductUT() {
+    int n = ThreadLocalRandom.current().nextInt(100);
+    int m = ThreadLocalRandom.current().nextInt(100);
+    Polynomial p1 = Chebyshev.T.of(m).times(Chebyshev.U.of(n));
+    Polynomial p2 = null;
+    if (n >= m) {
+      p2 = Chebyshev.U.of(n + m).plus(Chebyshev.U.of(n - m)).times(RationalScalar.HALF);
+      assertEquals(p1, p2);
+    }
+    if (n <= m - 2) {
+      p2 = Chebyshev.U.of(n + m).minus(Chebyshev.U.of(m - n - 2)).times(RationalScalar.HALF);
+      assertEquals(p1, p2);
+    }
+  }
+
+  @Test
+  void testComplex() {
+    Distribution distribution = UniformDistribution.of(Clips.absolute(Pi.VALUE));
+    for (int n = 1; n < 10; ++n) {
+      Scalar ab = ComplexScalar.fromPolar(RealScalar.ONE, RandomVariate.of(distribution));
+      final int fn = n;
+      ScalarUnaryOperator suo = z -> ComplexScalar.of( //
+          Chebyshev.T.of(fn).apply(Re.FUNCTION.apply(z)), //
+          Chebyshev.U.of(fn - 1).apply(Re.FUNCTION.apply(z)).multiply(Im.FUNCTION.apply(z)));
+      Scalar c1 = suo.apply(ab);
+      Scalar c2 = Power.of(ab, n);
+      Tolerance.CHOP.requireClose(c1, c2);
+    }
   }
 
   @ParameterizedTest

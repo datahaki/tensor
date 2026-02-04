@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -32,60 +33,56 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Sign;
 
 class DiscreteDistributionTest {
-  private static final Distribution[] DISTRIBUTIONS = { //
-      BernoulliDistribution.of(0.3), //
-      BinomialDistribution.of(5, .4), //
-      DiscreteUniformDistribution.of(2, 10), //
-      CategoricalDistribution.fromUnscaledPDF(Tensors.vector(1, 2, 0, 2, 3, 1)), //
-      GeometricDistribution.of(.3), //
-      HypergeometricDistribution.of(2, 2, 10), //
-      NegativeBinomialDistribution.of(4, 0.8), //
-      PascalDistribution.of(3, .2), //
-      PoissonBinomialDistribution.of(Tensors.vector(.2, .4, .2, .2)), //
-      PoissonDistribution.of(0.3), //
-  };
-
   private static Distribution[] distributions() {
-    return DISTRIBUTIONS;
+    return new Distribution[] { //
+        BernoulliDistribution.of(0.3), //
+        BinomialDistribution.of(5, .4), //
+        DiscreteUniformDistribution.of(2, 10), //
+        CategoricalDistribution.fromUnscaledPDF(Tensors.vector(1, 2, 0, 2, 3, 1)), //
+        GeometricDistribution.of(.3), //
+        HypergeometricDistribution.of(2, 2, 10), //
+        NegativeBinomialDistribution.of(4, 0.8), //
+        PascalDistribution.of(3, .2), //
+        PoissonBinomialDistribution.of(Tensors.vector(.2, .4, .2, .2)), //
+        PoissonDistribution.of(0.3), //
+    };
   }
 
-  @MethodSource("distributions")
   @ParameterizedTest
+  @MethodSource("distributions")
   void testInverseCDF(Distribution distribution) {
-    if (distribution instanceof InverseCDF) {
-      InverseCDF inverseCDF = InverseCDF.of(distribution);
-      Scalar scalar = Median.of(distribution);
-      assertTrue(FiniteScalarQ.of(scalar));
-      IntegerQ.require(scalar);
-      assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-      assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
-      assertTrue(FiniteScalarQ.of(inverseCDF.quantile(RealScalar.ZERO)));
-      assertTrue(FiniteScalarQ.of(inverseCDF.quantile(RealScalar.of(Math.nextDown(1)))));
-    }
+    assumeTrue(distribution instanceof InverseCDF);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Scalar scalar = Median.of(distribution);
+    assertTrue(FiniteScalarQ.of(scalar));
+    IntegerQ.require(scalar);
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertTrue(FiniteScalarQ.of(inverseCDF.quantile(RealScalar.ZERO)));
+    assertTrue(FiniteScalarQ.of(inverseCDF.quantile(RealScalar.of(Math.nextDown(1)))));
   }
 
-  @MethodSource("distributions")
   @ParameterizedTest
+  @MethodSource("distributions")
   void testInverseCDFIncreasing(Distribution distribution) {
-    if (distribution instanceof InverseCDF) {
-      InverseCDF inverseCDF = InverseCDF.of(distribution);
-      Sign.requirePositiveOrZero(InterquartileRange.of(distribution));
-      Scalar lo = inverseCDF.quantile(RationalScalar.of(1, 8));
-      Scalar hi = inverseCDF.quantile(RationalScalar.of(3, 8));
-      assertTrue(Scalars.lessEquals(lo, hi));
-    }
+    assumeTrue(distribution instanceof InverseCDF);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Sign.requirePositiveOrZero(InterquartileRange.of(distribution));
+    Scalar lo = inverseCDF.quantile(RationalScalar.of(1, 8));
+    Scalar hi = inverseCDF.quantile(RationalScalar.of(3, 8));
+    assertTrue(Scalars.lessEquals(lo, hi));
   }
 
-  @MethodSource("distributions")
   @ParameterizedTest
+  @MethodSource("distributions")
   void testMean(Distribution distribution) {
     RandomVariate.of(distribution);
     Scalar scalar = Mean.of(distribution);
     assertTrue(FiniteScalarQ.of(scalar));
   }
 
-  @MethodSource("distributions")
   @ParameterizedTest
+  @MethodSource("distributions")
   void testVariance(Distribution distribution) {
     Scalar scalar = Variance.of(distribution);
     assertTrue(FiniteScalarQ.of(scalar));

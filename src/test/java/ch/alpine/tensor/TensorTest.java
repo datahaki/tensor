@@ -82,7 +82,7 @@ class TensorTest {
     Tensor mat = Array.zeros(3, 3);
     Tensor cpy = mat.copy();
     Tensor ref = mat.extract(1, 3);
-    ref.set(entry -> Tensors.vector(1, 2), 1, 1);
+    ref.set(_ -> Tensors.vector(1, 2), 1, 1);
     assertEquals(mat, cpy);
   }
 
@@ -98,7 +98,7 @@ class TensorTest {
 
   @Test
   void testAppend2() {
-    Tensor a0 = Array.of(l -> Tensors.empty(), 5);
+    Tensor a0 = Array.of(_ -> Tensors.empty(), 5);
     a0.set(t -> t.append(RealScalar.of(0)), 1);
     a0.set(t -> t.append(RealScalar.of(1)), 3);
     a0.set(t -> t.append(RealScalar.of(2)), 1);
@@ -161,6 +161,6 @@ class TensorTest {
 
   @Test
   void testMapNullFail() {
-    assertThrows(NullPointerException.class, () -> Tensors.vector(1, 2, 3).map(s -> null));
+    assertThrows(NullPointerException.class, () -> Tensors.vector(1, 2, 3).map(_ -> null));
   }
 }

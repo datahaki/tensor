@@ -3,15 +3,18 @@ package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -50,7 +53,7 @@ class LeftNullSpaceTest {
   @Test
   void testMaxRank() {
     Tensor matrix = Tensors.fromString("{{0, 1}, {2, 1}, {0, 1}, {0, 1}}");
-    Tensor nullsp = LeftNullSpace.usingRowReduce(matrix);
+    Tensor nullsp = LeftNullSpace.of(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(2, 4));
     Chop._10.requireAllZero(nullsp.dot(matrix));
   }
@@ -77,14 +80,22 @@ class LeftNullSpaceTest {
   }
 
   private static void _matrixNumeric(Tensor A) {
-    assertTrue(NullSpace.of(A.map(N.DOUBLE)).stream().map(A::dot).allMatch(Chop._12::allZero));
-    // assertTrue(LeftNullSpace.of(A.map(N.DOUBLE)).stream().map(vector -> vector.dot(A)).allMatch(Chop._12::allZero));
-    assertTrue(NullSpace.usingQR(A.map(N.DOUBLE)).stream().map(A::dot).allMatch(Chop._12::allZero));
+    Chop chop = Chop._08;
+    chop.requireAllZero(Tensor.of(NullSpace.of(A.map(N.DOUBLE)).stream().map(A::dot)));
+    chop.requireAllZero(Tensor.of(NullSpace.usingQR(A.map(N.DOUBLE)).stream().map(A::dot)));
   }
 
   private static void _check(Tensor A) {
     _matrix(A);
     _matrix(Transpose.of(A));
+  }
+
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testRandomSome(Distribution distribution) {
+    Tensor matrix = RandomVariate.of(distribution, 7, 3);
+    Tensor ns = LeftNullSpace.of(matrix);
+    assertEquals(List.of(4, 7), Dimensions.of(ns));
   }
 
   @Test
@@ -103,9 +114,9 @@ class LeftNullSpaceTest {
     _check(Tensors.fromString("{{0, 5, 1}, {0, 0, 0}, {1, 0, 0}, {3, 2, 0}}").map(s -> Quantity.of(s, "m")));
   }
 
-  @Test
-  void testRandom() {
-    Distribution distribution = NormalDistribution.standard();
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testRandom(Distribution distribution) {
     Tensor x = RandomVariate.of(distribution, 3);
     Tensor y = RandomVariate.of(distribution, 7);
     _matrixNumeric(TensorProduct.of(x, y));
@@ -114,7 +125,7 @@ class LeftNullSpaceTest {
 
   @Test
   void testGaussScalar() {
-    RandomGenerator random = new Random();
+    RandomGenerator random = ThreadLocalRandom.current();
     int prime = 7741;
     int dim1 = 6;
     Tensor matrix = Array.fill(() -> GaussScalar.of(random.nextInt(), prime), dim1 - 2, dim1);
@@ -123,10 +134,9 @@ class LeftNullSpaceTest {
     assertEquals(list, Arrays.asList(dim1, dim1));
     Tensor nullsp = NullSpace.usingRowReduce(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(2, 6));
-    if (SquareMatrixQ.of(matrix)) {
-      Scalar det = Det.of(matrix);
-      assertEquals(det, GaussScalar.of(0, prime));
-    }
+    assumeTrue(SquareMatrixQ.INSTANCE.isMember(matrix));
+    Scalar det = Det.of(matrix);
+    assertEquals(det, GaussScalar.of(0, prime));
   }
 
   @Test
@@ -149,8 +159,8 @@ class LeftNullSpaceTest {
   @Test
   void testLeftGaussScalar() {
     int prime = 7879;
-    RandomGenerator random = new Random();
-    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 7, 4);
+    RandomGenerator random = ThreadLocalRandom.current();
+    Tensor matrix = Tensors.matrix((_, _) -> GaussScalar.of(random.nextInt(), prime), 7, 4);
     Tensor nullsp = LeftNullSpace.usingRowReduce(matrix);
     assertEquals(nullsp.length(), 3);
     for (Tensor vector : nullsp)

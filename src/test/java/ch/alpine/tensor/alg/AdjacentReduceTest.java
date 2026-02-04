@@ -8,12 +8,13 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 
 class AdjacentReduceTest {
-  public static class Some extends AdjacentReduce {
+  public static class Some implements TensorBinaryOperator {
     @Override
-    protected Tensor reduce(Tensor prev, Tensor next) {
+    public Tensor apply(Tensor prev, Tensor next) {
       return prev;
     }
   }
@@ -22,7 +23,8 @@ class AdjacentReduceTest {
   void testSimple() throws ClassNotFoundException, IOException {
     Tensor tensor = Range.of(0, 5);
     int length = tensor.length();
-    Tensor result = Serialization.copy(new Some()).apply(tensor);
+    AdjacentReduce adjacentReduce = new AdjacentReduce(new Some());
+    Tensor result = Serialization.copy(adjacentReduce).apply(tensor);
     assertEquals(result, Range.of(0, 4));
     assertEquals(result.length(), length - 1);
   }

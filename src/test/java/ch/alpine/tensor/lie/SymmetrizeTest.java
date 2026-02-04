@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -23,7 +25,6 @@ import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
@@ -81,11 +82,11 @@ class SymmetrizeTest {
     assertNotEquals(vector, tensor);
   }
 
-  @Test
-  void testMatrix() {
-    Distribution distribution = NormalDistribution.standard();
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testMatrix(Distribution distribution) {
     Tensor tensor = RandomVariate.of(distribution, 9, 9);
-    SymmetricMatrixQ.require(Symmetrize.of(tensor));
+    SymmetricMatrixQ.INSTANCE.requireMember(Symmetrize.of(tensor));
     assertEquals(Symmetrize.of(IdentityMatrix.of(10)), IdentityMatrix.of(10));
   }
 
@@ -105,11 +106,11 @@ class SymmetrizeTest {
   @Test
   void test01() {
     Tensor tensor = Array.of(Tensors::vector, 3, 3); // results in dimensions [3 x 3 x 2]
-    assertFalse(SymmetricMatrixQ.of(tensor.get(Tensor.ALL, Tensor.ALL, 0)));
+    assertFalse(SymmetricMatrixQ.INSTANCE.isMember(tensor.get(Tensor.ALL, Tensor.ALL, 0)));
     Tensor symmetrize01 = Symmetrize._01(tensor);
     assertEquals(Dimensions.of(tensor), Dimensions.of(symmetrize01));
     assertFalse(Chop._06.allZero(symmetrize01));
-    assertTrue(SymmetricMatrixQ.of(symmetrize01.get(Tensor.ALL, Tensor.ALL, 0)));
-    assertTrue(SymmetricMatrixQ.of(symmetrize01.get(Tensor.ALL, Tensor.ALL, 1)));
+    assertTrue(SymmetricMatrixQ.INSTANCE.isMember(symmetrize01.get(Tensor.ALL, Tensor.ALL, 0)));
+    assertTrue(SymmetricMatrixQ.INSTANCE.isMember(symmetrize01.get(Tensor.ALL, Tensor.ALL, 1)));
   }
 }

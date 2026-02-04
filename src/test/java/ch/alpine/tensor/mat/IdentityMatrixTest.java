@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.lie.LehmerTensor;
-import ch.alpine.tensor.mat.gr.IdempotentQ;
+import ch.alpine.tensor.mat.gr.IdempotentMatrixQ;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
@@ -30,6 +30,22 @@ class IdentityMatrixTest {
   }
 
   @Test
+  void testInplaceAdd() {
+    Tensor matrix = HilbertMatrix.of(4);
+    Tensor reference = matrix.add(IdentityMatrix.of(matrix));
+    IdentityMatrix.inplaceAdd(matrix);
+    assertEquals(matrix, reference);
+  }
+
+  @Test
+  void testInplaceSub() {
+    Tensor matrix = HilbertMatrix.of(5);
+    Tensor reference = matrix.subtract(IdentityMatrix.of(matrix));
+    IdentityMatrix.inplaceSub(matrix);
+    assertEquals(matrix, reference);
+  }
+
+  @Test
   void testSparse() {
     int n = 7;
     Tensor matrix = IdentityMatrix.sparse(n);
@@ -38,17 +54,11 @@ class IdentityMatrixTest {
     assertInstanceOf(SparseArray.class, square);
     assertEquals(square, matrix);
     assertEquals(square, IdentityMatrix.of(n));
-    IdempotentQ.of(matrix);
+    IdempotentMatrixQ.INSTANCE.isMember(matrix);
     Tensor matrow = matrix.get(1);
     assertInstanceOf(SparseArray.class, matrow);
     Tensor squrow = square.get(1);
     assertInstanceOf(SparseArray.class, squrow);
-    // Tensor re = IdentityMatrix.of(n);
-    // Timing timing1 = Timing.started();
-    // re.dot(re);
-    // timing1.stop();
-    // System.out.println(timing0.seconds());
-    // System.out.println(timing1.seconds());
   }
 
   @Test

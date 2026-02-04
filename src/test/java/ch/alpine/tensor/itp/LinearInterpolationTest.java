@@ -38,6 +38,7 @@ import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import test.InterpolationQ;
 
 class LinearInterpolationTest {
   @Test
@@ -162,7 +163,7 @@ class LinearInterpolationTest {
   void testUseCase() {
     Tensor tensor = Range.of(1, 11);
     Interpolation interpolation = LinearInterpolation.of(tensor);
-    Distribution distribution = DiscreteUniformDistribution.of(0, (tensor.length() - 1) * 3 + 1);
+    Distribution distribution = DiscreteUniformDistribution.of(0, (tensor.length() - 1) * 3);
     for (int count = 0; count < 10; ++count) {
       Scalar index = RandomVariate.of(distribution).divide(RealScalar.of(3));
       Scalar scalar = interpolation.At(index);
@@ -182,18 +183,14 @@ class LinearInterpolationTest {
   @Test
   void test1D() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.vector(10, 20, 30, 40));
-    TestHelper.checkMatch(interpolation);
-    TestHelper.checkMatchExact(interpolation);
-    TestHelper.getScalarFail(interpolation);
+    new InterpolationQ(interpolation).checkAll();
   }
 
   @Test
   void test2D() {
     Distribution distribution = UniformDistribution.unit();
     Interpolation interpolation = LinearInterpolation.of(RandomVariate.of(distribution, 3, 5));
-    TestHelper.checkMatch(interpolation);
-    TestHelper.checkMatchExact(interpolation);
-    TestHelper.getScalarFail(interpolation);
+    new InterpolationQ(interpolation).checkAll();
   }
 
   @Test

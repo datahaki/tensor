@@ -4,6 +4,7 @@ package ch.alpine.tensor.img;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 import ch.alpine.tensor.RationalScalar;
@@ -29,6 +30,10 @@ public enum Thumbnail {
    * @param size
    * @return square image with dimensions size x size */
   public static BufferedImage of(BufferedImage bufferedImage, int size) {
+    return of(bufferedImage, size, false);
+  }
+
+  public static BufferedImage of(BufferedImage bufferedImage, int size, boolean rotate) {
     // TODO TENSOR CbbFit
     int w = bufferedImage.getWidth();
     int h = bufferedImage.getHeight();
@@ -39,8 +44,12 @@ public enum Thumbnail {
         : new Dimension(size, s.divide(r).number().intValue());
     BufferedImage result = new BufferedImage(size, size, bufferedImage.getType());
     Graphics2D graphics = result.createGraphics();
-    Image image = bufferedImage.getScaledInstance(dimension.width, dimension.height, Image.SCALE_AREA_AVERAGING);
-    graphics.drawImage(image, (size - dimension.width) / 2, (size - dimension.height) / 2, null);
+    Image image = ImageResize.of(bufferedImage, //
+        dimension.width, dimension.height, AffineTransformOp.TYPE_BILINEAR);
+    graphics.drawImage(image, //
+        rotate ? 0 : (size - dimension.width) / 2, //
+        rotate ? (size - dimension.height) / 2 : 0, //
+        null);
     graphics.dispose();
     return result;
   }

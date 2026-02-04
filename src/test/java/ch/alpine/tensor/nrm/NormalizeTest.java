@@ -162,7 +162,7 @@ class NormalizeTest {
   @Test
   void testInconsistentFail() {
     Distribution distribution = UniformDistribution.of(3, 5);
-    TensorUnaryOperator tensorUnaryOperator = Normalize.with(v -> RandomVariate.of(distribution));
+    TensorUnaryOperator tensorUnaryOperator = Normalize.with(_ -> RandomVariate.of(distribution));
     assertThrows(Throw.class, () -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2)));
   }
 

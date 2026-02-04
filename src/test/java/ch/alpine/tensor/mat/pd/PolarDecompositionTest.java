@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.pd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,10 +37,10 @@ class PolarDecompositionTest {
     int k = list.get(0);
     Tolerance.CHOP.requireClose(Dot.of(polarDecomposition.getPositiveSemidefinite(), polarDecomposition.getUnitary()), matrix);
     Tensor result = polarDecomposition.getUnitary();
-    UnitaryMatrixQ.require(result, Chop._06);
+    new UnitaryMatrixQ(Chop._06).requireMember(result);
     Tensor sym = polarDecomposition.getPositiveSemidefinite();
     assertEquals(Dimensions.of(sym), Arrays.asList(k, k));
-    HermitianMatrixQ.require(sym, Chop._06);
+    new HermitianMatrixQ(Chop._06).requireMember(sym);
     assertTrue(polarDecomposition.toString().startsWith("PolarDecomposition["));
     boolean hermitian = PositiveSemidefiniteMatrixQ.ofHermitian(polarDecomposition.getPositiveSemidefinite());
     assertTrue(hermitian);
@@ -66,15 +67,8 @@ class PolarDecompositionTest {
     _check(matrix, polarDecomposition);
     Tensor r1 = polarDecomposition.getUnitary();
     Tensor r2 = Orthogonalize.usingSvd(matrix);
-    if (Sign.isPositive(Det.of(matrix)) && Sign.isPositive(Det.of(r1))) {
-      Tolerance.CHOP.requireClose(r1, r2);
-    } else {
-      // System.out.println("---");
-      // System.out.println(Det.of(matrix));
-      // System.out.println(Det.of(r1));
-      // System.out.println(Pretty.of(r1.map(Round._4)));
-      // System.out.println(Pretty.of(r2.map(Round._4)));
-    }
+    assumeTrue(Sign.isPositive(Det.of(matrix)) && Sign.isPositive(Det.of(r1)));
+    Tolerance.CHOP.requireClose(r1, r2);
   }
 
   @ParameterizedTest
@@ -94,14 +88,13 @@ class PolarDecompositionTest {
   @Test
   void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
-    Tensor mmt = MatrixDotConjugateTranspose.of(matrix);
-    HermitianMatrixQ.require(mmt);
+    Tensor mmt = MatrixDotConjugateTranspose.self(matrix);
+    HermitianMatrixQ.INSTANCE.requireMember(mmt);
     PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
     Tensor herm = polarDecomposition.getPositiveSemidefinite().map(Tolerance.CHOP);
-    HermitianMatrixQ.require(herm);
+    HermitianMatrixQ.INSTANCE.requireMember(herm);
     Tensor result = polarDecomposition.getUnitary();
-    UnitaryMatrixQ.require(result, Chop._06);
+    new UnitaryMatrixQ(Chop._06).requireMember(result);
     _check(matrix, polarDecomposition);
-    // System.out.println(Pretty.of(herm));
   }
 }

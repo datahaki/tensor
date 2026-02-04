@@ -18,7 +18,7 @@ public enum CosineDistance {
    * @param v vector
    * @return */
   public static Scalar of(Tensor u, Tensor v) {
-    return StaticHelper.ratio(u, v) //
+    return CosineSimilarity.of(u, v) //
         .map(RealScalar.ONE::subtract) // 1 - ratio
         .orElse(RealScalar.ZERO);
   }

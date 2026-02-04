@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 /* package */ class RootsDegree3 {
   private static final Scalar _3 = RealScalar.of(3);
   private static final Scalar N1_2 = RationalScalar.of(-1, 2);
-  private static final Scalar _1_3 = RationalScalar.of(1, 3);
+  private static final Scalar _1_3 = RationalScalar.THIRD;
   private static final Scalar _2_3 = RationalScalar.of(2, 3);
   private static final Scalar _4 = RealScalar.of(4);
   private static final Scalar _6 = RealScalar.of(6);

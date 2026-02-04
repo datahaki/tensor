@@ -19,6 +19,7 @@ import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clips;
 
 class StandardNormalDistributionTest {
   @Test
@@ -26,6 +27,11 @@ class StandardNormalDistributionTest {
     Scalar x = StandardNormalDistribution.INSTANCE.at(RealScalar.ZERO);
     assertTrue(x.toString().startsWith("0.398942280"));
     TestMarkovChebyshev.symmetricAroundMean(StandardNormalDistribution.INSTANCE);
+  }
+
+  @Test
+  void testSupport() {
+    assertEquals(StandardNormalDistribution.INSTANCE.support(), Clips.absolute(Double.POSITIVE_INFINITY));
   }
 
   @Test

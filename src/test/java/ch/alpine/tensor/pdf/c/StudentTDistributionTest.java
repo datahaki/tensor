@@ -6,12 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -20,6 +22,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
@@ -40,6 +43,14 @@ class StudentTDistributionTest {
         RealScalar.of(0.1260097929094335));
     assertEquals(distribution.toString(), "StudentTDistribution[2, 3, 5]");
     TestMarkovChebyshev.symmetricAroundMean(distribution);
+  }
+
+  @Test
+  void testRandom() throws ClassNotFoundException, IOException {
+    Distribution distribution = StudentTDistribution.of(2, 1, 5);
+    Tensor r1 = RandomVariate.of(distribution, new Random(10), 10);
+    Tensor r2 = RandomVariate.of(distribution, new Random(10), 10);
+    Tolerance.CHOP.requireClose(r1, r2);
   }
 
   @Test

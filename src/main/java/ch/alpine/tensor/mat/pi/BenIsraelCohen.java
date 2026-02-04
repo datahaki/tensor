@@ -21,8 +21,6 @@ import ch.alpine.tensor.sca.N;
  * 
  * Reference: Pseudo Inverse Wikipedia */
 /* package */ class BenIsraelCohen {
-  private static final int MAX_ITERATIONS = 128;
-
   /** @param matrix
    * @return pseudo inverse of given matrix */
   public static Tensor of(Tensor matrix) {
@@ -45,7 +43,8 @@ import ch.alpine.tensor.sca.N;
     if (Scalars.isZero(sigma2)) // special case that all entries of matrix are zero
       return ai;
     ai = ai.divide(sigma2);
-    for (int count = 0; count < MAX_ITERATIONS; ++count)
+    int max = PseudoInverse.MAX_ITERATIONS.get();
+    for (int count = 0; count < max; ++count)
       if (Tolerance.CHOP.isClose(ai, ai = refine(ai)))
         return ai;
     throw new Throw(matrix);

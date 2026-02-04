@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.pdf.d.GeometricDistribution;
@@ -54,7 +55,7 @@ public enum Expectation {
     T value = null;
     Scalar p_equals = RealScalar.ZERO;
     Scalar cumprob = RealScalar.ZERO;
-    BigInteger sample = discreteDistribution.lowerBound();
+    BigInteger sample = Scalars.bigIntegerValueExact(discreteDistribution.support().min());
     while (!StaticHelper.isFinished(p_equals, cumprob)) {
       Scalar x = RealScalar.of(sample);
       p_equals = discreteDistribution.p_equals(sample);

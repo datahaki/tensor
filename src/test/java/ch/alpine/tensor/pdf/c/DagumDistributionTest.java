@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
@@ -20,8 +21,11 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
 class DagumDistributionTest {
@@ -58,6 +62,18 @@ class DagumDistributionTest {
   }
 
   @Test
+  void testMeanQ() {
+    Distribution distribution = DagumDistribution.of( //
+        RealScalar.of(2.3), //
+        RealScalar.of(1.2), //
+        Quantity.of(0.7, "m"));
+    Scalar scalar = Mean.of(distribution);
+    Chop._12.requireClose(scalar, Quantity.of(7.579940034748095, "m"));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Quantity.of(Double.POSITIVE_INFINITY, "m")));
+  }
+
+  @Test
   void testMean() {
     Distribution distribution = DagumDistribution.of(2.3, 1.2, 0.7);
     Scalar scalar = Mean.of(distribution);
@@ -67,7 +83,7 @@ class DagumDistributionTest {
   @Test
   void testVarianceFail() {
     DagumDistribution distribution = (DagumDistribution) DagumDistribution.of(2.3, 1.2, 0.7);
-    assertThrows(UnsupportedOperationException.class, distribution::variance);
+    assertFalse(DeterminateScalarQ.of(distribution.variance()));
   }
 
   @Test

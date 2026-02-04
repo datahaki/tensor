@@ -16,7 +16,6 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -34,7 +33,6 @@ import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
-import ch.alpine.tensor.sca.SawtoothWave;
 import ch.alpine.tensor.sca.win.BlackmanHarrisWindow;
 import ch.alpine.tensor.sca.win.DirichletWindow;
 import ch.alpine.tensor.sca.win.HannWindow;
@@ -43,23 +41,9 @@ import ch.alpine.tensor.sca.win.TukeyWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
 
 class SpectrogramArrayTest {
-  private static Tensor signal() {
-    return Tensor.of(IntStream.range(0, 10000) //
-        .mapToObj(i -> RationalScalar.of(i, 100).add(RationalScalar.of(i * i, 1000_000))) //
-        .map(SawtoothWave.FUNCTION));
-  }
-
-  @Test
-  void testMathematica() {
-    Tensor tensor = CepstrogramArray.Real.apply(signal());
-    boolean status = Flatten.scalars(tensor) //
-        .allMatch(DeterminateScalarQ::of);
-    assertTrue(status);
-  }
-
   @Test
   void testMathematicaUnits() {
-    Tensor vector = signal().extract(0, 100).map(s -> Quantity.of(s, "s"));
+    Tensor vector = TestHelper.signal().extract(0, 100).map(s -> Quantity.of(s, "s"));
     Tensor tensor = new SpectrogramArray(Fourier.FORWARD::transform, 10, 3, DirichletWindow.FUNCTION).apply(vector);
     boolean status = Flatten.scalars(tensor) //
         .allMatch(DeterminateScalarQ::of);
@@ -70,8 +54,8 @@ class SpectrogramArrayTest {
   void testOperator() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tuo = new SpectrogramArray(Fourier.INVERSE::transform, 1345, 300, null);
     Serialization.copy(tuo);
-    tuo.apply(signal());
-    // assertTrue(tuo.toString().startsWith("CepstrogramRealArray["));
+    tuo.apply(TestHelper.signal());
+    assertTrue(tuo.toString().startsWith("SpectrogramArray["));
   }
 
   @Test

@@ -11,7 +11,7 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * <code>matrix == L . D . L*</code>
  * 
- * <code>matrix == getL().dot(Times.of(getD(), ConjugateTranspose.of(getL())))</code>
+ * <code>matrix == getL().dot(Times.of(diagonal(), ConjugateTranspose.of(getL())))</code>
  * 
  * <p>The decomposition is robust for positive definite matrices.
  * 
@@ -55,4 +55,10 @@ public interface CholeskyDecomposition {
    * @return Inverse.of(matrix).dot(b) == LinearSolve.of(matrix, b)
    * @throws Exception if any entry of diagonal is zero according to chop */
   Tensor solve(Tensor b);
+  // default Tensor map(ScalarUnaryOperator scalarUnaryOperator) {
+  // Tensor L = getL();
+  // Tensor diagonal = diagonal();
+  // Tensor ctL = ConjugateTranspose.of(L);
+  // return L.dot(Times.of(diagonal.map(scalarUnaryOperator), ctL));
+  // }
 }

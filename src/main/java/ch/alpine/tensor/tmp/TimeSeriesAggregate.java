@@ -3,11 +3,11 @@ package ch.alpine.tensor.tmp;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
@@ -21,17 +21,17 @@ public class TimeSeriesAggregate {
    * @param binaryOperator
    * @param resamplingMethod
    * @return */
-  public static TimeSeriesAggregate of(BinaryOperator<Tensor> binaryOperator, ResamplingMethod resamplingMethod) {
+  public static TimeSeriesAggregate of(TensorBinaryOperator binaryOperator, ResamplingMethod resamplingMethod) {
     return new TimeSeriesAggregate( //
         Objects.requireNonNull(binaryOperator), //
         Objects.requireNonNull(resamplingMethod));
   }
 
   // ---
-  private final BinaryOperator<Tensor> binaryOperator;
+  private final TensorBinaryOperator binaryOperator;
   private final ResamplingMethod resamplingMethod;
 
-  private TimeSeriesAggregate(BinaryOperator<Tensor> binaryOperator, ResamplingMethod resamplingMethod) {
+  private TimeSeriesAggregate(TensorBinaryOperator binaryOperator, ResamplingMethod resamplingMethod) {
     this.binaryOperator = binaryOperator;
     this.resamplingMethod = resamplingMethod;
   }

@@ -2,9 +2,9 @@
 package ch.alpine.tensor.tmp;
 
 import java.util.Optional;
-import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.red.Entrywise;
 
 /** reduction of all values from a time series to a single value */
@@ -15,7 +15,7 @@ public enum TsReduce {
    * @param binaryOperator
    * @return reduction of all values in given time series with respect to given operator,
    * or empty, if given time series is empty */
-  public static Optional<Tensor> reduce(TimeSeries timeSeries, BinaryOperator<Tensor> binaryOperator) {
+  public static Optional<Tensor> reduce(TimeSeries timeSeries, TensorBinaryOperator binaryOperator) {
     return timeSeries.stream() //
         .map(TsEntry::value) //
         .reduce(binaryOperator);

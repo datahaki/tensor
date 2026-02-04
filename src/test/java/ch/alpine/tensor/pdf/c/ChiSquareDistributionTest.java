@@ -5,14 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
@@ -55,10 +59,13 @@ class ChiSquareDistributionTest {
     // assertThrows(UnsupportedOperationException.class, () -> cdf.quantile(RationalScalar.HALF));
   }
 
-  @Test
-  void testRandomFails() {
-    Distribution distribution = ChiSquareDistribution.of(3);
-    assertThrows(UnsupportedOperationException.class, () -> RandomVariate.of(distribution));
+  @RepeatedTest(4)
+  void testRandomFails(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Distribution distribution = ChiSquareDistribution.of(n);
+    Tensor r1 = RandomVariate.of(distribution, new Random(3), 10);
+    Tensor r2 = RandomVariate.of(distribution, new Random(3), 10);
+    Tolerance.CHOP.requireClose(r1, r2);
   }
 
   @Test
@@ -70,7 +77,7 @@ class ChiSquareDistributionTest {
 
   @Test
   void testToString() {
-    Distribution distribution = ChiSquareDistribution.of(RationalScalar.of(3, 2));
-    assertEquals(distribution.toString(), "ChiSquareDistribution[3/2]");
+    Distribution distribution = ChiSquareDistribution.of(RealScalar.of(3));
+    assertEquals(distribution.toString(), "ChiSquareDistribution[3]");
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -11,6 +12,8 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.StandardDeviationInterface;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.erf.Erfc;
 import ch.alpine.tensor.sca.erf.InverseErfc;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -21,6 +24,7 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
     StandardDeviationInterface, Serializable {
   private static final Scalar _4 = RealScalar.of(4);
   private static final Scalar _5 = RealScalar.of(5);
+  private static final Distribution STANDARD = of(RealScalar.of(1), RationalScalar.of(3, 2));
 
   /** @param alpha positive real scalar
    * @param lambda positive real scalar
@@ -39,6 +43,11 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
     return of(RealScalar.of(alpha), RealScalar.of(lambda));
   }
 
+  /** @return Birnbaum Saunders distribution with mean and variance equal to 1 */
+  public static Distribution standard() {
+    return STANDARD;
+  }
+
   // ---
   private final Scalar alpha;
   private final Scalar lambda;
@@ -48,6 +57,11 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
     this.alpha = alpha;
     this.lambda = lambda;
     alpha2 = alpha.multiply(alpha);
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.positive(DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Override // from PDF

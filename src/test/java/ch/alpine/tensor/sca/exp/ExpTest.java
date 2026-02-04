@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
@@ -53,6 +55,25 @@ class ExpTest {
     // mathematica gives -1.4189653368301074` + 2.3185326117622904` I
     Scalar m = Scalars.fromString("-1.4189653368301074 + 2.3185326117622904 * I");
     Chop._15.requireClose(scalar, m);
+  }
+
+  @Test
+  void testSeries() {
+    Scalar scalar = Exp.series(RealScalar.of(1.0));
+    Tolerance.CHOP.requireClose(Exp.FUNCTION.apply(RealScalar.ONE), scalar);
+  }
+
+  @Test
+  void testSeriesZero() {
+    assertEquals(Exp.series(RealScalar.ZERO), RealScalar.ONE);
+  }
+
+  @Test
+  void testBigDecimal() {
+    String mathematica = "2.7182818284590452353602874713526624977572470936999595749669676277";
+    Scalar x = DecimalScalar.of(BigDecimal.ONE);
+    Scalar s0 = Exp.FUNCTION.apply(x);
+    assertTrue(Objects.toString(s0).startsWith(mathematica.substring(0, 30)));
   }
 
   @Test

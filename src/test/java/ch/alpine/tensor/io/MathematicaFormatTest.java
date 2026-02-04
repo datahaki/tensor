@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,8 +36,8 @@ class MathematicaFormatTest {
   void testMathematica() {
     int n = 20;
     int m = 10;
-    RandomGenerator randomGenerator = new SecureRandom();
-    Tensor a = Tensors.matrix((i, j) -> //
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
+    Tensor a = Tensors.matrix((_, _) -> //
     randomGenerator.nextInt(3) == 0 ? //
         DoubleScalar.of(randomGenerator.nextDouble()) : //
         RationalScalar.of(randomGenerator.nextLong(), randomGenerator.nextLong()), n, m);
@@ -51,7 +51,7 @@ class MathematicaFormatTest {
         .findAny();
     boolean containsStringScalar = optional.isPresent();
     if (containsStringScalar)
-      fail("" + optional.get());
+      fail("" + optional.orElseThrow());
     assertFalse(containsStringScalar);
     assertFalse(StringScalarQ.any(tensor));
   }

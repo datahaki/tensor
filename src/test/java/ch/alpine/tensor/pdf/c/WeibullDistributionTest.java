@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,8 +18,10 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clips;
 
 class WeibullDistributionTest {
   @Test
@@ -42,6 +45,8 @@ class WeibullDistributionTest {
     assertTrue(distribution.toString().startsWith("WeibullDistribution["));
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(2.1635084739905746));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(3.2784354158217064));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Double.POSITIVE_INFINITY));
   }
 
   @Test

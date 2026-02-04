@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -51,7 +52,7 @@ class BasisTransformTest {
     int cols = 8;
     RandomGenerator randomGenerator = new Random(4);
     Tensor m = IdentityMatrix.of(rows);
-    Tensor v = Tensors.matrix((i, j) -> RealScalar.of(randomGenerator.nextInt(10)), rows, cols);
+    Tensor v = Tensors.matrix((_, _) -> RealScalar.of(randomGenerator.nextInt(10)), rows, cols);
     Tensor t = BasisTransform.ofForm(m, v);
     Tensor d = t.subtract(Transpose.of(t));
     assertEquals(d, Array.zeros(cols, cols));
@@ -75,13 +76,12 @@ class BasisTransformTest {
     Distribution distribution = BinomialDistribution.of(10, 0.3);
     Tensor matrix = RandomVariate.of(distribution, randomGenerator, n, n);
     Tensor v = RandomVariate.of(distribution, randomGenerator, n, n);
-    if (Scalars.nonZero(Det.of(v))) {
-      Tensor trafo1 = BasisTransform.ofMatrix(matrix, v);
-      ExactTensorQ.require(trafo1);
-      Tensor trafo2 = BasisTransform.of(matrix, 1, v);
-      ExactTensorQ.require(trafo2);
-      assertEquals(trafo1, trafo2);
-    }
+    assumeTrue(Scalars.nonZero(Det.of(v)));
+    Tensor trafo1 = BasisTransform.ofMatrix(matrix, v);
+    ExactTensorQ.require(trafo1);
+    Tensor trafo2 = BasisTransform.of(matrix, 1, v);
+    ExactTensorQ.require(trafo2);
+    assertEquals(trafo1, trafo2);
   }
 
   @Test

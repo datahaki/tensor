@@ -51,13 +51,11 @@ public enum ImageFormat {
    * @param bufferedImage
    * @return tensor encoding the color values of given bufferedImage */
   public static Tensor from(BufferedImage bufferedImage) {
-    switch (bufferedImage.getType()) {
-    case BufferedImage.TYPE_BYTE_GRAY:
-      return fromGrayscale(bufferedImage);
-    default:
-      return Tensors.matrix((y, x) -> ColorFormat.toVector(bufferedImage.getRGB(x, y)), //
-          bufferedImage.getHeight(), bufferedImage.getWidth());
-    }
+    return switch (bufferedImage.getType()) {
+    case BufferedImage.TYPE_BYTE_GRAY -> fromGrayscale(bufferedImage);
+    default -> Tensors.matrix((y, x) -> ColorFormat.toVector(bufferedImage.getRGB(x, y)), //
+        bufferedImage.getHeight(), bufferedImage.getWidth());
+    };
   }
 
   /** @param tensor
@@ -67,24 +65,20 @@ public enum ImageFormat {
   }
 
   /* package */ static BufferedImage _of(Tensor tensor, Extension extension) {
-    return of(tensor, extension.imageType());
+    return of(tensor, extension.colorType());
   }
 
-  /** functionality for export a color image to bmp and jpg format
-   * 
-   * @param tensor
-   * @return image of type BufferedImage.TYPE_BYTE_GRAY or BufferedImage.TYPE_INT_BGR */
-  // public static BufferedImage bgr(Tensor tensor) {
-  // return of(tensor, BufferedImage.TYPE_INT_BGR);
-  // }
   // ---
+  /** @param tensor
+   * @param imageType fallback
+   * @return */
   /* package */ static BufferedImage of(Tensor tensor, int imageType) {
     List<Integer> dims = Dimensions.of(tensor);
     int width = dims.get(1);
     int height = dims.get(0);
-    if (dims.size() == 2)
-      return toTYPE_BYTE_GRAY(tensor, width, height);
-    return toTYPE_INT(tensor, width, height, imageType);
+    return dims.size() == 2 //
+        ? toTYPE_GRAY(tensor, width, height)
+        : toTYPE_COLOR(tensor, width, height, imageType);
   }
 
   /** @param bufferedImage grayscale image with dimensions [width x height]
@@ -93,13 +87,13 @@ public enum ImageFormat {
     WritableRaster writableRaster = bufferedImage.getRaster();
     DataBufferByte dataBufferByte = (DataBufferByte) writableRaster.getDataBuffer();
     ByteBuffer byteBuffer = ByteBuffer.wrap(dataBufferByte.getData());
-    return Tensors.matrix((i, j) -> LOOKUP[byteBuffer.get() & 0xff], //
+    return Tensors.matrix((_, _) -> LOOKUP[byteBuffer.get() & 0xff], //
         bufferedImage.getHeight(), bufferedImage.getWidth());
   }
 
   // helper function, alternative:
   // https://stackoverflow.com/questions/37362753/creating-grayscale-bitmap-from-array-of-0-255-gray-values-in-java
-  static BufferedImage toTYPE_BYTE_GRAY(Tensor tensor, int width, int height) {
+  static BufferedImage toTYPE_GRAY(Tensor tensor, int width, int height) {
     BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
     WritableRaster writableRaster = bufferedImage.getRaster();
     DataBufferByte dataBufferByte = (DataBufferByte) writableRaster.getDataBuffer();
@@ -111,7 +105,7 @@ public enum ImageFormat {
   }
 
   // fast extraction of color information to buffered image
-  private static BufferedImage toTYPE_INT(Tensor tensor, int width, int height, int imageType) {
+  private static BufferedImage toTYPE_COLOR(Tensor tensor, int width, int height, int imageType) {
     BufferedImage bufferedImage = new BufferedImage(width, height, imageType);
     int[] array = Flatten.stream(tensor, 1).mapToInt(ColorFormat::toInt).toArray();
     bufferedImage.setRGB(0, 0, width, height, array, 0, width);

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -138,7 +139,7 @@ class RationalizeTest {
 
   @Test
   void testDenominator() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Distribution distribution = UniformDistribution.of(-0.5, 0.5);
     for (Tensor scalar : RandomVariate.of(distribution, 100)) {
       Scalar max = RealScalar.of(random.nextInt(10_000_000));

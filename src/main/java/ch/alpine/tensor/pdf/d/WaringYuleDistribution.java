@@ -11,9 +11,11 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.num.FindInteger;
+import ch.alpine.tensor.opt.fnd.FindInteger;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Ceiling;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.gam.LogGamma;
@@ -51,9 +53,9 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
     lgp = LogGamma.FUNCTION.apply(alpha.add(beta)).subtract(LogGamma.FUNCTION.apply(beta));
   }
 
-  @Override // from DiscreteDistribution
-  public BigInteger lowerBound() {
-    return BigInteger.ZERO;
+  @Override
+  public Clip support() {
+    return Clips.positive(DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Override // from AbstractDiscreteDistribution
@@ -69,7 +71,6 @@ public class WaringYuleDistribution extends AbstractDiscreteDistribution impleme
 
   @Override
   public Scalar p_lessThan(Scalar x) {
-    // TODO TENSOR IMPL pattern exist somewhere else!?
     return Scalars.lessThan(RealScalar.ZERO, x) //
         ? private_cdf(Ceiling.FUNCTION.apply(x.subtract(RealScalar.ONE)))
         : RealScalar.ZERO;

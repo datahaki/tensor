@@ -47,7 +47,7 @@ class DbscanTest {
     assertEquals(integers.length, points.length());
     Map<Integer, Tensor> map = new HashMap<>();
     IntStream.range(0, integers.length) //
-        .forEach(index -> map.computeIfAbsent(integers[index], i -> Tensors.empty()).append(points.get(index)));
+        .forEach(index -> map.computeIfAbsent(integers[index], _ -> Tensors.empty()).append(points.get(index)));
     // System.out.println(map.size());
   }
 

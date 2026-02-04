@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -15,6 +16,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.KurtosisInterface;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 
@@ -64,6 +67,11 @@ public class LogNormalDistribution extends AbstractContinuousDistribution implem
     this.mu = mu;
     univariateDistribution = (UnivariateDistribution) NormalDistribution.of(mu, sigma);
     variance = univariateDistribution.variance();
+  }
+
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    return Clips.absolute(DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Override // from CDF

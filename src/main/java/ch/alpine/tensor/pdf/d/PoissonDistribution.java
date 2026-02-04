@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.d;
 
 import java.math.BigInteger;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -12,6 +13,8 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.exp.Exp;
 
 /** in Mathematica, the CDF of the Poisson-distribution is expressed as
@@ -57,6 +60,11 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
     build(P_EQUALS_MAX.intValueExact());
   }
 
+  @Override
+  public Clip support() {
+    return Clips.positive(DoubleScalar.POSITIVE_INFINITY);
+  }
+
   @Override // from MeanInterface
   public Scalar mean() {
     return lambda;
@@ -65,11 +73,6 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
   @Override // from VarianceInterface
   public Scalar variance() {
     return lambda;
-  }
-
-  @Override // from DiscreteDistribution
-  public BigInteger lowerBound() {
-    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution

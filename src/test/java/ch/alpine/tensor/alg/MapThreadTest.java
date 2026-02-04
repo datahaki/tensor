@@ -26,19 +26,19 @@ class MapThreadTest {
 
   @Test
   void testEmptyZero() {
-    Tensor result = MapThread.of(l -> ComplexScalar.I, Collections.emptyList(), 0);
+    Tensor result = MapThread.of(_ -> ComplexScalar.I, Collections.emptyList(), 0);
     assertEquals(ComplexScalar.I, result);
   }
 
   @Test
   void testNegFail() {
-    assertThrows(IllegalArgumentException.class, () -> MapThread.of(l -> ComplexScalar.I, Collections.emptyList(), -1));
+    assertThrows(IllegalArgumentException.class, () -> MapThread.of(_ -> ComplexScalar.I, Collections.emptyList(), -1));
   }
 
   @Test
   void testFail() {
     List<Tensor> list = Arrays.asList(HilbertMatrix.of(2, 3), HilbertMatrix.of(3, 3));
-    MapThread.of(l -> ComplexScalar.I, list, 0);
-    assertThrows(Throw.class, () -> MapThread.of(l -> ComplexScalar.I, list, 1));
+    MapThread.of(_ -> ComplexScalar.I, list, 0);
+    assertThrows(Throw.class, () -> MapThread.of(_ -> ComplexScalar.I, list, 1));
   }
 }

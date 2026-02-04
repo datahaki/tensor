@@ -33,7 +33,8 @@ public interface CDF {
   }
 
   /** @param x
-   * @return P(X < x), i.e. probability of random variable X < x */
+   * @return P(X < x), i.e. probability of random variable X < x
+   * @implSpec preferred method for continuous distributions */
   Scalar p_lessThan(Scalar x);
 
   /** For discrete distributions {@link #p_lessEquals(Scalar)} corresponds to

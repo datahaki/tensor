@@ -25,6 +25,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
@@ -83,6 +84,8 @@ class GompertzMakehamDistributionTest {
       assertInstanceOf(DoubleScalar.class, prob);
       assertTrue(FiniteScalarQ.of(prob));
     }
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Quantity.of(Double.POSITIVE_INFINITY, "m")));
   }
 
   @Test

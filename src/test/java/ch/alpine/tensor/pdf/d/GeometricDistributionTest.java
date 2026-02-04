@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf.d;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 
@@ -149,8 +150,8 @@ class GeometricDistributionTest {
     final Scalar p = RationalScalar.of(1, 19);
     GeometricDistribution distribution = (GeometricDistribution) GeometricDistribution.of(p);
     try {
-      PDF.of(distribution).at(Quantity.of(-2, "s")); // for now this returns 0
-      // fail();
+      distribution.at(Quantity.of(-2, "s")); // for now this returns 0
+      fail();
     } catch (Exception exception) {
       // ---
     }

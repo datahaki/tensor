@@ -36,7 +36,7 @@ import ch.alpine.tensor.spa.SparseArray;
 class TraceTest {
   // from wikipedia
   private static Scalar _tr2Formula(Tensor A) {
-    assertTrue(SquareMatrixQ.of(A));
+    assertTrue(SquareMatrixQ.INSTANCE.isMember(A));
     Scalar trA1 = Power.of(Trace.of(A), 2);
     Tensor trA2 = Trace.of(MatrixPower.of(A, 2));
     return trA1.subtract(trA2).divide(RealScalar.of(2));

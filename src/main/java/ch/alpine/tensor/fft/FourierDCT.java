@@ -11,9 +11,11 @@ import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Drop;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Reverse;
-import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.ext.RomanNumeral;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.EqualsReduce;
@@ -62,7 +64,12 @@ public enum FourierDCT implements DiscreteFourierTransform {
       }
       Scalar neg_half = RationalScalar.HALF.negate();
       matrix.append(Tensors.vector(i -> i % 2 == 0 ? RationalScalar.HALF : neg_half, n));
-      return matrix.multiply(scalar);
+      return Transpose.of(matrix.multiply(scalar));
+    }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return this;
     }
   },
   _2 {
@@ -78,7 +85,12 @@ public enum FourierDCT implements DiscreteFourierTransform {
       Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + n));
       return Tensors.matrix((i, j) -> //
-      Cos.FUNCTION.apply(RealScalar.of((i + i + 1) * j).multiply(factor)).multiply(scalar), n, n);
+      Cos.FUNCTION.apply(RealScalar.of((j + j + 1) * i).multiply(factor)).multiply(scalar), n, n);
+    }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return _3;
     }
   },
   _3 {
@@ -95,17 +107,16 @@ public enum FourierDCT implements DiscreteFourierTransform {
       Scalar s2 = Sqrt.FUNCTION.apply(RationalScalar.of(4, n));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + n));
       return Tensors.matrix((i, j) -> //
-      i == 0 ? s1 : Cos.FUNCTION.apply(RealScalar.of(i * (j + j + 1)).multiply(factor)).multiply(s2), n, n);
+      j == 0 ? s1 : Cos.FUNCTION.apply(RealScalar.of(j * (i + i + 1)).multiply(factor)).multiply(s2), n, n);
+    }
+
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return _2;
     }
   },
   /** involutory matrix */
   _4 {
-    @Override
-    public Tensor transform(Tensor vector) {
-      // TODO TENSOR
-      return super.transform(vector);
-    }
-
     @Override
     public Tensor matrix(int n) {
       Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(2, Integers.requirePositive(n)));
@@ -113,14 +124,12 @@ public enum FourierDCT implements DiscreteFourierTransform {
       return Tensors.matrix((i, j) -> //
       Cos.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + j + 1)).multiply(factor)).multiply(scalar), n, n);
     }
-  };
 
-  @Override
-  public Tensor transform(Tensor vector) {
-    /* MATHEMATICA CONVENTION
-     * FourierDCT[vector] == vector . FourierDCTMatrix */
-    return VectorQ.require(vector).dot(matrix(vector.length()));
-  }
+    @Override
+    public DiscreteFourierTransform inverse() {
+      return this;
+    }
+  };
 
   @PackageTestAccess
   static Tensor raw2(Tensor vector) {
@@ -144,5 +153,10 @@ public enum FourierDCT implements DiscreteFourierTransform {
     Tensor tensor = Join.of(vector, Array.same(EqualsReduce.zero(vector), 1), Reverse.of(Drop.head(vector, 1).negate()));
     Tensor result = Fourier.INVERSE.transform(Join.of(tensor, tensor.negate()));
     return Tensors.vector(i -> result.Get(i + i + 1), n);
+  }
+
+  @Override
+  public String toString() {
+    return MathematicaFormat.concise("FourierDCT", RomanNumeral.of(ordinal() + 1));
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca.ply;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
@@ -15,8 +16,34 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.qty.DateTime;
+import ch.alpine.tensor.qty.Quantity;
 
 class HornerSchemeTest {
+  @Test
+  void testHornerDateTime() {
+    Tensor coeffs = Tensors.of(Quantity.of(3, "s"), DateTime.now());
+    HornerScheme hornerScheme = new HornerScheme(coeffs);
+    Scalar result = hornerScheme.apply(RealScalar.of(5));
+    assertInstanceOf(DateTime.class, result);
+  }
+
+  @Test
+  void testHornerDateTime2() {
+    Tensor coeffs = Tensors.of(Quantity.of(-3, ""), DateTime.now());
+    HornerScheme hornerScheme = new HornerScheme(coeffs);
+    Scalar result = hornerScheme.apply(Quantity.of(3, "s"));
+    assertInstanceOf(DateTime.class, result);
+  }
+
+  @Test
+  void testHornerDateTimeConstant() {
+    Tensor coeffs = Tensors.of(DateTime.now());
+    HornerScheme hornerScheme = new HornerScheme(coeffs);
+    Scalar result = hornerScheme.apply(RealScalar.of(5));
+    assertInstanceOf(DateTime.class, result);
+  }
+
   @Test
   void testHorner1() {
     Tensor coeffs = Tensors.vector(-3, 4);

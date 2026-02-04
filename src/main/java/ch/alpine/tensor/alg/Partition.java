@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.chq.ScalarQ;
+import ch.alpine.tensor.ext.Integers;
 
 /** The tensor library implementation is consistent with Mathematica,
  * also when there are insufficient elements:
@@ -52,8 +53,8 @@ public enum Partition {
    * @throws Exception if given tensor is a scalar */
   public static Stream<Tensor> stream(Tensor tensor, int size, int offset) {
     ScalarQ.thenThrow(tensor);
-    if (offset <= 0 || size < offset)
-      throw new IllegalArgumentException("size=" + size + " offset=" + offset);
+    Integers.requirePositive(offset);
+    Integers.requireLessEquals(offset, size);
     return IntStream.iterate(0, index -> index + offset) //
         .limit((tensor.length() + offset - size) / offset) //
         .mapToObj(index -> tensor.extract(index, index + size));

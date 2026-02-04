@@ -13,9 +13,9 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.chq.IntegerQ;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
-import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
 class EvaluatedDiscreteDistributionTest {
@@ -28,7 +28,7 @@ class EvaluatedDiscreteDistributionTest {
       distribution.quantile(RealScalar.of(extreme));
       NavigableMap<Scalar, Scalar> navigableMap = distribution.inverse_cdf();
       Entry<Scalar, Scalar> entry = navigableMap.lastEntry();
-      Chop._12.requireClose(entry.getKey(), RealScalar.ONE);
+      Tolerance.CHOP.requireClose(entry.getKey(), RealScalar.ONE);
       IntegerQ.require(entry.getValue());
     }
   }

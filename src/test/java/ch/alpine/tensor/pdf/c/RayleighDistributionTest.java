@@ -21,9 +21,11 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clips;
 
 class RayleighDistributionTest {
   @Test
@@ -49,6 +51,8 @@ class RayleighDistributionTest {
         InverseCDF.of(distribution).quantile(RealScalar.of(0.7)), //
         RealScalar.of(2.017282349752177));
     assertTrue(distribution.toString().startsWith("RayleighDistribution["));
+    UnivariateDistribution ud = (UnivariateDistribution) distribution;
+    assertEquals(ud.support(), Clips.positive(Double.POSITIVE_INFINITY));
   }
 
   @Test

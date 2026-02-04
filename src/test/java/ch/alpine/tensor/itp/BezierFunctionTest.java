@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,14 @@ class BezierFunctionTest {
     Tensor tensor = scalarTensorFunction.apply(RationalScalar.of(1, 4));
     assertEquals(tensor, Tensors.fromString("{1/2, 5/8}"));
     ExactTensorQ.require(tensor);
+  }
+
+  @Test
+  void testClone() {
+    Tensor control = Tensors.fromString("{{0, 1}, {1, 0}, {2, 1}}");
+    BezierFunction bezierFunction = new BezierFunction(LinearBinaryAverage.INSTANCE, control);
+    Class<? extends BezierFunction> class1 = bezierFunction.getClass();
+    assertFalse(class1.isInstance(Cloneable.class));
   }
 
   @Test

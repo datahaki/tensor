@@ -3,13 +3,18 @@ package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
@@ -39,6 +44,11 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
   private LaplaceDistribution(Scalar mean, Scalar beta) {
     this.mean = mean;
     this.beta = beta;
+  }
+
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    return Clips.positive(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(mean)));
   }
 
   @Override // from PDF

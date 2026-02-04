@@ -157,17 +157,17 @@ class MatrixPowerTest {
     Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
     {
       Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
-      SymmetricMatrixQ.require(sqrt);
+      SymmetricMatrixQ.INSTANCE.requireMember(sqrt);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
     }
     {
       Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 3));
-      SymmetricMatrixQ.require(sqrt);
+      SymmetricMatrixQ.INSTANCE.requireMember(sqrt);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt), matrix);
     }
     {
       Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 4));
-      SymmetricMatrixQ.require(sqrt);
+      SymmetricMatrixQ.INSTANCE.requireMember(sqrt);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt).dot(sqrt), matrix);
     }
   }
@@ -204,7 +204,7 @@ class MatrixPowerTest {
   void testHermitian() {
     Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
     Tensor hermitian = MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
-    SquareMatrixQ.require(hermitian);
+    SquareMatrixQ.INSTANCE.requireMember(hermitian);
   }
 
   @Test
@@ -234,21 +234,22 @@ class MatrixPowerTest {
   @Test
   void testFailZero() {
     Tensor matrix = Array.zeros(2, 3);
-    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, -1));
-    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 0));
-    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 1));
+    assertThrows(Exception.class, () -> MatrixPower.of(matrix, -1));
+    assertThrows(Exception.class, () -> MatrixPower.of(matrix, 0));
+    assertThrows(Exception.class, () -> MatrixPower.of(matrix, 1));
   }
 
   @Test
   void testFailOne() {
     Tensor matrix = HilbertMatrix.of(3, 2);
-    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, -1));
-    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 0));
-    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 1));
+    assertThrows(Exception.class, () -> MatrixPower.of(matrix, -1));
+    assertThrows(Exception.class, () -> MatrixPower.of(matrix, 0));
+    assertThrows(Exception.class, () -> MatrixPower.of(matrix, 1));
   }
 
   @Test
   void testFailAd() {
-    assertThrows(ClassCastException.class, () -> MatrixPower.of(LeviCivitaTensor.of(3), 1));
+    assertThrows(Exception.class, () -> MatrixPower.of(LeviCivitaTensor.of(3), 2));
+    assertThrows(Exception.class, () -> MatrixPower.of(LeviCivitaTensor.of(3), 1));
   }
 }

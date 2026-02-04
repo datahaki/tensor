@@ -10,7 +10,11 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.gam.LogGamma;
@@ -69,6 +73,11 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
     power_pa1 = Power.function(pa.subtract(RealScalar.ONE));
   }
 
+  @Override
+  public Clip support() {
+    return Clips.positive(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(b)));
+  }
+
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     return power_pn.apply(power_an.apply(x.divide(b)).add(RealScalar.ONE));
@@ -102,7 +111,7 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    throw new UnsupportedOperationException();
+    return DoubleScalar.INDETERMINATE;
   }
 
   @Override // from Object

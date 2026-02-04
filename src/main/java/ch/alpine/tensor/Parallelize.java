@@ -5,6 +5,7 @@ import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.jet.Hold;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Parallelize.html">Parallelize</a> */
@@ -29,7 +30,7 @@ public enum Parallelize {
           .parallel() //
           .mapToObj(index -> rhs.get(index).multiply(lhs.Get(index))) //
           .reduce(Tensor::add) //
-          .orElse(RealScalar.ZERO);
+          .orElse(Hold.zero());
     }
     return Tensor.of(lhs.stream().parallel().map(entry -> entry.dot(rhs)));
   }
@@ -43,7 +44,6 @@ public enum Parallelize {
    * @param cols
    * @return (rows x cols)-matrix with (i, j)th-entry == bifunction.apply(i, j) */
   public static Tensor matrix(BiFunction<Integer, Integer, ? extends Tensor> biFunction, int rows, int cols) {
-    // TODO TENSOR check which rows/cols is larger
     return Tensor.of(IntStream.range(0, rows).parallel().mapToObj( //
         i -> Tensor.of(IntStream.range(0, cols).mapToObj(j -> biFunction.apply(i, j)))));
   }

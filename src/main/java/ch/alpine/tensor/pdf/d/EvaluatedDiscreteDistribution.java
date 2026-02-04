@@ -47,7 +47,8 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
    * @param upperBound greatest integer n for which 0 < p(n), i.e. upper bound is inclusive */
   protected final void build(int upperBound) {
     Scalar cumprob = RealScalar.ZERO;
-    for (int sample = lowerBound().intValueExact(); sample < upperBound; ++sample) {
+    int lo = Scalars.intValueExact(support().min());
+    for (int sample = lo; sample < upperBound; ++sample) {
       Scalar prob = p_equals(BigInteger.valueOf(sample));
       if (Scalars.nonZero(prob)) {
         cumprob = cumprob.add(prob);
@@ -67,7 +68,7 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
    * 
    * @param chop */
   protected final void build(Chop chop) {
-    BigInteger upperBound = lowerBound();
+    BigInteger upperBound = Scalars.bigIntegerValueExact(support().min());
     Scalar cumprob = RealScalar.ZERO;
     while (true) {
       Scalar prob = p_equals(upperBound);

@@ -12,6 +12,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.KurtosisInterface;
 import ch.alpine.tensor.red.Total;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
 /** inspired by
@@ -58,6 +59,11 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
     build(n);
   }
 
+  @Override // UnivariateDistribution
+  public Clip support() {
+    return Clips.positive(RealScalar.of(n));
+  }
+
   @Override // from MeanInterface
   public Scalar mean() {
     return RealScalar.of(n).multiply(p);
@@ -74,11 +80,6 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
     Scalar num = RealScalar.ONE.subtract(RealScalar.of(6).multiply(fac));
     Scalar den = RealScalar.of(n).multiply(fac);
     return num.divide(den).add(RealScalar.of(3));
-  }
-
-  @Override // from DiscreteDistribution
-  public BigInteger lowerBound() {
-    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution

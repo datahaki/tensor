@@ -28,7 +28,7 @@ public class TruncatedDistribution extends AbstractContinuousDistribution implem
    * @throws Exception if either parameter is null
    * @throws if CDF of given distribution is not monotonous over given interval */
   public static Distribution of(Distribution distribution, Clip clip) {
-    RandomVariateInterface rvin = (RandomVariateInterface) Objects.requireNonNull(distribution);
+    Objects.requireNonNull(distribution);
     if (Scalars.isZero(clip.width()))
       return DiracDeltaDistribution.of(clip.min());
     if (distribution instanceof UnivariateDistribution univariateDistribution) {
@@ -39,7 +39,7 @@ public class TruncatedDistribution extends AbstractContinuousDistribution implem
         throw new IllegalArgumentException();
       return new TruncatedDistribution(univariateDistribution, clip, clip_cdf);
     }
-    return new RV_S(rvin, clip);
+    return new RV_S(distribution, clip);
   }
 
   // ---
@@ -52,6 +52,11 @@ public class TruncatedDistribution extends AbstractContinuousDistribution implem
     this.univariateDistribution = univariateDistribution;
     this.clip = clip;
     this.clip_cdf = clip_cdf;
+  }
+
+  @Override
+  public Clip support() {
+    return clip;
   }
 
   @Override // from PDF
@@ -92,10 +97,10 @@ public class TruncatedDistribution extends AbstractContinuousDistribution implem
     return clip_cdf;
   }
 
-  private record RV_S(RandomVariateInterface randomVariateInterface, Clip clip) implements Distribution, RandomVariateInterface, Serializable {
-    @Override // from RandomVariateInterface
+  private record RV_S(Distribution distribution, Clip clip) implements Distribution, Serializable {
+    @Override // from Distribution
     public Scalar randomVariate(RandomGenerator randomGenerator) {
-      return Stream.generate(() -> randomVariateInterface.randomVariate(randomGenerator)) //
+      return Stream.generate(() -> distribution.randomVariate(randomGenerator)) //
           .limit(MAX_ITERATIONS) //
           .filter(clip::isInside) //
           .findFirst() //

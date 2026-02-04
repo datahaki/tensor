@@ -13,8 +13,11 @@ import org.junit.jupiter.api.io.TempDir;
 import ch.alpine.tensor.alg.Array;
 
 class AnimationWriterTest {
+  @TempDir
+  File tempDir;
+
   @Test
-  void testColor(@TempDir File tempDir) throws Exception {
+  void testColor() throws Exception {
     File file = new File(tempDir, "file.gif");
     try (AnimationWriter animationWriter = new GifAnimationWriter(file, 100, TimeUnit.MILLISECONDS)) {
       animationWriter.write(Array.zeros(3, 4));
@@ -25,7 +28,7 @@ class AnimationWriterTest {
 
   @Test
   void testFailExtension() {
-    try (AnimationWriter animationWriter = new GifAnimationWriter(null, 100, TimeUnit.MILLISECONDS)) { // extension unknown
+    try (AnimationWriter _ = new GifAnimationWriter(null, 100, TimeUnit.MILLISECONDS)) { // extension unknown
       fail();
     } catch (Exception exception) {
       // ---

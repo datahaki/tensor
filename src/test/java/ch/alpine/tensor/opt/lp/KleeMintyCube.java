@@ -49,6 +49,6 @@ import ch.alpine.tensor.sca.pow.Power;
         Tensors.matrix(KleeMintyCube::coefficient, n, n), //
         Tensors.vector(i -> Power.of(5, i + 1), n), //
         Variables.NON_NEGATIVE);
-    x = Tensors.vector(i -> i < n - 1 ? RealScalar.ZERO : Power.of(5, n), n);
+    x = Tensors.vector(i -> i < n - 1 ? RealScalar.ZERO : Power.of(5, n), n).unmodifiable();
   }
 }

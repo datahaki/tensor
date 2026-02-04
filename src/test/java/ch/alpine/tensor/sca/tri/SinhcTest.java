@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -30,9 +32,10 @@ class SinhcTest {
     assertEquals(Sinhc.FUNCTION.apply(eps), RealScalar.ONE);
   }
 
-  @Test
-  void testEps() {
-    Scalar eps = DoubleScalar.of(1e-12);
+  @ParameterizedTest
+  @ValueSource(doubles = { 1e-12, 1e-20, 1e-30, 1e-50 })
+  void testEps(double angle) {
+    Scalar eps = DoubleScalar.of(angle);
     assertEquals(Sinhc.FUNCTION.apply(eps), RealScalar.ONE);
   }
 

@@ -18,6 +18,12 @@ import ch.alpine.tensor.num.Pi;
 
 class SubsetsTest {
   @Test
+  void testOffDiagonal() {
+    Tensor vector = Tensors.vector(0, 1, 2, 3, 4);
+    assertEquals(Subsets.of(vector, 2), Tensors.fromString("{{0, 1}, {0, 2}, {0, 3}, {0, 4}, {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}}"));
+  }
+
+  @Test
   void testCardinality() {
     Tensor vector = Tensors.vector(3, 4, 5, 6);
     for (int k = 0; k <= vector.length(); ++k) {

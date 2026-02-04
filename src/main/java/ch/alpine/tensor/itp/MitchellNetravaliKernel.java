@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
  * Reference:
  * https://en.wikipedia.org/wiki/Mitchell%E2%80%93Netravali_filters */
 public class MitchellNetravaliKernel implements ScalarUnaryOperator {
-  private static final ScalarUnaryOperator STANDARD = of(RationalScalar.of(1, 3), RationalScalar.of(1, 3));
+  private static final ScalarUnaryOperator STANDARD = of(RationalScalar.THIRD, RationalScalar.THIRD);
 
   /** @param b typically inside unit interval
    * @param c typically inside unit interval

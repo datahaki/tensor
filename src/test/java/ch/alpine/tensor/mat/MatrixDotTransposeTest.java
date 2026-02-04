@@ -4,6 +4,8 @@ package ch.alpine.tensor.mat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -12,30 +14,34 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 
 class MatrixDotTransposeTest {
-  @Test
-  void testSimple() {
-    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testSimple(Distribution distribution) {
+    Tensor matrix = RandomVariate.of(distribution, 3, 5);
     Tensor tensor = Dot.of(matrix, Transpose.of(matrix));
     Tensor result = MatrixDotTranspose.of(matrix, matrix);
     Tolerance.CHOP.requireClose(tensor, result);
   }
 
-  @Test
-  void testTwo() {
-    Tensor a = RandomVariate.of(NormalDistribution.standard(), 3, 5);
-    Tensor b = RandomVariate.of(NormalDistribution.standard(), 3, 5);
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testTwo(Distribution distribution) {
+    Tensor a = RandomVariate.of(distribution, 3, 5);
+    Tensor b = RandomVariate.of(distribution, 3, 5);
     Tensor tensor = Dot.of(a, Transpose.of(b));
     Tensor result = MatrixDotTranspose.of(a, b);
     Tolerance.CHOP.requireClose(tensor, result);
   }
 
-  @Test
-  void testRank3() {
-    Tensor a = RandomVariate.of(NormalDistribution.standard(), 4, 3);
+  @ParameterizedTest
+  @MethodSource(value = "test.TestDistributions#distributions")
+  void testRank3(Distribution distribution) {
+    Tensor a = RandomVariate.of(distribution, 4, 3);
     Tensor b = LeviCivitaTensor.of(3);
     Tensor tensor = Dot.of(a, Transpose.of(b));
     Tensor result = MatrixDotTranspose.of(a, b);

@@ -2,7 +2,7 @@
 package ch.alpine.tensor;
 
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.lie.Quaternion;
+import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 import ch.alpine.tensor.mat.ex.MatrixPower;
 import ch.alpine.tensor.mat.pi.PseudoInverse;

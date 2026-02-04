@@ -11,22 +11,24 @@ import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.num.BinaryPower;
-import ch.alpine.tensor.num.ScalarProduct;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.ExpInterface;
 import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Cosh;
 import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
+import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** @implSpec
  * This class is immutable and thread-safe. */
 /* package */ class ComplexScalarImpl extends MultiplexScalar implements ComplexScalar, //
-    Serializable {
-  private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
+    SqrtInterface, ExpInterface, TrigonometryInterface, Serializable {
+  private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarGroups.MUL);
 
   /** creator with package visibility
    * 
@@ -105,7 +107,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
 
   @Override // from Scalar
   public Scalar one() {
-    return re.one();
+    return re.one().multiply(im.one());
   }
 
   // ---
@@ -113,9 +115,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof ComplexEmbedding z)
       return of(re.add(z.real()), im.add(z.imag()));
-    if (scalar instanceof MultiplexScalar)
-      return scalar.add(this);
-    throw new Throw(this, scalar);
+    return scalar.add(this);
   }
 
   // ---
@@ -162,7 +162,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
 
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
-    if (ExactScalarQ.of(this)) {
+    if (ExactScalarQ.of(this) && exponent instanceof RealScalar) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
         return BINARY_POWER.raise(this, optional.orElseThrow());

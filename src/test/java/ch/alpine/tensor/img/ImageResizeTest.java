@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Dimension;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +13,11 @@ import java.util.Arrays;
 import java.util.NavigableMap;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
@@ -30,10 +34,8 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.red.Tally;
+import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Clip;
-import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Sign;
 
 class ImageResizeTest {
   @Test
@@ -62,17 +64,16 @@ class ImageResizeTest {
     assertEquals(Dimensions.of(resize), Arrays.asList(60, 40, 4));
   }
 
-  @Test
-  void testBufferedImageColorNoResize() {
+  @ParameterizedTest
+  @ValueSource(ints = { AffineTransformOp.TYPE_NEAREST_NEIGHBOR, AffineTransformOp.TYPE_BILINEAR, AffineTransformOp.TYPE_BICUBIC })
+  void testBufferedImageColorNoResize(int type) {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/rgba15x33.png");
-    BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight());
+    BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight(), type);
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);
-    Tensor diff = t1.subtract(t2);
+    Tensor diff = t1.subtract(t2).map(Abs.FUNCTION);
     NavigableMap<Scalar, Long> navigableMap = Tally.sorted(Flatten.scalars(diff));
-    Clip clip = Clips.absolute(25);
-    clip.requireInside(navigableMap.firstKey());
-    clip.requireInside(navigableMap.lastKey());
+    assertEquals(navigableMap.size(), 1);
   }
 
   @Test
@@ -90,30 +91,31 @@ class ImageResizeTest {
     assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, Pi.VALUE.negate()));
   }
 
-  @Test
-  void testBufferedImage() {
+  @ParameterizedTest
+  @ValueSource(ints = { AffineTransformOp.TYPE_NEAREST_NEIGHBOR, AffineTransformOp.TYPE_BILINEAR, AffineTransformOp.TYPE_BICUBIC })
+  void testBufferedImage(int type) {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
-    BufferedImage bufferedImage = ImageResize.of(original, 12, 3);
+    BufferedImage bufferedImage = ImageResize.of(original, 12, 3, type);
     assertEquals(bufferedImage.getWidth(), 12);
     assertEquals(bufferedImage.getHeight(), 3);
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_BYTE_GRAY);
   }
 
-  @Test
-  void testBufferedImageGrayscaleNoResize() {
+  @ParameterizedTest
+  @ValueSource(ints = { AffineTransformOp.TYPE_NEAREST_NEIGHBOR, AffineTransformOp.TYPE_BILINEAR, AffineTransformOp.TYPE_BICUBIC })
+  void testBufferedImageGrayscaleNoResize(int type) {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
-    BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight());
+    BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight(), type);
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);
     Tensor diff = t1.subtract(t2);
-    Scalar norm = Vector1Norm.of(Flatten.scalars(diff)); // 812636
-    Sign.requirePositiveOrZero(norm);
-    // System.out.println(norm);
+    Scalar norm = Vector1Norm.of(Flatten.scalars(diff));
+    Scalars.requireZero(norm);
   }
 
   @Test
   void testImageResizeGray() {
-    Tensor tensor = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 10, 20);
+    Tensor tensor = RandomVariate.of(DiscreteUniformDistribution.forArray(256), 10, 20);
     Tensor resize = ImageResize.of(tensor, new Dimension(50, 20));
     assertEquals(Dimensions.of(resize), Arrays.asList(20, 50));
   }

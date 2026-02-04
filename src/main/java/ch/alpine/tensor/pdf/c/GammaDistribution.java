@@ -1,17 +1,16 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
-import java.io.Serializable;
+import java.util.OptionalInt;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.MeanInterface;
-import ch.alpine.tensor.pdf.PDF;
-import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.gam.LogGamma;
@@ -25,35 +24,37 @@ import ch.alpine.tensor.sca.pow.Power;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/GammaDistribution.html">GammaDistribution</a> */
-public class GammaDistribution implements Distribution, //
-    MeanInterface, PDF, VarianceInterface, Serializable {
-  /** @param alpha positive real
-   * @param beta positive real
+public class GammaDistribution extends Gamma1Distribution {
+  /** @param alpha shape positive real
+   * @param beta scale positive real
    * @return GammaDistribution[alpha, beta] */
   public static Distribution of(Scalar alpha, Scalar beta) {
     if (Scalars.lessThan(RealScalar.ZERO, alpha) && //
         Scalars.lessThan(RealScalar.ZERO, beta)) {
-      if (alpha.equals(RealScalar.ONE))
-        return ExponentialDistribution.of(beta.reciprocal());
+      OptionalInt optionalInt = Scalars.optionalInt(alpha);
+      if (optionalInt.isPresent())
+        return ErlangDistribution.of(optionalInt.orElseThrow(), beta.reciprocal());
+      if (beta.equals(RealScalar.ONE))
+        return new Gamma1Distribution(alpha);
       return new GammaDistribution(alpha, beta);
     }
     throw new Throw(alpha, beta);
   }
 
-  /** @param alpha positive
-   * @param beta positive
+  /** @param alpha shape positive
+   * @param beta scale positive
    * @return GammaDistribution[alpha, beta] */
   public static Distribution of(Number alpha, Number beta) {
     return of(RealScalar.of(alpha), RealScalar.of(beta));
   }
 
   // ---
-  private final Scalar alpha;
-  private final Scalar beta;
+  private final Scalar beta; // scale
   private final Scalar factor;
 
-  private GammaDistribution(Scalar alpha, Scalar beta) {
-    this.alpha = alpha;
+  @PackageTestAccess
+  GammaDistribution(Scalar alpha, Scalar beta) {
+    super(alpha);
     this.beta = beta;
     factor = Exp.FUNCTION.apply(Log.FUNCTION.apply(beta).multiply(alpha).add(LogGamma.FUNCTION.apply(alpha)).negate());
   }
@@ -67,14 +68,24 @@ public class GammaDistribution implements Distribution, //
   }
   // CDF requires GammaRegularized
 
+  @Override // from Distribution
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return super.randomVariate(randomGenerator).multiply(beta);
+  }
+
   @Override // from MeanInterface
   public Scalar mean() {
-    return alpha.multiply(beta);
+    return super.mean().multiply(beta);
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return alpha.multiply(beta).multiply(beta);
+    return super.variance().multiply(beta).multiply(beta);
+  }
+
+  @Override // from StandardDeviationInterface
+  public Scalar standardDeviation() {
+    return super.standardDeviation().multiply(beta);
   }
 
   @Override // from Object

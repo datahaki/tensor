@@ -13,6 +13,7 @@ import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.N;
 
@@ -35,6 +36,11 @@ public class DiracDeltaDistribution implements UnivariateDistribution, CentralMo
     infty = N.DOUBLE.apply(value.zero()).reciprocal();
   }
 
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    return Clips.interval(value, value);
+  }
+
   @Override // from PDF
   public Scalar at(Scalar x) {
     return 0 == Scalars.compare(x, value) //
@@ -52,7 +58,7 @@ public class DiracDeltaDistribution implements UnivariateDistribution, CentralMo
     return Boole.of(Scalars.lessEquals(value, x));
   }
 
-  @Override // from RandomVariateInterface
+  @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     return value;
   }

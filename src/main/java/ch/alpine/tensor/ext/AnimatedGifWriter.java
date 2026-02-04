@@ -24,7 +24,6 @@ public class AnimatedGifWriter implements AutoCloseable {
    * @param loop whether for animation to loop indefinitely
    * @return
    * @throws Exception */
-  @SuppressWarnings("resource")
   public static AnimatedGifWriter of(File file, int period, boolean loop) throws IOException {
     // deletion of existing file is mandatory:
     // if the gif output is smaller than the existing file

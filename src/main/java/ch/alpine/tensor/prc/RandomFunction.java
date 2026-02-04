@@ -2,9 +2,9 @@
 package ch.alpine.tensor.prc;
 
 import java.io.Serializable;
-import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
@@ -21,8 +21,6 @@ import ch.alpine.tensor.tmp.TimeSeries;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/RandomFunction.html">RandomFunction</a> */
 public class RandomFunction implements Serializable {
-  private static final RandomGenerator RANDOM_GENERATOR = new SecureRandom();
-
   /** @param randomProcess non null
    * @return */
   public static RandomFunction of(RandomProcess randomProcess) {
@@ -41,7 +39,7 @@ public class RandomFunction implements Serializable {
   /** @param time
    * @return */
   public Scalar evaluate(Scalar time) {
-    return evaluate(RANDOM_GENERATOR, time);
+    return evaluate(ThreadLocalRandom.current(), time);
   }
 
   /** @param random

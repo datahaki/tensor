@@ -1,16 +1,18 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.DecimalScalar;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -35,8 +37,8 @@ class WindowFunctionsTest {
 
   @ParameterizedTest
   @EnumSource
-  void testSerializable(WindowFunctions windowFunctions) throws ClassNotFoundException, IOException {
-    Serialization.copy(windowFunctions.get());
+  void testSerializable(WindowFunctions windowFunctions) {
+    assertDoesNotThrow(() -> Serialization.copy(windowFunctions.get()));
   }
 
   @ParameterizedTest
@@ -47,6 +49,21 @@ class WindowFunctionsTest {
       Scalar x = RandomVariate.of(distribution);
       Chop._15.requireClose(windowFunctions.get().apply(x), windowFunctions.get().apply(x.negate()));
     }
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testDecimal(WindowFunctions windowFunctions) {
+    Distribution distribution = UniformDistribution.unit(30);
+    Scalar x = RandomVariate.of(distribution).subtract(RationalScalar.HALF);
+    assertInstanceOf(DecimalScalar.class, x);
+    Scalar scalar = windowFunctions.get().apply(x);
+    // if (scalar instanceof DoubleScalar) {
+    // IO.println(windowFunctions);
+    // IO.println(x);
+    // IO.println(scalar);
+    // }
+    assertInstanceOf(RealScalar.class, scalar);
   }
 
   @ParameterizedTest

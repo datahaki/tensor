@@ -30,7 +30,7 @@ public enum ArrayReshape {
   public static Tensor of(Stream<? extends Tensor> stream, List<Integer> size) {
     Tensor tensor = Tensor.of(stream);
     int length = tensor.length();
-    int numel = size.get(0);
+    int numel = size.getFirst();
     for (int index = size.size() - 1; 0 < index; --index) {
       int count = size.get(index);
       numel *= count;

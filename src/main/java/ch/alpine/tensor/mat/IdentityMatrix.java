@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
@@ -64,5 +65,17 @@ public enum IdentityMatrix {
     return Tensors.matrix((i, j) -> i.equals(j) //
         ? matrix.Get(i, j).one()
         : matrix.Get(i, j).one().zero(), n, n);
+  }
+
+  public static Tensor inplaceAdd(Tensor matrix) {
+    int n = matrix.length();
+    IntStream.range(0, n).forEach(i -> matrix.set(s -> s.add(Scalar.class.cast(s).one()), i, i));
+    return matrix;
+  }
+
+  public static Tensor inplaceSub(Tensor matrix) {
+    int n = matrix.length();
+    IntStream.range(0, n).forEach(i -> matrix.set(s -> s.subtract(Scalar.class.cast(s).one()), i, i));
+    return matrix;
   }
 }

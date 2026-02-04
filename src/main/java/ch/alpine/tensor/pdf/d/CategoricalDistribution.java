@@ -2,17 +2,19 @@
 package ch.alpine.tensor.pdf.d;
 
 import java.math.BigInteger;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
 /** Tensor-lib:CategoricalDistribution corresponds to the special case of
@@ -65,11 +67,16 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
     build(accumulate.length() - 1);
   }
 
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    return Clips.positive(pdf_length.subtract(BigInteger.ONE));
+  }
+
   @Override // from MeanInterface
   public Scalar mean() {
-    AtomicInteger atomicInteger = new AtomicInteger();
+    Int i = new Int();
     return pdf.stream() //
-        .map(tensor -> tensor.multiply(RealScalar.of(atomicInteger.getAndIncrement()))) //
+        .map(tensor -> tensor.multiply(RealScalar.of(i.getAndIncrement()))) //
         .reduce(Tensor::add) //
         .map(Scalar.class::cast) //
         .orElseThrow();
@@ -78,11 +85,6 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
   @Override // from VarianceInterface
   public Scalar variance() {
     return centralMoment(2);
-  }
-
-  @Override // from DiscreteDistribution
-  public BigInteger lowerBound() {
-    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution

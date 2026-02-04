@@ -43,9 +43,9 @@ public class ArrayPad {
   private Tensor iterate(Tensor tensor, List<Integer> dimensions, List<Integer> ante, List<Integer> post) {
     int rank = dimensions.size();
     List<Integer> copy = new ArrayList<>(dimensions);
-    copy.set(0, ante.get(0));
+    copy.set(0, ante.getFirst());
     Tensor a = Array.same(scalar, copy);
-    copy.set(0, post.get(0));
+    copy.set(0, post.getFirst());
     Tensor b = Array.same(scalar, copy);
     if (1 == rank)
       return Join.of(0, a, tensor, b);

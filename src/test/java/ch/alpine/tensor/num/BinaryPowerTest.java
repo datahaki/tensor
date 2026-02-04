@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.BigInteger;
-
 import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.api.GroupInterface;
 
 class BinaryPowerTest {
   @Test
@@ -31,13 +31,13 @@ class BinaryPowerTest {
       }
     };
     BinaryPower<Integer> binaryPower = new BinaryPower<>(groupInterface);
-    assertEquals(binaryPower.raise(5, BigInteger.valueOf(0)), (Integer) 1);
-    assertEquals(binaryPower.raise(5, BigInteger.valueOf(1)), (Integer) 5);
-    assertEquals(binaryPower.raise(5, BigInteger.valueOf(2)), (Integer) 25);
-    assertEquals(binaryPower.raise(5, BigInteger.valueOf(3)), (Integer) 125);
-    assertEquals(binaryPower.raise(5, BigInteger.valueOf(4)), (Integer) 625);
-    assertEquals(binaryPower.raise(5, BigInteger.valueOf(5)), (Integer) 3125);
-    assertEquals(binaryPower.raise(1, BigInteger.valueOf(-3)), (Integer) 1);
+    assertEquals(binaryPower.raise(5, 0), (Integer) 1);
+    assertEquals(binaryPower.raise(5, 1), (Integer) 5);
+    assertEquals(binaryPower.raise(5, 2), (Integer) 25);
+    assertEquals(binaryPower.raise(5, 3), (Integer) 125);
+    assertEquals(binaryPower.raise(5, 4), (Integer) 625);
+    assertEquals(binaryPower.raise(5, 5), (Integer) 3125);
+    assertEquals(binaryPower.raise(1, -3), (Integer) 1);
     String string = binaryPower.toString();
     assertTrue(string.startsWith("BinaryPower"));
   }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.d;
 
 import java.math.BigInteger;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -10,6 +11,8 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 
 /** Quote from Mathematica:
  * "A hypergeometric distribution gives the distribution of the number of successes
@@ -51,6 +54,11 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
     build(Math.min(N, n));
   }
 
+  @Override
+  public Clip support() {
+    return Clips.positive(DoubleScalar.POSITIVE_INFINITY);
+  }
+
   @Override // from MeanInterface
   public Scalar mean() {
     return RealScalar.of(N).multiply(RationalScalar.of(n, m_n));
@@ -66,11 +74,6 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
     // ( n )
     Scalar rd4 = RationalScalar.of(n, 1);
     return rd1.multiply(rd2).multiply(rd3).multiply(rd4);
-  }
-
-  @Override // from DiscreteDistribution
-  public BigInteger lowerBound() {
-    return BigInteger.ZERO;
   }
 
   @Override // from AbstractDiscreteDistribution

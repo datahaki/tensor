@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAmount;
 import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
@@ -126,26 +127,68 @@ public class DateTime extends AbstractScalar implements //
     return new DateTime(LocalDateTime.of(localDate, localTime));
   }
 
+  /** @param year
+   * @param month
+   * @param dayOfMonth
+   * @param hour
+   * @param minute
+   * @return */
   public static DateTime of(int year, Month month, int dayOfMonth, int hour, int minute) {
     return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
   }
 
+  /** @param year
+   * @param month
+   * @param dayOfMonth
+   * @param hour
+   * @param minute
+   * @param second
+   * @return */
   public static DateTime of(int year, Month month, int dayOfMonth, int hour, int minute, int second) {
     return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
   }
 
+  /** @param year
+   * @param month
+   * @param dayOfMonth
+   * @param hour
+   * @param minute
+   * @param second
+   * @param nanoOfSecond
+   * @return */
   public static DateTime of(int year, Month month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
     return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
   }
 
+  /** @param year
+   * @param month
+   * @param dayOfMonth
+   * @param hour
+   * @param minute
+   * @return */
   public static DateTime of(int year, int month, int dayOfMonth, int hour, int minute) {
     return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute));
   }
 
+  /** @param year
+   * @param month
+   * @param dayOfMonth
+   * @param hour
+   * @param minute
+   * @param second
+   * @return */
   public static DateTime of(int year, int month, int dayOfMonth, int hour, int minute, int second) {
     return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second));
   }
 
+  /** @param year
+   * @param month
+   * @param dayOfMonth
+   * @param hour
+   * @param minute
+   * @param second
+   * @param nanoOfSecond
+   * @return */
   public static DateTime of(int year, int month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond) {
     return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
   }
@@ -162,22 +205,27 @@ public class DateTime extends AbstractScalar implements //
    * @param scalar with time based SI-unit, for instance "s", "h", "days", "wk", "mo", "yr", etc.
    * @param zoneOffset
    * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to
-   * given zoneOffset */
+   * given zoneOffset
+   * @see LocalDateTime#ofEpochSecond(long, int, ZoneOffset) */
   public static DateTime ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
     Scalar seconds = MAGNITUDE_S.apply(scalar);
     Scalar floor = Floor.FUNCTION.apply(seconds);
     Scalar nanos = seconds.subtract(floor).multiply(NANOS);
     return new DateTime(LocalDateTime.ofEpochSecond( //
-        floor.number().longValue(), //
+        Scalars.longValueExact(floor), //
         nanos.number().intValue(), //
         zoneOffset));
   }
 
+  /** @param scalar
+   * @return */
   public static Month month(Scalar scalar) {
     DateTime dateTime = (DateTime) scalar;
     return dateTime.month();
   }
 
+  /** @param scalar
+   * @return */
   public static DayOfWeek dayOfWeek(Scalar scalar) {
     DateTime dateTime = (DateTime) scalar;
     return dateTime.dayOfWeek();
@@ -291,6 +339,12 @@ public class DateTime extends AbstractScalar implements //
     return new DateTime(localDateTime.plusDays(days));
   }
 
+  /** @param temporalAmount
+   * @return */
+  public DateTime plus(TemporalAmount temporalAmount) {
+    return new DateTime(localDateTime.plus(temporalAmount));
+  }
+
   @Override // from RoundingInterface
   public DateTime ceiling() {
     return 0 == localDateTime.getNano() //
@@ -325,6 +379,13 @@ public class DateTime extends AbstractScalar implements //
 
   @Override // from AbstractScalar
   public Scalar multiply(Scalar scalar) {
+    if (scalar.equals(one()))
+      return this;
+    throw new Throw(this, scalar);
+  }
+
+  @Override
+  public Scalar divide(Scalar scalar) {
     if (scalar.equals(one()))
       return this;
     throw new Throw(this, scalar);

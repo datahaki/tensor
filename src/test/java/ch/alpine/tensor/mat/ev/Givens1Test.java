@@ -14,9 +14,7 @@ class Givens1Test {
   void testSimple() {
     Givens1 givens = new Givens1(4, RealScalar.of(0.3), 1, 2);
     Tensor matrix = givens.matrix();
-    // System.out.println(Pretty.of(matrix.map(Round._2)));
     Tensor invers = Inverse.of(matrix);
     Tolerance.CHOP.requireClose(invers, ConjugateTranspose.of(matrix));
-    // Tolerance.CHOP.requireClose(invers, new Givens1(4, RealScalar.of(-0.3), 1, 2).matrix());
   }
 }

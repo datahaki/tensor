@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -103,12 +103,10 @@ class HungarianAlgorithmTest {
     assertTrue(hungarianAlgorithm.iterations() <= Math.min(list.get(0), list.get(1)));
   }
 
-  private static final Random RANDOM = new Random();
-
   @Test
   void testRandom() throws ClassNotFoundException, IOException {
     Distribution distribution = UniformDistribution.unit();
-    int row = 40 + RANDOM.nextInt(25);
+    int row = 40 + ThreadLocalRandom.current().nextInt(25);
     _check3(RandomVariate.of(distribution, row, 53));
     _check3(RandomVariate.of(distribution, 53, row));
   }
@@ -116,7 +114,7 @@ class HungarianAlgorithmTest {
   @Test
   void testDiscreteRandom() throws ClassNotFoundException, IOException {
     Distribution distribution = DiscreteUniformDistribution.of(-20, 100);
-    int row = 40 + RANDOM.nextInt(25);
+    int row = 40 + ThreadLocalRandom.current().nextInt(25);
     _check3(RandomVariate.of(distribution, row, 53));
     _check3(RandomVariate.of(distribution, 53, row));
   }

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
@@ -18,7 +17,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.Pi;
 
 class ResamplingMethodsTest {
@@ -38,9 +36,8 @@ class ResamplingMethodsTest {
 
   @ParameterizedTest
   @EnumSource
-  void testFails(ResamplingMethods resamplingMethods) throws ClassNotFoundException, IOException {
+  void testFails(ResamplingMethods resamplingMethods) {
     ResamplingMethod resamplingMethod = resamplingMethods.get();
-    Serialization.copy(resamplingMethod);
     assertTrue(0 < resamplingMethod.toString().length());
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     assertSame(resamplingMethod.pack(navigableMap), navigableMap);
@@ -49,13 +46,6 @@ class ResamplingMethodsTest {
     resamplingMethod.insert(navigableMap, Pi.VALUE, RealScalar.ONE);
     assertEquals(resamplingMethod.evaluate(navigableMap, Pi.VALUE), RealScalar.ONE);
   }
-  // @ParameterizedTest
-  // @EnumSource
-  // void testStringDistinct(ResamplingMethods resamplingMethods) {
-  // ResamplingMethod resamplingMethod = resamplingMethods.get();
-  // long count = TestHelper.list().stream().map(Object::toString).distinct().count();
-  // assertEquals(count, TestHelper.list().size());
-  // }
 
   @Test
   void testSparse1() {

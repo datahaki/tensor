@@ -7,16 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.sca.Chop;
 
 class TensorDotTest {
   @Test
   void testDotEmpty() {
     Tensor a = Tensors.empty().dot(Tensors.empty());
     assertInstanceOf(Scalar.class, a);
-    assertEquals(a, RealScalar.ZERO);
-    assertEquals(a, DoubleScalar.of(0));
-    assertEquals(RealScalar.ZERO, a);
-    assertEquals(DoubleScalar.of(0), a);
+    Chop.NONE.requireClose(a, RealScalar.ZERO);
+    Chop.NONE.requireClose(a, DoubleScalar.of(0));
+    Chop.NONE.requireClose(RealScalar.ZERO, a);
+    Chop.NONE.requireClose(DoubleScalar.of(0), a);
   }
 
   @Test
@@ -24,14 +25,14 @@ class TensorDotTest {
     Tensor tensor = Tensors.of(Tensors.empty());
     Tensor sca = tensor.dot(Tensors.empty());
     ExactTensorQ.require(sca);
-    assertEquals(sca, Tensors.vectorDouble(0));
+    Chop.NONE.requireClose(sca, Tensors.vectorDouble(0));
   }
 
   @Test
   void testDot3() {
     Tensor tensor = Tensors.of(Tensors.empty(), Tensors.empty());
     Tensor sca = tensor.dot(Tensors.empty());
-    assertEquals(sca, Tensors.vectorLong(0, 0));
+    Chop.NONE.requireClose(sca, Tensors.vectorLong(0, 0));
   }
 
   @Test

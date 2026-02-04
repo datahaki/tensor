@@ -2,7 +2,10 @@
 package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
@@ -20,5 +23,11 @@ public enum Im implements ScalarUnaryOperator {
     if (scalar instanceof ComplexEmbedding complexEmbedding)
       return complexEmbedding.imag();
     throw new Throw(scalar);
+  }
+
+  /** @param tensor
+   * @return if all entries of given tensor have imaginary part equals 0 */
+  public static boolean allZero(Tensor tensor) {
+    return Flatten.scalars(tensor).map(Im.FUNCTION).allMatch(Scalars::isZero);
   }
 }

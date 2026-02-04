@@ -24,7 +24,7 @@ class HarmonicMeanTest {
 
   @Test
   void testEmpty() {
-    assertThrows(ArithmeticException.class, () -> HarmonicMean.ofVector(Tensors.empty()));
+    assertThrows(Exception.class, () -> HarmonicMean.ofVector(Tensors.empty()));
   }
 
   @Test

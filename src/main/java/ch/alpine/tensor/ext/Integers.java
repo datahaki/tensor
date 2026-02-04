@@ -67,6 +67,30 @@ public enum Integers {
   }
 
   /** @param value
+   * @return value
+   * @throws unless given value is an even number */
+  public static int requireEven(int value) {
+    if (isEven(value))
+      return value;
+    throw new IllegalArgumentException(Integer.toString(value));
+  }
+
+  /** @param value
+   * @return whether given value is an odd number */
+  public static boolean isOdd(int value) {
+    return (value & 1) == 1;
+  }
+
+  /** @param value
+   * @return value
+   * @throws unless given value is an odd number */
+  public static int requireOdd(int value) {
+    if (isOdd(value))
+      return value;
+    throw new IllegalArgumentException(Integer.toString(value));
+  }
+
+  /** @param value
    * @return true if value is a power of 2, e.g. 1, 2, 4, 8, 16, etc. */
   public static boolean isPowerOf2(int value) {
     return 0 < value //

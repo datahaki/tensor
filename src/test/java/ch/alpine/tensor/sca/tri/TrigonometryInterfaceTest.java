@@ -4,10 +4,16 @@ package ch.alpine.tensor.sca.tri;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -15,10 +21,14 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Expc;
+import ch.alpine.tensor.sca.exp.Log;
 
 class TrigonometryInterfaceTest {
   private static void _check(Scalar value, ScalarUnaryOperator suo, Function<Double, Double> f) {
@@ -46,22 +56,42 @@ class TrigonometryInterfaceTest {
     Chop._13.requireClose(Cos.FUNCTION.apply(scalar), RealScalar.ONE.negate());
   }
 
+  static List<ScalarUnaryOperator> functions() {
+    return Arrays.asList( //
+        Exp.FUNCTION, //
+        Log.FUNCTION, //
+        Expc.FUNCTION, //
+        Sin.FUNCTION, //
+        Cos.FUNCTION, //
+        Tan.FUNCTION, //
+        Cot.FUNCTION, //
+        Sinh.FUNCTION, //
+        Cosh.FUNCTION, //
+        Tanh.FUNCTION, //
+        Sinhc.FUNCTION, //
+        ArcSin.FUNCTION, //
+        ArcCos.FUNCTION, //
+        ArcTan.FUNCTION, //
+        ArcSinh.FUNCTION, //
+        ArcCosh.FUNCTION, //
+        ArcTanh.FUNCTION //
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("functions")
+  void testNaN(ScalarUnaryOperator suo) {
+    assertEquals(suo.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+  }
+
   @Test
-  void testNaN() {
-    assertEquals(Sin.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(Cos.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(Tan.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(Cot.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(Sinh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(Cosh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(Tanh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(Sinhc.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(ArcSin.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(ArcCos.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(ArcTan.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(ArcSinh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(ArcCosh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
-    assertEquals(ArcTanh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+  void testDecimalCos() {
+    Chop chop = Tolerance.CHOP;
+    Scalar scalar = DecimalScalar.of(BigDecimal.valueOf(12.234234));
+    chop.requireClose(Cos.series(scalar), Cos.FUNCTION.apply(scalar));
+    chop.requireClose(Sin.series(scalar), Sin.FUNCTION.apply(scalar));
+    chop.requireClose(Cosh.series(scalar), Cosh.FUNCTION.apply(scalar));
+    chop.requireClose(Sinh.series(scalar), Sinh.FUNCTION.apply(scalar));
   }
 
   @Test

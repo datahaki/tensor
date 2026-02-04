@@ -86,7 +86,7 @@ class HuKahngTest {
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    Scalar scalar = TestHelper.check(lpd, true);
+    Scalar scalar = new LinearProgramQ(lpd).check(true);
     assertEquals(scalar, RationalScalar.of(10, 3));
   }
 
@@ -173,7 +173,7 @@ class HuKahngTest {
     assertTrue(lpd.isCanonicDual());
     Tensor solp = SimplexCorners.of(lpd);
     assertEquals(solp, Tensors.fromString("{{4, 8}}"));
-    Scalar value = TestHelper.check(lpd, false);
+    Scalar value = new LinearProgramQ(lpd).check(false);
     assertEquals(value, RealScalar.of(20));
     LinearProgram lpp = lpd.standard();
     NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(lpp.c, lpp.A, lpp.b, true);
@@ -190,7 +190,7 @@ class HuKahngTest {
         Tensors.matrixInt(new int[][] { { 2, 1 }, { 1, 2 } }), //
         Tensors.vector(4, 4), Variables.NON_NEGATIVE);
     assertTrue(lpp.isCanonicPrimal());
-    TestHelper.check(lpp, true);
+    new LinearProgramQ(lpp).check(true);
   }
 
   @Test
@@ -201,7 +201,7 @@ class HuKahngTest {
         Tensors.matrixInt(new int[][] { { 3, 2, 1 }, { 1, 0, 1 }, { 8, 1, 2 } }), //
         Tensors.vector(23, 10, 40), Variables.NON_NEGATIVE);
     assertTrue(lpp.isCanonicPrimal());
-    TestHelper.check(lpp, false);
+    new LinearProgramQ(lpp).check(false);
   }
 
   @Test
@@ -211,14 +211,14 @@ class HuKahngTest {
         ConstraintType.LESS_EQUALS, //
         Tensors.matrixInt(new int[][] { { 1, -2, -1 }, { -1, -3, 0 } }), //
         Tensors.vector(-2, -3), Variables.NON_NEGATIVE);
-    TestHelper.check(lpd.toggle(), lpd);
+    new LinearProgramQ(lpd.toggle()).check(lpd);
     LinearProgram lp2 = LinearProgram.of( //
         lpd.objective.flip(), lpd.c.negate(), //
         lpd.constraintType.flipInequality(), //
         lpd.A.negate(), //
         lpd.b.negate(), Variables.NON_NEGATIVE);
     assertTrue(lp2.isCanonicPrimal());
-    TestHelper.check(lp2, true);
+    new LinearProgramQ(lp2).check(true);
   }
 
   @Test
@@ -228,14 +228,14 @@ class HuKahngTest {
         ConstraintType.LESS_EQUALS, //
         Tensors.matrixInt(new int[][] { { -2, 1, 1 }, { 1, 2, -1 } }), //
         Tensors.vector(-4, -6), Variables.NON_NEGATIVE);
-    TestHelper.check(lpd.toggle(), lpd);
+    new LinearProgramQ(lpd.toggle()).check(lpd);
     LinearProgram lp2 = LinearProgram.of( //
         lpd.objective.flip(), lpd.c.negate(), //
         lpd.constraintType.flipInequality(), //
         lpd.A.negate(), //
         lpd.b.negate(), Variables.NON_NEGATIVE);
     assertTrue(lp2.isCanonicPrimal());
-    TestHelper.check(lp2, true);
+    new LinearProgramQ(lp2).check(true);
   }
 
   @Test
@@ -255,6 +255,6 @@ class HuKahngTest {
     // System.out.println(sd);
     // System.out.println(sd.dot(lpd.c));
     // System.out.println(sp);
-    // TestHelper.check(lpd.toggle(), lpd);
+    // LinearProgramQ.check(lpd.toggle(), lpd);
   }
 }

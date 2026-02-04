@@ -7,6 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Sign;
 
+/** reviewed */
 /* package */ enum StaticHelper {
   ;
   /** @param vector

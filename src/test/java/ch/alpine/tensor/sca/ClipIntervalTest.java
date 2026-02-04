@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,18 +24,18 @@ class ClipIntervalTest {
   void testEqualsQuantity() {
     Clip c1 = Clips.interval(3, 7);
     Clip c2 = Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "m"));
-    assertFalse(c1.equals(c2));
-    assertFalse(c2.equals(c1));
+    assertNotEquals(c1, c2);
+    assertNotEquals(c2, c1);
     assertFalse(c1.equals(null));
     assertFalse(c2.equals(null));
-    assertTrue(c1.equals(c1));
-    assertTrue(c2.equals(c2));
+    assertEquals(c1, c1);
+    assertEquals(c2, c2);
   }
 
   @Test
   void testEqualsPoint() {
     assertEquals(Clips.interval(7, 7), Clips.interval(7, 7));
-    assertFalse(Clips.interval(7, 7).equals(Clips.interval(7, 8)));
+    assertNotEquals(Clips.interval(7, 7), Clips.interval(7, 8));
   }
 
   @Test

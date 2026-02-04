@@ -29,7 +29,7 @@ class RotateLeftTest {
   void testReferences() {
     Tensor matrix = HilbertMatrix.of(3);
     Tensor tensor = RotateLeft.of(matrix, 1);
-    matrix.set(s -> RealScalar.ONE, Tensor.ALL, 1);
+    matrix.set(_ -> RealScalar.ONE, Tensor.ALL, 1);
     assertEquals(tensor, RotateLeft.of(HilbertMatrix.of(3), 1));
   }
 

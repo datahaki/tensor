@@ -1,11 +1,10 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.function.BinaryOperator;
-
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.chq.ScalarQ;
 
 /** inspired by
@@ -19,7 +18,7 @@ public enum FoldList {
    * @param binaryOperator
    * @param tensor must not be a {@link Scalar}
    * @return see description above */
-  public static Tensor of(BinaryOperator<Tensor> binaryOperator, Tensor tensor) {
+  public static Tensor of(TensorBinaryOperator binaryOperator, Tensor tensor) {
     int length = tensor.length();
     Tensor result = Tensors.reserve(length); // throws an exception if tensor is a scalar
     if (0 < length) {
@@ -39,7 +38,7 @@ public enum FoldList {
    * @param x
    * @param tensor
    * @return */
-  public static Tensor of(BinaryOperator<Tensor> binaryOperator, Tensor x, Tensor tensor) {
+  public static Tensor of(TensorBinaryOperator binaryOperator, Tensor x, Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();
     Tensor result = Tensors.reserve(length + 1).append(x);

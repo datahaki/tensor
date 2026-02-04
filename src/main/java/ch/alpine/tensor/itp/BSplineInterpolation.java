@@ -52,7 +52,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
   @Override // from Interpolation
   public Tensor get(Tensor index) {
     Tensor interp = at(index.Get(0));
-    // TODO TENSOR IMPL can be improved by truncating data to a neighborhood
+    // TODO TENSOR IMPL SERIOUS can be improved by truncating data to a neighborhood
     return index.length() == 1 //
         ? interp
         : of(degree, interp).get(Tensor.of(index.stream().skip(1)));

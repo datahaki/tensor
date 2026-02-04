@@ -36,7 +36,7 @@ import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.N;
 
 class InterpolatingPolynomialTest {
-  private static final ScalarUnaryOperator MINUS_ONE = RealScalar.ONE.negate()::add;
+  private final ScalarUnaryOperator MINUS_ONE = RealScalar.ONE.negate()::add;
 
   @Test
   void testScaleInvariant() {

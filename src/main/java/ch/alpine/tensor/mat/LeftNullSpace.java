@@ -5,6 +5,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Join;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.re.Pivot;
 import ch.alpine.tensor.mat.re.Pivots;
@@ -20,11 +21,19 @@ import ch.alpine.tensor.mat.re.RowReduce;
  * The command "LeftNullSpace" does not exist in Mathematica.
  * 
  * @see NullSpace */
-/* package */ enum LeftNullSpace {
+public enum LeftNullSpace {
   ;
+  /** @param matrix
+   * @return */
+  public static Tensor of(Tensor matrix) {
+    return ExactTensorQ.of(matrix) //
+        ? usingRowReduce(matrix)
+        : NullSpace.of(Transpose.of(matrix));
+  }
+
   /** @param matrix with exact precision
    * @return */
-  public static Tensor usingRowReduce(Tensor matrix) {
+  /* package */ static Tensor usingRowReduce(Tensor matrix) {
     ExactTensorQ.require(matrix);
     return usingRowReduce(matrix, Pivots.FIRST_NON_ZERO);
   }

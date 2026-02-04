@@ -19,12 +19,12 @@ import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
 
 class ImageFilterTest {
-  private static final TensorScalarFunction MIN = block -> Flatten.scalars(block).reduce(Min::of).get();
-  private static final TensorScalarFunction MAX = block -> Flatten.scalars(block).reduce(Max::of).get();
+  private final TensorScalarFunction MIN = block -> Flatten.scalars(block).reduce(Min::of).orElseThrow();
+  private final TensorScalarFunction MAX = block -> Flatten.scalars(block).reduce(Max::of).orElseThrow();
 
   @Test
   void testMin() {
-    Distribution distribution = DiscreteUniformDistribution.of(0, 256);
+    Distribution distribution = DiscreteUniformDistribution.forArray(256);
     Tensor tensor = RandomVariate.of(distribution, 20, 30);
     Tensor filter = MinFilter.of(tensor, 3);
     Tensor result = ImageFilter.of(tensor, 3, MIN);
@@ -33,7 +33,7 @@ class ImageFilterTest {
 
   @Test
   void testMax() {
-    Distribution distribution = DiscreteUniformDistribution.of(0, 256);
+    Distribution distribution = DiscreteUniformDistribution.forArray(256);
     Tensor tensor = RandomVariate.of(distribution, 10, 15);
     Tensor filter = MaxFilter.of(tensor, 3);
     Tensor result = ImageFilter.of(tensor, 3, MAX);

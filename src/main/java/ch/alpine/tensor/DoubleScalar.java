@@ -7,8 +7,10 @@ import java.math.RoundingMode;
 
 import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.InexactScalarMarker;
-import ch.alpine.tensor.ext.BigDecimalMath;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.exp.ExpInterface;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
+import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** scalar with double precision, 64-bit, MATLAB style
  * 
@@ -44,7 +46,7 @@ import ch.alpine.tensor.sca.Chop;
  * @implSpec
  * This class is immutable and thread-safe. */
 public final class DoubleScalar extends AbstractRealScalar implements //
-    ChopInterface, InexactScalarMarker, Serializable {
+    ChopInterface, InexactScalarMarker, SqrtInterface, ExpInterface, TrigonometryInterface, Serializable {
   /** real scalar that encodes +Infinity. value is backed by Double.POSITIVE_INFINITY */
   public static final Scalar POSITIVE_INFINITY = of(Double.POSITIVE_INFINITY);
   /** real scalar that encodes -Infinity. value is backed by Double.NEGATIVE_INFINITY */
@@ -52,10 +54,6 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   /** real scalar that encodes NaN. value is backed by Double.NaN == 0.0d / 0.0
    * field name inspired by Mathematica::Indeterminate */
   public static final Scalar INDETERMINATE = of(Double.NaN);
-  /** positive numeric zero */
-  private static final Scalar DOUBLE_ZERO = of(0.0);
-  /** positive numeric zero */
-  private static final Scalar DOUBLE_ONE = of(1.0);
 
   /** @param value
    * @return new instance of {@link DoubleScalar} */
@@ -109,16 +107,6 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   }
 
   @Override // from Scalar
-  public Scalar zero() {
-    return DOUBLE_ZERO;
-  }
-
-  @Override // from Scalar
-  public Scalar one() {
-    return DOUBLE_ONE;
-  }
-
-  @Override // from Scalar
   public Number number() {
     return value;
   }
@@ -164,7 +152,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar ceiling() {
     return isFinite() //
-        ? RationalScalar.integer(BigDecimalMath.ceiling(bigDecimal()))
+        ? RationalScalar.integer(StaticHelper.ceiling(bigDecimal()))
         : this; // value non finite
   }
 
@@ -176,7 +164,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar floor() {
     return isFinite() //
-        ? RationalScalar.integer(BigDecimalMath.floor(bigDecimal()))
+        ? RationalScalar.integer(StaticHelper.floor(bigDecimal()))
         : this; // value non finite
   }
 
@@ -189,7 +177,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
 
   /* @return true if the argument is a finite floating-point
    * value; false otherwise (for NaN and infinity arguments). */
-  @Override
+  @Override // from InexactScalarMarker
   public boolean isFinite() {
     return Double.isFinite(value);
   }
@@ -219,7 +207,32 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   public Scalar sqrt() {
     return Double.isNaN(value) //
         ? DoubleScalar.INDETERMINATE
-        : super.sqrt();
+        : _sqrt();
+  }
+
+  @Override // from ExpInterface
+  public Scalar exp() {
+    return of(Math.exp(value));
+  }
+
+  @Override // from TrigonometryInterface
+  public Scalar cos() {
+    return of(Math.cos(value));
+  }
+
+  @Override // from TrigonometryInterface
+  public Scalar cosh() {
+    return of(Math.cosh(value));
+  }
+
+  @Override // from TrigonometryInterface
+  public Scalar sin() {
+    return of(Math.sin(value));
+  }
+
+  @Override // from TrigonometryInterface
+  public Scalar sinh() {
+    return of(Math.sinh(value));
   }
 
   // helper function used for implementation in RoundingInterface

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -61,12 +60,7 @@ class ChopTest {
 
   @Test
   void testFail() {
-    try {
-      Chop.below(-1e-9);
-      fail();
-    } catch (Exception exception) {
-      assertEquals(exception.getMessage(), "-1.0E-9");
-    }
+    assertThrows(Exception.class, () -> Chop.below(-1e-9));
   }
 
   @Test

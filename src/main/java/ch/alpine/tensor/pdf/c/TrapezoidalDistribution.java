@@ -110,6 +110,11 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
     mean = moment(false, 1);
   }
 
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    return clip;
+  }
+
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     Scalar value = _p_lessThan(x);

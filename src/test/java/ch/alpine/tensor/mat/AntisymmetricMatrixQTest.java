@@ -13,38 +13,38 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.lie.Cross;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.lie.rot.Cross;
 
 class AntisymmetricMatrixQTest {
   @Test
   void testMatrix() {
-    assertTrue(AntisymmetricMatrixQ.of(Array.zeros(4, 4)));
-    assertFalse(AntisymmetricMatrixQ.of(IdentityMatrix.of(3)));
-    assertTrue(AntisymmetricMatrixQ.of(Tensors.fromString("{{0, 1}, {-1, 0}}")));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(Array.zeros(4, 4)));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(IdentityMatrix.of(3)));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(Tensors.fromString("{{0, 1}, {-1, 0}}")));
   }
 
   @Test
   void testRectangularMatrix() {
-    assertFalse(AntisymmetricMatrixQ.of(Array.zeros(2, 4)));
-    assertFalse(AntisymmetricMatrixQ.of(HilbertMatrix.of(2, 3)));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(Array.zeros(2, 4)));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(HilbertMatrix.of(2, 3)));
   }
 
   @Test
   void testCross() {
-    assertTrue(AntisymmetricMatrixQ.of(Cross.skew3(Tensors.vector(1, 2, 3))));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(Cross.skew3(Tensors.vector(1, 2, 3))));
   }
 
   @Test
   void testNonMatrix() {
-    assertFalse(AntisymmetricMatrixQ.of(RealScalar.ONE));
-    assertFalse(AntisymmetricMatrixQ.of(LeviCivitaTensor.of(3)));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(RealScalar.ONE));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(LeviCivitaTensor.of(3)));
   }
 
   @Test
   void testRequire() {
     Tensor matrix = Tensors.fromString("{{0, 2}, {-2, 0}}");
-    assertEquals(AntisymmetricMatrixQ.require(matrix), matrix);
-    assertThrows(Throw.class, () -> AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-1, 0}}")));
+    assertEquals(AntisymmetricMatrixQ.INSTANCE.requireMember(matrix), matrix);
+    assertThrows(Throw.class, () -> AntisymmetricMatrixQ.INSTANCE.requireMember(Tensors.fromString("{{0, 2}, {-1, 0}}")));
   }
 }

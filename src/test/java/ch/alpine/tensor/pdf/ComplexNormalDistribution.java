@@ -7,11 +7,11 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 
 /** test scope only */
-public enum ComplexNormalDistribution implements Distribution, RandomVariateInterface {
+public enum ComplexNormalDistribution implements Distribution {
   STANDARD;
 
-  @Override // from RandomVariateInterface
-  public Scalar randomVariate(RandomGenerator random) {
-    return ComplexScalar.of(random.nextGaussian(), random.nextGaussian());
+  @Override // from Distribution
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return ComplexScalar.of(randomGenerator.nextGaussian(), randomGenerator.nextGaussian());
   }
 }

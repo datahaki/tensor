@@ -44,7 +44,7 @@ class QuantityMagnitudeTest {
   void testRad() throws ClassNotFoundException, IOException {
     QuantityMagnitude quantityMagnitude = Serialization.copy(QuantityMagnitude.SI());
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in(Unit.of("rad"));
-    Chop._12.requireClose(scalarUnaryOperator.apply(Quantity.of(360, "deg")), RealScalar.of(Math.PI * 2));
+    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(Quantity.of(360, "deg")), RealScalar.of(Math.PI * 2));
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.of(2));
     ExactScalarQ.require(scalar);
@@ -108,7 +108,7 @@ class QuantityMagnitudeTest {
     Scalar ps = scalarUnaryOperator.apply(Quantity.of(1.0, "PS"));
     Scalar hp = scalarUnaryOperator.apply(Quantity.of(1.0, "hp"));
     assertEquals(ps, RealScalar.of(735.49875));
-    Chop._12.requireClose(hp, RealScalar.of(745.6998715822702));
+    Tolerance.CHOP.requireClose(hp, RealScalar.of(745.6998715822702));
   }
 
   @Test

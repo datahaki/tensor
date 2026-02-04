@@ -34,7 +34,7 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Round;
 
 class BipartiteMatchingTest {
-  private static final int MAX = 7;
+  private final int MAX = 7;
 
   @Test
   void testExactPrecision() {

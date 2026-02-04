@@ -19,38 +19,38 @@ class UnitaryMatrixQTest {
   @Test
   void testExample2d() {
     Tensor matrix = Tensors.fromString("{{1, I}, {I, 1}}").multiply(RealScalar.of(Math.sqrt(0.5)));
-    assertTrue(UnitaryMatrixQ.of(matrix));
+    assertTrue(UnitaryMatrixQ.INSTANCE.isMember(matrix));
   }
 
   @Test
   void testExample3d() {
     Tensor matrix = Tensors.fromString("{{0.7071067811865476, 0.7071067811865476, 0.}, {-0.7071067811865476* I, 0.7071067811865476 *I, 0.}, {0., 0., I}}");
-    assertTrue(UnitaryMatrixQ.of(matrix));
+    assertTrue(UnitaryMatrixQ.INSTANCE.isMember(matrix));
   }
 
   @Test
   void testNonSquare() {
-    assertFalse(UnitaryMatrixQ.of(HilbertMatrix.of(2, 3)));
-    assertFalse(UnitaryMatrixQ.of(HilbertMatrix.of(3, 2)));
+    assertFalse(UnitaryMatrixQ.INSTANCE.isMember(HilbertMatrix.of(2, 3)));
+    assertFalse(UnitaryMatrixQ.INSTANCE.isMember(HilbertMatrix.of(3, 2)));
   }
 
   @Test
   void testFourier() {
-    assertTrue(UnitaryMatrixQ.of(Fourier.FORWARD.matrix(11)));
+    assertTrue(UnitaryMatrixQ.INSTANCE.isMember(Fourier.FORWARD.matrix(11)));
   }
 
   @Test
   void testOthers() {
-    assertFalse(UnitaryMatrixQ.of(Tensors.fromString("{{1, 2}, {I, I}}")));
-    assertFalse(UnitaryMatrixQ.of(RealScalar.of(3)));
-    assertFalse(UnitaryMatrixQ.of(Tensors.vector(1, 2, 3)));
-    assertFalse(UnitaryMatrixQ.of(LeviCivitaTensor.of(3)));
+    assertFalse(UnitaryMatrixQ.INSTANCE.isMember(Tensors.fromString("{{1, 2}, {I, I}}")));
+    assertFalse(UnitaryMatrixQ.INSTANCE.isMember(RealScalar.of(3)));
+    assertFalse(UnitaryMatrixQ.INSTANCE.isMember(Tensors.vector(1, 2, 3)));
+    assertFalse(UnitaryMatrixQ.INSTANCE.isMember(LeviCivitaTensor.of(3)));
   }
 
   @Test
   void testRequire() {
-    UnitaryMatrixQ.require(Fourier.FORWARD.matrix(7), Chop._12);
-    UnitaryMatrixQ.require(Fourier.FORWARD.matrix(8));
-    assertThrows(Throw.class, () -> UnitaryMatrixQ.require(Tensors.fromString("{{1, 2}, {I, I}}")));
+    new UnitaryMatrixQ(Chop._12).requireMember(Fourier.FORWARD.matrix(7));
+    UnitaryMatrixQ.INSTANCE.requireMember(Fourier.FORWARD.matrix(8));
+    assertThrows(Throw.class, () -> UnitaryMatrixQ.INSTANCE.requireMember(Tensors.fromString("{{1, 2}, {I, I}}")));
   }
 }

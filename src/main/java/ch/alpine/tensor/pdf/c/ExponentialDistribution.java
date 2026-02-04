@@ -8,7 +8,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
@@ -17,6 +16,7 @@ import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -38,7 +38,7 @@ import ch.alpine.tensor.sca.pow.Power;
  * <a href="https://reference.wolfram.com/language/ref/ExponentialDistribution.html">ExponentialDistribution</a> */
 public class ExponentialDistribution implements UnivariateDistribution, //
     CentralMomentInterface, StandardDeviationInterface, Serializable {
-  private static final Distribution STANDARD = ExponentialDistribution.of(RealScalar.ONE);
+  private static final Distribution STANDARD = of(RealScalar.ONE);
 
   /** @param lambda positive, may be instance of {@link Quantity}
    * @return exponential distribution with scale inversely proportional to parameter lambda */
@@ -66,16 +66,14 @@ public class ExponentialDistribution implements UnivariateDistribution, //
     lambda_negate = lambda.negate();
   }
 
-  @Override // from AbstractContinuousDistribution
-  public Scalar randomVariate(RandomGenerator randomGenerator) {
-    // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
-    return randomVariate(randomGenerator.nextDouble());
+  @Override // from UnivariateDistribution
+  public Clip support() {
+    return Clips.positive(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(lambda).negate()));
   }
 
-  @PackageTestAccess
-  Scalar randomVariate(double reference) {
-    Scalar p = DoubleScalar.of(Math.nextUp(reference));
-    return Log.FUNCTION.apply(p).divide(lambda_negate);
+  @Override // from AbstractContinuousDistribution
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return RealScalar.of(randomGenerator.nextExponential()).divide(lambda);
   }
 
   @Override // from AbstractContinuousDistribution

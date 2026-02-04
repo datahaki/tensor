@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import ch.alpine.tensor.api.GroupInterface;
+
 /* package */ enum CyclesGroup implements GroupInterface<Cycles> {
   INSTANCE;
 

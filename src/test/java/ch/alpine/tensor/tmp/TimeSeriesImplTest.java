@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.tmp;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -62,7 +63,7 @@ class TimeSeriesImplTest {
     timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(4, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(24, "h")), Tensors.vector(0, 0, 6));
-    Serialization.copy(timeSeries);
+    assertDoesNotThrow(() -> Serialization.copy(timeSeries));
     assertEquals(timeSeries.size(), 4);
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();
@@ -79,7 +80,7 @@ class TimeSeriesImplTest {
   }
 
   @Test
-  void testHoldLoSparse() throws ClassNotFoundException, IOException {
+  void testHoldLoSparse() {
     TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.HOLD_VALUE_FROM_LEFT_SPARSE);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
@@ -90,7 +91,7 @@ class TimeSeriesImplTest {
     timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(4, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(24, "h")), Tensors.vector(0, 0, 6));
-    Serialization.copy(timeSeries);
+    assertDoesNotThrow(() -> Serialization.copy(timeSeries));
     assertEquals(timeSeries.size(), 3);
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();
@@ -107,7 +108,7 @@ class TimeSeriesImplTest {
   }
 
   @Test
-  void testHoldHi() throws ClassNotFoundException, IOException {
+  void testHoldHi() {
     TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.HOLD_VALUE_FROM_RIGHT_SPARSE);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
@@ -119,7 +120,7 @@ class TimeSeriesImplTest {
     assertThrows(Exception.class, () -> timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0, 2)));
     timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(24, "h")), Tensors.vector(0, 0, 6));
-    Serialization.copy(timeSeries);
+    assertDoesNotThrow(() -> Serialization.copy(timeSeries));
     assertEquals(timeSeries.size(), 3);
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();

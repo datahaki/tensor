@@ -19,8 +19,6 @@ import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.PackageTestAccess;
-import ch.alpine.tensor.num.BinaryPower;
-import ch.alpine.tensor.num.ScalarProduct;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.MinMax;
 import ch.alpine.tensor.sca.Abs;
@@ -45,7 +43,6 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
 public class CenteredInterval extends AbstractScalar implements //
     AbsInterface, ExpInterface, LogInterface, InexactScalarMarker, //
     PowerInterface, SignInterface, Comparable<Scalar>, Serializable {
-  private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
   private static final String SEPARATOR = "\u00B1";
 
   /** @param clip with [min, max]
@@ -202,7 +199,7 @@ public class CenteredInterval extends AbstractScalar implements //
   public Scalar power(Scalar exponent) {
     Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
     if (optional.isPresent())
-      return BINARY_POWER.raise(this, optional.orElseThrow());
+      return Scalars.mul().raise(this, optional.orElseThrow());
     throw new Throw(this, exponent);
   }
 
@@ -247,7 +244,7 @@ public class CenteredInterval extends AbstractScalar implements //
   }
 
   @PackageTestAccess
-  /* package */ static Scalar centerAround(Clip clip, Scalar center) {
+  static Scalar centerAround(Clip clip, Scalar center) {
     return new CenteredInterval(center, Max.of( //
         Abs.between(clip.max(), center), //
         Abs.between(clip.min(), center)));

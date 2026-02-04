@@ -11,6 +11,10 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.sca.tri.Tan;
@@ -49,6 +53,11 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
   private CauchyDistribution(Scalar a, Scalar b) {
     this.a = a;
     this.b = b;
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.absolute(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(a)));
   }
 
   @Override // from PDF

@@ -19,6 +19,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.jet.Hold;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
@@ -40,6 +41,11 @@ class PowerTest {
   void testSqrtExactHalfNeg() {
     Scalar scalar = Power.function(RationalScalar.HALF.negate()).apply(RealScalar.of(9));
     assertEquals(ExactScalarQ.require(scalar), RationalScalar.of(1, 3));
+  }
+
+  @Test
+  void testHoldZero() {
+    Scalars.requireZero(Power.of(Hold.zero(), 3));
   }
 
   @Test

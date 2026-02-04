@@ -66,7 +66,7 @@ class MedianFilterTest {
   }
 
   @Test
-  void testDemo() {
+  void testFilters() {
     Tensor vector = Tensors.vector(0, 0, 1, 0, 0, 0, 0, 3, 3, 3, 0);
     Tensor result = MedianFilter.of(vector, 2);
     assertEquals(result, Tensors.fromString("{0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3}"));
@@ -79,14 +79,6 @@ class MedianFilterTest {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
     ExactTensorQ.require(matrix);
     Flatten.scalars(matrix).forEach(RationalScalar.class::cast); // test if parsing went ok
-    // Tensor res0 =
-    // MedianFilter.of(matrix, 0);
-    // try {
-    // MedianFilter.of(matrix, 1);
-    // fail();
-    // } catch (Exception exception) {
-    // // ---
-    // }
   }
 
   @Test

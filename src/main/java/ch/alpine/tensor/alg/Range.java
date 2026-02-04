@@ -7,6 +7,7 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.chq.IntegerQ;
@@ -66,5 +67,12 @@ public enum Range {
     return of( //
         Scalars.bigIntegerValueExact(clip.min()), //
         Scalars.bigIntegerValueExact(clip.max()).add(BigInteger.ONE));
+  }
+
+  /** @param one
+   * @param length
+   * @return vector of length */
+  public static Tensor of(Scalar one, int length) {
+    return NestList.of(one::add, one, length - 1);
   }
 }

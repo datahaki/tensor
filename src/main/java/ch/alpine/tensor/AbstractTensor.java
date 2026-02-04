@@ -1,9 +1,9 @@
 // code by jph
 package ch.alpine.tensor;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.ext.Integers;
 
 public abstract class AbstractTensor implements Tensor {
@@ -53,7 +53,7 @@ public abstract class AbstractTensor implements Tensor {
   public final boolean equals(Object object) {
     if (object instanceof Tensor tensor && //
         length() == tensor.length()) {
-      AtomicInteger i = new AtomicInteger();
+      Int i = new Int();
       return tensor.stream().allMatch(entry -> entry.equals(byRef(i.getAndIncrement())));
     }
     return false;

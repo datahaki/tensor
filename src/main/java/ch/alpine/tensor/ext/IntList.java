@@ -11,7 +11,6 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.RandomAccess;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -198,8 +197,8 @@ import java.util.stream.Stream;
   @Override // from List
   public boolean equals(Object object) {
     if (object instanceof List<?> list && list.size() == len) {
-      AtomicInteger atomicInteger = new AtomicInteger(ofs);
-      return list.stream().allMatch(value -> value.equals(array[atomicInteger.getAndIncrement()]));
+      Int i = new Int(ofs);
+      return list.stream().allMatch(value -> value.equals(array[i.getAndIncrement()]));
     }
     return false;
   }

@@ -6,7 +6,7 @@ import java.util.Comparator;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.lie.Quaternion;
+import ch.alpine.tensor.lie.rot.Quaternion;
 
 /** on the level of tensors, the implementation is consistent with Mathematica::Sort.
  * on the level of scalars, the implementation of the tensor library fails when the

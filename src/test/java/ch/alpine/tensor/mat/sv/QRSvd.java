@@ -14,7 +14,7 @@ import ch.alpine.tensor.mat.qr.QRDecomposition;
  * <p>Reference:
  * "Linear Algebra Learning from Data", p.144
  * by G. Strang, 2019 */
-public class QRSvd implements SingularValueDecomposition, Serializable {
+class QRSvd implements SingularValueDecomposition, Serializable {
   /** @param matrix with maximal rank
    * @return */
   public static SingularValueDecomposition of(Tensor matrix) {

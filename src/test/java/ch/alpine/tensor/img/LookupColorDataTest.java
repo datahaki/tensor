@@ -22,9 +22,9 @@ import ch.alpine.tensor.nrm.Vector2Norm;
 class LookupColorDataTest {
   @Test
   void testColor() {
-    assertEquals(ColorFormat.toColor(StaticHelper.GRAYSCALE.apply(RealScalar.ZERO)), Color.BLACK);
-    assertEquals(ColorFormat.toColor(StaticHelper.GRAYSCALE.apply(RationalScalar.HALF)), Color.GRAY);
-    assertEquals(ColorFormat.toColor(StaticHelper.GRAYSCALE.apply(RealScalar.ONE)), Color.WHITE);
+    assertEquals(ColorFormat.toColor(LookupColorData.GRAYSCALE.apply(RealScalar.ZERO)), Color.BLACK);
+    assertEquals(ColorFormat.toColor(LookupColorData.GRAYSCALE.apply(RationalScalar.HALF)), Color.GRAY);
+    assertEquals(ColorFormat.toColor(LookupColorData.GRAYSCALE.apply(RealScalar.ONE)), Color.WHITE);
   }
 
   @Test
@@ -38,7 +38,7 @@ class LookupColorDataTest {
 
   @Test
   void testTransparent() {
-    Tensor vector = StaticHelper.GRAYSCALE.apply(DoubleScalar.POSITIVE_INFINITY);
+    Tensor vector = LookupColorData.GRAYSCALE.apply(DoubleScalar.POSITIVE_INFINITY);
     assertTrue(Scalars.isZero(Vector2Norm.of(vector)));
     assertEquals(vector, Array.zeros(4));
   }
@@ -51,6 +51,6 @@ class LookupColorDataTest {
 
   @Test
   void testSerializable() throws ClassNotFoundException, IOException {
-    Serialization.copy(StaticHelper.GRAYSCALE);
+    Serialization.copy(LookupColorData.GRAYSCALE);
   }
 }

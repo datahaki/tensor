@@ -6,7 +6,7 @@ import java.math.MathContext;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.NInterface;
 
-/* package */ class NDecimal extends N {
+/* package */ class NDecimal extends NBase {
   private final MathContext mathContext;
 
   public NDecimal(MathContext mathContext) {

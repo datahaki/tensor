@@ -14,9 +14,13 @@ import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Sin;
 
 /** inspired by
- * <a href="https://reference.wolfram.com/language/ref/BesselI.html">BesselI</a> */
+ * <a href="https://reference.wolfram.com/language/ref/BesselJ.html">BesselJ</a> */
 public enum BesselJ {
   ;
+  static final Scalar ACC = RealScalar.of(40.0);
+  static final Scalar BIGNO = RealScalar.of(1.0e+10);
+  static final Scalar BIGNI = RealScalar.of(1.0e-10);
+
   /** Returns the Bessel function of the first kind of order <tt>n</tt> of the argument.
    * 
    * @param n the order of the Bessel function.
@@ -25,9 +29,6 @@ public enum BesselJ {
     int j, m;
     Scalar bj, bjm, bjp, sum, tox, ans;
     boolean jsum;
-    final Scalar ACC = RealScalar.of(40.0);
-    final Scalar BIGNO = RealScalar.of(1.0e+10);
-    final Scalar BIGNI = RealScalar.of(1.0e-10);
     if (n == 0)
       return _0(x);
     if (n == 1)

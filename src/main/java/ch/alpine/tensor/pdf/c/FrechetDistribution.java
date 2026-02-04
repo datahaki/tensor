@@ -13,7 +13,10 @@ import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.sca.AbsSquared;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
@@ -53,7 +56,12 @@ public class FrechetDistribution extends AbstractContinuousDistribution implemen
     this.beta = beta;
   }
 
-  @Override // from RandomVariateInterface
+  @Override
+  public Clip support() {
+    return Clips.positive(Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(beta)));
+  }
+
+  @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     return randomVariate(randomGenerator.nextDouble());
   }

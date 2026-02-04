@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -10,6 +11,8 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -40,6 +43,11 @@ public class RayleighDistribution extends AbstractContinuousDistribution impleme
     this.sigma = sigma;
     s2 = sigma.multiply(sigma);
     s2_n2 = s2.add(s2).negate();
+  }
+
+  @Override
+  public Clip support() {
+    return Clips.positive(DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Override // from PDF

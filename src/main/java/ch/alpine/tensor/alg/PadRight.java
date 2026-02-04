@@ -63,7 +63,7 @@ public class PadRight extends PadBase {
   }
 
   @Override // from PadBase
-  protected PadBase get(Tensor element, List<Integer> rest) {
+  PadBase get(Tensor element, List<Integer> rest) {
     return new PadRight(element, rest);
   }
 }

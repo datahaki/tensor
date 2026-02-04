@@ -3,11 +3,11 @@ package ch.alpine.tensor.mat.gr;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.UpperEvaluation;
@@ -54,19 +54,14 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   public Tensor leverages() {
     if (Objects.nonNull(matrix))
       return Diagonal.of(matrix);
-    AtomicInteger atomicInteger = new AtomicInteger();
+    Int i = new Int();
     return Tensor.of(design.stream() //
-        .map(row -> row.dot(d_pinv.get(Tensor.ALL, atomicInteger.getAndIncrement()))));
+        .map(row -> row.dot(d_pinv.get(Tensor.ALL, i.getAndIncrement()))));
   }
 
   @Override // from InfluenceMatrix
   public Tensor leverages_sqrt() {
     return leverages().map(Sqrt.FUNCTION);
-  }
-
-  @Override // from InfluenceMatrix
-  public Tensor residualMaker() {
-    return StaticHelper.residualMaker(matrix());
   }
 
   @Override // from InfluenceMatrix
@@ -82,7 +77,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   /** @return whether image(vector) is computed as the product vector . design . d_pinv,
    * or vector . matrix() in order to maximize efficiency */
   @PackageTestAccess
-  /* package */ boolean dotMatrix() {
+  boolean dotMatrix() {
     return dotMatrix;
   }
 }

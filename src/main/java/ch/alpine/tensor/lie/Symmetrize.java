@@ -1,13 +1,12 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.sca.gam.Factorial;
@@ -42,8 +41,8 @@ public enum Symmetrize {
    * @see Transpose */
   @PackageTestAccess
   static Tensor _01(Tensor tensor) {
-    AtomicInteger atomicInteger = new AtomicInteger();
+    Int i = new Int();
     return Tensor.of(tensor.stream() //
-        .map(row -> row.add(tensor.get(Tensor.ALL, atomicInteger.getAndIncrement())).multiply(RationalScalar.HALF)));
+        .map(row -> row.add(tensor.get(Tensor.ALL, i.getAndIncrement())).multiply(RationalScalar.HALF)));
   }
 }

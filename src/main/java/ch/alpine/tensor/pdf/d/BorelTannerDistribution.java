@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.d;
 
 import java.math.BigInteger;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -11,6 +12,8 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.gam.LogGamma;
@@ -51,9 +54,9 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
     build(Tolerance.CHOP);
   }
 
-  @Override // from DiscreteDistribution
-  public BigInteger lowerBound() {
-    return _n;
+  @Override
+  public Clip support() {
+    return Clips.interval(RealScalar.of(_n), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Override // from MeanInterface

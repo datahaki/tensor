@@ -25,6 +25,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -34,6 +35,8 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.MatrixRank;
+import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
+import ch.alpine.tensor.mat.sv.SingularValueDecompositionWrap;
 import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -191,10 +194,15 @@ class LeastSquaresTest {
   void testRect() {
     Distribution distribution = UniformDistribution.unit();
     Tensor matrix = RandomVariate.of(distribution, 10, 3);
-    Tensor b = RandomVariate.of(distribution, 10, 2);
+    int n = 2;
+    Tensor b = RandomVariate.of(distribution, 10, n);
     Tensor x = LeastSquares.usingSvd(matrix, b);
     assertEquals(Dimensions.of(x), Arrays.asList(3, 2));
     assertEquals(Dimensions.of(matrix.dot(x)), Dimensions.of(b));
+    SingularValueDecomposition svd = SingularValueDecompositionWrap.of(matrix);
+    TensorUnaryOperator tuo = LeastSquares.operator(svd);
+    for (int k = 0; k < n; ++k)
+      Tolerance.CHOP.requireClose(tuo.apply(b.get(Tensor.ALL, k)), x.get(Tensor.ALL, k));
   }
 
   @ParameterizedTest
@@ -203,6 +211,26 @@ class LeastSquaresTest {
     Tensor matrix = IdentityMatrix.of(n).add(RandomVariate.of(NormalDistribution.standard(), n, n));
     Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
     Chop._09.requireClose( //
+        LinearSolve.of(matrix, b), //
+        LeastSquares.usingQR(matrix, b));
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 5, 10 })
+  void testLeastSquaresDecimal(int n) {
+    Tensor matrix = RandomVariate.of(UniformDistribution.unit(40), n, n);
+    Tensor b = RandomVariate.of(UniformDistribution.unit(40), n, 2);
+    Chop._20.requireClose( //
+        LinearSolve.of(matrix, b), //
+        LeastSquares.usingQR(matrix, b));
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 5, 10 })
+  void testLeastSquaresDecimalVector(int n) {
+    Tensor matrix = RandomVariate.of(UniformDistribution.unit(40), n, n);
+    Tensor b = RandomVariate.of(UniformDistribution.unit(40), n);
+    Chop._20.requireClose( //
         LinearSolve.of(matrix, b), //
         LeastSquares.usingQR(matrix, b));
   }

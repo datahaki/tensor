@@ -16,8 +16,8 @@ import ch.alpine.tensor.red.Mean;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/MixtureDistribution.html">MixtureDistribution</a> */
-public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterface, //
-    RandomVariateInterface, Serializable {
+public class MixtureDistribution implements Distribution, //
+    PDF, CDF, MeanInterface, Serializable {
   /** @param weights vector with non-negative entries
    * @param distributions
    * @return */
@@ -72,7 +72,7 @@ public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterfac
     return dot(Mean::of);
   }
 
-  @Override // from RandomVariateInterface
+  @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     int index = RandomVariate.of(categoricalDistribution, randomGenerator).number().intValue();
     return RandomVariate.of(list.get(index), randomGenerator);

@@ -10,7 +10,7 @@ class PermutationCyclesTest {
   @Test
   void testSimple() {
     Cycles cycles = PermutationCycles.of(1, 4, 2, 5, 0, 7, 6, 8, 3, 9);
-    assertEquals(cycles, TestHelper.of("{{0, 1, 4}, {3, 5, 7, 8}}"));
+    assertEquals(cycles, Cycles.of("{{0, 1, 4}, {3, 5, 7, 8}}"));
   }
 
   @Test

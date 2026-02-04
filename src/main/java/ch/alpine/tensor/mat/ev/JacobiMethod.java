@@ -2,7 +2,6 @@
 // modified by jph
 package ch.alpine.tensor.mat.ev;
 
-import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -12,14 +11,12 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.UnitVector;
-import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.ScalarArray;
-import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Conjugate;
 
-/** vector of eigen{@link #values()} has strictly zero imaginary part */
-/* package */ abstract class JacobiMethod implements Eigensystem, Serializable {
-  private static final int MAX_ITERATIONS = 50;
+/** vector of eigenvalues has strictly zero imaginary part */
+/* package */ abstract class JacobiMethod {
   protected static final Scalar DBL_EPSILON = DoubleScalar.of(Math.ulp(1.0));
   private static final Scalar HUNDRED = DoubleScalar.of(100);
   // TODO TENSOR MAT reintroduce adapted phase, but cap at 4?
@@ -38,12 +35,15 @@ import ch.alpine.tensor.sca.Abs;
   }
 
   /** @throws Exception if iteration does not converge */
-  public void solve() {
+  public final Eigensystem solve() {
     Scalar factor = DoubleScalar.of(0.2 / (n * n));
-    for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
+    int max = Eigensystem.JacobiMethod_MAX_ITERATIONS.get();
+    for (int iteration = 0; iteration < max; ++iteration) {
       Scalar sum = sumAbs_offDiagonal();
       if (Scalars.isZero(sum))
-        return;
+        return new Eigensystem( //
+            Tensor.of(IntStream.range(0, n).mapToObj(this::diag)), // values
+            Unprotect.byRef(V).map(Conjugate.FUNCTION)); // vectors
       Scalar tresh = iteration < PHASE1 //
           ? sum.multiply(factor)
           : sum.zero();
@@ -81,25 +81,5 @@ import ch.alpine.tensor.sca.Abs;
       for (int q = p + 1; q < n; ++q)
         sum = sum.add(Abs.FUNCTION.apply(H[p][q]));
     return sum;
-  }
-
-  @Override // from Eigensystem
-  public final Tensor values() {
-    return Tensor.of(IntStream.range(0, n).mapToObj(this::diag));
-  }
-
-  @Override // from Eigensystem
-  public final Tensor diagonalMatrix() {
-    return DiagonalMatrix.with(values());
-  }
-
-  @Override // from Eigensystem
-  public final Tensor vectors() {
-    return Unprotect.byRef(V);
-  }
-
-  @Override // from Object
-  public final String toString() {
-    return MathematicaFormat.concise("Eigensystem", values(), vectors());
   }
 }

@@ -2,12 +2,12 @@
 package ch.alpine.tensor.tmp;
 
 import java.util.NavigableSet;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.num.Boole;
 
 public enum TsOp {
@@ -44,9 +44,9 @@ public enum TsOp {
    * incrementing by one for each element in the set and resampling method
    * {@link ResamplingMethod#HOLD_VALUE_FROM_LEFT} */
   public static TimeSeries indicator(NavigableSet<Scalar> navigableSet) {
-    AtomicInteger atomicInteger = new AtomicInteger();
+    Int i = new Int();
     return TimeSeries.of(navigableSet.stream() //
-        .map(key -> new TsEntry(key, RealScalar.of(atomicInteger.getAndIncrement()))), //
+        .map(key -> new TsEntry(key, RealScalar.of(i.getAndIncrement()))), //
         ResamplingMethod.HOLD_VALUE_FROM_LEFT);
   }
 }

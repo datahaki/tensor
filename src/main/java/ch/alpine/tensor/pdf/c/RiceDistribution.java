@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -9,6 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
@@ -48,18 +50,22 @@ public class RiceDistribution implements Distribution, //
   private final Scalar beta;
   private final Scalar a2;
   private final Scalar b2;
+  private final Distribution nd1;
+  private final Distribution nd2;
 
   private RiceDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;
     this.beta = beta;
     a2 = alpha.multiply(alpha);
     b2 = beta.multiply(beta);
+    nd1 = NormalDistribution.of(alpha, beta);
+    nd2 = NormalDistribution.of(alpha.zero(), beta);
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
     if (Scalars.lessThan(RealScalar.ZERO, x)) {
-      Scalar factor = Exp.FUNCTION.apply(x.multiply(x).add(alpha.multiply(alpha)).divide(b2).multiply(RationalScalar.HALF).negate());
+      Scalar factor = Exp.FUNCTION.apply(x.multiply(x).add(a2).divide(b2).multiply(RationalScalar.HALF).negate());
       if (Scalars.nonZero(factor))
         return Times.of(factor, x, BesselI._0(x.multiply(alpha).divide(b2))).divide(b2);
     }
@@ -79,6 +85,13 @@ public class RiceDistribution implements Distribution, //
     Scalar g = LaguerreL.of(RationalScalar.HALF, a2.divide(b2).multiply(RationalScalar.HALF).negate());
     Scalar f = Times.of(Pi.HALF, b2, g, g);
     return a2.add(b2).add(b2).subtract(f);
+  }
+
+  @Override // from Distribution
+  public Scalar randomVariate(RandomGenerator randomGenerator) {
+    return Hypot.of( //
+        nd1.randomVariate(randomGenerator), //
+        nd2.randomVariate(randomGenerator));
   }
 
   @Override // from Object

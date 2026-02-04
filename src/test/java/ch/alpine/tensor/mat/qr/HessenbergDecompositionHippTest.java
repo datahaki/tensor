@@ -20,11 +20,12 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
+import test.HessenbergDecompositionQ;
 
 class HessenbergDecompositionHippTest {
-  private static final HessenbergDecomposition _check(Tensor matrix) {
-    HessenbergDecomposition hessenbergDecomposition = new HessenbergDecompositionHipp(SquareMatrixQ.require(matrix));
-    TestHelper.check(matrix, hessenbergDecomposition);
+  private static HessenbergDecomposition _check(Tensor matrix) {
+    HessenbergDecomposition hessenbergDecomposition = new HessenbergDecompositionHipp(SquareMatrixQ.INSTANCE.requireMember(matrix));
+    HessenbergDecompositionQ.check(matrix, hessenbergDecomposition);
     return hessenbergDecomposition;
   }
 

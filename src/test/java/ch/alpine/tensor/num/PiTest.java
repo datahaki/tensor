@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +55,7 @@ class PiTest {
 
   @Test
   void test500() {
-    Random random = new Random();
+    Random random = ThreadLocalRandom.current();
     Scalar pi = Pi.in(400 + random.nextInt(200));
     assertInstanceOf(DecimalScalar.class, pi);
     double value = pi.add(pi).number().doubleValue();

@@ -7,22 +7,12 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Sign;
 
 /** The Jacobi transformations of a real symmetric matrix establishes the
  * eigenvectors and eigenvalues of given matrix.
- * 
- * Careful: {@link #vectors()} gives V* D == DiagonalMatrix[{@link #values()}]
- * 
- * Then the following identities hold
- * 
- * <pre>
- * A == V . D . V*
- * D == V* . A . V
- * </pre>
  * 
  * The matrix V == P1 * P2 * P3 * ..., is the product of the successive Jacobi
  * rotation matrices Pi. The diagonal entries of D are the eigenvalues of A and
@@ -35,15 +25,12 @@ import ch.alpine.tensor.sca.Sign;
  * exact "arithmetic" steps for matrices of size n > 4." */
 /* package */ class JacobiReal extends JacobiMethod {
   /** @param matrix symmetric */
-  public static Eigensystem eigensystem(Tensor matrix) {
-    JacobiMethod jacobiMethod = new JacobiReal(matrix);
-    jacobiMethod.solve();
-    return jacobiMethod;
+  public static Eigensystem of(Tensor matrix) {
+    return new JacobiReal(matrix).solve();
   }
 
   // ---
-  @PackageTestAccess
-  JacobiReal(Tensor matrix) {
+  public JacobiReal(Tensor matrix) {
     super(matrix);
   }
 

@@ -5,13 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.pdf.c.ErlangDistribution;
+import ch.alpine.tensor.pdf.c.StudentTDistribution;
 
 class CDFTest {
   @Test
   void testCDFFail() {
-    Distribution distribution = ErlangDistribution.of(3, RealScalar.of(0.3));
+    Distribution distribution = StudentTDistribution.of(1, 1, 1);
     assertThrows(IllegalArgumentException.class, () -> CDF.of(distribution));
   }
 
