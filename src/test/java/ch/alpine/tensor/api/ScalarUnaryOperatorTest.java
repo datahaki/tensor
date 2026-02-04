@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.tri.Sinc;
 import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.sca.tri.Tan;
 import ch.alpine.tensor.sca.tri.Tanh;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 /** the purpose of the test is to demonstrate that
  * none of the special input cases: NaN, Infty

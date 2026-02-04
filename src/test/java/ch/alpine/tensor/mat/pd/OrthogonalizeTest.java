@@ -267,7 +267,7 @@ class OrthogonalizeTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions2")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions2")
   void testCorrespondence(Distribution distribution) {
     Tensor matrix = RandomVariate.of(distribution, 4, 7);
     Tensor res1 = Orthogonalize.usingPD(matrix);

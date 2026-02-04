@@ -54,7 +54,7 @@ class TensorWedgeTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testAntisymmetric(Distribution distribution) {
     Tensor matrix = RandomVariate.of(distribution, 4, 4);
     Tensor skewsy = TensorWedge.of(matrix);
@@ -70,7 +70,7 @@ class TensorWedgeTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testVector(Distribution distribution) {
     Tensor vector = RandomVariate.of(distribution, 10);
     Tensor skewsy = TensorWedge.of(vector);

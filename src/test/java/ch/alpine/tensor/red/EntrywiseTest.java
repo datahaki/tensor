@@ -16,7 +16,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class EntrywiseTest {
   @Test

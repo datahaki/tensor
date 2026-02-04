@@ -23,7 +23,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class LinearSolveFunctionTest {
   @RepeatedTest(10)

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.num.GaussScalar;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class CompatibleUnitQTest {
   @Test

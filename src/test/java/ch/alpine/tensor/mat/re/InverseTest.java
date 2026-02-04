@@ -246,7 +246,7 @@ class InverseTest {
 
   /** Reference: NR 2007 eq. (2.7.2) */
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testShermanMorrison(Distribution distribution) {
     RandomGenerator random = new Random(3);
     for (int n = 3; n < 8; ++n) {

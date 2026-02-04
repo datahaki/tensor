@@ -32,7 +32,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Im;
-import test.DFTConsistency;
+import test.wrap.DFTConsistency;
 
 class FourierDCTTest {
   @Test

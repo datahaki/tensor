@@ -148,18 +148,19 @@ class ClenshawChebyshevTest {
 
   @Test
   void testY1() {
-    double i1 = BesselY._1(2.3).number().doubleValue();
-    // System.out.println(i1);
-    assertEquals(i1, 0.0522773155615776);
-    // ............. 0.05227731584422475
+    Scalar i1 = BesselY._1(2.3);
+    Tolerance.CHOP.requireClose(i1, //
+        RealScalar.of(0.0522773155615776));
+    // .............. 0.05227731584422475
   }
 
   @Test
   void testY5() {
-    double i1 = BesselY.of(5, 2.3).number().doubleValue();
+    Scalar i1 = BesselY.of(5, 2.3);
     // System.out.println(i1);
-    assertEquals(i1, -5.4143236590500425);
-    // ............. -5.414323703733118
+    Tolerance.CHOP.requireClose(i1, //
+        RealScalar.of(-5.4143236590500425));
+    // .............. -5.414323703733118
   }
 
   @Test

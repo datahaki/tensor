@@ -1,5 +1,5 @@
 // code by jph
-package test;
+package test.wrap;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.BasisTransform;
@@ -10,9 +10,8 @@ import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.UpperTriangularize;
 import ch.alpine.tensor.mat.qr.HessenbergDecomposition;
 
-public enum HessenbergDecompositionQ {
-  ;
-  public static void check(Tensor matrix, HessenbergDecomposition hessenbergDecomposition) {
+public record HessenbergDecompositionQ(Tensor matrix) {
+  public void check(HessenbergDecomposition hessenbergDecomposition) {
     Tensor p = hessenbergDecomposition.getUnitary();
     UnitaryMatrixQ.INSTANCE.requireMember(p);
     Tensor h = hessenbergDecomposition.getH();

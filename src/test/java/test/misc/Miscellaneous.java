@@ -1,5 +1,5 @@
 // code by jph
-package test;
+package test.misc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,7 +55,7 @@ import ch.alpine.tensor.nrm.VectorInfinityNorm;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.N;
 
-class MiscTest {
+class Miscellaneous {
   static List<Function<Tensor, ?>> functions() {
     return Arrays.asList( //
         RowReduce::of, //

@@ -38,7 +38,7 @@ import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import test.InterpolationQ;
+import test.wrap.InterpolationQ;
 
 class LinearInterpolationTest {
   @Test

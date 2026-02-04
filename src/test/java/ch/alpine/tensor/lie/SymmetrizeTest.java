@@ -83,7 +83,7 @@ class SymmetrizeTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testMatrix(Distribution distribution) {
     Tensor tensor = RandomVariate.of(distribution, 9, 9);
     SymmetricMatrixQ.INSTANCE.requireMember(Symmetrize.of(tensor));

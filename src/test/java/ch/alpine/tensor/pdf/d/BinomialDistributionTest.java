@@ -41,7 +41,7 @@ import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
-import test.DistributionEquality;
+import test.wrap.DistributionEquality;
 
 class BinomialDistributionTest {
   @ParameterizedTest

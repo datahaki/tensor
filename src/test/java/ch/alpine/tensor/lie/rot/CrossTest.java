@@ -52,7 +52,7 @@ class CrossTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testNormal(Distribution distribution) {
     Tensor a = RandomVariate.of(distribution, 3);
     Tensor b = RandomVariate.of(distribution, 3);

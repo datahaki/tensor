@@ -145,7 +145,7 @@ class QuaternionTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testSqrt(Distribution distribution) {
     Tensor arg = RandomVariate.of(distribution, 4);
     Scalar q = Quaternion.of(arg.Get(0), arg.extract(1, 4));
@@ -155,7 +155,7 @@ class QuaternionTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testSqrt0(Distribution distribution) {
     Tensor arg = RandomVariate.of(distribution, 4);
     Scalar q = Quaternion.of(RealScalar.ZERO, arg.extract(1, 4));

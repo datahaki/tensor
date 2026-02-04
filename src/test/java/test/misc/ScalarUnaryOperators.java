@@ -1,5 +1,5 @@
 // code by jph
-package test;
+package test.misc;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -53,7 +53,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.sca.tri.Tan;
 import ch.alpine.tensor.sca.tri.Tanh;
 
-class ScalarUnaryOperatorsTest {
+class ScalarUnaryOperators {
   private static ScalarUnaryOperator[] suos() {
     return new ScalarUnaryOperator[] { //
         Abs.FUNCTION, //

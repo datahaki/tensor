@@ -68,7 +68,7 @@ class QuaternionImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions2")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions2")
   void testPower3Random(Distribution distribution) {
     Scalar quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
     Scalar q3 = Power.of(quaternion, 3);
@@ -77,7 +77,7 @@ class QuaternionImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testPowerN1Random(Distribution distribution) {
     Scalar quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
     Scalar qr = Power.of(quaternion, -1);
@@ -86,7 +86,7 @@ class QuaternionImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testPowerN2Random(Distribution distribution) {
     Scalar quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
     Scalar q2r = Power.of(quaternion, -2);

@@ -1,4 +1,4 @@
-package test;
+package test.wrap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;

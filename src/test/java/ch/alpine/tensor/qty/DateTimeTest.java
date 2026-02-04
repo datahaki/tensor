@@ -44,7 +44,7 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class DateTimeTest {
   @Test

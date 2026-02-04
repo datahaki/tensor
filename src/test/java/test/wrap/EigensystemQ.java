@@ -1,14 +1,11 @@
 // code by jph
-package test;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+package test.wrap;
 
 import java.io.Serializable;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.BasisTransform;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.Tolerance;
@@ -21,7 +18,7 @@ public record EigensystemQ(Tensor matrix) implements Serializable {
    * @param chop */
   public void require(Eigensystem eigensystem, Chop chop) {
     Tensor diagonalMatrix = DiagonalMatrix.with(eigensystem.values());
-    assertDoesNotThrow(() -> Serialization.copy(eigensystem));
+    SerializableQ.require(eigensystem);
     require(diagonalMatrix, eigensystem.vectors(), chop);
   }
 
@@ -30,7 +27,7 @@ public record EigensystemQ(Tensor matrix) implements Serializable {
   }
 
   public void require(RealEigensystem realEigensystem, Chop chop) {
-    assertDoesNotThrow(() -> Serialization.copy(realEigensystem));
+    SerializableQ.require(realEigensystem);
     require(realEigensystem.diagonalMatrix(), realEigensystem.vectors(), chop);
   }
 

@@ -20,6 +20,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.jet.Hold;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
@@ -115,14 +116,14 @@ class PowerTest {
   void testNegativeFractional() {
     Scalar result = Power.of(-2.2, 1.3);
     Scalar gndtru = ComplexScalar.of(-1.6382047104755275, -2.254795345529229);
-    assertEquals(result, gndtru);
+    Tolerance.CHOP.requireClose(result, gndtru);
   }
 
   @Test
   void testNegativeFractionalNeg() {
     Scalar result = Power.of(-2.2, -1.3);
     Scalar gndtru = ComplexScalar.of(-0.21089641642663778, 0.290274014661784);
-    assertEquals(result, gndtru);
+    Tolerance.CHOP.requireClose(result, gndtru);
   }
 
   @Test

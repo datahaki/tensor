@@ -21,7 +21,7 @@ import ch.alpine.tensor.pdf.RandomSample;
 import ch.alpine.tensor.pdf.RandomSampleInterface;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Clips;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class BoxRandomSampleTest {
   @Test

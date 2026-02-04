@@ -91,7 +91,7 @@ class LeftNullSpaceTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testRandomSome(Distribution distribution) {
     Tensor matrix = RandomVariate.of(distribution, 7, 3);
     Tensor ns = LeftNullSpace.of(matrix);
@@ -115,7 +115,7 @@ class LeftNullSpaceTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testRandom(Distribution distribution) {
     Tensor x = RandomVariate.of(distribution, 3);
     Tensor y = RandomVariate.of(distribution, 7);

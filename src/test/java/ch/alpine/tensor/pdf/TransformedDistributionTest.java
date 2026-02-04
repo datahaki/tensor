@@ -19,7 +19,7 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.red.Mean;
-import test.DistributionEquality;
+import test.wrap.DistributionEquality;
 
 class TransformedDistributionTest {
   @Test

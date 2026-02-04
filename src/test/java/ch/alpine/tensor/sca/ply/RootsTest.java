@@ -46,7 +46,7 @@ class RootsTest {
   private final int LIMIT = 20;
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions2")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions2")
   void testComplexTripleRoot(Distribution distribution) {
     Random random = new Random(3);
     for (int length = 1; length <= 3; ++length)
@@ -236,7 +236,7 @@ class RootsTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions2")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions2")
   void testRealTripleRoot(Distribution distribution) {
     for (int length = 1; length <= 3; ++length)
       for (int index = 0; index < LIMIT; ++index) {

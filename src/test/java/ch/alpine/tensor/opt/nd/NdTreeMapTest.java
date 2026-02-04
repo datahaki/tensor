@@ -28,7 +28,7 @@ import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class NdTreeMapTest {
   @Test

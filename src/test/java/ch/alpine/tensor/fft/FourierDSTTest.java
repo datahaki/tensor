@@ -28,7 +28,7 @@ import ch.alpine.tensor.pdf.ComplexUniformDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Im;
-import test.DFTConsistency;
+import test.wrap.DFTConsistency;
 
 class FourierDSTTest {
   private static Tensor _consistent1(Tensor vector) {

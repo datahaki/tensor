@@ -27,7 +27,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.pow.Power;
-import test.DFTConsistency;
+import test.wrap.DFTConsistency;
 
 class HaarWaveletTransformTest {
   @Test

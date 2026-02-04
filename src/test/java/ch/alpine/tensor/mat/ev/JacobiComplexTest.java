@@ -32,7 +32,7 @@ import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Im;
-import test.EigensystemQ;
+import test.wrap.EigensystemQ;
 
 class JacobiComplexTest {
   @RepeatedTest(5)

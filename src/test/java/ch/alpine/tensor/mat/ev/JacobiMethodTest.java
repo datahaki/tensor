@@ -37,7 +37,7 @@ import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import test.EigensystemQ;
+import test.wrap.EigensystemQ;
 
 class JacobiMethodTest {
   private static void checkEquation(Tensor matrix, Eigensystem eigensystem) {

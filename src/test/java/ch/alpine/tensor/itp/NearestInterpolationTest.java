@@ -14,7 +14,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import test.InterpolationQ;
+import test.wrap.InterpolationQ;
 
 class NearestInterpolationTest {
   @Test

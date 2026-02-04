@@ -4,7 +4,7 @@ package ch.alpine.tensor.tmp;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class BaseResamplingMethodTest {
   @ParameterizedTest

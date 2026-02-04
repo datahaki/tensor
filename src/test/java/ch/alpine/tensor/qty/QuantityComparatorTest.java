@@ -16,7 +16,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Sort;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class QuantityComparatorTest {
   @Test

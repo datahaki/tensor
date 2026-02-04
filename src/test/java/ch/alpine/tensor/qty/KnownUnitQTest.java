@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ext.ResourceData;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class KnownUnitQTest {
   @Test

@@ -35,8 +35,8 @@ import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
-import test.SchurDecompositionQ;
-import test.SerializableQ;
+import test.wrap.SchurDecompositionQ;
+import test.wrap.SerializableQ;
 
 class SchurDecompositionTest {
   private static void _checkExpLog(Tensor matrix, SchurDecomposition schurDecomposition) {
@@ -51,7 +51,7 @@ class SchurDecompositionTest {
   @Test
   void testSimple() {
     Tensor matrix = Tensors.matrixDouble(new double[][] { { 3.7, 0.8, 0.1 }, { .2, 5, .3 }, { .1, 0, 4.3 } });
-    SchurDecomposition schurDecomposition = SchurDecompositionQ.of(matrix);
+    SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
     SerializableQ.require(schurDecomposition);
     Tensor t = schurDecomposition.getT();
     Tolerance.CHOP.requireClose(UpperTriangularize.of(t), t);
@@ -62,7 +62,7 @@ class SchurDecompositionTest {
   @Test
   void testParlett2x2() {
     Tensor matrix = Tensors.matrixDouble(new double[][] { { 2, 1 }, { 0, 2.1 } });
-    SchurDecomposition schurDecomposition = SchurDecomposition.of(matrix);
+    SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
     _checkExpLog(matrix, schurDecomposition);
   }
 
@@ -70,14 +70,14 @@ class SchurDecompositionTest {
   @ValueSource(ints = { 2, 3, 5, 10 })
   void testRandom(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
-    SchurDecompositionQ.of(matrix);
+    new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
   }
 
   @ParameterizedTest
   @ValueSource(ints = { 2, 3, 5, 10 })
   void testRandomSymmetric(int n) {
     Tensor matrix = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n));
-    SchurDecomposition schurDecomposition = SchurDecompositionQ.of(matrix);
+    SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
     Tensor t = schurDecomposition.getT();
     Tensor diag = Sort.of(Diagonal.of(t));
     Eigensystem eigensystem = Eigensystem.of(matrix);
@@ -88,17 +88,17 @@ class SchurDecompositionTest {
   @ValueSource(ints = { 2, 3, 5, 10 })
   void testRandomUnits(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m")), n, n);
-    SchurDecompositionQ.of(matrix);
+    new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testSo3(Distribution distribution) {
     Tensor x = RandomVariate.of(distribution, 3);
     Tensor y = RandomVariate.of(distribution, 3);
-    Tensor xy = TensorWedge.of(x, y);
-    SchurDecomposition sd = SchurDecompositionQ.of(xy);
-    Tensor t = sd.getT();
+    Tensor matrix = TensorWedge.of(x, y);
+    SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
+    Tensor t = schurDecomposition.getT();
     AntisymmetricMatrixQ.INSTANCE.requireMember(t);
     Tensor d = Diagonal.of(t);
     Tolerance.CHOP.requireAllZero(d);
@@ -110,9 +110,9 @@ class SchurDecompositionTest {
     Random random = new Random(2);
     Tensor x = RandomVariate.of(NormalDistribution.standard(), random, n);
     Tensor y = RandomVariate.of(NormalDistribution.standard(), random, n);
-    Tensor xy = TensorWedge.of(x, y);
-    SchurDecomposition sd = SchurDecompositionQ.of(xy);
-    Tensor t = sd.getT();
+    Tensor matrix = TensorWedge.of(x, y);
+    SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
+    Tensor t = schurDecomposition.getT();
     AntisymmetricMatrixQ.INSTANCE.requireMember(t);
     Tensor d = Diagonal.of(t);
     Tolerance.CHOP.requireAllZero(d);
@@ -128,9 +128,9 @@ class SchurDecompositionTest {
     Tensor x = RandomVariate.of(NormalDistribution.of(0, 0.3), random, n);
     Tensor y = RandomVariate.of(NormalDistribution.of(0, 0.3), random, n);
     Tensor xy = TensorWedge.of(x, y);
-    Tensor orth = MatrixExp.of(xy);
-    SchurDecomposition sd = SchurDecompositionQ.of(orth);
-    Tensor t = sd.getT();
+    Tensor matrix = MatrixExp.of(xy);
+    SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
+    Tensor t = schurDecomposition.getT();
     Tensor bin = t.map(Tolerance.CHOP).map(Abs.FUNCTION).map(Sign.FUNCTION);
     Tensor r = Nest.of(Total::of, bin, 2);
     assertEquals(r, RealScalar.of(n + 2));
@@ -139,8 +139,8 @@ class SchurDecompositionTest {
   @Test
   void Math4x4() {
     Tensor matrix = Tensors.fromString("{{0, 1, 2, 3}, {-1, 0, 4, 5}, {-2, -4, 0, 6}, {-3, -5, -6, 0}}");
-    SchurDecomposition sd = SchurDecompositionQ.of(matrix);
-    Tensor t = sd.getT();
+    SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
+    Tensor t = schurDecomposition.getT();
     Tolerance.CHOP.requireZero(Trace.of(t));
     AntisymmetricMatrixQ.INSTANCE.requireMember(t);
     Tolerance.CHOP.requireAllZero(UpperTriangularize.of(t, 2));
@@ -160,7 +160,7 @@ class SchurDecompositionTest {
   void testFail() {
     int n = 10;
     Tensor matrix = RandomVariate.of(NormalDistribution.of(0, 0.3), n, n);
-    SchurDecompositionQ.of(matrix);
+    new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
     SchurDecomposition.MAX_ITERATIONS.set(2);
     assertThrows(Exception.class, () -> SchurDecomposition.of(matrix));
     SchurDecomposition.MAX_ITERATIONS.remove();

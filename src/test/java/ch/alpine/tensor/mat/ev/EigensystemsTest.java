@@ -32,7 +32,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.ply.ChebyshevNodes;
-import test.EigensystemQ;
+import test.wrap.EigensystemQ;
 
 class EigensystemsTest {
   @Test

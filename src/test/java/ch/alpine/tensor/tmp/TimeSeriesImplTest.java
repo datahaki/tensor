@@ -19,6 +19,7 @@ import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.sca.Clip;
+import test.wrap.SerializableQ;
 
 class TimeSeriesImplTest {
   @Test
@@ -91,7 +92,7 @@ class TimeSeriesImplTest {
     timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(4, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(24, "h")), Tensors.vector(0, 0, 6));
-    assertDoesNotThrow(() -> Serialization.copy(timeSeries));
+    SerializableQ.require(timeSeries);
     assertEquals(timeSeries.size(), 3);
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();

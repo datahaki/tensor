@@ -1,4 +1,4 @@
-package test;
+package test.bulk;
 
 import java.util.List;
 import java.util.stream.Stream;

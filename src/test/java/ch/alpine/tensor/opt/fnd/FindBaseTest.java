@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Sin;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class FindBaseTest {
   @Test

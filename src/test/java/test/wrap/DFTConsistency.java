@@ -1,4 +1,4 @@
-package test;
+package test.wrap;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;

@@ -1,5 +1,5 @@
 // code by jph
-package test;
+package test.wrap;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;

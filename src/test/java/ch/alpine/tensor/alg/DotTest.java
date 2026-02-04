@@ -187,7 +187,7 @@ class DotTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testComparison(Distribution distribution) {
     Tensor v = RandomVariate.of(distribution, 50);
     Tensor m1 = RandomVariate.of(distribution, 50, 3);

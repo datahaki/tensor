@@ -20,7 +20,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 
 class MatrixDotTransposeTest {
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testSimple(Distribution distribution) {
     Tensor matrix = RandomVariate.of(distribution, 3, 5);
     Tensor tensor = Dot.of(matrix, Transpose.of(matrix));
@@ -29,7 +29,7 @@ class MatrixDotTransposeTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testTwo(Distribution distribution) {
     Tensor a = RandomVariate.of(distribution, 3, 5);
     Tensor b = RandomVariate.of(distribution, 3, 5);
@@ -39,7 +39,7 @@ class MatrixDotTransposeTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testRank3(Distribution distribution) {
     Tensor a = RandomVariate.of(distribution, 4, 3);
     Tensor b = LeviCivitaTensor.of(3);

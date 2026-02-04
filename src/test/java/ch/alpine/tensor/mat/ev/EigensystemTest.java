@@ -42,7 +42,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.N;
-import test.EigensystemQ;
+import test.wrap.EigensystemQ;
 
 class EigensystemTest {
   @Test

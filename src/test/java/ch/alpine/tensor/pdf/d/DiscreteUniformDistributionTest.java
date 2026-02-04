@@ -30,8 +30,8 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
-import test.DistributionEquality;
-import test.SerializableQ;
+import test.wrap.DistributionEquality;
+import test.wrap.SerializableQ;
 
 class DiscreteUniformDistributionTest {
   @Test

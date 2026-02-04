@@ -25,7 +25,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import test.InterpolationQ;
+import test.wrap.InterpolationQ;
 
 class LanczosInterpolationTest {
   @Test

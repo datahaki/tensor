@@ -45,7 +45,7 @@ class QuaternionToRotationMatrixTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testRandom(Distribution distribution) {
     Tensor wxyz = RandomVariate.of(distribution, 4);
     Quaternion q = Quaternion.of(wxyz.Get(0), wxyz.extract(1, 4));
@@ -59,7 +59,7 @@ class QuaternionToRotationMatrixTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testQuaternionVector(Distribution distribution) {
     RandomGenerator randomGenerator = ThreadLocalRandom.current();
     Quaternion quaternion = Quaternion.of(randomGenerator.nextGaussian(), randomGenerator.nextGaussian(), randomGenerator.nextGaussian(),

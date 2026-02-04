@@ -34,7 +34,7 @@ import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import test.DFTConsistency;
+import test.wrap.DFTConsistency;
 
 class FourierTest {
   @Test

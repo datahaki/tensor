@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.sca.Chop;
-import test.EigensystemQ;
+import test.wrap.EigensystemQ;
 
 class QREigensystemTest {
   @Test

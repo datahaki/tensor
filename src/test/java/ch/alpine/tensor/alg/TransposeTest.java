@@ -133,7 +133,7 @@ class TransposeTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testComparison(Distribution distribution) {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 6, 5, 4);
     ArrayQ.require(randn);

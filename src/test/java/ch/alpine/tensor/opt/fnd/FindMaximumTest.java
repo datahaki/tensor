@@ -7,7 +7,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.tri.Sin;
-import test.SerializableQ;
+import test.wrap.SerializableQ;
 
 class FindMaximumTest {
   @Test
