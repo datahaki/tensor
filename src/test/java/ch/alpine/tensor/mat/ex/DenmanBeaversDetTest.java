@@ -58,7 +58,8 @@ class DenmanBeaversDetTest {
   void testFail() {
     Tensor matrix = Import.of("/ch/alpine/tensor/mat/ex/dbd_fail.csv");
     try {
-      new DenmanBeaversDet(matrix, Tolerance.CHOP);
+      DenmanBeaversDet denmanBeaversDet = new DenmanBeaversDet(matrix, Tolerance.CHOP);
+      denmanBeaversDet.toString();
     } catch (Exception exception) {
       // ---
     }

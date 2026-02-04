@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 class LinearSparseTest {
   @Test
   void test() {
-    new LinearSparse();
+    LinearSparse linearSparse = new LinearSparse();
+    linearSparse.toString();
   }
 }

@@ -85,14 +85,14 @@ class RootsDegree3Test {
   @Test
   void testRoots3() {
     Tensor roots = Tensors.vector(0.27349919995262256, 0.28215588800565544, 0.3056009752969802);
-    Tensor coeffs = CoefficientList.of(roots);
+    Tensor coeffs = Polynomial.fromRoots(roots).coeffs();
     Chop._12.requireClose(roots, Sort.of(RootsDegree3.of(coeffs)));
   }
 
   @Test
   void testTriple1() {
     Tensor roots = Tensors.vector(2.146361758590232, 2.146361758590232, 2.146361758590232);
-    Tensor coeffs = CoefficientList.of(roots);
+    Tensor coeffs = Polynomial.fromRoots(roots).coeffs();
     Tensor r2 = RootsDegree3.of(coeffs);
     Chop._12.requireClose(roots, r2);
   }
@@ -100,7 +100,7 @@ class RootsDegree3Test {
   @Test
   void testTriple2() {
     Tensor roots = Tensors.vector(0.22765732048577852, 0.22765732048577852, 0.22765732048577852);
-    Tensor coeffs = CoefficientList.of(roots);
+    Tensor coeffs = Polynomial.fromRoots(roots).coeffs();
     Tensor r2 = RootsDegree3.of(coeffs);
     Chop._12.requireClose(roots, r2);
   }
@@ -219,7 +219,7 @@ class RootsDegree3Test {
   @Test
   void testOrdering() {
     Tensor zeros = Tensors.fromString("{1, 2-I, 2+I}");
-    Polynomial polynomial = CoefficientList.polynomial(zeros);
+    Polynomial polynomial = Polynomial.fromRoots(zeros);
     Tolerance.CHOP.requireClose(zeros, polynomial.roots());
   }
 }

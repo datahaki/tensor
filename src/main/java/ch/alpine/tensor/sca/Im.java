@@ -25,7 +25,7 @@ public enum Im implements ScalarUnaryOperator {
     throw new Throw(scalar);
   }
 
-  /** @param tensor
+  /** @param tensor may also be a {@link Scalar}
    * @return if all entries of given tensor have imaginary part equals 0 */
   public static boolean allZero(Tensor tensor) {
     return Flatten.scalars(tensor).map(Im.FUNCTION).allMatch(Scalars::isZero);

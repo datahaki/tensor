@@ -11,13 +11,16 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 25
-        uses: actions/setup-java@v2
+      - name: checkout main repo
+        uses: actions/checkout@v4
+
+      - name: set up JDK 25
+        uses: actions/setup-java@v4
         with:
           java-version: '25'
           distribution: 'temurin'
+          cache: 'maven'
+
       - name: mvn test
-        working-directory: .
-        run: mvn test -B
+        run: mvn -B -ntp test
 

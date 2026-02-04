@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +17,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.DateTime;
 
 class ImTest {
@@ -24,6 +26,7 @@ class ImTest {
     Scalar scalar = Im.FUNCTION.apply(Scalars.fromString("3+I*6/7"));
     assertEquals(scalar, RationalScalar.of(6, 7));
     ExactScalarQ.require(scalar);
+    assertTrue(Im.allZero(Pi.VALUE));
   }
 
   @Test

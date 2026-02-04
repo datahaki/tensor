@@ -78,6 +78,17 @@ public class Polynomial extends HornerScheme {
         : LeastSquares.of(VandermondeMatrix.of(xdata, degree), ydata), Tolerance.CHOP::isZero));
   }
 
+  /** @param roots vector
+   * @return polynomial with given roots */
+  public static Polynomial fromRoots(Tensor roots) {
+    return roots.stream() //
+        .map(Scalar.class::cast) //
+        .map(zero -> Tensors.of(zero.negate(), zero.one())) //
+        .map(Polynomial::of) //
+        .reduce(Polynomial::times) //
+        .orElseThrow();
+  }
+
   private static int lastNonZero(Tensor coeffs) {
     return lastNot(coeffs, Scalars::isZero);
   }

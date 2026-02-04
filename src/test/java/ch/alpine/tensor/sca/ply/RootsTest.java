@@ -54,7 +54,7 @@ class RootsTest {
         Tensor zeros = ConstantArray.of(ComplexScalar.of( //
             RandomVariate.of(distribution, random), //
             RandomVariate.of(distribution, random)), length);
-        Tensor coeffs = CoefficientList.of(zeros);
+        Tensor coeffs = Polynomial.fromRoots(zeros).coeffs();
         Tensor roots = Roots.of(coeffs);
         Polynomial polynomial = Polynomial.of(coeffs);
         Tensor map = roots.map(polynomial);
@@ -225,7 +225,7 @@ class RootsTest {
     int length = repetitionInfo.getCurrentRepetition();
     for (int index = 0; index < LIMIT; ++index) {
       Tensor roots = Sort.of(RandomVariate.of(distribution, length));
-      Tensor solve = Roots.of(CoefficientList.of(roots));
+      Tensor solve = Roots.of(Polynomial.fromRoots(roots).coeffs());
       if (!Chop._03.isClose(roots, solve)) {
         System.err.println("real unique");
         System.err.println(roots);
@@ -241,7 +241,7 @@ class RootsTest {
     for (int length = 1; length <= 3; ++length)
       for (int index = 0; index < LIMIT; ++index) {
         Tensor zeros = ConstantArray.of(RandomVariate.of(distribution), length);
-        Tensor coeff = CoefficientList.of(zeros);
+        Tensor coeff = Polynomial.fromRoots(zeros).coeffs();
         Tensor roots = Roots.of(coeff);
         if (!Chop._01.isClose(zeros, roots)) {
           System.err.println(zeros);
@@ -255,7 +255,7 @@ class RootsTest {
     Distribution distribution = NormalDistribution.of(Quantity.of(1, "m"), Quantity.of(0.5, "m"));
     for (int index = 0; index < LIMIT; ++index) {
       Tensor zeros = ConstantArray.of(RandomVariate.of(distribution), 3);
-      Tensor coeff = CoefficientList.of(zeros);
+      Tensor coeff = Polynomial.fromRoots(zeros).coeffs();
       Tensor roots = Roots.of(coeff);
       if (!Chop._01.isClose(zeros, roots)) {
         System.err.println(zeros);

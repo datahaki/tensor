@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 class HoldLoSparseTest {
   @Test
   void test() {
-    new HoldLoSparse();
+    HoldLoSparse holdLoSparse = new HoldLoSparse();
+    holdLoSparse.toString();
   }
 }

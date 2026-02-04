@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 class HoldHiTest {
   @Test
   void test() {
-    new HoldHi();
+    HoldHi holdHi = new HoldHi();
+    holdHi.toString();
   }
 }

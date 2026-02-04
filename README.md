@@ -300,32 +300,3 @@ Predefined color gradients
 Predefined color lists
 
 ![colordatalists](https://user-images.githubusercontent.com/4012178/42363765-095692fe-80f9-11e8-8376-3e1364937536.png)
-
-## Integration
-
-From time to time, a version is deployed and made available for maven integration. Specify `repository` and `dependency` of the library `tensor` in the `pom.xml` file of your maven project:
-
-```xml
-<dependencies>
-  <!-- other dependencies -->
-  <dependency>
-    <groupId>ch.alpine</groupId>
-    <artifactId>tensor</artifactId>
-    <version>1.0.6</version>
-  </dependency>
-</dependencies>
-
-<repositories>
-  <!-- other repositories -->
-  <repository>
-    <id>tensor-mvn-repo</id>
-    <url>https://raw.github.com/datahaki/tensor/mvn-repo/</url>
-    <snapshots>
-      <enabled>true</enabled>
-      <updatePolicy>always</updatePolicy>
-    </snapshots>
-  </repository>
-</repositories>
-```
-
-The source code is attached to every release.
