@@ -19,8 +19,11 @@ import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Sin;
 
-/** Identity in Mathematica
- * FourierDST[vector] == vector . FourierDSTMatrix
+/** The interface is compliant with Mathematica standards:
+ * 
+ * "The result of FourierDxTMatrix[n].list is equivalent to FourierDxT[list]
+ * when list has length n. However, the computation of FourierDxT[list] is
+ * much faster and has less numerical error."
  * 
  * implementation of FourierDCT[x, 1] is consistent with Mathematica for real and complex input
  * 

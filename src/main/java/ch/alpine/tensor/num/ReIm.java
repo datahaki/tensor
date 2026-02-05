@@ -6,6 +6,7 @@ import java.io.Serializable;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Re;
@@ -38,6 +39,7 @@ public record ReIm(Scalar re, Scalar im) implements Serializable {
    * @param vector of length 2 with entries that may be {@link Quantity}
    * @return vector of length 2 with real entries corresponding to real and imag of result */
   public Tensor rotate(Tensor vector) {
+    Integers.requireEquals(vector.length(), 2);
     return product(re, im, vector.Get(0), vector.Get(1)).vector();
   }
 

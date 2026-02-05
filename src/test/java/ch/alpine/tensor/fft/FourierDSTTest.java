@@ -19,6 +19,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.Import;
+import ch.alpine.tensor.io.Pretty;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -28,6 +29,7 @@ import ch.alpine.tensor.pdf.ComplexUniformDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Im;
+import ch.alpine.tensor.sca.Round;
 import test.wrap.DFTConsistency;
 
 class FourierDSTTest {
@@ -210,6 +212,12 @@ class FourierDSTTest {
     Tolerance.CHOP.requireClose(r3, vector);
     Tensor r4 = FourierDST._3.matrix(n).dot(r1);
     Tolerance.CHOP.requireClose(r3, r4);
+  }
+
+  @Test
+  void testFour() {
+    Tensor matrix = FourierDST._2.matrix(4);
+    IO.println(Pretty.of(matrix.map(Round._3)));
   }
 
   @ParameterizedTest

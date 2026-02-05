@@ -13,6 +13,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.RotateLeft;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 
 class LinearSubspaceTest {
   @Test
@@ -28,8 +30,11 @@ class LinearSubspaceTest {
   @ValueSource(ints = { 2, 3, 8 })
   void testAntiSymm(int n) {
     LinearSubspace linearSubspace = LinearSubspace.of(AntisymmetricMatrixQ.INSTANCE::defect, n, n);
-    assertEquals(linearSubspace.dimensions(), n * (n - 1) / 2);
+    int dimensions = linearSubspace.dimensions();
+    assertEquals(dimensions, n * (n - 1) / 2);
     ExactTensorQ.require(linearSubspace.basis());
+    Tensor weights = RandomVariate.of(NormalDistribution.standard(), dimensions);
+    linearSubspace.apply(weights);
   }
 
   @Test

@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
-import java.io.Serializable;
 import java.util.List;
 
 import ch.alpine.tensor.Tensor;
@@ -17,7 +16,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LeftNullSpace;
 
 // TODO TENSOR an empty LinearSubspace could also implement this interface
-public class LinearSubspace implements Serializable {
+public class LinearSubspace implements TensorUnaryOperator {
   /** @param constraint as homogeneous equations
    * @param size
    * @return */
@@ -31,7 +30,7 @@ public class LinearSubspace implements Serializable {
         .map(Flatten::of));
     Tensor nullSpace = LeftNullSpace.of(eqs);
     if (Tensors.nonEmpty(nullSpace))
-      return new LinearSubspace(nullSpace, Tensor.of(nullSpace.stream().map(reshape)));
+      return new LinearSubspace(nullSpace, reshape.slash(nullSpace));
     throw new Throw(eqs);
   }
 
@@ -52,6 +51,11 @@ public class LinearSubspace implements Serializable {
     this.basis = basis;
   }
 
+  @Override
+  public Tensor apply(Tensor weights) {
+    return weights.dot(basis);
+  }
+
   public Tensor basis() {
     return basis;
   }
@@ -63,7 +67,7 @@ public class LinearSubspace implements Serializable {
   /** @param v
    * @return least squares projection */
   public Tensor projection(Tensor v) {
-    return pinv.dot(Flatten.of(v)).dot(basis);
+    return apply(pinv.dot(Flatten.of(v)));
   }
 
   @Override // from Object

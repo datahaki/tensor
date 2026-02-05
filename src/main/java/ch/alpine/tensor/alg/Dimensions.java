@@ -79,7 +79,8 @@ public class Dimensions implements Serializable {
         && predicate.test(list());
   }
 
-  /** @return 0 for a scalar, 1 for a (non-empty) vector, 2 for a matrix, etc.
+  /** @return highest rank until which tensor has array structure, in particular:
+   * 0 for a scalar, 1 for a (possibly empty) vector, 2 for a matrix, etc.
    * @see TensorRank */
   public int rank() {
     return list.size();

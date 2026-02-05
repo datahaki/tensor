@@ -4,9 +4,11 @@ package ch.alpine.tensor.fft;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.VectorQ;
 
-/** Careful:
- * MATHEMATICA CONVENTION !
- * FourierDCT[vector] == vector . FourierDCTMatrix */
+/** The interface is compliant with Mathematica standards:
+ * 
+ * "The result of FourierDxTMatrix[n].list is equivalent to FourierDxT[list]
+ * when list has length n. However, the computation of FourierDxT[list] is
+ * much faster and has less numerical error." */
 public interface DiscreteFourierTransform {
   /** @param vector
    * @return matrix(vector.length()) . vector
@@ -19,5 +21,6 @@ public interface DiscreteFourierTransform {
    * @return square matrix of dimensions n x n */
   Tensor matrix(int n);
 
+  /** @return */
   DiscreteFourierTransform inverse();
 }

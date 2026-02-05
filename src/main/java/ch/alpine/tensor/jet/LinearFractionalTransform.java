@@ -10,6 +10,7 @@ import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.red.Times;
@@ -17,6 +18,7 @@ import ch.alpine.tensor.red.Times;
 /** https://stackoverflow.com/questions/35819142/calculate-a-2d-homogeneous-perspective-transformation-matrix-from-4-points-in-ma
  * 
  * The bottom right entry of the matrix is always equals to 1.
+ * That means the matrix lives in a normalized subset of PGL(3).
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LinearFractionalTransform.html">LinearFractionalTransform</a> */
@@ -52,7 +54,10 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
     return new LinearFractionalTransform(ArrayReshape.of(vec, m, m));
   }
 
-  /* package */ static LinearFractionalTransform of(Tensor matrix) {
+  public static LinearFractionalTransform of(Tensor matrix) {
+    int n = matrix.length() - 1;
+    Scalar val = matrix.Get(n, n);
+    Tolerance.CHOP.requireClose(val, val.one());
     return new LinearFractionalTransform(matrix.copy());
   }
 
@@ -60,11 +65,10 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
   private final Tensor matrix;
   private final int n;
 
+  /** @param matrix with bottom right entry equals one */
   private LinearFractionalTransform(Tensor matrix) {
     this.matrix = matrix;
     n = matrix.length() - 1;
-    // Scalar val = matrix.Get(n, n);
-    // Tolerance.CHOP.requireClose(val, val.one());
   }
 
   public LinearFractionalTransform inverse() {

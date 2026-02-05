@@ -35,6 +35,7 @@ class DimensionsTest {
     Dimensions dimensions = new Dimensions(Tensors.empty());
     assertTrue(dimensions.isArray());
     assertEquals(dimensions.list(), List.of(0));
+    assertEquals(dimensions.rank(), 1);
   }
 
   @Test
