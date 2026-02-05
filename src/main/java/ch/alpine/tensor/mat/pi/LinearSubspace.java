@@ -3,7 +3,6 @@ package ch.alpine.tensor.mat.pi;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -11,10 +10,10 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ArrayReshape;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LeftNullSpace;
 
 // TODO TENSOR an empty LinearSubspace could also implement this interface
@@ -26,7 +25,7 @@ public class LinearSubspace implements Serializable {
     size.forEach(Integers::requirePositive);
     int cumprod = size.stream().reduce(Math::multiplyExact).orElseThrow();
     TensorUnaryOperator reshape = v -> ArrayReshape.of(v, size);
-    Tensor eqs = Tensor.of(IntStream.range(0, cumprod).mapToObj(i -> UnitVector.of(cumprod, i)) //
+    Tensor eqs = Tensor.of(IdentityMatrix.stream(cumprod) //
         .map(reshape) //
         .map(constraint) //
         .map(Flatten::of));

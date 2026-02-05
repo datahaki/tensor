@@ -25,7 +25,7 @@ public abstract class ZeroDefectArrayQ implements MemberQ, Serializable {
   @Override // from MemberQ
   public final boolean isMember(Tensor tensor) {
     Dimensions dimensions = new Dimensions(tensor);
-    return dimensions.list().size() == rank //
+    return dimensions.rank() == rank //
         && dimensions.isArrayWith(this::isArrayWith) //
         && chop.allZero(defect(tensor));
   }

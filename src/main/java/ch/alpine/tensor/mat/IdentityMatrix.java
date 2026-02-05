@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -9,6 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ex.MatrixPower;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -42,6 +44,12 @@ public enum IdentityMatrix {
   public static Tensor of(int n) {
     Integers.requirePositive(n);
     return Tensors.matrix(KroneckerDelta::of, n, n);
+  }
+
+  /** @param n
+   * @return */
+  public static Stream<Tensor> stream(int n) {
+    return IntStream.range(0, n).mapToObj(k -> UnitVector.of(n, k));
   }
 
   /** @param n

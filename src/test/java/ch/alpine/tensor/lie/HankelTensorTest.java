@@ -38,7 +38,7 @@ class HankelTensorTest {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5), 4);
     Dimensions dimensions = new Dimensions(tensor);
     assertTrue(dimensions.isArray());
-    assertEquals(dimensions.list().size(), 4);
+    assertEquals(dimensions.rank(), 4);
   }
 
   @Test

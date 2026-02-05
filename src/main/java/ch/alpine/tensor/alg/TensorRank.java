@@ -30,7 +30,7 @@ public enum TensorRank {
   public static int ofArray(Tensor tensor) {
     Dimensions dimensions = new Dimensions(tensor);
     if (dimensions.isArray())
-      return dimensions.list().size();
+      return dimensions.rank();
     throw new Throw(tensor);
   }
 }

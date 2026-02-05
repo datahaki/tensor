@@ -49,9 +49,9 @@ class KroneckerProductTest {
         for (int i = 0; i < half; ++i)
           product = Join.of(half - 1, product.stream().toList()); // general algorithm
       } else {
-        if (dim_a.list().size() == 1 && dim_b.list().size() == 2) // special case: vector (X) matrix
+        if (dim_a.rank() == 1 && dim_b.rank() == 2) // special case: vector (X) matrix
           return Join.of(0, product.stream().toList());
-        if (dim_a.list().size() == 2 && dim_b.list().size() == 1) // special case: matrix (X) vector
+        if (dim_a.rank() == 2 && dim_b.rank() == 1) // special case: matrix (X) vector
           return Tensor.of(product.stream().map(s -> Join.of(0, s.stream().toList())));
       }
     return product;

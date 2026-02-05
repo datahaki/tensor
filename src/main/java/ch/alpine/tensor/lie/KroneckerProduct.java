@@ -27,7 +27,7 @@ public enum KroneckerProduct {
   public static Tensor of(Tensor a, Tensor b) {
     Dimensions dim_a = new Dimensions(a);
     Dimensions dim_b = new Dimensions(b);
-    int n = dim_a.list().size() + dim_b.list().size();
+    int n = dim_a.rank() + dim_b.rank();
     int half = n / 2;
     if (dim_a.isArray() && //
         dim_b.isArray() && //

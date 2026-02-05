@@ -76,10 +76,14 @@ class DimensionsTest {
   }
 
   @Test
+  void testRank() {
+    assertEquals(new Dimensions(RealScalar.ONE).rank(), 0);
+    assertEquals(new Dimensions(UnitVector.of(3, 2)).rank(), 1);
+    assertEquals(new Dimensions(HilbertMatrix.of(2, 3)).rank(), 2);
+  }
+
+  @Test
   void testDepth() {
-    assertEquals(new Dimensions(RealScalar.ONE).maxDepth(), 0);
-    assertEquals(new Dimensions(UnitVector.of(3, 2)).maxDepth(), 1);
-    assertEquals(new Dimensions(HilbertMatrix.of(2, 3)).maxDepth(), 2);
     Tensor tensor = Tensors.fromString("{{{2, 3}, {{}}}, {4, 5, 7}, 3}");
     assertEquals(new Dimensions(tensor).maxDepth(), 3);
   }
@@ -112,7 +116,7 @@ class DimensionsTest {
     Tensor tensor = Tensors.fromString("{{{2, 3}, {{}}}, {4, 5, 7}, 3}");
     Dimensions dimensions = new Dimensions(tensor);
     assertThrows(IndexOutOfBoundsException.class, () -> dimensions.lengths(-1));
-    dimensions.lengths(dimensions.maxDepth());
+    dimensions.lengths(dimensions.rank());
     assertThrows(IndexOutOfBoundsException.class, () -> dimensions.lengths(dimensions.maxDepth() + 1));
     assertThrows(UnsupportedOperationException.class, () -> dimensions.lengths(0).add(1));
   }

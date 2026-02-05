@@ -79,12 +79,10 @@ public class Dimensions implements Serializable {
         && predicate.test(list());
   }
 
-  /** Careful: for an empty tensor {} the function returns 0 !
-   * 
-   * @return 0 for a scalar, 1 for a (non-empty) vector, 2 for a matrix, etc. */
-  @PackageTestAccess
-  int maxDepth() {
-    return lengths.size() - 1;
+  /** @return 0 for a scalar, 1 for a (non-empty) vector, 2 for a matrix, etc.
+   * @see TensorRank */
+  public int rank() {
+    return list.size();
   }
 
   /** @param depth
@@ -92,5 +90,10 @@ public class Dimensions implements Serializable {
    * @throws Exception if depth is not from the set 0, 1, ..., {@link #maxDepth()} */
   public Set<Integer> lengths(int depth) {
     return Collections.unmodifiableSet(lengths.get(depth));
+  }
+
+  @PackageTestAccess
+  int maxDepth() {
+    return lengths.size() - 1;
   }
 }

@@ -2,14 +2,13 @@
 package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
-import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarTensorFunction;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.re.LinearSolve;
 
 /** BSplineInterpolation defines a parametric curve that interpolates
@@ -26,11 +25,11 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
 
   /** @param degree of b-spline basis functions: 1 for linear, 2 for quadratic, etc.
    * @param n number of control points
-   * @return */
+   * @return n x n matrix */
   public static Tensor matrix(int degree, int n) {
     Tensor domain = Range.of(0, n);
-    return Transpose.of(Tensor.of(IntStream.range(0, n) //
-        .mapToObj(index -> domain.map(BSplineFunctionString.of(degree, UnitVector.of(n, index))))));
+    return Transpose.of(Tensor.of(IdentityMatrix.stream(n) //
+        .map(unit -> domain.map(BSplineFunctionString.of(degree, unit)))));
   }
 
   /** @param degree

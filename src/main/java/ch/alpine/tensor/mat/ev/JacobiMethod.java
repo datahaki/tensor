@@ -10,8 +10,8 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Conjugate;
 
@@ -29,9 +29,7 @@ import ch.alpine.tensor.sca.Conjugate;
   protected JacobiMethod(Tensor matrix) {
     n = matrix.length();
     H = ScalarArray.ofMatrix(matrix);
-    V = IntStream.range(0, n) //
-        .mapToObj(k -> UnitVector.of(n, k)) //
-        .toArray(Tensor[]::new);
+    V = IdentityMatrix.stream(n).toArray(Tensor[]::new);
   }
 
   /** @throws Exception if iteration does not converge */

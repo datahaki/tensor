@@ -31,7 +31,7 @@ class HodgeDualTest {
   static Tensor hodgeDual_of(Tensor tensor, int d) {
     Dimensions dimensions = new Dimensions(tensor);
     if (dimensions.isArray()) {
-      int rank = dimensions.list().size();
+      int rank = dimensions.rank();
       // implementation is not efficient
       Tensor product = TensorProduct.of(tensor, LeviCivitaTensor.of(d));
       for (int index = 0; index < rank; ++index)
