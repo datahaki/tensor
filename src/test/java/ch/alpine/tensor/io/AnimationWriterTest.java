@@ -4,7 +4,8 @@ package ch.alpine.tensor.io;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
@@ -14,16 +15,16 @@ import ch.alpine.tensor.alg.Array;
 
 class AnimationWriterTest {
   @TempDir
-  File tempDir;
+  Path tempDir;
 
   @Test
   void testColor() throws Exception {
-    File file = new File(tempDir, "file.gif");
+    Path file = tempDir.resolve("file.gif");
     try (AnimationWriter animationWriter = new GifAnimationWriter(file, 100, TimeUnit.MILLISECONDS)) {
       animationWriter.write(Array.zeros(3, 4));
       animationWriter.write(Array.zeros(3, 4));
     }
-    assertTrue(file.isFile());
+    assertTrue(Files.isRegularFile(file));
   }
 
   @Test

@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -62,9 +62,9 @@ class VectorFormatTest {
   }
 
   @Test
-  void testUnicode(@TempDir File folder) throws IOException {
+  void testUnicode(@TempDir Path folder) throws IOException {
     Tensor tensor = Tensors.fromString("{\u3000\u4678,\"abc}");
-    File file = new File(folder, "file.vector");
+    Path file = folder.resolve("file.vector");
     Export.of(file, tensor);
     Tensor actual = Import.of(file);
     assertEquals(tensor, actual);

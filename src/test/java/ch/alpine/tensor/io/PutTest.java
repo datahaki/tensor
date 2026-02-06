@@ -4,8 +4,8 @@ package ch.alpine.tensor.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -15,11 +15,11 @@ import ch.alpine.tensor.Tensors;
 
 class PutTest {
   @TempDir
-  File tempDir;
+  Path tempDir;
 
   @Test
   void testUnstructured() throws IOException {
-    File file = new File(tempDir, "file.put");
+    Path file = tempDir.resolve("file.put");
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I, 34.1231}, {556, 3/456, -323/2, {3, 8.45`}}}");
     Put.of(file, tensor.unmodifiable());
     Tensor readin = Get.of(file);
@@ -28,7 +28,7 @@ class PutTest {
 
   @Test
   void testNullFail() {
-    File file = new File(tempDir, "file.put");
+    Path file = tempDir.resolve("file.put");
     assertThrows(Exception.class, () -> Put.of(file, null));
   }
 }

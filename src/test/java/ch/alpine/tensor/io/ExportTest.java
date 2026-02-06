@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -32,8 +32,8 @@ import ch.alpine.tensor.sca.Abs;
 
 class ExportTest {
   @Test
-  void testMathematica(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.mathematica");
+  void testMathematica(@TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file.mathematica");
     Tensor tensor = Tensors.fromString("{{2[m*s^-3], {3.123+3*I[V], {}}}, {{34.1231`32, 556}, 3/456, -323/2}}");
     assertFalse(StringScalarQ.any(tensor));
     Export.of(file, tensor);
@@ -41,8 +41,8 @@ class ExportTest {
   }
 
   @Test
-  void testMathematicaGz(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.mathematica.gz");
+  void testMathematicaGz(@TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file.mathematica.gz");
     Tensor tensor = Tensors.fromString("{{2[m*s^-3], {3.123+3*I[V], {}}}, {{34.1231`32, 556}, 3/456, -323/2}}");
     assertFalse(StringScalarQ.any(tensor));
     Export.of(file, tensor);
@@ -51,8 +51,8 @@ class ExportTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "csv", "csv.gz", "gz.csv", "tsv", "tsv.gz" })
-  void testCsv(String extension, @TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file." + extension);
+  void testCsv(String extension, @TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file." + extension);
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I[V]}, {34.1231`32, 556, 3/456, -323/2}}");
     Export.of(file, tensor);
     assertEquals(tensor, Import.of(file));
@@ -60,8 +60,8 @@ class ExportTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "csv", "csv.gz", "tsv", "tsv.gz" })
-  void testCsvLarge(String extension, @TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file." + extension);
+  void testCsvLarge(String extension, @TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file." + extension);
     Distribution distribution = BinomialDistribution.of(10, RealScalar.of(0.3));
     Tensor tensor = RandomVariate.of(distribution, 60, 30);
     Export.of(file, tensor);
@@ -71,8 +71,8 @@ class ExportTest {
   }
 
   @Test
-  void testJpgColor(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.jpg");
+  void testJpgColor(@TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file.jpg");
     Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.forArray(256), 7, 11, 4), 2);
     image.set(Array.of(_ -> RealScalar.of(255), 7, 11), Tensor.ALL, Tensor.ALL, 3);
     Export.of(file, image);
@@ -84,8 +84,8 @@ class ExportTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "jpg", "jpg.gz", "jpg.gz.gz", "gz.jpg" })
-  void testJpgGray(String extension, @TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file." + extension);
+  void testJpgGray(String extension, @TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file." + extension);
     Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.forArray(256), 7, 11), 4);
     Export.of(file, image);
     Tensor retry = Import.of(file);
@@ -97,8 +97,8 @@ class ExportTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "bmp", "bmp.gz", "bmp.gz.gz", "png", "png.gz", "gz.png" })
-  void testExactColor(String extension, @TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file." + extension);
+  void testExactColor(String extension, @TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file." + extension);
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.forArray(256), 7, 11, 4);
     image.set(Array.of(_ -> RealScalar.of(255), 7, 11), Tensor.ALL, Tensor.ALL, 3);
     Export.of(file, image);
@@ -107,46 +107,46 @@ class ExportTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "bmp", "bmp.gz", "bmp.gz.gz", "png", "png.gz" })
-  void testExactGray(String extension, @TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file." + extension);
+  void testExactGray(String extension, @TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file." + extension);
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.forArray(256), 7, 11);
     Export.of(file, image);
     assertEquals(image, Import.of(file));
   }
 
   @Test
-  void testMatlabM(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.m");
+  void testMatlabM(@TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file.m");
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I, 34.1231}, {556, 3/456, -323/2}}");
     Export.of(file, tensor);
   }
 
   @Test
-  void testFailFile(@TempDir File tempDir) {
-    File file = new File(tempDir, "folder/does/not/exist/ethz.m");
-    assertFalse(file.exists());
-    assertThrows(FileNotFoundException.class, () -> Export.of(file, Tensors.empty()));
+  void testFailFile(@TempDir Path tempDir) {
+    Path file = tempDir.resolve("folder/does/not/exist/ethz.m");
+    assertFalse(Files.isRegularFile(file));
+    assertThrows(Exception.class, () -> Export.of(file, Tensors.empty()));
   }
 
   @ParameterizedTest
   @ValueSource(strings = { "gz", "ethz.idsc" })
-  void testUnknownExtension(String extension, @TempDir File tempDir) {
-    File file = new File(tempDir, "file." + extension);
+  void testUnknownExtension(String extension, @TempDir Path tempDir) {
+    Path file = tempDir.resolve("file." + extension);
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
     assertThrows(IllegalArgumentException.class, () -> Export.of(file, tensor));
   }
 
   @ParameterizedTest
   @ValueSource(strings = { "bmp", "bmp.gz" })
-  void testExportNull(String extension, @TempDir File tempDir) {
-    File file = new File(tempDir, "file." + extension);
+  void testExportNull(String extension, @TempDir Path tempDir) {
+    Path file = tempDir.resolve("file." + extension);
     assertThrows(NullPointerException.class, () -> Export.of(file, null));
   }
 
   @Test
-  void testObjectNullFail(@TempDir File tempDir) {
-    File file = new File(tempDir, "tensor.file");
-    assertFalse(file.exists());
+  void testObjectNullFail(@TempDir Path tempDir) {
+    Path file = tempDir.resolve("tensor.file");
+    assertFalse(Files.isRegularFile(file));
     assertThrows(NullPointerException.class, () -> Export.object(file, null));
   }
 }

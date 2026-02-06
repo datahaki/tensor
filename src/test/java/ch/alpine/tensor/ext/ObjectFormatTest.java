@@ -6,8 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.zip.DataFormatException;
 
 import org.junit.jupiter.api.Test;
@@ -86,11 +87,11 @@ class ObjectFormatTest {
   }
 
   @Test
-  void testExportImportObject(@TempDir File tempDir) throws IOException, ClassNotFoundException, DataFormatException {
+  void testExportImportObject(@TempDir Path tempDir) throws IOException, ClassNotFoundException, DataFormatException {
     Tensor tensor = HilbertMatrix.of(3, 4);
-    File file = new File(tempDir, "file.random");
+    Path file = tempDir.resolve("file.random");
     Export.object(file, tensor);
-    assertTrue(file.isFile());
+    assertTrue(Files.isRegularFile(file));
     assertEquals(Import.object(file), tensor);
   }
 }

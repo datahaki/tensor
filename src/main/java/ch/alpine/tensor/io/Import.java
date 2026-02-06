@@ -1,17 +1,15 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.zip.DataFormatException;
@@ -44,12 +42,12 @@ public enum Import {
    * <li>tsv for tab separated values format
    * </ul>
    * 
-   * @param file source
-   * @return file content as {@link Tensor}
-   * @throws IOException if file cannot be read */
-  public static Tensor of(File file) throws IOException {
-    try (InputStream inputStream = new FileInputStream(file)) {
-      return ImportHelper.of(new Filename(file.getName()), inputStream);
+   * @param path source
+   * @return path content as {@link Tensor}
+   * @throws IOException if path cannot be read */
+  public static Tensor of(Path path) throws IOException {
+    try (InputStream inputStream = Files.newInputStream(path)) {
+      return ImportHelper.of(new Filename(path.getFileName().toString()), inputStream);
     }
   }
 
@@ -70,31 +68,31 @@ public enum Import {
   /** import function for Java objects that implement {@link Serializable}
    * and were stored with {@link Export#object(File, Object)}.
    * 
-   * @param file
+   * @param path
    * @return object prior to serialization, non-null
    * @throws IOException if file does not exist
    * @throws ClassNotFoundException
    * @throws DataFormatException */
-  public static <T> T object(File file) //
+  public static <T> T object(Path path) //
       throws IOException, ClassNotFoundException, DataFormatException {
-    return Objects.requireNonNull(ObjectFormat.parse(Files.readAllBytes(file.toPath())));
+    return Objects.requireNonNull(ObjectFormat.parse(Files.readAllBytes(path)));
   }
 
-  /** @param file in UTF-8 encoding
+  /** @param path in UTF-8 encoding
    * @return instance of {@link Properties} with key-value pairs specified in given file
    * @throws FileNotFoundException
    * @throws IOException */
-  public static Properties properties(File file) throws FileNotFoundException, IOException {
-    return properties(file, StaticHelper.CHARSET);
+  public static Properties properties(Path path) throws FileNotFoundException, IOException {
+    return properties(path, StaticHelper.CHARSET);
   }
 
-  /** @param file
+  /** @param path
    * @param charset for instance StandardCharsets.UTF_8
    * @return instance of {@link Properties} with key-value pairs specified in given file
    * @throws FileNotFoundException
    * @throws IOException */
-  public static Properties properties(File file, Charset charset) throws FileNotFoundException, IOException {
-    try (Reader reader = new BufferedReader(new FileReader(file, charset))) {
+  public static Properties properties(Path path, Charset charset) throws FileNotFoundException, IOException {
+    try (Reader reader = Files.newBufferedReader(path, charset)) {
       return ResourceData.properties(reader);
     }
   }

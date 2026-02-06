@@ -9,10 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,17 +46,17 @@ import ch.alpine.tensor.sca.Round;
 
 class ExportHelperTest {
   @TempDir
-  File tempDir;
+  Path tempDir;
 
   @Test
   void testGif() throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(128);
     Tensor image = Tensors.fromString("{{{255, 2, 3, 255}, {0, 0, 0, 0}, {91, 120, 230, 255}, {0, 0, 0, 0}}}");
     ExportHelper.of(Extension.GIF, image, byteArrayOutputStream);
-    File file = new File(tempDir, "file.gif");
+    Path file = tempDir.resolve("file.gif");
     Export.of(file, image);
-    assertTrue(file.isFile());
-    assertTrue(file.delete());
+    assertTrue(Files.isRegularFile(file));
+    Files.delete(file);
     byte[] array = byteArrayOutputStream.toByteArray(); // 54 bytes used
     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(array));
     Tensor tensor = ImageFormat.from(bufferedImage);
@@ -89,23 +90,23 @@ class ExportHelperTest {
   }
 
   @Test
-  void testSomeGz() {
-    File file = new File(tempDir, "some.unknown.gz");
+  void testSomeGz() throws IOException {
+    Path file = tempDir.resolve("some.unknown.gz");
     assertThrows(Exception.class, () -> Export.of(file, Array.zeros(4, 4, 4)));
-    assertEquals(tempDir.listFiles().length, 0);
+    assertEquals(Files.list(tempDir).toList().size(), 0);
   }
 
   @Test
-  void testGzGz() {
-    File file = new File(tempDir, "some.gz.gz");
+  void testGzGz() throws IOException {
+    Path file = tempDir.resolve("some.gz.gz");
     assertThrows(Exception.class, () -> Export.of(file, Array.zeros(4, 4, 4)));
-    assertEquals(tempDir.listFiles().length, 0);
+    assertEquals(Files.list(tempDir).toList().size(), 0);
   }
 
   static Tensor _readRGBA() throws IOException {
-    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
-    assertTrue(file.isFile());
-    BufferedImage bufferedImage = ImageIO.read(file);
+    Path file = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
+    assertTrue(Files.isRegularFile(file));
+    BufferedImage bufferedImage = ImageIO.read(file.toFile());
     return ImageFormat.from(bufferedImage);
   }
 
@@ -119,9 +120,9 @@ class ExportHelperTest {
 
   @Test
   void testGrayFile() throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/img/gray15x9.png");
-    assertTrue(file.isFile());
-    BufferedImage bufferedImage = ImageIO.read(file);
+    Path file = Unprotect.path("/ch/alpine/tensor/img/gray15x9.png");
+    assertTrue(Files.isReadable(file));
+    BufferedImage bufferedImage = ImageIO.read(file.toFile());
     Tensor tensor = ImageFormat.from(bufferedImage);
     // confirmed with gimp
     assertEquals(tensor.Get(0, 2), RealScalar.of(175));
@@ -132,9 +133,9 @@ class ExportHelperTest {
 
   @Test
   void testGrayJpg() throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/img/gray15x9.jpg");
-    assertTrue(file.isFile());
-    BufferedImage bufferedImage = ImageIO.read(file);
+    Path file = Unprotect.path("/ch/alpine/tensor/img/gray15x9.jpg");
+    assertTrue(Files.isRegularFile(file));
+    BufferedImage bufferedImage = ImageIO.read(file.toFile());
     Tensor tensor = ImageFormat.from(bufferedImage);
     // confirmed with gimp
     assertEquals(tensor.Get(0, 2), RealScalar.of(84));
@@ -146,11 +147,11 @@ class ExportHelperTest {
 
   @Test
   void testGrayJpg1() throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/img/gray15x9.jpg");
-    assertTrue(file.isFile());
+    Path file = Unprotect.path("/ch/alpine/tensor/img/gray15x9.jpg");
+    assertTrue(Files.isRegularFile(file));
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), List.of(9, 15));
-    File target = new File(tempDir, "grayscale.jpg");
+    Path target = tempDir.resolve("grayscale.jpg");
     Export.of(target, tensor);
     Tensor result = Import.of(target);
     assertEquals(Dimensions.of(result), List.of(9, 15));
@@ -159,8 +160,8 @@ class ExportHelperTest {
   @ParameterizedTest
   @ValueSource(strings = { "jpg", "png" })
   void testGray(String ext) throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/img/gray5x3." + ext);
-    assertTrue(file.isFile());
+    Path file = Unprotect.path("/ch/alpine/tensor/img/gray5x3." + ext);
+    assertTrue(Files.isRegularFile(file));
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), List.of(5, 3));
   }
@@ -181,16 +182,16 @@ class ExportHelperTest {
 
   @Test
   void testRGBAConvert() throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
-    BufferedImage bufferedImage = ImageIO.read(file);
+    Path file = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
+    BufferedImage bufferedImage = ImageIO.read(file.toFile());
     Tensor tensor = ImageFormat.from(bufferedImage);
     assertEquals(tensor, ImageFormat.from(ImageFormat.of(tensor)));
   }
 
   @Test
   void testRGBASmooth() throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
-    BufferedImage bufferedImage = ImageIO.read(file);
+    Path file = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
+    BufferedImage bufferedImage = ImageIO.read(file.toFile());
     Tensor tensor = ImageFormat.from(bufferedImage);
     Tensor kernel = Array.of(_ -> RationalScalar.of(1, 6), 3, 2, 1);
     Tensor array = ListConvolve.of(kernel, tensor);
@@ -199,8 +200,8 @@ class ExportHelperTest {
 
   @Test
   void testRGBAInvalid() throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
-    BufferedImage bufferedImage = ImageIO.read(file);
+    Path file = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
+    BufferedImage bufferedImage = ImageIO.read(file.toFile());
     Tensor tensor = ImageFormat.from(bufferedImage);
     Tensor kernel = Array.of(_ -> RationalScalar.of(1, 1), 3, 5, 1);
     Tensor array = ListConvolve.of(kernel, tensor);

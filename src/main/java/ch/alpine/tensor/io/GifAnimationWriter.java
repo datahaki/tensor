@@ -2,8 +2,8 @@
 package ch.alpine.tensor.io;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 import ch.alpine.tensor.Tensor;
@@ -11,7 +11,7 @@ import ch.alpine.tensor.ext.AnimatedGifWriter;
 
 /** Example:
  * <pre>
- * try (AnimationWriter animationWriter = new GifAnimationWriter(file, 100, TimeUnit.MILLISECONDS)) {
+ * try (AnimationWriter animationWriter = new GifAnimationWriter(path, 100, TimeUnit.MILLISECONDS)) {
  * animationWriter.append(bufferedImage);
  * ...
  * }
@@ -21,14 +21,14 @@ import ch.alpine.tensor.ext.AnimatedGifWriter;
 public class GifAnimationWriter implements AnimationWriter {
   private final AnimatedGifWriter animatedGifWriter;
 
-  /** @param file typically with extension "gif"
+  /** @param path typically with extension "gif"
    * @param period
    * @param timeUnit
    * @return
    * @throws IOException */
-  public GifAnimationWriter(File file, int period, TimeUnit timeUnit) throws IOException {
+  public GifAnimationWriter(Path path, int period, TimeUnit timeUnit) throws IOException {
     animatedGifWriter = //
-        AnimatedGifWriter.of(file, Math.toIntExact(TimeUnit.MILLISECONDS.convert(period, timeUnit)), true);
+        AnimatedGifWriter.of(path, Math.toIntExact(TimeUnit.MILLISECONDS.convert(period, timeUnit)), true);
   }
 
   @Override // from AnimationWriter

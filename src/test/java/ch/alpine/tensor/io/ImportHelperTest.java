@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class ImportHelperTest {
   void testGif() throws Exception {
     String string = "/ch/alpine/tensor/img/rgba7x3.gif"; // file consist of a single line break character
     Tensor tempor = Import.of(string);
-    File file = Unprotect.file(string);
+    Path file = Unprotect.path(string);
     Tensor tensor = Import.of(file);
     assertEquals(tensor, tempor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 7, 4));

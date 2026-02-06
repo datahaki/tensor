@@ -1,10 +1,10 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -34,12 +34,12 @@ import ch.alpine.tensor.Tensor;
  * <a href="https://reference.wolfram.com/language/ref/Put.html">Put</a> */
 public enum Put {
   ;
-  /** @param file destination of write
+  /** @param path destination of write
    * @param tensor
    * @throws IOException */
-  public static void of(File file, Tensor tensor) throws IOException {
+  public static void of(Path path, Tensor tensor) throws IOException {
     Objects.requireNonNull(tensor);
-    try (OutputStream outputStream = new FileOutputStream(file)) {
+    try (OutputStream outputStream = Files.newOutputStream(path)) {
       of(outputStream, tensor);
     }
   }

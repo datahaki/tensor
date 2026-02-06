@@ -4,6 +4,9 @@ package ch.alpine.tensor.ext;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -27,9 +30,13 @@ public enum Jpeg {
    * @param object e.g. instance of File
    * @param quality between 0 and 1
    * @throws IOException */
-  public static void put(BufferedImage bufferedImage, Object object, float quality) throws IOException {
+  public static void put(BufferedImage bufferedImage, Path path, float quality) throws IOException {
+    put(bufferedImage, Files.newOutputStream(path), quality);
+  }
+
+  public static void put(BufferedImage bufferedImage, OutputStream outputStream, float quality) throws IOException {
     if (TYPES.contains(bufferedImage.getType()))
-      try (ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(object)) {
+      try (ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(outputStream)) {
         Iterator<ImageWriter> iterator = ImageIO.getImageWritersByFormatName("jpeg");
         ImageWriter imageWriter = iterator.next();
         ImageWriteParam imageWriteParam = imageWriter.getDefaultWriteParam();
@@ -44,7 +51,7 @@ public enum Jpeg {
       ColorConvertOp op = new ColorConvertOp(null);
       BufferedImage target = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
       op.filter(bufferedImage, target);
-      put(target, object, quality);
+      put(target, outputStream, quality);
       // } else {
       // BufferedImage converted = new BufferedImage( //
       // bufferedImage.getWidth(), //

@@ -3,8 +3,9 @@
 package ch.alpine.tensor.ext;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 import javax.imageio.IIOImage;
@@ -14,23 +15,22 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
-import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 
 /** AnimatedGifWriter is a standalone implementation to generate animated .gif image files */
 public class AnimatedGifWriter implements AutoCloseable {
-  /** @param file with extension "gif"
+  /** @param path with extension "gif"
    * @param period between frames in milliseconds
    * @param loop whether for animation to loop indefinitely
    * @return
    * @throws Exception */
-  public static AnimatedGifWriter of(File file, int period, boolean loop) throws IOException {
+  public static AnimatedGifWriter of(Path path, int period, boolean loop) throws IOException {
     // deletion of existing file is mandatory:
     // if the gif output is smaller than the existing file
     // trailing bytes of the existing file are not removed
-    if (file.isFile())
-      file.delete();
-    ImageOutputStream imageOutputStream = new FileImageOutputStream(file);
+    if (Files.isRegularFile(path))
+      Files.delete(path);
+    ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(Files.newOutputStream(path));
     return new AnimatedGifWriter(imageOutputStream, period, loop);
   }
 

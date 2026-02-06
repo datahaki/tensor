@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
-import java.io.File;
+import java.nio.file.Path;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/FileExtension.html">FileExtension</a>
@@ -11,16 +11,16 @@ public enum FileExtension {
   ;
   public static final char DOT = '.';
 
-  /** @param file
-   * @return extension of given file name */
-  public static String of(File file) {
-    return fromName(file.getName());
+  /** @param path
+   * @return extension of given path name */
+  public static String of(Path path) {
+    return fromName(path.getFileName().toString());
   }
 
   /** @param string
    * @return extension of file name specified by given string */
   public static String of(String string) {
-    return of(new File(string));
+    return of(Path.of(string));
   }
 
   private static String fromName(String string) {

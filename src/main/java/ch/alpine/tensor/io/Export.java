@@ -2,11 +2,11 @@
 package ch.alpine.tensor.io;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 import ch.alpine.tensor.Tensor;
@@ -35,16 +35,16 @@ public enum Export {
    * <p>If the extension of the given file is not used in the tensor library, an exception
    * is thrown, and the file will not be created.
    * 
-   * @param file destination
+   * @param path destination
    * @param tensor non-null
    * @throws IOException if writing to the file fails
    * @throws IllegalArgumentException if extension of given file can not be associated
    * to a supported file format */
-  public static void of(File file, Tensor tensor) throws IOException {
-    Filename filename = new Filename(file.getName());
+  public static void of(Path path, Tensor tensor) throws IOException {
+    Filename filename = new Filename(path.getFileName().toString());
     _check(filename);
     Objects.requireNonNull(tensor); // tensor non-null
-    try (OutputStream outputStream = new FileOutputStream(file)) {
+    try (OutputStream outputStream = Files.newOutputStream(path)) {
       ExportHelper.of(filename, tensor, outputStream);
     }
   }
@@ -60,10 +60,10 @@ public enum Export {
   /** export function for Java objects that implement {@link Serializable}.
    * To retrieve the object, use {@link Import#object(File)}.
    * 
-   * @param file
+   * @param path
    * @param object non-null that implements {@link Serializable}
    * @throws IOException */
-  public static void object(File file, Object object) throws IOException {
-    Files.write(file.toPath(), ObjectFormat.of(Objects.requireNonNull(object)));
+  public static void object(Path path, Object object) throws IOException {
+    Files.write(path, ObjectFormat.of(Objects.requireNonNull(object)));
   }
 }

@@ -5,8 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -27,7 +28,7 @@ import ch.alpine.tensor.sca.Floor;
 
 class JpegTest {
   @TempDir
-  File tempDir;
+  Path tempDir;
 
   @ParameterizedTest
   @ValueSource(floats = { 0.1f, 0.9f })
@@ -35,10 +36,10 @@ class JpegTest {
     Tensor image = RandomVariate.of(UniformDistribution.unit(30), 10, 20).map(ColorDataGradients.AURORA).map(Floor.FUNCTION);
     // IO.println(image);
     BufferedImage bufferedImage = ImageFormat.of(image);
-    File file = new File(tempDir, "asd" + quality + ".jpg");
-    assertFalse(file.isFile());
+    Path file = tempDir.resolve("asd" + quality + ".jpg");
+    assertFalse(Files.isRegularFile(file));
     Jpeg.put(bufferedImage, file, quality);
-    assertTrue(file.isFile());
+    assertTrue(Files.isRegularFile(file));
     Tensor readb = Import.of(file);
     Flatten.of(readb);
   }
@@ -50,10 +51,10 @@ class JpegTest {
     Tensor resto = ImageFormat.from(bufferedImage);
     Scalar between = FrobeniusNorm.of(image.subtract(resto));
     Scalars.requireZero(between);
-    File file = new File(tempDir, "asd.jpg");
-    assertFalse(file.isFile());
+    Path file = tempDir.resolve("asd.jpg");
+    assertFalse(Files.isRegularFile(file));
     Jpeg.put(bufferedImage, file, 1);
-    assertTrue(file.isFile());
+    assertTrue(Files.isRegularFile(file));
     Tensor readb = Import.of(file);
     Tensor diff = image.subtract(readb);
     Flatten.of(diff);

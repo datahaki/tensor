@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.awt.Dimension;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.NavigableMap;
 
@@ -40,7 +40,7 @@ import ch.alpine.tensor.sca.Chop;
 class ImageResizeTest {
   @Test
   void testImage1() throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
+    Path file = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2);
@@ -49,7 +49,7 @@ class ImageResizeTest {
 
   @Test
   void testImage2() throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
+    Path file = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2, 3);
@@ -58,7 +58,7 @@ class ImageResizeTest {
 
   @Test
   void testImage3() throws IOException {
-    File file = Unprotect.file("/ch/alpine/tensor/img/rgba15x33.png");
+    Path file = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(file);
     Tensor resize = ImageResize.of(tensor, new Dimension(40, 60));
     assertEquals(Dimensions.of(resize), Arrays.asList(60, 40, 4));

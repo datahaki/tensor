@@ -1,11 +1,11 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.HexFormat;
@@ -16,13 +16,13 @@ import java.util.HexFormat;
  * <a href="https://reference.wolfram.com/language/ref/FileHash.html">FileHash</a> */
 public enum FileHash {
   ;
-  /** @param file
+  /** @param path
    * @param messageDigest
    * @return
    * @throws FileNotFoundException
    * @throws IOException */
-  public static byte[] of(File file, MessageDigest messageDigest) throws FileNotFoundException, IOException {
-    try (InputStream inputStream = new FileInputStream(file)) {
+  public static byte[] of(Path path, MessageDigest messageDigest) throws FileNotFoundException, IOException {
+    try (InputStream inputStream = Files.newInputStream(path)) {
       try (DigestInputStream digestInputStream = new DigestInputStream(inputStream, messageDigest)) {
         digestInputStream.readAllBytes();
         return messageDigest.digest();
@@ -33,12 +33,12 @@ public enum FileHash {
   /** for MessageDigest.getInstance("MD5") the function is consistent with
    * md5sum on linux.
    * 
-   * @param file
+   * @param path
    * @param messageDigest
    * @return
    * @throws FileNotFoundException
    * @throws IOException */
-  public static String string(File file, MessageDigest messageDigest) throws FileNotFoundException, IOException {
-    return HexFormat.of().formatHex(of(file, messageDigest));
+  public static String string(Path path, MessageDigest messageDigest) throws FileNotFoundException, IOException {
+    return HexFormat.of().formatHex(of(path, messageDigest));
   }
 }

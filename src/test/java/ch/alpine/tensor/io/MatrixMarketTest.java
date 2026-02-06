@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.File;
 import java.lang.reflect.Modifier;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.junit.jupiter.api.Disabled;
@@ -75,9 +75,9 @@ class MatrixMarketTest {
   }
 
   @Test
-  void testExportFail(@TempDir File tempDir) {
+  void testExportFail(@TempDir Path tempDir) {
     Tensor matrix = Array.zeros(2, 3);
-    assertThrows(UnsupportedOperationException.class, () -> Export.of(new File(tempDir, "matrix.mtx"), matrix));
+    assertThrows(UnsupportedOperationException.class, () -> Export.of(tempDir.resolve("matrix.mtx"), matrix));
   }
 
   @Test

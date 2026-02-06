@@ -1,10 +1,10 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.ReadLine;
@@ -38,11 +38,11 @@ import ch.alpine.tensor.spa.SparseArray;
  * <a href="https://reference.wolfram.com/language/ref/Get.html">Get</a> */
 public enum Get {
   ;
-  /** @param file source
+  /** @param path source
    * @return
    * @throws IOException */
-  public static Tensor of(File file) throws IOException {
-    try (InputStream inputStream = new FileInputStream(file)) {
+  public static Tensor of(Path path) throws IOException {
+    try (InputStream inputStream = Files.newInputStream(path)) {
       return of(inputStream);
     }
   }

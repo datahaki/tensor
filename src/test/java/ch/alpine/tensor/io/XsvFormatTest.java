@@ -5,11 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -52,8 +52,8 @@ class XsvFormatTest {
   }
 
   @Test
-  void testRandom(@TempDir File tempDir) throws IOException {
-    File file = new File(tempDir, "file.tsv");
+  void testRandom(@TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("file.tsv");
     Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 6, 4);
     Export.of(file, matrix);
     Tensor result = Import.of(file);
@@ -80,8 +80,8 @@ class XsvFormatTest {
 
   @Test
   void testImport() throws Exception {
-    File file = Unprotect.file("/ch/alpine/tensor/io/qty/quantity0.csv");
-    try (InputStream inputStream = new FileInputStream(file)) {
+    Path file = Unprotect.path("/ch/alpine/tensor/io/qty/quantity0.csv");
+    try (InputStream inputStream = Files.newInputStream(file)) {
       Tensor tensor = XsvFormat.parse( //
           ReadLine.of(inputStream), //
           string -> Tensors.fromString("{" + string + "}"));
@@ -95,12 +95,12 @@ class XsvFormatTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "csv", "tsv" })
-  void testImport(String ext, @TempDir File folder) throws Exception {
-    File read = Unprotect.file("/ch/alpine/tensor/io/chinese.csv");
+  void testImport(String ext, @TempDir Path folder) throws Exception {
+    Path read = Unprotect.path("/ch/alpine/tensor/io/chinese.csv");
     Tensor tensor = Import.of(read);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
     assertEquals(tensor.Get(0, 0).toString().length(), 2);
-    File file = new File(folder, "file." + ext);
+    Path file = folder.resolve("file." + ext);
     Export.of(file, tensor);
     Tensor actual = Import.of(file);
     assertEquals(tensor, actual);

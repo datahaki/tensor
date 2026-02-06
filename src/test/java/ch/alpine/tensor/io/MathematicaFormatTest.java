@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -81,7 +81,7 @@ class MathematicaFormatTest {
 
   @Test
   void testBasic() throws IOException {
-    File file = Unprotect.file("/ch/alpine/tensor/io/basic.mathematica");
+    Path file = Unprotect.path("/ch/alpine/tensor/io/basic.mathematica");
     Tensor tensor = Get.of(file);
     checkNonString(tensor);
   }
@@ -94,7 +94,7 @@ class MathematicaFormatTest {
 
   @Test
   void testExponent() throws IOException {
-    File file = Unprotect.file("/ch/alpine/tensor/io/exponent.mathematica");
+    Path file = Unprotect.path("/ch/alpine/tensor/io/exponent.mathematica");
     Tensor tensor = Get.of(file);
     checkNonString(tensor);
     assertEquals(tensor, Import.of("/ch/alpine/tensor/io/exponent.mathematica"));
@@ -111,7 +111,7 @@ class MathematicaFormatTest {
 
   @Test
   void testPrime() throws IOException {
-    File file = Unprotect.file("/ch/alpine/tensor/io/decimals.mathematica");
+    Path file = Unprotect.path("/ch/alpine/tensor/io/decimals.mathematica");
     Tensor tensor = Get.of(file);
     assertTrue(tensor.stream().anyMatch(scalar -> scalar instanceof DecimalScalar));
     checkNonString(tensor);

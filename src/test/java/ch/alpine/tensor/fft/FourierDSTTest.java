@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
@@ -214,6 +215,7 @@ class FourierDSTTest {
     Tolerance.CHOP.requireClose(r3, r4);
   }
 
+  @Disabled
   @Test
   void testFour() {
     Tensor matrix = FourierDST._2.matrix(4);

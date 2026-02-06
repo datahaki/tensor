@@ -29,6 +29,7 @@ class FileBaseNameTest {
 
   @Test
   void testExample() {
+    assertEquals(FileBaseName.of("/home/user/Documents"), "Documents");
     assertEquals(FileBaseName.of("/home/user/info.txt"), "info");
     assertEquals(FileBaseName.of("/home/user/info.txt.gz"), "info.txt");
   }

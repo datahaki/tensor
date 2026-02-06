@@ -1,29 +1,37 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/$HomeDirectory.html">$HomeDirectory</a> */
 public enum HomeDirectory {
   ;
-  private static File user_home() {
+  private static Path user_home() {
     try {
-      return new File(System.getProperty("user.home"));
+      return Path.of(System.getProperty("user.home"));
     } catch (Exception exception) { // security exception, null pointer
       return null;
     }
   }
 
-  private static final File USER_HOME = user_home();
+  private static final Path USER_HOME = user_home();
+
+  @PackageTestAccess
+  static Path join(Path start, String... parts) {
+    return Arrays.stream(parts) //
+        .reduce(start, Path::resolve, (p1, p2) -> p1.resolve(p2));
+  }
 
   /** On linux, the directory has the form
    * /home/$USERNAME/string[0]/string[1]/...
    * 
    * @param strings
    * @return $user.home/string[0]/string[1]/... */
-  public static File file(String... strings) {
-    return FileNameJoin.of(USER_HOME, strings);
+  public static Path file(String... strings) {
+    return join(USER_HOME, strings);
   }
 
   /** On linux, the directory has the form
@@ -31,7 +39,7 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Desktop/string[0]/string[1]/... */
-  public static File Desktop(String... strings) {
+  public static Path Desktop(String... strings) {
     return subfolder("Desktop", strings);
   }
 
@@ -40,7 +48,7 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Documents/string[0]/string[1]/... */
-  public static File Documents(String... strings) {
+  public static Path Documents(String... strings) {
     return subfolder("Documents", strings);
   }
 
@@ -49,7 +57,7 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Downloads/string[0]/string[1]/... */
-  public static File Downloads(String... strings) {
+  public static Path Downloads(String... strings) {
     return subfolder("Downloads", strings);
   }
 
@@ -58,7 +66,7 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Pictures/string[0]/string[1]/... */
-  public static File Pictures(String... strings) {
+  public static Path Pictures(String... strings) {
     return subfolder("Pictures", strings);
   }
 
@@ -67,7 +75,7 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Music/string[0]/string[1]/... */
-  public static File Music(String... strings) {
+  public static Path Music(String... strings) {
     return subfolder("Music", strings);
   }
 
@@ -76,7 +84,7 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Videos/string[0]/string[1]/... */
-  public static File Videos(String... strings) {
+  public static Path Videos(String... strings) {
     return subfolder("Videos", strings);
   }
 
@@ -85,18 +93,19 @@ public enum HomeDirectory {
    * 
    * @param strings
    * @return $user.home/Videos/string[0]/string[1]/... */
-  public static File Templates(String... strings) {
+  public static Path Templates(String... strings) {
     return subfolder("Templates", strings);
   }
 
   // helper function
-  private static File subfolder(String folder, String... strings) {
-    File file = file(folder);
-    if (!file.isDirectory()) {
-      boolean created = file.mkdir();
-      if (!created)
-        throw new RuntimeException("unable to create folder: " + file);
-    }
-    return FileNameJoin.of(file, strings);
+  private static Path subfolder(String folder, String... strings) {
+    Path path = file(folder);
+    if (!Files.isDirectory(path))
+      try {
+        Files.createDirectory(path);
+      } catch (Exception exception) {
+        throw new RuntimeException(exception);
+      }
+    return join(path, strings);
   }
 }

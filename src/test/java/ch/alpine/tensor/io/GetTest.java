@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.Chop;
 class GetTest {
   @Test
   void testResource() throws IOException {
-    File file = Unprotect.file("/ch/alpine/tensor/io/basic.mathematica");
+    Path file = Unprotect.path("/ch/alpine/tensor/io/basic.mathematica");
     Tensor tensor = Get.of(file);
     assertNotNull(tensor);
     assertFalse(tensor instanceof Scalar);
@@ -34,20 +34,20 @@ class GetTest {
 
   @Test
   void testBinary() throws IOException { // this use is not as intended
-    File file = Unprotect.file("/ch/alpine/tensor/img/rgb7x11.bmp");
+    Path file = Unprotect.path("/ch/alpine/tensor/img/rgb7x11.bmp");
     Tensor tensor = Get.of(file);
     assertInstanceOf(StringScalar.class, tensor);
   }
 
   @Test
   void testMissing() {
-    File file = new File("/ch/alpine/tensor/io/doesnotexist");
+    Path file = Path.of("/ch/alpine/tensor/io/doesnotexist");
     assertThrows(Exception.class, () -> Get.of(file));
   }
 
   @Test
   void testHanzi() throws IOException {
-    File file = Unprotect.file("/ch/alpine/tensor/io/hanzi.mathematica");
+    Path file = Unprotect.path("/ch/alpine/tensor/io/hanzi.mathematica");
     Tensor tensor = Get.of(file);
     String string = tensor.Get(2).toString();
     assertEquals(string.charAt(0), '\u6C49');

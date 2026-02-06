@@ -41,7 +41,7 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testResource() throws Exception {
-    _check(Get.of(Unprotect.file("/ch/alpine/tensor/mat/sv/svd0.mathematica")));
+    _check(Get.of(Unprotect.path("/ch/alpine/tensor/mat/sv/svd0.mathematica")));
   }
 
   @Test

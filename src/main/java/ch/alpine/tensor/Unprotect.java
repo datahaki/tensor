@@ -1,8 +1,9 @@
 // code by jph
 package ch.alpine.tensor;
 
-import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -125,31 +126,33 @@ public enum Unprotect {
    * @param string
    * @return
    * @throws Exception if string does not correspond to a resource file, or directory */
-  public static File file(String string) {
+  public static Path path(String string) {
     URL url = Unprotect.class.getResource(string);
     if (Objects.nonNull(url)) {
-      File file = new File(url.getFile());
-      if (file.exists())
-        return file;
+      Path path = Path.of(url.getFile());
+      if (Files.exists(path))
+        return path;
     }
     throw new IllegalArgumentException(string);
   }
 
-  /** @param file
-   * @param tensor */
-  public static void _export(File file, Tensor tensor) {
+  /** @param path
+   * @param tensor
+   * @throws Exception if export of tensor to path fails */
+  public static void Export(Path path, Tensor tensor) {
     try {
-      Export.of(file, tensor);
+      Export.of(path, tensor);
     } catch (Exception exception) {
       throw new RuntimeException(exception);
     }
   }
 
-  /** @param file
-   * @return */
-  public static Tensor _import(File file) {
+  /** @param path
+   * @return
+   * @throws Exception if import from path fails */
+  public static Tensor Import(Path path) {
     try {
-      return Import.of(file);
+      return Import.of(path);
     } catch (Exception exception) {
       throw new RuntimeException(exception);
     }

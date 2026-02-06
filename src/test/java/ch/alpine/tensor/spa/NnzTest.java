@@ -3,8 +3,8 @@ package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 
@@ -64,11 +64,11 @@ class NnzTest {
   }
 
   @Test
-  void testObject(@TempDir File folder) throws IOException, ClassNotFoundException, DataFormatException {
+  void testObject(@TempDir Path folder) throws IOException, ClassNotFoundException, DataFormatException {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     Tensor raw = TensorToSparseArray.of(tensor);
     SparseArray sparse = (SparseArray) raw;
-    File file = new File(folder, "sparse.object");
+    Path file = folder.resolve("sparse.object");
     Export.object(file, sparse);
     SparseArray object = Import.object(file);
     assertEquals(sparse, object);

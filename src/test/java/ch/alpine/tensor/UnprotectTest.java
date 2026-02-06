@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.io.StringScalar;
@@ -154,20 +156,30 @@ class UnprotectTest {
   }
 
   @Test
+  void testIo(@TempDir Path tempDir) {
+    Path file = tempDir.resolve("hilbert.csv");
+    Tensor matrix = HilbertMatrix.of(3);
+    Unprotect.Export(file, matrix);
+    Tensor result = Unprotect.Import(file);
+    assertEquals(matrix, result);
+    assertEquals(matrix.toString(), result.toString());
+  }
+
+  @Test
   void testFile() {
-    File file = Unprotect.file("/ch/alpine/tensor/io/basic.mathematica");
-    assertTrue(file.isFile());
+    Path file = Unprotect.path("/ch/alpine/tensor/io/basic.mathematica");
+    assertTrue(Files.isRegularFile(file));
   }
 
   @Test
   void testDirectory() {
-    File file = Unprotect.file("/ch/alpine/tensor/io");
-    assertTrue(file.isDirectory());
+    Path file = Unprotect.path("/ch/alpine/tensor/io");
+    assertTrue(Files.isDirectory(file));
   }
 
   @Test
   void testFileFail() {
-    assertThrows(Exception.class, () -> Unprotect.file("/does/not/exist.txt"));
+    assertThrows(Exception.class, () -> Unprotect.path("/does/not/exist.txt"));
   }
 
   @Test
