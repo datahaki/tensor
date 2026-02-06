@@ -21,12 +21,6 @@ public enum FileBaseName {
     return fromName(path.getFileName().toString());
   }
 
-  /** @param string
-   * @return file name specified by given string without extension */
-  public static String of(String string) {
-    return of(Path.of(string));
-  }
-
   private static String fromName(String string) {
     int index = string.lastIndexOf(FileExtension.DOT);
     return 0 < index //

@@ -31,7 +31,7 @@ import ch.alpine.tensor.alg.Flatten;
  * 
  * <p>For export of the table to a CSV file use
  * <pre>
- * Export.of(new File("file.csv"), tb.toTable().map(CsvFormat.strict()));
+ * Export.of(Path.of("file.csv"), tb.toTable().map(CsvFormat.strict()));
  * </pre>
  * 
  * <p>The name TableBuilder was inspired by {@link StringBuilder}.

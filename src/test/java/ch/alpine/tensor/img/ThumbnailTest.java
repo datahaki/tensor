@@ -7,8 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import ch.alpine.tensor.io.Import;
 
 class ThumbnailTest {
   @TempDir
-  File tempDir;
+  Path tempDir;
 
   @Test
   void testSimple() {
@@ -63,10 +64,10 @@ class ThumbnailTest {
   void testAuGrayBufferedImage() throws IOException {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
     BufferedImage expected = Thumbnail.of(original, 64);
-    File file = new File(tempDir, "file.jpg");
-    assertFalse(file.exists());
-    ImageIO.write(expected, "JPG", file);
-    assertTrue(file.isFile());
+    Path file = tempDir.resolve("file.jpg");
+    assertFalse(Files.exists(file));
+    ImageIO.write(expected, "JPG", file.toFile());
+    assertTrue(Files.isRegularFile(file));
   }
 
   @Test

@@ -62,7 +62,7 @@ public enum CsvFormat {
    * 
    * <p>Example use:
    * <pre>
-   * Export.of(new File("name.csv"), tensor.map(CsvFormat.strict()));
+   * Export.of(Path.of("name.csv"), tensor.map(CsvFormat.strict()));
    * </pre> */
   public static ScalarUnaryOperator strict() {
     return CsvHelper.FUNCTION;

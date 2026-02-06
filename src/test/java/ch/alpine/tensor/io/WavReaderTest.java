@@ -14,7 +14,7 @@ class WavReaderTest {
   @Test
   void test() throws IOException {
     // TODO TENSOR IMPL
-    Path file = HomeDirectory.file("USERAUDIO001.WAV");
+    Path file = HomeDirectory.path("USERAUDIO001.WAV");
     // if (file.isFile()) {
     // try (InputStream inputStream = new FileInputStream(file)) {
     // Tensor tensor = WavReader.read(inputStream);

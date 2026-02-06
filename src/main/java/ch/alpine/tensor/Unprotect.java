@@ -128,10 +128,14 @@ public enum Unprotect {
    * @throws Exception if string does not correspond to a resource file, or directory */
   public static Path path(String string) {
     URL url = Unprotect.class.getResource(string);
-    if (Objects.nonNull(url)) {
-      Path path = Path.of(url.getFile());
-      if (Files.exists(path))
-        return path;
+    try {
+      if (Objects.nonNull(url)) {
+        Path path = Path.of(url.toURI());
+        if (Files.exists(path))
+          return path;
+      }
+    } catch (Exception exception) {
+      throw new RuntimeException(exception);
     }
     throw new IllegalArgumentException(string);
   }

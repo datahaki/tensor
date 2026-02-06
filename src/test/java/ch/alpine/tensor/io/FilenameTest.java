@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
 
 import javax.imageio.IIOImage;
@@ -25,12 +25,12 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class FilenameTest {
   @TempDir
-  File tempDir;
+  Path tempDir;
 
   @Test
   void testImageWriter() throws IOException {
-    File file = new File(tempDir, "file.jpg");
-    try (OutputStream outputStream = new FileOutputStream(file)) {
+    Path file = tempDir.resolve("file.jpg");
+    try (OutputStream outputStream = Files.newOutputStream(file)) {
       Iterator<ImageWriter> iterator = ImageIO.getImageWritersByFormatName("jpeg");
       ImageWriter imageWriter = iterator.next();
       ImageWriteParam imageWriteParam = imageWriter.getDefaultWriteParam();
@@ -44,7 +44,7 @@ class FilenameTest {
         imageWriter.dispose();
       }
     }
-    assertTrue(file.exists());
+    assertTrue(Files.exists(file));
   }
 
   @Test

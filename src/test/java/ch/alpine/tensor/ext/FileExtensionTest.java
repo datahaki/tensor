@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 class FileExtensionTest {
   @Test
   void testFile() {
-    assertEquals(FileExtension.of(HomeDirectory.file(".git")), "");
-    assertEquals(FileExtension.of(HomeDirectory.file("a.git")), "git");
-    assertEquals(FileExtension.of(HomeDirectory.file("a.git ")), "git ");
+    assertEquals(FileExtension.of(HomeDirectory.path(".git")), "");
+    assertEquals(FileExtension.of(HomeDirectory.path("a.git")), "git");
+    assertEquals(FileExtension.of(HomeDirectory.path("a.git ")), "git ");
   }
 
   @Test

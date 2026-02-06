@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,7 +65,7 @@ public enum Import {
   }
 
   /** import function for Java objects that implement {@link Serializable}
-   * and were stored with {@link Export#object(File, Object)}.
+   * and were stored with {@link Export#object(Path, Object)}.
    * 
    * @param path
    * @return object prior to serialization, non-null

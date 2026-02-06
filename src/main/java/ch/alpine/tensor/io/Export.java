@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -58,7 +57,7 @@ public enum Export {
   }
 
   /** export function for Java objects that implement {@link Serializable}.
-   * To retrieve the object, use {@link Import#object(File)}.
+   * To retrieve the object, use {@link Import#object(Path)}.
    * 
    * @param path
    * @param object non-null that implements {@link Serializable}
