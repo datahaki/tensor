@@ -18,10 +18,7 @@ public enum FileBaseName {
    * @param path
    * @return base name of given path name */
   public static String of(Path path) {
-    return fromName(path.getFileName().toString());
-  }
-
-  private static String fromName(String string) {
+    String string = path.getFileName().toString();
     int index = string.lastIndexOf(FileExtension.DOT);
     return 0 < index //
         ? string.substring(0, index)

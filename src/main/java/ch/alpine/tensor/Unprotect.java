@@ -123,6 +123,12 @@ public enum Unprotect {
    * 
    * useful in the test scope to access a resource as a file
    * 
+   * Example:
+   * "/ch/alpine/tensor/io/basic.mathematica"
+   * is mapped to
+   * "/home/username/Projects/tensor/target/test-classes/ch/alpine/tensor/io/basic.mathematica"
+   * when running during tests
+   * 
    * @param string
    * @return
    * @throws Exception if string does not correspond to a resource file, or directory */

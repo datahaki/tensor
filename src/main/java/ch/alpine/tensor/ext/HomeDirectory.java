@@ -23,15 +23,7 @@ public enum HomeDirectory {
   /** Video files */
   Videos;
 
-  private static Path user_home() {
-    try {
-      return Path.of(System.getProperty("user.home"));
-    } catch (Exception exception) { // security exception, null pointer
-      return null;
-    }
-  }
-
-  private static final Path USER_HOME = user_home();
+  private static final Path USER_HOME = Path.of(System.getProperty("user.home"));
 
   /** On linux, the directory has the form
    * /home/$USERNAME/string[0]/string[1]/...

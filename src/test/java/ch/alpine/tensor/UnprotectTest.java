@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.GaussScalar;
@@ -166,9 +168,12 @@ class UnprotectTest {
   }
 
   @Test
-  void testFile() {
-    Path file = Unprotect.path("/ch/alpine/tensor/io/basic.mathematica");
+  void testFile() throws IOException {
+    String string = "/ch/alpine/tensor/io/basic.mathematica";
+    Path file = Unprotect.path(string);
     assertTrue(Files.isRegularFile(file));
+    Import.of(string);
+    Import.of(file);
   }
 
   @Test

@@ -14,19 +14,16 @@ public enum FileExtension {
   /** @param path
    * @return extension of given path name */
   public static String of(Path path) {
-    return fromName(path.getFileName().toString());
+    String string = path.getFileName().toString();
+    int index = string.lastIndexOf(DOT);
+    return 0 < index //
+        ? string.substring(index + 1)
+        : "";
   }
 
   /** @param string
    * @return extension of file name specified by given string */
   public static String of(String string) {
     return of(Path.of(string));
-  }
-
-  private static String fromName(String string) {
-    int index = string.lastIndexOf(DOT);
-    return 0 < index //
-        ? string.substring(index + 1)
-        : "";
   }
 }

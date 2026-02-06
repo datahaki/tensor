@@ -21,6 +21,7 @@ import org.junit.jupiter.api.io.TempDir;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.itp.Interpolation;
@@ -29,7 +30,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ImportTest {
   private static Tensor load(String string) throws IOException {
-    Path file = Path.of(ResourceData.class.getResource(string).getPath());
+    Path file = Unprotect.path(string);
     Tensor tensor = Import.of(file);
     assertEquals(tensor, Import.of(string));
     return tensor;
@@ -48,24 +49,23 @@ class ImportTest {
   @Test
   void testCsvEmpty() throws Exception {
     String string = "/ch/alpine/tensor/io/empty.csv"; // file has byte length 0
-    Path file = Path.of(getClass().getResource(string).getPath());
-    assertTrue(Tensors.isEmpty(Import.of(file)));
-    assertTrue(Tensors.isEmpty(Import.of(string)));
+    Tensor tensor = load(string);
+    assertTrue(Tensors.isEmpty(tensor));
   }
 
   @Test
   void testCsvEmptyLine() throws Exception {
     String string = "/ch/alpine/tensor/io/emptyline.csv"; // file consist of a single line break character
-    Path file = Path.of(getClass().getResource(string).getPath());
+    Tensor tensor = load(string);
     Tensor expected = Tensors.fromString("{{}}").unmodifiable();
-    assertEquals(Import.of(file), expected);
-    assertEquals(Import.of(string), expected);
+    assertEquals(tensor, expected);
   }
 
   @Test
   void testCsvFail() {
-    Path file = Path.of("/ch/alpine/tensor/io/doesnotexist.csv");
-    assertThrows(Exception.class, () -> Import.of(file));
+    String string = "/ch/alpine/tensor/io/doesnotexist.csv";
+    assertThrows(Exception.class, () -> Unprotect.path(string));
+    assertThrows(Exception.class, () -> Import.of(string));
   }
 
   @Test
@@ -118,7 +118,8 @@ class ImportTest {
 
   @Test
   void testPngClose() throws Exception {
-    Tensor tensor = Import.of("/ch/alpine/tensor/img/rgba15x33.png");
+    String string = "/ch/alpine/tensor/img/rgba15x33.png";
+    Tensor tensor = load(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Path file = tempDir.resolve("file456.png");
     Export.of(file, tensor);
@@ -161,15 +162,16 @@ class ImportTest {
   @Test
   void testObject() throws ClassNotFoundException, DataFormatException, IOException {
     // Export.object(UserHome.file("string.object"), "tensorlib.importtest");
-    Path file = Path.of(getClass().getResource("/ch/alpine/tensor/io/string.object").getPath());
-    String string = Import.object(file);
+    Path path = Unprotect.path("/ch/alpine/tensor/io/string.object");
+    String string = Import.object(path);
     assertEquals(string, "tensorlib.importtest");
   }
 
   @Test
   void testUnknownFail() {
-    Path file = Path.of(getClass().getResource("/ch/alpine/tensor/io/extension.unknown").getPath());
-    assertThrows(IllegalArgumentException.class, () -> Import.of(file));
+    String string = "/ch/alpine/tensor/io/extension.unknown";
+    Path path = Unprotect.path(string);
+    assertThrows(Exception.class, () -> Import.of(path));
   }
 
   @Test

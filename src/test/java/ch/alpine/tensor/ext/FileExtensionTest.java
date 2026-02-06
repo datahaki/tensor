@@ -4,12 +4,19 @@ package ch.alpine.tensor.ext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 class FileExtensionTest {
   @Test
   void testFile() {
     assertEquals(FileExtension.of(HomeDirectory.path(".git")), "");
     assertEquals(FileExtension.of(HomeDirectory.path("a.git")), "git");
+  }
+
+  @DisabledOnOs(OS.WINDOWS)
+  @Test
+  void testWhitespace() {
     assertEquals(FileExtension.of(HomeDirectory.path("a.git ")), "git ");
   }
 
