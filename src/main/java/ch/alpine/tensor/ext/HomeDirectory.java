@@ -51,9 +51,7 @@ public enum HomeDirectory {
     return join(path, strings);
   }
 
-  @PackageTestAccess
-  static Path join(Path start, String... parts) {
-    return Arrays.stream(parts) //
-        .reduce(start, Path::resolve, (p1, p2) -> p1.resolve(p2));
+  private static Path join(Path start, String... parts) {
+    return Arrays.stream(parts).reduce(start, Path::resolve, Path::resolve);
   }
 }

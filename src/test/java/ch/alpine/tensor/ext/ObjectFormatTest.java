@@ -89,9 +89,9 @@ class ObjectFormatTest {
   @Test
   void testExportImportObject(@TempDir Path tempDir) throws IOException, ClassNotFoundException, DataFormatException {
     Tensor tensor = HilbertMatrix.of(3, 4);
-    Path file = tempDir.resolve("file.random");
-    Export.object(file, tensor);
-    assertTrue(Files.isRegularFile(file));
-    assertEquals(Import.object(file), tensor);
+    Path path = tempDir.resolve("file.random");
+    Export.object(path, tensor);
+    assertTrue(Files.isRegularFile(path));
+    assertEquals(Import.object(path), tensor);
   }
 }

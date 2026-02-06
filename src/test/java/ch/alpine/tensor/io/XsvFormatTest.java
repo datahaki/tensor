@@ -53,10 +53,10 @@ class XsvFormatTest {
 
   @Test
   void testRandom(@TempDir Path tempDir) throws IOException {
-    Path file = tempDir.resolve("file.tsv");
+    Path path = tempDir.resolve("file.tsv");
     Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 6, 4);
-    Export.of(file, matrix);
-    Tensor result = Import.of(file);
+    Export.of(path, matrix);
+    Tensor result = Import.of(path);
     assertEquals(matrix, result);
   }
 
@@ -80,8 +80,8 @@ class XsvFormatTest {
 
   @Test
   void testImport() throws Exception {
-    Path file = Unprotect.path("/ch/alpine/tensor/io/qty/quantity0.csv");
-    try (InputStream inputStream = Files.newInputStream(file)) {
+    Path path = Unprotect.path("/ch/alpine/tensor/io/qty/quantity0.csv");
+    try (InputStream inputStream = Files.newInputStream(path)) {
       Tensor tensor = XsvFormat.parse( //
           ReadLine.of(inputStream), //
           string -> Tensors.fromString("{" + string + "}"));
@@ -100,9 +100,9 @@ class XsvFormatTest {
     Tensor tensor = Import.of(read);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
     assertEquals(tensor.Get(0, 0).toString().length(), 2);
-    Path file = folder.resolve("file." + ext);
-    Export.of(file, tensor);
-    Tensor actual = Import.of(file);
+    Path path = folder.resolve("file." + ext);
+    Export.of(path, tensor);
+    Tensor actual = Import.of(path);
     assertEquals(tensor, actual);
   }
 

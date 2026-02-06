@@ -17,50 +17,50 @@ class AnimatedGifWriterTest {
 
   @Test
   void testColor() throws IOException {
-    Path file = tempDir.resolve("file123.gif");
-    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
+    Path path = tempDir.resolve("file123.gif");
+    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(path, 100, true)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
     }
-    assertTrue(Files.isRegularFile(file));
-    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 120, true)) {
+    assertTrue(Files.isRegularFile(path));
+    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(path, 120, true)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
     }
-    assertTrue(Files.isRegularFile(file));
+    assertTrue(Files.isRegularFile(path));
   }
 
   @Test
   void testColorNonLoop() throws IOException {
-    Path file = tempDir.resolve("file234.gif");
-    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, false)) {
+    Path path = tempDir.resolve("file234.gif");
+    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(path, 100, false)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
     }
-    assertTrue(Files.isRegularFile(file));
-    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 120, false)) {
+    assertTrue(Files.isRegularFile(path));
+    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(path, 120, false)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
     }
-    assertTrue(Files.isRegularFile(file));
+    assertTrue(Files.isRegularFile(path));
   }
 
   @Test
   void testGray() throws IOException {
-    Path file = tempDir.resolve("file345.gif");
-    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
+    Path path = tempDir.resolve("file345.gif");
+    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(path, 100, true)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
     }
-    assertTrue(Files.isRegularFile(file));
+    assertTrue(Files.isRegularFile(path));
   }
 
   @Test
   void testEmpty() throws IOException {
-    Path file = tempDir.resolve("file456.gif");
-    try (AnimatedGifWriter _ = AnimatedGifWriter.of(file, 100, true)) {
+    Path path = tempDir.resolve("file456.gif");
+    try (AnimatedGifWriter _ = AnimatedGifWriter.of(path, 100, true)) {
       // ---
     }
-    assertTrue(Files.isRegularFile(file));
+    assertTrue(Files.isRegularFile(path));
   }
 }

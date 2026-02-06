@@ -64,9 +64,9 @@ class VectorFormatTest {
   @Test
   void testUnicode(@TempDir Path folder) throws IOException {
     Tensor tensor = Tensors.fromString("{\u3000\u4678,\"abc}");
-    Path file = folder.resolve("file.vector");
-    Export.of(file, tensor);
-    Tensor actual = Import.of(file);
+    Path path = folder.resolve("file.vector");
+    Export.of(path, tensor);
+    Tensor actual = Import.of(path);
     assertEquals(tensor, actual);
   }
 

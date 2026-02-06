@@ -36,11 +36,11 @@ class JpegTest {
     Tensor image = RandomVariate.of(UniformDistribution.unit(30), 10, 20).map(ColorDataGradients.AURORA).map(Floor.FUNCTION);
     // IO.println(image);
     BufferedImage bufferedImage = ImageFormat.of(image);
-    Path file = tempDir.resolve("asd" + quality + ".jpg");
-    assertFalse(Files.isRegularFile(file));
-    Jpeg.put(bufferedImage, file, quality);
-    assertTrue(Files.isRegularFile(file));
-    Tensor readb = Import.of(file);
+    Path path = tempDir.resolve("asd" + quality + ".jpg");
+    assertFalse(Files.isRegularFile(path));
+    Jpeg.put(bufferedImage, path, quality);
+    assertTrue(Files.isRegularFile(path));
+    Tensor readb = Import.of(path);
     Flatten.of(readb);
   }
 
@@ -51,11 +51,11 @@ class JpegTest {
     Tensor resto = ImageFormat.from(bufferedImage);
     Scalar between = FrobeniusNorm.of(image.subtract(resto));
     Scalars.requireZero(between);
-    Path file = tempDir.resolve("asd.jpg");
-    assertFalse(Files.isRegularFile(file));
-    Jpeg.put(bufferedImage, file, 1);
-    assertTrue(Files.isRegularFile(file));
-    Tensor readb = Import.of(file);
+    Path path = tempDir.resolve("asd.jpg");
+    assertFalse(Files.isRegularFile(path));
+    Jpeg.put(bufferedImage, path, 1);
+    assertTrue(Files.isRegularFile(path));
+    Tensor readb = Import.of(path);
     Tensor diff = image.subtract(readb);
     Flatten.of(diff);
   }

@@ -19,9 +19,9 @@ class FileHashTest {
 
   @Test
   void testSimple() throws IOException, NoSuchAlgorithmException {
-    Path file = tempDir.resolve("file.png");
-    Export.of(file, Tensors.fromString("{{{0,128,255,255}}}"));
-    String string = FileHash.string(file, MessageDigest.getInstance("MD5"));
+    Path path = tempDir.resolve("file.png");
+    Export.of(path, Tensors.fromString("{{{0,128,255,255}}}"));
+    String string = FileHash.string(path, MessageDigest.getInstance("MD5"));
     assertEquals(string, "d8c57575d8c6fdf296d4231e8b5f3f22"); // md5sum
   }
 }

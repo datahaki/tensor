@@ -24,31 +24,31 @@ import ch.alpine.tensor.sca.Chop;
 class GetTest {
   @Test
   void testResource() throws IOException {
-    Path file = Unprotect.path("/ch/alpine/tensor/io/basic.mathematica");
-    Tensor tensor = Get.of(file);
+    Path path = Unprotect.path("/ch/alpine/tensor/io/basic.mathematica");
+    Tensor tensor = Get.of(path);
     assertNotNull(tensor);
     assertFalse(tensor instanceof Scalar);
     assertEquals(tensor.length(), 13);
-    assertEquals(tensor, Get.of(file));
+    assertEquals(tensor, Get.of(path));
   }
 
   @Test
   void testBinary() throws IOException { // this use is not as intended
-    Path file = Unprotect.path("/ch/alpine/tensor/img/rgb7x11.bmp");
-    Tensor tensor = Get.of(file);
+    Path path = Unprotect.path("/ch/alpine/tensor/img/rgb7x11.bmp");
+    Tensor tensor = Get.of(path);
     assertInstanceOf(StringScalar.class, tensor);
   }
 
   @Test
   void testMissing() {
-    Path file = Path.of("/ch/alpine/tensor/io/doesnotexist");
-    assertThrows(Exception.class, () -> Get.of(file));
+    Path path = Path.of("/ch/alpine/tensor/io/doesnotexist");
+    assertThrows(Exception.class, () -> Get.of(path));
   }
 
   @Test
   void testHanzi() throws IOException {
-    Path file = Unprotect.path("/ch/alpine/tensor/io/hanzi.mathematica");
-    Tensor tensor = Get.of(file);
+    Path path = Unprotect.path("/ch/alpine/tensor/io/hanzi.mathematica");
+    Tensor tensor = Get.of(path);
     String string = tensor.Get(2).toString();
     assertEquals(string.charAt(0), '\u6C49');
     assertEquals(string.charAt(1), '\u5B57');

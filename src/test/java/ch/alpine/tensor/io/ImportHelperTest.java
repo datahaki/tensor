@@ -30,8 +30,8 @@ class ImportHelperTest {
   void testGif() throws Exception {
     String string = "/ch/alpine/tensor/img/rgba7x3.gif"; // file consist of a single line break character
     Tensor tempor = Import.of(string);
-    Path file = Unprotect.path(string);
-    Tensor tensor = Import.of(file);
+    Path path = Unprotect.path(string);
+    Tensor tensor = Import.of(path);
     assertEquals(tensor, tempor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 7, 4));
     assertEquals(tensor.get(0, 0), Tensors.vector(0, 0, 0, 255));

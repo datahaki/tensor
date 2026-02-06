@@ -68,9 +68,9 @@ class NnzTest {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     Tensor raw = TensorToSparseArray.of(tensor);
     SparseArray sparse = (SparseArray) raw;
-    Path file = folder.resolve("sparse.object");
-    Export.object(file, sparse);
-    SparseArray object = Import.object(file);
+    Path path = folder.resolve("sparse.object");
+    Export.object(path, sparse);
+    SparseArray object = Import.object(path);
     assertEquals(sparse, object);
   }
 }

@@ -23,8 +23,12 @@ class HomeDirectoryTest {
 
   @Test
   void testNested() {
-    Path file = HomeDirectory.path("Doc", "proj1", "some.txt");
-    assertFalse(file.toString().contains(" "));
+    Path path = HomeDirectory.path("Doc", "proj1", "admin", "some.txt");
+    assertFalse(path.toString().contains(" "));
+    assertTrue(path.endsWith("some.txt"));
+    assertTrue(path.endsWith(Path.of("admin", "some.txt")));
+    assertTrue(path.endsWith(Path.of("proj1", "admin", "some.txt")));
+    assertTrue(path.endsWith(Path.of("Doc", "proj1", "admin", "some.txt")));
   }
 
   @ParameterizedTest
@@ -37,8 +41,8 @@ class HomeDirectoryTest {
 
   @Test
   void testFreeSpace() throws IOException {
-    Path file = HomeDirectory.path();
-    FileStore store = Files.getFileStore(file);
+    Path path = HomeDirectory.path();
+    FileStore store = Files.getFileStore(path);
     assertTrue(0 < store.getTotalSpace());
     assertTrue(0 < store.getUsableSpace());
   }

@@ -80,32 +80,32 @@ class ImportTest {
    * the file. */
   @Test
   void testCsvClosed() throws IOException {
-    Path file = tempDir.resolve("file123.csv");
+    Path path = tempDir.resolve("file123.csv");
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4}}");
-    Export.of(file, tensor);
-    assertTrue(Files.isRegularFile(file));
-    assertTrue(8 <= Files.size(file));
-    Tensor result = Import.of(file);
+    Export.of(path, tensor);
+    assertTrue(Files.isRegularFile(path));
+    assertTrue(8 <= Files.size(path));
+    Tensor result = Import.of(path);
     assertEquals(tensor, result);
   }
 
   @Test
   void testImageClose() throws Exception {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4}}");
-    Path file = tempDir.resolve("file234.png");
-    Export.of(file, tensor);
-    assertTrue(Files.isRegularFile(file));
-    Tensor image = Import.of(file);
+    Path path = tempDir.resolve("file234.png");
+    Export.of(path, tensor);
+    assertTrue(Files.isRegularFile(path));
+    Tensor image = Import.of(path);
     assertEquals(tensor, image);
   }
 
   @Test
   void testFolderCsvClosed() throws IOException {
-    Path file = tempDir.resolve("file345.csv");
-    Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
-    assertTrue(Files.isRegularFile(file));
-    assertTrue(12 <= Files.size(file));
-    Tensor table = Import.of(file);
+    Path path = tempDir.resolve("file345.csv");
+    Export.of(path, Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
+    assertTrue(Files.isRegularFile(path));
+    assertTrue(12 <= Files.size(path));
+    Tensor table = Import.of(path);
     assertEquals(Dimensions.of(table), Arrays.asList(3, 2));
   }
 
@@ -121,10 +121,10 @@ class ImportTest {
     String string = "/ch/alpine/tensor/img/rgba15x33.png";
     Tensor tensor = load(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
-    Path file = tempDir.resolve("file456.png");
-    Export.of(file, tensor);
-    assertTrue(Files.isRegularFile(file));
-    Import.of(file);
+    Path path = tempDir.resolve("file456.png");
+    Export.of(path, tensor);
+    assertTrue(Files.isRegularFile(path));
+    Import.of(path);
   }
 
   @Test
@@ -176,24 +176,27 @@ class ImportTest {
 
   @Test
   void testUnknownObjectFail() {
-    Path file = Path.of("doesnotexist.fileext");
-    assertThrows(IOException.class, () -> Import.object(file));
+    Path path = Path.of("doesnotexist.fileext");
+    assertThrows(IOException.class, () -> Import.object(path));
   }
 
   @Disabled
   @Test
   void testTensor() throws Exception {
-    Path file = Files.createTempFile("file", ".object");
-    Export.object(file, Tensors.vector(1, 2, 3, 4));
-    Tensor vector = Import.object(file);
+    Path path = Files.createTempFile("file", ".object");
+    Export.object(path, Tensors.vector(1, 2, 3, 4));
+    Tensor vector = Import.object(path);
     assertEquals(vector, Tensors.vector(1, 2, 3, 4));
   }
 
   @Test
   void testProperties() throws IOException {
-    Path file = Path.of(getClass().getResource("/ch/alpine/tensor/io/simple.properties").getPath());
-    Properties properties = Import.properties(file);
-    assertEquals(Scalars.fromString(properties.get("maxTor").toString()), Quantity.of(3, "m*s"));
+    String string = "/ch/alpine/tensor/io/simple.properties";
+    Path path = Unprotect.path(string);
+    Properties properties1 = Import.properties(path);
+    assertEquals(Scalars.fromString(properties1.get("maxTor").toString()), Quantity.of(3, "m*s"));
+    Properties properties2 = ResourceData.properties(string);
+    assertEquals(properties1.size(), properties2.size());
   }
 
   @Test

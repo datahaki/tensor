@@ -19,12 +19,12 @@ class AnimationWriterTest {
 
   @Test
   void testColor() throws Exception {
-    Path file = tempDir.resolve("file.gif");
-    try (AnimationWriter animationWriter = new GifAnimationWriter(file, 100, TimeUnit.MILLISECONDS)) {
+    Path path = tempDir.resolve("file.gif");
+    try (AnimationWriter animationWriter = new GifAnimationWriter(path, 100, TimeUnit.MILLISECONDS)) {
       animationWriter.write(Array.zeros(3, 4));
       animationWriter.write(Array.zeros(3, 4));
     }
-    assertTrue(Files.isRegularFile(file));
+    assertTrue(Files.isRegularFile(path));
   }
 
   @Test

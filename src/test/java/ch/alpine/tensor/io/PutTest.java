@@ -19,16 +19,16 @@ class PutTest {
 
   @Test
   void testUnstructured() throws IOException {
-    Path file = tempDir.resolve("file.put");
+    Path path = tempDir.resolve("file.put");
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I, 34.1231}, {556, 3/456, -323/2, {3, 8.45`}}}");
-    Put.of(file, tensor.unmodifiable());
-    Tensor readin = Get.of(file);
+    Put.of(path, tensor.unmodifiable());
+    Tensor readin = Get.of(path);
     assertEquals(tensor, readin);
   }
 
   @Test
   void testNullFail() {
-    Path file = tempDir.resolve("file.put");
-    assertThrows(Exception.class, () -> Put.of(file, null));
+    Path path = tempDir.resolve("file.put");
+    assertThrows(Exception.class, () -> Put.of(path, null));
   }
 }

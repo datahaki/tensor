@@ -52,7 +52,6 @@ class ThumbnailTest {
     Tensor square1 = Thumbnail.of(tensor1, 64);
     List<Integer> list1 = Dimensions.of(square1);
     assertEquals(list1, Arrays.asList(64, 64));
-    // Export.of(HomeDirectory.file("thumb.jpg"), square1);
     Tensor tensor2 = Transpose.of(Import.of("/ch/alpine/tensor/img/album_au_gray.jpg"));
     Tensor square2 = Thumbnail.of(tensor2, 64);
     List<Integer> list2 = Dimensions.of(square2);
@@ -64,10 +63,10 @@ class ThumbnailTest {
   void testAuGrayBufferedImage() throws IOException {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
     BufferedImage expected = Thumbnail.of(original, 64);
-    Path file = tempDir.resolve("file.jpg");
-    assertFalse(Files.exists(file));
-    ImageIO.write(expected, "JPG", file.toFile());
-    assertTrue(Files.isRegularFile(file));
+    Path path = tempDir.resolve("file.jpg");
+    assertFalse(Files.exists(path));
+    ImageIO.write(expected, "JPG", path.toFile());
+    assertTrue(Files.isRegularFile(path));
   }
 
   @Test

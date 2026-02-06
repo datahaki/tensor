@@ -29,8 +29,8 @@ class FilenameTest {
 
   @Test
   void testImageWriter() throws IOException {
-    Path file = tempDir.resolve("file.jpg");
-    try (OutputStream outputStream = Files.newOutputStream(file)) {
+    Path path = tempDir.resolve("file.jpg");
+    try (OutputStream outputStream = Files.newOutputStream(path)) {
       Iterator<ImageWriter> iterator = ImageIO.getImageWritersByFormatName("jpeg");
       ImageWriter imageWriter = iterator.next();
       ImageWriteParam imageWriteParam = imageWriter.getDefaultWriteParam();
@@ -44,7 +44,7 @@ class FilenameTest {
         imageWriter.dispose();
       }
     }
-    assertTrue(Files.exists(file));
+    assertTrue(Files.exists(path));
   }
 
   @Test

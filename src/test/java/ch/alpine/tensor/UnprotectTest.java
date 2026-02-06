@@ -159,10 +159,10 @@ class UnprotectTest {
 
   @Test
   void testIo(@TempDir Path tempDir) {
-    Path file = tempDir.resolve("hilbert.csv");
+    Path path = tempDir.resolve("hilbert.csv");
     Tensor matrix = HilbertMatrix.of(3);
-    Unprotect.Export(file, matrix);
-    Tensor result = Unprotect.Import(file);
+    Unprotect.Export(path, matrix);
+    Tensor result = Unprotect.Import(path);
     assertEquals(matrix, result);
     assertEquals(matrix.toString(), result.toString());
   }
@@ -170,16 +170,16 @@ class UnprotectTest {
   @Test
   void testFile() throws IOException {
     String string = "/ch/alpine/tensor/io/basic.mathematica";
-    Path file = Unprotect.path(string);
-    assertTrue(Files.isRegularFile(file));
+    Path path = Unprotect.path(string);
+    assertTrue(Files.isRegularFile(path));
     Import.of(string);
-    Import.of(file);
+    Import.of(path);
   }
 
   @Test
   void testDirectory() {
-    Path file = Unprotect.path("/ch/alpine/tensor/io");
-    assertTrue(Files.isDirectory(file));
+    Path path = Unprotect.path("/ch/alpine/tensor/io");
+    assertTrue(Files.isDirectory(path));
   }
 
   @Test
