@@ -28,6 +28,9 @@ import ch.alpine.tensor.spa.Normal;
 import ch.alpine.tensor.spa.SparseArray;
 
 class MatrixMarketTest {
+  @TempDir
+  Path tempDir;
+
   @Test
   void testCoordinate() {
     Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/well1033.mtx.gz");
@@ -75,7 +78,7 @@ class MatrixMarketTest {
   }
 
   @Test
-  void testExportFail(@TempDir Path tempDir) {
+  void testExportFail() {
     Tensor matrix = Array.zeros(2, 3);
     assertThrows(UnsupportedOperationException.class, () -> Export.of(tempDir.resolve("matrix.mtx"), matrix));
   }

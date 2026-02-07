@@ -23,6 +23,9 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
 class VectorFormatTest {
+  @TempDir
+  Path tempDir;
+
   @Test
   void testVector() throws IOException {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
@@ -62,9 +65,9 @@ class VectorFormatTest {
   }
 
   @Test
-  void testUnicode(@TempDir Path folder) throws IOException {
+  void testUnicode() throws IOException {
     Tensor tensor = Tensors.fromString("{\u3000\u4678,\"abc}");
-    Path path = folder.resolve("file.vector");
+    Path path = tempDir.resolve("fileUnicode.vector");
     Export.of(path, tensor);
     Tensor actual = Import.of(path);
     assertEquals(tensor, actual);

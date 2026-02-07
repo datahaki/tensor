@@ -157,8 +157,11 @@ class UnprotectTest {
     assertThrows(Throw.class, () -> Unprotect.dimension1Hint(RealScalar.ONE));
   }
 
+  @TempDir
+  Path tempDir;
+
   @Test
-  void testIo(@TempDir Path tempDir) {
+  void testIo() {
     Path path = tempDir.resolve("hilbert.csv");
     Tensor matrix = HilbertMatrix.of(3);
     Unprotect.Export(path, matrix);

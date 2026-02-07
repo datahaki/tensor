@@ -96,6 +96,7 @@ class EllipticCurveTest {
     EllipticCurve ellipticCurve = EllipticCurve.of(0, 6);
     ellipticCurve.requireMember(EllipticCurve.NEUTRAL);
     assertEquals(ellipticCurve.discriminant(), RealScalar.of(-15552));
+    ellipticCurve.isMember(Tensors.vector(1, 2, 3));
   }
 
   @Test

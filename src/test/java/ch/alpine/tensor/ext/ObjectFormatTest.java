@@ -27,6 +27,9 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
 class ObjectFormatTest {
+  @TempDir
+  Path tempDir;
+
   @Test
   void testSome() throws Exception {
     Tensor inp = Tensors.fromString("{1, {2, 3, {4.3}}, 1}");
@@ -87,7 +90,7 @@ class ObjectFormatTest {
   }
 
   @Test
-  void testExportImportObject(@TempDir Path tempDir) throws IOException, ClassNotFoundException, DataFormatException {
+  void testExportImportObject() throws IOException, ClassNotFoundException, DataFormatException {
     Tensor tensor = HilbertMatrix.of(3, 4);
     Path path = tempDir.resolve("file.random");
     Export.object(path, tensor);

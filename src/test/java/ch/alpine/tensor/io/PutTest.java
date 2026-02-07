@@ -28,7 +28,7 @@ class PutTest {
 
   @Test
   void testNullFail() {
-    Path path = tempDir.resolve("file.put");
+    Path path = tempDir.resolve("fileNullFail.put");
     assertThrows(Exception.class, () -> Put.of(path, null));
   }
 }

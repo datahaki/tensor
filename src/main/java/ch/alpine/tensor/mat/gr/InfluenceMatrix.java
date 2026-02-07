@@ -47,10 +47,6 @@ public interface InfluenceMatrix {
         : new InfluenceMatrixImpl(Array.sparse(n, 1), Array.sparse(1, n));
   }
 
-  static InfluenceMatrix of(Tensor design, Tensor d_pinv) {
-    return new InfluenceMatrixImpl(design, d_pinv);
-  }
-
   /** projection matrix defines a projection of a tangent vector at given point to a vector in
    * the subspace of the tangent space at given point. The subspace depends on the given sequence.
    * 

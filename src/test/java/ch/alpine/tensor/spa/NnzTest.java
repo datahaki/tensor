@@ -24,6 +24,9 @@ import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 
 class NnzTest {
+  @TempDir
+  Path tempDir;
+
   @Test
   void testSimple() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
@@ -64,11 +67,11 @@ class NnzTest {
   }
 
   @Test
-  void testObject(@TempDir Path folder) throws IOException, ClassNotFoundException, DataFormatException {
+  void testObject() throws IOException, ClassNotFoundException, DataFormatException {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     Tensor raw = TensorToSparseArray.of(tensor);
     SparseArray sparse = (SparseArray) raw;
-    Path path = folder.resolve("sparse.object");
+    Path path = tempDir.resolve("sparseObject.object");
     Export.object(path, sparse);
     SparseArray object = Import.object(path);
     assertEquals(sparse, object);

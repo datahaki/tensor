@@ -35,7 +35,7 @@ public enum HomeDirectory {
   }
 
   /** On linux, the directory has the form
-   * /home/$USERNAME/Desktop/string[0]/string[1]/...
+   * /home/$USERNAME/name()/string[0]/string[1]/...
    * 
    * @param strings
    * @return $user.home/Desktop/string[0]/string[1]/... */
@@ -43,7 +43,7 @@ public enum HomeDirectory {
     Path path = path(name());
     if (!Files.isDirectory(path))
       try {
-        IO.println("create directory " + path);
+        IO.println("create missing directory: " + path);
         Files.createDirectory(path);
       } catch (Exception exception) {
         throw new RuntimeException(exception);

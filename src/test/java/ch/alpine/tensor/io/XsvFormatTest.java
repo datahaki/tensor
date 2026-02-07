@@ -37,6 +37,9 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
 class XsvFormatTest {
+  @TempDir
+  Path tempDir;
+
   private static void convertCheck(Tensor A) {
     for (XsvFormat xsvFormat : XsvFormat.values())
       assertEquals(A, xsvFormat.parse(xsvFormat.of(A)));
@@ -52,8 +55,8 @@ class XsvFormatTest {
   }
 
   @Test
-  void testRandom(@TempDir Path tempDir) throws IOException {
-    Path path = tempDir.resolve("file.tsv");
+  void testRandom() throws IOException {
+    Path path = tempDir.resolve("fileRandom.tsv");
     Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 6, 4);
     Export.of(path, matrix);
     Tensor result = Import.of(path);
@@ -95,12 +98,12 @@ class XsvFormatTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "csv", "tsv" })
-  void testImport(String ext, @TempDir Path folder) throws Exception {
+  void testImport(String ext) throws Exception {
     Path read = Unprotect.path("/ch/alpine/tensor/io/chinese.csv");
     Tensor tensor = Import.of(read);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
     assertEquals(tensor.Get(0, 0).toString().length(), 2);
-    Path path = folder.resolve("file." + ext);
+    Path path = tempDir.resolve("fileImport." + ext);
     Export.of(path, tensor);
     Tensor actual = Import.of(path);
     assertEquals(tensor, actual);
