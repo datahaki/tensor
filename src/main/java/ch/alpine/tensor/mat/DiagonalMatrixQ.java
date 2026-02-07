@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;

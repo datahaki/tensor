@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.opt.fnd;
 
 import org.junit.jupiter.api.Test;

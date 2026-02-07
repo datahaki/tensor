@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.Tensor;

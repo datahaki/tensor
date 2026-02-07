@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.opt.fnd;
 
 import ch.alpine.tensor.DoubleScalar;

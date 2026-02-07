@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.sca;
 
 import java.io.Serializable;

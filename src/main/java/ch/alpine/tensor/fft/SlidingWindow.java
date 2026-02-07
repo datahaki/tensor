@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.fft;
 
 import java.io.Serializable;
