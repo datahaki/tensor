@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.ObjectFormat;
+import ch.alpine.tensor.ext.PathName;
 
 /** supported file formats are:
  * BMP, JPG, PNG (for images)
@@ -40,20 +41,23 @@ public enum Export {
    * @throws IllegalArgumentException if extension of given file can not be associated
    * to a supported file format */
   public static void of(Path path, Tensor tensor) throws IOException {
-    Filename filename = new Filename(path.getFileName().toString());
-    _check(filename);
+    PathName pathName = PathName.of(path);
+    _check(pathName);
     Objects.requireNonNull(tensor); // tensor non-null
     try (OutputStream outputStream = Files.newOutputStream(path)) {
-      ExportHelper.of(filename, tensor, outputStream);
+      ExportHelper.of(pathName, tensor, outputStream);
     }
   }
 
   /** @param filename
    * @return
    * @throws Exception if sequence of file extensions is invalid */
-  private static void _check(Filename filename) {
-    while (filename.extension().equals(Extension.GZ))
+  private static void _check(PathName filename) {
+    Extension.of(filename.extension());
+    while (filename.extension().equalsIgnoreCase(Extension.GZ.toString())) {
       filename = filename.truncate();
+      Extension.of(filename.extension());
+    }
   }
 
   /** export function for Java objects that implement {@link Serializable}.

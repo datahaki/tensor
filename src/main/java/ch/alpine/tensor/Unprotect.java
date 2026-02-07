@@ -132,7 +132,7 @@ public enum Unprotect {
    * @param string
    * @return
    * @throws Exception if string does not correspond to a resource file, or directory */
-  public static Path path(String string) {
+  public static Path resourcePath(String string) {
     URL url = Unprotect.class.getResource(string);
     try {
       if (Objects.nonNull(url)) {

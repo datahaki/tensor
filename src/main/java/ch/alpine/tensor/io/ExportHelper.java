@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Jpeg;
+import ch.alpine.tensor.ext.PathName;
 
 /* package */ enum ExportHelper {
   ;
@@ -19,8 +20,8 @@ import ch.alpine.tensor.ext.Jpeg;
    * @param tensor
    * @param outputStream
    * @throws IOException */
-  public static void of(Filename filename, Tensor tensor, OutputStream outputStream) throws IOException {
-    Extension extension = filename.extension();
+  public static void of(PathName filename, Tensor tensor, OutputStream outputStream) throws IOException {
+    Extension extension = Extension.of(filename.extension());
     if (extension.equals(Extension.GZ))
       try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream)) {
         of(filename.truncate(), tensor, gzipOutputStream);

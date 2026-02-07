@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -65,7 +66,9 @@ class ThumbnailTest {
     BufferedImage expected = Thumbnail.of(original, 64);
     Path path = tempDir.resolve("file.jpg");
     assertFalse(Files.exists(path));
-    ImageIO.write(expected, "JPG", path.toFile());
+    try (OutputStream outputStream = Files.newOutputStream(path)) {
+      ImageIO.write(expected, "JPG", outputStream);
+    }
     assertTrue(Files.isRegularFile(path));
   }
 

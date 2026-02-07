@@ -10,7 +10,7 @@ public abstract class ZeroDefectSquareMatrixQ extends ZeroDefectArrayQ {
     super(2, chop);
   }
 
-  @Override
+  @Override // from ZeroDefectArrayQ
   public final boolean isArrayWith(List<Integer> list) {
     return list.get(0).equals(list.get(1));
   }

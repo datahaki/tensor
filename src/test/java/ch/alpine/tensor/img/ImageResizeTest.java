@@ -40,7 +40,7 @@ import ch.alpine.tensor.sca.Chop;
 class ImageResizeTest {
   @Test
   void testImage1() throws Exception {
-    Path path = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(path);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2);
@@ -49,7 +49,7 @@ class ImageResizeTest {
 
   @Test
   void testImage2() throws Exception {
-    Path path = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(path);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2, 3);
@@ -58,7 +58,7 @@ class ImageResizeTest {
 
   @Test
   void testImage3() throws IOException {
-    Path path = Unprotect.path("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(path);
     Tensor resize = ImageResize.of(tensor, new Dimension(40, 60));
     assertEquals(Dimensions.of(resize), Arrays.asList(60, 40, 4));

@@ -22,6 +22,7 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.OrderedQ;
+import ch.alpine.tensor.ext.PathName;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Unitize;
 
@@ -30,7 +31,7 @@ class ImportHelperTest {
   void testGif() throws Exception {
     String string = "/ch/alpine/tensor/img/rgba7x3.gif"; // file consist of a single line break character
     Tensor tempor = Import.of(string);
-    Path path = Unprotect.path(string);
+    Path path = Unprotect.resourcePath(string);
     Tensor tensor = Import.of(path);
     assertEquals(tensor, tempor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 7, 4));
@@ -56,7 +57,7 @@ class ImportHelperTest {
   @Test
   void testExtensionMFail() {
     InputStream inputStream = new ByteArrayInputStream(new byte[128]);
-    assertThrows(Exception.class, () -> ImportHelper.of(new Filename("some.m"), inputStream));
+    assertThrows(Exception.class, () -> ImportHelper.of(PathName.of(Path.of("some.m")), inputStream));
   }
 
   @SuppressWarnings("null")

@@ -83,7 +83,7 @@ class XsvFormatTest {
 
   @Test
   void testImport() throws Exception {
-    Path path = Unprotect.path("/ch/alpine/tensor/io/qty/quantity0.csv");
+    Path path = Unprotect.resourcePath("/ch/alpine/tensor/io/qty/quantity0.csv");
     try (InputStream inputStream = Files.newInputStream(path)) {
       Tensor tensor = XsvFormat.parse( //
           ReadLine.of(inputStream), //
@@ -99,7 +99,7 @@ class XsvFormatTest {
   @ParameterizedTest
   @ValueSource(strings = { "csv", "tsv" })
   void testImport(String ext) throws Exception {
-    Path read = Unprotect.path("/ch/alpine/tensor/io/chinese.csv");
+    Path read = Unprotect.resourcePath("/ch/alpine/tensor/io/chinese.csv");
     Tensor tensor = Import.of(read);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
     assertEquals(tensor.Get(0, 0).toString().length(), 2);

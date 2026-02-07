@@ -15,6 +15,7 @@ import java.util.zip.DataFormatException;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.ObjectFormat;
+import ch.alpine.tensor.ext.PathName;
 import ch.alpine.tensor.ext.ResourceData;
 
 /** supported file formats are: CSV, GIF, JPG, PNG, etc.
@@ -46,7 +47,7 @@ public enum Import {
    * @throws IOException if path cannot be read */
   public static Tensor of(Path path) throws IOException {
     try (InputStream inputStream = Files.newInputStream(path)) {
-      return ImportHelper.of(new Filename(path.getFileName().toString()), inputStream);
+      return ImportHelper.of(PathName.of(path), inputStream);
     }
   }
 
@@ -58,7 +59,7 @@ public enum Import {
    * @throws Exception if resource could not be loaded */
   public static Tensor of(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ImportHelper.of(new Filename(string), inputStream);
+      return ImportHelper.of(PathName.of(Path.of(string)), inputStream);
     } catch (Exception exception) {
       throw new RuntimeException(exception);
     }

@@ -30,7 +30,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ImportTest {
   private static Tensor load(String string) throws IOException {
-    Path file = Unprotect.path(string);
+    Path file = Unprotect.resourcePath(string);
     Tensor tensor = Import.of(file);
     assertEquals(tensor, Import.of(string));
     return tensor;
@@ -64,7 +64,7 @@ class ImportTest {
   @Test
   void testCsvFail() {
     String string = "/ch/alpine/tensor/io/doesnotexist.csv";
-    assertThrows(Exception.class, () -> Unprotect.path(string));
+    assertThrows(Exception.class, () -> Unprotect.resourcePath(string));
     assertThrows(Exception.class, () -> Import.of(string));
   }
 
@@ -162,7 +162,7 @@ class ImportTest {
   @Test
   void testObject() throws ClassNotFoundException, DataFormatException, IOException {
     // Export.object(UserHome.file("string.object"), "tensorlib.importtest");
-    Path path = Unprotect.path("/ch/alpine/tensor/io/string.object");
+    Path path = Unprotect.resourcePath("/ch/alpine/tensor/io/string.object");
     String string = Import.object(path);
     assertEquals(string, "tensorlib.importtest");
   }
@@ -170,7 +170,7 @@ class ImportTest {
   @Test
   void testUnknownFail() {
     String string = "/ch/alpine/tensor/io/extension.unknown";
-    Path path = Unprotect.path(string);
+    Path path = Unprotect.resourcePath(string);
     assertThrows(Exception.class, () -> Import.of(path));
   }
 
@@ -192,7 +192,7 @@ class ImportTest {
   @Test
   void testProperties() throws IOException {
     String string = "/ch/alpine/tensor/io/simple.properties";
-    Path path = Unprotect.path(string);
+    Path path = Unprotect.resourcePath(string);
     Properties properties1 = Import.properties(path);
     assertEquals(Scalars.fromString(properties1.get("maxTor").toString()), Quantity.of(3, "m*s"));
     Properties properties2 = ResourceData.properties(string);

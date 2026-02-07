@@ -20,6 +20,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.ext.PathName;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
 class VectorFormatTest {
@@ -33,7 +34,7 @@ class VectorFormatTest {
     ExportHelper.of(Extension.VECTOR, tensor, outputStream);
     byte[] array = outputStream.toByteArray(); // 44 bytes used
     InputStream inputStream = new ByteArrayInputStream(array);
-    Tensor result = ImportHelper.of(new Filename("some.vEcToR"), inputStream);
+    Tensor result = ImportHelper.of(PathName.of(Path.of("some.vEcToR")), inputStream);
     assertEquals(tensor, result);
   }
 

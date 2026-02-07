@@ -8,21 +8,22 @@ import java.util.zip.GZIPInputStream;
 import javax.imageio.ImageIO;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.PathName;
 import ch.alpine.tensor.ext.ReadLine;
 import ch.alpine.tensor.ext.ResourceData;
 
 /** functionality used in {@link Import} and {@link ResourceData} */
 /* package */ enum ImportHelper {
   ;
-  /** @param filename
+  /** @param pathName
    * @param inputStream
    * @return
    * @throws IOException */
-  public static Tensor of(Filename filename, InputStream inputStream) throws IOException {
-    Extension extension = filename.extension();
+  public static Tensor of(PathName pathName, InputStream inputStream) throws IOException {
+    Extension extension = Extension.of(pathName.extension());
     if (extension.equals(Extension.GZ))
       try (GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream)) {
-        return of(filename.truncate(), gzipInputStream);
+        return of(pathName.truncate(), gzipInputStream);
       }
     return of(extension, inputStream);
   }

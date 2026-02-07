@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.NavigableSet;
 import java.util.Random;
 import java.util.TreeSet;
@@ -75,6 +76,14 @@ class RandomIntegerTest {
     BigInteger b1 = RandomInteger.of(max_inclusive, new Random(3));
     BigInteger b2 = RandomInteger.of(max_inclusive, new Random(3));
     assertEquals(b1, b2);
+  }
+
+  @Test
+  void testRandomFour() {
+    BigInteger max_inclusive = new BigInteger("2");
+    List<BigInteger> list = Stream.generate(() -> RandomInteger.of(max_inclusive)) //
+        .limit(100).distinct().sorted().toList();
+    assertEquals(list.toString(), "[0, 1, 2]");
   }
 
   @Test

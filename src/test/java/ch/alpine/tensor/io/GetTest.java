@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.Chop;
 class GetTest {
   @Test
   void testResource() throws IOException {
-    Path path = Unprotect.path("/ch/alpine/tensor/io/basic.mathematica");
+    Path path = Unprotect.resourcePath("/ch/alpine/tensor/io/basic.mathematica");
     Tensor tensor = Get.of(path);
     assertNotNull(tensor);
     assertFalse(tensor instanceof Scalar);
@@ -34,7 +34,7 @@ class GetTest {
 
   @Test
   void testBinary() throws IOException { // this use is not as intended
-    Path path = Unprotect.path("/ch/alpine/tensor/img/rgb7x11.bmp");
+    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgb7x11.bmp");
     Tensor tensor = Get.of(path);
     assertInstanceOf(StringScalar.class, tensor);
   }
@@ -47,7 +47,7 @@ class GetTest {
 
   @Test
   void testHanzi() throws IOException {
-    Path path = Unprotect.path("/ch/alpine/tensor/io/hanzi.mathematica");
+    Path path = Unprotect.resourcePath("/ch/alpine/tensor/io/hanzi.mathematica");
     Tensor tensor = Get.of(path);
     String string = tensor.Get(2).toString();
     assertEquals(string.charAt(0), '\u6C49');
