@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/FileBaseName.html">FileBaseName</a>
@@ -24,7 +25,23 @@ public record PathName(Path parent, String title, String extension) {
         : new PathName(parent, string, "");
   }
 
+  /** @return */
   public PathName truncate() {
     return of(parent, title);
+  }
+
+  /** @param string
+   * @return */
+  public Path withExtension(String string) {
+    String concat = title + (string.isEmpty() ? "" : DOT + string);
+    return Objects.isNull(parent) //
+        ? Path.of(concat)
+        : parent.resolve(concat);
+  }
+
+  /** @param string
+   * @return */
+  public boolean hasExtension(String string) {
+    return string.equalsIgnoreCase(extension);
   }
 }

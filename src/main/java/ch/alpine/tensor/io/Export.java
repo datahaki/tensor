@@ -54,7 +54,7 @@ public enum Export {
    * @throws Exception if sequence of file extensions is invalid */
   private static void _check(PathName filename) {
     Extension.of(filename.extension());
-    while (filename.extension().equalsIgnoreCase(Extension.GZ.toString())) {
+    while (filename.hasExtension(Extension.GZ.toString())) {
       filename = filename.truncate();
       Extension.of(filename.extension());
     }

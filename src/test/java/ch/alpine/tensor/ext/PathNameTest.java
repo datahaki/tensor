@@ -94,4 +94,26 @@ class PathNameTest {
     assertEquals(PathName.of(Path.of("asd/.git")).extension(), "");
     assertEquals(PathName.of(Path.of("asd/a.git")).extension(), "git");
   }
+  
+  @Test
+  void testFileHomeDir() {
+    PathName filename = PathName.of(HomeDirectory.path("some.properties"));
+    assertEquals(filename.title(), "some");
+    assertEquals(filename.extension(), "properties");
+    assertEquals(filename.withExtension("txt"), HomeDirectory.path("some.txt"));
+    assertThrows(Exception.class, () -> filename.withExtension(null));
+  }
+
+  @Test
+  void testDirectory() {
+    PathName filename = PathName.of(HomeDirectory.Documents.resolve());
+    assertEquals(filename.extension(), "");
+  }
+
+  @Test
+  void testHiddenDirectory() {
+    PathName filename = PathName.of(HomeDirectory.Documents.resolve(".git"));
+    assertEquals(filename.extension(), "");
+    assertEquals(filename.title(), ".git");
+  }
 }
