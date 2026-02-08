@@ -68,15 +68,21 @@ class ExtensionTest {
   }
 
   @Test
-  void testFailExtension() {
-    PathName filename = PathName.of(Path.of("dir/title.ext"));
-    assertEquals(filename.toString(), "PathName[parent=dir, title=title, extension=ext]");
+  void testComponents() {
+    PathName pathName = PathName.of(Path.of("dir/title.ext"));
+    assertEquals(pathName.parent(), Path.of("dir"));
+    assertEquals(pathName.title(), "title");
+    assertEquals(pathName.extension(), "ext");
+    assertEquals(pathName.hasDot(), true);
   }
 
   @Test
-  void testFailNoExt() {
-    PathName filename = PathName.of(Path.of("dir/mybmp"));
-    assertEquals(filename.toString(), "PathName[parent=dir, title=mybmp, extension=]");
+  void testNoExt() {
+    PathName pathName = PathName.of(Path.of("dir/mybmp"));
+    assertEquals(pathName.parent(), Path.of("dir"));
+    assertEquals(pathName.title(), "mybmp");
+    assertEquals(pathName.extension(), "");
+    assertEquals(pathName.hasDot(), false);
   }
 
   @Test

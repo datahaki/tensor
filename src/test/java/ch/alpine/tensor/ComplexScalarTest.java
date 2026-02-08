@@ -11,6 +11,7 @@ import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 
@@ -86,6 +87,17 @@ class ComplexScalarTest {
   @Test
   void testPolarNumberFail() {
     assertThrows(Throw.class, () -> ComplexScalar.fromPolar(-1, 3));
+  }
+
+  private static void _checkNaN(Scalar scalar) {
+    assertEquals(scalar.toString(), DoubleScalar.INDETERMINATE.toString());
+  }
+
+  @Test
+  void testNaN() {
+    _checkNaN(Abs.FUNCTION.apply(ComplexScalar.of(Double.NaN, 3)));
+    _checkNaN(Abs.FUNCTION.apply(ComplexScalar.of(3, Double.NaN)));
+    _checkNaN(Abs.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN)));
   }
 
   @Test

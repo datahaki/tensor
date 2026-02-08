@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.api.ComplexEmbedding;
+import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.num.BinaryPower;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.pow.SqrtInterface;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.sca.tri.Cos;
@@ -120,7 +122,9 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
   // ---
   @Override // from AbsInterface
   public Scalar abs() { // "complex modulus"
-    return Hypot.of(re, im);
+    return DeterminateScalarQ.of(re) && DeterminateScalarQ.of(im) //
+        ? Hypot.of(re, im)
+        : Sqrt.FUNCTION.apply(absSquared());
   }
 
   @Override // from AbsInterface
