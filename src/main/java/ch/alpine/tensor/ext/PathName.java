@@ -11,7 +11,7 @@ import java.util.Objects;
  * @param parent may be null
  * @param title
  * @param extension */
-public record PathName(Path parent, String title, String extension) {
+public record PathName(Path parent, String title, String extension, boolean hasDot) {
   private static final char DOT = '.';
 
   public static PathName of(Path path) {
@@ -21,8 +21,8 @@ public record PathName(Path parent, String title, String extension) {
   public static PathName of(Path parent, String string) {
     int index = string.lastIndexOf(DOT);
     return 0 < index //
-        ? new PathName(parent, string.substring(0, index), string.substring(index + 1))
-        : new PathName(parent, string, "");
+        ? new PathName(parent, string.substring(0, index), string.substring(index + 1), true)
+        : new PathName(parent, string, "", false);
   }
 
   /** @return */
@@ -43,5 +43,13 @@ public record PathName(Path parent, String title, String extension) {
    * @return */
   public boolean hasExtension(String string) {
     return string.equalsIgnoreCase(extension);
+  }
+  
+  public String name() {
+    return title + (hasDot ? "" : DOT + extension); 
+  }
+
+  public Path asDirectory() {
+    return parent.resolve(title);
   }
 }

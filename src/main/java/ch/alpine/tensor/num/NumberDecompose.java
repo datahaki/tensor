@@ -1,7 +1,8 @@
 // code by jph
-package ch.alpine.tensor.qty;
+package ch.alpine.tensor.num;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarTensorFunction;
@@ -14,7 +15,7 @@ import ch.alpine.tensor.sca.Floor;
 public class NumberDecompose implements ScalarTensorFunction {
   /** @param vector
    * @return */
-  public static ScalarTensorFunction of(Tensor vector) {
+  public static NumberDecompose of(Tensor vector) {
     return new NumberDecompose(vector);
   }
 
@@ -35,6 +36,14 @@ public class NumberDecompose implements ScalarTensorFunction {
       scalar = scalar.subtract(floor);
     }
     return result;
+  }
+
+  public int[] toInt(Scalar scalar) {
+    Tensor vector = apply(scalar);
+    return vector.stream() //
+        .map(Scalar.class::cast) //
+        .mapToInt(Scalars::intValueExact) //
+        .toArray();
   }
 
   @Override

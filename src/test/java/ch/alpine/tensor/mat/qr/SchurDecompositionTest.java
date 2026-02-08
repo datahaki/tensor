@@ -92,7 +92,7 @@ class SchurDecompositionTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.bulk.TestDistributions#distributions")
+  @MethodSource(value = "test.bulk.TestDistributions#distributions2")
   void testSo3(Distribution distribution) {
     Tensor x = RandomVariate.of(distribution, 3);
     Tensor y = RandomVariate.of(distribution, 3);

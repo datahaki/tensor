@@ -3,12 +3,17 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.NavigableSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnOs;
@@ -94,7 +99,7 @@ class PathNameTest {
     assertEquals(PathName.of(Path.of("asd/.git")).extension(), "");
     assertEquals(PathName.of(Path.of("asd/a.git")).extension(), "git");
   }
-  
+
   @Test
   void testFileHomeDir() {
     PathName filename = PathName.of(HomeDirectory.path("some.properties"));
@@ -112,8 +117,23 @@ class PathNameTest {
 
   @Test
   void testHiddenDirectory() {
-    PathName filename = PathName.of(HomeDirectory.Documents.resolve(".git"));
-    assertEquals(filename.extension(), "");
-    assertEquals(filename.title(), ".git");
+    PathName pathName = PathName.of(HomeDirectory.Documents.resolve(".git"));
+    assertEquals(pathName.extension(), "");
+    assertEquals(pathName.title(), ".git");
+  }
+
+  @Test
+  void testHash() {
+    PathName p1 = PathName.of(HomeDirectory.Pictures.resolve("scene.png"));
+    PathName p2 = PathName.of(HomeDirectory.Pictures.resolve("scene.png"));
+    assertNotSame(p1, p2);
+    assertEquals(p1, p2);
+    assertEquals(p1.hashCode(), p2.hashCode());
+    Set<PathName> set = new HashSet<>();
+    set.add(p1);
+    set.add(p2);
+    assertEquals(set.size(), 1);
+    NavigableSet<Object> treeSet = new TreeSet<>();
+    assertThrows(Exception.class, () -> treeSet.add(p1));
   }
 }

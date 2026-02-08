@@ -27,6 +27,11 @@ public class ArrayPad {
     return of(tensor, EqualsReduce.zero(tensor), ante, post);
   }
 
+  /** @param tensor
+   * @param scalar
+   * @param ante
+   * @param post
+   * @return */
   public static Tensor of(Tensor tensor, Scalar scalar, List<Integer> ante, List<Integer> post) {
     List<Integer> dimensions = Dimensions.of(tensor);
     for (int index = 0; index < dimensions.size(); ++index)
