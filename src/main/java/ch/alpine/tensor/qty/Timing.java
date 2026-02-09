@@ -1,7 +1,9 @@
 // code by jph
-package ch.alpine.tensor.ext;
+package ch.alpine.tensor.qty;
 
 import java.util.Objects;
+
+import ch.alpine.tensor.Scalar;
 
 /** Timing with nanoseconds precision.
  * 
@@ -16,6 +18,9 @@ import java.util.Objects;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Timing.html">Timing</a> */
 public class Timing {
+  private static final Unit NS = Unit.of("ns");
+  private static final Unit S = Unit.of("s");
+
   /** @return new instance of {@code Timing} that is started upon creation */
   public static Timing started() {
     Timing timing = new Timing();
@@ -60,16 +65,22 @@ public class Timing {
     tic = null;
   }
 
-  /** @return what is on the display of the timing in nanoseconds:
-   * total of all start-until-stop intervals including start-until-now if instance is started */
-  public long nanoSeconds() {
+  private long _nanos() {
     return frozen + (isStopped() ? 0 : current());
   }
 
+  /** @return what is on the display of the timing in nanoseconds:
+   * total of all start-until-stop intervals including start-until-now
+   * if instance is started in exact precision */
+  public Scalar nanoSeconds() {
+    return Quantity.of(_nanos(), NS);
+  }
+
   /** @return what is on the display of the timing in seconds:
-   * total of all start-until-stop intervals including start-until-now if instance is started */
-  public double seconds() {
-    return nanoSeconds() * 1e-9;
+   * total of all start-until-stop intervals including start-until-now
+   * if instance is started in machine precision */
+  public Scalar seconds() {
+    return Quantity.of(_nanos() * 1e-9, S);
   }
 
   /** @return true if timing is not started */
