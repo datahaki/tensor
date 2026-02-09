@@ -23,7 +23,7 @@ class InversePowerVariogramTest {
   @Test
   void testSimple() throws ClassNotFoundException, IOException {
     Tensor tensor = Tensors.vector(2, 3, 4, 5);
-    Tensor w1 = NormalizeTotal.FUNCTION.apply(tensor.map(Serialization.copy(InversePowerVariogram.of(2))));
+    Tensor w1 = NormalizeTotal.FUNCTION.apply(tensor.maps(Serialization.copy(InversePowerVariogram.of(2))));
     ExactTensorQ.require(w1);
   }
 
@@ -43,6 +43,6 @@ class InversePowerVariogramTest {
   void testExponentZero() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator suo = Serialization.copy(InversePowerVariogram.of(0));
     Tensor domain = Subdivide.of(-1, 1, 6);
-    assertEquals(domain.map(suo), ConstantArray.of(RealScalar.ONE, 7));
+    assertEquals(domain.maps(suo), ConstantArray.of(RealScalar.ONE, 7));
   }
 }

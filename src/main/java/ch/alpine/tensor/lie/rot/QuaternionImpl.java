@@ -92,12 +92,12 @@ import ch.alpine.tensor.sca.tri.Sin;
 
   @Override // from Scalar
   public Quaternion zero() {
-    return new QuaternionImpl(w.zero(), xyz.map(Scalar::zero));
+    return new QuaternionImpl(w.zero(), xyz.maps(Scalar::zero));
   }
 
   @Override // from Scalar
   public Scalar one() {
-    return new QuaternionImpl(w.one(), xyz.map(Scalar::one).map(Scalar::zero));
+    return new QuaternionImpl(w.one(), xyz.maps(Scalar::one).maps(Scalar::zero));
   }
 
   // ---
@@ -145,7 +145,7 @@ import ch.alpine.tensor.sca.tri.Sin;
     return new QuaternionImpl( //
         Cos.FUNCTION.apply(et).multiply(qa), //
         Scalars.isZero(vn) //
-            ? xyz.map(Scalar::zero)
+            ? xyz.maps(Scalar::zero)
             : xyz.multiply(Sin.FUNCTION.apply(et).multiply(qa).divide(vn)));
   }
 
@@ -174,7 +174,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 
   @Override // from MultiplexScalar
   public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
-    return new QuaternionImpl(unaryOperator.apply(w), xyz.map(unaryOperator));
+    return new QuaternionImpl(unaryOperator.apply(w), xyz.maps(unaryOperator));
   }
 
   @Override // from MultiplexScalar

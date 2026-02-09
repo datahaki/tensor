@@ -42,6 +42,6 @@ public enum CirclePoints {
 
   // helper function
   private static Tensor function(int n) {
-    return Range.of(0, n).divide(RealScalar.of(n)).map(AngleVector::turns);
+    return Range.of(0, n).divide(RealScalar.of(n)).maps(AngleVector::turns);
   }
 }

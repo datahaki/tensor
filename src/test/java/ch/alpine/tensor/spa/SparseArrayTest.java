@@ -86,7 +86,7 @@ class SparseArrayTest {
   void testMap1() {
     Tensor sparse = SparseArray.of(RealScalar.ZERO, 5, 4);
     sparse.set(RealScalar.of(2), 2, 1);
-    Tensor tensor = sparse.map(s -> GaussScalar.of(s.number().intValue(), 7));
+    Tensor tensor = sparse.maps(s -> GaussScalar.of(s.number().intValue(), 7));
     assertInstanceOf(SparseArray.class, tensor);
     SparseArray casted = (SparseArray) tensor;
     assertEquals(casted.fallback(), GaussScalar.of(0, 7));
@@ -96,7 +96,7 @@ class SparseArrayTest {
   void testMap2() {
     Tensor sparse = SparseArray.of(RealScalar.ZERO, 5, 4);
     sparse.set(RealScalar.of(2), 2, 1);
-    Tensor tensor = sparse.map(s -> Scalars.isZero(s) ? s : Tensors.vector(1, 2));
+    Tensor tensor = sparse.maps(s -> Scalars.isZero(s) ? s : Tensors.vector(1, 2));
     assertFalse(tensor instanceof SparseArray);
     assertFalse(ArrayQ.of(tensor));
   }
@@ -142,7 +142,7 @@ class SparseArrayTest {
   void testFails() {
     Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
     assertThrows(UnsupportedOperationException.class, () -> sparse.append(Array.zeros(4, 8)));
-    assertThrows(Throw.class, () -> sparse.map(RealScalar.ONE::add));
+    assertThrows(Throw.class, () -> sparse.maps(RealScalar.ONE::add));
   }
 
   @Test
@@ -208,7 +208,7 @@ class SparseArrayTest {
     Tensor expect = Tensors.fromString("{{5, 6, 8}, {0, 2, 9}}");
     assertEquals(Dimensions.of(result), Arrays.asList(2, 3));
     assertEquals(result, expect);
-    Tensor mapped = result.map(s -> s);
+    Tensor mapped = result.maps(s -> s);
     assertEquals(mapped, expect);
     // assertInstanceOf(SparseArray.class, mapped);
     assertEquals(Normal.of(result), expect);

@@ -32,7 +32,7 @@ class InverseErfcTest {
   void testVector() {
     Tensor expect = Tensors.vector( //
         0.9061938024368229, -0.17914345462129164, -0.4769362762044699);
-    Tensor actual = Tensors.vector(0.2, 1.2, 1.5).map(InverseErfc.FUNCTION);
+    Tensor actual = Tensors.vector(0.2, 1.2, 1.5).maps(InverseErfc.FUNCTION);
     Tolerance.CHOP.requireClose(expect, actual);
   }
 

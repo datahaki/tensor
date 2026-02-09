@@ -21,21 +21,21 @@ class AberthEhrlichTest {
   void testDegree1() {
     Polynomial polynomial = Polynomial.of(Tensors.vector(4, -5, 1));
     Tensor result = AberthEhrlich.of(polynomial);
-    Tolerance.CHOP.requireAllZero(result.map(polynomial));
+    Tolerance.CHOP.requireAllZero(result.maps(polynomial));
   }
 
   @Test
   void testSimple() {
     Polynomial polynomial = Polynomial.of(Tensors.vector(4, -5, 0, 1));
     Tensor result = AberthEhrlich.of(polynomial);
-    Tolerance.CHOP.requireAllZero(result.map(polynomial));
+    Tolerance.CHOP.requireAllZero(result.maps(polynomial));
   }
 
   @Test
   void testQuantity() {
     Polynomial polynomial = Polynomial.of(Tensors.fromString("{-13[bar], 0.27[K^-1*bar]}")).antiderivative();
     Tensor v1 = polynomial.roots();
-    Tensor v2 = Sort.of(AberthEhrlich.of(polynomial).map(Tolerance.CHOP));
+    Tensor v2 = Sort.of(AberthEhrlich.of(polynomial).maps(Tolerance.CHOP));
     Tolerance.CHOP.requireClose(v1, v2);
   }
 
@@ -44,7 +44,7 @@ class AberthEhrlichTest {
     Tensor coeffs = Tensors.fromString("{3[m], 2[m*s^-1], 3[m*s^-2], -4[m*s^-3]}");
     Polynomial polynomial = Polynomial.of(coeffs);
     Tensor roots = AberthEhrlich.of(polynomial);
-    Tolerance.CHOP.requireAllZero(roots.map(polynomial));
+    Tolerance.CHOP.requireAllZero(roots.maps(polynomial));
   }
 
   @RepeatedTest(8)
@@ -55,7 +55,7 @@ class AberthEhrlichTest {
     Tensor zeros1 = RandomVariate.of(distribution, random, degree);
     Polynomial polynomial = Polynomial.fromRoots(zeros1);
     Tensor zeros = AberthEhrlich.of(polynomial, random);
-    Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
+    Tolerance.CHOP.requireAllZero(zeros.maps(polynomial));
   }
 
   @RepeatedTest(6)
@@ -66,20 +66,20 @@ class AberthEhrlichTest {
     Tensor zeros1 = RandomVariate.of(distribution, random, degree);
     Polynomial polynomial = Polynomial.fromRoots(zeros1);
     Tensor zeros = AberthEhrlich.of(polynomial, random);
-    Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
+    Tolerance.CHOP.requireAllZero(zeros.maps(polynomial));
   }
 
   @Test
   void testMultiplicity2() {
     Polynomial polynomial = Polynomial.fromRoots(Tensors.fromString("{3,3,1+I}"));
     Tensor zeros = AberthEhrlich.of(polynomial);
-    Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
+    Tolerance.CHOP.requireAllZero(zeros.maps(polynomial));
   }
 
   @Test
   void testMultiplicity3() {
     Polynomial polynomial = Polynomial.fromRoots(Tensors.fromString("{3,3,3,1+I,-2-I}"));
     Tensor zeros = AberthEhrlich.of(polynomial);
-    Tolerance.CHOP.requireAllZero(zeros.map(polynomial));
+    Tolerance.CHOP.requireAllZero(zeros.maps(polynomial));
   }
 }

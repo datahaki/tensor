@@ -53,42 +53,42 @@ class DbscanTest {
 
   @Test
   void testUniform() {
-    Tensor points = Range.of(0, 8).map(Tensors::of);
+    Tensor points = Range.of(0, 8).maps(Tensors::of);
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_1_NORM, RealScalar.of(1), 3);
     assertEquals(Tensors.vector(integers), Array.zeros(integers.length));
   }
 
   @Test
   void testInsufficientRadius() {
-    Tensor points = Range.of(0, 8).map(Tensors::of);
+    Tensor points = Range.of(0, 8).maps(Tensors::of);
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(0.1), 2);
     assertEquals(Tensors.vector(integers), ConstantArray.of(RealScalar.of(-1), integers.length));
   }
 
   @Test
   void testInsufficientPoints() {
-    Tensor points = Range.of(0, 8).map(Tensors::of);
+    Tensor points = Range.of(0, 8).maps(Tensors::of);
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_INFINITY_NORM, RealScalar.of(1), 4);
     assertEquals(Tensors.vector(integers), ConstantArray.of(RealScalar.of(-1), integers.length));
   }
 
   @Test
   void testQuantity() {
-    Tensor points = Range.of(0, 8).map(Tensors::of).map(s -> Quantity.of(s, "m"));
+    Tensor points = Range.of(0, 8).maps(Tensors::of).maps(s -> Quantity.of(s, "m"));
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_2_NORM, Quantity.of(1, "m"), 3);
     assertEquals(Tensors.vector(integers), Array.zeros(integers.length));
   }
 
   @Test
   void testSpaced() {
-    Tensor points = Join.of(Range.of(0, 7), Range.of(10, 15), Range.of(20, 24)).map(Tensors::of);
+    Tensor points = Join.of(Range.of(0, 7), Range.of(10, 15), Range.of(20, 24)).maps(Tensors::of);
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_INFINITY_NORM, Quantity.of(1, ""), 3);
     assertEquals(Tensors.vector(integers), Tensors.vector(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2));
   }
 
   @Test
   void testSpacedPermuted() {
-    Tensor points = Join.of(Range.of(0, 7), Range.of(10, 15), Range.of(20, 24)).map(Tensors::of);
+    Tensor points = Join.of(Range.of(0, 7), Range.of(10, 15), Range.of(20, 24)).maps(Tensors::of);
     List<Integer> perm = IntStream.range(0, points.length()).boxed().collect(Collectors.toList());
     Collections.shuffle(perm);
     points = Tensor.of(perm.stream().map(points::get));
@@ -106,7 +106,7 @@ class DbscanTest {
 
   @Test
   void testFail() {
-    Tensor points = Range.of(0, 8).map(Tensors::of);
+    Tensor points = Range.of(0, 8).maps(Tensors::of);
     assertThrows(Throw.class, () -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(-1.1), 3));
     assertThrows(IllegalArgumentException.class, () -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(+1.1), 0));
   }

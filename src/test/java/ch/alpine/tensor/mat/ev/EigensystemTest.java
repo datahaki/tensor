@@ -98,7 +98,7 @@ class EigensystemTest {
       assertInstanceOf(Quantity.class, eigensystem.values().Get(1));
     }
     {
-      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix.map(N.DOUBLE));
+      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix.maps(N.DOUBLE));
       assertInstanceOf(Quantity.class, eigensystem.values().Get(0));
       assertInstanceOf(Quantity.class, eigensystem.values().Get(1));
     }
@@ -107,9 +107,9 @@ class EigensystemTest {
   @ParameterizedTest
   @ValueSource(ints = { 8, 9 })
   void testQuantityLarge(int n) {
-    Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n)).map(s -> Quantity.of(s, "m"));
+    Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n)).maps(s -> Quantity.of(s, "m"));
     Eigensystem eigensystem = Eigensystem.ofSymmetric(x);
-    eigensystem.values().map(QuantityMagnitude.singleton("m"));
+    eigensystem.values().maps(QuantityMagnitude.singleton("m"));
   }
 
   @ParameterizedTest
@@ -118,13 +118,13 @@ class EigensystemTest {
     int r = 4;
     Tensor v = Join.of( //
         RandomVariate.of(NormalDistribution.standard(), r), //
-        Array.zeros(n - 4)).map(s -> Quantity.of(s, "m"));
+        Array.zeros(n - 4)).maps(s -> Quantity.of(s, "m"));
     Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
     Tensor matrix = Transpose.of(x).dot(Times.of(v, x));
     // System.out.println(Pretty.of(matrix.map(Round._1)));
     assertEquals(MatrixRank.of(matrix), r);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-    eigensystem.values().map(QuantityMagnitude.singleton("m"));
+    eigensystem.values().maps(QuantityMagnitude.singleton("m"));
   }
 
   @Test

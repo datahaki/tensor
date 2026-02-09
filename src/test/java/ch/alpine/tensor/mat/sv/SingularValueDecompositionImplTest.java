@@ -59,25 +59,25 @@ class SingularValueDecompositionImplTest {
   @Test
   void testCondition1UnitA() {
     Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd3.csv");
-    SingularValueDecompositionWrap.of(matrix.map(s -> Quantity.of(s, "m")));
+    SingularValueDecompositionWrap.of(matrix.maps(s -> Quantity.of(s, "m")));
   }
 
   @Test
   void testCondition1UnitB() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd3.csv").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd3.csv").maps(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     SingularValueDecompositionWrap.of(matrix);
   }
 
   @Test
   void testCondition2UnitA() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv").maps(s -> Quantity.of(s, "m"));
     SingularValueDecompositionWrap.of(matrix);
   }
 
   @Test
   void testCondition2UnitB() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv").maps(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     SingularValueDecompositionWrap.of(matrix);
   }
@@ -86,7 +86,7 @@ class SingularValueDecompositionImplTest {
   void testEps() {
     Tensor A = Tensors.fromString("{{1, 0}, {0, 1E-14}}");
     assertTrue(FiniteTensorQ.of(A));
-    SingularValueDecompositionWrap.of(A.map(s -> Quantity.of(s, "kg")));
+    SingularValueDecompositionWrap.of(A.maps(s -> Quantity.of(s, "kg")));
     SingularValueDecomposition svd = SingularValueDecompositionWrap.of(A);
     assertEquals(NullSpace.of(svd).length(), 1);
     assertEquals(NullSpace.of(svd, Chop._20), Tensors.empty());
@@ -95,7 +95,7 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testDecimalScalar() {
-    Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
+    Tensor matrix = HilbertMatrix.of(5, 3).maps(N.DECIMAL128);
     SingularValueDecompositionWrap.of(matrix);
   }
 
@@ -112,7 +112,7 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testConvergenceArtificialFail() {
-    Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
+    Tensor matrix = HilbertMatrix.of(5, 3).maps(N.DECIMAL128);
     SingularValueDecomposition.MAX_ITERATIONS.set(2);
     assertThrows(Exception.class, () -> SingularValueDecomposition.of(matrix));
     SingularValueDecomposition.MAX_ITERATIONS.remove();
@@ -120,7 +120,7 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testUnit() {
-    Tensor a = Tensors.fromString("{{1, 0}, {0, 0}}").map(s -> Quantity.of(s, "m"));
+    Tensor a = Tensors.fromString("{{1, 0}, {0, 0}}").maps(s -> Quantity.of(s, "m"));
     SingularValueDecomposition svd = SingularValueDecompositionWrap.of(a);
     ExactTensorQ.require(svd.values());
     assertEquals(svd.values(), Tensors.fromString("{1[m], 0[m]}"));

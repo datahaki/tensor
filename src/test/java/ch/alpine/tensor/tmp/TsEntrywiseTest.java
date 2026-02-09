@@ -125,7 +125,7 @@ class TsEntrywiseTest {
   void testExactAndInexact() {
     Tensor p1 = Tensors.fromString("{{1, 3}, {4, 3}, {5, 6}, {7, 5}, {10, 2}}");
     TimeSeries ts1 = TimeSeries.path(p1, ResamplingMethod.LINEAR_INTERPOLATION);
-    TimeSeries ts2 = TimeSeries.path(p1.map(N.DOUBLE), ResamplingMethod.LINEAR_INTERPOLATION);
+    TimeSeries ts2 = TimeSeries.path(p1.maps(N.DOUBLE), ResamplingMethod.LINEAR_INTERPOLATION);
     TimeSeries timeSeries = TsEntrywise.plus(ts1, ts2);
     assertEquals(timeSeries.size(), 5);
   }

@@ -21,7 +21,7 @@ class AbstractScalarTest {
     Tensor c = Tensors.fromString("{{1}, {4}, {4}}");
     Tensor a = Tensors.vector(1, 2, 3);
     Tensor b = Tensors.vector(4).unmodifiable();
-    a = a.map(_ -> b);
+    a = a.maps(_ -> b);
     a.set(RealScalar.ONE, 0, 0); // requires copy() in AbstractScalar::map
     assertEquals(a, c);
   }

@@ -43,7 +43,7 @@ class NnzTest {
     assertEquals(Nnz.of(sparseArray), 0);
     // assertInstanceOf(SparseArray.class, MatrixDotConjugateTranspose.of(sparse));
     Tensor dot = MatrixDotConjugateTranspose.self(Transpose.of(sparse));
-    dot.map(Scalar::zero);
+    dot.maps(Scalar::zero);
     // assertInstanceOf(SparseArray.class, dot);
     // assertInstanceOf(SparseArray.class, raw.map(Conjugate.FUNCTION));
   }

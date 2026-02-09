@@ -12,7 +12,7 @@ import ch.alpine.tensor.sca.N;
 
 public enum QuaternionToRotationMatrix {
   ;
-  private static final Tensor ID3 = IdentityMatrix.of(3).map(N.DOUBLE);
+  private static final Tensor ID3 = IdentityMatrix.of(3).maps(N.DOUBLE);
 
   /** @param quaternion with unit length
    * @return orthogonal 3x3 matrix

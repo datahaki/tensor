@@ -25,7 +25,7 @@ public enum CosineSimilarity {
       Integers.requireEquals(u.length(), v.length());
       return Optional.empty();
     }
-    Tensor vc = v.map(Conjugate.FUNCTION);
+    Tensor vc = v.maps(Conjugate.FUNCTION);
     Scalar ratio = ExactTensorQ.of(u) || ExactTensorQ.of(v) //
         ? (Scalar) u.dot(vc).divide(nu).divide(nv)
         : (Scalar) Vector2Norm.NORMALIZE.apply(u).dot(Vector2Norm.NORMALIZE.apply(vc));

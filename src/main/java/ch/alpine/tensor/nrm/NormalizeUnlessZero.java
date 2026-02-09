@@ -39,7 +39,7 @@ public class NormalizeUnlessZero implements TensorUnaryOperator {
   public Tensor apply(Tensor vector) {
     Scalar norm = tensorScalarFunction.apply(vector); // throws exception if input is not a vector
     return Scalars.isZero(norm) //
-        ? vector.map(Unprotect::withoutUnit)
+        ? vector.maps(Unprotect::withoutUnit)
         : normalize.normalize(vector, norm);
   }
 

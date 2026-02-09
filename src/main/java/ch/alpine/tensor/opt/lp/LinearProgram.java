@@ -173,10 +173,10 @@ public class LinearProgram implements Serializable {
         !StaticHelper.isNonNegative(x))
       throw new Throw(c, A, b, x);
     if (constraintType.equals(ConstraintType.LESS_EQUALS) && //
-        !StaticHelper.isNonNegative(b.subtract(A.dot(x)).map(Tolerance.CHOP)))
+        !StaticHelper.isNonNegative(b.subtract(A.dot(x)).maps(Tolerance.CHOP)))
       throw new Throw(c, A, b, x);
     if (constraintType.equals(ConstraintType.GREATER_EQUALS) && //
-        !StaticHelper.isNonNegative(A.dot(x).subtract(b).map(Tolerance.CHOP)))
+        !StaticHelper.isNonNegative(A.dot(x).subtract(b).maps(Tolerance.CHOP)))
       throw new Throw(c, A, b, x);
     return x;
   }

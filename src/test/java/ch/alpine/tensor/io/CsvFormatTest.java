@@ -121,7 +121,7 @@ class CsvFormatTest {
         RationalScalar.of(1, 2), //
         RationalScalar.of(5, 1), //
         DoubleScalar.of(1.25)));
-    Tensor strict = matrix.map(CsvFormat.strict());
+    Tensor strict = matrix.maps(CsvFormat.strict());
     assertEquals(strict.toString(), "{{\"PUT\", 0.5, 5, 1.25}}");
   }
 
@@ -137,7 +137,7 @@ class CsvFormatTest {
   @Test
   void testStringStrict() {
     Tensor row = Tensors.of(StringTensor.vector("123", "[ , ]", "a"));
-    Stream<String> stream = XsvFormat.CSV.of(row.map(CsvFormat.strict()));
+    Stream<String> stream = XsvFormat.CSV.of(row.maps(CsvFormat.strict()));
     List<String> list = stream.collect(Collectors.toList());
     assertEquals(list.size(), 1); // only 1 row
     assertEquals(list.get(0), "\"123\",\"[ , ]\",\"a\"");

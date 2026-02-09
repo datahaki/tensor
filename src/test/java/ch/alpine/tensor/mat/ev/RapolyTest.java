@@ -47,6 +47,6 @@ class RapolyTest {
     matrix = MatrixExp.of(matrix);
     Tensor res = matrix.subtract(DiagonalMatrix.of(n, Rapoly.of(Tensors.vector(0, 1))));
     Rapoly rapoly = (Rapoly) Det.withoutDivision(res);
-    rapoly.polynomial().roots().map(Tolerance.CHOP);
+    rapoly.polynomial().roots().maps(Tolerance.CHOP);
   }
 }

@@ -32,7 +32,7 @@ class FactorialTest {
 
   @Test
   void testOf2() {
-    Tensor result = Tensors.vector(0, 1, 2, 3, 4).map(Factorial.FUNCTION);
+    Tensor result = Tensors.vector(0, 1, 2, 3, 4).maps(Factorial.FUNCTION);
     assertEquals(result, Tensors.vector(1, 1, 2, 6, 24));
   }
 

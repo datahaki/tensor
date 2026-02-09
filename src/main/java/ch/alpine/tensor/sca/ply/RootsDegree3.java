@@ -77,7 +77,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   }
 
   private Tensor roots() {
-    return _roots().map(shift::add);
+    return _roots().maps(shift::add);
   }
 
   /** @return vector of length 3 */
@@ -118,11 +118,11 @@ import ch.alpine.tensor.sca.pow.Sqrt;
       if (Sign.isNegativeOrZero(Dn)) { // discriminant
         // positive: the equation has three distinct real roots
         // zero: the equation has a multiple root and all of its roots are real
-        return roots.map(Re.FUNCTION);
+        return roots.maps(Re.FUNCTION);
       }
       // the equation has one real root and two non-real complex conjugate roots
       // the expression below also works for scalars with unit
-      roots = roots.map(Re.FUNCTION).add(roots.map(Im.FUNCTION).map(Tolerance.CHOP).multiply(ComplexScalar.I));
+      roots = roots.maps(Re.FUNCTION).add(roots.maps(Im.FUNCTION).maps(Tolerance.CHOP).multiply(ComplexScalar.I));
     }
     return roots;
   }

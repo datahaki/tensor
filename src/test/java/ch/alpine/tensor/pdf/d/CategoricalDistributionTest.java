@@ -221,12 +221,12 @@ class CategoricalDistributionTest {
   @ParameterizedTest
   @ValueSource(ints = { 10, 100, 300 })
   void testStrictlyMonotonousExp(int length) {
-    Tensor unscaledPdf = RandomVariate.of(UniformDistribution.unit(), new Random(3), length).map(RealScalar.of(0.1)::add);
+    Tensor unscaledPdf = RandomVariate.of(UniformDistribution.unit(), new Random(3), length).maps(RealScalar.of(0.1)::add);
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(unscaledPdf);
     Tensor samples = Range.of(0, length + 1);
-    Tensor pdfs = samples.map(PDF.of(distribution)::at);
+    Tensor pdfs = samples.maps(PDF.of(distribution)::at);
     assertTrue(pdfs.stream().limit(length).map(Scalar.class::cast).allMatch(Sign::isPositive));
-    Tensor cdfs = samples.map(CDF.of(distribution)::p_lessThan);
+    Tensor cdfs = samples.maps(CDF.of(distribution)::p_lessThan);
     assertTrue(OrderedQ.of(cdfs));
     assertEquals(cdfs.stream().distinct().count(), cdfs.length());
   }

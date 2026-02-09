@@ -29,7 +29,7 @@ class FirstPositionTest {
 
   @Test
   void testQuantity() {
-    Tensor tensor = Tensors.vector(5, 6, 7, 8, 9.0).map(s -> Quantity.of(s, "km"));
+    Tensor tensor = Tensors.vector(5, 6, 7, 8, 9.0).maps(s -> Quantity.of(s, "km"));
     assertFalse(FirstPosition.of(tensor, RealScalar.of(5)).isPresent());
     assertEquals(FirstPosition.of(tensor, Quantity.of(8, "km")).orElseThrow(), 3);
     assertEquals(FirstPosition.of(tensor, Quantity.of(9, "km")).orElseThrow(), 4);

@@ -88,7 +88,7 @@ class FourierTest {
   public void checkFormat(int n) {
     Tensor original = Fourier.FORWARD.matrix(n);
     SymmetricMatrixQ.INSTANCE.requireMember(original);
-    Tensor matrix = original.map(Tolerance.CHOP);
+    Tensor matrix = original.maps(Tolerance.CHOP);
     SymmetricMatrixQ.INSTANCE.requireMember(matrix);
     Tensor invert = ConjugateTranspose.of(matrix);
     SymmetricMatrixQ.INSTANCE.requireMember(matrix);
@@ -115,7 +115,7 @@ class FourierTest {
   @Test
   void testVandermonde() {
     for (int n = 1; n < 8; ++n) {
-      Tensor vector = Subdivide.of(RealScalar.ZERO, Pi.TWO, n).multiply(ComplexScalar.I).map(Exp.FUNCTION).extract(0, n);
+      Tensor vector = Subdivide.of(RealScalar.ZERO, Pi.TWO, n).multiply(ComplexScalar.I).maps(Exp.FUNCTION).extract(0, n);
       Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, n));
       Tensor matrix = VandermondeMatrix.of(vector).multiply(scalar);
       Tolerance.CHOP.requireClose(Fourier.FORWARD.matrix(n), matrix);

@@ -21,8 +21,8 @@ class NegativeDefiniteMatrixQTest {
   void testComplex() {
     assertTrue(NegativeDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{-10, I}, {-I, -10}}")));
     assertFalse(NegativeDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{-10, I}, {-I, -1/10}}")));
-    assertTrue(NegativeDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{-10, I}, {-I, -10}}").map(N.DOUBLE)));
-    assertFalse(NegativeDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{-10, I}, {-I, -1/10}}").map(N.DOUBLE)));
+    assertTrue(NegativeDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{-10, I}, {-I, -10}}").maps(N.DOUBLE)));
+    assertFalse(NegativeDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{-10, I}, {-I, -1/10}}").maps(N.DOUBLE)));
   }
 
   @Test

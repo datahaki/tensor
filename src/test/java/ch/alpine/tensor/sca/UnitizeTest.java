@@ -16,7 +16,7 @@ import ch.alpine.tensor.qty.Quantity;
 class UnitizeTest {
   @Test
   void testVector() {
-    Tensor tensor = Tensors.vector(0, 0, 1e-3, -3, Double.NaN, 0).map(Unitize.FUNCTION);
+    Tensor tensor = Tensors.vector(0, 0, 1e-3, -3, Double.NaN, 0).maps(Unitize.FUNCTION);
     ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.vector(0, 0, 1, 1, 1, 0));
   }

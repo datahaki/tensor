@@ -234,7 +234,7 @@ class ExportHelperTest {
       image.append(Raster.of(arr, cdf));
     image = Flatten.of(image, 1);
     image = Transpose.of(image, 1, 0, 2);
-    return image.map(Round.FUNCTION);
+    return image.maps(Round.FUNCTION);
   }
 
   @Test

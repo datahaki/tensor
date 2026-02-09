@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
 class SpectrogramArrayTest {
   @Test
   void testMathematicaUnits() {
-    Tensor vector = TestHelper.signal().extract(0, 100).map(s -> Quantity.of(s, "s"));
+    Tensor vector = TestHelper.signal().extract(0, 100).maps(s -> Quantity.of(s, "s"));
     Tensor tensor = new SpectrogramArray(Fourier.FORWARD::transform, 10, 3, DirichletWindow.FUNCTION).apply(vector);
     boolean status = Flatten.scalars(tensor) //
         .allMatch(DeterminateScalarQ::of);
@@ -84,12 +84,12 @@ class SpectrogramArrayTest {
         .mapToObj(d -> Quantity.of(d, "m")));
     Tensor array = SpectrogramArray.SPECTROGRAM.apply(tensor);
     ScalarUnaryOperator suo = QuantityMagnitude.SI().in("km");
-    Tensor array2 = array.map(suo);
+    Tensor array2 = array.maps(suo);
     int windowLength = Unprotect.dimension1(array2);
     assertEquals(windowLength, 32);
     Tensor matrix = SpectrogramArray.SPECTROGRAM.half_abs(tensor);
     MatrixQ.require(matrix);
-    matrix.map(suo);
+    matrix.maps(suo);
   }
 
   @Test
@@ -133,10 +133,10 @@ class SpectrogramArrayTest {
   @Test
   void testQuantity2() {
     Tensor signal = Tensors.vector(1, 2, 1, 4, 3, 2, 3, 4, 3, 4);
-    Tensor vector = signal.map(s -> Quantity.of(s, "m"));
+    Tensor vector = signal.maps(s -> Quantity.of(s, "m"));
     Tensor array1 = SpectrogramArray.SPECTROGRAM.apply(signal);
     Tensor array2 = SpectrogramArray.SPECTROGRAM.apply(vector);
-    Tolerance.CHOP.requireClose(array1.map(s -> Quantity.of(s, "m")), array2);
+    Tolerance.CHOP.requireClose(array1.maps(s -> Quantity.of(s, "m")), array2);
   }
   // @Test
   // void testFailWindowLength() {

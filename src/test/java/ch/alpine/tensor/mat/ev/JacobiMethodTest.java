@@ -57,7 +57,7 @@ class JacobiMethodTest {
     Tensor btr = BasisTransform.ofMatrix(diagonalMatrix, eigensystem.vectors());
     Tolerance.CHOP.requireClose(res, matrix);
     Tolerance.CHOP.requireClose(btr, matrix);
-    assertEquals(res.subtract(matrix).map(Chop._08), matrix.multiply(RealScalar.ZERO));
+    assertEquals(res.subtract(matrix).maps(Chop._08), matrix.multiply(RealScalar.ZERO));
     // testing determinant
     Scalar det = Det.of(matrix);
     Tensor prd = eigensystem.values().stream().map(Scalar.class::cast).reduce(Scalar::multiply).orElseThrow();
@@ -169,7 +169,7 @@ class JacobiMethodTest {
 
   @Test
   void testDecimalScalar() {
-    Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
+    Tensor matrix = HilbertMatrix.of(5).maps(N.DECIMAL128);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     assertInstanceOf(DecimalScalar.class, eigensystem.vectors().Get(3, 3));
     assertInstanceOf(DecimalScalar.class, eigensystem.values().Get(4));

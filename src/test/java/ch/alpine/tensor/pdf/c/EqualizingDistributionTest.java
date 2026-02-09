@@ -42,15 +42,15 @@ class EqualizingDistributionTest {
     Distribution distribution = Serialization.copy(EqualizingDistribution.fromUnscaledPDF(Tensors.vector(3)));
     CDF cdf = CDF.of(distribution);
     Tensor domain = Subdivide.of(0, 1, 10);
-    assertEquals(domain, domain.map(cdf::p_lessThan));
-    assertEquals(domain, domain.map(cdf::p_lessEquals));
+    assertEquals(domain, domain.maps(cdf::p_lessThan));
+    assertEquals(domain, domain.maps(cdf::p_lessEquals));
     PDF pdf = PDF.of(distribution);
-    assertEquals(domain.map(pdf::at), Tensors.vector(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0));
+    assertEquals(domain.maps(pdf::at), Tensors.vector(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0));
     assertEquals(Mean.of(distribution), RationalScalar.HALF);
     assertEquals(Variance.of(distribution), RationalScalar.of(1, 12));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertEquals(domain.map(inverseCDF::quantile), domain);
-    RandomVariate.of(distribution, 30).map(Clips.unit()::requireInside);
+    assertEquals(domain.maps(inverseCDF::quantile), domain);
+    RandomVariate.of(distribution, 30).maps(Clips.unit()::requireInside);
   }
 
   @Test
@@ -59,8 +59,8 @@ class EqualizingDistributionTest {
     Distribution distribution = EqualizingDistribution.fromUnscaledPDF(Differences.of(vector));
     Tensor domain = Subdivide.of(0, 1, 10);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    Tensor tensor = domain.map(inverseCDF::quantile);
-    Tensor linear = tensor.map(LinearInterpolation.of(vector)::At);
+    Tensor tensor = domain.maps(inverseCDF::quantile);
+    Tensor linear = tensor.maps(LinearInterpolation.of(vector)::At);
     assertEquals(linear.Get(0), RealScalar.of(-3));
     assertEquals(Last.of(linear), RealScalar.of(30));
     Tensor uniform = Differences.of(linear);

@@ -101,7 +101,7 @@ public class LogNormalDistribution extends AbstractContinuousDistribution implem
 
   @Override // from KurtosisInterface
   public Scalar kurtosis() {
-    Tensor vec = Range.of(2, 5).multiply(variance).map(Exp.FUNCTION);
+    Tensor vec = Range.of(2, 5).multiply(variance).maps(Exp.FUNCTION);
     return RealScalar.of(-3).add(Tensors.vector(3, 2, 1).dot(vec));
   }
 

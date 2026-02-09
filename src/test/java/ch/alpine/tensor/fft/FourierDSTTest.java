@@ -102,7 +102,7 @@ class FourierDSTTest {
   @RepeatedTest(6)
   void test_vectorDSTUnit(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
-    Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).map(s -> Quantity.of(s, "m"));
+    Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).maps(s -> Quantity.of(s, "m"));
     Tensor r1 = FourierDST._1.transform(vector);
     Tensor r2 = vector.dot(FourierDST._1.matrix(n));
     Tolerance.CHOP.requireClose(r1, r2);
@@ -205,7 +205,7 @@ class FourierDSTTest {
   @RepeatedTest(6)
   void testDST_vectorDSTUnit(RepetitionInfo repetitionInfo) {
     int n = 1 << repetitionInfo.getCurrentRepetition();
-    Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).map(s -> Quantity.of(s, "m"));
+    Tensor vector = RandomVariate.of(ComplexNormalDistribution.STANDARD, n).maps(s -> Quantity.of(s, "m"));
     Tensor r1 = FourierDST._2.transform(vector);
     Tensor r2 = FourierDST._2.matrix(n).dot(vector);
     Tolerance.CHOP.requireClose(r1, r2);
@@ -219,7 +219,7 @@ class FourierDSTTest {
   @Test
   void testFour() {
     Tensor matrix = FourierDST._2.matrix(4);
-    IO.println(Pretty.of(matrix.map(Round._3)));
+    IO.println(Pretty.of(matrix.maps(Round._3)));
   }
 
   @ParameterizedTest

@@ -63,7 +63,7 @@ class RootsDegree2Test {
   void testChallenge() {
     Tensor coeffs = Tensors.vector(-0.45461391407082863, -0.44401256484994056, -0.43798541191338114);
     Tensor roots = Roots.of(coeffs);
-    Tensor zeros = roots.map(Polynomial.of(coeffs));
+    Tensor zeros = roots.maps(Polynomial.of(coeffs));
     Chop._12.requireAllZero(zeros);
   }
 
@@ -71,7 +71,7 @@ class RootsDegree2Test {
   void testGaussScalar() {
     Tensor coeffs = Tensors.of(GaussScalar.of(3, 7), GaussScalar.of(2, 7), GaussScalar.of(2, 7));
     Tensor roots = Roots.of(coeffs);
-    Tensor zeros = roots.map(Polynomial.of(coeffs));
+    Tensor zeros = roots.maps(Polynomial.of(coeffs));
     Chop.NONE.requireAllZero(zeros);
     assertEquals(roots, Tensors.of(GaussScalar.of(1, 7), GaussScalar.of(5, 7)));
   }
@@ -83,7 +83,7 @@ class RootsDegree2Test {
     Tensor r1 = polynomial.roots();
     Scalar value = RealScalar.of(-4.050000332100021E-8);
     Chop._16.requireClose(r1.Get(0), value);
-    Chop._01.requireAllZero(r1.map(polynomial));
+    Chop._01.requireAllZero(r1.maps(polynomial));
     Tolerance.CHOP.requireZero(polynomial.apply(value));
   }
 
@@ -108,7 +108,7 @@ class RootsDegree2Test {
         .map(Scalar.class::cast) //
         .sorted(ComplexComparator.INSTANCE));
     Chop._06.requireClose(r1, r2);
-    Tensor zeros = r1.map(Polynomial.of(coeffs));
+    Tensor zeros = r1.maps(Polynomial.of(coeffs));
     Chop._02.requireAllZero(zeros);
   }
 }

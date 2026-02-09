@@ -32,7 +32,7 @@ class CirclePointsTest {
   static Tensor numeric(int n) {
     if (n < 0)
       throw new RuntimeException("n=" + n);
-    return Range.of(0, n).multiply(DoubleScalar.of(2 * Math.PI / n)).map(AngleVector::of);
+    return Range.of(0, n).multiply(DoubleScalar.of(2 * Math.PI / n)).maps(AngleVector::of);
   }
 
   @Test
@@ -79,13 +79,13 @@ class CirclePointsTest {
   void testSmall() {
     assertEquals(CirclePoints.of(0), Tensors.empty());
     assertEquals(CirclePoints.of(1), Tensors.fromString("{{1, 0}}"));
-    assertEquals(CirclePoints.of(2).map(Chop._14), Tensors.fromString("{{1, 0}, {-1, 0}}"));
+    assertEquals(CirclePoints.of(2).maps(Chop._14), Tensors.fromString("{{1, 0}, {-1, 0}}"));
   }
 
   @Test
   void testCirclePoints() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, CirclePoints.of(10));
-    Tensor polygon = Subdivide.of(0, 9, 20).map(bSplineFunction);
+    Tensor polygon = Subdivide.of(0, 9, 20).maps(bSplineFunction);
     assertTrue(MatrixQ.of(polygon));
   }
 

@@ -20,6 +20,6 @@ class ErfiTest {
   @Test
   void testOf() {
     Tensor vector = Tensors.vector(1, 2, 3, 4);
-    vector.map(Erfi.FUNCTION);
+    vector.maps(Erfi.FUNCTION);
   }
 }

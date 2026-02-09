@@ -49,7 +49,7 @@ class InfluenceMatrixImplTest {
     Distribution distribution = DiscreteUniformDistribution.of(-20, 20);
     for (int count = 0; count < 5; ++count)
       for (int r = 1; r < _m - 1; ++r) {
-        Tensor m1 = RandomVariate.of(distribution, random, n, r).map(s -> Quantity.of(s, "m"));
+        Tensor m1 = RandomVariate.of(distribution, random, n, r).maps(s -> Quantity.of(s, "m"));
         Tensor m2 = RandomVariate.of(distribution, random, r, _m);
         Tensor design = m1.dot(m2);
         ExactTensorQ.require(design);

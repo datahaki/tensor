@@ -32,14 +32,14 @@ import ch.alpine.tensor.sca.Conjugate;
       Scalar norm2squared = Vector2NormSquared.of(x);
       if (Scalars.isZero(norm2squared)) {
         vc = x;
-        vr = x.map(Unprotect::negateUnit);
+        vr = x.maps(Unprotect::negateUnit);
       } else {
         vc = x;
-        vr = x.add(x).map(Conjugate.FUNCTION).divide(norm2squared);
+        vr = x.add(x).maps(Conjugate.FUNCTION).divide(norm2squared);
       }
     } else {
       vc = NORMALIZE_UNLESS_ZERO.apply(x);
-      vr = vc.add(vc).map(Conjugate.FUNCTION);
+      vr = vc.add(vc).maps(Conjugate.FUNCTION);
     }
   }
 

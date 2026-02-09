@@ -27,9 +27,9 @@ class TransformedDistributionTest {
     Distribution d1 = DiscreteUniformDistribution.of(3, 11);
     Distribution d2 = TransformedDistribution.shift(DiscreteUniformDistribution.of(0, 8), RealScalar.of(3));
     Tensor domain = Range.of(-3, 20);
-    assertEquals(domain.map(PDF.of(d1)::at), domain.map(PDF.of(d2)::at));
-    assertEquals(domain.map(CDF.of(d1)::p_lessThan), domain.map(CDF.of(d2)::p_lessThan));
-    assertEquals(domain.map(CDF.of(d1)::p_lessEquals), domain.map(CDF.of(d2)::p_lessEquals));
+    assertEquals(domain.maps(PDF.of(d1)::at), domain.maps(PDF.of(d2)::at));
+    assertEquals(domain.maps(CDF.of(d1)::p_lessThan), domain.maps(CDF.of(d2)::p_lessThan));
+    assertEquals(domain.maps(CDF.of(d1)::p_lessEquals), domain.maps(CDF.of(d2)::p_lessEquals));
     assertEquals(RandomVariate.of(d1, new Random(3), 10), RandomVariate.of(d2, new Random(3), 10));
     assertEquals(Mean.of(d1), Mean.of(d2));
   }

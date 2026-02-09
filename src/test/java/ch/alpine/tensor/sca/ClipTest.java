@@ -39,7 +39,7 @@ class ClipTest {
     Scalar max = RealScalar.of(10);
     Clip clip = Clips.interval(min, max);
     Tensor vector = Tensors.vector(-30, 30, 5);
-    assertEquals(vector.map(clip), Tensors.vector(-3, 10, 5));
+    assertEquals(vector.maps(clip), Tensors.vector(-3, 10, 5));
   }
 
   @Test
@@ -129,14 +129,14 @@ class ClipTest {
   void testClipInfty() {
     Clip clip = Clips.interval(DoubleScalar.NEGATIVE_INFINITY, DoubleScalar.POSITIVE_INFINITY);
     Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3, 4);
-    assertEquals(tensor.map(clip), tensor);
+    assertEquals(tensor.maps(clip), tensor);
   }
 
   @Test
   void testClipInftyQuantity() {
     Clip clip = Clips.interval(Quantity.of(Double.NEGATIVE_INFINITY, "V"), Quantity.of(Double.POSITIVE_INFINITY, "V"));
-    Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3, 4).map(s -> Quantity.of(s, "V"));
-    assertEquals(tensor.map(clip), tensor);
+    Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3, 4).maps(s -> Quantity.of(s, "V"));
+    assertEquals(tensor.maps(clip), tensor);
   }
 
   @Test

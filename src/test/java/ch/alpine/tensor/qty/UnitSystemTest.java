@@ -70,7 +70,7 @@ class UnitSystemTest {
         Quantity.of(3, "Hz^-2*N*m^-1"), //
         Quantity.of(3.6, "km*h^-1"), //
         Quantity.of(2, "cm^2"));
-    Tensor result = tensor.map(UnitSystem.SI());
+    Tensor result = tensor.maps(UnitSystem.SI());
     assertEquals(result, Tensors.of( //
         Quantity.of(3, "kg"), //
         Quantity.of(1, "m*s^-1"), //
@@ -96,7 +96,7 @@ class UnitSystemTest {
     assertEquals(prices.apply(Quantity.of(3, "Apples")), Quantity.of(6, "CHF"));
     Tensor cart = Tensors.of(Quantity.of(2, "Apples"), Quantity.of(3, "Chocolates"), Quantity.of(3, "Oranges"));
     assertThrows(Throw.class, () -> Total.of(cart));
-    Scalar total = Total.ofVector(cart.map(prices));
+    Scalar total = Total.ofVector(cart.maps(prices));
     assertEquals(total, Quantity.of(16, "CHF"));
     Scalar euro = UnitConvert.of(prices).to(Unit.of("EUR")).apply(total);
     assertEquals(euro, Quantity.of(12.8, "EUR"));

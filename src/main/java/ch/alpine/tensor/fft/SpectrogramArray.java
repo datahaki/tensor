@@ -62,7 +62,7 @@ public class SpectrogramArray implements TensorUnaryOperator {
   public final Tensor half_abs(Tensor vector) {
     Tensor tensor = apply(vector);
     int half = Unprotect.dimension1Hint(tensor) / 2;
-    return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).map(Abs.FUNCTION), half);
+    return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).maps(Abs.FUNCTION), half);
   }
 
   /** @param windowDuration

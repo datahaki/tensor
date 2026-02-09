@@ -97,7 +97,7 @@ class BernsteinBasisTest {
         Tensor vector = of(n).apply(p);
         Distribution distribution = BinomialDistribution.of(n - 1, p);
         PDF pdf = PDF.of(distribution);
-        Tensor cmp = Range.of(0, n).map(pdf::at);
+        Tensor cmp = Range.of(0, n).maps(pdf::at);
         assertEquals(vector, cmp);
         ExactTensorQ.require(vector);
         ExactTensorQ.require(cmp);

@@ -96,9 +96,9 @@ class HistogramDistributionTest {
     Distribution d2 = HistogramDistribution.of(RandomVariate.of(d1, new Random(3), 1000));
     Clip domain = Clips.positive(3);
     Tensor samples = Subdivide.increasing(domain, 1234);
-    Tensor pdfs = samples.map(PDF.of(d2)::at);
+    Tensor pdfs = samples.maps(PDF.of(d2)::at);
     assertTrue(pdfs.stream().map(Scalar.class::cast).allMatch(Sign::isPositive));
-    Tensor cdfs = samples.map(CDF.of(d2)::p_lessThan);
+    Tensor cdfs = samples.maps(CDF.of(d2)::p_lessThan);
     assertTrue(OrderedQ.of(cdfs));
     assertEquals(cdfs.stream().distinct().count(), cdfs.length());
   }
@@ -110,9 +110,9 @@ class HistogramDistributionTest {
     Distribution d2 = HistogramDistribution.of(RandomVariate.of(d1, 1000));
     Clip domain = Clips.positive(3);
     Tensor samples = Subdivide.increasing(domain, 1234);
-    Tensor pdfs = samples.map(PDF.of(d2)::at);
+    Tensor pdfs = samples.maps(PDF.of(d2)::at);
     assertTrue(pdfs.stream().map(Scalar.class::cast).allMatch(Sign::isPositive));
-    Tensor cdfs = samples.map(CDF.of(d2)::p_lessThan);
+    Tensor cdfs = samples.maps(CDF.of(d2)::p_lessThan);
     assertTrue(OrderedQ.of(cdfs));
     assertEquals(cdfs.stream().distinct().count(), cdfs.length());
     UnivariateDistribution ud = (UnivariateDistribution) d2;

@@ -253,7 +253,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
   }
 
   @Override // from Tensor
-  public Tensor map(Function<Scalar, ? extends Tensor> function) {
+  public Tensor maps(Function<Scalar, ? extends Tensor> function) {
     Tensor probe = function.apply(fallback);
     try {
       if (probe instanceof Scalar nextzero && Scalars.isZero(nextzero)) {

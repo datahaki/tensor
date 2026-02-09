@@ -63,7 +63,7 @@ class ErlangDistributionTest {
     PDF pdf1 = PDF.of(d1);
     PDF pdf2 = PDF.of(d2);
     Tensor samples = Subdivide.of(0.1, 10.0, 14);
-    Tolerance.CHOP.requireClose(samples.map(pdf1::at), samples.map(pdf2::at));
+    Tolerance.CHOP.requireClose(samples.maps(pdf1::at), samples.maps(pdf2::at));
   }
 
   @Test

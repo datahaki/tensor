@@ -15,13 +15,13 @@ import ch.alpine.tensor.qty.Quantity;
 class BSplineFunctionTest {
   @Test
   void testIdentical() {
-    Tensor control = HilbertMatrix.of(20, 3).map(scalar -> Quantity.of(scalar, "bsp"));
+    Tensor control = HilbertMatrix.of(20, 3).maps(scalar -> Quantity.of(scalar, "bsp"));
     Tensor domain = Subdivide.of(6, 14, 28);
     for (int degree = 0; degree <= 5; ++degree) {
       ScalarTensorFunction stfC = BSplineFunctionCyclic.of(3, control);
       ScalarTensorFunction stfS = BSplineFunctionString.of(3, control);
-      Tensor tensor = domain.map(stfC);
-      assertEquals(tensor, domain.map(stfS));
+      Tensor tensor = domain.maps(stfC);
+      assertEquals(tensor, domain.maps(stfS));
       ExactTensorQ.require(tensor);
     }
   }

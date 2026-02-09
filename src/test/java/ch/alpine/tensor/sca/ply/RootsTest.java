@@ -57,10 +57,10 @@ class RootsTest {
         Tensor coeffs = Polynomial.fromRoots(zeros).coeffs();
         Tensor roots = Roots.of(coeffs);
         Polynomial polynomial = Polynomial.of(coeffs);
-        Tensor map = roots.map(polynomial);
+        Tensor map = roots.maps(polynomial);
         if (!Chop._05.allZero(map))
           for (int count = 0; count < length; ++count) {
-            boolean anyZero = roots.map(zeros.Get(count).negate()::add).stream() //
+            boolean anyZero = roots.maps(zeros.Get(count).negate()::add).stream() //
                 .anyMatch(Chop._01::allZero);
             if (!anyZero) {
               IO.println("coeffs: " + coeffs);
@@ -108,7 +108,7 @@ class RootsTest {
       assumeFalse(Scalars.isZero(Last.of(coeffs)));
       Tensor roots = Roots.of(coeffs);
       VectorQ.requireLength(roots, length - 1);
-      Tensor check = roots.map(Polynomial.of(coeffs));
+      Tensor check = roots.maps(Polynomial.of(coeffs));
       if (!Chop._03.allZero(check)) {
         System.err.println("uni5 " + coeffs);
         System.err.println(check);
@@ -126,7 +126,7 @@ class RootsTest {
       assumeFalse(Scalars.isZero(Last.of(coeffs)));
       Tensor roots = Roots.of(coeffs);
       VectorQ.requireLength(roots, length - 1);
-      Tensor check = roots.map(Polynomial.of(coeffs));
+      Tensor check = roots.maps(Polynomial.of(coeffs));
       if (!Chop._03.allZero(check)) {
         System.err.println("uniT " + coeffs);
         System.err.println(check);
@@ -142,7 +142,7 @@ class RootsTest {
     for (int index = 0; index < LIMIT; ++index) {
       Tensor coeffs = RandomVariate.of(distribution, length);
       Tensor roots = Roots.of(coeffs);
-      Tensor check = roots.map(Polynomial.of(coeffs));
+      Tensor check = roots.maps(Polynomial.of(coeffs));
       Chop._04.requireAllZero(check);
     }
   }
@@ -155,7 +155,7 @@ class RootsTest {
       Tensor coeffs = RandomVariate.of(distribution, length);
       Tensor roots = Roots.of(coeffs);
       ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
-      Tensor tensor = roots.map(scalarUnaryOperator);
+      Tensor tensor = roots.maps(scalarUnaryOperator);
       boolean allZero = Chop._04.allZero(tensor);
       if (!allZero) {
         System.err.println(coeffs);
@@ -173,7 +173,7 @@ class RootsTest {
       Tensor coeffs = Array.of(list -> Quantity.of(RandomVariate.of(distribution), "m^-" + list.getFirst()), length);
       Tensor roots = Roots.of(coeffs);
       ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
-      Tensor tensor = roots.map(scalarUnaryOperator);
+      Tensor tensor = roots.maps(scalarUnaryOperator);
       boolean allZero = Chop._04.allZero(tensor);
       if (!allZero) {
         System.err.println(coeffs);
@@ -190,7 +190,7 @@ class RootsTest {
       Tensor coeffs = RandomVariate.of(ComplexNormalDistribution.STANDARD, length);
       Tensor roots = Roots.of(coeffs);
       ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
-      Tensor tensor = roots.map(scalarUnaryOperator);
+      Tensor tensor = roots.maps(scalarUnaryOperator);
       boolean allZero = Chop._04.allZero(tensor);
       if (!allZero) {
         System.err.println(coeffs);
@@ -209,7 +209,7 @@ class RootsTest {
           RandomVariate.of(distribution), RandomVariate.of(distribution)), "m^-" + list.getFirst()), length);
       Tensor roots = Roots.of(coeffs);
       ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
-      Tensor tensor = roots.map(scalarUnaryOperator);
+      Tensor tensor = roots.maps(scalarUnaryOperator);
       boolean allZero = Chop._04.allZero(tensor);
       if (!allZero) {
         System.err.println(coeffs);
@@ -291,7 +291,7 @@ class RootsTest {
     for (Tensor t : Subdivide.of(-0.75, 0.75, 1230)) {
       Scalar d = cubic.apply((Scalar) t);
       Tensor roots = Roots.of(Tensors.of(d.negate(), c, RealScalar.ZERO, a));
-      assertEquals(ExactTensorQ.require(roots.map(Im.FUNCTION)), Array.zeros(3));
+      assertEquals(ExactTensorQ.require(roots.maps(Im.FUNCTION)), Array.zeros(3));
       Chop._13.requireClose(roots.Get(1), t);
     }
   }
@@ -349,6 +349,6 @@ class RootsTest {
   void testNotImplemented() {
     Polynomial polynomial = Polynomial.of(Tensors.vector(1, 2, 3, 4, 5, 6));
     Tensor tensor = polynomial.roots();
-    Tolerance.CHOP.requireAllZero(tensor.map(polynomial));
+    Tolerance.CHOP.requireAllZero(tensor.maps(polynomial));
   }
 }

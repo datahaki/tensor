@@ -48,7 +48,7 @@ class CubeRootTest {
 
   @Test
   void testOf() {
-    Tensor tensor = Tensors.vector(-27, -8, -1, 0, 1, 8, 27).map(CubeRoot.FUNCTION);
+    Tensor tensor = Tensors.vector(-27, -8, -1, 0, 1, 8, 27).maps(CubeRoot.FUNCTION);
     assertEquals(tensor, Range.of(-3, 4));
   }
 

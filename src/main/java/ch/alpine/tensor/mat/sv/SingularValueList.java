@@ -36,6 +36,6 @@ public enum SingularValueList {
    * @param chop
    * @return inverted singular values unless zero */
   public static Tensor inverted(SingularValueDecomposition svd, Chop chop) {
-    return svd.values().map(chop).map(InvertUnlessZero.FUNCTION);
+    return svd.values().maps(chop).maps(InvertUnlessZero.FUNCTION);
   }
 }

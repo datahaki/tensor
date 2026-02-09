@@ -236,7 +236,7 @@ class TrapezoidalDistributionTest {
     Tensor sequence = Tensors.vector(0, 0, 1, 1);
     Tensor domain = Subdivide.of(0, sequence.length() - 1, 100);
     ScalarTensorFunction suo = BSplineFunctionString.of(2, sequence);
-    Tolerance.CHOP.requireClose(domain.map(cdf::p_lessEquals), domain.map(suo));
+    Tolerance.CHOP.requireClose(domain.maps(cdf::p_lessEquals), domain.maps(suo));
   }
 
   @Test

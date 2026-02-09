@@ -27,6 +27,6 @@ public enum HistogramTransform {
         .mapToInt(Scalars::intValueExact) //
         .forEach(index -> ++values[index]);
     CDF cdf = CDF.of(CategoricalDistribution.fromUnscaledPDF(Tensors.vectorInt(values)));
-    return Rescale.of(matrix.map(cdf::p_lessThan)).multiply(_255);
+    return Rescale.of(matrix.maps(cdf::p_lessThan)).multiply(_255);
   }
 }

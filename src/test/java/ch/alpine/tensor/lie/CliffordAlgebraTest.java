@@ -133,7 +133,7 @@ class CliffordAlgebraTest {
     assertEquals(qm.xyz(), m.extract(1, 4));
     assertEquals(qm.w(), m.Get(0));
     Quaternion qe = q1.exp();
-    Tensor xe = _exp(cliffordAlgebra.gp(), x.map(N.DOUBLE));
+    Tensor xe = _exp(cliffordAlgebra.gp(), x.maps(N.DOUBLE));
     Tolerance.CHOP.requireClose(qe.xyz(), xe.extract(1, 1 + 3));
     Tolerance.CHOP.requireClose(qe.w(), xe.Get(0));
     Tensor xi = cliffordAlgebra.exp(x);
@@ -172,7 +172,7 @@ class CliffordAlgebraTest {
     assertEquals(qm.xyz(), m.extract(1 + 3, 1 + 3 + 3));
     assertEquals(qm.w(), m.Get(0));
     Quaternion qe = q1.exp();
-    Tensor xe = _exp(cliffordAlgebra.gp(), x.map(N.DOUBLE));
+    Tensor xe = _exp(cliffordAlgebra.gp(), x.maps(N.DOUBLE));
     Tolerance.CHOP.requireClose(qe.xyz(), xe.extract(1 + 3, 1 + 3 + 3));
     Tolerance.CHOP.requireClose(qe.w(), xe.Get(0));
     Tensor xi = cliffordAlgebra.exp(x);

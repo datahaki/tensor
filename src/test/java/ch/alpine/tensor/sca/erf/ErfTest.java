@@ -56,7 +56,7 @@ class ErfTest {
         0.9999999945765992, 0.9999999988065282, 0.9999999997526137, //
         0.999999999951703, 0.9999999999911201, 0.9999999999984626 //
     };
-    Chop._07.requireClose(xs.map(Erf.FUNCTION), Tensors.vectorDouble(values));
+    Chop._07.requireClose(xs.maps(Erf.FUNCTION), Tensors.vectorDouble(values));
   }
 
   @Test
@@ -78,8 +78,8 @@ class ErfTest {
   @Test
   void testOdd() {
     Tensor x = RandomVariate.of(NormalDistribution.standard(), 10);
-    Tensor z1 = x.map(Erf.FUNCTION);
-    Tensor z2 = x.map(y -> Erf.FUNCTION.apply(y.negate()).negate());
+    Tensor z1 = x.maps(Erf.FUNCTION);
+    Tensor z2 = x.maps(y -> Erf.FUNCTION.apply(y.negate()).negate());
     Tolerance.CHOP.requireClose(z1, z2);
   }
 }

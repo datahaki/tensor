@@ -48,8 +48,8 @@ class TensorUnaryOperatorTest {
 
   @Test
   void testCompose() {
-    TensorUnaryOperator tuo1 = t -> t.map(Sin.FUNCTION);
-    TensorUnaryOperator tuo2 = t -> t.map(Tan.FUNCTION);
+    TensorUnaryOperator tuo1 = t -> t.maps(Sin.FUNCTION);
+    TensorUnaryOperator tuo2 = t -> t.maps(Tan.FUNCTION);
     TensorUnaryOperator result = tuo1.compose(tuo2);
     Tensor s1 = result.apply(RealScalar.of(0.3));
     Scalar s2 = Sin.FUNCTION.apply(Tan.FUNCTION.apply(RealScalar.of(0.3)));

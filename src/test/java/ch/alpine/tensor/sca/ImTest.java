@@ -31,7 +31,7 @@ class ImTest {
 
   @Test
   void testTensorExact() {
-    Tensor tensor = Tensors.fromString("{{3+I*6/7, 5*I}, 2, {}}").map(Im.FUNCTION);
+    Tensor tensor = Tensors.fromString("{{3+I*6/7, 5*I}, 2, {}}").maps(Im.FUNCTION);
     assertEquals(tensor, Tensors.fromString("{{6/7, 5}, 0, {}}"));
     ExactTensorQ.require(tensor);
   }
@@ -40,7 +40,7 @@ class ImTest {
   void testIncrement() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
     matrix.set(RealScalar.ONE::add, 0, 0);
-    Tensor result = matrix.map(RealScalar.ONE::add);
+    Tensor result = matrix.maps(RealScalar.ONE::add);
     Tensor check = Tensors.matrixInt(new int[][] { { -6, 4, -2 }, { 3, -1, 8 } });
     assertEquals(result, check);
   }
@@ -49,7 +49,7 @@ class ImTest {
   void testDecrement() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
     matrix.set(s -> s.subtract(RealScalar.ONE), 0, 0);
-    Tensor result = matrix.map(s -> s.subtract(RealScalar.ONE));
+    Tensor result = matrix.maps(s -> s.subtract(RealScalar.ONE));
     Tensor check = Tensors.matrixInt(new int[][] { { -10, 2, -4 }, { 1, -3, 6 } });
     assertEquals(result, check);
   }

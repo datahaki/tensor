@@ -138,7 +138,7 @@ class CholeskyDecompositionTest {
 
   @Test
   void testHilbertN1() {
-    CholeskyDecompositionWrap.of(HilbertMatrix.of(16).map(N.DOUBLE));
+    CholeskyDecompositionWrap.of(HilbertMatrix.of(16).maps(N.DOUBLE));
   }
 
   @Test
@@ -161,7 +161,7 @@ class CholeskyDecompositionTest {
   @Test
   void testComplex() {
     CholeskyDecompositionWrap.of(Tensors.fromString("{{10, I}, {-I, 10}}"));
-    CholeskyDecompositionWrap.of(Tensors.fromString("{{10, I}, {-I, 10}}").map(N.DOUBLE));
+    CholeskyDecompositionWrap.of(Tensors.fromString("{{10, I}, {-I, 10}}").maps(N.DOUBLE));
   }
 
   @Test
@@ -196,8 +196,8 @@ class CholeskyDecompositionTest {
     CholeskyDecomposition cd = CholeskyDecompositionWrap.of(matrix);
     {
       assertEquals(Det.of(matrix), cd.det()); // 100[kg^2, m^2, rad^2]
-      Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal().map(Sqrt.FUNCTION));
-      Tensor upper = Times.of(cd.diagonal().map(Sqrt.FUNCTION), ConjugateTranspose.of(cd.getL()));
+      Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal().maps(Sqrt.FUNCTION));
+      Tensor upper = Times.of(cd.diagonal().maps(Sqrt.FUNCTION), ConjugateTranspose.of(cd.getL()));
       Tensor res = Tensors.matrix((i, j) -> Times.of(lower.get(i), upper.get(Tensor.ALL, j)).stream().reduce(LenientAdd::of).orElseThrow(), 3, 3);
       Chop._10.requireClose(matrix, res);
     }
@@ -230,7 +230,7 @@ class CholeskyDecompositionTest {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     CholeskyDecomposition cd = CholeskyDecompositionWrap.of(matrix);
-    Tensor sdiag = cd.diagonal().map(Sqrt.FUNCTION);
+    Tensor sdiag = cd.diagonal().maps(Sqrt.FUNCTION);
     Times.of(sdiag, ConjugateTranspose.of(cd.getL()));
     {
       Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal());

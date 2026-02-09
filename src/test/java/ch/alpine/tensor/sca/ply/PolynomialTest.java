@@ -308,7 +308,7 @@ class PolynomialTest {
     Scalar res = Polynomial.of(coeffs).apply(val);
     ExactScalarQ.require(res);
     Tensor roots = Roots.of(coeffs);
-    roots.map(series); // non-zero
+    roots.maps(series); // non-zero
   }
 
   @Test
@@ -427,7 +427,7 @@ class PolynomialTest {
     Polynomial c2 = Polynomial.of(Tensors.vector(5, 7, 1));
     assertEquals(c2.toString(), "Polynomial[{5, 7, 1}]");
     Tensor roots = c2.roots();
-    Tolerance.CHOP.requireAllZero(roots.map(c2));
+    Tolerance.CHOP.requireAllZero(roots.maps(c2));
     assertNotEquals(c1, c2);
     assertNotEquals(null, c1);
     assertNotEquals(c1, Pi.VALUE);
@@ -566,7 +566,7 @@ class PolynomialTest {
     Distribution distribution = TriangularDistribution.of(-2, 1, 2);
     for (int n = 5; n < 10; ++n) {
       Tensor xdata = RandomVariate.of(distribution, random, n);
-      Tensor ydata = xdata.map(polynomial);
+      Tensor ydata = xdata.maps(polynomial);
       Polynomial fit = Polynomial.fit(xdata, ydata, 4);
       assertEquals(fit.degree(), polynomial.degree());
     }

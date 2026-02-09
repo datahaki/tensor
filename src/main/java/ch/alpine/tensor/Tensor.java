@@ -288,12 +288,16 @@ public interface Tensor extends Iterable<Tensor> {
    * @return dot product between this and input tensor */
   Tensor dot(Tensor tensor);
 
-  /** applies function to all entries
+  /** applies function to all scalars that are nested inside this tensor
+   * and returns a copy of the result
+   * 
+   * the method is called 'maps' akin to "map scalars" to avoid confusion with
+   * {@link Stream#map(Function)}
    * 
    * @param function
    * @return new tensor with {@link Scalar} entries replaced by
    * function evaluation of {@link Scalar} entries */
-  Tensor map(Function<Scalar, ? extends Tensor> function);
+  Tensor maps(Function<Scalar, ? extends Tensor> function);
 
   /** the returned block consists of references to the elements in this tensor.
    * The function {@link #block(List, List)} is useful for applications such as

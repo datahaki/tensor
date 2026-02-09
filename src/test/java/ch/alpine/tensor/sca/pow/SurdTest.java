@@ -63,7 +63,7 @@ class SurdTest {
   @Test
   void testOf() {
     ScalarUnaryOperator suo = Surd.of(3);
-    Tensor tensor = Tensors.vector(-27, -8, -1, 0, 1, 8, 27).map(suo);
+    Tensor tensor = Tensors.vector(-27, -8, -1, 0, 1, 8, 27).maps(suo);
     assertEquals(tensor, Range.of(-3, 4));
     assertEquals(suo.toString(), "Surd[3]");
   }

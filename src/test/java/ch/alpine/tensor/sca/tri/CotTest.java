@@ -31,7 +31,7 @@ class CotTest {
   void testTensor() {
     Tensor vector = Tensors.vector(-1, 2, -3);
     Tensor expected = Tensors.fromString("{-0.6420926159343306`, -0.45765755436028577`, 7.015252551434534`}");
-    Tolerance.CHOP.requireClose(vector.map(Cot.FUNCTION), expected);
+    Tolerance.CHOP.requireClose(vector.maps(Cot.FUNCTION), expected);
   }
 
   private static void checkCot(double value) {

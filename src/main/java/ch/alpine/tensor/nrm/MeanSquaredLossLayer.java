@@ -12,6 +12,6 @@ public enum MeanSquaredLossLayer {
   ;
   public static Scalar of(Tensor a, Tensor b) {
     // TODO TENSOR not sure
-    return Mean.ofVector(Flatten.of(a.subtract(b)).map(s -> s.multiply(s)));
+    return Mean.ofVector(Flatten.of(a.subtract(b)).maps(s -> s.multiply(s)));
   }
 }

@@ -67,7 +67,7 @@ class CholeskyDecompositionImplTest {
 
   @Test
   void testDecimalScalar() {
-    Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
+    Tensor matrix = HilbertMatrix.of(5).maps(N.DECIMAL128);
     CholeskyDecomposition choleskyDecomposition = CholeskyDecompositionWrap.of(matrix);
     Tensor result = MatrixDotTranspose.of(Dot.of( //
         choleskyDecomposition.getL(), //

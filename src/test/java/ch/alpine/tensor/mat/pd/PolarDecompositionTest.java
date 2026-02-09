@@ -91,7 +91,7 @@ class PolarDecompositionTest {
     Tensor mmt = MatrixDotConjugateTranspose.self(matrix);
     HermitianMatrixQ.INSTANCE.requireMember(mmt);
     PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
-    Tensor herm = polarDecomposition.getPositiveSemidefinite().map(Tolerance.CHOP);
+    Tensor herm = polarDecomposition.getPositiveSemidefinite().maps(Tolerance.CHOP);
     HermitianMatrixQ.INSTANCE.requireMember(herm);
     Tensor result = polarDecomposition.getUnitary();
     new UnitaryMatrixQ(Chop._06).requireMember(result);

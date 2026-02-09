@@ -73,7 +73,7 @@ class ExpectationTest {
     Tensor accumulate = Accumulate.of(unscaledPDF);
     Scalar scale = Last.of(accumulate);
     Tensor pdf = unscaledPDF.divide(scale);
-    Scalar result = (Scalar) pdf.dot(Range.of(0, upper).map(clip));
+    Scalar result = (Scalar) pdf.dot(Range.of(0, upper).maps(clip));
     assertEquals(expect, result);
     ExactScalarQ.require(expect);
     ExactScalarQ.require(result);

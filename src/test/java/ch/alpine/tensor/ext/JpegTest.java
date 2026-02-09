@@ -33,7 +33,7 @@ class JpegTest {
   @ParameterizedTest
   @ValueSource(floats = { 0.1f, 0.9f })
   void testSimple(float quality) throws IOException {
-    Tensor image = RandomVariate.of(UniformDistribution.unit(30), 10, 20).map(ColorDataGradients.AURORA).map(Floor.FUNCTION);
+    Tensor image = RandomVariate.of(UniformDistribution.unit(30), 10, 20).maps(ColorDataGradients.AURORA).maps(Floor.FUNCTION);
     // IO.println(image);
     BufferedImage bufferedImage = ImageFormat.of(image);
     Path path = tempDir.resolve("asd" + quality + ".jpg");
@@ -46,7 +46,7 @@ class JpegTest {
 
   @Test
   void testSimple() throws IOException {
-    Tensor image = RandomVariate.of(UniformDistribution.unit(30), 10, 20).map(ColorDataGradients.AURORA).map(Floor.FUNCTION);
+    Tensor image = RandomVariate.of(UniformDistribution.unit(30), 10, 20).maps(ColorDataGradients.AURORA).maps(Floor.FUNCTION);
     BufferedImage bufferedImage = ImageFormat.of(image);
     Tensor resto = ImageFormat.from(bufferedImage);
     Scalar between = FrobeniusNorm.of(image.subtract(resto));

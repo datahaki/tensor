@@ -36,7 +36,7 @@ class QuantileTest {
   void testMultiple() throws ClassNotFoundException, IOException {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(Quantile.of(vector));
-    Tensor q = Tensors.fromString("{0, 1/5, 2/5, 3/5, 4/5, 1}").map(scalarUnaryOperator);
+    Tensor q = Tensors.fromString("{0, 1/5, 2/5, 3/5, 4/5, 1}").maps(scalarUnaryOperator);
     Tensor r = Tensors.vector(0, 0, 1, 2, 3, 4);
     assertEquals(q, r);
   }
@@ -53,7 +53,7 @@ class QuantileTest {
   void testSorted() throws ClassNotFoundException, IOException {
     Tensor vector = Sort.of(Tensors.vector(0, 2, 1, 4, 3));
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(Quantile.ofSorted(vector));
-    Tensor q = Tensors.fromString("{0, 1/5, 2/5, 3/5, 4/5, 1}").map(scalarUnaryOperator);
+    Tensor q = Tensors.fromString("{0, 1/5, 2/5, 3/5, 4/5, 1}").maps(scalarUnaryOperator);
     Tensor r = Tensors.vector(0, 0, 1, 2, 3, 4);
     assertEquals(q, r);
   }
@@ -89,7 +89,7 @@ class QuantileTest {
     Tensor tensor = Array.of(_ -> RealScalar.of(ThreadLocalRandom.current().nextDouble()), 2000);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
     Tensor weight = Tensors.vector(0.76, 0.1, 0.25, 0.5, 0.05, 0.95, 0, 0.5, 0.99, 1);
-    Tensor quantile = weight.map(scalarUnaryOperator);
+    Tensor quantile = weight.maps(scalarUnaryOperator);
     Scalar maxError = VectorInfinityNorm.between(quantile, weight);
     assertTrue(Scalars.lessThan(maxError, RealScalar.of(0.125)));
   }
@@ -115,7 +115,7 @@ class QuantileTest {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
     Tensor weight = Tensors.of(RealScalar.ONE, ComplexScalar.of(1, 2));
-    assertThrows(Throw.class, () -> weight.map(scalarUnaryOperator));
+    assertThrows(Throw.class, () -> weight.maps(scalarUnaryOperator));
   }
 
   @Test

@@ -34,7 +34,7 @@ class LinearOptimizationTest {
     }
     {
       LinearProgram linearProgram = LinearProgram.of( //
-          Objective.MIN, c, ConstraintType.EQUALS, m.map(N.DOUBLE), b, Variables.NON_NEGATIVE);
+          Objective.MIN, c, ConstraintType.EQUALS, m.maps(N.DOUBLE), b, Variables.NON_NEGATIVE);
       Tensor x = LinearOptimization.of(linearProgram);
       // Mathematica {5, 7, 0, 3, 0}
       Tolerance.CHOP.requireClose(x, Tensors.vector(5, 7, 0, 3, 0));
@@ -43,7 +43,7 @@ class LinearOptimizationTest {
     }
     {
       LinearProgram linearProgram = LinearProgram.of( //
-          Objective.MIN, c.map(N.DOUBLE), ConstraintType.EQUALS, m.map(N.DOUBLE), b.map(N.DOUBLE), Variables.NON_NEGATIVE);
+          Objective.MIN, c.maps(N.DOUBLE), ConstraintType.EQUALS, m.maps(N.DOUBLE), b.maps(N.DOUBLE), Variables.NON_NEGATIVE);
       Tensor x = LinearOptimization.of(linearProgram);
       // Mathematica {5, 7, 0, 3, 0}
       Tolerance.CHOP.requireClose(x, Tensors.vector(5, 7, 0, 3, 0));
@@ -92,7 +92,7 @@ class LinearOptimizationTest {
     }
     {
       LinearProgram lpd = LinearProgram.of( //
-          Objective.MAX, c.map(N.DOUBLE), ConstraintType.LESS_EQUALS, m.map(N.DOUBLE), b.map(N.DOUBLE), Variables.NON_NEGATIVE);
+          Objective.MAX, c.maps(N.DOUBLE), ConstraintType.LESS_EQUALS, m.maps(N.DOUBLE), b.maps(N.DOUBLE), Variables.NON_NEGATIVE);
       Tensor x = LinearOptimization.of(lpd);
       Tolerance.CHOP.requireClose(x, Tensors.fromString("{2/3, 4/3}"));
       Tensor tensor = SimplexCorners.of(lpd);

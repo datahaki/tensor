@@ -116,7 +116,7 @@ class QRDecompositionImplTest {
   void testBic() {
     Tensor matrix = Import.of("/ch/alpine/tensor/mat/pi/bic1.csv");
     QRDecompositionImpl qrDecomposition = (QRDecompositionImpl) QRDecompositionWrap.of(matrix);
-    Tensor rs = Diagonal.of(qrDecomposition.getR()).map(Abs.FUNCTION);
+    Tensor rs = Diagonal.of(qrDecomposition.getR()).maps(Abs.FUNCTION);
     Scalar max = (Scalar) rs.stream().reduce(Max::of).orElseThrow();
     double thres = max.number().doubleValue() * 1e-12;
     Chop chop = Chop.below(thres);
@@ -126,7 +126,7 @@ class QRDecompositionImplTest {
 
   @Test
   void testDecimalScalar() {
-    Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
+    Tensor matrix = HilbertMatrix.of(5, 3).maps(N.DECIMAL128);
     QRDecomposition qrDecomposition = QRDecompositionWrap.of(matrix);
     Tensor tensor = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, tensor);

@@ -122,8 +122,8 @@ class BSplineFunctionStringTest {
     for (int degree = 0; degree <= 5; ++degree) {
       ScalarTensorFunction bsf = BSplineFunctionString.of(degree, control);
       ScalarTensorFunction bsr = BSplineFunctionString.of(degree, Reverse.of(control));
-      Tensor res1f = Subdivide.of(0, n, 10).map(bsf);
-      Tensor res1r = Subdivide.of(n, 0, 10).map(bsr);
+      Tensor res1f = Subdivide.of(0, n, 10).maps(bsf);
+      Tensor res1r = Subdivide.of(n, 0, 10).maps(bsr);
       assertEquals(res1f, res1r);
     }
   }
@@ -135,11 +135,11 @@ class BSplineFunctionStringTest {
     int n = control.length() - 1;
     for (int degree = 0; degree <= 5; ++degree) {
       ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(degree, control);
-      Tensor tensor = Subdivide.of(0, n, 10).map(bSplineFunction);
+      Tensor tensor = Subdivide.of(0, n, 10).maps(bSplineFunction);
       VectorQ.require(tensor);
-      Tensor nounit = tensor.map(QuantityMagnitude.SI().in("m"));
+      Tensor nounit = tensor.maps(QuantityMagnitude.SI().in("m"));
       ExactTensorQ.require(nounit);
-      nounit.map(clip::requireInside);
+      nounit.maps(clip::requireInside);
     }
   }
 
@@ -183,9 +183,9 @@ class BSplineFunctionStringTest {
     for (int degree = 1; degree < 8; ++degree) {
       Tensor control = RandomVariate.of(distribution, n, 3);
       ScalarTensorFunction mapForward = BSplineFunctionString.of(degree, control);
-      Tensor forward = domain.map(mapForward);
+      Tensor forward = domain.maps(mapForward);
       ScalarTensorFunction mapReverse = BSplineFunctionString.of(degree, Reverse.of(control));
-      Tensor reverse = Reverse.of(domain.map(mapReverse));
+      Tensor reverse = Reverse.of(domain.maps(mapReverse));
       assertEquals(forward, reverse);
       ExactTensorQ.require(forward);
       ExactTensorQ.require(reverse);
@@ -195,7 +195,7 @@ class BSplineFunctionStringTest {
   @Test
   void testBasisWeights1a() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(1, UnitVector.of(3, 1));
-    Tensor limitMask = Range.of(1, 2).map(bSplineFunction);
+    Tensor limitMask = Range.of(1, 2).maps(bSplineFunction);
     ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1}"));
   }
@@ -203,7 +203,7 @@ class BSplineFunctionStringTest {
   @Test
   void testBasisWeights2() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(2, UnitVector.of(5, 2));
-    Tensor limitMask = Range.of(1, 4).map(bSplineFunction);
+    Tensor limitMask = Range.of(1, 4).maps(bSplineFunction);
     ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/8, 3/4, 1/8}"));
   }
@@ -211,7 +211,7 @@ class BSplineFunctionStringTest {
   @Test
   void testBasisWeights3a() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, UnitVector.of(7, 3));
-    Tensor limitMask = Range.of(2, 5).map(bSplineFunction);
+    Tensor limitMask = Range.of(2, 5).maps(bSplineFunction);
     ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/6, 2/3, 1/6}"));
   }
@@ -219,7 +219,7 @@ class BSplineFunctionStringTest {
   @Test
   void testBasisWeights3b() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, UnitVector.of(5, 2));
-    Tensor limitMask = Range.of(1, 4).map(bSplineFunction);
+    Tensor limitMask = Range.of(1, 4).maps(bSplineFunction);
     ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/6, 2/3, 1/6}"));
   }
@@ -227,7 +227,7 @@ class BSplineFunctionStringTest {
   @Test
   void testBasisWeights4() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(4, UnitVector.of(9, 4));
-    Tensor limitMask = Range.of(2, 7).map(bSplineFunction);
+    Tensor limitMask = Range.of(2, 7).maps(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
     ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/384, 19/96, 115/192, 19/96, 1/384}"));
@@ -236,7 +236,7 @@ class BSplineFunctionStringTest {
   @Test
   void testBasisWeights5a() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(5, UnitVector.of(11, 5));
-    Tensor limitMask = Range.of(3, 8).map(bSplineFunction);
+    Tensor limitMask = Range.of(3, 8).maps(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
     ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
@@ -245,7 +245,7 @@ class BSplineFunctionStringTest {
   @Test
   void testBasisWeights5b() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(5, UnitVector.of(9, 4));
-    Tensor limitMask = Range.of(2, 7).map(bSplineFunction);
+    Tensor limitMask = Range.of(2, 7).maps(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
     ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
@@ -254,7 +254,7 @@ class BSplineFunctionStringTest {
   @Test
   void testBasisWeights5c() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(5, UnitVector.of(7, 3));
-    Tensor limitMask = Range.of(1, 6).map(bSplineFunction);
+    Tensor limitMask = Range.of(1, 6).maps(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
     ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));

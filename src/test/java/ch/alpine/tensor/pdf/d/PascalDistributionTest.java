@@ -103,7 +103,7 @@ class PascalDistributionTest {
     int n = 5;
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
     CDF cdf = CDF.of(distribution);
-    Tensor actual = Range.of(0, 10 + 1).map(cdf::p_lessEquals);
+    Tensor actual = Range.of(0, 10 + 1).maps(cdf::p_lessEquals);
     Tensor expect = Tensors.fromString("{0, 0, 0, 0, 0, 1/1024, 19/4096, 211/16384, 1789/65536, 6413/131072, 40961/524288}");
     assertEquals(actual, expect);
   }

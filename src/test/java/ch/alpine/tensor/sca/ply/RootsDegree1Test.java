@@ -16,7 +16,7 @@ class RootsDegree1Test {
   void testGaussScalar() {
     Tensor coeffs = Tensors.of(GaussScalar.of(4, 7), GaussScalar.of(5, 7));
     Tensor roots = Roots.of(coeffs);
-    Tensor zeros = roots.map(Polynomial.of(coeffs));
+    Tensor zeros = roots.maps(Polynomial.of(coeffs));
     assertEquals(zeros, Tensors.of(GaussScalar.of(0, 7)));
     Chop.NONE.requireAllZero(zeros);
     Tolerance.CHOP.requireAllZero(zeros);

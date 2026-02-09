@@ -50,6 +50,6 @@ public class BSplineFunctionString extends BSplineFunctionBase {
 
   @Override // from BSplineFunctionBase
   protected Tensor project(Tensor knots) {
-    return knots.map(clip);
+    return knots.maps(clip);
   }
 }

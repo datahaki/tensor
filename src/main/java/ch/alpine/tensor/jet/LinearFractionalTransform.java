@@ -41,7 +41,7 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
     final int d = Unprotect.dimension1(p);
     final int m = d + 1;
     Tensor p1 = Tensor.of(p.stream().map(AppendOne.FUNCTION));
-    Tensor zero = p1.map(Scalar::zero);
+    Tensor zero = p1.maps(Scalar::zero);
     Tensor qt = Transpose.of(q);
     Tensor[][] array = new Tensor[d][m];
     for (int i = 0; i < d; ++i) {

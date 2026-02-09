@@ -18,6 +18,6 @@ public enum ConjugateTranspose {
    * @return transpose of tensor with entries conjugated
    * @throws Exception if given tensor is not of rank at least 2 */
   public static Tensor of(Tensor tensor) {
-    return Transpose.of(tensor).map(Conjugate.FUNCTION);
+    return Transpose.of(tensor).maps(Conjugate.FUNCTION);
   }
 }

@@ -63,7 +63,7 @@ public enum Hypot {
    * @throws Exception if vector is empty, or vector contains NaN */
   public static Scalar ofVector(Tensor vector) {
     // same issue as in Pivots
-    Tensor abs = vector.map(Abs.FUNCTION);
+    Tensor abs = vector.maps(Abs.FUNCTION);
     Scalar max = abs.stream() //
         .map(Scalar.class::cast) //
         .reduce(Max::of) //

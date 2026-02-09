@@ -34,9 +34,9 @@ class ConjugateGradientSolveTest {
   @Test
   void testUnits1() {
     ScalarUnaryOperator suo = s -> Quantity.of(s, "m^2");
-    Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}").map(suo);
+    Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}").maps(suo);
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
-    Tensor b = Tensors.vector(1, 2, 3).map(suo);
+    Tensor b = Tensors.vector(1, 2, 3).maps(suo);
     Tensor x = LinearSolve.of(matrix, b);
     assertEquals(matrix.dot(x), b);
     x = ConjugateGradientSolve.of(matrix, b);
@@ -47,7 +47,7 @@ class ConjugateGradientSolveTest {
   @Test
   void testUnits2() {
     ScalarUnaryOperator suo = s -> Quantity.of(s, "m^2");
-    Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}").map(suo);
+    Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}").maps(suo);
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     Tensor b = Tensors.vector(1, 2, 3);
     Tensor x = LinearSolve.of(matrix, b);

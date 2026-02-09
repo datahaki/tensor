@@ -73,7 +73,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
 
   @Override
   public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
-    return new Rapoly(Polynomial.of(polynomial.coeffs().map(unaryOperator)));
+    return new Rapoly(Polynomial.of(polynomial.coeffs().maps(unaryOperator)));
   }
 
   @Override

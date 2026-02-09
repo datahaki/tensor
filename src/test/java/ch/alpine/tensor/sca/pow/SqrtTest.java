@@ -91,7 +91,7 @@ class SqrtTest {
 
   @Test
   void testTensor() {
-    Tensor vector = Tensors.vector(1, 4, 9, 16).map(Sqrt.FUNCTION);
+    Tensor vector = Tensors.vector(1, 4, 9, 16).maps(Sqrt.FUNCTION);
     assertEquals(vector, Tensors.vector(1, 2, 3, 4));
   }
 

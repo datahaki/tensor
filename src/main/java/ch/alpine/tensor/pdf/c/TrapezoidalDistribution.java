@@ -196,8 +196,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
     if (lo.equals(hi))
       return Optional.empty();
     Tensor domain = Tensors.of(lo, hi);
-    Tensor xdata = domain.map(map);
-    Tensor ydata = domain.map(this::at);
+    Tensor xdata = domain.maps(map);
+    Tensor ydata = domain.maps(this::at);
     return Optional.of(Polynomial.fit(xdata, ydata, 1).moment(order, xdata.Get(0), xdata.Get(1)));
   }
 

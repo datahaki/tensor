@@ -132,7 +132,7 @@ public record Eigensystem(Tensor values, Tensor vectors) implements Serializable
    * @see MatrixLog
    * @see MatrixSqrt */
   public Tensor map(ScalarUnaryOperator scalarUnaryOperator) {
-    return Transpose.of(LinearSolve.of(vectors, Times.of(values.map(scalarUnaryOperator), vectors)));
+    return Transpose.of(LinearSolve.of(vectors, Times.of(values.maps(scalarUnaryOperator), vectors)));
   }
 
   @Override

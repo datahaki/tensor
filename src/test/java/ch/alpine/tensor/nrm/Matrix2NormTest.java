@@ -64,26 +64,26 @@ class Matrix2NormTest {
     Unit unit = Unit.of("m*K^1/2");
     int n = repetitionInfo.getCurrentRepetition();
     _check(HilbertMatrix.of(n));
-    _check(RandomVariate.of(NormalDistribution.standard(), n, n).map(s -> Quantity.of(s, "m")));
-    _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n, n).map(s -> Quantity.of(s, "m")));
-    _check(RandomVariate.of(UniformDistribution.of(-5, 5), n, n).map(s -> Quantity.of(s, unit)));
+    _check(RandomVariate.of(NormalDistribution.standard(), n, n).maps(s -> Quantity.of(s, "m")));
+    _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n, n).maps(s -> Quantity.of(s, "m")));
+    _check(RandomVariate.of(UniformDistribution.of(-5, 5), n, n).maps(s -> Quantity.of(s, unit)));
   }
 
   @Test
   void testNonSquareQuantity() {
     for (int n = 3; n < 6; ++n) {
-      _check(RandomVariate.of(NormalDistribution.standard(), n - 2, n).map(s -> Quantity.of(s, "m")));
-      _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n - 2, n).map(s -> Quantity.of(s, "m*s")));
-      _check(RandomVariate.of(UniformDistribution.of(-5, 5), n - 2, n).map(s -> Quantity.of(s, "m")));
+      _check(RandomVariate.of(NormalDistribution.standard(), n - 2, n).maps(s -> Quantity.of(s, "m")));
+      _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n - 2, n).maps(s -> Quantity.of(s, "m*s")));
+      _check(RandomVariate.of(UniformDistribution.of(-5, 5), n - 2, n).maps(s -> Quantity.of(s, "m")));
     }
   }
 
   @Test
   void testNonSquareQuantity2() {
     for (int n = 3; n < 6; ++n) {
-      _check(RandomVariate.of(NormalDistribution.standard(), n, n - 2).map(s -> Quantity.of(s, "m")));
-      _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n, n - 2).map(s -> Quantity.of(s, "m^-2")));
-      _check(RandomVariate.of(UniformDistribution.of(-5, 5), n, n - 2).map(s -> Quantity.of(s, "m")));
+      _check(RandomVariate.of(NormalDistribution.standard(), n, n - 2).maps(s -> Quantity.of(s, "m")));
+      _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n, n - 2).maps(s -> Quantity.of(s, "m^-2")));
+      _check(RandomVariate.of(UniformDistribution.of(-5, 5), n, n - 2).maps(s -> Quantity.of(s, "m")));
     }
   }
 

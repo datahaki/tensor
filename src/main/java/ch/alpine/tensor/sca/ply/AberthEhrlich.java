@@ -57,7 +57,7 @@ public class AberthEhrlich {
             }
           }
           FiniteTensorQ.require(vector);
-          Tensor eval = vector.map(polynomial);
+          Tensor eval = vector.maps(polynomial);
           FiniteTensorQ.require(eval);
           Scalar err = VectorInfinityNorm.of(eval);
           if (Tolerance.CHOP.isZero(err)) {
@@ -91,7 +91,7 @@ public class AberthEhrlich {
       Scalar p1 = derivative.apply(zk);
       Scalar p0 = polynomial.apply(zk);
       Int i = new Int();
-      Scalar push = vector.map(zk::subtract).stream() //
+      Scalar push = vector.maps(zk::subtract).stream() //
           .map(Scalar.class::cast) //
           .filter(_ -> i.getAndIncrement() != fi) //
           .map(Scalar::reciprocal) //

@@ -43,12 +43,12 @@ class InterpolatingPolynomialTest {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.vector(6, -7, 20);
     ScalarUnaryOperator suo1 = InterpolatingPolynomial.of(suppor).scalarUnaryOperator(values);
-    ScalarUnaryOperator suo2 = InterpolatingPolynomial.of(suppor.multiply(RealScalar.of(3)).map(MINUS_ONE)).scalarUnaryOperator(values);
+    ScalarUnaryOperator suo2 = InterpolatingPolynomial.of(suppor.multiply(RealScalar.of(3)).maps(MINUS_ONE)).scalarUnaryOperator(values);
     Distribution distribution = UniformDistribution.of(2, 4);
     Tensor domain = RandomVariate.of(distribution, 20);
     Tolerance.CHOP.requireClose( //
-        domain.map(suo1), //
-        domain.multiply(RealScalar.of(3)).map(MINUS_ONE).map(suo2));
+        domain.maps(suo1), //
+        domain.multiply(RealScalar.of(3)).maps(MINUS_ONE).maps(suo2));
   }
 
   @Test
@@ -62,7 +62,7 @@ class InterpolatingPolynomialTest {
           .scalarUnaryOperator(Tensor.of(IntStream.of(index).mapToObj(values::get)));
       Distribution distribution = UniformDistribution.of(2, 4);
       Tensor domain = RandomVariate.of(distribution, 20);
-      Tolerance.CHOP.requireClose(domain.map(suo1), domain.map(suo2));
+      Tolerance.CHOP.requireClose(domain.maps(suo1), domain.maps(suo2));
     }
   }
 
@@ -71,12 +71,12 @@ class InterpolatingPolynomialTest {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.fromString("{{2,-3}, {-7, 5}, {5, 9}}");
     ScalarTensorFunction suo1 = InterpolatingPolynomial.of(suppor).scalarTensorFunction(values);
-    ScalarTensorFunction suo2 = InterpolatingPolynomial.of(suppor.multiply(RealScalar.of(3)).map(MINUS_ONE)).scalarTensorFunction(values);
+    ScalarTensorFunction suo2 = InterpolatingPolynomial.of(suppor.multiply(RealScalar.of(3)).maps(MINUS_ONE)).scalarTensorFunction(values);
     Distribution distribution = UniformDistribution.of(2, 4);
     Tensor domain = RandomVariate.of(distribution, 20);
     Tolerance.CHOP.requireClose( //
-        domain.map(suo1), //
-        domain.multiply(RealScalar.of(3)).map(MINUS_ONE).map(suo2));
+        domain.maps(suo1), //
+        domain.multiply(RealScalar.of(3)).maps(MINUS_ONE).maps(suo2));
     assertThrows(IllegalArgumentException.class, () -> InterpolatingPolynomial.of(suppor).scalarTensorFunction(Tensors.vector(2, 3, 4, 5)));
   }
 
@@ -87,7 +87,7 @@ class InterpolatingPolynomialTest {
     ScalarUnaryOperator suo1 = InterpolatingPolynomial.of(suppor).scalarUnaryOperator(values);
     Distribution distribution = UniformDistribution.of(2, 4);
     Tensor domain = QuantityTensor.of(RandomVariate.of(distribution, 20), "m");
-    domain.map(suo1).map(QuantityMagnitude.singleton("s"));
+    domain.maps(suo1).maps(QuantityMagnitude.singleton("s"));
   }
 
   @Test
@@ -107,27 +107,27 @@ class InterpolatingPolynomialTest {
 
   @Test
   void testDegreesUnits() {
-    Tensor xdata = Tensors.vector(10, 11, 14, 20).map(s -> Quantity.of(s, "K"));
-    Tensor ydata = Tensors.vector(5, -2, 1, 9).map(s -> Quantity.of(s, "bar"));
+    Tensor xdata = Tensors.vector(10, 11, 14, 20).maps(s -> Quantity.of(s, "K"));
+    Tensor ydata = Tensors.vector(5, -2, 1, 9).maps(s -> Quantity.of(s, "bar"));
     for (int degree = 0; degree <= 3; ++degree) {
       Tensor x = xdata.extract(0, degree + 1);
       Tensor y = ydata.extract(0, degree + 1);
       Tensor coeffs = polynomial_coeffs(x, y);
       ExactTensorQ.require(coeffs);
       ScalarUnaryOperator scalarUnaryOperator = InterpolatingPolynomial.of(x).scalarUnaryOperator(y);
-      assertEquals(x.map(scalarUnaryOperator), y);
+      assertEquals(x.maps(scalarUnaryOperator), y);
     }
   }
 
   @Test
   void testDegreesUnitsNumeric() {
-    Tensor xdata = Tensors.vector(10, 11, 14, 20).map(s -> Quantity.of(s, "K")).map(N.DOUBLE);
-    Tensor ydata = Tensors.vector(5, -2, 1, 9).map(s -> Quantity.of(s, "bar")).map(N.DOUBLE);
+    Tensor xdata = Tensors.vector(10, 11, 14, 20).maps(s -> Quantity.of(s, "K")).maps(N.DOUBLE);
+    Tensor ydata = Tensors.vector(5, -2, 1, 9).maps(s -> Quantity.of(s, "bar")).maps(N.DOUBLE);
     for (int degree = 0; degree <= 3; ++degree) {
       Tensor x = xdata.extract(0, degree + 1);
       Tensor y = ydata.extract(0, degree + 1);
       ScalarUnaryOperator scalarUnaryOperator = InterpolatingPolynomial.of(x).scalarUnaryOperator(y);
-      Tolerance.CHOP.requireClose(x.map(scalarUnaryOperator), y);
+      Tolerance.CHOP.requireClose(x.maps(scalarUnaryOperator), y);
     }
   }
 

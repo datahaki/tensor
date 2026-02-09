@@ -84,10 +84,10 @@ class BSplineFunctionCyclicTest {
     ScalarUnaryOperator scalarUnaryOperator = Round.toMultipleOf(RationalScalar.of(1, 7));
     for (int degree = 0; degree < 5; ++degree) {
       ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(degree, HilbertMatrix.of(3, 5));
-      RandomVariate.of(distribution, 20).map(scalarTensorFunction);
-      Tensor tensor = RandomVariate.of(distribution, 20).map(scalarUnaryOperator);
-      Tensor result = tensor.map(scalarTensorFunction);
-      ExactTensorQ.require(result.map(Sign::requirePositive));
+      RandomVariate.of(distribution, 20).maps(scalarTensorFunction);
+      Tensor tensor = RandomVariate.of(distribution, 20).maps(scalarUnaryOperator);
+      Tensor result = tensor.maps(scalarTensorFunction);
+      ExactTensorQ.require(result.maps(Sign::requirePositive));
     }
   }
 

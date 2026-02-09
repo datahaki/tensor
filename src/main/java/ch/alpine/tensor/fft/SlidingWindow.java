@@ -74,7 +74,7 @@ public record SlidingWindow(Integer windowLength, Integer offset) implements Ser
     Tensor samples = 1 == length //
         ? Tensors.vector(0)
         : samples(length);
-    Tensor weights = samples.map(window);
+    Tensor weights = samples.maps(window);
     return weights.multiply(RealScalar.of(length).divide(Total.ofVector(weights)));
   }
 

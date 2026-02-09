@@ -127,7 +127,7 @@ class RationalizeTest {
         .map(Number::doubleValue) //
         .map(Math::round) //
         .collect(Collectors.toList());
-    Tensor ratio = vector.map(Rationalize.withDenominatorLessEquals(RealScalar.ONE));
+    Tensor ratio = vector.maps(Rationalize.withDenominatorLessEquals(RealScalar.ONE));
     assertEquals(ratio, Tensors.vector(round));
   }
 

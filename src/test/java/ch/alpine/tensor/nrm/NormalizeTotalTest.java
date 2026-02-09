@@ -23,7 +23,7 @@ class NormalizeTotalTest {
 
   @Test
   void testUnitVector() {
-    Tensor tensor = NormalizeTotal.FUNCTION.apply(Tensors.vector(2, 0.0, 4, 5).map(Scalar::reciprocal));
+    Tensor tensor = NormalizeTotal.FUNCTION.apply(Tensors.vector(2, 0.0, 4, 5).maps(Scalar::reciprocal));
     assertEquals(tensor, UnitVector.of(4, 1));
   }
 

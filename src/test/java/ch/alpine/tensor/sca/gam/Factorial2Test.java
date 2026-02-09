@@ -20,7 +20,7 @@ class Factorial2Test {
   void testSimple() {
     Scalar f2_20 = Factorial2.FUNCTION.apply(RealScalar.of(20));
     assertEquals(f2_20, RealScalar.of(3715891200L));
-    Tensor tensor = Range.of(0, 10).map(Factorial2.FUNCTION);
+    Tensor tensor = Range.of(0, 10).maps(Factorial2.FUNCTION);
     assertEquals(tensor, Tensors.vector(1, 1, 2, 3, 8, 15, 48, 105, 384, 945));
   }
 

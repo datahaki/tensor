@@ -90,7 +90,7 @@ public enum NullSpace {
   public static Tensor usingQR(Tensor matrix) {
     Tensor r = GramSchmidt.of(matrix).getR();
     int n = Unprotect.dimension1Hint(matrix);
-    return Orthogonalize.of(Join.of(r, IdentityMatrix.of(n))).extract(r.length(), n).map(Conjugate.FUNCTION);
+    return Orthogonalize.of(Join.of(r, IdentityMatrix.of(n))).extract(r.length(), n).maps(Conjugate.FUNCTION);
   }
 
   /** @param matrix of dimensions rows x cols with rows >= cols

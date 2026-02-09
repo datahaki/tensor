@@ -49,7 +49,7 @@ import ch.alpine.tensor.sca.Sign;
    * @param simplexPivot
    * @return */
   public static Tensor of(LinearProgram linearProgram, SimplexPivot simplexPivot) {
-    Scalar c_zero = Total.ofVector(linearProgram.c.map(Scalar::zero));
+    Scalar c_zero = Total.ofVector(linearProgram.c.maps(Scalar::zero));
     Tensor tab = ArrayFlatten.of(new Tensor[][] { //
         { linearProgram.A, Partition.of(linearProgram.b, 1) }, //
         { Tensors.of(linearProgram.minObjective()), Tensors.of(Tensors.of(c_zero)) } });
@@ -105,6 +105,6 @@ import ch.alpine.tensor.sca.Sign;
 
   // helper function
   private static Tensor withoutUnits(Tensor vector) {
-    return vector.map(Unprotect::withoutUnit);
+    return vector.maps(Unprotect::withoutUnit);
   }
 }

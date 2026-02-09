@@ -14,7 +14,7 @@ public enum CorrelationDistance {
    * @return */
   public static Scalar of(Tensor u, Tensor v) {
     return CosineDistance.of( //
-        u.map(Mean.of(u).negate()::add), //
-        v.map(Mean.of(v).negate()::add));
+        u.maps(Mean.of(u).negate()::add), //
+        v.maps(Mean.of(v).negate()::add));
   }
 }

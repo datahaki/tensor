@@ -96,13 +96,13 @@ class Miscellaneous {
     assertThrows(Exception.class, () -> function.apply(Tensors.vector(1, 2, 3)));
     assertThrows(Exception.class, () -> function.apply(Tensors.vector(1.0, 2, 3)));
     assertThrows(Exception.class, () -> function.apply(LeviCivitaTensor.of(3)));
-    assertThrows(Exception.class, () -> function.apply(LeviCivitaTensor.of(3).map(N.DOUBLE)));
+    assertThrows(Exception.class, () -> function.apply(LeviCivitaTensor.of(3).maps(N.DOUBLE)));
     {
       Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
       assertThrows(Exception.class, () -> function.apply(tensor));
     }
     {
-      Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}").map(N.DOUBLE);
+      Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}").maps(N.DOUBLE);
       assertThrows(Exception.class, () -> function.apply(tensor));
     }
     {
@@ -110,7 +110,7 @@ class Miscellaneous {
       assertThrows(Exception.class, () -> function.apply(tensor));
     }
     {
-      Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}").map(N.DOUBLE);
+      Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}").maps(N.DOUBLE);
       assertThrows(Exception.class, () -> function.apply(tensor));
     }
   }

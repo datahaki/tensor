@@ -55,7 +55,7 @@ class MatrixSqrtEigensystemTest {
   void testNegative() {
     Tensor matrix = Tensors.fromString("{{-10[m^2], -2[m^2]}, {-2[m^2], 4[m^2]}}");
     MatrixSqrt matrixSqrt = new MatrixSqrtEigensystem(Eigensystem.ofSymmetric(matrix));
-    assertTrue(Scalars.lessThan(Quantity.of(2, "m"), Matrix2Norm.bound(matrixSqrt.sqrt().map(Im.FUNCTION))));
+    assertTrue(Scalars.lessThan(Quantity.of(2, "m"), Matrix2Norm.bound(matrixSqrt.sqrt().maps(Im.FUNCTION))));
     Tensor eye = Dot.of(matrixSqrt.sqrt(), matrixSqrt.sqrt_inverse());
     Tolerance.CHOP.requireClose(eye, IdentityMatrix.of(2));
   }

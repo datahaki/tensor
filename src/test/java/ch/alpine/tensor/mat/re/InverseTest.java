@@ -101,7 +101,7 @@ class InverseTest {
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
     Scalar one = GaussScalar.of(1, prime);
     for (int n = 3; n < 6; ++n) {
-      Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
+      Tensor matrix = RandomVariate.of(distribution, n, n).maps(s -> GaussScalar.of(s.number().intValue(), prime));
       assumeTrue(Scalars.nonZero(Det.of(matrix)));
       for (Pivot pivot : Pivots.values()) {
         Tensor revers = Inverse.of(matrix, pivot);
@@ -116,7 +116,7 @@ class InverseTest {
     Tensor matrix = Import.of("/ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
     assertThrows(Throw.class, () -> Inverse.of(matrix));
-    assertThrows(Throw.class, () -> Inverse.of(matrix.map(N.DOUBLE)));
+    assertThrows(Throw.class, () -> Inverse.of(matrix.maps(N.DOUBLE)));
   }
 
   @Test
@@ -227,7 +227,7 @@ class InverseTest {
 
   @Test
   void testDecimalScalarInverse() {
-    Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
+    Tensor matrix = HilbertMatrix.of(5).maps(N.DECIMAL128);
     Tensor invers = Inverse.of(matrix);
     Scalar detmat = Det.of(matrix);
     Scalar detinv = Det.of(invers);

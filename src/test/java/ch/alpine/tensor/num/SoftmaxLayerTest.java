@@ -25,7 +25,7 @@ class SoftmaxLayerTest {
     Tensor tensor = Tensors.vector(0.1, 4.5, -0.2, 3.3, 5.4);
     Tensor actual = SoftmaxLayer.of(tensor);
     Tensor expected = Tensors.vector(0.00324611, 0.264398, 0.00240478, 0.0796353, 0.650315);
-    assertEquals(expected.subtract(actual).map(Round.toMultipleOf(DoubleScalar.of(0.0001))), Array.zeros(5));
+    assertEquals(expected.subtract(actual).maps(Round.toMultipleOf(DoubleScalar.of(0.0001))), Array.zeros(5));
   }
 
   @Test

@@ -20,14 +20,14 @@ class LinearColorDataGradientTest {
   void testRandom() {
     ColorDataGradient colorDataGradient = //
         LinearColorDataGradient.of(RandomVariate.of(DiscreteUniformDistribution.forArray(256), 123, 4));
-    Subdivide.of(0, 1, 10).map(colorDataGradient);
+    Subdivide.of(0, 1, 10).maps(colorDataGradient);
   }
 
   @Test
   void testSingle() {
     ColorDataGradient colorDataGradient = //
         LinearColorDataGradient.of(Tensors.fromString("{{1, 2, 3, 4}}"));
-    Tensor matrix = Subdivide.of(0, 1, 10).map(colorDataGradient);
+    Tensor matrix = Subdivide.of(0, 1, 10).maps(colorDataGradient);
     assertEquals(matrix, ConstantArray.of(Range.of(1, 5), 11));
   }
 

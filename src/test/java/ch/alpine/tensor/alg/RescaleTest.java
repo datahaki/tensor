@@ -37,7 +37,7 @@ class RescaleTest {
   void testVector() {
     Tensor res = Rescale.of(Tensors.vector(-0.7, 0.5, 1.2, 5.6, 1.8));
     Tensor sol = Tensors.vector(0., 0.190476, 0.301587, 1., 0.396825);
-    assertEquals(res.subtract(sol).map(Chop._05), Array.zeros(5));
+    assertEquals(res.subtract(sol).maps(Chop._05), Array.zeros(5));
   }
 
   @Test

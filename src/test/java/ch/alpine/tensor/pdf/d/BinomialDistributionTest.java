@@ -194,7 +194,7 @@ class BinomialDistributionTest {
     int n = 5;
     Distribution distribution = BinomialDistribution.of(n, RationalScalar.of(1, 4));
     CDF cdf = CDF.of(distribution);
-    Tensor actual = Range.of(0, n + 1).map(cdf::p_lessEquals);
+    Tensor actual = Range.of(0, n + 1).maps(cdf::p_lessEquals);
     Tensor expect = Tensors.fromString("{243/1024, 81/128, 459/512, 63/64, 1023/1024, 1}");
     assertEquals(actual, expect);
   }

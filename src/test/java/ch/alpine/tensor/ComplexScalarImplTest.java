@@ -186,7 +186,7 @@ class ComplexScalarImplTest {
   @Test
   void testTensor() {
     Tensor u = Tensors.fromString("{I, 3/4-5*I}");
-    Tensor uc = u.map(Conjugate.FUNCTION);
+    Tensor uc = u.maps(Conjugate.FUNCTION);
     assertEquals(uc.toString(), "{-I, 3/4+5*I}");
   }
 

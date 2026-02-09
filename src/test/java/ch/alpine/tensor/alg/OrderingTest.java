@@ -88,7 +88,7 @@ class OrderingTest {
   @Test
   void testIntegerToTensor() {
     Integer[] a = { 2, 3, 4 };
-    assertEquals(Tensors.vector(a), Tensors.vector(1, 2, 3).map(RealScalar.ONE::add));
+    assertEquals(Tensors.vector(a), Tensors.vector(1, 2, 3).maps(RealScalar.ONE::add));
   }
 
   @Test

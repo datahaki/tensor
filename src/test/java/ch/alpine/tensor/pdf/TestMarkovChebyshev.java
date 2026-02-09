@@ -53,16 +53,16 @@ public enum TestMarkovChebyshev {
   private static final Tensor LARGE = Tensor.of(IntStream.range(7, 200) //
       .mapToObj(RealScalar::of) //
       .map(Power.function(3)));
-  private static final Tensor NUMER = LARGE.map(N.DOUBLE);
+  private static final Tensor NUMER = LARGE.maps(N.DOUBLE);
 
   public static void monotonous(Distribution distribution) {
     // System.out.println(LARGE.map(PDF.of(distribution)::at).extract(0, 10));
-    OrderedQ.require(Reverse.of(LARGE.map(PDF.of(distribution)::at)));
+    OrderedQ.require(Reverse.of(LARGE.maps(PDF.of(distribution)::at)));
     if (distribution instanceof CDF)
-      OrderedQ.require(LARGE.map(CDF.of(distribution)::p_lessEquals));
-    OrderedQ.require(Reverse.of(NUMER.map(PDF.of(distribution)::at)));
+      OrderedQ.require(LARGE.maps(CDF.of(distribution)::p_lessEquals));
+    OrderedQ.require(Reverse.of(NUMER.maps(PDF.of(distribution)::at)));
     if (distribution instanceof CDF)
-      OrderedQ.require(NUMER.map(CDF.of(distribution)::p_lessEquals));
+      OrderedQ.require(NUMER.maps(CDF.of(distribution)::p_lessEquals));
   }
 
   public static void symmetricAroundMean(Distribution distribution) {
@@ -76,13 +76,13 @@ public enum TestMarkovChebyshev {
             Tensor x = Subdivide.of(mean.subtract(delta), mean.add(delta), 13);
             {
               PDF pdf = PDF.of(distribution);
-              Tensor ref = x.map(pdf::at);
+              Tensor ref = x.maps(pdf::at);
               Tolerance.CHOP.requireClose(ref, Reverse.of(ref));
             }
             if (distribution instanceof CDF) {
               CDF cdf = CDF.of(distribution);
-              Tensor ref = x.map(cdf::p_lessThan);
-              Tolerance.CHOP.requireClose(ref, Reverse.of(ref.map(RealScalar.ONE::subtract)));
+              Tensor ref = x.maps(cdf::p_lessThan);
+              Tolerance.CHOP.requireClose(ref, Reverse.of(ref.maps(RealScalar.ONE::subtract)));
             }
           }
           if (distribution instanceof InverseCDF) {

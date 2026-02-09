@@ -31,7 +31,7 @@ class KroneckerDeltaTest {
   @Test
   void testFunction() {
     Tensor vector = Tensors.vector(0, 3, 255, 0, 255, -43, 3, 0, 255, 0, 225);
-    Tensor res = vector.map(function(RealScalar.of(255)));
+    Tensor res = vector.maps(function(RealScalar.of(255)));
     assertEquals(res, Tensors.fromString("{0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0}"));
   }
 

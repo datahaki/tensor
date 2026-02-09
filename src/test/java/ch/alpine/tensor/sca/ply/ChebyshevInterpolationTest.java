@@ -20,10 +20,10 @@ class ChebyshevInterpolationTest {
     ScalarUnaryOperator apx2 = ChebyshevInterpolation.of(suo, chebyshevNodes, n);
     Tensor knots = chebyshevNodes.of(n);
     InterpolatingPolynomial ip = InterpolatingPolynomial.of(knots);
-    ScalarUnaryOperator suo3 = ip.scalarUnaryOperator(knots.map(suo));
+    ScalarUnaryOperator suo3 = ip.scalarUnaryOperator(knots.maps(suo));
     Tensor domain = Subdivide.of(-1, 1, 10);
-    Tensor p1 = domain.map(suo3);
-    Tensor p2 = domain.map(apx2);
+    Tensor p1 = domain.maps(suo3);
+    Tensor p2 = domain.maps(apx2);
     Tolerance.CHOP.requireClose(p1, p2);
   }
   // @RepeatedTest(1)

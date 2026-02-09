@@ -80,7 +80,7 @@ class ExportTest {
     image.set(Array.of(_ -> RealScalar.of(255), 7, 11), Tensor.ALL, Tensor.ALL, 3);
     Export.of(path, image);
     Tensor diff = image.subtract(Import.of(path));
-    Scalar total = Flatten.scalars(diff.map(Abs.FUNCTION)).reduce(Scalar::add).orElseThrow();
+    Scalar total = Flatten.scalars(diff.maps(Abs.FUNCTION)).reduce(Scalar::add).orElseThrow();
     Scalar pixel = total.divide(RealScalar.of(4 * 77.0));
     assertTrue(Scalars.lessEquals(pixel, RealScalar.of(6)));
   }
@@ -93,7 +93,7 @@ class ExportTest {
     Export.of(path, image);
     Tensor retry = Import.of(path);
     Tensor diff = image.subtract(retry);
-    Scalar total = Flatten.scalars(diff.map(Abs.FUNCTION)).reduce(Scalar::add).orElseThrow();
+    Scalar total = Flatten.scalars(diff.maps(Abs.FUNCTION)).reduce(Scalar::add).orElseThrow();
     Scalar pixel = total.divide(RealScalar.of(77.0));
     assertTrue(Scalars.lessEquals(pixel, RealScalar.of(5)));
   }

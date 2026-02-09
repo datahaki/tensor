@@ -35,8 +35,8 @@ class BSplineBasisTest {
     assertEquals(suo.toString(), "BSplineBasis[" + deg + "]");
     BSplineBasisDouble old = BSplineBasisDouble.of[deg];
     Tensor domain = RandomVariate.of(UniformDistribution.of(-4, 4), 10);
-    Tensor s1 = domain.map(suo);
-    Tensor s2 = domain.map(s -> RealScalar.of(old.at(s.number().doubleValue())));
+    Tensor s1 = domain.maps(suo);
+    Tensor s2 = domain.maps(s -> RealScalar.of(old.at(s.number().doubleValue())));
     Tolerance.CHOP.requireClose(s1, s2);
   }
 
@@ -47,8 +47,8 @@ class BSplineBasisTest {
     Distribution distribution = NormalDistribution.standard();
     Scalar scalar = Rationalize._5.apply(RandomVariate.of(distribution));
     ExactScalarQ.require(scalar);
-    Tensor vector = Range.of(-10, 10).map(scalar::add);
-    Tensor result = vector.map(suo);
+    Tensor vector = Range.of(-10, 10).maps(scalar::add);
+    Tensor result = vector.maps(suo);
     ExactTensorQ.require(result);
     Scalar sum = Total.ofVector(result);
     ExactScalarQ.require(sum);

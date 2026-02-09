@@ -71,7 +71,7 @@ class OrthogonalizeTest {
   @Test
   void testZeroPad() {
     Tensor v1 = Tensors.vector(1, 2, 3);
-    Tensor v0 = v1.map(Scalar::zero);
+    Tensor v0 = v1.maps(Scalar::zero);
     Tensor matrix = Tensors.of(v1, v0, v0);
     Tensor q1 = Orthogonalize.of(matrix);
     Tolerance.CHOP.requireClose(Det.of(q1), RealScalar.ONE);
@@ -147,7 +147,7 @@ class OrthogonalizeTest {
   @Test
   void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
-    Tensor mmt = MatrixDotTranspose.of(matrix, matrix.map(Conjugate.FUNCTION));
+    Tensor mmt = MatrixDotTranspose.of(matrix, matrix.maps(Conjugate.FUNCTION));
     HermitianMatrixQ.INSTANCE.requireMember(mmt);
     Tensor q1 = Orthogonalize.of(matrix);
     assertTrue(UnitaryMatrixQ.INSTANCE.isMember(q1));
@@ -184,7 +184,7 @@ class OrthogonalizeTest {
     Tensor r1 = Orthogonalize.usingPD(matrix);
     Tolerance.CHOP.requireClose(r1, s1);
     OrthogonalMatrixQ.INSTANCE.requireMember(r1);
-    Chop.NONE.requireAllZero(r1.map(Im.FUNCTION));
+    Chop.NONE.requireAllZero(r1.maps(Im.FUNCTION));
     Tensor s2 = Orthogonalize.usingSvd(s1);
     Tensor r2 = Orthogonalize.usingPD(r1);
     Tolerance.CHOP.requireClose(r1, r2);

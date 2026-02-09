@@ -30,6 +30,6 @@ public enum Beta {
    * @return */
   public static Scalar of(Tensor vector) {
     return Exp.FUNCTION.apply( //
-        Total.ofVector(vector.map(LogGamma.FUNCTION)).subtract(LogGamma.FUNCTION.apply(Total.ofVector(vector))));
+        Total.ofVector(vector.maps(LogGamma.FUNCTION)).subtract(LogGamma.FUNCTION.apply(Total.ofVector(vector))));
   }
 }

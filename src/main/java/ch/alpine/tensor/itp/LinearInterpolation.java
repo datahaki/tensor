@@ -55,9 +55,9 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
   public Tensor get(Tensor index) {
     if (Tensors.isEmpty(index))
       return tensor.copy();
-    Tensor floor = index.map(Floor.FUNCTION);
-    Tensor above = index.map(Ceiling.FUNCTION);
-    Tensor width = above.subtract(floor).map(RealScalar.ONE::add);
+    Tensor floor = index.maps(Floor.FUNCTION);
+    Tensor above = index.maps(Ceiling.FUNCTION);
+    Tensor width = above.subtract(floor).maps(RealScalar.ONE::add);
     List<Integer> fromIndex = Primitives.toListInteger(floor);
     List<Integer> dimensions = Primitives.toListInteger(width);
     Tensor block = tensor.block(fromIndex, dimensions);

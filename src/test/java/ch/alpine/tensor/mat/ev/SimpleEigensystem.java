@@ -27,7 +27,7 @@ import ch.alpine.tensor.mat.re.Det;
     Tensor values = Tensors.reserve(n);
     Tensor vectors = Tensors.reserve(n);
     List<Scalar> list = new ArrayList<>();
-    for (Tensor _r : rapoly.polynomial().roots().map(Tolerance.CHOP)) {
+    for (Tensor _r : rapoly.polynomial().roots().maps(Tolerance.CHOP)) {
       Scalar root = (Scalar) _r;
       OptionalInt optionalInt = IntStream.range(0, list.size()).filter(i -> Tolerance.CHOP.isClose(list.get(i), root)).findFirst();
       if (optionalInt.isPresent())

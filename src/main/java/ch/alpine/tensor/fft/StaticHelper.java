@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Re;
    * @return result output with imaginary part projected to zero, if input is all-real */
   public static Tensor re_re(Tensor vector, Tensor result) {
     return Im.allZero(vector) //
-        ? result.map(Re.FUNCTION)
+        ? result.maps(Re.FUNCTION)
         : result;
   }
 }

@@ -61,8 +61,8 @@ class InverseGammaDistributionTest {
     assertInstanceOf(InverseGammaDistribution.class, d1);
     assertInstanceOf(LevyDistribution.class, d2);
     Tensor domain = Subdivide.of(0, 10, 100);
-    Tensor res1 = domain.map(PDF.of(d1)::at);
-    Tensor res2 = domain.map(PDF.of(d2)::at);
+    Tensor res1 = domain.maps(PDF.of(d1)::at);
+    Tensor res2 = domain.maps(PDF.of(d2)::at);
     Tolerance.CHOP.requireClose(res1, res2);
   }
 }

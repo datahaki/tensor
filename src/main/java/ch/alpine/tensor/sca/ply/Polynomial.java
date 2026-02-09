@@ -257,7 +257,7 @@ public class Polynomial extends HornerScheme {
   }
 
   public Polynomial zero() {
-    return of(coeffs.map(Scalar::zero));
+    return of(coeffs.maps(Scalar::zero));
   }
 
   /** @return scalar so that polynomial times scalar equals polynomial */

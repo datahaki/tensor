@@ -71,7 +71,7 @@ class ImageResizeTest {
     BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight(), type);
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);
-    Tensor diff = t1.subtract(t2).map(Abs.FUNCTION);
+    Tensor diff = t1.subtract(t2).maps(Abs.FUNCTION);
     NavigableMap<Scalar, Long> navigableMap = Tally.sorted(Flatten.scalars(diff));
     assertEquals(navigableMap.size(), 1);
   }

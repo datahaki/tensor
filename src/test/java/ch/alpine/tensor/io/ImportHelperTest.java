@@ -40,7 +40,7 @@ class ImportHelperTest {
     assertEquals(tensor.get(0, 3), Tensors.vector(255, 255, 255, 255));
     assertEquals(tensor.get(2, 5), Tensors.vector(145, 74, 198, 255));
     Tensor tensor2 = tensor.get(Tensor.ALL, Tensor.ALL, 3);
-    Tensor units = tensor2.map(Unitize.FUNCTION);
+    Tensor units = tensor2.maps(Unitize.FUNCTION);
     assertEquals(Flatten.scalars(units).reduce(Scalar::add).orElseThrow(), RealScalar.of(9));
   }
 

@@ -21,7 +21,7 @@ public enum TensorProduct {
    * @param b
    * @return tensor product of a and b */
   public static Tensor of(Tensor a, Tensor b) {
-    return a.map(b::multiply);
+    return a.maps(b::multiply);
   }
 
   /** @param tensors

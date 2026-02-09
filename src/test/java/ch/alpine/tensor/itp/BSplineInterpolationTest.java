@@ -143,7 +143,7 @@ class BSplineInterpolationTest {
       Tensor y = Reverse.of(x);
       Tensor eval = Tensors.matrix((i, j) -> interpolation.get( //
           Tensors.of(y.Get(i), x.Get(j))), x.length(), x.length());
-      Rescale.of(eval).map(ColorDataGradients.SOUTH_WEST);
+      Rescale.of(eval).maps(ColorDataGradients.SOUTH_WEST);
     }
   }
 }

@@ -148,8 +148,8 @@ class ScalarUnaryOperatorTest {
       // ---
     }
     // ---
-    scalar.map(s -> s.subtract(RealScalar.ONE));
-    scalar.map(RealScalar.ONE::add);
+    scalar.maps(s -> s.subtract(RealScalar.ONE));
+    scalar.maps(RealScalar.ONE::add);
   }
 
   @Test

@@ -13,7 +13,7 @@ public enum MatrixDotConjugateTranspose {
    * @param tensor
    * @return */
   public static Tensor of(Tensor matrix, Tensor tensor) {
-    return MatrixDotTranspose.of(matrix, tensor.map(Conjugate.FUNCTION));
+    return MatrixDotTranspose.of(matrix, tensor.maps(Conjugate.FUNCTION));
   }
 
   /** @param matrix

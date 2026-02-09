@@ -13,7 +13,7 @@ import ch.alpine.tensor.alg.Range;
 class SubfactorialTest {
   @Test
   void testSimple() {
-    Tensor vector = Range.of(0, 10).map(Subfactorial.FUNCTION);
+    Tensor vector = Range.of(0, 10).maps(Subfactorial.FUNCTION);
     Tensor expect = Tensors.vector(1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496);
     assertEquals(vector, expect);
   }

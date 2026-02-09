@@ -61,7 +61,7 @@ class SingularValueDecompositionTest {
     Tensor mat = RandomVariate.of(NormalDistribution.standard(), 10, 3);
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3 }, { 0, 0, 4 }, { 0, 0, 0 } });
-    SingularValueDecompositionWrap.of(mat.dot(B).map(s -> Quantity.of(s, "A")));
+    SingularValueDecompositionWrap.of(mat.dot(B).maps(s -> Quantity.of(s, "A")));
     SingularValueDecomposition svd = SingularValueDecompositionWrap.of(mat.dot(B));
     assertEquals(MatrixRank.of(mat.dot(B)), 2);
     SingularValueDecompositionWrap.of(svd.getU());
@@ -76,7 +76,7 @@ class SingularValueDecompositionTest {
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3, -1 }, { 0, 0, 4, 2 }, { 0, 0, 0, 1 }, { 0, 0, 0, 0 } });
     Tensor A = mat.dot(B);
-    SingularValueDecompositionWrap.of(A.map(s -> Quantity.of(s, "A")));
+    SingularValueDecompositionWrap.of(A.maps(s -> Quantity.of(s, "A")));
     SingularValueDecomposition svd = SingularValueDecompositionWrap.of(A);
     assertEquals(MatrixRank.of(A), 3);
     SingularValueDecompositionWrap.of(svd.getU());
@@ -92,7 +92,7 @@ class SingularValueDecompositionTest {
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3, -1 }, { 0, 0, 4, 2 }, { 0, 0, 0, 1 }, { 0, 0, 0, 0 } });
     Tensor A = mat.dot(B);
-    SingularValueDecompositionWrap.of(A.map(s -> Quantity.of(s, "V")));
+    SingularValueDecompositionWrap.of(A.maps(s -> Quantity.of(s, "V")));
     SingularValueDecomposition svd = SingularValueDecompositionWrap.of(A);
     assertEquals(MatrixRank.of(A), 3);
     Tensor nls = NullSpace.of(svd);

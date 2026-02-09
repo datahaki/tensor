@@ -22,14 +22,14 @@ import ch.alpine.tensor.sca.SoftThreshold;
   public static Tensor of(Tensor A, Tensor b, Scalar rho) {
     TensorUnaryOperator solver = LeastSquares.operator(SingularValueDecomposition.of(A));
     // initialize
-    Tensor u = b.map(Scalar::zero);
-    Tensor z = b.map(Scalar::zero);
+    Tensor u = b.maps(Scalar::zero);
+    Tensor z = b.maps(Scalar::zero);
     ScalarUnaryOperator suo = SoftThreshold.of(rho);
     Tensor x = null;
     for (int i = 0; i < 100; ++i) {
       x = solver.apply(b.add(z).subtract(u));
       // ---
-      z = A.dot(x).subtract(b).add(u).map(suo);
+      z = A.dot(x).subtract(b).add(u).maps(suo);
       u = A.dot(x).add(u).subtract(z).subtract(b);
     }
     return x;

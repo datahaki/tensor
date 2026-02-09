@@ -103,7 +103,7 @@ class HypergeometricDistributionTest {
     int n = 5;
     Distribution distribution = HypergeometricDistribution.of(10, 50, 100);
     CDF cdf = CDF.of(distribution);
-    Tensor actual = Range.of(0, n + 1).map(cdf::p_lessEquals);
+    Tensor actual = Range.of(0, n + 1).maps(cdf::p_lessEquals);
     Tensor expect = Tensors.fromString( //
         "{1763/2970916, 23263/2970916, 68069/1485458, 236069/1485458, 6051259/16340038, 10288779/16340038}");
     assertEquals(actual, expect);

@@ -105,7 +105,7 @@ class BipartiteMatchingTest {
     Distribution distribution = UniformDistribution.of(Quantity.of(-9, "MYR"), Quantity.of(10, "MYR"));
     for (int rows = 1; rows < MAX; ++rows)
       for (int cols = 1; cols < MAX; ++cols) {
-        Tensor tensor = RandomVariate.of(distribution, rows, cols).map(Round.FUNCTION);
+        Tensor tensor = RandomVariate.of(distribution, rows, cols).maps(Round.FUNCTION);
         BipartiteMatching bipartiteMatching = BipartiteMatching.of(tensor);
         Scalar min = bipartiteMatching.minimum();
         ExactScalarQ.require(min);

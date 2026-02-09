@@ -203,7 +203,7 @@ class InfluenceMatrixTest {
   void testComplex5x3() {
     Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 5, 3);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    assertEquals(influenceMatrix.leverages().map(Im.FUNCTION), Array.zeros(5));
+    assertEquals(influenceMatrix.leverages().maps(Im.FUNCTION), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();
     InfluenceMatrixQ.INSTANCE.requireMember(matrix);
     Eigensystem eigensystem = Eigensystem.ofHermitian(matrix).decreasing();
@@ -215,9 +215,9 @@ class InfluenceMatrixTest {
     Distribution distribution = TriangularDistribution.with(0, 2);
     Tensor re = RandomVariate.of(distribution, 5, 3);
     Tensor im = RandomVariate.of(distribution, 5, 3);
-    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im).map(Rationalize._5);
+    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im).maps(Rationalize._5);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    assertEquals(influenceMatrix.leverages().map(Im.FUNCTION), Array.zeros(5));
+    assertEquals(influenceMatrix.leverages().maps(Im.FUNCTION), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();
     InfluenceMatrixQ.INSTANCE.requireMember(matrix);
     ExactTensorQ.require(matrix);
@@ -227,7 +227,7 @@ class InfluenceMatrixTest {
   void testComplex3x5() {
     Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 3, 5);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    assertEquals(influenceMatrix.leverages().map(Im.FUNCTION), Array.zeros(3));
+    assertEquals(influenceMatrix.leverages().maps(Im.FUNCTION), Array.zeros(3));
     Tensor matrix = influenceMatrix.matrix();
     assertTrue(HermitianMatrixQ.INSTANCE.isMember(matrix));
     InfluenceMatrixQ.INSTANCE.requireMember(matrix);
@@ -235,9 +235,9 @@ class InfluenceMatrixTest {
 
   @Test
   void testComplex3x5Exact() {
-    Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 3, 5).map(Rationalize._5);
+    Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 3, 5).maps(Rationalize._5);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    assertEquals(influenceMatrix.leverages().map(Im.FUNCTION), Array.zeros(3));
+    assertEquals(influenceMatrix.leverages().maps(Im.FUNCTION), Array.zeros(3));
     Tensor matrix = influenceMatrix.matrix();
     InfluenceMatrixQ.INSTANCE.requireMember(matrix);
     ExactTensorQ.require(matrix);

@@ -113,8 +113,8 @@ class LinearFractionalTransformTest {
     int d = repetitionInfo.getCurrentRepetition();
     int n = d + 2;
     Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
-    Tensor xy = RandomVariate.of(distribution, n, d).map(s -> Quantity.of(s, "m"));
-    Tensor uv = RandomVariate.of(distribution, n, d).map(s -> Quantity.of(s, "m"));
+    Tensor xy = RandomVariate.of(distribution, n, d).maps(s -> Quantity.of(s, "m"));
+    Tensor uv = RandomVariate.of(distribution, n, d).maps(s -> Quantity.of(s, "m"));
     _checkExact(xy, uv);
   }
 
@@ -124,8 +124,8 @@ class LinearFractionalTransformTest {
     int n = d + 2;
     int p = Prime.of(2000).number().intValue();
     Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
-    Tensor xy = RandomVariate.of(distribution, n, d).map(s -> GaussScalar.of(s.number().intValue(), p));
-    Tensor uv = RandomVariate.of(distribution, n, d).map(s -> GaussScalar.of(s.number().intValue(), p));
+    Tensor xy = RandomVariate.of(distribution, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
+    Tensor uv = RandomVariate.of(distribution, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
     _checkExact(xy, uv);
   }
 
@@ -148,7 +148,7 @@ class LinearFractionalTransformTest {
       Tensor mat = lft.matrix();
       Tensor res = Times.of(mat, Transpose.of(mat));
       assertEquals(res, IdentityMatrix.of(res));
-      Tensor zero = uv.get(0).map(Scalar::zero);
+      Tensor zero = uv.get(0).maps(Scalar::zero);
       assertEquals(zero, lft.apply(zero));
     }
   }

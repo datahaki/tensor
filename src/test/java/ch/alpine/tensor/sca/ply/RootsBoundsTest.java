@@ -27,7 +27,7 @@ class RootsBoundsTest {
     Distribution distribution = UniformDistribution.of(-10, +10);
     Tensor coeffs = RandomVariate.of(distribution, 3);
     Tensor roots = Roots.of(coeffs);
-    Scalar max = roots.map(Abs.FUNCTION).stream().map(Scalar.class::cast).reduce(Max::of).orElseThrow();
+    Scalar max = roots.maps(Abs.FUNCTION).stream().map(Scalar.class::cast).reduce(Max::of).orElseThrow();
     for (RootsBounds rootsBounds : RootsBounds.values()) {
       Scalar bound = rootsBounds.of(coeffs);
       boolean check = Scalars.lessEquals(max, bound);
@@ -43,7 +43,7 @@ class RootsBoundsTest {
     Distribution distribution = UniformDistribution.of(-10, +10);
     Tensor coeffs = RandomVariate.of(distribution, 4);
     Tensor roots = Roots.of(coeffs);
-    Scalar max = roots.map(Abs.FUNCTION).stream().map(Scalar.class::cast).reduce(Max::of).orElseThrow();
+    Scalar max = roots.maps(Abs.FUNCTION).stream().map(Scalar.class::cast).reduce(Max::of).orElseThrow();
     for (RootsBounds rootsBounds : RootsBounds.values()) {
       Scalar bound = rootsBounds.of(coeffs);
       boolean check = Scalars.lessEquals(max, bound);

@@ -187,7 +187,7 @@ class AroundTest {
   }
 
   private static Tensor _meanOnly(Tensor tensor) {
-    return tensor.map(s -> ((Around) s).mean());
+    return tensor.maps(s -> ((Around) s).mean());
   }
 
   @Test

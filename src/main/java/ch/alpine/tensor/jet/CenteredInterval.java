@@ -163,7 +163,7 @@ public class CenteredInterval extends AbstractScalar implements //
   // ---
   @Override // from AbsInterface
   public Scalar abs() {
-    Tensor flat = flat().map(Abs.FUNCTION);
+    Tensor flat = flat().maps(Abs.FUNCTION);
     if (clip.isInside(zero()))
       flat.append(zero());
     return new CenteredInterval(flat.stream().map(Scalar.class::cast).collect(MinMax.toClip()));

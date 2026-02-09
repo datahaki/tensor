@@ -70,7 +70,7 @@ public class KaczmarzIteration {
    * @return */
   public Tensor refine(int i) {
     Tensor a = rows[i];
-    Tensor ac = a.map(Conjugate.FUNCTION);
+    Tensor ac = a.maps(Conjugate.FUNCTION);
     // LenientAdd.of(a, ac);
     // TODO TENSOR does this dot product need lenient add?
     Scalar fac = b.Get(i).subtract(a.dot(x)).divide(normsq.Get(i));

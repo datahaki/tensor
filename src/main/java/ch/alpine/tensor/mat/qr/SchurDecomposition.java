@@ -334,7 +334,7 @@ public class SchurDecomposition implements Serializable {
     if (!isUpperTriangular())
       return Optional.empty();
     Tensor u = getT();
-    Tensor r = u.map(Scalar::zero);
+    Tensor r = u.maps(Scalar::zero);
     int n = u.length();
     for (int i = 0; i < n; ++i)
       r.set(suo.apply(u.Get(i, i)), i, i);

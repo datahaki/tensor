@@ -12,7 +12,7 @@ public enum QuantityTensor {
    * @return tensor with all scalars of given tensor equipped with given unit
    * @throws Exception if any entry of given tensor is an instance of {@link Quantity} */
   public static Tensor of(Tensor tensor, Unit unit) {
-    return tensor.map(scalar -> Quantity.of(scalar, unit));
+    return tensor.maps(scalar -> Quantity.of(scalar, unit));
   }
 
   /** Example:

@@ -36,7 +36,7 @@ class MahalanobisTest {
     int n = 7;
     int _m = 5;
     Distribution distribution = NormalDistribution.standard();
-    Tensor m1 = RandomVariate.of(distribution, n, r).map(s -> Quantity.of(s, "m"));
+    Tensor m1 = RandomVariate.of(distribution, n, r).maps(s -> Quantity.of(s, "m"));
     Tensor m2 = RandomVariate.of(distribution, r, _m);
     Tensor design = m1.dot(m2);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
@@ -47,7 +47,7 @@ class MahalanobisTest {
     Chop._07.requireClose(influenceMatrix.leverages_sqrt(), mahalanobis.leverages_sqrt());
     Chop._07.requireClose(influenceMatrix.matrix(), mahalanobis.matrix());
     Chop._07.requireClose(influenceMatrix.residualMaker(), mahalanobis.residualMaker());
-    influenceMatrix.matrix().map(QuantityMagnitude.singleton(Unit.ONE));
+    influenceMatrix.matrix().maps(QuantityMagnitude.singleton(Unit.ONE));
     Tensor vector = RandomVariate.of(distribution, n);
     Chop._07.requireClose(influenceMatrix.image(vector), mahalanobis.image(vector));
     Chop._07.requireClose(influenceMatrix.kernel(vector), mahalanobis.kernel(vector));

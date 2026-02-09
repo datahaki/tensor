@@ -15,7 +15,7 @@ public enum ColorNegate {
    * @return */
   public static Tensor of(Tensor tensor) {
     return tensor.get(0, 0) instanceof Scalar //
-        ? MatrixQ.require(tensor).map(s -> StaticHelper.LOOKUP[255 - s.number().intValue()])
+        ? MatrixQ.require(tensor).maps(s -> StaticHelper.LOOKUP[255 - s.number().intValue()])
         : TensorMap.of(v -> Tensors.of( //
             StaticHelper.LOOKUP[255 - v.Get(0).number().intValue()], //
             StaticHelper.LOOKUP[255 - v.Get(1).number().intValue()], //

@@ -81,8 +81,8 @@ class LeftNullSpaceTest {
 
   private static void _matrixNumeric(Tensor A) {
     Chop chop = Chop._08;
-    chop.requireAllZero(Tensor.of(NullSpace.of(A.map(N.DOUBLE)).stream().map(A::dot)));
-    chop.requireAllZero(Tensor.of(NullSpace.usingQR(A.map(N.DOUBLE)).stream().map(A::dot)));
+    chop.requireAllZero(Tensor.of(NullSpace.of(A.maps(N.DOUBLE)).stream().map(A::dot)));
+    chop.requireAllZero(Tensor.of(NullSpace.usingQR(A.maps(N.DOUBLE)).stream().map(A::dot)));
   }
 
   private static void _check(Tensor A) {
@@ -108,10 +108,10 @@ class LeftNullSpaceTest {
     _check(Tensors.fromString("{{0, 0}, {0, 3}, {1, 0}, {0, 0}}"));
     _check(Tensors.fromString("{{0, 0}, {0, 0}, {0, 0}, {0, 0}}"));
     _check(Tensors.fromString("{{0, 0}, {0, 0}, {1, 0}, {0, 0}}"));
-    _check(Tensors.fromString("{{0, 0, 1}, {0, 0, 0}, {1, 0, 0}}").map(s -> Quantity.of(s, "m")));
-    _check(Tensors.fromString("{{0, 0, 0}, {0, 0, 0}, {1, 0, 0}, {3, 2, 0}}").map(s -> Quantity.of(s, "m")));
-    _check(Tensors.fromString("{{0, 0, 1}, {0, 0, 0}, {1, 0, 0}, {1, 0, 1}}").map(s -> Quantity.of(s, "m")));
-    _check(Tensors.fromString("{{0, 5, 1}, {0, 0, 0}, {1, 0, 0}, {3, 2, 0}}").map(s -> Quantity.of(s, "m")));
+    _check(Tensors.fromString("{{0, 0, 1}, {0, 0, 0}, {1, 0, 0}}").maps(s -> Quantity.of(s, "m")));
+    _check(Tensors.fromString("{{0, 0, 0}, {0, 0, 0}, {1, 0, 0}, {3, 2, 0}}").maps(s -> Quantity.of(s, "m")));
+    _check(Tensors.fromString("{{0, 0, 1}, {0, 0, 0}, {1, 0, 0}, {1, 0, 1}}").maps(s -> Quantity.of(s, "m")));
+    _check(Tensors.fromString("{{0, 5, 1}, {0, 0, 0}, {1, 0, 0}, {3, 2, 0}}").maps(s -> Quantity.of(s, "m")));
   }
 
   @ParameterizedTest
@@ -142,18 +142,18 @@ class LeftNullSpaceTest {
   @Test
   void testRectangle3x2G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
-    Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
+    Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").maps(suo);
     Tensor tensor = NullSpace.usingRowReduce(matrix);
-    assertEquals(tensor.get(0), UnitVector.of(2, 1).map(suo));
+    assertEquals(tensor.get(0), UnitVector.of(2, 1).maps(suo));
   }
 
   @Test
   void testRectangle2x3G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
-    Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}").map(suo);
+    Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}").maps(suo);
     Tensor tensor = NullSpace.usingRowReduce(matrix);
-    assertEquals(tensor.get(0), UnitVector.of(3, 1).map(suo));
-    assertEquals(tensor.get(1), UnitVector.of(3, 2).map(suo));
+    assertEquals(tensor.get(0), UnitVector.of(3, 1).maps(suo));
+    assertEquals(tensor.get(1), UnitVector.of(3, 2).maps(suo));
   }
 
   @Test

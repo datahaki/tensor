@@ -60,9 +60,9 @@ class PseudoInverseTest {
   @ValueSource(ints = { 0, 1, 2 })
   void testMixedUnitsVantHoff(int degree) {
     // inspired by code by gjoel
-    Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}").map(Scalar::reciprocal);
+    Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}").maps(Scalar::reciprocal);
     assertEquals(x.Get(0).one(), RealScalar.ONE);
-    Tensor matrix = x.map(s -> NestList.of(s::multiply, s.one(), degree));
+    Tensor matrix = x.maps(s -> NestList.of(s::multiply, s.one(), degree));
     PseudoInverse.of(matrix);
   }
 
@@ -191,7 +191,7 @@ class PseudoInverseTest {
 
   @Test
   void testDecimalScalar() {
-    Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
+    Tensor matrix = HilbertMatrix.of(3, 5).maps(N.DECIMAL128);
     Tensor pseudo = PseudoInverse.of(matrix);
     assertInstanceOf(DecimalScalar.class, pseudo.Get(1, 2));
   }

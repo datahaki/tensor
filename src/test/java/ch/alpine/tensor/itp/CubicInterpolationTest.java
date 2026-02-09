@@ -20,7 +20,7 @@ class CubicInterpolationTest {
   void testSimple() {
     Interpolation interpolation = CubicInterpolation.of(Tensors.vector(1, 0, 0, 2, 0));
     Tensor tensor = Subdivide.of(0, 4, 8);
-    Tensor values = tensor.map(interpolation::At);
+    Tensor values = tensor.maps(interpolation::At);
     assertEquals(values, Tensors.fromString("{1, 293/448, 0, -177/448, 0, 583/448, 2, 421/448, 0}"));
   }
 

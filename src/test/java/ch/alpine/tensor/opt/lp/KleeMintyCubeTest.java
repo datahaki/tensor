@@ -30,10 +30,10 @@ class KleeMintyCubeTest {
     KleeMintyCube kleeMintyCube = KleeMintyCube.of(n);
     LinearProgram linearProgram = LinearProgram.of( //
         Objective.MAX, //
-        kleeMintyCube.linearProgram.c.map(N.DOUBLE), //
+        kleeMintyCube.linearProgram.c.maps(N.DOUBLE), //
         ConstraintType.LESS_EQUALS, //
-        kleeMintyCube.linearProgram.A.map(N.DOUBLE), //
-        kleeMintyCube.linearProgram.b.map(N.DOUBLE), //
+        kleeMintyCube.linearProgram.A.maps(N.DOUBLE), //
+        kleeMintyCube.linearProgram.b.maps(N.DOUBLE), //
         Variables.NON_NEGATIVE);
     Tensor x = LinearOptimization.of(linearProgram);
     assertEquals(x, kleeMintyCube.x);

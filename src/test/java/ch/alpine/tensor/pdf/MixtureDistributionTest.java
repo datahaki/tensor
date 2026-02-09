@@ -35,7 +35,7 @@ class MixtureDistributionTest {
     Distribution d1 = Serialization.copy(MixtureDistribution.of(Tensors.vector(1, 2, 3), d, d, d));
     Distribution d2 = BernoulliDistribution.of(RationalScalar.HALF);
     Tensor domain = Range.of(-1, 3);
-    assertEquals(domain.map(PDF.of(d1)::at), domain.map(PDF.of(d2)::at));
+    assertEquals(domain.maps(PDF.of(d1)::at), domain.maps(PDF.of(d2)::at));
   }
 
   @Test

@@ -33,7 +33,7 @@ class Gamma1DistributionTest {
     Distribution d1 = new GammaDistribution(alpha, RealScalar.ONE);
     Distribution d2 = new Gamma1Distribution(alpha);
     Tensor samples = Subdivide.of(1e-10, 10.0, 123);
-    Chop._08.requireClose(samples.map(PDF.of(d1)::at), samples.map(PDF.of(d2)::at));
+    Chop._08.requireClose(samples.maps(PDF.of(d1)::at), samples.maps(PDF.of(d2)::at));
     Serialization.copy(d1);
     Serialization.copy(d2);
     assertEquals(Mean.of(d1), Mean.of(d2));

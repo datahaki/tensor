@@ -49,8 +49,8 @@ class CosineDistanceTest {
   void testEmpty(TensorUnaryOperator tuo) {
     assertThrows(Exception.class, () -> tuo.apply(Tensors.empty()));
     assertThrows(Exception.class, () -> tuo.apply(Array.zeros(10)));
-    assertThrows(Exception.class, () -> tuo.apply(Array.zeros(10).map(N.DOUBLE)));
-    assertThrows(Exception.class, () -> tuo.apply(Array.zeros(10).map(N.DECIMAL128)));
+    assertThrows(Exception.class, () -> tuo.apply(Array.zeros(10).maps(N.DOUBLE)));
+    assertThrows(Exception.class, () -> tuo.apply(Array.zeros(10).maps(N.DECIMAL128)));
   }
 
   @ParameterizedTest

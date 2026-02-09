@@ -122,8 +122,8 @@ class NormalizeTest {
     TensorUnaryOperator normalize = Serialization.copy(Vector2Norm.NORMALIZE);
     Tensor vector = Tensors.fromString("{1+I, 2*I, -3-9.2*I}");
     Tensor s = normalize.apply(vector);
-    Chop._13.requireClose(s.dot(s.map(Conjugate.FUNCTION)), RealScalar.ONE);
-    Chop._13.requireClose(s.map(Conjugate.FUNCTION).dot(s), RealScalar.ONE);
+    Chop._13.requireClose(s.dot(s.maps(Conjugate.FUNCTION)), RealScalar.ONE);
+    Chop._13.requireClose(s.maps(Conjugate.FUNCTION).dot(s), RealScalar.ONE);
   }
 
   @Test
@@ -132,8 +132,8 @@ class NormalizeTest {
     Tensor s = Vector2Norm.NORMALIZE.apply(vector);
     assertEquals(Projection.on(vector).apply(s), s);
     assertEquals(Projection.on(s).apply(vector), vector);
-    Chop._13.requireClose(s.dot(s.map(Conjugate.FUNCTION)), RealScalar.ONE);
-    Chop._13.requireClose(s.map(Conjugate.FUNCTION).dot(s), RealScalar.ONE);
+    Chop._13.requireClose(s.dot(s.maps(Conjugate.FUNCTION)), RealScalar.ONE);
+    Chop._13.requireClose(s.maps(Conjugate.FUNCTION).dot(s), RealScalar.ONE);
   }
 
   @Test
@@ -144,7 +144,7 @@ class NormalizeTest {
 
   @Test
   void testDecimalScalar() {
-    Tensor vector = Range.of(3, 6).map(N.DECIMAL128);
+    Tensor vector = Range.of(3, 6).maps(N.DECIMAL128);
     Tensor tensor = Vector2Norm.NORMALIZE.apply(vector);
     Scalar scalar = Vector2Norm.of(tensor);
     assertTrue(scalar.toString().startsWith("1.0000000000000000000000000000000"));

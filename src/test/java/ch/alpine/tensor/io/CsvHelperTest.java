@@ -45,7 +45,7 @@ class CsvHelperTest {
 
   @Test
   void testDecimal() {
-    Scalar scalar = (Scalar) DoubleScalar.of(0.25).map(Round._6);
+    Scalar scalar = (Scalar) DoubleScalar.of(0.25).maps(Round._6);
     assertInstanceOf(DecimalScalar.class, scalar);
     scalar = CsvHelper.FUNCTION.apply(scalar);
     assertInstanceOf(DoubleScalar.class, scalar);

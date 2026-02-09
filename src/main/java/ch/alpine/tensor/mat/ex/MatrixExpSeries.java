@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.N;
       if (Chop.NONE.allZero(nxt))
         return sum;
     }
-    sum = sum.map(N.DOUBLE); // switch to numeric precision
+    sum = sum.maps(N.DOUBLE); // switch to numeric precision
     /* with scaling the series typically converges in few steps */
     int max = MatrixExp.MAX_ITERATIONS.get();
     for (int k = n + 1; k < max; ++k) {

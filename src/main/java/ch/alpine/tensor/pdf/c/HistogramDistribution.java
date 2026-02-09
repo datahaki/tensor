@@ -82,7 +82,7 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
     Scalar min = Floor.toMultipleOf(width).apply((Scalar) samples.stream().reduce(Min::of).orElseThrow());
     discrete = scalar -> scalar.subtract(min).divide(width);
     original = scalar -> scalar.multiply(width).add(min);
-    Tensor unscaledPDF = BinCounts.of(samples.map(discrete));
+    Tensor unscaledPDF = BinCounts.of(samples.maps(discrete));
     categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
     this.width = width;
     width_half = width.multiply(RationalScalar.HALF);

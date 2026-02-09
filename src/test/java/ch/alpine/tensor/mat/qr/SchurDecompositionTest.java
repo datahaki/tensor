@@ -116,7 +116,7 @@ class SchurDecompositionTest {
     AntisymmetricMatrixQ.INSTANCE.requireMember(t);
     Tensor d = Diagonal.of(t);
     Tolerance.CHOP.requireAllZero(d);
-    Tensor bin = t.map(Tolerance.CHOP).map(Abs.FUNCTION).map(Sign.FUNCTION);
+    Tensor bin = t.maps(Tolerance.CHOP).maps(Abs.FUNCTION).maps(Sign.FUNCTION);
     Tensor r = Nest.of(Total::of, bin, 2);
     assertEquals(r, RealScalar.TWO);
   }
@@ -131,7 +131,7 @@ class SchurDecompositionTest {
     Tensor matrix = MatrixExp.of(xy);
     SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
     Tensor t = schurDecomposition.getT();
-    Tensor bin = t.map(Tolerance.CHOP).map(Abs.FUNCTION).map(Sign.FUNCTION);
+    Tensor bin = t.maps(Tolerance.CHOP).maps(Abs.FUNCTION).maps(Sign.FUNCTION);
     Tensor r = Nest.of(Total::of, bin, 2);
     assertEquals(r, RealScalar.of(n + 2));
   }

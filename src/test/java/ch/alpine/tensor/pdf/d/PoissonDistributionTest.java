@@ -105,7 +105,7 @@ class PoissonDistributionTest {
     int n = 5;
     Distribution distribution = PoissonDistribution.of(RationalScalar.of(1, 4));
     CDF cdf = CDF.of(distribution);
-    Tensor actual = Range.of(0, n + 1).map(cdf::p_lessEquals);
+    Tensor actual = Range.of(0, n + 1).maps(cdf::p_lessEquals);
     Tensor expect = Tensors
         .fromString("{0.7788007830714049`, 0.9735009788392561`, 0.9978385033102375`, 0.999866630349486`, 0.999993388289439`, 0.9999997261864366`}");
     Tolerance.CHOP.requireClose(actual, expect);

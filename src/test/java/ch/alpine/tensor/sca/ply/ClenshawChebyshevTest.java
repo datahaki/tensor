@@ -48,7 +48,7 @@ class ClenshawChebyshevTest {
   @RepeatedTest(8)
   void testRandomUnit(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
-    Tensor coeffs = RandomVariate.of(NormalDistribution.standard(), n).map(s -> Quantity.of(s, "m"));
+    Tensor coeffs = RandomVariate.of(NormalDistribution.standard(), n).maps(s -> Quantity.of(s, "m"));
     Scalar x = RandomVariate.of(NormalDistribution.standard());
     ScalarUnaryOperator suo = ClenshawChebyshev.of(coeffs);
     Scalar expect = suo.apply(x);
@@ -62,7 +62,7 @@ class ClenshawChebyshevTest {
   void testRandomUnitExact(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
-    Tensor coeffs = RandomVariate.of(distribution, n).map(s -> Quantity.of(s, "m"));
+    Tensor coeffs = RandomVariate.of(distribution, n).maps(s -> Quantity.of(s, "m"));
     Scalar x = RandomVariate.of(distribution);
     ScalarUnaryOperator suo = ClenshawChebyshev.of(coeffs);
     Scalar expect = suo.apply(x);

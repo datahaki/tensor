@@ -37,7 +37,7 @@ class TukeyWindowTest {
   @Test
   void testSmall() {
     Tensor tensor = Tensors.of(RationalScalar.of(-1, 6), RealScalar.ZERO, RealScalar.of(0.01), RationalScalar.of(1, 6));
-    Tensor mapped = tensor.map(TukeyWindow.FUNCTION);
+    Tensor mapped = tensor.maps(TukeyWindow.FUNCTION);
     Map<Tensor, Long> map = Tally.of(mapped);
     assertEquals(map.get(RealScalar.ONE).longValue(), tensor.length());
   }

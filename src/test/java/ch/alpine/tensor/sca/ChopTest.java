@@ -31,7 +31,7 @@ class ChopTest {
   @Test
   void testChop() {
     Tensor v = Tensors.vectorDouble(1e-10, 1e-12, 1e-14, 1e-16);
-    Tensor c = v.map(Chop._12);
+    Tensor c = v.maps(Chop._12);
     assertNotEquals(c.get(0), RealScalar.ZERO);
     assertNotEquals(c.get(1), RealScalar.ZERO);
     assertEquals(c.get(2), RealScalar.ZERO);

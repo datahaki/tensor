@@ -53,12 +53,12 @@ public enum ChebyshevNodes {
    * @see FourierDCT#_3 */
   public Tensor matrix(int n) {
     Tensor domain = of(n);
-    return Tensors.vector(k -> domain.map(ClenshawChebyshev.of(UnitVector.of(k + 1, k))), n);
+    return Tensors.vector(k -> domain.maps(ClenshawChebyshev.of(UnitVector.of(k + 1, k))), n);
   }
 
   public abstract Tensor solve(Tensor rhs);
 
   public Tensor coeffs(ScalarUnaryOperator function, int n) {
-    return solve(of(n).map(function));
+    return solve(of(n).maps(function));
   }
 }

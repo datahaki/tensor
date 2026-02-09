@@ -84,7 +84,7 @@ class ExpTest {
 
   @Test
   void testEmpty() {
-    assertEquals(Tensors.empty().map(Exp.FUNCTION), Tensors.empty());
+    assertEquals(Tensors.empty().maps(Exp.FUNCTION), Tensors.empty());
   }
 
   @Test

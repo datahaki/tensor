@@ -30,7 +30,7 @@ class DirectInfluenceMatrix implements InfluenceMatrix, Serializable {
 
   @Override
   public Tensor leverages_sqrt() {
-    return leverages().map(Sqrt.FUNCTION);
+    return leverages().maps(Sqrt.FUNCTION);
   }
 
   @Override

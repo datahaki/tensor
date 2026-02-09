@@ -137,7 +137,7 @@ class PowerTest {
 
   @Test
   void testFunction() {
-    assertEquals(RealScalar.of(7).map(Power.function(0.5)), Sqrt.FUNCTION.apply(RealScalar.of(7)));
+    assertEquals(RealScalar.of(7).maps(Power.function(0.5)), Sqrt.FUNCTION.apply(RealScalar.of(7)));
     assertEquals(Power.function(0.5).apply(RealScalar.of(7)), Sqrt.FUNCTION.apply(RealScalar.of(7)));
   }
 

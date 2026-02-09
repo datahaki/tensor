@@ -36,8 +36,8 @@ class FloorTest {
   void testHash() {
     Tensor a = Tensors.of( //
         DoubleScalar.of(0.123), DoubleScalar.of(3.343), DoubleScalar.of(-0.123));
-    Tensor b = a.map(Floor.FUNCTION);
-    Tensor c = a.map(Floor.FUNCTION);
+    Tensor b = a.maps(Floor.FUNCTION);
+    Tensor c = a.maps(Floor.FUNCTION);
     assertEquals(b, c);
     assertEquals(b.hashCode(), c.hashCode());
   }

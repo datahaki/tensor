@@ -19,7 +19,7 @@ import ch.alpine.tensor.ext.Integers;
 class PermutationListTest {
   @Test
   void testSimple() {
-    Tensor perm = Tensors.fromString("{{3, 2}, {1, 6, 7}}").map(s -> s.subtract(RealScalar.ONE));
+    Tensor perm = Tensors.fromString("{{3, 2}, {1, 6, 7}}").maps(s -> s.subtract(RealScalar.ONE));
     List<Integer> list = Integers.asList(PermutationList.of(Cycles.of(perm), 9));
     List<Integer> math = IntStream.of(6, 3, 2, 4, 5, 7, 1, 8, 9) //
         .map(i -> i - 1).boxed().collect(Collectors.toList());

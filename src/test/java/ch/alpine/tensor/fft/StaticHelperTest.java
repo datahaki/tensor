@@ -51,7 +51,7 @@ class StaticHelperTest {
   void testSamplesDifferences() {
     for (int n = 2; n < 8; ++n) {
       Tensor vector = SlidingWindow.samples(n);
-      Tensor result = Join.of(vector, vector.map(RealScalar.ONE::add));
+      Tensor result = Join.of(vector, vector.maps(RealScalar.ONE::add));
       assertEquals(Tally.of(Differences.of(result)).size(), 1);
     }
   }

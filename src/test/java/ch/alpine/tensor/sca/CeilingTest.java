@@ -38,8 +38,8 @@ class CeilingTest {
   void testHash() {
     Tensor a = Tensors.of( //
         DoubleScalar.of(0.123), DoubleScalar.of(3.343), DoubleScalar.of(-0.123));
-    Tensor b = a.map(Ceiling.FUNCTION);
-    Tensor c = a.map(Ceiling.FUNCTION);
+    Tensor b = a.maps(Ceiling.FUNCTION);
+    Tensor c = a.maps(Ceiling.FUNCTION);
     assertEquals(b, c);
     assertEquals(b.hashCode(), c.hashCode());
   }

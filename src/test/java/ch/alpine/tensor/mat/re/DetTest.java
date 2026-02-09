@@ -201,10 +201,10 @@ class DetTest {
     assertEquals(det, RealScalar.ZERO);
     // Matlab gives num == 1.0597e+05 !
     // Mathematica gives num == 44934.8 !
-    Scalar num1 = Det.of(matrix.map(N.DOUBLE)); // indeed, our algo is no different:
+    Scalar num1 = Det.of(matrix.maps(N.DOUBLE)); // indeed, our algo is no different:
     // num1 == 105968.67122221774
     num1.toString(); // to eliminate warning
-    Scalar num2 = Det.of(matrix.map(N.DOUBLE), Pivots.FIRST_NON_ZERO); // indeed, our algo is no different:
+    Scalar num2 = Det.of(matrix.maps(N.DOUBLE), Pivots.FIRST_NON_ZERO); // indeed, our algo is no different:
     // num2 == 105968.67122221774
     num2.toString(); // to eliminate warning
   }

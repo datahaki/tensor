@@ -56,11 +56,11 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
       IntUnaryOperator clipx = Integers.clip(0, tensor.length() - 1);
       int m = Unprotect.dimension1(tensor);
       IntUnaryOperator clipy = Integers.clip(0, m - 1);
-      Tensor fi = index.map(Floor.FUNCTION);
+      Tensor fi = index.maps(Floor.FUNCTION);
       Tensor nuind = index.subtract(fi);
       int fx = Scalars.intValueExact(fi.Get(0));
       int fy = Scalars.intValueExact(fi.Get(1));
-      Tensor sum = tensor.get(0, 0).map(Scalar::zero);
+      Tensor sum = tensor.get(0, 0).maps(Scalar::zero);
       for (int i = -lanczosKernel.semi() + 1; i < lanczosKernel.semi(); ++i) {
         for (int j = -lanczosKernel.semi() + 1; j < lanczosKernel.semi(); ++j) {
           Scalar mi = lanczosKernel.apply(nuind.Get(0).subtract(RealScalar.of(i)));

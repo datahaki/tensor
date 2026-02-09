@@ -26,7 +26,7 @@ public enum GaussianMatrix {
     int m = 2 * r + 1;
     Tensor offset = Tensors.vector(-r, -r);
     Tensor matrix = Array.of(list -> Vector2NormSquared.of(Tensors.vector(list).add(offset)), m, m) //
-        .divide(factor).map(Exp.FUNCTION);
+        .divide(factor).maps(Exp.FUNCTION);
     return matrix.divide((Scalar) Flatten.stream(matrix, 1).reduce(Tensor::add).orElseThrow());
   }
 }

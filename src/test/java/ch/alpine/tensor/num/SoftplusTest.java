@@ -30,7 +30,7 @@ class SoftplusTest {
   void testTensor() {
     Scalar s0 = Softplus.FUNCTION.apply(RealScalar.ZERO);
     Scalar s1 = Softplus.FUNCTION.apply(RealScalar.ONE);
-    Tensor tensor = Tensors.vector(0, 1).map(Softplus.FUNCTION);
+    Tensor tensor = Tensors.vector(0, 1).maps(Softplus.FUNCTION);
     assertEquals(tensor, Tensors.of(s0, s1));
   }
 

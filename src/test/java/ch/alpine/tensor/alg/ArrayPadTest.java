@@ -46,7 +46,7 @@ class ArrayPadTest {
 
   @Test
   void testMatrixQuantity() {
-    Tensor tensor = HilbertMatrix.of(2, 3).map(s -> Quantity.of(s, "K"));
+    Tensor tensor = HilbertMatrix.of(2, 3).maps(s -> Quantity.of(s, "K"));
     Tensor result = ArrayPad.of(tensor, List.of(3, 4), List.of(5, 6));
     List<Integer> list = Dimensions.of(result);
     assertEquals(list, List.of(10, 13));

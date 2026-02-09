@@ -46,7 +46,7 @@ class LinearSolveTest {
     Tensor b = Tensors.matrix((i, j) -> RationalScalar.of(i.equals(j) ? 1 : 0, 1), n, n + 3);
     Tensor X = LinearSolve.of(A, b);
     Tensor err = A.dot(X).subtract(b);
-    assertEquals(err, b.map(Scalar::zero));
+    assertEquals(err, b.maps(Scalar::zero));
     assertEquals(err, Array.zeros(Dimensions.of(b)));
     ExactTensorQ.require(X);
   }
@@ -63,7 +63,7 @@ class LinearSolveTest {
         RealScalar.of(randomGenerator.nextInt(15))), n, n + 3);
     Tensor X = LinearSolve.of(A, b);
     Tensor err = A.dot(X).subtract(b);
-    assertEquals(err, b.map(Scalar::zero));
+    assertEquals(err, b.maps(Scalar::zero));
     assertEquals(err, Array.zeros(Dimensions.of(b)));
     ExactTensorQ.require(X);
   }

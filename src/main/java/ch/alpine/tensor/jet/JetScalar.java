@@ -112,7 +112,7 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from Scalar
   public Scalar zero() {
-    return new JetScalar(vector.map(Scalar::zero));
+    return new JetScalar(vector.maps(Scalar::zero));
   }
 
   @Override // from Scalar
@@ -204,7 +204,7 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from MultiplexScalar
   public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
-    return new JetScalar(vector.map(unaryOperator));
+    return new JetScalar(vector.maps(unaryOperator));
   }
 
   @Override // from MultiplexScalar

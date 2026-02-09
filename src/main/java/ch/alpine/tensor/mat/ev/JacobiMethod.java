@@ -41,7 +41,7 @@ import ch.alpine.tensor.sca.Conjugate;
       if (Scalars.isZero(sum))
         return new Eigensystem( //
             Tensor.of(IntStream.range(0, n).mapToObj(this::diag)), // values
-            Unprotect.byRef(V).map(Conjugate.FUNCTION)); // vectors
+            Unprotect.byRef(V).maps(Conjugate.FUNCTION)); // vectors
       Scalar tresh = iteration < PHASE1 //
           ? sum.multiply(factor)
           : sum.zero();

@@ -27,7 +27,7 @@ class MatrixRankTest {
       assertEquals(rank, MatrixRank.of(Transpose.of(matrix)));
     }
     if (ExactTensorQ.of(matrix)) {
-      Tensor numerc = matrix.map(N.DOUBLE);
+      Tensor numerc = matrix.maps(N.DOUBLE);
       {
         int rank = MatrixRank.of(numerc);
         assertEquals(rank, expect);
@@ -98,7 +98,7 @@ class MatrixRankTest {
   void testVectorFail() {
     Tensor vector = Tensors.vector(1, 2, 3);
     assertThrows(IllegalArgumentException.class, () -> MatrixRank.of(vector));
-    assertThrows(NegativeArraySizeException.class, () -> MatrixRank.of(vector.map(N.DOUBLE)));
+    assertThrows(NegativeArraySizeException.class, () -> MatrixRank.of(vector.maps(N.DOUBLE)));
   }
 
   @Test

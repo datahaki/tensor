@@ -57,7 +57,7 @@ public class Rescale {
   public Rescale(Tensor tensor, Clip clip) {
     ScalarQ.thenThrow(tensor);
     this.clip = clip;
-    result = tensor.map(Objects.nonNull(clip) && Scalars.nonZero(clip.width()) //
+    result = tensor.maps(Objects.nonNull(clip) && Scalars.nonZero(clip.width()) //
         // operation is not identical to Clip#rescale for non-finite values
         ? scalar -> scalar.subtract(clip.min()).divide(clip.width())
         // set all finite number entries to 0, but keep non-finite values

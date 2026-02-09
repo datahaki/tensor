@@ -183,8 +183,8 @@ class MatrixPowerTest {
     Tensor tensor = MatrixPower.ofSymmetric(Tensors.fromString("{{3, 4}, {4, -5.}}"), RealScalar.of(0.345));
     Tensor re = Tensors.fromString("{{1.58297621781119750, +0.28292717088123903}, {+0.2829271708812389, 1.0171218760487195}}");
     Tensor im = Tensors.fromString("{{0.24891109223875751, -0.60092453470790870}, {-0.6009245347079087, 1.4507601616545749}}");
-    Tolerance.CHOP.requireClose(tensor.map(Re.FUNCTION), re);
-    Tolerance.CHOP.requireClose(tensor.map(Im.FUNCTION), im);
+    Tolerance.CHOP.requireClose(tensor.maps(Re.FUNCTION), re);
+    Tolerance.CHOP.requireClose(tensor.maps(Im.FUNCTION), im);
   }
 
   @ParameterizedTest
@@ -193,7 +193,7 @@ class MatrixPowerTest {
     int prime = 7879;
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
     Scalar one = GaussScalar.of(1, prime);
-    Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
+    Tensor matrix = RandomVariate.of(distribution, n, n).maps(s -> GaussScalar.of(s.number().intValue(), prime));
     Tensor result = MatrixPower.of(matrix, +343386231231234L);
     Tensor revers = MatrixPower.of(matrix, -343386231231234L);
     MatrixQ.requireSize(result, n, n);

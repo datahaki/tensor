@@ -49,7 +49,7 @@ public enum DFTConsistency {
     IO.println(dft);
     IO.println(SymmetricMatrixQ.INSTANCE.isMember(matrix));
     IO.println(HermitianMatrixQ.INSTANCE.isMember(matrix));
-    IO.println(Pretty.of(matrix.map(Round._3)));
+    IO.println(Pretty.of(matrix.maps(Round._3)));
   }
 
   static void main() {

@@ -155,12 +155,12 @@ class TensorTest {
   @Test
   void testMap() {
     Tensor a = Tensors.of(DoubleScalar.of(1e-20), Tensors.of(DoubleScalar.of(3e-19)));
-    Tensor b = a.map(Tolerance.CHOP);
+    Tensor b = a.maps(Tolerance.CHOP);
     assertEquals(b, Tensors.of(RealScalar.ZERO, Tensors.of(RealScalar.ZERO)));
   }
 
   @Test
   void testMapNullFail() {
-    assertThrows(NullPointerException.class, () -> Tensors.vector(1, 2, 3).map(_ -> null));
+    assertThrows(NullPointerException.class, () -> Tensors.vector(1, 2, 3).maps(_ -> null));
   }
 }

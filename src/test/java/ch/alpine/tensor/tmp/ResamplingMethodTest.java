@@ -32,8 +32,8 @@ class ResamplingMethodTest {
     resamplingMethod.insert(navigableMap, RealScalar.of(3), RandomVariate.of(v_distribution, 3));
     resamplingMethod.insert(navigableMap, RealScalar.of(4), RandomVariate.of(v_distribution, 3));
     Tensor x = Tensor.of(navigableMap.navigableKeySet().stream());
-    Tensor v1 = x.map(s -> resamplingMethod.evaluate(navigableMap, s));
-    Tensor v2 = x.map(s -> resamplingMethod.evaluate(navigableMap.navigableKeySet(), navigableMap::get, s));
+    Tensor v1 = x.maps(s -> resamplingMethod.evaluate(navigableMap, s));
+    Tensor v2 = x.maps(s -> resamplingMethod.evaluate(navigableMap.navigableKeySet(), navigableMap::get, s));
     assertEquals(v1, v2);
     assertThrows(Exception.class, () -> resamplingMethod.evaluate(navigableMap, RealScalar.of(0.2)));
     assertThrows(Exception.class, () -> resamplingMethod.evaluate(navigableMap, RealScalar.of(4.2)));
@@ -54,8 +54,8 @@ class ResamplingMethodTest {
     assumeFalse(resamplingMethod.equals(ResamplingMethod.NONE));
     Distribution k_distribution = UniformDistribution.of(Clips.keycover(navigableMap));
     Tensor x = RandomVariate.of(k_distribution, 10);
-    Tensor v1 = x.map(s -> resamplingMethod.evaluate(navigableMap, s));
-    Tensor v2 = x.map(s -> resamplingMethod.evaluate(navigableMap.navigableKeySet(), navigableMap::get, s));
+    Tensor v1 = x.maps(s -> resamplingMethod.evaluate(navigableMap, s));
+    Tensor v2 = x.maps(s -> resamplingMethod.evaluate(navigableMap.navigableKeySet(), navigableMap::get, s));
     assertEquals(v1, v2);
   }
 }

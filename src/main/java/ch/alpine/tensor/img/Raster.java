@@ -22,6 +22,6 @@ public enum Raster {
    * @param function for instance {@link ColorDataGradients#CLASSIC}
    * @return */
   public static Tensor of(Tensor tensor, Function<Scalar, ? extends Tensor> function) {
-    return Rescale.of(tensor).map(function);
+    return Rescale.of(tensor).maps(function);
   }
 }

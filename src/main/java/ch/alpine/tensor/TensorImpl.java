@@ -134,8 +134,8 @@ import ch.alpine.tensor.jet.Hold;
   }
 
   @Override // from Tensor
-  public Tensor map(Function<Scalar, ? extends Tensor> function) {
-    return Tensor.of(stream().map(tensor -> tensor.map(function)));
+  public Tensor maps(Function<Scalar, ? extends Tensor> function) {
+    return Tensor.of(stream().map(tensor -> tensor.maps(function)));
   }
 
   @Override // from Tensor

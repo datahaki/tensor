@@ -34,7 +34,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
     if (Tensors.isEmpty(tensor))
       throw new Throw(tensor);
     tensor.forEach(ColorFormat::toColor);
-    return new LinearColorDataGradient(tensor.map(CLIP::requireInside));
+    return new LinearColorDataGradient(tensor.maps(CLIP::requireInside));
   }
 
   // ---
@@ -44,7 +44,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
 
   /* package */ LinearColorDataGradient(Tensor tensor) {
     this.tensor = tensor;
-    interpolation = LinearInterpolation.of(tensor.map(N.DOUBLE));
+    interpolation = LinearInterpolation.of(tensor.maps(N.DOUBLE));
     scale = DoubleScalar.of(tensor.length() - 1);
   }
 

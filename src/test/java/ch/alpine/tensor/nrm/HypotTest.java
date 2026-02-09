@@ -47,8 +47,8 @@ class HypotTest {
 
   @Test
   void testDecimal() {
-    Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
-    matrix.map(Hypot::withOne);
+    Tensor matrix = HilbertMatrix.of(5, 3).maps(N.DECIMAL128);
+    matrix.maps(Hypot::withOne);
   }
 
   @Test

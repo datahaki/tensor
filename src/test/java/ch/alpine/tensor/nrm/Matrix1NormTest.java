@@ -28,7 +28,7 @@ class Matrix1NormTest {
   @Test
   void testTranspose() {
     Distribution distribution = TrapezoidalDistribution.with(1, 2, 2);
-    Tensor matrix = RandomVariate.of(distribution, 3, 6).map(Rationalize._3);
+    Tensor matrix = RandomVariate.of(distribution, 3, 6).maps(Rationalize._3);
     Scalar mn1 = Matrix1Norm.of(matrix);
     Scalar mni = MatrixInfinityNorm.of(Transpose.of(matrix));
     assertEquals(mn1, mni);

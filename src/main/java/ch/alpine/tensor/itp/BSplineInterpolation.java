@@ -29,7 +29,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
   public static Tensor matrix(int degree, int n) {
     Tensor domain = Range.of(0, n);
     return Transpose.of(Tensor.of(IdentityMatrix.stream(n) //
-        .map(unit -> domain.map(BSplineFunctionString.of(degree, unit)))));
+        .map(unit -> domain.maps(BSplineFunctionString.of(degree, unit)))));
   }
 
   /** @param degree

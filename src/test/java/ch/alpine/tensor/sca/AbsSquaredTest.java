@@ -49,7 +49,7 @@ class AbsSquaredTest {
   @Test
   void testTensor() {
     Tensor qs1 = Tensors.fromString("{3+4*I[s^2*m^-1]}");
-    Tensor qs2 = qs1.map(AbsSquared.FUNCTION);
+    Tensor qs2 = qs1.maps(AbsSquared.FUNCTION);
     ExactTensorQ.require(qs2);
     assertEquals(qs2.toString(), "{25[m^-2*s^4]}");
   }

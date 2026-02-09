@@ -36,10 +36,10 @@ import ch.alpine.tensor.sca.N;
 
   /** @return pseudo inverse of given matrix */
   public Tensor pseudoInverse() {
-    Scalar sigma = N.DOUBLE.apply(Matrix2Norm.bound(matrix.map(Unprotect::withoutUnit)));
+    Scalar sigma = N.DOUBLE.apply(Matrix2Norm.bound(matrix.maps(Unprotect::withoutUnit)));
     FiniteScalarQ.require(sigma); // fail fast
     Scalar sigma2 = sigma.multiply(sigma);
-    Tensor ai = ConjugateTranspose.of(matrix.map(Unprotect::negateUnit));
+    Tensor ai = ConjugateTranspose.of(matrix.maps(Unprotect::negateUnit));
     if (Scalars.isZero(sigma2)) // special case that all entries of matrix are zero
       return ai;
     ai = ai.divide(sigma2);

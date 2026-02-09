@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 class NilpotentMatrixQTest {
   private static void _check(Tensor matrix) {
     assertTrue(NilpotentMatrixQ.of(matrix));
-    assertTrue(NilpotentMatrixQ.of(matrix.map(N.DOUBLE)));
+    assertTrue(NilpotentMatrixQ.of(matrix.maps(N.DOUBLE)));
   }
 
   @Test
@@ -40,9 +40,9 @@ class NilpotentMatrixQTest {
   void test234Quantity() {
     ScalarUnaryOperator suo = s -> Quantity.of(s, "m");
     // Reference: https://en.wikipedia.org/wiki/Nilpotent_matrix
-    _check(Tensors.fromString("{{2,-1},{4,-2}}").map(suo));
-    _check(Tensors.fromString("{{2,2,-2},{5,1,-3},{1,5,-3}}").map(suo));
-    _check(Tensors.fromString("{{2,2,2,-3},{6,1,1,-4},{1,6,1,-4},{1,1,6,-4}}").map(suo));
+    _check(Tensors.fromString("{{2,-1},{4,-2}}").maps(suo));
+    _check(Tensors.fromString("{{2,2,-2},{5,1,-3},{1,5,-3}}").maps(suo));
+    _check(Tensors.fromString("{{2,2,2,-3},{6,1,1,-4},{1,6,1,-4},{1,1,6,-4}}").maps(suo));
   }
 
   @Test
@@ -63,9 +63,9 @@ class NilpotentMatrixQTest {
     Scalar s1 = Matrix2Norm.bound(scaled);
     Scalar s2 = Matrix2Norm.bound(scaled.dot(scaled));
     Scalar s3 = Matrix2Norm.bound(scaled.dot(scaled).dot(scaled));
-    Tensor vec = Tensors.of(n2, s1, s2, s3).map(Round._2);
+    Tensor vec = Tensors.of(n2, s1, s2, s3).maps(Round._2);
     Tensor tensor = MatrixPower.of(matrix, n);
-    tensor.map(Scalar::zero);
-    vec.map(Scalar::zero);
+    tensor.maps(Scalar::zero);
+    vec.maps(Scalar::zero);
   }
 }

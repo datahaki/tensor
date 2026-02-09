@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.exp.Log;
    * @return */
   public static Tensor _1(Tensor matrix) {
     MatrixQ.requireSize(matrix, 1, 1);
-    return matrix.map(Log.FUNCTION);
+    return matrix.maps(Log.FUNCTION);
   }
 
   /** @param matrix of size 2 x 2
@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.exp.Log;
     try {
       // the final Tolerance.CHOP was discovered to be necessary when testing
       // StiefelManifold Exponential Log
-      return Eigensystem.of(matrix).map(Log.FUNCTION).map(Tolerance.CHOP);
+      return Eigensystem.of(matrix).map(Log.FUNCTION).maps(Tolerance.CHOP);
     } catch (Exception exception) {
       // ---
     }
@@ -52,7 +52,7 @@ import ch.alpine.tensor.sca.exp.Log;
     for (int count = 0; count < max; ++count) {
       Scalar rho_max = Matrix2Norm.bound(rem);
       if (Scalars.lessThan(rho_max, MatrixLog.RHO_MAX)) {
-        Tensor sum = matrix.map(Scalar::zero);
+        Tensor sum = matrix.maps(Scalar::zero);
         Scalar factor = RealScalar.ONE;
         for (DenmanBeaversDet denmanBeaversDet : deque) {
           sum = sum.add(denmanBeaversDet.mk().subtract(id).multiply(factor));

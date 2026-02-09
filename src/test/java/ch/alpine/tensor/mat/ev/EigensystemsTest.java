@@ -52,7 +52,7 @@ class EigensystemsTest {
     assertEquals(eigensystem.values(), Tensors.fromString("{1, 1/2}"));
     ExactTensorQ.require(eigensystem.vectors());
     Tensor Vt = Transpose.of(eigensystem.vectors());
-    Tensor alt = Vt.dot(DiagonalMatrix.with(eigensystem.values().map(Log.FUNCTION))).dot(Inverse.of(Vt));
+    Tensor alt = Vt.dot(DiagonalMatrix.with(eigensystem.values().maps(Log.FUNCTION))).dot(Inverse.of(Vt));
     Tensor log = MatrixLog.of(matrix);
     Tolerance.CHOP.requireClose(log, alt);
     Tolerance.CHOP.requireClose(matrix.dot(Vt), Vt.dot(DiagonalMatrix.with(eigensystem.values())));
@@ -109,7 +109,7 @@ class EigensystemsTest {
 
   @Test
   void test2x2Quantity() {
-    Tensor matrix = Tensors.fromString("{{1,2},{0,1/2}}").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = Tensors.fromString("{{1,2},{0,1/2}}").maps(s -> Quantity.of(s, "m"));
     Eigensystem eigensystem = Eigensystems._2(matrix);
     new EigensystemQ(matrix).require(eigensystem, Tolerance.CHOP);
     assertEquals(eigensystem.values(), Tensors.fromString("{1[m], 1/2[m]}"));

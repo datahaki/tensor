@@ -62,7 +62,7 @@ class NullSpaceTest {
   void testZerosUsingSvd(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     _checkZeros(Array.zeros(n, n));
-    _checkZeros(Array.zeros(n, n).map(N.DOUBLE));
+    _checkZeros(Array.zeros(n, n).maps(N.DOUBLE));
   }
 
   @Test
@@ -245,7 +245,7 @@ class NullSpaceTest {
     Tensor id = IdentityMatrix.of(d);
     assertEquals(id, NullSpace.of(matrix));
     assertEquals(id, NullSpace.usingQR(matrix));
-    assertEquals(id, NullSpace.usingQR(matrix.map(N.DOUBLE)));
+    assertEquals(id, NullSpace.usingQR(matrix.maps(N.DOUBLE)));
   }
 
   @Test
@@ -289,7 +289,7 @@ class NullSpaceTest {
 
   @Test
   void testDecimalScalar() {
-    Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
+    Tensor matrix = HilbertMatrix.of(3, 5).maps(N.DECIMAL128);
     Tolerance.CHOP.requireAllZero(MatrixDotTranspose.of(matrix, NullSpace.of(matrix)));
   }
 
@@ -334,8 +334,8 @@ class NullSpaceTest {
     int r = 2;
     int n = 5;
     int c = r + repetitionInfo.getCurrentRepetition() - 1;
-    Tensor v = RandomVariate.of(ComplexNormalDistribution.STANDARD, r, n).map(RealScalar.of(10)::multiply).map(Round.FUNCTION);
-    Tensor w = RandomVariate.of(ComplexNormalDistribution.STANDARD, c, r).map(RealScalar.of(10)::multiply).map(Round.FUNCTION);
+    Tensor v = RandomVariate.of(ComplexNormalDistribution.STANDARD, r, n).maps(RealScalar.of(10)::multiply).maps(Round.FUNCTION);
+    Tensor w = RandomVariate.of(ComplexNormalDistribution.STANDARD, c, r).maps(RealScalar.of(10)::multiply).maps(Round.FUNCTION);
     Tensor matrix = w.dot(v);
     Tensor ns = NullSpace.of(matrix);
     ExactTensorQ.require(ns);

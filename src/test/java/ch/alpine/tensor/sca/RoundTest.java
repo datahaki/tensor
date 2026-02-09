@@ -118,29 +118,29 @@ class RoundTest {
   @Test
   void testRoundOptions() {
     Scalar pi = DoubleScalar.of(Math.PI);
-    assertEquals(pi.map(Round._1).toString(), "3.1");
-    assertEquals(pi.map(Round._2).toString(), "3.14");
-    assertEquals(pi.map(Round._3).toString(), "3.142");
-    assertEquals(pi.map(Round._4).toString(), "3.1416");
-    assertEquals(pi.map(Round._5).toString(), "3.14159");
-    assertEquals(pi.map(Round._6).toString(), "3.141593");
-    assertEquals(pi.map(Round._7).toString(), "3.1415927");
-    assertEquals(pi.map(Round._8).toString(), "3.14159265");
-    assertEquals(pi.map(Round._9).toString(), "3.141592654");
+    assertEquals(pi.maps(Round._1).toString(), "3.1");
+    assertEquals(pi.maps(Round._2).toString(), "3.14");
+    assertEquals(pi.maps(Round._3).toString(), "3.142");
+    assertEquals(pi.maps(Round._4).toString(), "3.1416");
+    assertEquals(pi.maps(Round._5).toString(), "3.14159");
+    assertEquals(pi.maps(Round._6).toString(), "3.141593");
+    assertEquals(pi.maps(Round._7).toString(), "3.1415927");
+    assertEquals(pi.maps(Round._8).toString(), "3.14159265");
+    assertEquals(pi.maps(Round._9).toString(), "3.141592654");
   }
 
   @Test
   void testRoundOptions2() {
     Scalar pi = Scalars.fromString("3.100000000000008");
-    assertEquals(pi.map(Round._1).toString(), "3.1");
-    assertEquals(pi.map(Round._2).toString(), "3.10");
-    assertEquals(pi.map(Round._3).toString(), "3.100");
-    assertEquals(pi.map(Round._4).toString(), "3.1000");
-    assertEquals(pi.map(Round._5).toString(), "3.10000");
-    assertEquals(pi.map(Round._6).toString(), "3.100000");
-    assertEquals(pi.map(Round._7).toString(), "3.1000000");
-    assertEquals(pi.map(Round._8).toString(), "3.10000000");
-    assertEquals(pi.map(Round._9).toString(), "3.100000000");
+    assertEquals(pi.maps(Round._1).toString(), "3.1");
+    assertEquals(pi.maps(Round._2).toString(), "3.10");
+    assertEquals(pi.maps(Round._3).toString(), "3.100");
+    assertEquals(pi.maps(Round._4).toString(), "3.1000");
+    assertEquals(pi.maps(Round._5).toString(), "3.10000");
+    assertEquals(pi.maps(Round._6).toString(), "3.100000");
+    assertEquals(pi.maps(Round._7).toString(), "3.1000000");
+    assertEquals(pi.maps(Round._8).toString(), "3.10000000");
+    assertEquals(pi.maps(Round._9).toString(), "3.100000000");
   }
 
   @Test
@@ -153,7 +153,7 @@ class RoundTest {
 
   @Test
   void testRoundOptions3() {
-    Scalar pi = (Scalar) Scalars.fromString("1234.100000000000008").map(Round._2);
+    Scalar pi = (Scalar) Scalars.fromString("1234.100000000000008").maps(Round._2);
     DecimalScalar ds = (DecimalScalar) pi;
     BigDecimal bd = ds.number();
     assertEquals(bd.precision(), 4 + 2);

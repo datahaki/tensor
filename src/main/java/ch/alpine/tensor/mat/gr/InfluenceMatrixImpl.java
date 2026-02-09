@@ -61,7 +61,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
   @Override // from InfluenceMatrix
   public Tensor leverages_sqrt() {
-    return leverages().map(Sqrt.FUNCTION);
+    return leverages().maps(Sqrt.FUNCTION);
   }
 
   @Override // from InfluenceMatrix

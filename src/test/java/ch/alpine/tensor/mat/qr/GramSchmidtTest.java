@@ -78,7 +78,7 @@ class GramSchmidtTest {
 
   @Test
   void testQuantity() {
-    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4).map(s -> Quantity.of(s, "m"));
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4).maps(s -> Quantity.of(s, "m"));
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);

@@ -16,6 +16,6 @@ public enum SoftmaxLayer {
    * @throws Exception if vector is empty */
   public static Tensor of(Tensor vector) {
     Scalar n_max = vector.stream().reduce(Max::of).map(Scalar.class::cast).orElseThrow().negate();
-    return Vector1Norm.NORMALIZE.apply(vector.map(s -> Exp.FUNCTION.apply(s.add(n_max))));
+    return Vector1Norm.NORMALIZE.apply(vector.maps(s -> Exp.FUNCTION.apply(s.add(n_max))));
   }
 }
