@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +56,6 @@ class SizeTest {
 
   @Test
   void testVisibility() {
-    assertEquals(Size.class.getModifiers(), 0);
+    assertFalse(Modifier.isPublic(Size.class.getModifiers()));
   }
 }

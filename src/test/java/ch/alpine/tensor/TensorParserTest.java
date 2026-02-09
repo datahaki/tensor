@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
@@ -198,6 +199,6 @@ class TensorParserTest {
 
   @Test
   void testVisibility() {
-    assertEquals(TensorParser.class.getModifiers() & 1, 0);
+    assertFalse(Modifier.isPublic(TensorParser.class.getModifiers()));
   }
 }

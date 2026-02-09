@@ -44,9 +44,9 @@ public record PathName(Path parent, String title, String extension, boolean hasD
   public boolean hasExtension(String string) {
     return string.equalsIgnoreCase(extension);
   }
-  
+
   public String name() {
-    return title + (hasDot ? "" : DOT + extension); 
+    return title + (hasDot ? "" : DOT + extension);
   }
 
   public Path asDirectory() {

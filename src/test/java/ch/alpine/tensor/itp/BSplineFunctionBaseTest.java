@@ -1,13 +1,15 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
 class BSplineFunctionBaseTest {
   @Test
   void testVisibility() {
-    assertEquals(BSplineFunctionBase.class.getModifiers() & 1, 1);
+    assertTrue(Modifier.isPublic(BSplineFunctionBase.class.getModifiers()));
   }
 }

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
@@ -121,6 +122,6 @@ class ScalarParserTest {
 
   @Test
   void testVisibility() {
-    assertEquals(ScalarParser.class.getModifiers() & 1, 0);
+    assertFalse(Modifier.isPublic(ScalarParser.class.getModifiers()));
   }
 }

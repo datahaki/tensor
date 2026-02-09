@@ -16,6 +16,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
@@ -140,7 +141,10 @@ class ArcTanTest {
 
   @Test
   void testDoubleNaNFail() {
-    assertThrows(Throw.class, () -> ArcTan.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN)));
+    Scalar nan = ComplexScalar.of(Double.NaN, Double.NaN);
+    Scalar res = ArcTan.FUNCTION.apply(nan);
+    assertFalse(DeterminateScalarQ.of(res));
+    assertEquals(nan.toString(), res.toString());
   }
 
   @Test

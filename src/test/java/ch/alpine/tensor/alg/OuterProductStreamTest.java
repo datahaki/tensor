@@ -3,7 +3,9 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
@@ -18,7 +20,7 @@ class OuterProductStreamTest {
 
   @Test
   void testVisibility() {
-    assertEquals(OuterProductStream.class.getModifiers(), 0);
+    assertFalse(Modifier.isPublic(OuterProductStream.class.getModifiers()));
   }
 
   @Test

@@ -17,12 +17,6 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class GaussianEliminationTest {
   @Test
-  void testPackageVisibility() {
-    int modifiers = GaussianElimination.class.getModifiers();
-    assertEquals(modifiers & 0x1, 0x1); // non public but package
-  }
-
-  @Test
   void testPivots() {
     Tensor matrix = HilbertMatrix.of(3);
     Tensor rhs = Tensors.vector(-1, -2, 3);

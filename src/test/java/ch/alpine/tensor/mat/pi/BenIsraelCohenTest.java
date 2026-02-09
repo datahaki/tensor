@@ -2,8 +2,10 @@
 package ch.alpine.tensor.mat.pi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.lang.reflect.Modifier;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -169,6 +171,6 @@ class BenIsraelCohenTest {
 
   @Test
   void testVisibility() {
-    assertEquals(BenIsraelCohen.class.getModifiers() & 1, 0);
+    assertFalse(Modifier.isPublic(BenIsraelCohen.class.getModifiers()));
   }
 }

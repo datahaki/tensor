@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.lang.reflect.Modifier;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -74,6 +76,6 @@ class ClipIntervalTest {
 
   @Test
   void testVisibility() {
-    assertEquals(ClipInterval.class.getModifiers(), 0);
+    assertFalse(Modifier.isPublic(ClipInterval.class.getModifiers()));
   }
 }

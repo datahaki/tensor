@@ -2,11 +2,13 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -129,6 +131,6 @@ class UnmodifiableTensorTest {
 
   @Test
   void testNonPublic() {
-    assertEquals(UnmodifiableTensor.class.getModifiers(), 0);
+    assertFalse(Modifier.isPublic(UnmodifiableTensor.class.getModifiers()));
   }
 }

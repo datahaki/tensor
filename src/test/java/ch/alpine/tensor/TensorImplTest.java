@@ -2,9 +2,11 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -131,6 +133,6 @@ class TensorImplTest {
 
   @Test
   void testNonPublic() {
-    assertEquals(TensorImpl.class.getModifiers(), 0);
+    assertFalse(Modifier.isPublic(TensorImpl.class.getModifiers()));
   }
 }

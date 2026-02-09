@@ -1,9 +1,11 @@
 // code by jph
 package ch.alpine.tensor.spa;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +23,7 @@ class SparseArrayToStringTest {
 
   @Test
   void testVisibility() {
-    assertEquals(SparseArrayToString.class.getModifiers() & 1, 0);
+    assertFalse(Modifier.isPublic(SparseArrayToString.class.getModifiers()));
   }
 
   @Test
