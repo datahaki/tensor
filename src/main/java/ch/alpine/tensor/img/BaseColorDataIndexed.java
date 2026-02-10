@@ -43,7 +43,7 @@ import ch.alpine.tensor.chq.FiniteScalarQ;
   /** @param alpha in the range [0, 1, ..., 255]
    * @return */
   protected final Tensor tableWithAlpha(int alpha) {
-    return Tensor.of(tensor.stream().map(withAlpha(alpha)));
+    return withAlpha(alpha).slash(tensor);
   }
 
   /** @param alpha in the range [0, 1, ..., 255]

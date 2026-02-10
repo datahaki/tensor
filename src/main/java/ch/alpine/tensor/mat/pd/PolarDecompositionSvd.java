@@ -48,7 +48,7 @@ import ch.alpine.tensor.sca.Sign;
   @Override // from PolarDecomposition
   public Tensor getPositiveSemidefinite() {
     // TODO can this be simplified?
-    return MatrixDotTranspose.of(Tensor.of(basis.stream().map(Times.operator(svd.values()))), basis);
+    return MatrixDotTranspose.of(Times.operator(svd.values()).slash(basis), basis);
   }
 
   /** @return */

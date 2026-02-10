@@ -142,6 +142,6 @@ public enum PseudoInverse {
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd, Chop chop) {
     Tensor wi = SingularValueList.inverted(svd, chop);
-    return MatrixDotTranspose.of(Tensor.of(svd.getV().stream().map(Times.operator(wi))), svd.getU());
+    return MatrixDotTranspose.of(Times.operator(wi).slash(svd.getV()), svd.getU());
   }
 }

@@ -49,13 +49,13 @@ class LinearFractionalTransformTest {
     Tensor uv = Tensors.fromString("{{-0.2},{1.1},{1.5}}");
     {
       LinearFractionalTransform lft = LinearFractionalTransform.fit(xy, uv);
-      Tolerance.CHOP.requireClose(Tensor.of(xy.stream().map(lft)), uv);
+      Tolerance.CHOP.requireClose(lft.slash(xy), uv);
       LinearFractionalTransform lfi = lft.inverse();
-      Tolerance.CHOP.requireClose(Tensor.of(uv.stream().map(lfi)), xy);
+      Tolerance.CHOP.requireClose(lfi.slash(uv), xy);
     }
     {
       LinearFractionalTransform lft = LinearFractionalTransform.fit(uv, xy);
-      Tolerance.CHOP.requireClose(Tensor.of(uv.stream().map(lft)), xy);
+      Tolerance.CHOP.requireClose(lft.slash(uv), xy);
     }
   }
 
@@ -65,16 +65,16 @@ class LinearFractionalTransformTest {
     Tensor uv = Tensors.fromString("{{-0.2,0.3},{1.1,0.1},{0.9,0.8},{0.1,1.2}}");
     {
       LinearFractionalTransform lft = LinearFractionalTransform.fit(xy, uv);
-      Tolerance.CHOP.requireClose(Tensor.of(xy.stream().map(lft)), uv);
+      Tolerance.CHOP.requireClose(lft.slash(xy), uv);
       LinearFractionalTransform lfi = lft.inverse();
-      Tolerance.CHOP.requireClose(Tensor.of(uv.stream().map(lfi)), xy);
+      Tolerance.CHOP.requireClose(lfi.slash(uv), xy);
       RealEigensystem eigensystem = RealEigensystem.of(lft.matrix());
       Tensor values = eigensystem.values();
       assertEquals(values.length(), 3);
     }
     {
       LinearFractionalTransform lft = LinearFractionalTransform.fit(uv, xy);
-      Tolerance.CHOP.requireClose(Tensor.of(uv.stream().map(lft)), xy);
+      Tolerance.CHOP.requireClose(lft.slash(uv), xy);
     }
     {
       LinearFractionalTransform lft = LinearFractionalTransform.fit(xy, xy);

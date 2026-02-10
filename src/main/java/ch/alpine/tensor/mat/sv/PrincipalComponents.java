@@ -21,6 +21,6 @@ public enum PrincipalComponents {
   /** @param svd
    * @return */
   public static Tensor of(SingularValueDecomposition svd) {
-    return Tensor.of(svd.getU().stream().map(Times.operator(svd.values())));
+    return Times.operator(svd.values()).slash(svd.getU());
   }
 }

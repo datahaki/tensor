@@ -75,6 +75,7 @@ public enum IdentityMatrix {
         ? matrix.Get(i, j).one()
         : matrix.Get(i, j).one().zero(), n, n);
   }
+
   private static final ScalarUnaryOperator INCR = s -> s.add(s.one());
   private static final ScalarUnaryOperator DECR = s -> s.subtract(s.one());
 
@@ -89,7 +90,6 @@ public enum IdentityMatrix {
     return matrix;
   }
 
-  
   /** Careful: the function alters the input matrix !
    * 
    * @param matrix

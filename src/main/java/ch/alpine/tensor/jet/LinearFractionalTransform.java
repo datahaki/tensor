@@ -41,7 +41,7 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
   public static LinearFractionalTransform fit(Tensor p, Tensor q) {
     final int d = Unprotect.dimension1(p);
     final int m = d + 1;
-    Tensor p1 = Tensor.of(p.stream().map(AppendOne.FUNCTION));
+    Tensor p1 = AppendOne.FUNCTION.slash(p);
     Tensor zero = p1.maps(Scalar::zero);
     Tensor qt = Transpose.of(q);
     Tensor[][] array = new Tensor[d][m];

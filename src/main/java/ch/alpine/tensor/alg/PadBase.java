@@ -28,7 +28,7 @@ import ch.alpine.tensor.ext.Lists;
         return Tensor.of(trim(tensor, dim0).map(padBase));
       List<Integer> copy = new ArrayList<>(dimensions);
       copy.set(0, dim0 - length);
-      return join(Tensor.of(tensor.stream().map(padBase)), ConstantArray.of(element, copy));
+      return join(padBase.slash(tensor), ConstantArray.of(element, copy));
     }
     return dim0 <= length //
         ? Tensor.of(trim(tensor, dim0).map(Tensor::copy))
