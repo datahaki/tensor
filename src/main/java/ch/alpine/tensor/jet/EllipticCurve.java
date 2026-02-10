@@ -81,7 +81,7 @@ public class EllipticCurve extends ZeroDefectArrayQ implements GroupInterface<Te
   private final BinaryPower<Tensor> binaryPower = new BinaryPower<>(this);
 
   private EllipticCurve(Scalar a, Scalar b) {
-    super(1, Chop.NONE);
+    super(1, Chop.NONE); // vector in exact precision
     Scalar one = a.one();
     polynomial = Polynomial.of(Tensors.of(b, a, Unprotect.zero_negateUnit(a).multiply(b), one));
     derivative = polynomial.derivative();
@@ -91,14 +91,14 @@ public class EllipticCurve extends ZeroDefectArrayQ implements GroupInterface<Te
     discriminant = Times.of(P04, a, a, a).add(Times.of(P27, b, b)).multiply(N16);
   }
 
-  @Override // from ConstraintMemberQ
+  @Override // from ZeroDefectArrayQ
   protected boolean isArrayWith(List<Integer> list) {
     int n = list.getFirst();
     return n == 0 //
         || n == 2;
   }
 
-  @Override // from ConstraintMemberQ
+  @Override // from ZeroDefectArrayQ
   public Tensor defect(Tensor p) {
     if (isNeutral(p))
       return RealScalar.ZERO;

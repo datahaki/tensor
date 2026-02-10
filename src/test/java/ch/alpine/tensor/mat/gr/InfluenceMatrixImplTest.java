@@ -59,6 +59,8 @@ class InfluenceMatrixImplTest {
         influenceMatrix.residualMaker();
         Tensor vector = RandomVariate.of(distribution, random, n);
         Tensor image = influenceMatrix.image(vector);
+        Tensor kernel = influenceMatrix.kernel(vector);
+        Tolerance.CHOP.requireClose(image.add(kernel), vector);
         {
           InfluenceMatrixImpl influenceMatrixImpl = (InfluenceMatrixImpl) influenceMatrix;
           assertFalse(influenceMatrixImpl.dotMatrix());

@@ -92,14 +92,15 @@ public interface InfluenceMatrix {
    * interval [0, 1] */
   Tensor leverages_sqrt();
 
-  /** function returns a vector vimage that satisfies
-   * vimage . design == vector . design
+  /** image(vector) + kernel(vector) = vector
    * 
    * @param vector
    * @return vector . design . design^+ */
   Tensor image(Tensor vector);
 
-  /** linear function returns a vector vnull that satisfies
+  /** image(vector) + kernel(vector) = vector
+   * 
+   * linear function returns a vector vnull that satisfies
    * vnull . design == 0
    * 
    * @param vector

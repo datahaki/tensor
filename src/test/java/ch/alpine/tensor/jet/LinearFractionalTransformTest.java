@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -120,12 +122,13 @@ class LinearFractionalTransformTest {
 
   @RepeatedTest(5)
   void testGauss(RepetitionInfo repetitionInfo) {
+    RandomGenerator randomGenerator = new Random(1);
     int d = repetitionInfo.getCurrentRepetition();
     int n = d + 2;
-    int p = Prime.of(2000).number().intValue();
+    int p = Prime.of(3000).number().intValue();
     Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
-    Tensor xy = RandomVariate.of(distribution, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
-    Tensor uv = RandomVariate.of(distribution, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
+    Tensor xy = RandomVariate.of(distribution, randomGenerator, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
+    Tensor uv = RandomVariate.of(distribution, randomGenerator, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
     _checkExact(xy, uv);
   }
 

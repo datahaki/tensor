@@ -23,7 +23,7 @@ public class InfluenceMatrixQ extends ZeroDefectSquareMatrixQ {
     super(chop);
   }
 
-  @Override
+  @Override // from ZeroDefectArrayQ
   public Tensor defect(Tensor p) {
     return Join.of( //
         HermitianMatrixQ.INSTANCE.defect(p), // P == ConjugateTranspose[P]
