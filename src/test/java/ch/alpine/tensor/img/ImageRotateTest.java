@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -21,73 +23,72 @@ import ch.alpine.tensor.red.Nest;
 class ImageRotateTest {
   @Test
   void testSimple() {
-    Tensor tensor = ImageRotate.of(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
+    Tensor tensor = ImageRotate.CCW.apply(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
     assertEquals(tensor, Tensors.fromString("{{3, 6}, {2, 5}, {1, 4}}"));
-    assertEquals(ImageRotate.of(tensor), Tensors.fromString("{{6, 5, 4}, {3, 2, 1}}"));
+    assertEquals(ImageRotate.CCW.apply(tensor), Tensors.fromString("{{6, 5, 4}, {3, 2, 1}}"));
   }
 
   @Test
   void testCw() {
     Tensor origin = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}");
-    Tensor tensor = ImageRotate.cw(origin);
+    Tensor tensor = ImageRotate.CW.apply(origin);
     Tensor expect = Tensors.fromString("{{4, 1}, {5, 2}, {6, 3}}");
     assertEquals(tensor, expect);
-    assertEquals(ImageRotate.cw(tensor), Tensors.fromString("{{6, 5, 4}, {3, 2, 1}}"));
+    assertEquals(ImageRotate.CW.apply(tensor), Tensors.fromString("{{6, 5, 4}, {3, 2, 1}}"));
     Tensor result = ImageFormat.from(ImageRotate.cw(ImageFormat.of(origin)));
     assertEquals(result, expect);
   }
 
   @Test
   void test180() {
-    Tensor tensor = ImageRotate._180(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
+    Tensor tensor = ImageRotate._180.apply(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
     assertEquals(tensor, Tensors.fromString("{{6, 5, 4}, {3, 2, 1}}"));
-    assertEquals(ImageRotate._180(tensor), Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
+    assertEquals(ImageRotate._180.apply(tensor), Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
   }
 
   @Test
   void test4Identity() {
     Tensor tensor = RandomVariate.of(DiscreteUniformDistribution.of(-3, 3), 4, 6);
-    assertEquals(Nest.of(ImageRotate::of, tensor, 4), tensor);
-    assertEquals(Nest.of(ImageRotate::cw, tensor, 4), tensor);
-    assertEquals(Nest.of(ImageRotate::_180, tensor, 2), tensor);
+    assertEquals(Nest.of(ImageRotate.CCW, tensor, 4), tensor);
+    assertEquals(Nest.of(ImageRotate.CW, tensor, 4), tensor);
+    assertEquals(Nest.of(ImageRotate._180, tensor, 2), tensor);
   }
 
   @Test
   void testCwCcw() {
     Tensor tensor = RandomVariate.of(DiscreteUniformDistribution.of(-3, 3), 4, 6);
     for (int count = 0; count < 4; ++count) {
-      Tensor next = ImageRotate.of(tensor);
-      assertEquals(tensor, ImageRotate.cw(next));
+      Tensor next = ImageRotate.CCW.apply(tensor);
+      assertEquals(tensor, ImageRotate.CW.apply(next));
       tensor = next;
     }
   }
 
-  @Test
-  void testRank3() {
-    ImageRotate.cw(LeviCivitaTensor.of(3));
+  @ParameterizedTest
+  @EnumSource
+  void testRank3(ImageRotate imageRotate) {
+    imageRotate.apply(LeviCivitaTensor.of(3));
   }
 
-  @Test
-  void testScalarFail() {
-    assertThrows(Throw.class, () -> ImageRotate.of(Pi.HALF));
-    assertThrows(Throw.class, () -> ImageRotate.cw(Pi.HALF));
-    assertThrows(Throw.class, () -> ImageRotate._180(Pi.HALF));
+  @ParameterizedTest
+  @EnumSource
+  void testScalarFail(ImageRotate imageRotate) {
+    assertThrows(Throw.class, () -> imageRotate.apply(Pi.HALF));
   }
 
   @Test
   void testVectorFail() {
     Tensor vector = Range.of(1, 4);
     VectorQ.requireLength(vector, 3);
-    assertThrows(IllegalArgumentException.class, () -> ImageRotate.of(vector));
-    assertThrows(IllegalArgumentException.class, () -> ImageRotate.cw(vector));
-    assertThrows(IllegalArgumentException.class, () -> ImageRotate._180(vector));
+    assertThrows(IllegalArgumentException.class, () -> ImageRotate.CCW.apply(vector));
+    assertThrows(IllegalArgumentException.class, () -> ImageRotate.CW.apply(vector));
+    assertThrows(IllegalArgumentException.class, () -> ImageRotate._180.apply(vector));
   }
 
-  @Test
-  void testUnstructuredFail() {
+  @ParameterizedTest
+  @EnumSource
+  void testUnstructuredFail(ImageRotate imageRotate) {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
-    assertThrows(Throw.class, () -> ImageRotate.of(tensor));
-    assertThrows(Throw.class, () -> ImageRotate.cw(tensor));
-    assertThrows(Throw.class, () -> ImageRotate._180(tensor));
+    assertThrows(Throw.class, () -> imageRotate.apply(tensor));
   }
 }

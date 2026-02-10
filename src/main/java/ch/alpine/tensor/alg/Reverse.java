@@ -11,7 +11,7 @@ import ch.alpine.tensor.chq.ScalarQ;
  * <a href="https://reference.wolfram.com/language/ref/Reverse.html">Reverse</a>
  * 
  * @see Transpose
- * @see RotateLeft
+ * @see Rotate
  * @see RotateRight */
 public enum Reverse {
   ;

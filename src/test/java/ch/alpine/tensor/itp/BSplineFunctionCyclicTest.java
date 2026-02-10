@@ -15,7 +15,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.alg.RotateRight;
+import ch.alpine.tensor.alg.Rotate;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -67,7 +67,7 @@ class BSplineFunctionCyclicTest {
         Tensor control = RandomVariate.of(distribution, n, 3);
         ScalarTensorFunction stf1 = BSplineFunctionCyclic.of(degree, control);
         int shift = randomGenerator.nextInt(20);
-        ScalarTensorFunction stf2 = BSplineFunctionCyclic.of(degree, RotateRight.of(control, shift));
+        ScalarTensorFunction stf2 = BSplineFunctionCyclic.of(degree, Rotate.PUSH.of(control, shift));
         Scalar x1 = RandomVariate.of(distribution).divide(RealScalar.of(7));
         Scalar x2 = x1.add(RealScalar.of(shift));
         Tensor y1 = stf1.apply(x1);

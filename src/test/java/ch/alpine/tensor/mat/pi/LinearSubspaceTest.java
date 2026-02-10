@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.RotateLeft;
+import ch.alpine.tensor.alg.Rotate;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -40,6 +40,6 @@ class LinearSubspaceTest {
 
   @Test
   void testFail() {
-    assertThrows(Exception.class, () -> LinearSubspace.of(v -> RotateLeft.of(v, 1), 3));
+    assertThrows(Exception.class, () -> LinearSubspace.of(v -> Rotate.PULL.of(v, 1), 3));
   }
 }
