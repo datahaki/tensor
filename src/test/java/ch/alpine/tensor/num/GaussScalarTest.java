@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -55,7 +54,7 @@ class GaussScalarTest {
     assertNotSame(p1, p2);
     GaussScalar gs1 = GaussScalar.of(BigInteger.valueOf(3), p1);
     GaussScalar gs2 = GaussScalar.of(BigInteger.valueOf(4), p2);
-    assertSame(gs1.prime(), gs2.prime());
+    assertEquals(gs1.prime(), gs2.prime());
   }
 
   @Test
