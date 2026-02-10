@@ -86,14 +86,14 @@ class RootsDegree3Test {
   void testRoots3() {
     Tensor roots = Tensors.vector(0.27349919995262256, 0.28215588800565544, 0.3056009752969802);
     Tensor coeffs = Polynomial.fromRoots(roots).coeffs();
-    Chop._12.requireClose(roots, Sort.of(RootsDegree3.of(coeffs)));
+    Chop._12.requireClose(roots, Sort.of(RootsExplicit.DEGREE_3.apply(coeffs)));
   }
 
   @Test
   void testTriple1() {
     Tensor roots = Tensors.vector(2.146361758590232, 2.146361758590232, 2.146361758590232);
     Tensor coeffs = Polynomial.fromRoots(roots).coeffs();
-    Tensor r2 = RootsDegree3.of(coeffs);
+    Tensor r2 = RootsExplicit.DEGREE_3.apply(coeffs);
     Chop._12.requireClose(roots, r2);
   }
 
@@ -101,7 +101,7 @@ class RootsDegree3Test {
   void testTriple2() {
     Tensor roots = Tensors.vector(0.22765732048577852, 0.22765732048577852, 0.22765732048577852);
     Tensor coeffs = Polynomial.fromRoots(roots).coeffs();
-    Tensor r2 = RootsDegree3.of(coeffs);
+    Tensor r2 = RootsExplicit.DEGREE_3.apply(coeffs);
     Chop._12.requireClose(roots, r2);
   }
 
@@ -118,7 +118,7 @@ class RootsDegree3Test {
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
     Tensor tensor = roots.maps(scalarUnaryOperator);
     Chop._13.requireAllZero(tensor);
-    Tensor depres = RootsDegree3.of(coeffs);
+    Tensor depres = RootsExplicit.DEGREE_3.apply(coeffs);
     check(roots, depres);
   }
 
@@ -129,7 +129,7 @@ class RootsDegree3Test {
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
     Tensor tensor = roots.maps(scalarUnaryOperator);
     assertEquals(tensor, Array.zeros(3));
-    Tensor depres = RootsDegree3.of(coeffs);
+    Tensor depres = RootsExplicit.DEGREE_3.apply(coeffs);
     Chop._10.requireClose(depres, roots);
   }
 
@@ -141,7 +141,7 @@ class RootsDegree3Test {
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
     Tensor tensor = roots.maps(scalarUnaryOperator);
     assertEquals(tensor, Array.zeros(3));
-    Tensor depres = RootsDegree3.of(coeffs);
+    Tensor depres = RootsExplicit.DEGREE_3.apply(coeffs);
     Chop._10.requireClose(depres, roots);
   }
 
@@ -153,7 +153,7 @@ class RootsDegree3Test {
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
     Tensor tensor = roots.maps(scalarUnaryOperator);
     assertEquals(tensor, Array.zeros(3));
-    Tensor depres = RootsDegree3.of(coeffs);
+    Tensor depres = RootsExplicit.DEGREE_3.apply(coeffs);
     Chop._10.requireClose(depres, roots);
   }
 
@@ -167,7 +167,7 @@ class RootsDegree3Test {
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
     Tensor tensor = roots.maps(scalarUnaryOperator);
     Chop._07.requireAllZero(tensor);
-    Tensor depres = RootsDegree3.of(coeffs);
+    Tensor depres = RootsExplicit.DEGREE_3.apply(coeffs);
     Chop._10.requireClose(depres, roots);
   }
 
@@ -178,7 +178,7 @@ class RootsDegree3Test {
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
     Tensor tensor = roots.maps(scalarUnaryOperator);
     Chop._13.requireAllZero(tensor);
-    Tensor depres = RootsDegree3.of(coeffs);
+    Tensor depres = RootsExplicit.DEGREE_3.apply(coeffs);
     check(roots, depres);
   }
 
@@ -189,7 +189,7 @@ class RootsDegree3Test {
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
     Tensor tensor = roots.maps(scalarUnaryOperator);
     Chop._05.requireAllZero(tensor);
-    Tensor depres = RootsDegree3.of(coeffs);
+    Tensor depres = RootsExplicit.DEGREE_3.apply(coeffs);
     check(roots, depres);
   }
 

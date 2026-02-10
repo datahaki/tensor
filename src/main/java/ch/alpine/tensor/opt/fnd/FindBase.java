@@ -12,7 +12,7 @@ import ch.alpine.tensor.itp.LinearBinaryAverage;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 
-abstract class FindBase implements Serializable {
+/* package */ abstract class FindBase implements Serializable {
   private static final Scalar RESPHI = RealScalar.TWO.subtract(GoldenRatio.VALUE);
   // ---
   private final ScalarUnaryOperator function;

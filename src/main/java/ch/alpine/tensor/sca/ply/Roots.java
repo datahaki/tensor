@@ -77,7 +77,7 @@ public enum Roots {
     case 0:
       return Tensors.empty();
     case 1: // a + b ** x == 0
-      return RootsDegree1.of(coeffs);
+      return RootsExplicit.DEGREE_1.apply(coeffs);
     default:
     }
     if (Scalars.isZero(coeffs.Get(0))) {
@@ -85,8 +85,8 @@ public enum Roots {
       return roots.append(roots.Get(0).zero());
     }
     return switch (degree) {
-    case 2 -> RootsDegree2.of(coeffs); // a + b*x + c*x^2 == 0
-    case 3 -> RootsDegree3.of(coeffs); // a + b*x + c*x^2 + d*x^3 == 0
+    case 2 -> RootsExplicit.DEGREE_2.apply(coeffs); // a + b*x + c*x^2 == 0
+    case 3 -> RootsExplicit.DEGREE_3.apply(coeffs); // a + b*x + c*x^2 + d*x^3 == 0
     default -> AberthEhrlich.of(Polynomial.of(coeffs));
     };
   }

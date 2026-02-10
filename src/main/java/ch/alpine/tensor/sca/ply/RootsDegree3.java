@@ -45,18 +45,6 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   private static final Scalar R3_2 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3).negate()).divide(Power.of(2, _2_3));
   private static final Scalar R3_3 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3)).divide(_6).negate();
   private static final ScalarUnaryOperator POWER_1_3 = Power.function(_1_3);
-
-  /** finds the roots of the polynomial
-   * <pre>
-   * d + c*x + b*x^2 + a*x^3 == 0
-   * </pre>
-   * 
-   * @param coeffs vector of the form {d, c, b, a} with last entry non-zero
-   * @return vector of length 3 containing the roots of the polynomial */
-  public static Tensor of(Tensor coeffs) {
-    return new RootsDegree3(coeffs).roots();
-  }
-
   // ---
   private final Scalar d;
   private final Scalar c;
@@ -76,7 +64,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
     a = _a;
   }
 
-  private Tensor roots() {
+  Tensor roots() {
     return _roots().maps(shift::add);
   }
 
