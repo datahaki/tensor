@@ -9,8 +9,21 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.mat.OrthogonalMatrixQ;
+import ch.alpine.tensor.mat.UnitaryMatrixQ;
+import ch.alpine.tensor.mat.pi.LinearSubspace;
 import ch.alpine.tensor.sca.Chop;
 
+/** predicate for tensors that first tests for a certain rank and dimensions
+ * then secondly, the tensor content is subject to a defect computation.
+ * predicate tests true only if the defect is zero based on chop.
+ * 
+ * the defect computation may be linear or non-linear.
+ * in case the defect is a linear constraint, one may use
+ * {@link LinearSubspace} to obtain the span.
+ * 
+ * @see OrthogonalMatrixQ
+ * @see UnitaryMatrixQ */
 public abstract class ZeroDefectArrayQ implements MemberQ, Serializable {
   private final int rank;
   private final Chop chop;

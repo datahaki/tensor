@@ -99,7 +99,7 @@ public interface InfluenceMatrix {
    * @return vector . design . design^+ */
   Tensor image(Tensor vector);
 
-  /** function returns a vector vnull that satisfies
+  /** linear function returns a vector vnull that satisfies
    * vnull . design == 0
    * 
    * @param vector

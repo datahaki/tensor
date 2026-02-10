@@ -1,13 +1,12 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
-import java.util.OptionalInt;
-import java.util.stream.IntStream;
-
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.chq.FiniteTensorQ;
+import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.red.Total;
 
 /** Hint: if the weights sum up to zero, then the normalization fails, for example
@@ -20,20 +19,10 @@ public enum NormalizeTotal implements TensorUnaryOperator {
   FUNCTION;
 
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
+  private static final ScalarUnaryOperator UNITIZE = s -> Boole.of(!FiniteScalarQ.of(s));
 
   @Override
   public Tensor apply(Tensor vector) {
-    OptionalInt optionalInt = indeterminate(vector);
-    return optionalInt.isPresent() //
-        ? UnitVector.of(vector.length(), optionalInt.orElseThrow())
-        : NORMALIZE.apply(vector);
-  }
-
-  /** @param vector
-   * @return */
-  public static OptionalInt indeterminate(Tensor vector) {
-    return IntStream.range(0, vector.length()) //
-        .filter(index -> !FiniteScalarQ.of(vector.Get(index))) //
-        .findFirst();
+    return NORMALIZE.apply(FiniteTensorQ.of(vector) ? vector : vector.maps(UNITIZE));
   }
 }

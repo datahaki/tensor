@@ -28,6 +28,12 @@ class NormalizeTotalTest {
   }
 
   @Test
+  void testUnitsVector() {
+    Tensor tensor = NormalizeTotal.FUNCTION.apply(Tensors.vector(2, 0.0, 4, 5, 0.0, Double.NaN).maps(Scalar::reciprocal));
+    assertEquals(tensor, Tensors.fromString("{0, 1/3, 0, 0, 1/3, 1/3}"));
+  }
+
+  @Test
   void testEmpty() {
     assertThrows(Throw.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.empty()));
   }
