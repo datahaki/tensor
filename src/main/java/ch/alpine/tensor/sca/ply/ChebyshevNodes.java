@@ -31,6 +31,7 @@ public enum ChebyshevNodes {
     public Tensor solve(Tensor rhs) {
       int n = rhs.length();
       Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+      // TODO !?
       return rhs.dot(FourierDCT._3.matrix(n)).multiply(scalar);
     }
   };

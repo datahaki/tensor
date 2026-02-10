@@ -80,7 +80,7 @@ class DistributionTest {
   @Test
   void testBorelTannerDistribution() {
     _check(BorelTannerDistribution.of(0.3, 10), 1000);
-    _check(BorelTannerDistribution.of(0.8, 10), 2000);
+    _check(BorelTannerDistribution.of(0.8, 10), 3000);
   }
 
   @Test

@@ -11,6 +11,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ex.MatrixPower;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -74,6 +75,8 @@ public enum IdentityMatrix {
         ? matrix.Get(i, j).one()
         : matrix.Get(i, j).one().zero(), n, n);
   }
+  private static final ScalarUnaryOperator INCR = s -> s.add(s.one());
+  private static final ScalarUnaryOperator DECR = s -> s.subtract(s.one());
 
   /** Careful: the function alters the input matrix !
    * 
@@ -82,11 +85,11 @@ public enum IdentityMatrix {
    * @throws Exception if matrix is {@link Tensor#unmodifiable()} */
   public static Tensor inplaceAdd(Tensor matrix) {
     SquareMatrixQ.INSTANCE.requireMember(matrix);
-    int n = matrix.length();
-    IntStream.range(0, n).forEach(i -> matrix.set(s -> s.add(Scalar.class.cast(s).one()), i, i));
+    IntStream.range(0, matrix.length()).forEach(i -> matrix.set(INCR, i, i));
     return matrix;
   }
 
+  
   /** Careful: the function alters the input matrix !
    * 
    * @param matrix
@@ -94,8 +97,7 @@ public enum IdentityMatrix {
    * @throws Exception if matrix is {@link Tensor#unmodifiable()} */
   public static Tensor inplaceSub(Tensor matrix) {
     SquareMatrixQ.INSTANCE.requireMember(matrix);
-    int n = matrix.length();
-    IntStream.range(0, n).forEach(i -> matrix.set(s -> s.subtract(Scalar.class.cast(s).one()), i, i));
+    IntStream.range(0, matrix.length()).forEach(i -> matrix.set(DECR, i, i));
     return matrix;
   }
 }

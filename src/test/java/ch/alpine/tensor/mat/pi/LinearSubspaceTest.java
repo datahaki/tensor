@@ -2,7 +2,6 @@
 package ch.alpine.tensor.mat.pi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -11,11 +10,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Rotate;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import test.wrap.SerializableQ;
 
 class LinearSubspaceTest {
   @Test
@@ -25,6 +24,7 @@ class LinearSubspaceTest {
     Tensor w = linearSubspace.projection(Tensors.vector(3, 4, 5));
     assertEquals(w, Tensors.vector(0, 4, 5));
     assertTrue(linearSubspace.toString().startsWith("LinearSubspace["));
+    SerializableQ.require(linearSubspace);
   }
 
   @ParameterizedTest
@@ -36,10 +36,5 @@ class LinearSubspaceTest {
     ExactTensorQ.require(linearSubspace.basis());
     Tensor weights = RandomVariate.of(NormalDistribution.standard(), dimensions);
     linearSubspace.apply(weights);
-  }
-
-  @Test
-  void testFail() {
-    assertThrows(Exception.class, () -> LinearSubspace.of(v -> Rotate.PULL.of(v, 1), 3));
   }
 }

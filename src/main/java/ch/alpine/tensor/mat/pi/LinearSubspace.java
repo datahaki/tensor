@@ -5,18 +5,14 @@ import java.util.List;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ArrayReshape;
 import ch.alpine.tensor.alg.Flatten;
-import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LeftNullSpace;
 
-// TODO TENSOR an empty LinearSubspace could also implement this interface
-public class LinearSubspace implements TensorUnaryOperator {
+public interface LinearSubspace extends TensorUnaryOperator {
   /** @param constraint as homogeneous equations
    * @param size
    * @return */
@@ -29,9 +25,9 @@ public class LinearSubspace implements TensorUnaryOperator {
         .map(constraint) //
         .map(Flatten::of));
     Tensor nullSpace = LeftNullSpace.of(eqs);
-    if (Tensors.nonEmpty(nullSpace))
-      return new LinearSubspace(nullSpace, reshape.slash(nullSpace));
-    throw new Throw(eqs);
+    return Tensors.isEmpty(nullSpace) //
+        ? new LinearSubspaceNull(size)
+        : new LinearSubspaceImpl(nullSpace, reshape.slash(nullSpace));
   }
 
   /** @param constraint
@@ -41,37 +37,16 @@ public class LinearSubspace implements TensorUnaryOperator {
     return of(constraint, Integers.asList(size));
   }
 
-  // ---
-  /** pinv has dimensions rows x cols with rows <= cols */
-  private final Tensor pinv;
-  private final Tensor basis;
-
-  private LinearSubspace(Tensor nullSpace, Tensor basis) {
-    this.pinv = PseudoInverse.of(Transpose.of(nullSpace));
-    this.basis = basis;
+  default int dimensions() {
+    return basis().length();
   }
 
-  @Override
-  public Tensor apply(Tensor weights) {
-    return weights.dot(basis);
-  }
-
-  public Tensor basis() {
-    return basis;
-  }
-
-  public int dimensions() {
-    return basis.length();
-  }
+  /** @return vector of basis elements, i.e. the result is a tensor
+   * with Dimensions: { dimensions() , size() } */
+  Tensor basis();
 
   /** @param v
-   * @return least squares projection */
-  public Tensor projection(Tensor v) {
-    return apply(pinv.dot(Flatten.of(v)));
-  }
-
-  @Override // from Object
-  public String toString() {
-    return MathematicaFormat.concise("LinearSubspace", basis);
-  }
+   * @return least squares projection of v to the subvector space
+   * the result satisfies the constraint */
+  Tensor projection(Tensor v);
 }
