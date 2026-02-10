@@ -4,7 +4,6 @@ package ch.alpine.tensor.img;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 import ch.alpine.tensor.RationalScalar;
@@ -44,8 +43,7 @@ public enum Thumbnail {
         : new Dimension(size, s.divide(r).number().intValue());
     BufferedImage result = new BufferedImage(size, size, bufferedImage.getType());
     Graphics2D graphics = result.createGraphics();
-    Image image = ImageResize.of(bufferedImage, //
-        dimension.width, dimension.height, AffineTransformOp.TYPE_BILINEAR);
+    Image image = ImageResize.DEGREE_1.of(bufferedImage, dimension.width, dimension.height);
     graphics.drawImage(image, //
         rotate ? 0 : (size - dimension.width) / 2, //
         rotate ? (size - dimension.height) / 2 : 0, //

@@ -14,7 +14,7 @@ import java.util.NavigableMap;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -56,19 +56,20 @@ class ImageResizeTest {
     assertEquals(Dimensions.of(image), Arrays.asList(66, 45, 4));
   }
 
-  @Test
-  void testImage3() throws IOException {
+  @ParameterizedTest
+  @EnumSource
+  void testImage3(ImageResize imageResize) throws IOException {
     Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(path);
-    Tensor resize = ImageResize.of(tensor, new Dimension(40, 60));
+    Tensor resize = imageResize.of(tensor, new Dimension(40, 60));
     assertEquals(Dimensions.of(resize), Arrays.asList(60, 40, 4));
   }
 
   @ParameterizedTest
-  @ValueSource(ints = { AffineTransformOp.TYPE_NEAREST_NEIGHBOR, AffineTransformOp.TYPE_BILINEAR, AffineTransformOp.TYPE_BICUBIC })
-  void testBufferedImageColorNoResize(int type) {
+  @EnumSource
+  void testBufferedImageColorNoResize(ImageResize imageResize) {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/rgba15x33.png");
-    BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight(), type);
+    BufferedImage bufferedImage = imageResize.of(original, original.getWidth(), original.getHeight());
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);
     Tensor diff = t1.subtract(t2).maps(Abs.FUNCTION);
@@ -76,36 +77,38 @@ class ImageResizeTest {
     assertEquals(navigableMap.size(), 1);
   }
 
-  @Test
-  void testFactor() {
+  @ParameterizedTest
+  @EnumSource
+  void testFactor(ImageResize imageResize) {
     Tensor tensor = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
-    Tensor dimens = ImageResize.of(tensor, Pi.VALUE);
+    Tensor dimens = imageResize.of(tensor, Pi.VALUE);
     assertEquals(Dimensions.of(dimens), Arrays.asList(314, 418));
-    ImageResize.of(tensor, Pi.HALF);
-    ImageResize.of(tensor, Pi.HALF.reciprocal());
-  }
-
-  @Test
-  void testFactorNegativeFail() {
-    Tensor tensor = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, Pi.VALUE.negate()));
+    imageResize.of(tensor, Pi.HALF);
+    imageResize.of(tensor, Pi.HALF.reciprocal());
   }
 
   @ParameterizedTest
-  @ValueSource(ints = { AffineTransformOp.TYPE_NEAREST_NEIGHBOR, AffineTransformOp.TYPE_BILINEAR, AffineTransformOp.TYPE_BICUBIC })
-  void testBufferedImage(int type) {
+  @EnumSource
+  void testFactorNegativeFail(ImageResize imageResize) {
+    Tensor tensor = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
+    assertThrows(IllegalArgumentException.class, () -> imageResize.of(tensor, Pi.VALUE.negate()));
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testBufferedImage(ImageResize imageResize) {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
-    BufferedImage bufferedImage = ImageResize.of(original, 12, 3, type);
+    BufferedImage bufferedImage = imageResize.of(original, 12, 3);
     assertEquals(bufferedImage.getWidth(), 12);
     assertEquals(bufferedImage.getHeight(), 3);
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_BYTE_GRAY);
   }
 
   @ParameterizedTest
-  @ValueSource(ints = { AffineTransformOp.TYPE_NEAREST_NEIGHBOR, AffineTransformOp.TYPE_BILINEAR, AffineTransformOp.TYPE_BICUBIC })
-  void testBufferedImageGrayscaleNoResize(int type) {
+  @EnumSource
+  void testBufferedImageGrayscaleNoResize(ImageResize imageResize) {
     BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
-    BufferedImage bufferedImage = ImageResize.of(original, original.getWidth(), original.getHeight(), type);
+    BufferedImage bufferedImage = imageResize.of(original, original.getWidth(), original.getHeight());
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);
     Tensor diff = t1.subtract(t2);
@@ -113,10 +116,11 @@ class ImageResizeTest {
     Scalars.requireZero(norm);
   }
 
-  @Test
-  void testImageResizeGray() {
+  @ParameterizedTest
+  @EnumSource
+  void testImageResizeGray(ImageResize imageResize) {
     Tensor tensor = RandomVariate.of(DiscreteUniformDistribution.forArray(256), 10, 20);
-    Tensor resize = ImageResize.of(tensor, new Dimension(50, 20));
+    Tensor resize = imageResize.of(tensor, new Dimension(50, 20));
     assertEquals(Dimensions.of(resize), Arrays.asList(20, 50));
   }
 
@@ -161,24 +165,34 @@ class ImageResizeTest {
     assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, 2, -1));
   }
 
-  @Test
-  void testImageResizeFail() {
-    assertThrows(IndexOutOfBoundsException.class, () -> ImageResize.of(Pi.TWO, new Dimension(50, 20)));
-    assertThrows(IndexOutOfBoundsException.class, () -> ImageResize.of(Tensors.vector(1, 2, 3, 4), new Dimension(50, 20)));
+  @ParameterizedTest
+  @EnumSource
+  void testImageResizeFail(ImageResize imageResize) {
+    assertThrows(IndexOutOfBoundsException.class, () -> imageResize.of(Pi.TWO, new Dimension(50, 20)));
+    assertThrows(IndexOutOfBoundsException.class, () -> imageResize.of(Tensors.vector(1, 2, 3, 4), new Dimension(50, 20)));
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testImageResizeNegative1Fail(ImageResize imageResize) {
+    Tensor tensor = HilbertMatrix.of(3);
+    assertThrows(IllegalArgumentException.class, () -> imageResize.of(tensor, new Dimension(50, -20)));
+    assertThrows(IllegalArgumentException.class, () -> imageResize.of(tensor, new Dimension(-50, 20)));
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testImageResizeNegative2Fail(ImageResize imageResize) {
+    Tensor tensor = HilbertMatrix.of(3);
+    imageResize.of(tensor, 10, 10);
+    assertThrows(IllegalArgumentException.class, () -> imageResize.of(tensor, 50, -20));
+    assertThrows(IllegalArgumentException.class, () -> imageResize.of(tensor, -50, 20));
   }
 
   @Test
-  void testImageResizeNegative1Fail() {
-    Tensor tensor = HilbertMatrix.of(3);
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, new Dimension(50, -20)));
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, new Dimension(-50, 20)));
-  }
-
-  @Test
-  void testImageResizeNegative2Fail() {
-    Tensor tensor = HilbertMatrix.of(3);
-    ImageResize.of(tensor, 10, 10);
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, 50, -20));
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, -50, 20));
+  void testSync() {
+    assertEquals(ImageResize.DEGREE_0.affineTransformType(), AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+    assertEquals(ImageResize.DEGREE_1.affineTransformType(), AffineTransformOp.TYPE_BILINEAR);
+    assertEquals(ImageResize.DEGREE_3.affineTransformType(), AffineTransformOp.TYPE_BICUBIC);
   }
 }
