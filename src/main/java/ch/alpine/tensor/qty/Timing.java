@@ -80,7 +80,7 @@ public class Timing {
    * total of all start-until-stop intervals including start-until-now
    * if instance is started in machine precision */
   public Scalar seconds() {
-    return Quantity.of(_nanos() * 1e-9, S);
+    return Quantity.of(_nanos() * 1E-9, S);
   }
 
   /** @return true if timing is not started */

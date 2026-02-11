@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
@@ -26,4 +27,11 @@ public interface BinaryAverage {
    * @return point on curve/geodesic that connects p and q at parameter scalar
    * for scalar == 0 the function returns p, for scalar == 1 the function returns q */
   Tensor split(Tensor p, Tensor q, Scalar scalar);
+
+  /** @param p
+   * @param q
+   * @return midpoint along curve from p to q */
+  default Tensor midpoint(Tensor p, Tensor q) {
+    return split(p, q, RationalScalar.HALF);
+  }
 }

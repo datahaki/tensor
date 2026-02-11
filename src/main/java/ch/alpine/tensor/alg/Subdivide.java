@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.Quantity;
@@ -97,5 +98,21 @@ public enum Subdivide {
    * @return Subdivide.of(clip.max(), clip.min(), n) */
   public static Tensor decreasing(Clip clip, int n) {
     return of(clip.max(), clip.min(), n);
+  }
+
+  /** @param clip
+   * @param n
+   * @return tensor of length n (!) */
+  public static Tensor intermediate_increasing(Clip clip, int n) {
+    Scalar delta = clip.width().divide(RealScalar.of(2 * n));
+    return of(clip.min().add(delta), clip.max().subtract(delta), n - 1);
+  }
+
+  /** @param clip
+   * @param n
+   * @return tensor of length n (!) */
+  public static Tensor intermediate_decreasing(Clip clip, int n) {
+    Scalar delta = clip.width().divide(RealScalar.of(2 * n));
+    return of(clip.max().subtract(delta), clip.min().add(delta), n - 1);
   }
 }

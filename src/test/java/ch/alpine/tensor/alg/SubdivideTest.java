@@ -108,6 +108,18 @@ class SubdivideTest {
   }
 
   @Test
+  void testImagingIncr() {
+    Tensor tensor = Subdivide.intermediate_increasing(Clips.interval(-3, 3), 3);
+    assertEquals(tensor, Tensors.vector(-2, 0, 2));
+  }
+
+  @Test
+  void testImagingDecr() {
+    Tensor tensor = Subdivide.intermediate_decreasing(Clips.interval(-2, 4), 3);
+    assertEquals(tensor, Tensors.vector(3, 1, -1));
+  }
+
+  @Test
   void testNumeric() {
     Scalar beg = RealScalar.of(-0.1);
     Scalar end = RealScalar.of(0.3);
