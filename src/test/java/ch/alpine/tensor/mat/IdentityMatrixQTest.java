@@ -25,6 +25,6 @@ class IdentityMatrixQTest {
     IdentityMatrixQ.INSTANCE.requireMember(IdentityMatrix.of(1));
     LinearSubspace linearSubspace = LinearSubspace.of(IdentityMatrixQ.INSTANCE::defect, 1, 1);
     // FIXME this is wrong
-    IO.println(linearSubspace.basis());
+    // IO.println(linearSubspace.basis());
   }
 }

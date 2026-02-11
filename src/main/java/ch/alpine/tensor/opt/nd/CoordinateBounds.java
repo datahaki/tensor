@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
@@ -50,5 +51,18 @@ public enum CoordinateBounds {
         .mapToObj(index -> Clips.cover( //
             cbb1.clip(index), //
             cbb2.clip(index))));
+  }
+
+  /** @param cbb1
+   * @param cbb2
+   * @return non-empty intersection or Optional.empty */
+  public static Optional<CoordinateBoundingBox> optionalIntersection(CoordinateBoundingBox cbb1, CoordinateBoundingBox cbb2) {
+    int n = Integers.requireEquals(cbb1.dimensions(), cbb2.dimensions());
+    CoordinateBoundingBox cut = CoordinateBoundingBox.of(IntStream.range(0, n) //
+        .mapToObj(i -> Clips.optionalIntersection(cbb1.clip(i), cbb2.clip(i))) //
+        .flatMap(Optional::stream));
+    return n == cut.dimensions() //
+        ? Optional.of(cut)
+        : Optional.empty();
   }
 }

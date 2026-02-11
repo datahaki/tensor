@@ -3,9 +3,11 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +40,22 @@ class CoordinateBoundsTest {
         Clips.positive(Quantity.of(2, "A")));
     CoordinateBoundingBox cbb3 = CoordinateBounds.cover(cbb1, cbb2);
     assertEquals(cbb3.toString(), "[Clip[-2[m], 3[m]], Clip[-1[A], 2[A]]]");
+  }
+
+  @Test
+  void testIntersection() {
+    CoordinateBoundingBox cbb1 = CoordinateBoundingBox.of(Clips.unit(), Clips.unit());
+    CoordinateBoundingBox cbb2 = CoordinateBoundingBox.of(Clips.unit(), Clips.positive(2));
+    Optional<CoordinateBoundingBox> optional = CoordinateBounds.optionalIntersection(cbb1, cbb2);
+    assertEquals(optional.orElseThrow(), cbb1);
+  }
+
+  @Test
+  void testIntersectionEmpty() {
+    CoordinateBoundingBox cbb1 = CoordinateBoundingBox.of(Clips.unit(), Clips.unit());
+    CoordinateBoundingBox cbb2 = CoordinateBoundingBox.of(Clips.unit(), Clips.interval(2, 3));
+    Optional<CoordinateBoundingBox> optional = CoordinateBounds.optionalIntersection(cbb1, cbb2);
+    assertTrue(optional.isEmpty());
   }
 
   @Test
