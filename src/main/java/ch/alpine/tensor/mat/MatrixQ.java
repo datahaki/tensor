@@ -3,10 +3,13 @@ package ch.alpine.tensor.mat;
 
 import java.util.List;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.chq.ZeroDefectArrayQ;
+import ch.alpine.tensor.sca.Chop;
 
 /** The implementation is consistent with Mathematica::MatrixQ, in particular
  * MatrixQ[ {} ] == false
@@ -18,6 +21,21 @@ import ch.alpine.tensor.alg.Dimensions;
  * @see PositiveDefiniteMatrixQ */
 public enum MatrixQ {
   ;
+  public static ZeroDefectArrayQ ofSize(int i, int j) {
+    return new ZeroDefectArrayQ(2, Chop.NONE) {
+      @Override
+      protected boolean isArrayWith(List<Integer> list) {
+        return list.get(0).equals(i) //
+            && list.get(1).equals(j);
+      }
+
+      @Override
+      public Tensor defect(Tensor tensor) {
+        return RealScalar.ZERO;
+      }
+    };
+  }
+
   /** @param tensor
    * @return true if tensor is a matrix */
   public static boolean of(Tensor tensor) {
