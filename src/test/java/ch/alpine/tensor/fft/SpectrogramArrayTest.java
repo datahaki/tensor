@@ -44,7 +44,7 @@ class SpectrogramArrayTest {
   @Test
   void testMathematicaUnits() {
     Tensor vector = TestHelper.signal().extract(0, 100).maps(s -> Quantity.of(s, "s"));
-    Tensor tensor = new SpectrogramArray(Fourier.FORWARD::transform, 10, 3, DirichletWindow.FUNCTION).apply(vector);
+    Tensor tensor = SpectrogramArray.of(Fourier.FORWARD::transform, 10, 3, DirichletWindow.FUNCTION).apply(vector);
     boolean status = Flatten.scalars(tensor) //
         .allMatch(DeterminateScalarQ::of);
     assertTrue(status);
@@ -52,7 +52,7 @@ class SpectrogramArrayTest {
 
   @Test
   void testOperator() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator tuo = new SpectrogramArray(Fourier.INVERSE::transform, 1345, 300, null);
+    TensorUnaryOperator tuo = SpectrogramArray.of(Fourier.INVERSE::transform, 1345, 300, null);
     Serialization.copy(tuo);
     tuo.apply(TestHelper.signal());
     assertTrue(tuo.toString().startsWith("SpectrogramArray["));
@@ -60,7 +60,7 @@ class SpectrogramArrayTest {
 
   @Test
   void testDimension() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(new SpectrogramArray(Fourier.FORWARD::transform, 8, 8, null));
+    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(SpectrogramArray.of(Fourier.FORWARD::transform, 8, 8, null));
     Tensor tensor = tensorUnaryOperator.apply(Range.of(0, 128));
     assertEquals(Dimensions.of(tensor), Arrays.asList(16, 8));
     // assertTrue(tensorUnaryOperator.toString().startsWith("SpectrogramArray["));
@@ -72,7 +72,7 @@ class SpectrogramArrayTest {
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(RealScalar::of));
     for (WindowFunctions windowFunctions : WindowFunctions.values()) {
-      int windowLength = Unprotect.dimension1(new SpectrogramArray(Fourier.FORWARD::transform, null, null, windowFunctions.get()).apply(tensor));
+      int windowLength = Unprotect.dimension1(SpectrogramArray.of(Fourier.FORWARD::transform, null, null, windowFunctions.get()).apply(tensor));
       assertEquals(windowLength, 32);
     }
   }
@@ -110,7 +110,7 @@ class SpectrogramArrayTest {
   void testPreallocate(RepetitionInfo repetitionInfo) {
     int windowLength = repetitionInfo.getCurrentRepetition();
     for (int offset = 1; offset <= windowLength; ++offset) {
-      TensorUnaryOperator tensorUnaryOperator = new SpectrogramArray(Fourier.FORWARD::transform, windowLength, offset, null);
+      TensorUnaryOperator tensorUnaryOperator = SpectrogramArray.of(Fourier.FORWARD::transform, windowLength, offset, null);
       for (int length = 10; length < 20; ++length) {
         Tensor signal = Range.of(0, length);
         tensorUnaryOperator.apply(signal);
