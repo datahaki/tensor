@@ -99,7 +99,7 @@ class SchurDecompositionTest {
     Tensor matrix = TensorWedge.of(x, y);
     SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
     Tensor t = schurDecomposition.getT();
-    AntisymmetricMatrixQ.INSTANCE.requireMember(t);
+    AntisymmetricMatrixQ.INSTANCE.require(t);
     Tensor d = Diagonal.of(t);
     Tolerance.CHOP.requireAllZero(d);
   }
@@ -113,7 +113,7 @@ class SchurDecompositionTest {
     Tensor matrix = TensorWedge.of(x, y);
     SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
     Tensor t = schurDecomposition.getT();
-    AntisymmetricMatrixQ.INSTANCE.requireMember(t);
+    AntisymmetricMatrixQ.INSTANCE.require(t);
     Tensor d = Diagonal.of(t);
     Tolerance.CHOP.requireAllZero(d);
     Tensor bin = t.maps(Tolerance.CHOP).maps(Abs.FUNCTION).maps(Sign.FUNCTION);
@@ -142,7 +142,7 @@ class SchurDecompositionTest {
     SchurDecomposition schurDecomposition = new SchurDecompositionQ(matrix).check(SchurDecomposition.of(matrix));
     Tensor t = schurDecomposition.getT();
     Tolerance.CHOP.requireZero(Trace.of(t));
-    AntisymmetricMatrixQ.INSTANCE.requireMember(t);
+    AntisymmetricMatrixQ.INSTANCE.require(t);
     Tolerance.CHOP.requireAllZero(UpperTriangularize.of(t, 2));
     Tensor exp = Tensors.vector(-9.502167235316495, 0, -0.8419131974721066);
     Tolerance.CHOP.requireClose(exp, Diagonal.of(t, 1));

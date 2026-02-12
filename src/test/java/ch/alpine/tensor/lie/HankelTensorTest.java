@@ -18,19 +18,19 @@ class HankelTensorTest {
   @Test
   void testRank2() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5), 2);
-    SymmetricMatrixQ.INSTANCE.requireMember(tensor);
+    SymmetricMatrixQ.INSTANCE.require(tensor);
   }
 
   @Test
   void testRank3a() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4), 3);
-    tensor.forEach(SymmetricMatrixQ.INSTANCE::requireMember);
+    tensor.forEach(SymmetricMatrixQ.INSTANCE::require);
   }
 
   @Test
   void testRank3b() {
     Tensor tensor = HankelTensor.of(Tensors.vector(0, 1, 2, 3, 4, 5, 6), 3);
-    tensor.forEach(SymmetricMatrixQ.INSTANCE::requireMember);
+    tensor.forEach(SymmetricMatrixQ.INSTANCE::require);
   }
 
   @Test

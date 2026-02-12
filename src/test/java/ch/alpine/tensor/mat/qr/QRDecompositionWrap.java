@@ -33,7 +33,7 @@ public enum QRDecompositionWrap {
       Tensor Qi = qrDecomposition.getQConjugateTranspose();
       Tensor R = qrDecomposition.getR();
       Chop._10.requireClose(Qi.dot(A), R);
-      if (SquareMatrixQ.INSTANCE.isMember(A)) {
+      if (SquareMatrixQ.INSTANCE.test(A)) {
         // Scalar detA = Det.of(A);
         if (!Chop._10.isZero(qrDecomposition.det())) {
           // TODO TENSOR also check pseudoInverse
@@ -46,7 +46,7 @@ public enum QRDecompositionWrap {
         Chop._10.requireClose(Q.dot(Qi), IdentityMatrix.of(A.length()));
         Scalar detR = Diagonal.of(R).stream().map(Scalar.class::cast).reduce(Scalar::multiply).get();
         Scalar qrDet = Det.of(Q).multiply(detR);
-        if (SquareMatrixQ.INSTANCE.isMember(A)) {
+        if (SquareMatrixQ.INSTANCE.test(A)) {
           Scalar detA = Det.of(A);
           Chop._10.requireClose(qrDet, detA);
           Tensor lower = LowerTriangularize.of(R, -1);

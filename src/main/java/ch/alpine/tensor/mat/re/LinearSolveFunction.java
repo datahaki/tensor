@@ -15,7 +15,7 @@ public enum LinearSolveFunction {
   /** @param matrix
    * @return */
   public static TensorUnaryOperator of(Tensor matrix) {
-    if (SquareMatrixQ.INSTANCE.isMember(matrix))
+    if (SquareMatrixQ.INSTANCE.test(matrix))
       try {
         return Inverse.of(matrix)::dot;
       } catch (Exception exception) {

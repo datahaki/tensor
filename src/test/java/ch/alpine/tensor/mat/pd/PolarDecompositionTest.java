@@ -37,10 +37,10 @@ class PolarDecompositionTest {
     int k = list.get(0);
     Tolerance.CHOP.requireClose(Dot.of(polarDecomposition.getPositiveSemidefinite(), polarDecomposition.getUnitary()), matrix);
     Tensor result = polarDecomposition.getUnitary();
-    new UnitaryMatrixQ(Chop._06).requireMember(result);
+    new UnitaryMatrixQ(Chop._06).require(result);
     Tensor sym = polarDecomposition.getPositiveSemidefinite();
     assertEquals(Dimensions.of(sym), Arrays.asList(k, k));
-    new HermitianMatrixQ(Chop._06).requireMember(sym);
+    new HermitianMatrixQ(Chop._06).require(sym);
     assertTrue(polarDecomposition.toString().startsWith("PolarDecomposition["));
     boolean hermitian = PositiveSemidefiniteMatrixQ.ofHermitian(polarDecomposition.getPositiveSemidefinite());
     assertTrue(hermitian);
@@ -89,12 +89,12 @@ class PolarDecompositionTest {
   void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
     Tensor mmt = MatrixDotConjugateTranspose.self(matrix);
-    HermitianMatrixQ.INSTANCE.requireMember(mmt);
+    HermitianMatrixQ.INSTANCE.require(mmt);
     PolarDecomposition polarDecomposition = PolarDecomposition.pu(matrix);
     Tensor herm = polarDecomposition.getPositiveSemidefinite().maps(Tolerance.CHOP);
-    HermitianMatrixQ.INSTANCE.requireMember(herm);
+    HermitianMatrixQ.INSTANCE.require(herm);
     Tensor result = polarDecomposition.getUnitary();
-    new UnitaryMatrixQ(Chop._06).requireMember(result);
+    new UnitaryMatrixQ(Chop._06).require(result);
     _check(matrix, polarDecomposition);
   }
 }

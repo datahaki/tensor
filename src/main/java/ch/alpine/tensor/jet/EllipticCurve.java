@@ -147,14 +147,14 @@ public class EllipticCurve extends ZeroDefectArrayQ implements GroupInterface<Te
   public Tensor invert(Tensor element) {
     if (isNeutral(element))
       return NEUTRAL;
-    requireMember(element);
+    require(element);
     return Tensors.of(element.Get(0), element.Get(1).negate());
   }
 
   @Override // from GroupInterface
   public Tensor combine(Tensor p, Tensor q) {
-    requireMember(p);
-    requireMember(q);
+    require(p);
+    require(q);
     if (isNeutral(p))
       return q;
     if (isNeutral(q))
@@ -171,14 +171,14 @@ public class EllipticCurve extends ZeroDefectArrayQ implements GroupInterface<Te
         : py.subtract(qy).divide(px.subtract(qx));
     Scalar rx = s.multiply(s).subtract(px.add(qx));
     Scalar ry = px.subtract(rx).multiply(s).subtract(py);
-    return requireMember(Tensors.of(rx, ry));
+    return require(Tensors.of(rx, ry));
   }
 
   /** @param x
    * @return
    * @throws Exception if x cannot be completed to a point on the curve */
   public Tensor complete(Scalar x) {
-    return requireMember(Tensors.of(x, apply(x)));
+    return require(Tensors.of(x, apply(x)));
   }
 
   @Override // from Object

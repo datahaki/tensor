@@ -86,7 +86,7 @@ class SymmetrizeTest {
   @MethodSource(value = "test.bulk.TestDistributions#distributions")
   void testMatrix(Distribution distribution) {
     Tensor tensor = RandomVariate.of(distribution, 9, 9);
-    SymmetricMatrixQ.INSTANCE.requireMember(Symmetrize.of(tensor));
+    SymmetricMatrixQ.INSTANCE.require(Symmetrize.of(tensor));
     assertEquals(Symmetrize.of(IdentityMatrix.of(10)), IdentityMatrix.of(10));
   }
 
@@ -106,11 +106,11 @@ class SymmetrizeTest {
   @Test
   void test01() {
     Tensor tensor = Array.of(Tensors::vector, 3, 3); // results in dimensions [3 x 3 x 2]
-    assertFalse(SymmetricMatrixQ.INSTANCE.isMember(tensor.get(Tensor.ALL, Tensor.ALL, 0)));
+    assertFalse(SymmetricMatrixQ.INSTANCE.test(tensor.get(Tensor.ALL, Tensor.ALL, 0)));
     Tensor symmetrize01 = Symmetrize._01(tensor);
     assertEquals(Dimensions.of(tensor), Dimensions.of(symmetrize01));
     assertFalse(Chop._06.allZero(symmetrize01));
-    assertTrue(SymmetricMatrixQ.INSTANCE.isMember(symmetrize01.get(Tensor.ALL, Tensor.ALL, 0)));
-    assertTrue(SymmetricMatrixQ.INSTANCE.isMember(symmetrize01.get(Tensor.ALL, Tensor.ALL, 1)));
+    assertTrue(SymmetricMatrixQ.INSTANCE.test(symmetrize01.get(Tensor.ALL, Tensor.ALL, 0)));
+    assertTrue(SymmetricMatrixQ.INSTANCE.test(symmetrize01.get(Tensor.ALL, Tensor.ALL, 1)));
   }
 }

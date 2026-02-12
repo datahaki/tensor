@@ -12,6 +12,6 @@ class InvolutoryMatrixQTest {
   @Test
   void test() {
     Tensor matrix = Tensors.fromString("{{3,-4},{2,-3}}");
-    assertTrue(InvolutoryMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(InvolutoryMatrixQ.INSTANCE.test(matrix));
   }
 }

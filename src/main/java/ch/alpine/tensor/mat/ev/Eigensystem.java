@@ -75,7 +75,7 @@ public record Eigensystem(Tensor values, Tensor vectors) implements Serializable
    * @param chop threshold to check symmetry of matrix
    * @return */
   public static Eigensystem ofSymmetric(Tensor matrix, Chop chop) {
-    return JacobiReal.of(new SymmetricMatrixQ(chop).requireMember(matrix));
+    return JacobiReal.of(new SymmetricMatrixQ(chop).require(matrix));
   }
 
   /** @param matrix hermitian
@@ -90,7 +90,7 @@ public record Eigensystem(Tensor values, Tensor vectors) implements Serializable
    * @return eigenvalue decomposition of given matrix
    * @see HermitianMatrixQ */
   public static Eigensystem ofHermitian(Tensor matrix, Chop chop) {
-    return JacobiComplex.of(new HermitianMatrixQ(chop).requireMember(matrix));
+    return JacobiComplex.of(new HermitianMatrixQ(chop).require(matrix));
   }
 
   /** Careful: the general case is only for use with small matrices
@@ -107,9 +107,9 @@ public record Eigensystem(Tensor values, Tensor vectors) implements Serializable
 
   private static Eigensystem _of(Tensor matrix) {
     if (Im.allZero(matrix) && //
-        SymmetricMatrixQ.INSTANCE.isMember(matrix))
+        SymmetricMatrixQ.INSTANCE.test(matrix))
       return JacobiReal.of(matrix);
-    if (HermitianMatrixQ.INSTANCE.isMember(matrix))
+    if (HermitianMatrixQ.INSTANCE.test(matrix))
       return JacobiComplex.of(matrix);
     throw new Throw(matrix);
   }

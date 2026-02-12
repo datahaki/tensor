@@ -240,7 +240,7 @@ class PseudoInverseTest {
     Tensor point = RandomVariate.of(NormalDistribution.standard(), 3);
     Tensor matrix = Tensor.of(sequence.stream().map(point.negate()::add));
     Tensor nullsp = NullSpace.of(Transpose.of(matrix));
-    OrthogonalMatrixQ.INSTANCE.requireMember(nullsp);
+    OrthogonalMatrixQ.INSTANCE.require(nullsp);
     Chop._08.requireClose(PseudoInverse.usingSvd(nullsp), Transpose.of(nullsp));
   }
 

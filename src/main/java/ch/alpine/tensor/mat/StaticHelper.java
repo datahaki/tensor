@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.Re;
    * @param predicate
    * @return */
   public static boolean definite(Tensor tensor, Chop chop, Predicate<Scalar> predicate) {
-    return SquareMatrixQ.INSTANCE.isMember(tensor) //
+    return SquareMatrixQ.INSTANCE.test(tensor) //
         && CholeskyDecomposition.of(tensor).diagonal().stream() //
             .map(Scalar.class::cast) //
             .map(Re.FUNCTION) //

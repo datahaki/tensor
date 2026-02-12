@@ -36,7 +36,7 @@ public enum MatrixPower {
    * @return matrix ^ exponent
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, BigInteger exponent) {
-    return MatrixGroups.GENERAL_LINEAR.binaryPower().raise(SquareMatrixQ.INSTANCE.requireMember(matrix), exponent);
+    return MatrixGroups.GENERAL_LINEAR.binaryPower().raise(SquareMatrixQ.INSTANCE.require(matrix), exponent);
   }
 
   /** @param matrix square

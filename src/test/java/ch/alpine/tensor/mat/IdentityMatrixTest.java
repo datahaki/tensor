@@ -54,7 +54,7 @@ class IdentityMatrixTest {
     assertInstanceOf(SparseArray.class, square);
     assertEquals(square, matrix);
     assertEquals(square, IdentityMatrix.of(n));
-    IdempotentMatrixQ.INSTANCE.isMember(matrix);
+    IdempotentMatrixQ.INSTANCE.test(matrix);
     Tensor matrow = matrix.get(1);
     assertInstanceOf(SparseArray.class, matrow);
     Tensor squrow = square.get(1);

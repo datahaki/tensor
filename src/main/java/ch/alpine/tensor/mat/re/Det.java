@@ -34,7 +34,7 @@ public class Det extends AbstractReduce {
    * @return determinant of matrix
    * @throws Exception if matrix is not square */
   public static Scalar of(Tensor matrix, Pivot pivot) {
-    return new Det(SquareMatrixQ.INSTANCE.requireMember(matrix), pivot).override_det();
+    return new Det(SquareMatrixQ.INSTANCE.require(matrix), pivot).override_det();
   }
 
   /** Careful: do not call function for large matrix
@@ -43,7 +43,7 @@ public class Det extends AbstractReduce {
    * @param matrix
    * @return */
   public static Scalar withoutDivision(Tensor matrix) {
-    int n = SquareMatrixQ.INSTANCE.requireMember(matrix).length();
+    int n = SquareMatrixQ.INSTANCE.require(matrix).length();
     return Permutations.stream(Range.of(0, n)).map(sigma -> {
       Int i = new Int();
       int[] index = Primitives.toIntArray(sigma);

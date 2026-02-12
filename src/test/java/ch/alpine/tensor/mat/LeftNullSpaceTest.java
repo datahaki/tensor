@@ -134,7 +134,7 @@ class LeftNullSpaceTest {
     assertEquals(list, Arrays.asList(dim1, dim1));
     Tensor nullsp = NullSpace.usingRowReduce(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(2, 6));
-    assumeTrue(SquareMatrixQ.INSTANCE.isMember(matrix));
+    assumeTrue(SquareMatrixQ.INSTANCE.test(matrix));
     Scalar det = Det.of(matrix);
     assertEquals(det, GaussScalar.of(0, prime));
   }

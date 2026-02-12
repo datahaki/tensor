@@ -56,7 +56,7 @@ class EllipticCurveTest {
   void testCongruent() {
     EllipticCurve ellipticCurve = EllipticCurve.of(-25, 0);
     Tensor p = Tensors.fromString("{25/4, 75/8}");
-    assertTrue(ellipticCurve.isMember(p));
+    assertTrue(ellipticCurve.test(p));
     Tensor q = ellipticCurve.combine(p, p);
     Scalar x = q.Get(0);
     Scalar y = q.Get(1);
@@ -94,9 +94,9 @@ class EllipticCurveTest {
   @Test
   void testNoRationalSolution() {
     EllipticCurve ellipticCurve = EllipticCurve.of(0, 6);
-    ellipticCurve.requireMember(EllipticCurve.NEUTRAL);
+    ellipticCurve.require(EllipticCurve.NEUTRAL);
     assertEquals(ellipticCurve.discriminant(), RealScalar.of(-15552));
-    ellipticCurve.isMember(Tensors.vector(1, 2, 3));
+    ellipticCurve.test(Tensors.vector(1, 2, 3));
   }
 
   @Test
@@ -105,9 +105,9 @@ class EllipticCurveTest {
     Tensor constraint = ellipticCurve.defect(EllipticCurve.NEUTRAL);
     assertEquals(constraint, RealScalar.ZERO);
     assertTrue(Chop.NONE.allZero(RealScalar.ZERO));
-    ellipticCurve.requireMember(EllipticCurve.NEUTRAL);
+    ellipticCurve.require(EllipticCurve.NEUTRAL);
     Tensor p = Tensors.vector(4, 1);
-    assertTrue(ellipticCurve.isMember(p));
+    assertTrue(ellipticCurve.test(p));
     Tensor p2 = ellipticCurve.combine(p, p);
     assertEquals(p2, Tensors.vector(568, -13537));
   }
@@ -124,8 +124,8 @@ class EllipticCurveTest {
   void testFinite(String point) {
     Tensor p = Tensors.fromString(point);
     EllipticCurve ellipticCurve = EllipticCurve.of(0, 1);
-    ellipticCurve.requireMember(EllipticCurve.NEUTRAL);
-    ellipticCurve.requireMember(p);
+    ellipticCurve.require(EllipticCurve.NEUTRAL);
+    ellipticCurve.require(p);
     _checkInverse(ellipticCurve, p);
     _check(ellipticCurve, p);
   }
@@ -134,7 +134,7 @@ class EllipticCurveTest {
   void testLikeIntegers() {
     EllipticCurve ellipticCurve = EllipticCurve.of(0, -2);
     Tensor p = Tensors.fromString("{3,5}");
-    ellipticCurve.requireMember(p);
+    ellipticCurve.require(p);
     Set<Tensor> set = new HashSet<>();
     for (int i = 1; i < 30; ++i)
       assertTrue(set.add(ellipticCurve.raise(p, i)));
@@ -145,8 +145,8 @@ class EllipticCurveTest {
     EllipticCurve ellipticCurve = EllipticCurve.of(-4, 1);
     Tensor p = Tensors.vector(0, 1);
     Tensor q = Tensors.vector(4, 7);
-    ellipticCurve.requireMember(p);
-    ellipticCurve.requireMember(q);
+    ellipticCurve.require(p);
+    ellipticCurve.require(q);
     Set<Tensor> set = new HashSet<>();
     for (int i = 1; i < 10; ++i) {
       assertTrue(set.add(ellipticCurve.raise(p, i)));
@@ -170,10 +170,10 @@ class EllipticCurveTest {
     Tensor p = Tensors.vector(0, 4);
     Tensor q = Tensors.vector(1, 1);
     Tensor r = Tensors.vector(4, 4);
-    ellipticCurve.requireMember(p);
-    ellipticCurve.requireMember(q);
-    ellipticCurve.requireMember(r);
-    assertThrows(Exception.class, () -> ellipticCurve.requireMember(Tensors.vector(100, 3)));
+    ellipticCurve.require(p);
+    ellipticCurve.require(q);
+    ellipticCurve.require(r);
+    assertThrows(Exception.class, () -> ellipticCurve.require(Tensors.vector(100, 3)));
     assertNotEquals(ellipticCurve, EllipticCurve.of(-16, 17));
   }
 
@@ -214,7 +214,7 @@ class EllipticCurveTest {
     for (int i = 0; i < list.size(); ++i)
       ellipticCurve.combine(list.get(i), list.get(i));
     for (Tensor p : list)
-      assertTrue(ellipticCurve.isMember(p));
+      assertTrue(ellipticCurve.test(p));
     Tensor p = ellipticCurve.complete(RealScalar.of(-2));
     Tensor q = ellipticCurve.complete(RealScalar.of(+4));
     Tensor r = ellipticCurve.combine(p, q);
@@ -242,7 +242,7 @@ class EllipticCurveTest {
     List<Tensor> list = Stream.of("{0, 0}", "{-1, 1}", "{+2, 2}", "{338, 6214}") //
         .map(Tensors::fromString).toList();
     for (Tensor p : list)
-      assertTrue(ellipticCurve.isMember(p));
+      assertTrue(ellipticCurve.test(p));
     for (int i = 1; i < list.size(); ++i)
       ellipticCurve.combine(list.get(i), list.get(i));
     for (int i = 0; i < list.size(); ++i)
@@ -260,7 +260,7 @@ class EllipticCurveTest {
     for (int i = 0; i < mod; ++i)
       for (int j = 0; j < mod; ++j) {
         Tensor p = Tensors.of(GaussScalar.of(i, mod), GaussScalar.of(j, mod));
-        if (ellipticCurve.isMember(p))
+        if (ellipticCurve.test(p))
           set.add(p);
       }
     return set;
@@ -285,9 +285,9 @@ class EllipticCurveTest {
     Scalar xt = Scalars.fromString("612776083187947368101/78841535860683900210");
     Scalar x0 = xt.multiply(xt);
     Tensor m = Tensors.vector(0, 0);
-    assertTrue(ellipticCurve.isMember(m));
+    assertTrue(ellipticCurve.test(m));
     Tensor p = ellipticCurve.complete(x0);
-    assertTrue(ellipticCurve.isMember(p));
+    assertTrue(ellipticCurve.test(p));
     Tensor q = ellipticCurve.combine(m, p);
     assertNotEquals(p, q);
     assertNotEquals(ellipticCurve, new Object());
@@ -315,11 +315,11 @@ class EllipticCurveTest {
     Tensor p = Tensors.of(GaussScalar.of(2, mod), GaussScalar.of(4, mod));
     Tensor q = Tensors.of(GaussScalar.of(3, mod), GaussScalar.of(4, mod));
     Tensor r = ellipticCurve.combine(p, q);
-    assertTrue(ellipticCurve.isMember(r));
-    assertTrue(ellipticCurve.isMember(Tensors.of(GaussScalar.of(4, mod), GaussScalar.of(1, mod))));
-    assertTrue(ellipticCurve.isMember(Tensors.of(GaussScalar.of(6, mod), GaussScalar.of(4, mod))));
-    assertTrue(ellipticCurve.isMember(Tensors.of(GaussScalar.of(7, mod), GaussScalar.of(5, mod))));
-    assertTrue(ellipticCurve.isMember(Tensors.of(GaussScalar.of(10, mod), GaussScalar.of(3, mod))));
+    assertTrue(ellipticCurve.test(r));
+    assertTrue(ellipticCurve.test(Tensors.of(GaussScalar.of(4, mod), GaussScalar.of(1, mod))));
+    assertTrue(ellipticCurve.test(Tensors.of(GaussScalar.of(6, mod), GaussScalar.of(4, mod))));
+    assertTrue(ellipticCurve.test(Tensors.of(GaussScalar.of(7, mod), GaussScalar.of(5, mod))));
+    assertTrue(ellipticCurve.test(Tensors.of(GaussScalar.of(10, mod), GaussScalar.of(3, mod))));
   }
 
   @Test

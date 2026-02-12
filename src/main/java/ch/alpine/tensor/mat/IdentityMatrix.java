@@ -85,7 +85,7 @@ public enum IdentityMatrix {
    * @return given matrix with diagonal elements incremented by {@link Scalar#one()}
    * @throws Exception if matrix is {@link Tensor#unmodifiable()} */
   public static Tensor inplaceAdd(Tensor matrix) {
-    SquareMatrixQ.INSTANCE.requireMember(matrix);
+    SquareMatrixQ.INSTANCE.require(matrix);
     IntStream.range(0, matrix.length()).forEach(i -> matrix.set(INCR, i, i));
     return matrix;
   }
@@ -96,7 +96,7 @@ public enum IdentityMatrix {
    * @return given matrix with diagonal elements decremented by {@link Scalar#one()}
    * @throws Exception if matrix is {@link Tensor#unmodifiable()} */
   public static Tensor inplaceSub(Tensor matrix) {
-    SquareMatrixQ.INSTANCE.requireMember(matrix);
+    SquareMatrixQ.INSTANCE.require(matrix);
     IntStream.range(0, matrix.length()).forEach(i -> matrix.set(DECR, i, i));
     return matrix;
   }

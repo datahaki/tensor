@@ -150,7 +150,7 @@ class MatrixSqrtTest {
   @Test
   void testComplexFail() {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     _check(matrix, MatrixSqrt.of(matrix));
     _check(matrix, MatrixSqrt.ofSymmetric(matrix));
   }

@@ -15,7 +15,7 @@ public enum DiagonalMatrixQ {
    * @param chop
    * @return */
   public static boolean of(Tensor matrix, Chop chop) {
-    if (SquareMatrixQ.INSTANCE.isMember(matrix)) {
+    if (SquareMatrixQ.INSTANCE.test(matrix)) {
       int n = matrix.length();
       for (int i = 0; i < n; ++i)
         for (int j = 0; j < n; ++j)

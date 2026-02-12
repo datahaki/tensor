@@ -31,7 +31,7 @@ class ToeplitzMatrixTest {
   @Test
   void testSquare() {
     Tensor matrix = ToeplitzMatrix.of(Tensors.vector(1, 2, 3, 4, 5));
-    assertTrue(SquareMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(SquareMatrixQ.INSTANCE.test(matrix));
     assertEquals(matrix.get(0), Range.of(3, 6));
     assertEquals(matrix.get(1), Range.of(2, 5));
     assertEquals(matrix.get(2), Range.of(1, 4));
@@ -40,7 +40,7 @@ class ToeplitzMatrixTest {
 
   @Test
   void testSymmetric() {
-    SymmetricMatrixQ.INSTANCE.requireMember(ToeplitzMatrix.of(Tensors.vector(5, 4, 3, 4, 5)));
+    SymmetricMatrixQ.INSTANCE.require(ToeplitzMatrix.of(Tensors.vector(5, 4, 3, 4, 5)));
   }
 
   @Test
@@ -55,7 +55,7 @@ class ToeplitzMatrixTest {
   @Test
   void testRank2() {
     Tensor matrix = ToeplitzMatrix.of(Tensors.vector(0, 1, 0, 1, 0));
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     assertEquals(RowReduce.of(matrix), Tensors.fromString("{{1, 0, 1}, {0, 1, 0}, {0, 0, 0}}"));
     assertEquals(MatrixRank.of(matrix), 2);
   }

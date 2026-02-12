@@ -18,7 +18,7 @@ class QREigensystemTest {
     // System.out.println(Pretty.of(qrEigensystem.qrDecomposition.getR().map(Round._2)));
     // IO.println(qrEigensystem.values());
     Tensor qn = qrEigensystem.vectors();
-    OrthogonalMatrixQ.INSTANCE.requireMember(qn);
+    OrthogonalMatrixQ.INSTANCE.require(qn);
     // Chop._08.requireClose(Dot.of(Inverse.of(qn), matrix, qn), qrEigensystem.qrDecomposition.getR());
     // System.out.println(Pretty.of(qrEigensystem.qrDecomposition.getR().map(Round._2)));
     new EigensystemQ(matrix).require(qrEigensystem, Chop._08);

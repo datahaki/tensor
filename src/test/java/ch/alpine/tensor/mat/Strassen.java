@@ -33,7 +33,7 @@ public class Strassen implements TensorBinaryOperator {
 
   @Override
   public Tensor apply(Tensor a, Tensor b) {
-    return recur(SquareMatrixQ.INSTANCE.requireMember(a), SquareMatrixQ.INSTANCE.requireMember(b));
+    return recur(SquareMatrixQ.INSTANCE.require(a), SquareMatrixQ.INSTANCE.require(b));
   }
 
   private Tensor recur(Tensor a, Tensor b) {

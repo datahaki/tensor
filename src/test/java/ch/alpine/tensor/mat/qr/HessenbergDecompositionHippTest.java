@@ -24,7 +24,7 @@ import test.wrap.HessenbergDecompositionQ;
 
 class HessenbergDecompositionHippTest {
   private static HessenbergDecomposition _check(Tensor matrix) {
-    HessenbergDecomposition hessenbergDecomposition = new HessenbergDecompositionHipp(SquareMatrixQ.INSTANCE.requireMember(matrix));
+    HessenbergDecomposition hessenbergDecomposition = new HessenbergDecompositionHipp(SquareMatrixQ.INSTANCE.require(matrix));
     new HessenbergDecompositionQ(matrix).check(hessenbergDecomposition);
     return hessenbergDecomposition;
   }

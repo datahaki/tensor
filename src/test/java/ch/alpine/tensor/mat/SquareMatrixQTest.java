@@ -19,60 +19,60 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 class SquareMatrixQTest {
   @Test
   void testMatrix() {
-    assertTrue(SquareMatrixQ.INSTANCE.isMember(IdentityMatrix.of(10)));
-    assertTrue(SquareMatrixQ.INSTANCE.isMember(IdentityMatrix.of(10).unmodifiable()));
-    assertFalse(SquareMatrixQ.INSTANCE.isMember(Array.zeros(3, 4)));
+    assertTrue(SquareMatrixQ.INSTANCE.test(IdentityMatrix.of(10)));
+    assertTrue(SquareMatrixQ.INSTANCE.test(IdentityMatrix.of(10).unmodifiable()));
+    assertFalse(SquareMatrixQ.INSTANCE.test(Array.zeros(3, 4)));
   }
 
   @Test
   void testOthers() {
-    assertFalse(SquareMatrixQ.INSTANCE.isMember(UnitVector.of(10, 3)));
-    assertFalse(SquareMatrixQ.INSTANCE.isMember(LeviCivitaTensor.of(3)));
-    assertFalse(SquareMatrixQ.INSTANCE.isMember(RealScalar.ONE));
+    assertFalse(SquareMatrixQ.INSTANCE.test(UnitVector.of(10, 3)));
+    assertFalse(SquareMatrixQ.INSTANCE.test(LeviCivitaTensor.of(3)));
+    assertFalse(SquareMatrixQ.INSTANCE.test(RealScalar.ONE));
   }
 
   @Test
   void testEmpty() {
-    assertFalse(SquareMatrixQ.INSTANCE.isMember(Tensors.empty()));
+    assertFalse(SquareMatrixQ.INSTANCE.test(Tensors.empty()));
   }
 
   @Test
   void testEmptyNested() {
     Tensor tensor = Tensors.fromString("{{}}");
     assertTrue(MatrixQ.of(tensor));
-    assertFalse(SquareMatrixQ.INSTANCE.isMember(tensor));
-    assertTrue(SquareMatrixQ.INSTANCE.isMember(Tensors.fromString("{{1}}")));
+    assertFalse(SquareMatrixQ.INSTANCE.test(tensor));
+    assertTrue(SquareMatrixQ.INSTANCE.test(Tensors.fromString("{{1}}")));
   }
 
   @Test
   void testRequire() {
-    SquareMatrixQ.INSTANCE.requireMember(IdentityMatrix.of(10));
+    SquareMatrixQ.INSTANCE.require(IdentityMatrix.of(10));
   }
 
   @Test
   void testNonArray() {
-    assertFalse(SquareMatrixQ.INSTANCE.isMember(Tensors.fromString("{{1, 2}, {{3}, 4}}")));
+    assertFalse(SquareMatrixQ.INSTANCE.test(Tensors.fromString("{{1, 2}, {{3}, 4}}")));
   }
 
   @Test
   void testRequireScalar() {
-    assertThrows(Throw.class, () -> SquareMatrixQ.INSTANCE.requireMember(RealScalar.of(3)));
+    assertThrows(Throw.class, () -> SquareMatrixQ.INSTANCE.require(RealScalar.of(3)));
   }
 
   @Test
   void testRequireVector() {
-    assertThrows(Throw.class, () -> SquareMatrixQ.INSTANCE.requireMember(Range.of(3, 10)));
+    assertThrows(Throw.class, () -> SquareMatrixQ.INSTANCE.require(Range.of(3, 10)));
   }
 
   @Test
   void testRequireMatrixNonSquare() {
-    assertFalse(SquareMatrixQ.INSTANCE.isMember(HilbertMatrix.of(3, 4)));
-    assertThrows(Throw.class, () -> SquareMatrixQ.INSTANCE.requireMember(HilbertMatrix.of(3, 4)));
+    assertFalse(SquareMatrixQ.INSTANCE.test(HilbertMatrix.of(3, 4)));
+    assertThrows(Throw.class, () -> SquareMatrixQ.INSTANCE.require(HilbertMatrix.of(3, 4)));
   }
 
   @Test
   void testRequireRank3() {
-    assertFalse(SquareMatrixQ.INSTANCE.isMember(LeviCivitaTensor.of(3)));
-    assertThrows(Throw.class, () -> SquareMatrixQ.INSTANCE.requireMember(LeviCivitaTensor.of(3)));
+    assertFalse(SquareMatrixQ.INSTANCE.test(LeviCivitaTensor.of(3)));
+    assertThrows(Throw.class, () -> SquareMatrixQ.INSTANCE.require(LeviCivitaTensor.of(3)));
   }
 }

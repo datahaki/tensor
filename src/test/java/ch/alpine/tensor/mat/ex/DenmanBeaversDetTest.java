@@ -40,7 +40,7 @@ class DenmanBeaversDetTest {
   @Test
   void testComplex() {
     Tensor x2 = Tensors.fromString("{{6, 1+5*I}, {1-5*I, 11}}");
-    HermitianMatrixQ.INSTANCE.requireMember(x2);
+    HermitianMatrixQ.INSTANCE.require(x2);
     DenmanBeaversDet denmanBeaversDet = new DenmanBeaversDet(x2, Tolerance.CHOP);
     Tolerance.CHOP.requireClose( //
         Dot.of(denmanBeaversDet.sqrt(), denmanBeaversDet.sqrt_inverse()), IdentityMatrix.of(2));

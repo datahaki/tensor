@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.N;
 
 class SingularValueDecompositionImplTest {
   private static void _check(Tensor matrix) {
-    assertTrue(SquareMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(SquareMatrixQ.INSTANCE.test(matrix));
     SingularValueDecompositionWrap.of(matrix);
     Tensor svd = IdentityMatrix.of(matrix.length()).subtract(Transpose.of(matrix));
     SingularValueDecompositionWrap.of(svd);

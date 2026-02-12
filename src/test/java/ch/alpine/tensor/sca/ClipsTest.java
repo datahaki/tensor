@@ -122,6 +122,13 @@ class ClipsTest {
   }
 
   @Test
+  void testPositiveNumberNumeric() {
+    Clip clip = Clips.positive(10.0);
+    boolean exact = ExactScalarQ.of(clip.min());
+    assertTrue(exact);
+  }
+
+  @Test
   void testIntersectionSimple() {
     Clip clip = Clips.intersection(Clips.interval(2, 6), Clips.interval(3, 10));
     assertEquals(clip.min(), RealScalar.of(3));

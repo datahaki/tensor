@@ -23,7 +23,7 @@ class RotationMatrixTest {
   void testPointThree() {
     Tensor matrix = RotationMatrix.of(RealScalar.of(0.3));
     assertEquals(IdentityMatrix.of(2), MatrixDotTranspose.of(matrix, matrix));
-    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.test(matrix));
     assertTrue(matrix.Get(0, 1).toString().startsWith("-0.2955"));
     assertTrue(matrix.Get(1, 1).toString().startsWith("0.95533"));
   }
@@ -33,7 +33,7 @@ class RotationMatrixTest {
     Tensor matrix = RotationMatrix.of(ComplexScalar.of(1, 2));
     Tolerance.CHOP.requireClose(matrix.Get(0, 0), ComplexScalar.of(2.0327230070196655294, -3.0518977991518000575));
     Tolerance.CHOP.requireClose(matrix.Get(0, 1), ComplexScalar.of(-3.1657785132161681467, -1.9596010414216058971));
-    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.test(matrix));
   }
 
   @Test

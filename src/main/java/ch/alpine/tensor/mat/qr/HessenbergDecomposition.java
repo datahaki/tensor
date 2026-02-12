@@ -19,7 +19,7 @@ public interface HessenbergDecomposition {
   /** @param matrix
    * @return */
   static HessenbergDecomposition of(Tensor matrix) {
-    return new HessenbergDecompositionImpl(SquareMatrixQ.INSTANCE.requireMember(matrix));
+    return new HessenbergDecompositionImpl(SquareMatrixQ.INSTANCE.require(matrix));
   }
 
   /** @return */

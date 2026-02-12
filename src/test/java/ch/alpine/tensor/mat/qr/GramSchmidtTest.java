@@ -53,7 +53,7 @@ class GramSchmidtTest {
     QRDecomposition qrDecomposition = Serialization.copy(GramSchmidt.of(matrix));
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);
-    OrthogonalMatrixQ.INSTANCE.requireMember(qrDecomposition.getQConjugateTranspose());
+    OrthogonalMatrixQ.INSTANCE.require(qrDecomposition.getQConjugateTranspose());
   }
 
   @Test
@@ -82,7 +82,7 @@ class GramSchmidtTest {
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);
-    OrthogonalMatrixQ.INSTANCE.requireMember(qrDecomposition.getQConjugateTranspose());
+    OrthogonalMatrixQ.INSTANCE.require(qrDecomposition.getQConjugateTranspose());
   }
 
   @Test
@@ -91,10 +91,10 @@ class GramSchmidtTest {
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);
-    OrthogonalMatrixQ.INSTANCE.requireMember(qrDecomposition.getQ());
-    OrthogonalMatrixQ.INSTANCE.requireMember(qrDecomposition.getQConjugateTranspose());
-    UnitaryMatrixQ.INSTANCE.requireMember(qrDecomposition.getQ());
-    UnitaryMatrixQ.INSTANCE.requireMember(qrDecomposition.getQConjugateTranspose());
+    OrthogonalMatrixQ.INSTANCE.require(qrDecomposition.getQ());
+    OrthogonalMatrixQ.INSTANCE.require(qrDecomposition.getQConjugateTranspose());
+    UnitaryMatrixQ.INSTANCE.require(qrDecomposition.getQ());
+    UnitaryMatrixQ.INSTANCE.require(qrDecomposition.getQConjugateTranspose());
   }
 
   @Test
@@ -103,7 +103,7 @@ class GramSchmidtTest {
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);
-    UnitaryMatrixQ.INSTANCE.requireMember(qrDecomposition.getQConjugateTranspose());
+    UnitaryMatrixQ.INSTANCE.require(qrDecomposition.getQConjugateTranspose());
   }
 
   @Test
@@ -112,7 +112,7 @@ class GramSchmidtTest {
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);
-    UnitaryMatrixQ.INSTANCE.requireMember(qrDecomposition.getQConjugateTranspose());
+    UnitaryMatrixQ.INSTANCE.require(qrDecomposition.getQConjugateTranspose());
   }
 
   @Test
@@ -130,8 +130,8 @@ class GramSchmidtTest {
     Random random = new Random(5);
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, n, n);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
-    OrthogonalMatrixQ.INSTANCE.requireMember(qrDecomposition.getQ());
-    OrthogonalMatrixQ.INSTANCE.requireMember(qrDecomposition.getQConjugateTranspose());
+    OrthogonalMatrixQ.INSTANCE.require(qrDecomposition.getQ());
+    OrthogonalMatrixQ.INSTANCE.require(qrDecomposition.getQConjugateTranspose());
     Scalar det1 = qrDecomposition.det();
     Scalar det2 = Det.of(matrix);
     Tolerance.CHOP.requireClose(Abs.FUNCTION.apply(det1), Abs.FUNCTION.apply(det2));
@@ -169,7 +169,7 @@ class GramSchmidtTest {
     Tensor pinv1 = gramSchmidt.pseudoInverse();
     Tensor pinv2 = PseudoInverse.of(SingularValueDecompositionWrap.of(matrix));
     pinv1.add(pinv2);
-    UnitaryMatrixQ.INSTANCE.requireMember(gramSchmidt.getQConjugateTranspose());
+    UnitaryMatrixQ.INSTANCE.require(gramSchmidt.getQConjugateTranspose());
   }
 
   @Test

@@ -58,7 +58,7 @@ class TensorWedgeTest {
   void testAntisymmetric(Distribution distribution) {
     Tensor matrix = RandomVariate.of(distribution, 4, 4);
     Tensor skewsy = TensorWedge.of(matrix);
-    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(skewsy));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.test(skewsy));
     assertEquals(MatrixRank.of(matrix), 4);
   }
 
@@ -96,14 +96,14 @@ class TensorWedgeTest {
     Tensor xy = TensorWedge.of(x, y);
     Tensor expected = Tensors.fromString("{{0, -1, -2}, {1, 0, -1}, {2, 1, 0}}"); // mathematica
     assertEquals(xy, expected);
-    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(xy));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.test(xy));
   }
 
   @Test
   void testCross() {
     Tensor vector = Tensors.vector(2, 3, 4);
     Tensor matrix = Cross.skew3(vector);
-    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.test(matrix));
     assertEquals(matrix, TensorWedge.of(matrix));
   }
 

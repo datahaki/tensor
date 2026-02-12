@@ -21,7 +21,7 @@ class ChebyshevNodesTest {
   @RepeatedTest(6)
   void testSymmetric(RepetitionInfo repetitionInfo) {
     Tensor matrix = ChebyshevNodes._0.matrix(repetitionInfo.getCurrentRepetition());
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
   }
 
   @RepeatedTest(10)

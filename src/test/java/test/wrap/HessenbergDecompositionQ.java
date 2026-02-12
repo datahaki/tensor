@@ -13,7 +13,7 @@ import ch.alpine.tensor.mat.qr.HessenbergDecomposition;
 public record HessenbergDecompositionQ(Tensor matrix) {
   public void check(HessenbergDecomposition hessenbergDecomposition) {
     Tensor p = hessenbergDecomposition.getUnitary();
-    UnitaryMatrixQ.INSTANCE.requireMember(p);
+    UnitaryMatrixQ.INSTANCE.require(p);
     Tensor h = hessenbergDecomposition.getH();
     Tolerance.CHOP.requireClose(UpperTriangularize.of(h, -1), h);
     Tensor result = Dot.of(p, h, ConjugateTranspose.of(p));

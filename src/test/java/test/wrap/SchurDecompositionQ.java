@@ -16,7 +16,7 @@ public record SchurDecompositionQ(Tensor matrix) {
     Tensor lower = LowerTriangularize.of(t, -2);
     // IO.println(Pretty.of(lower.map(Round._3)));
     Tolerance.CHOP.requireAllZero(lower);
-    UnitaryMatrixQ.INSTANCE.requireMember(p);
+    UnitaryMatrixQ.INSTANCE.require(p);
     Tensor result = Dot.of(p, t, ConjugateTranspose.of(p));
     Tolerance.CHOP.requireClose(matrix, result);
     return schurDecomposition;

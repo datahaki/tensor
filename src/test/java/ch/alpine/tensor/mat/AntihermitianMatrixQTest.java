@@ -16,19 +16,19 @@ import ch.alpine.tensor.alg.Array;
 class AntihermitianMatrixQTest {
   @Test
   void testSimple() {
-    assertTrue(AntihermitianMatrixQ.INSTANCE.isMember(Array.zeros(2, 2)));
-    assertFalse(AntihermitianMatrixQ.INSTANCE.isMember(HilbertMatrix.of(3)));
+    assertTrue(AntihermitianMatrixQ.INSTANCE.test(Array.zeros(2, 2)));
+    assertFalse(AntihermitianMatrixQ.INSTANCE.test(HilbertMatrix.of(3)));
   }
 
   @Test
   void test2x2() {
     Tensor matrix = Tensors.fromString("{{0,1+2*I},{-1+2*I,0}}");
-    assertEquals(AntihermitianMatrixQ.INSTANCE.requireMember(matrix), matrix);
+    assertEquals(AntihermitianMatrixQ.INSTANCE.require(matrix), matrix);
   }
 
   @Test
   void testRequireFail() {
     Tensor matrix = Tensors.fromString("{{1,1+2*I},{-1+2*I,0}}");
-    assertThrows(Throw.class, () -> AntihermitianMatrixQ.INSTANCE.requireMember(matrix));
+    assertThrows(Throw.class, () -> AntihermitianMatrixQ.INSTANCE.require(matrix));
   }
 }

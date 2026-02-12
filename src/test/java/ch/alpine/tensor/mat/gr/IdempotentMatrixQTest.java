@@ -17,17 +17,17 @@ class IdempotentMatrixQTest {
   @Test
   void testSimple() {
     Tensor matrix = Tensors.of(UnitVector.of(2, 1), UnitVector.of(2, 1));
-    assertTrue(IdempotentMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(IdempotentMatrixQ.INSTANCE.test(matrix));
   }
 
   @Test
   void testFalse() {
-    assertFalse(IdempotentMatrixQ.INSTANCE.isMember(DiagonalMatrix.of(1, 2)));
-    assertFalse(IdempotentMatrixQ.INSTANCE.isMember(HilbertMatrix.of(2, 3)));
+    assertFalse(IdempotentMatrixQ.INSTANCE.test(DiagonalMatrix.of(1, 2)));
+    assertFalse(IdempotentMatrixQ.INSTANCE.test(HilbertMatrix.of(2, 3)));
   }
 
   @Test
   void testNullFail() {
-    assertThrows(NullPointerException.class, () -> IdempotentMatrixQ.INSTANCE.isMember(null));
+    assertThrows(NullPointerException.class, () -> IdempotentMatrixQ.INSTANCE.test(null));
   }
 }

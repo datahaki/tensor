@@ -174,8 +174,8 @@ class CholeskyDecompositionTest {
     CholeskyDecomposition cd = CholeskyDecompositionWrap.of(mat);
     assertTrue(Scalars.nonZero(cd.det()));
     assertEquals(cd.diagonal().toString(), "{2[m], 3/2[m]}");
-    SymmetricMatrixQ.INSTANCE.requireMember(mat);
-    assertTrue(HermitianMatrixQ.INSTANCE.isMember(mat));
+    SymmetricMatrixQ.INSTANCE.require(mat);
+    assertTrue(HermitianMatrixQ.INSTANCE.test(mat));
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(mat));
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(mat));
     assertFalse(NegativeDefiniteMatrixQ.ofHermitian(mat));
@@ -208,8 +208,8 @@ class CholeskyDecompositionTest {
       ExactTensorQ.require(res);
       assertEquals(res, matrix);
     }
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
-    assertTrue(HermitianMatrixQ.INSTANCE.isMember(matrix));
+    SymmetricMatrixQ.INSTANCE.require(matrix);
+    assertTrue(HermitianMatrixQ.INSTANCE.test(matrix));
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(matrix));
     assertFalse(NegativeDefiniteMatrixQ.ofHermitian(matrix));
@@ -277,7 +277,7 @@ class CholeskyDecompositionTest {
   void testBigDecimal(int n) {
     Tensor rnd = RandomVariate.of(UniformDistribution.unit(50), new Random(3), n, n);
     Tensor mat = MatrixDotTranspose.of(rnd, rnd);
-    assertTrue(HermitianMatrixQ.INSTANCE.isMember(mat));
+    assertTrue(HermitianMatrixQ.INSTANCE.test(mat));
     CholeskyDecompositionWrap.of(mat, Chop._40);
   }
 

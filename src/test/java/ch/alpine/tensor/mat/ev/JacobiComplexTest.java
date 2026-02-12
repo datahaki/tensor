@@ -42,7 +42,7 @@ class JacobiComplexTest {
     Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
     Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
-    HermitianMatrixQ.INSTANCE.requireMember(matrix);
+    HermitianMatrixQ.INSTANCE.require(matrix);
     JacobiComplex jacobiComplex = new JacobiComplex(matrix);
     Eigensystem eigensystem = jacobiComplex.solve();
     new EigensystemQ(matrix).require(eigensystem);
@@ -57,7 +57,7 @@ class JacobiComplexTest {
   @Test
   void testComplex() {
     Tensor matrix = Tensors.fromString("{{2, 3-3*I}, {3+3*I, 5}}");
-    HermitianMatrixQ.INSTANCE.requireMember(matrix);
+    HermitianMatrixQ.INSTANCE.require(matrix);
     Scalar det = Det.of(matrix);
     assertEquals(det, RealScalar.of(-8));
     Tensor ns8 = NullSpace.of(matrix.subtract(IdentityMatrix.of(2).multiply(RealScalar.of(8))));
@@ -99,7 +99,7 @@ class JacobiComplexTest {
     Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
     Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
-    HermitianMatrixQ.INSTANCE.requireMember(matrix);
+    HermitianMatrixQ.INSTANCE.require(matrix);
     Eigensystem eigensystem = JacobiComplex.of(matrix);
     new EigensystemQ(matrix).require(eigensystem);
     JacobiComplex jacobiComplex = new JacobiComplex(matrix);
@@ -112,7 +112,7 @@ class JacobiComplexTest {
   @Test
   void testComplex2() {
     Tensor matrix = Tensors.fromString("{{2, 3-3*I}, {3+3*I, 5}}");
-    HermitianMatrixQ.INSTANCE.requireMember(matrix);
+    HermitianMatrixQ.INSTANCE.require(matrix);
     Scalar det = Det.of(matrix);
     assertEquals(det, RealScalar.of(-8));
     Tensor ns8 = NullSpace.of(matrix.subtract(IdentityMatrix.of(2).multiply(RealScalar.of(8))));
@@ -146,7 +146,7 @@ class JacobiComplexTest {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor prelim = RandomVariate.of(ComplexDiskUniformDistribution.of(1), n, n);
     Tensor matrix = prelim.add(ConjugateTranspose.of(prelim));
-    HermitianMatrixQ.INSTANCE.requireMember(matrix);
+    HermitianMatrixQ.INSTANCE.require(matrix);
     EigensystemQ eigensystemQ = new EigensystemQ(matrix);
     Eigensystem eigensystem = Eigensystem.of(matrix);
     eigensystemQ.require(eigensystem);

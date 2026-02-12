@@ -36,7 +36,7 @@ public abstract class ZeroDefectArrayQ implements MemberQ, Serializable {
   }
 
   @Override // from MemberQ
-  public final boolean isMember(Tensor tensor) {
+  public final boolean test(Tensor tensor) {
     Dimensions dimensions = new Dimensions(tensor);
     return dimensions.rank() == rank //
         && dimensions.isArrayWith(this::isArrayWith) //
@@ -44,8 +44,8 @@ public abstract class ZeroDefectArrayQ implements MemberQ, Serializable {
   }
 
   @Override // from MemberQ
-  public final Tensor requireMember(Tensor tensor) {
-    if (isMember(tensor))
+  public final Tensor require(Tensor tensor) {
+    if (test(tensor))
       return tensor;
     throw new Throw(tensor);
   }

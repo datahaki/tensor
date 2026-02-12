@@ -58,7 +58,7 @@ class HaarWaveletTransformTest {
       Scalar scalar = Power.of(2, n - 1);
       assertEquals(scalar, Det.of(matrix));
       Tensor inverse = Inverse.of(matrix);
-      SquareMatrixQ.INSTANCE.requireMember(inverse);
+      SquareMatrixQ.INSTANCE.require(inverse);
     }
   }
 

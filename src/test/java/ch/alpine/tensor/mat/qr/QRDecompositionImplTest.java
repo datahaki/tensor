@@ -85,8 +85,8 @@ class QRDecompositionImplTest {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
       QRDecomposition qrDecomposition = QRDecompositionWrap.of(matrix);
       Tolerance.CHOP.requireClose(qrDecomposition.getQ().dot(qrDecomposition.getR()), matrix);
-      assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(qrDecomposition.getQ()));
-      assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(qrDecomposition.getQConjugateTranspose()));
+      assertTrue(OrthogonalMatrixQ.INSTANCE.test(qrDecomposition.getQ()));
+      assertTrue(OrthogonalMatrixQ.INSTANCE.test(qrDecomposition.getQConjugateTranspose()));
       assertEquals(Dimensions.of(qrDecomposition.getQConjugateTranspose()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(n, m));

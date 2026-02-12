@@ -43,7 +43,7 @@ class AbstractScalarTest {
     matrix.set(Tensor::negate, 3, Tensor.ALL);
     matrix.set(Tensor::negate, 1);
     matrix.set(Tensor::negate, Tensor.ALL, 3);
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
   }
 
   @Test

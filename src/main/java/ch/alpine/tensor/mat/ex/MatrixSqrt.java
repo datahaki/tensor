@@ -26,9 +26,9 @@ public interface MatrixSqrt {
    * @return sqrt of given matrix */
   static MatrixSqrt of(Tensor matrix) {
     if (Im.allZero(matrix) && //
-        SymmetricMatrixQ.INSTANCE.isMember(matrix))
+        SymmetricMatrixQ.INSTANCE.test(matrix))
       return ofSymmetric(matrix);
-    if (HermitianMatrixQ.INSTANCE.isMember(matrix))
+    if (HermitianMatrixQ.INSTANCE.test(matrix))
       return ofHermitian(matrix);
     return new DenmanBeaversDet(matrix, Tolerance.CHOP);
   }

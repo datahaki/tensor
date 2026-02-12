@@ -68,7 +68,7 @@ class JacobiRealTest {
   private static void _check(Tensor matrix, Scalar[][] A, Tensor[] Vs) {
     Tensor V = Unprotect.byRef(Vs);
     Tensor a = Tensors.matrix(A);
-    SymmetricMatrixQ.INSTANCE.requireMember(a);
+    SymmetricMatrixQ.INSTANCE.require(a);
     Tensor Vt = Transpose.of(V);
     Tolerance.CHOP.requireClose(matrix, Dot.of(Vt, a, V));
     Tolerance.CHOP.requireClose(matrix, BasisTransform.ofMatrix(a, V));

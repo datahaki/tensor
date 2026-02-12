@@ -74,7 +74,7 @@ class EigensystemTest {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor vectors = eigensystem.vectors();
     Tensor values = eigensystem.values();
-    OrthogonalMatrixQ.INSTANCE.requireMember(vectors);
+    OrthogonalMatrixQ.INSTANCE.require(vectors);
     Tensor recons = Transpose.of(vectors).dot(Times.of(values, vectors));
     Scalar err = MatrixInfinityNorm.of(matrix.subtract(recons));
     if (!Tolerance.CHOP.isClose(matrix, recons)) {
@@ -91,7 +91,7 @@ class EigensystemTest {
   @Test
   void testQuantity() {
     Tensor matrix = Tensors.fromString("{{10[m], -2[m]}, {-2[m], 4[m]}}");
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     {
       Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
       assertInstanceOf(Quantity.class, eigensystem.values().Get(0));
@@ -130,7 +130,7 @@ class EigensystemTest {
   @Test
   void testQuantityMixed() {
     Tensor matrix = Tensors.fromString("{{10[m^2], 2[m*kg]}, {2[m*kg], 4[kg^2]}}");
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     assertThrows(Throw.class, () -> Eigensystem.of(matrix));
     assertThrows(Throw.class, () -> Eigensystems._2(matrix));
     assertThrows(Throw.class, () -> Eigensystem.ofSymmetric(matrix));
@@ -149,7 +149,7 @@ class EigensystemTest {
   @Test
   void testComplexFail() {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     Eigensystem eigensystem = Eigensystem.of(matrix);
     new EigensystemQ(matrix).require(eigensystem);
     Eigensystem ofSymmetric = Eigensystem.ofSymmetric(matrix);
@@ -167,7 +167,7 @@ class EigensystemTest {
   @Test
   void testComplex2Fail() {
     Tensor matrix = Tensors.fromString("{{0, I}, {I, 0}}");
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     Eigensystem eigensystem = Eigensystem.of(matrix);
     new EigensystemQ(matrix).require(eigensystem);
     Eigensystem ofSymmetric = Eigensystem.ofSymmetric(matrix);

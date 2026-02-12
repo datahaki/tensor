@@ -55,7 +55,7 @@ class InfluenceMatrixImplTest {
         ExactTensorQ.require(design);
         assertEquals(Dimensions.of(design), Arrays.asList(7, 5));
         InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-        SymmetricMatrixQ.INSTANCE.requireMember(influenceMatrix.matrix());
+        SymmetricMatrixQ.INSTANCE.require(influenceMatrix.matrix());
         influenceMatrix.residualMaker();
         Tensor vector = RandomVariate.of(distribution, random, n);
         Tensor image = influenceMatrix.image(vector);
@@ -82,14 +82,14 @@ class InfluenceMatrixImplTest {
     Tensor influe = design.dot(PseudoInverse.of(design));
     // IO.println(Dimensions.of(influe));
     {
-      assertTrue(IdempotentMatrixQ.INSTANCE.isMember(influe));
-      InfluenceMatrixQ.INSTANCE.requireMember(influe);
+      assertTrue(IdempotentMatrixQ.INSTANCE.test(influe));
+      InfluenceMatrixQ.INSTANCE.require(influe);
     }
     {
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
       Tolerance.CHOP.requireClose(influe, influenceMatrix.matrix());
       Tensor matrix = influenceMatrix.matrix();
-      InfluenceMatrixQ.INSTANCE.requireMember(matrix);
+      InfluenceMatrixQ.INSTANCE.require(matrix);
       DirectInfluenceMatrix directInfluenceMatrix = new DirectInfluenceMatrix(influe);
       Tolerance.CHOP.requireClose(influenceMatrix.matrix(), directInfluenceMatrix.matrix());
       Tolerance.CHOP.requireClose(influenceMatrix.leverages(), directInfluenceMatrix.leverages());
@@ -115,7 +115,7 @@ class InfluenceMatrixImplTest {
     Tensor vector = RandomVariate.of(distribution, n);
     Tensor image = influenceMatrix.image(vector);
     ExactTensorQ.require(image);
-    SymmetricMatrixQ.INSTANCE.requireMember(influenceMatrix.matrix());
+    SymmetricMatrixQ.INSTANCE.require(influenceMatrix.matrix());
     assertEquals(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(m));
     String string = influenceMatrix.toString();
     assertTrue(string.startsWith("InfluenceMatrix["));
@@ -134,7 +134,7 @@ class InfluenceMatrixImplTest {
       Tensor vector = RandomVariate.of(distribution, n);
       Tensor image = influenceMatrix.image(vector);
       ExactTensorQ.require(image);
-      SymmetricMatrixQ.INSTANCE.requireMember(influenceMatrix.matrix());
+      SymmetricMatrixQ.INSTANCE.require(influenceMatrix.matrix());
       assertEquals(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(m));
       String string = influenceMatrix.toString();
       assertTrue(string.startsWith("InfluenceMatrix["));

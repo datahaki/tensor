@@ -42,7 +42,7 @@ class LowercaseETest {
     assertEquals(tensor.length(), 6);
     assertEquals(tensor.get(0).length(), 3);
     MatrixQ.require(tensor.extract(0, 3));
-    assertTrue(SquareMatrixQ.INSTANCE.isMember(tensor.extract(0, 3)));
+    assertTrue(SquareMatrixQ.INSTANCE.test(tensor.extract(0, 3)));
     assertEquals(Dimensions.of(tensor.extract(3, 6)), Arrays.asList(3, 2));
   }
 
@@ -59,7 +59,7 @@ class LowercaseETest {
     assertEquals(tensor.length(), 6);
     assertEquals(tensor.get(0).length(), 3);
     MatrixQ.require(tensor.extract(0, 3));
-    assertTrue(SquareMatrixQ.INSTANCE.isMember(tensor.extract(0, 3)));
+    assertTrue(SquareMatrixQ.INSTANCE.test(tensor.extract(0, 3)));
     assertEquals(Dimensions.of(tensor.extract(3, 6)), Arrays.asList(3, 2));
   }
 }

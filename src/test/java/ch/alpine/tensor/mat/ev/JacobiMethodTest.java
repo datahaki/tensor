@@ -70,12 +70,12 @@ class JacobiMethodTest {
     Tensor id = IdentityMatrix.of(n);
     Tolerance.CHOP.requireClose(Vt.dot(eigensystem.vectors()), id);
     Tolerance.CHOP.requireClose(eigensystem.vectors().dot(Vt), id);
-    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(eigensystem.vectors()));
-    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(Vt));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.test(eigensystem.vectors()));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.test(Vt));
     // assert that values are sorted from max to min
     assertEquals(eigensystem.decreasing().values(), Reverse.of(Sort.of(eigensystem.values())));
     JacobiReal jacobiMethod = new JacobiReal(matrix);
-    new SymmetricMatrixQ(Chop.NONE).requireMember(Tensors.matrix(jacobiMethod.H));
+    new SymmetricMatrixQ(Chop.NONE).require(Tensors.matrix(jacobiMethod.H));
     new EigensystemQ(matrix).require(eigensystem, Tolerance.CHOP);
   }
 

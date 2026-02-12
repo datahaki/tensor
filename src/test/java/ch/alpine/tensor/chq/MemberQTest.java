@@ -13,7 +13,7 @@ import ch.alpine.tensor.num.Pi;
 class MemberQTest {
   static class CheckMemberQ implements MemberQ {
     @Override
-    public boolean isMember(Tensor tensor) {
+    public boolean test(Tensor tensor) {
       return tensor.length() == 3;
     }
   }
@@ -22,7 +22,7 @@ class MemberQTest {
   void testRequire() {
     CheckMemberQ checkMemberQ = new CheckMemberQ();
     Tensor v = UnitVector.of(3, 1);
-    assertSame(v, checkMemberQ.requireMember(v));
-    assertThrows(Exception.class, () -> checkMemberQ.requireMember(Pi.VALUE));
+    assertSame(v, checkMemberQ.require(v));
+    assertThrows(Exception.class, () -> checkMemberQ.require(Pi.VALUE));
   }
 }

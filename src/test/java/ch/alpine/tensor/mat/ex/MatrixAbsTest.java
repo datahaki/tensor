@@ -14,8 +14,8 @@ class MatrixAbsTest {
   void testSimple() {
     Tensor matrix = Symmetrize.of(RandomVariate.of(UniformDistribution.of(-1, 1), 5, 5));
     Tensor symmetric = MatrixAbs.ofSymmetric(matrix);
-    SquareMatrixQ.INSTANCE.requireMember(symmetric);
+    SquareMatrixQ.INSTANCE.require(symmetric);
     Tensor hermitian = MatrixAbs.ofHermitian(matrix);
-    SquareMatrixQ.INSTANCE.requireMember(hermitian);
+    SquareMatrixQ.INSTANCE.require(hermitian);
   }
 }

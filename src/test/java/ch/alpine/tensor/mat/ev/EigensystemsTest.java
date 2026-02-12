@@ -163,7 +163,7 @@ class EigensystemsTest {
   @Test
   void testComplex2() {
     Tensor matrix = Tensors.fromString("{{2, 3-3*I}, {3+3*I, 5}}");
-    HermitianMatrixQ.INSTANCE.requireMember(matrix);
+    HermitianMatrixQ.INSTANCE.require(matrix);
     Tensor vector = Eigensystem.ofHermitian(matrix).decreasing().values();
     Tolerance.CHOP.requireClose(vector, Tensors.vector(8, -1));
   }

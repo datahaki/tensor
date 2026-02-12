@@ -40,10 +40,10 @@ class PolarDecompositionSqrtTest {
     int k = list.get(0);
     Tolerance.CHOP.requireClose(Dot.of(polarDecomposition.getUnitary(), polarDecomposition.getPositiveSemidefinite()), matrix);
     Tensor result = polarDecomposition.getUnitary();
-    new UnitaryMatrixQ(Chop._06).requireMember(result);
+    new UnitaryMatrixQ(Chop._06).require(result);
     Tensor sym = polarDecomposition.getPositiveSemidefinite();
     assertEquals(Dimensions.of(sym), Arrays.asList(k, k));
-    new HermitianMatrixQ(Chop._06).requireMember(sym);
+    new HermitianMatrixQ(Chop._06).require(sym);
     assertTrue(polarDecomposition.toString().startsWith("PolarDecomposition["));
     boolean hermitian = PositiveSemidefiniteMatrixQ.ofHermitian(polarDecomposition.getPositiveSemidefinite());
     assertTrue(hermitian);

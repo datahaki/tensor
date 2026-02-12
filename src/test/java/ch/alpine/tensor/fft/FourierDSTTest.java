@@ -37,7 +37,7 @@ class FourierDSTTest {
   private static Tensor _consistent1(Tensor vector) {
     Tensor r1 = FourierDST._1.transform(vector);
     Tensor matrix = FourierDST._1.matrix(vector.length());
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     Tensor r2 = matrix.dot(vector);
     Tolerance.CHOP.requireClose(r1, r2);
     Tolerance.CHOP.requireClose(vector, FourierDST._1.transform(r1));
@@ -96,7 +96,7 @@ class FourierDSTTest {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = FourierDST._1.matrix(n);
     Tolerance.CHOP.requireClose(matrix, Inverse.of(matrix));
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
   }
 
   @RepeatedTest(6)

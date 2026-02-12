@@ -51,7 +51,7 @@ class BenIsraelCohenTest {
     Tensor design = p1.dot(p2);
     Tensor pinv = BenIsraelCohen.of(design);
     suo.apply(pinv.Get(0, 0));
-    new InfluenceMatrixQ(Chop._10).requireMember(design.dot(pinv)); // 1e-12 does not always work
+    new InfluenceMatrixQ(Chop._10).require(design.dot(pinv)); // 1e-12 does not always work
   }
 
   @Test
@@ -80,7 +80,7 @@ class BenIsraelCohenTest {
     Tensor pinv1 = BenIsraelCohen.of(matrix);
     Tensor pinv2 = BenIsraelCohen.of(Transpose.of(matrix));
     Tolerance.CHOP.requireClose(Transpose.of(pinv1), pinv2);
-    InfluenceMatrixQ.INSTANCE.requireMember(pinv1.dot(matrix));
+    InfluenceMatrixQ.INSTANCE.require(pinv1.dot(matrix));
   }
 
   @Test
@@ -111,7 +111,7 @@ class BenIsraelCohenTest {
     Tensor matrix = p1.dot(p2);
     Tensor refine = BenIsraelCohen.of(matrix);
     Chop._09.requireClose(PseudoInverse.of(matrix), refine);
-    InfluenceMatrixQ.INSTANCE.requireMember(refine.dot(matrix));
+    InfluenceMatrixQ.INSTANCE.require(refine.dot(matrix));
   }
 
   @Test

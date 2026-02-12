@@ -71,7 +71,7 @@ class InfluenceMatrixSvdTest {
       SingularValueDecomposition svd = SingularValueDecomposition.of(design);
       assertEquals(EqualsReduce.zero(svd.getU()), RealScalar.ZERO);
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-      InfluenceMatrixQ.INSTANCE.requireMember(influenceMatrix.matrix());
+      InfluenceMatrixQ.INSTANCE.require(influenceMatrix.matrix());
       influenceMatrix.residualMaker();
       Tensor vector = RandomVariate.of(distribution, n);
       Tensor image = influenceMatrix.image(vector);

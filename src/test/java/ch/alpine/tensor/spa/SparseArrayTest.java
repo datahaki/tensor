@@ -236,7 +236,7 @@ class SparseArrayTest {
   @Test
   void testCreateId() {
     Tensor sparse = TensorToSparseArray.of(IdentityMatrix.of(5));
-    SquareMatrixQ.INSTANCE.requireMember(sparse);
+    SquareMatrixQ.INSTANCE.require(sparse);
     assertEquals(Inverse.of(sparse), IdentityMatrix.of(5));
   }
 

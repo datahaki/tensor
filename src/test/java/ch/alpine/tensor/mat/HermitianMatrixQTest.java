@@ -19,45 +19,45 @@ import ch.alpine.tensor.sca.Chop;
 class HermitianMatrixQTest {
   @Test
   void testMatrix() {
-    assertTrue(HermitianMatrixQ.INSTANCE.isMember(Tensors.fromString("{{0, I}, {-I, 0}}")));
-    assertFalse(HermitianMatrixQ.INSTANCE.isMember(Tensors.fromString("{{I, I}, {-I, 0}}")));
-    assertFalse(HermitianMatrixQ.INSTANCE.isMember(Tensors.fromString("{{0, I}, {I, 0}}")));
+    assertTrue(HermitianMatrixQ.INSTANCE.test(Tensors.fromString("{{0, I}, {-I, 0}}")));
+    assertFalse(HermitianMatrixQ.INSTANCE.test(Tensors.fromString("{{I, I}, {-I, 0}}")));
+    assertFalse(HermitianMatrixQ.INSTANCE.test(Tensors.fromString("{{0, I}, {I, 0}}")));
   }
 
   @Test
   void testHilbert() {
-    assertTrue(HermitianMatrixQ.INSTANCE.isMember(HilbertMatrix.of(10)));
+    assertTrue(HermitianMatrixQ.INSTANCE.test(HilbertMatrix.of(10)));
   }
 
   @Test
   void testRectangular() {
-    assertFalse(HermitianMatrixQ.INSTANCE.isMember(Array.zeros(2, 3, 3)));
-    assertFalse(HermitianMatrixQ.INSTANCE.isMember(HilbertMatrix.of(3, 4)));
+    assertFalse(HermitianMatrixQ.INSTANCE.test(Array.zeros(2, 3, 3)));
+    assertFalse(HermitianMatrixQ.INSTANCE.test(HilbertMatrix.of(3, 4)));
   }
 
   @Test
   void testNaN() {
-    assertFalse(HermitianMatrixQ.INSTANCE.isMember(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
+    assertFalse(HermitianMatrixQ.INSTANCE.test(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
   }
 
   @Test
   void testNonMatrix() {
-    assertFalse(HermitianMatrixQ.INSTANCE.isMember(Tensors.vector(1, 2, 3)));
-    assertFalse(HermitianMatrixQ.INSTANCE.isMember(RealScalar.ONE));
+    assertFalse(HermitianMatrixQ.INSTANCE.test(Tensors.vector(1, 2, 3)));
+    assertFalse(HermitianMatrixQ.INSTANCE.test(RealScalar.ONE));
   }
 
   @Test
   void testRequire() {
-    assertEquals(HermitianMatrixQ.INSTANCE.requireMember(HilbertMatrix.of(10)), HilbertMatrix.of(10));
+    assertEquals(HermitianMatrixQ.INSTANCE.require(HilbertMatrix.of(10)), HilbertMatrix.of(10));
   }
 
   @Test
   void testRequireFail() {
-    assertThrows(Throw.class, () -> HermitianMatrixQ.INSTANCE.requireMember(Tensors.vector(1, 2, 3)));
+    assertThrows(Throw.class, () -> HermitianMatrixQ.INSTANCE.require(Tensors.vector(1, 2, 3)));
   }
 
   @Test
   void testRequireChop() {
-    assertThrows(Throw.class, () -> new HermitianMatrixQ(Chop._02).requireMember(Tensors.vector(1, 2, 3)));
+    assertThrows(Throw.class, () -> new HermitianMatrixQ(Chop._02).require(Tensors.vector(1, 2, 3)));
   }
 }

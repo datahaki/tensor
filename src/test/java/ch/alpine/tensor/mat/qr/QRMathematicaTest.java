@@ -78,9 +78,9 @@ class QRMathematicaTest {
       assertEquals(dq, Arrays.asList(n, Math.min(n, m)));
       assertEquals(dq, Dimensions.of(matrix));
       assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(Math.min(n, m), m));
-      SquareMatrixQ.INSTANCE.requireMember(qrDecomposition.getR());
+      SquareMatrixQ.INSTANCE.require(qrDecomposition.getR());
       Tolerance.CHOP.requireClose(qrDecomposition.getQ().dot(qrDecomposition.getR()), matrix);
-      assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(qrDecomposition.getQConjugateTranspose()));
+      assertTrue(OrthogonalMatrixQ.INSTANCE.test(qrDecomposition.getQConjugateTranspose()));
       Tolerance.CHOP.requireClose(qrdi.pseudoInverse(), qrDecomposition.pseudoInverse());
     }
   }
@@ -94,8 +94,8 @@ class QRMathematicaTest {
       QRDecompositionImpl qrdi = (QRDecompositionImpl) QRDecompositionWrap.of(matrix);
       QRMathematica qrDecomposition = (QRMathematica) QRMathematica.wrap(qrdi);
       Tolerance.CHOP.requireClose(qrDecomposition.getQ().dot(qrDecomposition.getR()), matrix);
-      assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(qrDecomposition.getQ()));
-      assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(qrDecomposition.getQConjugateTranspose()));
+      assertTrue(OrthogonalMatrixQ.INSTANCE.test(qrDecomposition.getQ()));
+      assertTrue(OrthogonalMatrixQ.INSTANCE.test(qrDecomposition.getQConjugateTranspose()));
       assertEquals(Dimensions.of(qrDecomposition.getQConjugateTranspose()), Arrays.asList(Math.min(n, m), n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, Math.min(n, m)));
       assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(Math.min(n, m), m));

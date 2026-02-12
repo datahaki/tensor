@@ -64,7 +64,7 @@ class OrthogonalizeTest {
   @Test
   void testMatrix1X3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1}}");
-    assertFalse(OrthogonalMatrixQ.INSTANCE.isMember(matrix));
+    assertFalse(OrthogonalMatrixQ.INSTANCE.test(matrix));
     _check(matrix);
   }
 
@@ -82,7 +82,7 @@ class OrthogonalizeTest {
   @Test
   void testMatrix2X3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1}, {1, 1, 1}}");
-    assertFalse(OrthogonalMatrixQ.INSTANCE.isMember(matrix));
+    assertFalse(OrthogonalMatrixQ.INSTANCE.test(matrix));
     _check(matrix);
   }
 
@@ -91,7 +91,7 @@ class OrthogonalizeTest {
     Tensor v0 = Tensors.fromString("{1, 0, 1}");
     Tensor v1 = Tensors.fromString("{0, 1, 0}");
     Tensor matrix = Tensors.of(v0, v1);
-    assertFalse(OrthogonalMatrixQ.INSTANCE.isMember(matrix));
+    assertFalse(OrthogonalMatrixQ.INSTANCE.test(matrix));
     _check(matrix);
     Tensor q1 = Orthogonalize.of(matrix);
     Scalar angle1 = VectorAngle.of(q1.get(0), v0).orElseThrow();
@@ -148,11 +148,11 @@ class OrthogonalizeTest {
   void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
     Tensor mmt = MatrixDotTranspose.of(matrix, matrix.maps(Conjugate.FUNCTION));
-    HermitianMatrixQ.INSTANCE.requireMember(mmt);
+    HermitianMatrixQ.INSTANCE.require(mmt);
     Tensor q1 = Orthogonalize.of(matrix);
-    assertTrue(UnitaryMatrixQ.INSTANCE.isMember(q1));
+    assertTrue(UnitaryMatrixQ.INSTANCE.test(q1));
     Tensor q3 = Orthogonalize.usingPD(matrix);
-    assertTrue(UnitaryMatrixQ.INSTANCE.isMember(q3));
+    assertTrue(UnitaryMatrixQ.INSTANCE.test(q3));
   }
 
   @Test
@@ -183,7 +183,7 @@ class OrthogonalizeTest {
     Tensor s1 = Orthogonalize.usingSvd(matrix);
     Tensor r1 = Orthogonalize.usingPD(matrix);
     Tolerance.CHOP.requireClose(r1, s1);
-    OrthogonalMatrixQ.INSTANCE.requireMember(r1);
+    OrthogonalMatrixQ.INSTANCE.require(r1);
     Chop.NONE.requireAllZero(r1.maps(Im.FUNCTION));
     Tensor s2 = Orthogonalize.usingSvd(s1);
     Tensor r2 = Orthogonalize.usingPD(r1);
@@ -250,7 +250,7 @@ class OrthogonalizeTest {
   @ValueSource(ints = { 1, 2, 3, 4 })
   void testMatrixExp(int d) {
     Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
-    OrthogonalMatrixQ.INSTANCE.requireMember(matrix);
+    OrthogonalMatrixQ.INSTANCE.require(matrix);
     Tolerance.CHOP.requireClose(matrix, Orthogonalize.of(matrix));
     Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingSvd(matrix));
     Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingPD(matrix));

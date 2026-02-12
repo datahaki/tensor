@@ -157,17 +157,17 @@ class MatrixPowerTest {
     Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
     {
       Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
-      SymmetricMatrixQ.INSTANCE.requireMember(sqrt);
+      SymmetricMatrixQ.INSTANCE.require(sqrt);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
     }
     {
       Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 3));
-      SymmetricMatrixQ.INSTANCE.requireMember(sqrt);
+      SymmetricMatrixQ.INSTANCE.require(sqrt);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt), matrix);
     }
     {
       Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 4));
-      SymmetricMatrixQ.INSTANCE.requireMember(sqrt);
+      SymmetricMatrixQ.INSTANCE.require(sqrt);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt).dot(sqrt), matrix);
     }
   }
@@ -204,7 +204,7 @@ class MatrixPowerTest {
   void testHermitian() {
     Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
     Tensor hermitian = MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
-    SquareMatrixQ.INSTANCE.requireMember(hermitian);
+    SquareMatrixQ.INSTANCE.require(hermitian);
   }
 
   @Test

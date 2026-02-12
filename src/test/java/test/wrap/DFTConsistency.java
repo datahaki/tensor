@@ -47,8 +47,8 @@ public enum DFTConsistency {
   public static void show(DiscreteFourierTransform dft) {
     Tensor matrix = dft.matrix(8);
     IO.println(dft);
-    IO.println(SymmetricMatrixQ.INSTANCE.isMember(matrix));
-    IO.println(HermitianMatrixQ.INSTANCE.isMember(matrix));
+    IO.println(SymmetricMatrixQ.INSTANCE.test(matrix));
+    IO.println(HermitianMatrixQ.INSTANCE.test(matrix));
     IO.println(Pretty.of(matrix.maps(Round._3)));
   }
 

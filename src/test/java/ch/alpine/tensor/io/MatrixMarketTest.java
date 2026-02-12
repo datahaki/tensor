@@ -48,7 +48,7 @@ class MatrixMarketTest {
   @Test
   void testCoordinateSymmetric() {
     Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/bcsstk13.mtx.gz");
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
   }
 
   @Test

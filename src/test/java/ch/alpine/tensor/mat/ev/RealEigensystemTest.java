@@ -104,14 +104,14 @@ class RealEigensystemTest {
     Tensor ini = RandomVariate.of(distribution, new Random(3), n, n);
     // antisymm
     Tensor matrix = Transpose.of(ini).subtract(ini);
-    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.test(matrix));
     RealEigensystem realEigensystem = RealEigensystem.of(matrix);
     new EigensystemQ(matrix).require(realEigensystem);
     Tensor vectors = realEigensystem.vectors();
     Tensor values = realEigensystem.values();
     values.toString();
     Tensor diag = realEigensystem.diagonalMatrix();
-    OrthogonalMatrixQ.INSTANCE.requireMember(vectors);
+    OrthogonalMatrixQ.INSTANCE.require(vectors);
     Tensor recons = Transpose.of(vectors).dot(diag).dot(vectors);
     Scalar err = MatrixInfinityNorm.of(matrix.subtract(recons));
     if (!Chop._20.isClose(matrix, recons)) {

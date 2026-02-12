@@ -49,8 +49,8 @@ class CholeskyDecompositionImplTest {
     Tensor matrix = Tensors.matrix((_, _) -> GaussScalar.of(randomGenerator.nextInt(), prime), n, n);
     // Symmetrize
     matrix = Transpose.of(matrix).add(matrix).divide(GaussScalar.of(2, prime));
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
-    HermitianMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
+    HermitianMatrixQ.INSTANCE.require(matrix);
     CholeskyDecomposition choleskyDecomposition = //
         Serialization.copy(CholeskyDecompositionWrap.of(matrix));
     Tensor result = MatrixDotTranspose.of(Dot.of( //

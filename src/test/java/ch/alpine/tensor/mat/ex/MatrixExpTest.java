@@ -82,15 +82,15 @@ class MatrixExpTest {
     Tensor A = RandomVariate.of(distribution, n, n);
     Tensor S = TensorWedge.of(A);
     Tensor o = MatrixExp.of(S);
-    OrthogonalMatrixQ.INSTANCE.requireMember(o);
+    OrthogonalMatrixQ.INSTANCE.require(o);
   }
 
   @Test
   void testGoldenThompsonInequality() {
     Tensor a = Tensors.fromString("{{2, I}, {-I, 2}}");
     Tensor b = Tensors.fromString("{{2, 1-I}, {1+I, 2}}");
-    assertTrue(HermitianMatrixQ.INSTANCE.isMember(a));
-    assertTrue(HermitianMatrixQ.INSTANCE.isMember(b));
+    assertTrue(HermitianMatrixQ.INSTANCE.test(a));
+    assertTrue(HermitianMatrixQ.INSTANCE.test(b));
     Tensor tra = Trace.of(MatrixExp.of(a.add(b)));
     Tensor trb = Trace.of(MatrixExp.of(a).dot(MatrixExp.of(b)));
     Chop._08.requireClose(tra, RealScalar.of(168.49869602)); // mathematica
@@ -173,7 +173,7 @@ class MatrixExpTest {
     Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
     Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
-    HermitianMatrixQ.INSTANCE.requireMember(matrix);
+    HermitianMatrixQ.INSTANCE.require(matrix);
     Tensor exp1 = MatrixExp.of(matrix);
     Tensor exp2 = MatrixExp.ofHermitian(matrix);
     Tolerance.CHOP.requireClose(exp1, exp2);

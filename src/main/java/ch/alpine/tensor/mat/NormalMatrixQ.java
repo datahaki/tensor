@@ -16,7 +16,7 @@ public enum NormalMatrixQ {
    * @param chop
    * @return true if tensor is an explicitly normal matrix */
   public static boolean of(Tensor tensor, Chop chop) {
-    if (SquareMatrixQ.INSTANCE.isMember(tensor)) {
+    if (SquareMatrixQ.INSTANCE.test(tensor)) {
       Tensor ct = ConjugateTranspose.of(tensor);
       return chop.isClose(tensor.dot(ct), ct.dot(tensor));
     }

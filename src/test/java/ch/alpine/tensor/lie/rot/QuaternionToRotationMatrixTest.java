@@ -35,13 +35,13 @@ class QuaternionToRotationMatrixTest {
     Quaternion quaternion = Quaternion.of(0.240810, -0.761102, -0.355923, -0.485854);
     quaternion = quaternion.divide(quaternion.abs());
     Tensor matrix = QuaternionToRotationMatrix.of(quaternion);
-    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.test(matrix));
     Chop._12.requireClose(Det.of(matrix), RealScalar.ONE);
     Tensor xyza = Append.of(quaternion.xyz(), quaternion.w());
     xyza = Vector2Norm.NORMALIZE.apply(xyza);
     Tensor rot = QuaternionToRotationMatrix.of(xyza);
     Chop._12.requireClose(matrix, rot);
-    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(rot));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.test(rot));
   }
 
   @ParameterizedTest
@@ -51,7 +51,7 @@ class QuaternionToRotationMatrixTest {
     Quaternion q = Quaternion.of(wxyz.Get(0), wxyz.extract(1, 4));
     q = q.divide(q.abs());
     Tensor matrix = QuaternionToRotationMatrix.of(q);
-    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.test(matrix));
     Chop._12.requireClose(Det.of(matrix), RealScalar.ONE);
     Quaternion reciprocal = q.reciprocal();
     Tensor invmat = QuaternionToRotationMatrix.of(reciprocal);
@@ -70,7 +70,7 @@ class QuaternionToRotationMatrixTest {
     Quaternion qvqi = quaternion.multiply(v).multiply(Conjugate.FUNCTION.apply(quaternion));
     Quaternion qq = quaternion;
     Tensor matrix = QuaternionToRotationMatrix.of(qq);
-    assertTrue(OrthogonalMatrixQ.INSTANCE.isMember(matrix));
+    assertTrue(OrthogonalMatrixQ.INSTANCE.test(matrix));
     Chop._12.requireClose(Det.of(matrix), RealScalar.ONE);
     Tensor result = matrix.dot(vector);
     Chop._12.requireClose(result, qvqi.xyz());

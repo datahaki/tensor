@@ -19,32 +19,32 @@ import ch.alpine.tensor.lie.rot.Cross;
 class AntisymmetricMatrixQTest {
   @Test
   void testMatrix() {
-    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(Array.zeros(4, 4)));
-    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(IdentityMatrix.of(3)));
-    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(Tensors.fromString("{{0, 1}, {-1, 0}}")));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.test(Array.zeros(4, 4)));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.test(IdentityMatrix.of(3)));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.test(Tensors.fromString("{{0, 1}, {-1, 0}}")));
   }
 
   @Test
   void testRectangularMatrix() {
-    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(Array.zeros(2, 4)));
-    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(HilbertMatrix.of(2, 3)));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.test(Array.zeros(2, 4)));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.test(HilbertMatrix.of(2, 3)));
   }
 
   @Test
   void testCross() {
-    assertTrue(AntisymmetricMatrixQ.INSTANCE.isMember(Cross.skew3(Tensors.vector(1, 2, 3))));
+    assertTrue(AntisymmetricMatrixQ.INSTANCE.test(Cross.skew3(Tensors.vector(1, 2, 3))));
   }
 
   @Test
   void testNonMatrix() {
-    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(RealScalar.ONE));
-    assertFalse(AntisymmetricMatrixQ.INSTANCE.isMember(LeviCivitaTensor.of(3)));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.test(RealScalar.ONE));
+    assertFalse(AntisymmetricMatrixQ.INSTANCE.test(LeviCivitaTensor.of(3)));
   }
 
   @Test
   void testRequire() {
     Tensor matrix = Tensors.fromString("{{0, 2}, {-2, 0}}");
-    assertEquals(AntisymmetricMatrixQ.INSTANCE.requireMember(matrix), matrix);
-    assertThrows(Throw.class, () -> AntisymmetricMatrixQ.INSTANCE.requireMember(Tensors.fromString("{{0, 2}, {-1, 0}}")));
+    assertEquals(AntisymmetricMatrixQ.INSTANCE.require(matrix), matrix);
+    assertThrows(Throw.class, () -> AntisymmetricMatrixQ.INSTANCE.require(Tensors.fromString("{{0, 2}, {-1, 0}}")));
   }
 }

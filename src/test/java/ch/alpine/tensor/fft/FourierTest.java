@@ -87,11 +87,11 @@ class FourierTest {
 
   public void checkFormat(int n) {
     Tensor original = Fourier.FORWARD.matrix(n);
-    SymmetricMatrixQ.INSTANCE.requireMember(original);
+    SymmetricMatrixQ.INSTANCE.require(original);
     Tensor matrix = original.maps(Tolerance.CHOP);
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     Tensor invert = ConjugateTranspose.of(matrix);
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     Tolerance.CHOP.requireClose(matrix.dot(invert), IdentityMatrix.of(n));
     Tolerance.CHOP.requireClose(Inverse.of(matrix), invert);
   }

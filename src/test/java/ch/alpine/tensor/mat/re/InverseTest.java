@@ -172,8 +172,8 @@ class InverseTest {
     assertEquals(matrix.dot(inverse), expect);
     Tensor dual = Tensors.fromString("{{1, 0[m^-1*rad], 0[kg*m^-1]}, {0[m*rad^-1], 1, 0[kg*rad^-1]}, {0[kg^-1*m], 0[kg^-1*rad], 1}}");
     assertEquals(inverse.dot(matrix), dual);
-    assertFalse(HermitianMatrixQ.INSTANCE.isMember(matrix));
-    assertFalse(SymmetricMatrixQ.INSTANCE.isMember(matrix));
+    assertFalse(HermitianMatrixQ.INSTANCE.test(matrix));
+    assertFalse(SymmetricMatrixQ.INSTANCE.test(matrix));
   }
 
   @Test
@@ -214,7 +214,7 @@ class InverseTest {
   void testMixed3x3() {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
-    SymmetricMatrixQ.INSTANCE.requireMember(matrix);
+    SymmetricMatrixQ.INSTANCE.require(matrix);
     Tensor inverse = Inverse.of(matrix);
     Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
     assertEquals(matrix.dot(inverse), expect);
