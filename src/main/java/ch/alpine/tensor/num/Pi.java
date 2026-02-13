@@ -18,8 +18,10 @@ public enum Pi {
   ;
   /** 3.14159265358979323846 */
   public static final Scalar VALUE = DoubleScalar.of(Math.PI);
-  public static final Scalar HALF = DoubleScalar.of(Math.PI / 2);
-  public static final Scalar TWO = DoubleScalar.of(Math.PI + Math.PI);
+  public static final Scalar HALF = DoubleScalar.of(1.5707963267948966192313216916397514420985846996875529104874722961);
+  public static final Scalar TWO = DoubleScalar.of(6.2831853071795864769252867665590057683943387987502116419498891846);
+  public static final Scalar QUARTER = DoubleScalar.of(0.7853981633974483096156608458198757210492923498437764552437361480);
+  public static final Scalar _3_4 = DoubleScalar.of(2.3561944901923449288469825374596271631478770495313293657312084442);
   // ---
   private static final Scalar _6 = RealScalar.of(6);
   private static final Scalar _13591409 = RealScalar.of(13591409);

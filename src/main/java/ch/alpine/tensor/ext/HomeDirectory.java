@@ -31,6 +31,7 @@ public enum HomeDirectory {
   Projects,
   /** Publicly shared files */
   Public,
+  public_html,
   /** (possibly does not pre-exist on Windows) */
   Templates,
   /** Video files */

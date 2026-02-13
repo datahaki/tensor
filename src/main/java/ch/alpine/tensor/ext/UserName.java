@@ -1,8 +1,6 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
-import java.nio.file.Path;
-
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/$UserName.html">$UserName</a> */
 public enum UserName {
@@ -19,9 +17,5 @@ public enum UserName {
    * @throws Exception if given username is null */
   public static boolean is(String username) {
     return username.equals(whoami());
-  }
-
-  public static Path home() {
-    return StaticHelper.USER_HOME;
   }
 }

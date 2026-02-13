@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -42,7 +43,17 @@ class HomeDirectoryTest {
   }
 
   @Test
+  void testHome() {
+    Path base = HomeDirectory.Pictures.resolve();
+    assertEquals(base, HomeDirectory.Pictures.resolve());
+    assertEquals(base, HomeDirectory.Pictures.resolve(""));
+    assertEquals(base, HomeDirectory.Pictures.resolve("", ""));
+    assertEquals(base, HomeDirectory.Pictures.resolve("", "", ""));
+  }
+
+  @Test
   void testNullFail() {
     assertThrows(NullPointerException.class, () -> HomeDirectory.Documents.resolve("here", null, "some.txt"));
+    assertThrows(NullPointerException.class, () -> HomeDirectory.Documents.resolve((String) null));
   }
 }
