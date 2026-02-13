@@ -27,6 +27,7 @@ public enum HomeDirectory {
   Music,
   /** Image files */
   Pictures,
+  /** Source code */
   Projects,
   /** Publicly shared files */
   Public,
@@ -53,8 +54,8 @@ public enum HomeDirectory {
   public Path resolve(String... strings) {
     if (!Files.isDirectory(path))
       try {
-        IO.println("create missing base directory: " + path);
-        Files.createDirectory(path);
+        // create missing base directories, e.g. .local/share
+        Files.createDirectories(path);
       } catch (IOException ioException) {
         throw new UncheckedIOException(ioException);
       }
