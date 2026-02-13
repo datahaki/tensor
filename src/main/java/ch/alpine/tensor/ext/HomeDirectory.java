@@ -27,6 +27,7 @@ public enum HomeDirectory {
   Music,
   /** Image files */
   Pictures,
+  Projects,
   /** Publicly shared files */
   Public,
   /** (possibly does not pre-exist on Windows) */
@@ -42,16 +43,6 @@ public enum HomeDirectory {
 
   private HomeDirectory() {
     path = join(StaticHelper.USER_HOME, name());
-  }
-
-  /** On linux, the directory has the form
-   * /home/$USERNAME/string[0]/string[1]/...
-   * 
-   * @param strings
-   * @return $user.home/string[0]/string[1]/... */
-  @Deprecated
-  public static Path path(String... strings) {
-    return join(StaticHelper.USER_HOME, strings);
   }
 
   /** On linux, the directory has the form
