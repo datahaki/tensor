@@ -90,6 +90,7 @@ public enum Power {
    * @param exponent
    * @return scalar ^ exponent */
   private static Scalar evaluate(Scalar scalar, Scalar exponent) {
+    // TODO TENSOR for Power.function it would me more efficient to do preprocessing exponent w/o scalar
     if (scalar instanceof PowerInterface powerInterface)
       return powerInterface.power(exponent);
     Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);

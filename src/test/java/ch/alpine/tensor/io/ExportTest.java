@@ -6,9 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -151,5 +156,27 @@ class ExportTest {
     Path path = tempDir.resolve("tensorObjectNull.file");
     assertFalse(Files.isRegularFile(path));
     assertThrows(NullPointerException.class, () -> Export.object(path, null));
+  }
+
+  @Test
+  void testGrayAlpha() throws IOException {
+    Distribution distribution = DiscreteUniformDistribution.forArray(256);
+    Tensor image = RandomVariate.of(distribution, 100, 80, 2);
+    int x = 10;
+    int y = 20;
+    Tensor pixel = image.get(y, x);
+    Path path = tempDir.resolve("grayscalealpha.png");
+    Export.of(path, image);
+    try (InputStream inputStream = Files.newInputStream(path)) {
+      BufferedImage bufferedImage = ImageIO.read(inputStream);
+      int type = bufferedImage.getType();
+      assertEquals(type, BufferedImage.TYPE_CUSTOM);
+      WritableRaster writableRaster = bufferedImage.getRaster();
+      int numBands = writableRaster.getNumBands();
+      assertEquals(numBands, 2);
+      int[] read = new int[2];
+      writableRaster.getPixel(x, y, read);
+      assertEquals(pixel, Tensors.vectorInt(read));
+    }
   }
 }

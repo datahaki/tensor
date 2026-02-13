@@ -1,37 +1,57 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-/** inspired by
+/** folders do not have to exists
+ * base folders are created if needed only when {@link #resolve(String...)}
+ * is invoked
+ * 
+ * inspired by
  * <a href="https://reference.wolfram.com/language/ref/$HomeDirectory.html">$HomeDirectory</a> */
 public enum HomeDirectory {
+  _local_share(".local", "share"),
   /** Items shown on the desktop */
   Desktop,
   /** Default location for text files, Office docs, etc. */
   Documents,
   /** Where browsers save files by default */
   Downloads,
+  /** auto-generated and machine-read files */
+  Ephemeral,
   /** Audio files */
   Music,
   /** Image files */
   Pictures,
+  /** Publicly shared files */
+  Public,
   /** (possibly does not pre-exist on Windows) */
   Templates,
   /** Video files */
   Videos;
 
-  private static final Path USER_HOME = Path.of(System.getProperty("user.home"));
+  private final Path path;
+
+  private HomeDirectory(String... strings) {
+    path = join(StaticHelper.USER_HOME, strings);
+  }
+
+  private HomeDirectory() {
+    path = join(StaticHelper.USER_HOME, name());
+  }
 
   /** On linux, the directory has the form
    * /home/$USERNAME/string[0]/string[1]/...
    * 
    * @param strings
    * @return $user.home/string[0]/string[1]/... */
+  @Deprecated
   public static Path path(String... strings) {
-    return join(USER_HOME, strings);
+    return join(StaticHelper.USER_HOME, strings);
   }
 
   /** On linux, the directory has the form
@@ -40,18 +60,33 @@ public enum HomeDirectory {
    * @param strings
    * @return $user.home/Desktop/string[0]/string[1]/... */
   public Path resolve(String... strings) {
-    Path path = path(name());
     if (!Files.isDirectory(path))
       try {
-        IO.println("create missing directory: " + path);
+        IO.println("create missing base directory: " + path);
         Files.createDirectory(path);
-      } catch (Exception exception) {
-        throw new RuntimeException(exception);
+      } catch (IOException ioException) {
+        throw new UncheckedIOException(ioException);
       }
     return join(path, strings);
   }
 
+  public Path createDirectories(String... strings) {
+    Path path = resolve(strings);
+    if (!Files.isDirectory(path))
+      try {
+        Files.createDirectories(path);
+      } catch (IOException ioException) {
+        throw new UncheckedIOException(ioException);
+      }
+    return path;
+  }
+
   private static Path join(Path start, String... parts) {
     return Arrays.stream(parts).reduce(start, Path::resolve, Path::resolve);
+  }
+
+  @Override
+  public String toString() {
+    return path.toString();
   }
 }

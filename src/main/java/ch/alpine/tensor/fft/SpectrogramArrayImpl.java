@@ -10,6 +10,9 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Abs;
 
+/** @param process
+ * @param slidingWindow
+ * @param window */
 /* package */ record SpectrogramArrayImpl(TensorUnaryOperator process, SlidingWindow slidingWindow, ScalarUnaryOperator window) implements SpectrogramArray {
   @Override
   public Tensor half_abs(Tensor vector) {

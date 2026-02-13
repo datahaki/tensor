@@ -20,15 +20,13 @@ import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
 class PathNameTest {
-  final String USER_NAME = System.getProperty("user.name");
-
   @Test
   void testDoesNotCreate() {
-    Path path = HomeDirectory.path("doesnotexist");
-    assumeTrue(USER_NAME.equals("datahaki"));
+    Path path = HomeDirectory.Documents.resolve("doesnotexist");
+    assumeTrue(UserName.is("datahaki"));
     assertFalse(Files.exists(path));
     assertFalse(Files.isDirectory(path));
-    Path sub = HomeDirectory.path("doesnotexist", "sub");
+    Path sub = HomeDirectory.Documents.resolve("doesnotexist", "sub");
     assertFalse(Files.exists(path));
     assertFalse(Files.isDirectory(path));
     assertThrows(Exception.class, () -> Files.list(sub));
@@ -36,8 +34,8 @@ class PathNameTest {
 
   @Test
   void testFile() {
-    assertEquals(PathName.of(HomeDirectory.path(".git")).title(), ".git");
-    assertEquals(PathName.of(HomeDirectory.path("a.git")).title(), "a");
+    assertEquals(PathName.of(HomeDirectory.Documents.resolve(".git")).title(), ".git");
+    assertEquals(PathName.of(HomeDirectory.Documents.resolve("a.git")).title(), "a");
   }
 
   @Test
@@ -50,7 +48,7 @@ class PathNameTest {
   @DisabledOnOs(OS.WINDOWS)
   @Test
   void testWhitespace() {
-    assertEquals(PathName.of(HomeDirectory.path("a.git ")).title(), "a");
+    assertEquals(PathName.of(HomeDirectory.Documents.resolve("a.git ")).title(), "a");
   }
 
   @Test
@@ -76,14 +74,14 @@ class PathNameTest {
 
   @Test
   void testFile1() {
-    assertEquals(PathName.of(HomeDirectory.path(".git")).extension(), "");
-    assertEquals(PathName.of(HomeDirectory.path("a.git")).extension(), "git");
+    assertEquals(PathName.of(HomeDirectory.Documents.resolve(".git")).extension(), "");
+    assertEquals(PathName.of(HomeDirectory.Documents.resolve("a.git")).extension(), "git");
   }
 
   @DisabledOnOs(OS.WINDOWS)
   @Test
   void testWhitespace2() {
-    assertEquals(PathName.of(HomeDirectory.path("a.git ")).extension(), "git ");
+    assertEquals(PathName.of(HomeDirectory.Documents.resolve("a.git ")).extension(), "git ");
   }
 
   @Test
@@ -102,10 +100,10 @@ class PathNameTest {
 
   @Test
   void testFileHomeDir() {
-    PathName filename = PathName.of(HomeDirectory.path("some.properties"));
+    PathName filename = PathName.of(HomeDirectory.Documents.resolve("some.properties"));
     assertEquals(filename.title(), "some");
     assertEquals(filename.extension(), "properties");
-    assertEquals(filename.withExtension("txt"), HomeDirectory.path("some.txt"));
+    assertEquals(filename.withExtension("txt"), HomeDirectory.Documents.resolve("some.txt"));
     assertThrows(Exception.class, () -> filename.withExtension(null));
   }
 

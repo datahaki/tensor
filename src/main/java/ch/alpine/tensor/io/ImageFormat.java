@@ -14,6 +14,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
+import ch.alpine.tensor.ext.GrayscaleImage;
 import ch.alpine.tensor.img.ColorFormat;
 
 /** ImageFormat uses the data alignment of {@link BufferedImage}.
@@ -51,6 +52,7 @@ public enum ImageFormat {
    * @param bufferedImage
    * @return tensor encoding the color values of given bufferedImage */
   public static Tensor from(BufferedImage bufferedImage) {
+    // TODO TENSOR reimport grayscale + alpha
     return switch (bufferedImage.getType()) {
     case BufferedImage.TYPE_BYTE_GRAY -> fromGrayscale(bufferedImage);
     default -> Tensors.matrix((y, x) -> ColorFormat.toVector(bufferedImage.getRGB(x, y)), //
@@ -76,9 +78,24 @@ public enum ImageFormat {
     List<Integer> dims = Dimensions.of(tensor);
     int width = dims.get(1);
     int height = dims.get(0);
-    return dims.size() == 2 //
-        ? toTYPE_GRAY(tensor, width, height)
-        : toTYPE_COLOR(tensor, width, height, imageType);
+    int channels = dims.size() == 2 ? 1 : dims.get(2);
+    return switch (channels) { //
+    case 1 -> toTYPE_GRAY(tensor, width, height);
+    case 2 -> toTYPE_GRAYA(tensor, width, height);
+    case 4 -> toTYPE_COLOR(tensor, width, height, imageType);
+    default -> throw new IllegalArgumentException("Unexpected value: " + channels);
+    };
+  }
+
+  static BufferedImage toTYPE_GRAYA(Tensor tensor, int width, int height) {
+    BufferedImage bufferedImage = GrayscaleImage.of(width, height);
+    WritableRaster writableRaster = bufferedImage.getRaster();
+    DataBufferByte dataBufferByte = (DataBufferByte) writableRaster.getDataBuffer();
+    byte[] bytes = dataBufferByte.getData();
+    ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
+    Flatten.stream(tensor, 2).map(Scalar.class::cast).map(Scalar::number) //
+        .forEach(number -> byteBuffer.put(number.byteValue()));
+    return bufferedImage;
   }
 
   /** @param bufferedImage grayscale image with dimensions [width x height]

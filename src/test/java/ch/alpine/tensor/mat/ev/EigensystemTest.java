@@ -83,7 +83,7 @@ class EigensystemTest {
       System.out.println("n=" + n);
       System.out.println(matrix);
       // TODO TENSOR store somewhere consistent
-      Export.of(HomeDirectory.path("eigensystem_fail_" + System.currentTimeMillis() + ".csv"), matrix);
+      Export.of(HomeDirectory.Ephemeral.resolve("eigensystem_fail_" + System.currentTimeMillis() + ".csv"), matrix);
       fail();
     }
   }

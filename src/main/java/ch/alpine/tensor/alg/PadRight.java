@@ -42,7 +42,7 @@ public class PadRight extends PadBase {
 
   /** @param dimensions non-empty
    * @return */
-  // TODO TENSOR CHECK wherever used investigate if scalar::zero is requires
+  // TODO TENSOR CHECK wherever used investigate if scalar::zero is required
   public static TensorUnaryOperator zeros(int... dimensions) {
     return zeros(Integers.asList(dimensions));
   }
