@@ -48,7 +48,7 @@ class JacobiComplexTest {
     new EigensystemQ(matrix).require(eigensystem);
     Chop.NONE.requireAllZero(eigensystem.values().maps(Im.FUNCTION));
     Tensor h = Tensors.matrix(jacobiComplex.H);
-    Tolerance.CHOP.requireClose(DiagonalMatrix.with(Diagonal.of(h)), h);
+    Tolerance.CHOP.requireClose(DiagonalMatrix.sparse(Diagonal.of(h)), h);
     // Tolerance.CHOP.requireClose( //
     // BasisTransform.ofMatrix(h, jacobiComplex.vectors()), //
     // matrix);
@@ -106,7 +106,7 @@ class JacobiComplexTest {
     jacobiComplex.solve();
     Chop.NONE.requireAllZero(eigensystem.values().maps(Im.FUNCTION));
     Tensor h = Tensors.matrix(jacobiComplex.H);
-    Tolerance.CHOP.requireClose(DiagonalMatrix.with(Diagonal.of(h)), h);
+    Tolerance.CHOP.requireClose(DiagonalMatrix.sparse(Diagonal.of(h)), h);
   }
 
   @Test

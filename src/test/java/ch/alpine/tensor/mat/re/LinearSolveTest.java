@@ -177,14 +177,14 @@ class LinearSolveTest {
   @Test
   void testDiag() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
-    Tensor x = LinearSolve.any(DiagonalMatrix.with(vector), vector);
+    Tensor x = LinearSolve.any(DiagonalMatrix.sparse(vector), vector);
     assertEquals(x, Tensors.fromString("{1, 1, 0, 1, 1, 1}"));
   }
 
   @Test
   void testDiag2() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
-    Tensor m = Join.of(DiagonalMatrix.with(vector), Array.zeros(3, 6));
+    Tensor m = Join.of(DiagonalMatrix.sparse(vector), Array.zeros(3, 6));
     Tensor b = Join.of(vector, Array.zeros(3));
     Tensor x = LinearSolve.any(m.unmodifiable(), b.unmodifiable());
     assertEquals(m.dot(x), b);
@@ -194,7 +194,7 @@ class LinearSolveTest {
   void testDiag2b() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     // m is 6 x 9 matrix
-    Tensor m = Join.of(1, DiagonalMatrix.with(vector), Array.zeros(6, 3));
+    Tensor m = Join.of(1, DiagonalMatrix.sparse(vector), Array.zeros(6, 3));
     Tensor b = Join.of(vector);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
@@ -204,7 +204,7 @@ class LinearSolveTest {
   @Test
   void testDiag3() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
-    Tensor m = Join.of(Array.zeros(3, 6), DiagonalMatrix.with(vector));
+    Tensor m = Join.of(Array.zeros(3, 6), DiagonalMatrix.sparse(vector));
     Tensor b = Join.of(Array.zeros(3), vector);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
@@ -213,7 +213,7 @@ class LinearSolveTest {
   @Test
   void testDiag3b() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
-    Tensor m = Join.of(1, Array.zeros(6, 3), DiagonalMatrix.with(vector));
+    Tensor m = Join.of(1, Array.zeros(6, 3), DiagonalMatrix.sparse(vector));
     Tensor b = Join.of(vector);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);

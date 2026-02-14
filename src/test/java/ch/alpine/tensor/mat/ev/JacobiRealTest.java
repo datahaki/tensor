@@ -41,7 +41,7 @@ class JacobiRealTest {
     for (int count = 0; count < 5; ++count) {
       Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, randomGenerator, d, d));
       Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-      Tensor diagon = DiagonalMatrix.with(eigensystem.values());
+      Tensor diagon = DiagonalMatrix.sparse(eigensystem.values());
       Tensor m1 = BasisTransform.ofMatrix(diagon, eigensystem.vectors());
       Tolerance.CHOP.requireClose(m1, matrix);
       new EigensystemQ(matrix).require(eigensystem);
@@ -53,7 +53,7 @@ class JacobiRealTest {
     Tensor matrix = HilbertMatrix.of(4).unmodifiable();
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor vs = eigensystem.vectors();
-    Tensor D = DiagonalMatrix.with(eigensystem.values());
+    Tensor D = DiagonalMatrix.sparse(eigensystem.values());
     Tensor v = Transpose.of(vs);
     Tolerance.CHOP.requireClose(Dot.of(v, D, vs), matrix);
     Tolerance.CHOP.requireClose(Dot.of(vs, matrix, v), D);

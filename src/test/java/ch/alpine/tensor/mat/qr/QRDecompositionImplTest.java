@@ -46,7 +46,7 @@ class QRDecompositionImplTest {
   @Test
   void testDegenerate1Square() {
     for (int n = 1; n < 6; ++n) {
-      Tensor matrix = DiagonalMatrix.with(UnitVector.of(n, 0));
+      Tensor matrix = DiagonalMatrix.sparse(UnitVector.of(n, 0));
       QRDecomposition qrDecomposition = QRDecompositionWrap.of(matrix);
       assertEquals(qrDecomposition.getQConjugateTranspose(), IdentityMatrix.of(n));
       assertEquals(qrDecomposition.getR(), matrix);

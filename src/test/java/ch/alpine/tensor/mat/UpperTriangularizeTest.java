@@ -41,7 +41,7 @@ class UpperTriangularizeTest {
     Tensor matrix = RandomVariate.of(distribution, 10, 10);
     Tensor result = Total.of(Tensors.of( //
         LowerTriangularize.of(matrix, -1), //
-        DiagonalMatrix.with(Diagonal.of(matrix)), //
+        DiagonalMatrix.sparse(Diagonal.of(matrix)), //
         UpperTriangularize.of(matrix, 1)));
     assertEquals(matrix, result);
   }

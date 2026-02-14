@@ -59,7 +59,7 @@ class EigensystemTest {
     int n = 6;
     Distribution distribution = UniformDistribution.of(-10, 10);
     Tensor vector = RandomVariate.of(distribution, n);
-    Tensor diag = DiagonalMatrix.with(vector);
+    Tensor diag = DiagonalMatrix.sparse(vector);
     Tensor v = Orthogonalize.of(RandomVariate.of(NormalDistribution.standard(), n, n));
     Tensor matrix = BasisTransform.ofMatrix(diag, v);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix).decreasing();

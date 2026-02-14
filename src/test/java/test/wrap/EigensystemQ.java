@@ -17,7 +17,7 @@ public record EigensystemQ(Tensor matrix) implements Serializable {
   /** @param eigensystem
    * @param chop */
   public void require(Eigensystem eigensystem, Chop chop) {
-    Tensor diagonalMatrix = DiagonalMatrix.with(eigensystem.values());
+    Tensor diagonalMatrix = DiagonalMatrix.sparse(eigensystem.values());
     SerializableQ.require(eigensystem);
     require(diagonalMatrix, eigensystem.vectors(), chop);
   }

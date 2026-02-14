@@ -81,7 +81,7 @@ class QRSvdTest {
     Tensor v1 = SingularValueList.of(matrix);
     Tensor v2 = SingularValueList.of(svd);
     Tolerance.CHOP.requireClose(v1, v2);
-    Tensor approx = MatrixDotTranspose.of(Dot.of(svd.getU(), DiagonalMatrix.with(svd.values())), svd.getV());
+    Tensor approx = MatrixDotTranspose.of(Dot.of(svd.getU(), DiagonalMatrix.sparse(svd.values())), svd.getV());
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
@@ -94,7 +94,7 @@ class QRSvdTest {
     Tensor v1 = SingularValueList.of(matrix);
     Tensor v2 = SingularValueList.of(svd);
     Tolerance.CHOP.requireClose(v1, v2);
-    Tensor approx = MatrixDotTranspose.of(Dot.of(svd.getU(), DiagonalMatrix.with(svd.values())), svd.getV());
+    Tensor approx = MatrixDotTranspose.of(Dot.of(svd.getU(), DiagonalMatrix.sparse(svd.values())), svd.getV());
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
@@ -107,7 +107,7 @@ class QRSvdTest {
     Tensor v1 = SingularValueList.of(matrix);
     Tensor v2 = SingularValueList.of(svd);
     Tolerance.CHOP.requireClose(v1, v2);
-    Tensor approx = MatrixDotTranspose.of(Dot.of(svd.getU(), DiagonalMatrix.with(svd.values())), svd.getV());
+    Tensor approx = MatrixDotTranspose.of(Dot.of(svd.getU(), DiagonalMatrix.sparse(svd.values())), svd.getV());
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 }

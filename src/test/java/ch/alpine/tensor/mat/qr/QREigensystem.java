@@ -27,7 +27,7 @@ import ch.alpine.tensor.sca.Chop;
       Tensor q = qrDecomposition.getQ();
       qn = Objects.isNull(qn) ? q : qn.dot(q);
       // rather check if difference converges to 0 !?
-      if (chop.isClose(r, DiagonalMatrix.with(Diagonal.of(r)))) {
+      if (chop.isClose(r, DiagonalMatrix.sparse(Diagonal.of(r)))) {
         // System.out.println("finish at " + index);
         break;
       }

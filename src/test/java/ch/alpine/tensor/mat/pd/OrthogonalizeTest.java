@@ -50,7 +50,7 @@ class OrthogonalizeTest {
   private static void orthogonalMatrixQ_require(Tensor q) {
     Tensor id = MatrixDotTranspose.of(q, q);
     Tensor diagonal = Diagonal.of(id);
-    Tolerance.CHOP.requireClose(id, DiagonalMatrix.with(diagonal));
+    Tolerance.CHOP.requireClose(id, DiagonalMatrix.sparse(diagonal));
     for (Tensor d : diagonal)
       assertTrue(Tolerance.CHOP.isClose(d, RealScalar.ONE) || Tolerance.CHOP.isClose(d, RealScalar.ZERO));
   }

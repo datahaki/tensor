@@ -17,7 +17,13 @@ import ch.alpine.tensor.qty.Quantity;
 class DiagonalMatrixTest {
   @Test
   void testIdentity() {
-    Tensor matrix = DiagonalMatrix.with(Tensors.vector(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+    Tensor matrix = DiagonalMatrix.full(Tensors.vector(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+    assertEquals(IdentityMatrix.of(10), matrix);
+  }
+
+  @Test
+  void testIdentitySparse() {
+    Tensor matrix = DiagonalMatrix.sparse(Tensors.vector(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
     assertEquals(IdentityMatrix.of(10), matrix);
   }
 
@@ -30,9 +36,11 @@ class DiagonalMatrixTest {
 
   @Test
   void testDiagonalMatrix() {
-    Tensor m1 = DiagonalMatrix.with(Tensors.vectorDouble(12, 3.2, 0.32));
-    Tensor m2 = DiagonalMatrix.of(12.0, 3.2, 0.32);
+    Tensor m1 = DiagonalMatrix.full(Tensors.vectorDouble(12, 3.2, 0.32));
+    Tensor m2 = DiagonalMatrix.sparse(Tensors.vectorDouble(12, 3.2, 0.32));
+    Tensor m3 = DiagonalMatrix.of(12.0, 3.2, 0.32);
     assertEquals(m1, m2);
+    assertEquals(m1, m3);
   }
 
   @Test
@@ -46,7 +54,8 @@ class DiagonalMatrixTest {
   @Test
   void testMisc3() {
     Tensor tensor = RealScalar.of(-2);
-    assertThrows(Exception.class, () -> DiagonalMatrix.with(tensor));
+    assertThrows(Exception.class, () -> DiagonalMatrix.full(tensor));
+    assertThrows(Exception.class, () -> DiagonalMatrix.sparse(tensor));
   }
 
   @Test
@@ -55,7 +64,7 @@ class DiagonalMatrixTest {
     Scalar qs2 = Quantity.of(2, "s");
     Tensor vec = Tensors.of(qs1, qs2);
     // assertThrows(Exception.class, () -> DiagonalMatrix.with(vec));
-    Tensor matrix = DiagonalMatrix.with(vec);
+    Tensor matrix = DiagonalMatrix.full(vec);
     ExactTensorQ.require(matrix);
     assertEquals(matrix, Tensors.fromString("{{1[m], 0[m]}, {0[s], 2[s]}}"));
   }
@@ -65,26 +74,34 @@ class DiagonalMatrixTest {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(2, "m");
     Tensor vec = Tensors.of(qs1, qs2);
-    Tensor matrix = DiagonalMatrix.with(vec);
-    ExactTensorQ.require(matrix);
-    assertEquals(matrix, Tensors.fromString("{{1[m], 0[m]}, {0[m], 2[m]}}"));
+    Tensor expect = Tensors.fromString("{{1[m], 0[m]}, {0[m], 2[m]}}");
+    Tensor m1 = DiagonalMatrix.full(vec);
+    ExactTensorQ.require(m1);
+    assertEquals(m1, expect);
+    Tensor m2 = DiagonalMatrix.sparse(vec);
+    ExactTensorQ.require(m2);
+    assertEquals(m2, expect);
   }
 
   @Test
   void testFailScalar() {
-    Tensor matrix = DiagonalMatrix.of(RealScalar.ONE);
+    Tensor matrix = DiagonalMatrix.sparse(RealScalar.ONE);
     assertEquals(matrix, Tensors.fromString("{{1}}"));
-    assertThrows(Exception.class, () -> DiagonalMatrix.with(RealScalar.ONE));
+    assertThrows(Exception.class, () -> DiagonalMatrix.full(RealScalar.ONE));
+    assertThrows(Exception.class, () -> DiagonalMatrix.sparse(RealScalar.ONE));
   }
 
   @Test
   void testFailNonVector() {
-    assertThrows(ClassCastException.class, () -> DiagonalMatrix.with(Tensors.fromString("{1, 2, {3}}")));
+    Tensor tensor = Tensors.fromString("{1, 2, {3}}");
+    assertThrows(ClassCastException.class, () -> DiagonalMatrix.full(tensor));
+    assertThrows(ClassCastException.class, () -> DiagonalMatrix.sparse(tensor));
   }
 
   @Test
   void testFailEmpty() {
-    assertThrows(Exception.class, () -> DiagonalMatrix.with(Tensors.empty()));
+    assertThrows(Exception.class, () -> DiagonalMatrix.full(Tensors.empty()));
+    assertThrows(Exception.class, () -> DiagonalMatrix.sparse(Tensors.empty()));
   }
 
   @Test

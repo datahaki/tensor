@@ -46,7 +46,7 @@ public enum SingularValueDecompositionWrap {
     assertEquals(unit, unitUnique);
     final Tensor V = svd.getV();
     assertEquals(EqualsReduce.zero(V), RealScalar.ZERO);
-    Tensor W = DiagonalMatrix.with(w);
+    Tensor W = DiagonalMatrix.sparse(w);
     Tolerance.CHOP.requireClose(Transpose.of(U).dot(U), IdentityMatrix.of(N));
     Tolerance.CHOP.requireClose(MatrixDotTranspose.of(V, V), IdentityMatrix.of(N));
     Tolerance.CHOP.requireClose(Transpose.of(V).dot(V), IdentityMatrix.of(N));

@@ -169,7 +169,7 @@ class TimesTest {
     Distribution distribution = UniformDistribution.of(-10, 10);
     Tensor v = RandomVariate.of(distribution, 3);
     Tensor m = RandomVariate.of(distribution, 3, 4, 2);
-    assertEquals(DiagonalMatrix.with(v).dot(m), Times.of(v, m));
+    assertEquals(DiagonalMatrix.sparse(v).dot(m), Times.of(v, m));
   }
 
   @Test

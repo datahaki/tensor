@@ -52,11 +52,11 @@ class EigensystemsTest {
     assertEquals(eigensystem.values(), Tensors.fromString("{1, 1/2}"));
     ExactTensorQ.require(eigensystem.vectors());
     Tensor Vt = Transpose.of(eigensystem.vectors());
-    Tensor alt = Vt.dot(DiagonalMatrix.with(eigensystem.values().maps(Log.FUNCTION))).dot(Inverse.of(Vt));
+    Tensor alt = Vt.dot(DiagonalMatrix.sparse(eigensystem.values().maps(Log.FUNCTION))).dot(Inverse.of(Vt));
     Tensor log = MatrixLog.of(matrix);
     Tolerance.CHOP.requireClose(log, alt);
-    Tolerance.CHOP.requireClose(matrix.dot(Vt), Vt.dot(DiagonalMatrix.with(eigensystem.values())));
-    Tolerance.CHOP.requireClose(matrix, Vt.dot(DiagonalMatrix.with(eigensystem.values())).dot(Inverse.of(Vt)));
+    Tolerance.CHOP.requireClose(matrix.dot(Vt), Vt.dot(DiagonalMatrix.sparse(eigensystem.values())));
+    Tolerance.CHOP.requireClose(matrix, Vt.dot(DiagonalMatrix.sparse(eigensystem.values())).dot(Inverse.of(Vt)));
     Tolerance.CHOP.requireClose(MatrixExp.of(log), matrix);
   }
 

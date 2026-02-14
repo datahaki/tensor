@@ -123,7 +123,7 @@ class QRDecompositionTest {
 
   @Test
   void testDiag() {
-    Tensor A = DiagonalMatrix.with(Tensors.vector(2, 3, 4));
+    Tensor A = DiagonalMatrix.of(2, 3, 4);
     QRDecompositionWrap.of(A);
   }
 

@@ -169,7 +169,7 @@ class SingularValueDecompositionTest {
 
   @Test
   void testJordan1() {
-    Tensor d = DiagonalMatrix.with(Tensors.vector(1e-10, 1, 1, 1, 1e-10));
+    Tensor d = DiagonalMatrix.sparse(Tensors.vector(1e-10, 1, 1, 1, 1e-10));
     IntStream.range(0, 4).forEach(j -> d.set(RealScalar.of(1e-10), j, j + 1));
     SingularValueDecompositionWrap.of(d);
     assertEquals(MatrixRank.of(d), 5);
@@ -177,7 +177,7 @@ class SingularValueDecompositionTest {
 
   @Test
   void testJordan2() {
-    Tensor d = DiagonalMatrix.with(Tensors.vector(1, 1, 1, 1, 1));
+    Tensor d = DiagonalMatrix.sparse(Tensors.vector(1, 1, 1, 1, 1));
     IntStream.range(0, 4).forEach(j -> d.set(RealScalar.of(1e-10), j + 1, j));
     SingularValueDecompositionWrap.of(d);
   }
@@ -197,7 +197,7 @@ class SingularValueDecompositionTest {
   @Test
   void testEye() {
     assertEquals(MatrixRank.of(IdentityMatrix.of(10)), 10);
-    assertEquals(MatrixRank.of(DiagonalMatrix.with(Tensors.vector(1, 1, 1, 1, 0, 0))), 4);
+    assertEquals(MatrixRank.of(DiagonalMatrix.sparse(Tensors.vector(1, 1, 1, 1, 0, 0))), 4);
   }
 
   @Test

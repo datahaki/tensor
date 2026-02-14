@@ -55,7 +55,7 @@ class CholeskyDecompositionImplTest {
         Serialization.copy(CholeskyDecompositionWrap.of(matrix));
     Tensor result = MatrixDotTranspose.of(Dot.of( //
         choleskyDecomposition.getL(), //
-        DiagonalMatrix.with(choleskyDecomposition.diagonal())), //
+        DiagonalMatrix.sparse(choleskyDecomposition.diagonal())), //
         choleskyDecomposition.getL());
     assertEquals(result, matrix);
     Scalar one = GaussScalar.of(1, prime);
@@ -71,7 +71,7 @@ class CholeskyDecompositionImplTest {
     CholeskyDecomposition choleskyDecomposition = CholeskyDecompositionWrap.of(matrix);
     Tensor result = MatrixDotTranspose.of(Dot.of( //
         choleskyDecomposition.getL(), //
-        DiagonalMatrix.with(choleskyDecomposition.diagonal())), //
+        DiagonalMatrix.sparse(choleskyDecomposition.diagonal())), //
         choleskyDecomposition.getL());
     assertInstanceOf(DecimalScalar.class, result.Get(3, 3));
     Tolerance.CHOP.requireClose(matrix, result);

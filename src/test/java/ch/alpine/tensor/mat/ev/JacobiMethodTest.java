@@ -52,7 +52,7 @@ class JacobiMethodTest {
       Tolerance.CHOP.requireClose(sol, matrix);
     }
     Tensor Vi = Inverse.of(eigensystem.vectors());
-    Tensor diagonalMatrix = DiagonalMatrix.with(eigensystem.values());
+    Tensor diagonalMatrix = DiagonalMatrix.sparse(eigensystem.values());
     Tensor res = Vi.dot(diagonalMatrix).dot(eigensystem.vectors());
     Tensor btr = BasisTransform.ofMatrix(diagonalMatrix, eigensystem.vectors());
     Tolerance.CHOP.requireClose(res, matrix);
