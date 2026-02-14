@@ -19,6 +19,7 @@ import ch.alpine.tensor.chq.ZeroDefectArrayQ;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.BinaryPower;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
@@ -33,7 +34,11 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 public class EllipticCurve extends ZeroDefectArrayQ implements GroupInterface<Tensor>, ScalarUnaryOperator {
   public static final Tensor NEUTRAL = Tensors.unmodifiableEmpty();
 
-  /** Hint: also works for parameters of type {@link Quantity}
+  /** elliptic curve of the from
+   * 
+   * y^2 == x^3 + a*x + b
+   * 
+   * Hint: also works for parameters of type {@link GaussScalar}, {@link Quantity}
    * 
    * @param a in exact precision
    * @param b in exact precision

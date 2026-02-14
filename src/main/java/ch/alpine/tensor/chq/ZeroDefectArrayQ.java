@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.chq;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +23,7 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * @see OrthogonalMatrixQ
  * @see UnitaryMatrixQ */
-public abstract class ZeroDefectArrayQ implements MemberQ, Serializable {
+public abstract class ZeroDefectArrayQ implements MemberQ {
   private final int rank;
   private final Chop chop;
 
