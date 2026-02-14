@@ -75,4 +75,9 @@ class FlattenTest {
     flatten.set(RealScalar.ZERO, 0, 0);
     assertEquals(tensor, Tensors.fromString("{{{1, 2}, {3, 4}}}"));
   }
+  // @Test
+  // void testOperator() {
+  // Tensor tensor = Tensors.fromString("{{{1, 2}, {3, 4}}}");
+  // assertEquals(Flatten.operator().apply(tensor), Range.of(1, 5));
+  // }
 }

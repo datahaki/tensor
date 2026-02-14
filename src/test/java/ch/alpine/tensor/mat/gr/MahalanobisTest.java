@@ -14,12 +14,15 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -30,6 +33,17 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
 
 class MahalanobisTest {
+  @Test
+  void testExtremelyRankDeficient() {
+    Distribution distribution = NormalDistribution.standard();
+    Tensor p = RandomVariate.of(distribution, 7, 3);
+    Tensor design = Join.of(1, p, Array.zeros(7, 10));
+    assertEquals(MatrixRank.of(design), 3);
+    InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+    Tensor leverages = influenceMatrix.leverages();
+    IO.println(leverages);
+  }
+
   @ParameterizedTest
   @ValueSource(ints = { 1, 2, 3 })
   void testRankDeficientQuantity(int r) {

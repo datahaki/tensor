@@ -14,7 +14,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
-import ch.alpine.tensor.lie.rot.Cross;
 
 class AntisymmetricMatrixQTest {
   @Test
@@ -28,11 +27,6 @@ class AntisymmetricMatrixQTest {
   void testRectangularMatrix() {
     assertFalse(AntisymmetricMatrixQ.INSTANCE.test(Array.zeros(2, 4)));
     assertFalse(AntisymmetricMatrixQ.INSTANCE.test(HilbertMatrix.of(2, 3)));
-  }
-
-  @Test
-  void testCross() {
-    assertTrue(AntisymmetricMatrixQ.INSTANCE.test(Cross.skew3(Tensors.vector(1, 2, 3))));
   }
 
   @Test

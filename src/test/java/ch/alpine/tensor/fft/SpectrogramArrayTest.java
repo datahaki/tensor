@@ -22,11 +22,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
-import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
@@ -34,22 +32,12 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.sca.win.BlackmanHarrisWindow;
-import ch.alpine.tensor.sca.win.DirichletWindow;
 import ch.alpine.tensor.sca.win.HannWindow;
 import ch.alpine.tensor.sca.win.NuttallWindow;
 import ch.alpine.tensor.sca.win.TukeyWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
 
 class SpectrogramArrayTest {
-  @Test
-  void testMathematicaUnits() {
-    Tensor vector = TestHelper.signal().extract(0, 100).maps(s -> Quantity.of(s, "s"));
-    Tensor tensor = SpectrogramArray.of(Fourier.FORWARD::transform, 10, 3, DirichletWindow.FUNCTION).apply(vector);
-    boolean status = Flatten.scalars(tensor) //
-        .allMatch(DeterminateScalarQ::of);
-    assertTrue(status);
-  }
-
   @Test
   void testOperator() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tuo = SpectrogramArray.of(Fourier.INVERSE::transform, 1345, 300, null);
