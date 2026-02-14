@@ -12,6 +12,8 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LeftNullSpace;
 
+/** operator that maps a vector of length == LS.dimensions()
+ * to a tensor in the linear subspace */
 public interface LinearSubspace extends TensorUnaryOperator {
   /** @param constraint as homogeneous equations
    * @param size

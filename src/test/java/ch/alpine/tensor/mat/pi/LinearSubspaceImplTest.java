@@ -14,7 +14,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 
 class LinearSubspaceImplTest {
   @ParameterizedTest
-  @ValueSource(ints = { 2, 3, 8 })
+  @ValueSource(ints = { 1, 2, 3, 8 })
   void testAntiSymm(int n) {
     LinearSubspace linearSubspace = LinearSubspace.of(AntisymmetricMatrixQ.INSTANCE::defect, n, n);
     int dimensions = linearSubspace.dimensions();
