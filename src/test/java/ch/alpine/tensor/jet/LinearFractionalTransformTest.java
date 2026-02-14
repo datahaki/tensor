@@ -112,11 +112,12 @@ class LinearFractionalTransformTest {
 
   @RepeatedTest(5)
   void testQuantity(RepetitionInfo repetitionInfo) {
+    Random random = new Random(13);
     int d = repetitionInfo.getCurrentRepetition();
     int n = d + 2;
     Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
-    Tensor xy = RandomVariate.of(distribution, n, d).maps(s -> Quantity.of(s, "m"));
-    Tensor uv = RandomVariate.of(distribution, n, d).maps(s -> Quantity.of(s, "m"));
+    Tensor xy = RandomVariate.of(distribution, random, n, d).maps(s -> Quantity.of(s, "m"));
+    Tensor uv = RandomVariate.of(distribution, random, n, d).maps(s -> Quantity.of(s, "m"));
     _checkExact(xy, uv);
   }
 

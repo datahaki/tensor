@@ -171,7 +171,12 @@ class LinearSolveTest {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");
     Tensor b = Tensors.fromString("{1, 1, 1}");
     Tensor x = LinearSolve.any(m, b);
-    assertEquals(x, Tensors.fromString("{-1, 1, 0}"));
+    assertEquals(MatrixRank.of(m), 2);
+    ExactTensorQ.require(x);
+    // assertEquals(x, Tensors.fromString("{-1, 1, 0}"));
+    assertEquals(m.dot(x), b);
+    Tensor y = LinearSolveFunction.of(m).apply(b);
+    Tolerance.CHOP.requireClose(m.dot(y), b);
   }
 
   @Test

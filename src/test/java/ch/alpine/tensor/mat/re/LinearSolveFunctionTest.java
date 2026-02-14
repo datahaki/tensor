@@ -124,8 +124,16 @@ class LinearSolveFunctionTest {
         { GaussScalar.of(4, 17) } };
     Tensor matrix = Tensors.matrix(arrays);
     TensorUnaryOperator lsf = LinearSolveFunction.of(matrix);
-    Tensor result = lsf.apply(matrix.get(Tensor.ALL, 0));
-    assertEquals(result, Tensors.of(GaussScalar.of(1, 17)));
+    {
+      Scalar f = GaussScalar.of(11, 17);
+      Tensor b = matrix.get(Tensor.ALL, 0).multiply(f);
+      Tensor result = lsf.apply(b);
+      assertEquals(result, Tensors.of(f));
+    }
+    {
+      Tensor b = Tensors.of(GaussScalar.of(3, 17), GaussScalar.of(3, 17));
+      assertThrows(Exception.class, () -> lsf.apply(b));
+    }
   }
 
   @Test
