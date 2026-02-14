@@ -85,7 +85,7 @@ class DiagonalMatrixTest {
 
   @Test
   void testFailScalar() {
-    Tensor matrix = DiagonalMatrix.sparse(RealScalar.ONE);
+    Tensor matrix = DiagonalMatrix.of(RealScalar.ONE);
     assertEquals(matrix, Tensors.fromString("{{1}}"));
     assertThrows(Exception.class, () -> DiagonalMatrix.full(RealScalar.ONE));
     assertThrows(Exception.class, () -> DiagonalMatrix.sparse(RealScalar.ONE));
