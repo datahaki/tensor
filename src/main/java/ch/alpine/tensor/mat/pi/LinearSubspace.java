@@ -18,7 +18,7 @@ public interface LinearSubspace extends TensorUnaryOperator {
   /** @param constraint as homogeneous equations
    * @param size
    * @return */
-  public static LinearSubspace of(TensorUnaryOperator constraint, List<Integer> size) {
+  static LinearSubspace of(TensorUnaryOperator constraint, List<Integer> size) {
     size.forEach(Integers::requirePositive);
     int cumprod = size.stream().reduce(Math::multiplyExact).orElseThrow();
     TensorUnaryOperator reshape = v -> ArrayReshape.of(v, size);
@@ -35,7 +35,7 @@ public interface LinearSubspace extends TensorUnaryOperator {
   /** @param constraint
    * @param size
    * @return */
-  public static LinearSubspace of(TensorUnaryOperator constraint, int... size) {
+  static LinearSubspace of(TensorUnaryOperator constraint, int... size) {
     return of(constraint, Integers.asList(size));
   }
 

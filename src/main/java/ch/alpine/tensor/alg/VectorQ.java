@@ -26,7 +26,7 @@ public enum VectorQ {
     return new ZeroDefectArrayQ(1, Chop.NONE) {
       @Override
       protected boolean isArrayWith(List<Integer> list) {
-        return list.get(0).equals(length);
+        return list.getFirst().equals(length);
       }
 
       @Override

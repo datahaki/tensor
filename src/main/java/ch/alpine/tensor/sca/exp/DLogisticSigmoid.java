@@ -19,5 +19,5 @@ public enum DLogisticSigmoid implements ScalarUnaryOperator {
     public Scalar apply(Scalar x) {
       return x.multiply(RealScalar.ONE.subtract(x)); // x * (1 - x)
     }
-  };
+  }
 }

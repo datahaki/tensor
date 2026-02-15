@@ -40,7 +40,7 @@ public class RealEigensystem implements Serializable {
     return new RealEigensystem(matrix);
   }
 
-  private static record ComplexWrap(Scalar[][] matrixT) {
+  private record ComplexWrap(Scalar[][] matrixT) {
     public void set(int i, int idx, Scalar z) {
       ReIm reIm = ReIm.of(z);
       matrixT[i][idx - 1] = reIm.re();

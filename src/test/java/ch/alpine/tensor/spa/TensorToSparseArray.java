@@ -18,7 +18,7 @@ public enum TensorToSparseArray {
     Dimensions dimensions = new Dimensions(tensor);
     Throw.unless(dimensions.isArray());
     List<Integer> size = dimensions.list();
-    if (0 == size.size()) // tensor is a scalar
+    if (size.isEmpty()) // tensor is a scalar
       return tensor;
     Scalar fallback = Flatten.scalars(tensor).limit(1).findFirst().get().zero();
     return SparseArray.content(fallback, size, tensor);

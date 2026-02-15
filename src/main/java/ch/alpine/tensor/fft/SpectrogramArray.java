@@ -16,13 +16,13 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
  * 
  * @see WindowFunctions */
 public interface SpectrogramArray extends TensorUnaryOperator {
-  public static final SpectrogramArray SPECTROGRAM = of(Fourier.FORWARD::transform);
+  SpectrogramArray SPECTROGRAM = of(Fourier.FORWARD::transform);
 
   /** @param process
    * @param windowLength
    * @param offset positive and not greater than windowLength, or null
    * @param window */
-  public static SpectrogramArray of( //
+  static SpectrogramArray of( //
       TensorUnaryOperator process, Integer windowLength, Integer offset, ScalarUnaryOperator window) {
     return new SpectrogramArrayImpl( //
         Objects.requireNonNull(process), //
@@ -31,7 +31,7 @@ public interface SpectrogramArray extends TensorUnaryOperator {
   }
 
   /** @param process for instance Fourier.FORWARD::transform */
-  public static SpectrogramArray of(TensorUnaryOperator process) {
+  static SpectrogramArray of(TensorUnaryOperator process) {
     return of(process, null, null, null);
   }
 

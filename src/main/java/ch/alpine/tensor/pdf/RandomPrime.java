@@ -18,14 +18,14 @@ public class RandomPrime implements Distribution, Serializable {
   /** @param min inclusive
    * @param max inclusive
    * @return */
-  public static final Distribution of(Scalar min, Scalar max) {
+  public static Distribution of(Scalar min, Scalar max) {
     return new RandomPrime(min, max);
   }
 
   /** @param min inclusive
    * @param max inclusive
    * @return */
-  public static final Distribution of(int min, int max) {
+  public static Distribution of(int min, int max) {
     return of(RealScalar.of(min), RealScalar.of(max));
   }
 

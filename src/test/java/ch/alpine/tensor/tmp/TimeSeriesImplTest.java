@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
@@ -23,7 +21,7 @@ import test.wrap.SerializableQ;
 
 class TimeSeriesImplTest {
   @Test
-  void testInterp1() throws ClassNotFoundException, IOException {
+  void testInterp1() {
     TimeSeries timeSeries = TimeSeries.empty(ResamplingMethod.LINEAR_INTERPOLATION);
     assertEquals(timeSeries.size(), 0);
     assertTrue(timeSeries.isEmpty());
@@ -42,7 +40,7 @@ class TimeSeriesImplTest {
     assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(25, "h"))));
     assertEquals(copy.size(), 1);
     assertTrue(timeSeries.toString().startsWith("TimeSeries["));
-    TimeSeries copy_unmodif = Serialization.copy(timeSeries.unmodifiable());
+    TimeSeries copy_unmodif = SerializableQ.require(timeSeries.unmodifiable());
     assertThrows(Exception.class, () -> copy_unmodif.insert(dateTime, Tensors.vector(0, 0, 6)));
     Tensor integral = TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
     assertEquals(integral, Tensors.fromString("{91800[s], 140400[s], 243000[s]}"));
@@ -121,7 +119,7 @@ class TimeSeriesImplTest {
     assertThrows(Exception.class, () -> timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0, 2)));
     timeSeries.insert(dateTime.add(Quantity.of(3, "h")), Tensors.vector(2, 3, 0));
     timeSeries.insert(dateTime.add(Quantity.of(24, "h")), Tensors.vector(0, 0, 6));
-    assertDoesNotThrow(() -> Serialization.copy(timeSeries));
+    SerializableQ.require(timeSeries);
     assertEquals(timeSeries.size(), 3);
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();

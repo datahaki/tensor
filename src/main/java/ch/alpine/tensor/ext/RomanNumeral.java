@@ -28,7 +28,7 @@ public enum RomanNumeral {
 
     private final int value;
 
-    private Hook(int value) {
+    Hook(int value) {
       this.value = value;
     }
   }

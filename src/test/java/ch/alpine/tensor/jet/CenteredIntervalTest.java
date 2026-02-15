@@ -271,7 +271,7 @@ class CenteredIntervalTest {
   @Test
   void testNumberThrows() {
     Scalar x = CenteredInterval.of(2, 1);
-    assertThrows(Exception.class, () -> x.number());
+    assertThrows(Exception.class, x::number);
   }
 
   @Test

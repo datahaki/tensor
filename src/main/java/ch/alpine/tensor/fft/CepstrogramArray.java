@@ -29,9 +29,9 @@ public enum CepstrogramArray implements SpectrogramArray {
       .maps(Log.FUNCTION))//
       .maps(Re.FUNCTION));
 
-  private SpectrogramArray spectrogramArray;
+  private final SpectrogramArray spectrogramArray;
 
-  private CepstrogramArray(TensorUnaryOperator process) {
+  CepstrogramArray(TensorUnaryOperator process) {
     spectrogramArray = SpectrogramArray.of(process);
   }
 

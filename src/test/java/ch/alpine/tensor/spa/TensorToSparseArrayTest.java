@@ -124,8 +124,7 @@ class TensorToSparseArrayTest {
     Tensor sa_fb = sa.dot(fb);
     Tensor sa_sb = sa.dot(sb);
     assertTrue(sa_sb instanceof SparseArray || sa_sb instanceof Scalar);
-    if (sa_sb instanceof SparseArray) {
-      SparseArray sparse = (SparseArray) sa_sb;
+    if (sa_sb instanceof SparseArray sparse) {
       Nnz.of(sparse);
     }
     assertEquals(fa_fb, fa_sb);

@@ -17,7 +17,7 @@ class KillingFormTest {
   @Test
   void testSe2() {
     Tensor ad = ExAd.SE2.ad();
-    JacobiIdentity.require(ad);
+    JacobiIdentity.INSTANCE.require(ad);
     assertEquals(ad.dot(UnitVector.of(3, 0)).dot(UnitVector.of(3, 1)), Array.zeros(3));
     assertEquals(ad.dot(UnitVector.of(3, 0)).dot(UnitVector.of(3, 2)), UnitVector.of(3, 1).negate());
     assertEquals(ad.dot(UnitVector.of(3, 1)).dot(UnitVector.of(3, 2)), UnitVector.of(3, 0));

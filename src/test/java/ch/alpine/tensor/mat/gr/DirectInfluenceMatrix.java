@@ -7,22 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-class DirectInfluenceMatrix implements InfluenceMatrix, Serializable {
-  public static InfluenceMatrix of(Tensor matrix) {
-    return new DirectInfluenceMatrix(matrix);
-  }
-
-  private final Tensor matrix;
-
-  public DirectInfluenceMatrix(Tensor matrix) {
-    this.matrix = matrix;
-  }
-
-  @Override
-  public Tensor matrix() {
-    return matrix;
-  }
-
+record DirectInfluenceMatrix(Tensor matrix) implements InfluenceMatrix, Serializable {
   @Override
   public Tensor leverages() {
     return Diagonal.of(matrix());

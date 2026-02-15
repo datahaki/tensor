@@ -580,7 +580,7 @@ class PolynomialTest {
     Scalar scalar = polynomial.apply(Quantity.of(4, "h"));
     assertEquals(polynomial.getZeroDomain(), Quantity.of(0, "s"));
     assertEquals(polynomial.getUnitValues(), Unit.ONE);
-    assertThrows(Exception.class, () -> polynomial.antiderivative());
+    assertThrows(Exception.class, polynomial::antiderivative);
     assertInstanceOf(DateTime.class, scalar);
     Polynomial derivative = polynomial.derivative();
     assertEquals(derivative.getZeroDomain(), Quantity.of(0, "s"));
@@ -595,10 +595,10 @@ class PolynomialTest {
     assertEquals(polynomial.getUnitValues(), Unit.ONE);
     Scalar scalar = polynomial.apply(RealScalar.of(3));
     assertInstanceOf(DateTime.class, scalar);
-    assertThrows(Exception.class, () -> polynomial.antiderivative());
+    assertThrows(Exception.class, polynomial::antiderivative);
     Polynomial derivative = polynomial.derivative();
     assertEquals(derivative, Polynomial.of(Tensors.of(Quantity.of(4, "s"), Quantity.of(10, "s"))));
-    assertThrows(Exception.class, () -> polynomial.antiderivative());
+    assertThrows(Exception.class, polynomial::antiderivative);
     assertEquals(derivative.getZeroDomain(), RealScalar.ZERO);
     assertEquals(derivative.getUnitValues(), Unit.of("s"));
   }
@@ -609,7 +609,7 @@ class PolynomialTest {
     assertEquals(p1.antiderivative().coeffs(), Tensors.vector(0, 4));
     assertEquals(p1.antiderivative().antiderivative().coeffs(), Tensors.vector(0, 0, 2));
     Polynomial p2 = Polynomial.of(Tensors.of(DateTime.now()));
-    assertThrows(Exception.class, () -> p2.antiderivative());
+    assertThrows(Exception.class, p2::antiderivative);
   }
 
   @Test

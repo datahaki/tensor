@@ -17,7 +17,7 @@ import ch.alpine.tensor.red.Total;
   protected final Tensor ad;
 
   protected BchSeries(Tensor ad) {
-    this.ad = JacobiIdentity.require(ad);
+    this.ad = JacobiIdentity.INSTANCE.require(ad);
   }
 
   /** function allows to investigate the rate of convergence

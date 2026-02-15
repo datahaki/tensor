@@ -92,7 +92,7 @@ class CliffordAlgebraTest {
     SparseArray cp = (SparseArray) cliffordAlgebra.cp();
     assertEquals(Nnz.of(cp), 6);
     assertEquals(Numel.of(cp), 64);
-    assertInstanceOf(SparseArray.class, JacobiIdentity.of(cp));
+    assertInstanceOf(SparseArray.class, JacobiIdentity.INSTANCE.defect(cp));
     Tensor x = Tensors.vector(1, 2, 3, 4);
     Tensor m = gp.dot(x);
     LinearSolve.of(m, UnitVector.of(4, 0));
@@ -229,7 +229,7 @@ class CliffordAlgebraTest {
         CliffordAlgebra cliffordAlgebra = CliffordAlgebraCache.of(p, q);
         Tensor cp = cliffordAlgebra.cp();
         assertInstanceOf(SparseArray.class, cp);
-        JacobiIdentity.require(cp);
+        JacobiIdentity.INSTANCE.require(cp);
         Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-10, +10), cp.length());
         Tensor y = RandomVariate.of(DiscreteUniformDistribution.of(-10, +10), cp.length());
         assertEquals(cliffordAlgebra.cp(x, y), cp.dot(x).dot(y));
@@ -240,7 +240,7 @@ class CliffordAlgebraTest {
   void testCommutatorNegative() {
     for (int n = 1; n <= 3; ++n) {
       CliffordAlgebra cliffordAlgebra = CliffordAlgebraCache.negative(n);
-      JacobiIdentity.require(cliffordAlgebra.cp());
+      JacobiIdentity.INSTANCE.require(cliffordAlgebra.cp());
     }
   }
 

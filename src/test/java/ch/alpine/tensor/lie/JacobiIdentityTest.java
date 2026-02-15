@@ -36,7 +36,7 @@ class JacobiIdentityTest {
   void testSl2() {
     Tensor ad = ExAd.SL2.ad().copy(); // Sl2Algebra.INSTANCE.ad();
     ad.set(Scalar::zero, Tensor.ALL, 1, 2);
-    assertThrows(Exception.class, () -> JacobiIdentity.require(ad));
+    assertThrows(Exception.class, () -> JacobiIdentity.INSTANCE.require(ad));
   }
 
   @ParameterizedTest
@@ -44,6 +44,6 @@ class JacobiIdentityTest {
   void testSe2(ExAd exAd) {
     Tensor ad = exAd.ad(); // Se2Algebra.INSTANCE.ad();
     int n = ad.length();
-    assertEquals(JacobiIdentity.of(ad), ConstantArray.of(RealScalar.ZERO, n, n, n, n));
+    assertEquals(JacobiIdentity.INSTANCE.defect(ad), ConstantArray.of(RealScalar.ZERO, n, n, n, n));
   }
 }

@@ -22,8 +22,8 @@ public class ComplexUniformDistribution implements Distribution {
   }
 
   // ---
-  private Distribution distribution_re;
-  private Distribution distribution_im;
+  private final Distribution distribution_re;
+  private final Distribution distribution_im;
 
   private ComplexUniformDistribution(Clip clip_re, Clip clip_im) {
     distribution_re = UniformDistribution.of(clip_re);

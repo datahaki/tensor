@@ -15,6 +15,8 @@ import java.util.Arrays;
  * <a href="https://reference.wolfram.com/language/ref/$HomeDirectory.html">$HomeDirectory</a> */
 public enum HomeDirectory {
   _local_share(".local", "share"),
+  /** database */
+  Database,
   /** Items shown on the desktop */
   Desktop,
   /** Default location for text files, Office docs, etc. */
@@ -39,11 +41,11 @@ public enum HomeDirectory {
 
   private final Path path;
 
-  private HomeDirectory(String... strings) {
+  HomeDirectory(String... strings) {
     path = join(StaticHelper.USER_HOME, strings);
   }
 
-  private HomeDirectory() {
+  HomeDirectory() {
     path = join(StaticHelper.USER_HOME, name());
   }
 

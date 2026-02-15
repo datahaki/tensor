@@ -11,7 +11,7 @@ import ch.alpine.tensor.qty.Quantity;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SingularValueDecomposition.html">SingularValueDecomposition</a> */
 public interface SingularValueDecomposition {
-  public static final ThreadLocal<Integer> MAX_ITERATIONS = ThreadLocal.withInitial(() -> 28);
+  ThreadLocal<Integer> MAX_ITERATIONS = ThreadLocal.withInitial(() -> 28);
 
   /** performs a singular value decomposition of a given matrix
    * <ul>

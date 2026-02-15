@@ -163,7 +163,7 @@ class ScalarSummaryStatisticsTest {
     sss1.getClip();
     sss1.toString();
     assertInstanceOf(DateTime.class, sss1.getAverage());
-    assertThrows(Exception.class, () -> sss1.getSum());
+    assertThrows(Exception.class, sss1::getSum);
   }
 
   @Test

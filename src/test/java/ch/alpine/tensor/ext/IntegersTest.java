@@ -3,7 +3,6 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -268,15 +267,5 @@ class IntegersTest {
   @Test
   void testFailNegative() {
     assertThrows(Exception.class, () -> Integers.log2Ceiling(-1));
-  }
-
-  @Test
-  void testEllipticCurveHashCode() {
-    int field = 123;
-    int a = 13;
-    int b = 23;
-    int c1 = (field << 6 + (a << 4) + (b << 2));
-    int c2 = (field << 6) + (a << 4) + (b << 2);
-    assertNotEquals(c1, c2);
   }
 }

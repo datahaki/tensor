@@ -50,5 +50,5 @@ import ch.alpine.tensor.sca.pow.Sqrt;
     public Tensor apply(Tensor coeffs) {
       return new RootsDegree3(coeffs).roots();
     }
-  };
+  }
 }
