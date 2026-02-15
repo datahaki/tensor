@@ -17,6 +17,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
@@ -41,7 +42,7 @@ class MahalanobisTest {
     assertEquals(MatrixRank.of(design), 3);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     Tensor leverages = influenceMatrix.leverages();
-    IO.println(leverages);
+    VectorQ.require(leverages);
   }
 
   @ParameterizedTest
