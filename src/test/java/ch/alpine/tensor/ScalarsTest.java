@@ -38,7 +38,7 @@ class ScalarsTest {
   @ParameterizedTest
   @ValueSource(strings = { "123", "  123  ", "3 /  4", "0" })
   void testParseRationalScalar(String string) {
-    checkInvariant(string, Rational.class);
+    checkInvariant(string, RationalImpl.class);
   }
 
   @ParameterizedTest

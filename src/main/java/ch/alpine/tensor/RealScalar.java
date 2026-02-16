@@ -30,16 +30,16 @@ public interface RealScalar extends Scalar, //
     ConjugateInterface, LogInterface, PowerInterface, RoundingInterface, //
     SignInterface {
   /** real scalar 0 as a {@link Rational} */
-  Scalar ZERO = Rational.integer(0);
+  Scalar ZERO = of(0);
   /** real scalar 1 as a {@link Rational} */
-  Scalar ONE = Rational.integer(1);
+  Scalar ONE = of(1);
   /** real scalar 2 as a {@link Rational} */
-  Scalar TWO = Rational.integer(2);
+  Scalar TWO = of(2);
 
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(long value) {
-    return Rational.integer(value);
+    return new RationalImpl(BigFraction.integer(value));
   }
 
   /** @param value
@@ -51,19 +51,19 @@ public interface RealScalar extends Scalar, //
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(Integer value) {
-    return Rational.integer(value);
+    return new RationalImpl(BigFraction.integer(value));
   }
 
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(Long value) {
-    return Rational.integer(value);
+    return new RationalImpl(BigFraction.integer(value));
   }
 
   /** @param bigInteger
    * @return real scalar of given integer value */
   static Scalar of(BigInteger bigInteger) {
-    return Rational.integer(bigInteger);
+    return new RationalImpl(BigFraction.integer(bigInteger));
   }
 
   /** @param bigDecimal
@@ -86,12 +86,12 @@ public interface RealScalar extends Scalar, //
         number instanceof Byte || //
         number instanceof AtomicInteger || //
         number instanceof AtomicLong)
-      return Rational.integer(number.longValue());
+      return new RationalImpl(BigFraction.integer(number.longValue()));
     if (number instanceof Double || //
         number instanceof Float)
       return DoubleScalar.of(number.doubleValue());
     if (number instanceof BigInteger)
-      return Rational.integer((BigInteger) number);
+      return new RationalImpl(BigFraction.integer((BigInteger) number));
     if (number instanceof BigDecimal)
       return DecimalScalar.of((BigDecimal) number);
     Objects.requireNonNull(number);

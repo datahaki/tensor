@@ -3,7 +3,6 @@ package ch.alpine.tensor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.InexactScalarMarker;
@@ -152,7 +151,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar ceiling() {
     return isFinite() //
-        ? Rational.integer(StaticHelper.ceiling(bigDecimal()))
+        ? StaticHelper.ceiling(bigDecimal())
         : this; // value non finite
   }
 
@@ -164,7 +163,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar floor() {
     return isFinite() //
-        ? Rational.integer(StaticHelper.floor(bigDecimal()))
+        ? StaticHelper.floor(bigDecimal())
         : this; // value non finite
   }
 
@@ -185,7 +184,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar round() {
     return isFinite() //
-        ? Rational.integer(bigDecimal().setScale(0, RoundingMode.HALF_UP).toBigIntegerExact())
+        ? StaticHelper.round(bigDecimal())
         : this; // value non finite
   }
 

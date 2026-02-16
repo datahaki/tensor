@@ -89,30 +89,31 @@ import ch.alpine.tensor.sca.tri.ArcTan;
   /** @param bigDecimal
    * @return
    * @throws Exception if value is Infinity */
-  public static BigInteger floor(BigDecimal bigDecimal) {
+  public static Scalar floor(BigDecimal bigDecimal) {
     BigInteger bigInteger = bigDecimal.toBigInteger();
     if (0 < new BigDecimal(bigInteger).compareTo(bigDecimal)) {
       bigDecimal = bigDecimal.subtract(BigDecimal.ONE);
       bigInteger = bigDecimal.toBigInteger();
     }
-    return bigInteger;
+    return new RationalImpl(BigFraction.integer(bigInteger));
   }
 
   /** @param bigDecimal
    * @return
    * @throws Exception if value is Infinity */
-  public static BigInteger ceiling(BigDecimal bigDecimal) {
+  public static Scalar ceiling(BigDecimal bigDecimal) {
     BigInteger bigInteger = bigDecimal.toBigInteger();
     if (new BigDecimal(bigInteger).compareTo(bigDecimal) < 0) {
       bigDecimal = bigDecimal.add(BigDecimal.ONE);
       bigInteger = bigDecimal.toBigInteger();
     }
-    return bigInteger;
+    return new RationalImpl(BigFraction.integer(bigInteger));
   }
 
   /** @param bigDecimal
    * @return */
-  public static BigInteger round(BigDecimal bigDecimal) {
-    return bigDecimal.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact();
+  public static Scalar round(BigDecimal bigDecimal) {
+    BigInteger bigInteger = bigDecimal.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact();
+    return new RationalImpl(BigFraction.integer(bigInteger));
   }
 }

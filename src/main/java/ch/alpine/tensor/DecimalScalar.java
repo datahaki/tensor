@@ -167,7 +167,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar ceiling() {
-    return Rational.integer(StaticHelper.ceiling(value));
+    return StaticHelper.ceiling(value);
   }
 
   @Override // from Comparable<Scalar>
@@ -181,7 +181,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar floor() {
-    return Rational.integer(StaticHelper.floor(value));
+    return StaticHelper.floor(value);
   }
 
   @Override // from NInterface
@@ -208,7 +208,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar round() {
-    return Rational.integer(StaticHelper.round(value));
+    return StaticHelper.round(value);
   }
 
   @Override // from AbstractRealScalar

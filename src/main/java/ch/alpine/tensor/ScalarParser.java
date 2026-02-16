@@ -88,7 +88,7 @@ import java.util.regex.Pattern;
     if (string.equals(I_SYMBOL))
       return ComplexScalar.I;
     if (PREDICATE_INTEGER.test(string))
-      return Rational.integer(new BigInteger(string));
+      return new RationalImpl(BigFraction.integer(new BigInteger(string)));
     if (PREDICATE_DOUBLE.test(string))
       return DoubleScalar.of(Double.parseDouble(string));
     int prime = string.indexOf(DECIMAL_PRIME); // check decimal
