@@ -51,7 +51,7 @@ class BoxRandomSampleTest {
     SerializableQ.require(randomSampleInterface);
     for (Tensor tensor : RandomSample.of(randomSampleInterface, 10)) {
       VectorQ.requireLength(tensor, 3);
-      assertTrue(cbb.isInside(tensor));
+      assertTrue(cbb.test(tensor));
     }
   }
 

@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -11,7 +10,7 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.MemberQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -25,7 +24,7 @@ import ch.alpine.tensor.sca.Clips;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class CoordinateBoundingBox implements Serializable {
+public class CoordinateBoundingBox implements MemberQ {
   /** @param stream of clip instances
    * @return */
   public static CoordinateBoundingBox of(Stream<Clip> stream) {
@@ -65,21 +64,12 @@ public class CoordinateBoundingBox implements Serializable {
 
   /** @param vector
    * @return whether given vector is inside this bounding box */
-  public boolean isInside(Tensor vector) {
+  @Override
+  public boolean test(Tensor vector) {
     return IntStream.range(0, Integers.requireEquals(dimensions(), vector.length())) //
         .allMatch(i -> clip(i).isInside(vector.Get(i)));
   }
 
-  /** @param vector
-   * @return given vector
-   * @throws Exception if any coordinate of vector is outside of this bounding box */
-  public Tensor requireInside(Tensor vector) {
-    if (isInside(vector))
-      return vector;
-    throw new Throw(vector);
-  }
-
-  // ---
   /** @param index of dimension
    * @return left, i.e. lower half of this bounding box */
   public CoordinateBoundingBox splitLo(int index) {

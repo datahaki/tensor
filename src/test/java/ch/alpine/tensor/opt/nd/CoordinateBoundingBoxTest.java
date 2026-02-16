@@ -74,8 +74,8 @@ class CoordinateBoundingBoxTest {
         Tensors.fromString("{1[m], 2[m], 3[m]}"), //
         Tensors.fromString("{2[m], 3[m], 4[m]}"));
     Tensor tensor = RandomSample.of(new BoxRandomSample(coordinateBoundingBox));
-    assertTrue(coordinateBoundingBox.isInside(tensor));
-    coordinateBoundingBox.requireInside(tensor);
+    assertTrue(coordinateBoundingBox.test(tensor));
+    coordinateBoundingBox.require(tensor);
   }
 
   @Test
@@ -84,8 +84,8 @@ class CoordinateBoundingBoxTest {
         Tensors.fromString("{1[m], 2[s], 3[A]}"), //
         Tensors.fromString("{2[m], 3[s], 4[A]}"));
     Tensor tensor = RandomSample.of(new BoxRandomSample(coordinateBoundingBox));
-    assertTrue(coordinateBoundingBox.isInside(tensor));
-    coordinateBoundingBox.requireInside(tensor);
+    assertTrue(coordinateBoundingBox.test(tensor));
+    coordinateBoundingBox.require(tensor);
   }
 
   @Test
@@ -95,8 +95,8 @@ class CoordinateBoundingBoxTest {
         Tensors.fromString("{2[m], 3[m], 4[m]}"));
     Tensor tensor = RandomSample.of(new BoxRandomSample(coordinateBoundingBox));
     assertEquals(ExactScalarQ.require(tensor.Get(2)), Quantity.of(4, "m"));
-    assertTrue(coordinateBoundingBox.isInside(tensor));
-    coordinateBoundingBox.requireInside(tensor);
+    assertTrue(coordinateBoundingBox.test(tensor));
+    coordinateBoundingBox.require(tensor);
     assertEquals(coordinateBoundingBox.toString(), "[Clip[1[m], 2[m]], Clip[2[m], 3[m]], Clip[4[m], 4[m]]]");
   }
 
@@ -131,8 +131,8 @@ class CoordinateBoundingBoxTest {
   @Test
   void testFail1() {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
-    box.requireInside(Tensors.vector(4, 3));
-    assertThrows(Throw.class, () -> box.requireInside(Tensors.vector(14, 3)));
+    box.require(Tensors.vector(4, 3));
+    assertThrows(Throw.class, () -> box.require(Tensors.vector(14, 3)));
   }
 
   @Test
