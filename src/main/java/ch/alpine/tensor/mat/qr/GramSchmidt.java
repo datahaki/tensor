@@ -20,6 +20,9 @@ import ch.alpine.tensor.sca.Conjugate;
 /** the {@link GramSchmidt} algorithm is efficient for obtaining the {@link InfluenceMatrix}
  * for matrices, including rank-deficient matrices.
  * 
+ * For full rank square matrices the {@link GramSchmidt#of(Tensor)} method was found to be
+ * slightly faster than {@link QRDecomposition#of(Tensor)}
+ * 
  * Reference:
  * Chapter "Gram-Schmidt with Column Pivoting"
  * in "Linear Algebra and Learning from Data", p. 129

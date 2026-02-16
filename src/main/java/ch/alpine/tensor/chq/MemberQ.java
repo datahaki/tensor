@@ -2,6 +2,8 @@
 package ch.alpine.tensor.chq;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 import ch.alpine.tensor.Tensor;
@@ -19,6 +21,26 @@ import ch.alpine.tensor.Throw;
  * <a href="https://reference.wolfram.com/language/ref/MemberQ.html">MemberQ</a> */
 @FunctionalInterface
 public interface MemberQ extends Predicate<Tensor>, Serializable {
+  /** @param collection
+   * @return */
+  static MemberQ all(Collection<MemberQ> collection) {
+    return tensor -> collection.stream().allMatch(memberQ -> memberQ.test(tensor));
+  }
+
+  static MemberQ all(MemberQ... memberQs) {
+    return all(List.of(memberQs));
+  }
+
+  /** @param collection
+   * @return */
+  static MemberQ any(Collection<MemberQ> collection) {
+    return tensor -> collection.stream().anyMatch(memberQ -> memberQ.test(tensor));
+  }
+
+  static MemberQ any(MemberQ... memberQs) {
+    return any(List.of(memberQs));
+  }
+
   /** @param tensor
    * @return tensor
    * @throws Exception if given tensor does not have membership status */
