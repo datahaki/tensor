@@ -95,7 +95,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
       bigDecimal = bigDecimal.subtract(BigDecimal.ONE);
       bigInteger = bigDecimal.toBigInteger();
     }
-    return RationalImpl.integer(bigInteger);
+    return Rational.integer(bigInteger);
   }
 
   /** @param bigDecimal
@@ -107,13 +107,13 @@ import ch.alpine.tensor.sca.tri.ArcTan;
       bigDecimal = bigDecimal.add(BigDecimal.ONE);
       bigInteger = bigDecimal.toBigInteger();
     }
-    return RationalImpl.integer(bigInteger);
+    return Rational.integer(bigInteger);
   }
 
   /** @param bigDecimal
    * @return */
   public static Scalar round(BigDecimal bigDecimal) {
     BigInteger bigInteger = bigDecimal.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact();
-    return RationalImpl.integer(bigInteger);
+    return Rational.integer(bigInteger);
   }
 }

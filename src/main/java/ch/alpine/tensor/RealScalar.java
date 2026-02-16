@@ -39,7 +39,7 @@ public interface RealScalar extends Scalar, //
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(long value) {
-    return RationalImpl.integer(value);
+    return Rational.integer(value);
   }
 
   /** @param value
@@ -51,19 +51,19 @@ public interface RealScalar extends Scalar, //
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(Integer value) {
-    return RationalImpl.integer(value);
+    return Rational.integer(value);
   }
 
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(Long value) {
-    return RationalImpl.integer(value);
+    return Rational.integer(value);
   }
 
   /** @param bigInteger
    * @return real scalar of given integer value */
   static Scalar of(BigInteger bigInteger) {
-    return RationalImpl.integer(bigInteger);
+    return Rational.integer(bigInteger);
   }
 
   /** @param bigDecimal
@@ -86,12 +86,12 @@ public interface RealScalar extends Scalar, //
         number instanceof Byte || //
         number instanceof AtomicInteger || //
         number instanceof AtomicLong)
-      return RationalImpl.integer(number.longValue());
+      return Rational.integer(number.longValue());
     if (number instanceof Double || //
         number instanceof Float)
       return DoubleScalar.of(number.doubleValue());
     if (number instanceof BigInteger bigInteger)
-      return RationalImpl.integer(bigInteger);
+      return Rational.integer(bigInteger);
     if (number instanceof BigDecimal bigDecimal)
       return DecimalScalar.of(bigDecimal);
     Objects.requireNonNull(number);
