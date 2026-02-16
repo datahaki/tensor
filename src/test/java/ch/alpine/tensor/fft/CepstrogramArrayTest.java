@@ -3,17 +3,16 @@ package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.DeterminateScalarQ;
 
 class CepstrogramArrayTest {
-  @ParameterizedTest
-  @EnumSource
-  void testMathematica(CepstrogramArray cepstrogramArray) {
+  @Test
+  void testMathematica() {
+    SpectrogramArray cepstrogramArray = CepstrogramArray.POWER;
     Tensor tensor = cepstrogramArray.apply(TestHelper.signal());
     boolean status = Flatten.scalars(tensor) //
         .allMatch(DeterminateScalarQ::of);
