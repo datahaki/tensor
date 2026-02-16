@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -71,13 +71,13 @@ class ModTest {
 
   @Test
   void testRational1() {
-    Scalar m = RationalScalar.of( //
+    Scalar m = Rational.of( //
         new BigInteger("816345827635482763548726354817635487162354876135284765"), //
         new BigInteger("89354817623548127345928347902837409827304897917"));
-    Scalar n = RationalScalar.of( //
+    Scalar n = Rational.of( //
         new BigInteger("876215837615238675"), //
         new BigInteger("29386548765867571711"));
-    Scalar d = RationalScalar.of( //
+    Scalar d = Rational.of( //
         new BigInteger("-9874698736"), //
         new BigInteger("230817253875"));
     String mathem = "-103027088435315211090616226024636019095132932417575467867214490110/2625829705559600168587308022574969971429853524559950547309532025987";
@@ -93,13 +93,13 @@ class ModTest {
 
   @Test
   void testRational2() {
-    Scalar m = RationalScalar.of( //
+    Scalar m = Rational.of( //
         new BigInteger("816345827635482763548726354817635487162354876135284765"), //
         new BigInteger("89354817623548127345928347902837409827917"));
-    Scalar n = RationalScalar.of( //
+    Scalar n = Rational.of( //
         new BigInteger("876215837615238675"), //
         new BigInteger("29386548765867571711332"));
-    Scalar d = RationalScalar.of( //
+    Scalar d = Rational.of( //
         new BigInteger("-3453453453453459874698736"), //
         new BigInteger("230817253875123123"));
     String mathem = "-4365252651220514098051928821648538890491086296970254009125271304896855/291758856173288907624108202447331994414076589308384576368761716";

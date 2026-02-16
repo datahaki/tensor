@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -13,10 +13,10 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 public enum NuttallWindow implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar A0 = RationalScalar.of(88942, 250000);
-  private static final Scalar A1 = RationalScalar.of(121849, 250000);
-  private static final Scalar A2 = RationalScalar.of(36058, 250000);
-  private static final Scalar A3 = RationalScalar.of(3151, 250000);
+  private static final Scalar A0 = Rational.of(88942, 250000);
+  private static final Scalar A1 = Rational.of(121849, 250000);
+  private static final Scalar A2 = Rational.of(36058, 250000);
+  private static final Scalar A3 = Rational.of(3151, 250000);
 
   @Override
   public Scalar apply(Scalar x) {

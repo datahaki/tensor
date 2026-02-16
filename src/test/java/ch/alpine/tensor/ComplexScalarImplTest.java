@@ -36,10 +36,10 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 class ComplexScalarImplTest {
   @Test
   void testAbs() {
-    ComplexScalar s = (ComplexScalar) ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
+    ComplexScalar s = (ComplexScalar) ComplexScalar.of(Rational.of(-2, 3), Rational.of(-5, 100));
     // ----------------------------------------- 0.668539037337719303091638399542
     Scalar a = Abs.FUNCTION.apply(s); // ------------------- 0.6685390373377194
-    Scalar c = RationalScalar.of(1609, 3600); // 0.6685390373377192
+    Scalar c = Rational.of(1609, 3600); // 0.6685390373377192
     Tensor r = Sqrt.FUNCTION.apply(c);
     double d = Math.sqrt(c.number().doubleValue());
     Tolerance.CHOP.requireClose(a, r);
@@ -52,7 +52,7 @@ class ComplexScalarImplTest {
   @Test
   void testAbs2() {
     Scalar s = ComplexScalar.of(RealScalar.of(-3), RealScalar.of(4));
-    assertInstanceOf(RationalScalar.class, Abs.FUNCTION.apply(s));
+    assertInstanceOf(Rational.class, Abs.FUNCTION.apply(s));
   }
 
   @Test
@@ -68,10 +68,10 @@ class ComplexScalarImplTest {
 
   @Test
   void testMultiply() {
-    Scalar c = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
+    Scalar c = ComplexScalar.of(RealScalar.of(2), Rational.of(5, 8));
     assertEquals(Re.FUNCTION.apply(c), RealScalar.of(2));
-    assertEquals(Im.FUNCTION.apply(c), RationalScalar.of(5, 8));
-    assertEquals(Abs.FUNCTION.apply(c), Vector2Norm.of(Tensors.of(RealScalar.of(2), RationalScalar.of(5, 8))));
+    assertEquals(Im.FUNCTION.apply(c), Rational.of(5, 8));
+    assertEquals(Abs.FUNCTION.apply(c), Vector2Norm.of(Tensors.of(RealScalar.of(2), Rational.of(5, 8))));
     Scalar r = RealScalar.of(-6);
     assertEquals(Re.FUNCTION.apply(r), r);
     assertEquals(Im.FUNCTION.apply(r), RealScalar.ZERO);
@@ -104,10 +104,10 @@ class ComplexScalarImplTest {
 
   @Test
   void testParsing() {
-    Scalar c1 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
-    Scalar c2 = ComplexScalar.of(RealScalar.ZERO, RationalScalar.of(5, 8));
-    Scalar c3 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(-5, 8));
-    Scalar c4 = ComplexScalar.of(RealScalar.ZERO, RationalScalar.of(-5, 8));
+    Scalar c1 = ComplexScalar.of(RealScalar.of(2), Rational.of(5, 8));
+    Scalar c2 = ComplexScalar.of(RealScalar.ZERO, Rational.of(5, 8));
+    Scalar c3 = ComplexScalar.of(RealScalar.of(2), Rational.of(-5, 8));
+    Scalar c4 = ComplexScalar.of(RealScalar.ZERO, Rational.of(-5, 8));
     assertEquals("2+5/8*I", c1.toString());
     assertEquals("5/8*I", c2.toString());
     assertEquals("2-5/8*I", c3.toString());
@@ -122,9 +122,9 @@ class ComplexScalarImplTest {
 
   @Test
   void testEquals() {
-    Scalar c1 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
-    Scalar c2 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
-    Scalar s1 = RationalScalar.of(3, 2);
+    Scalar c1 = ComplexScalar.of(RealScalar.of(2), Rational.of(5, 8));
+    Scalar c2 = ComplexScalar.of(RealScalar.of(2), Rational.of(5, 8));
+    Scalar s1 = Rational.of(3, 2);
     assertNotEquals(c1, s1);
     assertNotEquals(s1, c1);
     assertEquals(c1.hashCode(), c2.hashCode());
@@ -139,11 +139,11 @@ class ComplexScalarImplTest {
 
   @Test
   void testConjugate() {
-    Scalar s = ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
-    assertEquals(AbsSquared.FUNCTION.apply(s), RationalScalar.of(1609, 3600));
-    ComplexScalar c = (ComplexScalar) ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
-    Scalar ra = RationalScalar.of(5, 8);
-    assertEquals(Conjugate.FUNCTION.apply(ra), RationalScalar.of(5, 8));
+    Scalar s = ComplexScalar.of(Rational.of(-2, 3), Rational.of(-5, 100));
+    assertEquals(AbsSquared.FUNCTION.apply(s), Rational.of(1609, 3600));
+    ComplexScalar c = (ComplexScalar) ComplexScalar.of(RealScalar.of(2), Rational.of(5, 8));
+    Scalar ra = Rational.of(5, 8);
+    assertEquals(Conjugate.FUNCTION.apply(ra), Rational.of(5, 8));
     Scalar s1 = Conjugate.FUNCTION.apply(c);
     Scalar s2 = ComplexScalar.of(RealScalar.of(2), ra.negate());
     assertEquals(s1.toString(), s2.toString());
@@ -173,13 +173,13 @@ class ComplexScalarImplTest {
 
   @Test
   void testPower2() {
-    Scalar s = ComplexScalar.of(RationalScalar.of(2, 7), RationalScalar.of(-4, 3));
+    Scalar s = ComplexScalar.of(Rational.of(2, 7), Rational.of(-4, 3));
     assertEquals(Power.of(s, -3), Scalars.fromString("-16086357/68921000-10955763/34460500*I"));
   }
 
   @Test
   void testToString() {
-    Scalar c2 = ComplexScalar.of(RealScalar.ZERO, RationalScalar.of(5, 8));
+    Scalar c2 = ComplexScalar.of(RealScalar.ZERO, Rational.of(5, 8));
     assertEquals(c2.toString(), "5/8*I");
   }
 

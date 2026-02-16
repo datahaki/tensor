@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -260,7 +260,7 @@ class ClipsTest {
 
   @Test
   void testFinite() {
-    Clip result = Clips.translation(RationalScalar.HALF).apply(Clips.positive(3));
+    Clip result = Clips.translation(Rational.HALF).apply(Clips.positive(3));
     assertEquals(result, Clips.interval(0.5, 3.5));
   }
 

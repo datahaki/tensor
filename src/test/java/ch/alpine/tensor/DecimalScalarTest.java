@@ -48,7 +48,7 @@ class DecimalScalarTest {
   @Test
   void testUnderRational() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL128));
-    Scalar d = s.under(RationalScalar.of(1, 2));
+    Scalar d = s.under(Rational.of(1, 2));
     assertInstanceOf(DecimalScalar.class, d);
     Tolerance.CHOP.requireClose(d, DoubleScalar.of(0.5 / Math.PI));
   }
@@ -113,8 +113,8 @@ class DecimalScalarTest {
         DoubleScalar.of(1.0 / 3.0), //
         DoubleScalar.of(2.0 / 3.0), //
         DoubleScalar.of(1.0), //
-        RationalScalar.of(1, 3), //
-        RationalScalar.of(2, 3), //
+        Rational.of(1, 3), //
+        Rational.of(2, 3), //
         DecimalScalar.of(new BigDecimal("0.33")), //
         DecimalScalar.of(BigDecimal.valueOf(1).divide(BigDecimal.valueOf(3), MathContext.DECIMAL32)), //
         DecimalScalar.of(BigDecimal.valueOf(2).divide(BigDecimal.valueOf(3), MathContext.DECIMAL32)), //
@@ -179,7 +179,7 @@ class DecimalScalarTest {
     Scalar sc2 = sc1.add(sc1);
     Scalar sc2c = sc1.add(sc1);
     Scalar sc4 = sc2.multiply(sc2);
-    Scalar r23 = RationalScalar.of(2, 3);
+    Scalar r23 = Rational.of(2, 3);
     assertEquals(sc2, sc2c);
     Scalar sc4pr23 = sc4.add(r23);
     Scalar sc4mr23 = sc4.multiply(r23);
@@ -207,7 +207,7 @@ class DecimalScalarTest {
     Scalar sc2 = sc1.add(sc1);
     DecimalScalar sc3 = (DecimalScalar) sc2.add(sc1);
     Scalar s13 = sc3.reciprocal();
-    Scalar r13 = RationalScalar.of(1, 3);
+    Scalar r13 = Rational.of(1, 3);
     Scalar d13 = DoubleScalar.of(1. / 3);
     assertEquals(r13, s13);
     assertEquals(s13, r13);
@@ -229,7 +229,7 @@ class DecimalScalarTest {
     Scalar sc2 = sc1.add(sc1);
     Scalar sc3 = sc2.add(sc1);
     Scalar s23 = sc2.divide(sc3);
-    Scalar r23 = RationalScalar.of(2, 3);
+    Scalar r23 = Rational.of(2, 3);
     Scalar d23 = DoubleScalar.of(Math.nextUp(2. / 3));
     Tolerance.CHOP.requireClose(r23, s23);
     Tolerance.CHOP.requireClose(s23, r23);
@@ -240,7 +240,7 @@ class DecimalScalarTest {
   @Test
   void testDivide2() {
     Scalar s = DecimalScalar.of(new BigDecimal("123.345"));
-    Scalar d = s.divide(RationalScalar.of(2, 7));
+    Scalar d = s.divide(Rational.of(2, 7));
     assertEquals(d.toString(), "431.7075");
   }
 
@@ -297,21 +297,21 @@ class DecimalScalarTest {
     assertEquals(Round.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.1"))), RealScalar.of(12));
     assertEquals(Round.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.99"))), RealScalar.of(13));
     assertEquals(Round.FUNCTION.apply(DecimalScalar.of(new BigDecimal("25"))), RealScalar.of(25));
-    assertTrue(Round.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.99"))) instanceof RationalScalar);
+    assertTrue(Round.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.99"))) instanceof Rational);
   }
 
   @Test
   void testFloor() {
     assertEquals(Floor.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.99"))), RealScalar.of(12));
     assertEquals(Floor.FUNCTION.apply(DecimalScalar.of(new BigDecimal("25"))), RealScalar.of(25));
-    assertTrue(Floor.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.99"))) instanceof RationalScalar);
+    assertTrue(Floor.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.99"))) instanceof Rational);
   }
 
   @Test
   void testCeiling() {
     assertEquals(Ceiling.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.1"))), RealScalar.of(13));
     assertEquals(Ceiling.FUNCTION.apply(DecimalScalar.of(new BigDecimal("25"))), RealScalar.of(25));
-    assertInstanceOf(RationalScalar.class, Ceiling.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.99"))));
+    assertInstanceOf(Rational.class, Ceiling.FUNCTION.apply(DecimalScalar.of(new BigDecimal("12.99"))));
   }
 
   @Test
@@ -333,7 +333,7 @@ class DecimalScalarTest {
   @Test
   void testCompare2() {
     Scalar dec = DecimalScalar.of(new BigDecimal("0.1"));
-    Scalar alt = RationalScalar.of(1, 100);
+    Scalar alt = Rational.of(1, 100);
     assertTrue(Scalars.lessThan(alt, dec));
     assertFalse(Scalars.lessThan(dec, alt));
   }

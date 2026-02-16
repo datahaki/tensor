@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -31,7 +31,7 @@ class LanczosKernelTest {
   @Test
   void testIntermediate() {
     LanczosKernel lanczosKernel = LanczosKernel._3;
-    Scalar apply = lanczosKernel.apply(RationalScalar.HALF);
+    Scalar apply = lanczosKernel.apply(Rational.HALF);
     Chop._14.requireClose(apply, RealScalar.of(0.6079271018540267));
   }
 }

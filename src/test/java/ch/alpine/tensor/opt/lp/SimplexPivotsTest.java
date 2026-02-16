@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -40,7 +40,7 @@ class SimplexPivotsTest {
     Chop.NONE.requireAllZero(res);
     c.dot(sol);
     NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(c, m, b, true);
-    Tensor xs = navigableMap.get(Quantity.of(RationalScalar.of(216, 5), "USD"));
+    Tensor xs = navigableMap.get(Quantity.of(Rational.of(216, 5), "USD"));
     assertEquals(xs, Tensors.fromString("{{24/5, 24/5}}"));
     Tensor x = xs.get(0);
     Tensor mx = m.dot(x);

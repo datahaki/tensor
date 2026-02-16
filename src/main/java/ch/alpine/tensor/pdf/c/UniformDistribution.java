@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -35,7 +35,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * <a href="https://reference.wolfram.com/language/ref/UniformDistribution.html">UniformDistribution</a> */
 public class UniformDistribution extends AbstractContinuousDistribution //
     implements StandardDeviationInterface, CentralMomentInterface, KurtosisInterface, Serializable {
-  private static final Scalar _1_12 = RationalScalar.of(1, 12);
+  private static final Scalar _1_12 = Rational.of(1, 12);
 
   /** the input parameters may be an instance of {@link Quantity} of identical unit
    * 
@@ -142,7 +142,7 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   @Override // from MeanInterface
   public final Scalar mean() {
-    return protected_quantile(RationalScalar.HALF);
+    return protected_quantile(Rational.HALF);
   }
 
   @Override // from VarianceInterface
@@ -157,7 +157,7 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   @Override // from KurtosisInterface
   public Scalar kurtosis() {
-    return RationalScalar.of(9, 5);
+    return Rational.of(9, 5);
   }
 
   @Override // from CentralMomentInterface
@@ -166,7 +166,7 @@ public class UniformDistribution extends AbstractContinuousDistribution //
     // for k uneven 0
     // consistent with Polynomial # moment
     return order % 2 == 0 //
-        ? Power.of(clip.width().multiply(RationalScalar.HALF), order).divide(RealScalar.of(order + 1))
+        ? Power.of(clip.width().multiply(Rational.HALF), order).divide(RealScalar.of(order + 1))
         : Power.of(clip.width().zero(), order);
   }
 

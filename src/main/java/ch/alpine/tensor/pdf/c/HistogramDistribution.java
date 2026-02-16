@@ -3,7 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -85,7 +85,7 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
     Tensor unscaledPDF = BinCounts.of(samples.maps(discrete));
     categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
     this.width = width;
-    width_half = width.multiply(RationalScalar.HALF);
+    width_half = width.multiply(Rational.HALF);
     clip = Clips.interval(min, min.add(width.multiply(RealScalar.of(unscaledPDF.length()))));
   }
 
@@ -126,7 +126,7 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return Expectation.variance(categoricalDistribution).add(RationalScalar.of(1, 12)) //
+    return Expectation.variance(categoricalDistribution).add(Rational.of(1, 12)) //
         .multiply(width).multiply(width);
   }
 

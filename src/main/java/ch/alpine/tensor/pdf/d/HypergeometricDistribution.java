@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.d;
 import java.math.BigInteger;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Integers;
@@ -61,18 +61,18 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return RealScalar.of(N).multiply(RationalScalar.of(n, m_n));
+    return RealScalar.of(N).multiply(Rational.of(n, m_n));
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
     // ((mpn - n) n (mpn - N) N) / ((-1 + mpn) mpn^2)
-    Scalar rd1 = RationalScalar.of(m_n - n, m_n);
-    Scalar rd2 = RationalScalar.of(m_n - N, m_n);
+    Scalar rd1 = Rational.of(m_n - n, m_n);
+    Scalar rd2 = Rational.of(m_n - N, m_n);
     // ( n N) / (-1 + mpn)
-    Scalar rd3 = RationalScalar.of(N, m_n - 1);
+    Scalar rd3 = Rational.of(N, m_n - 1);
     // ( n )
-    Scalar rd4 = RationalScalar.of(n, 1);
+    Scalar rd4 = Rational.of(n, 1);
     return rd1.multiply(rd2).multiply(rd3).multiply(rd4);
   }
 

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -28,7 +28,7 @@ class CirclePointTest {
   @Test
   void testExact() {
     for (int count = 0; count < 12; ++count) {
-      Scalar scalar = RationalScalar.of(count, 12);
+      Scalar scalar = Rational.of(count, 12);
       Optional<Tensor> optional = CirclePoint.INSTANCE.turns(scalar);
       assertTrue(optional.isPresent());
       Tensor vector = optional.orElseThrow();

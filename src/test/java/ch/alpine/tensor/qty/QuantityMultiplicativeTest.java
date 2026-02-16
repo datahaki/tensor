@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -41,7 +41,7 @@ class QuantityMultiplicativeTest {
     Scalar qs2 = Quantity.of(4, "m");
     Scalar qs3 = Quantity.of(3, "m^0");
     assertEquals(qs1.divide(qs2), qs3);
-    assertInstanceOf(RationalScalar.class, qs3);
+    assertInstanceOf(Rational.class, qs3);
   }
 
   @Test

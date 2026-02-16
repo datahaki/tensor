@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -68,8 +68,8 @@ class DiscreteDistributionTest {
     assumeTrue(distribution instanceof InverseCDF);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Sign.requirePositiveOrZero(InterquartileRange.of(distribution));
-    Scalar lo = inverseCDF.quantile(RationalScalar.of(1, 8));
-    Scalar hi = inverseCDF.quantile(RationalScalar.of(3, 8));
+    Scalar lo = inverseCDF.quantile(Rational.of(1, 8));
+    Scalar hi = inverseCDF.quantile(Rational.of(3, 8));
     assertTrue(Scalars.lessEquals(lo, hi));
   }
 

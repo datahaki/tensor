@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -82,13 +82,13 @@ class MatrixPowerTest {
           MatrixPower.of(a, 5));
     }
     {
-      Tensor sqrt = MatrixPower.of(a, RationalScalar.HALF);
+      Tensor sqrt = MatrixPower.of(a, Rational.HALF);
       MatrixSqrt matrixSqrt = MatrixSqrt.of(a);
       Tolerance.CHOP.requireClose(sqrt, matrixSqrt.sqrt());
       Tolerance.CHOP.requireClose(sqrt, Tensors.fromString("{{2, 2}, {0, 3}}"));
     }
     {
-      Tensor sqrt = MatrixPower.of(a, RationalScalar.HALF.negate());
+      Tensor sqrt = MatrixPower.of(a, Rational.HALF.negate());
       MatrixSqrt matrixSqrt = MatrixSqrt.of(a);
       Tolerance.CHOP.requireClose(sqrt, matrixSqrt.sqrt_inverse());
       Tolerance.CHOP.requireClose(sqrt, Inverse.of(Tensors.fromString("{{2, 2}, {0, 3}}")));
@@ -138,7 +138,7 @@ class MatrixPowerTest {
   void testIdentityMatrix() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = IdentityMatrix.of(n);
-      Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
+      Tensor sqrt = MatrixPower.ofSymmetric(matrix, Rational.HALF);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
     }
   }
@@ -146,7 +146,7 @@ class MatrixPowerTest {
   @Test
   void testNegativeDiagonal() {
     Tensor matrix = DiagonalMatrix.of(-1, -2, -3);
-    Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
+    Tensor sqrt = MatrixPower.ofSymmetric(matrix, Rational.HALF);
     Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
   }
 
@@ -156,17 +156,17 @@ class MatrixPowerTest {
     Distribution distribution = NormalDistribution.standard();
     Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
     {
-      Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
+      Tensor sqrt = MatrixPower.ofSymmetric(matrix, Rational.HALF);
       SymmetricMatrixQ.INSTANCE.require(sqrt);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
     }
     {
-      Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 3));
+      Tensor sqrt = MatrixPower.ofSymmetric(matrix, Rational.of(1, 3));
       SymmetricMatrixQ.INSTANCE.require(sqrt);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt), matrix);
     }
     {
-      Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 4));
+      Tensor sqrt = MatrixPower.ofSymmetric(matrix, Rational.of(1, 4));
       SymmetricMatrixQ.INSTANCE.require(sqrt);
       Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt).dot(sqrt), matrix);
     }
@@ -174,7 +174,7 @@ class MatrixPowerTest {
 
   @Test
   void testComplexDiagnoal() {
-    Tensor tensor = MatrixPower.ofSymmetric(DiagonalMatrix.of(-1, 4), RationalScalar.HALF);
+    Tensor tensor = MatrixPower.ofSymmetric(DiagonalMatrix.of(-1, 4), Rational.HALF);
     Tolerance.CHOP.requireClose(tensor, Tensors.fromString("{{I, 0}, {0, 2}}"));
   }
 
@@ -223,12 +223,12 @@ class MatrixPowerTest {
 
   @Test
   void testNonSymmetricFail() {
-    assertThrows(Throw.class, () -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
+    assertThrows(Throw.class, () -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), Rational.HALF));
   }
 
   @Test
   void testNullFail() {
-    assertThrows(NullPointerException.class, () -> MatrixPower.ofSymmetric(null, RationalScalar.HALF));
+    assertThrows(NullPointerException.class, () -> MatrixPower.ofSymmetric(null, Rational.HALF));
   }
 
   @Test

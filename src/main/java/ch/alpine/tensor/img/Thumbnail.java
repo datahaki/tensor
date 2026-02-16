@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -37,7 +37,7 @@ public enum Thumbnail {
     int w = bufferedImage.getWidth();
     int h = bufferedImage.getHeight();
     Scalar s = RealScalar.of(size);
-    Scalar r = RationalScalar.of(w, h);
+    Scalar r = Rational.of(w, h);
     Dimension dimension = h <= w //
         ? new Dimension(s.multiply(r).number().intValue(), size)
         : new Dimension(size, s.divide(r).number().intValue());

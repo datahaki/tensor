@@ -3,7 +3,7 @@ package ch.alpine.tensor.io;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.N;
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof StringScalar)
       return wrap(scalar);
-    if (scalar instanceof RationalScalar)
+    if (scalar instanceof Rational)
       return IntegerQ.of(scalar) //
           ? scalar
           : N.DOUBLE.apply(scalar);

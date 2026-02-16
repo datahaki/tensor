@@ -12,7 +12,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -111,7 +111,7 @@ class UnitSystemTest {
     ExactScalarQ.require(r1);
     Scalar r2 = UnitConvert.SI().to(Unit.of("km*h^-1")).apply(r1);
     ExactScalarQ.require(r2);
-    Scalar r3 = Quantity.of(RationalScalar.of(463, 250), "km*h^-1");
+    Scalar r3 = Quantity.of(Rational.of(463, 250), "km*h^-1");
     ExactScalarQ.require(r3);
     assertEquals(r2, r3);
   }

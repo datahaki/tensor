@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.lie.rot;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 
@@ -14,7 +14,7 @@ public enum PolygonalNumber {
   /** @param n
    * @return 1 + 2 + ... + n == n (n + 1) / 2 */
   public static Scalar of(Scalar n) {
-    return n.multiply(n.add(RealScalar.ONE)).multiply(RationalScalar.HALF);
+    return n.multiply(n.add(RealScalar.ONE)).multiply(Rational.HALF);
   }
 
   /** @param r
@@ -22,6 +22,6 @@ public enum PolygonalNumber {
    * @return 1/2 n (n (r-2)-r+4) */
   public static Scalar of(Scalar r, Scalar n) {
     Scalar v = r.subtract(RealScalar.TWO).multiply(n).subtract(r).add(_4);
-    return n.multiply(v).multiply(RationalScalar.HALF);
+    return n.multiply(v).multiply(Rational.HALF);
   }
 }

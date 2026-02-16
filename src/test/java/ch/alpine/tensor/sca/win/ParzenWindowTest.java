@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -19,13 +19,13 @@ import ch.alpine.tensor.qty.Quantity;
 class ParzenWindowTest {
   @Test
   void testSimple() {
-    assertEquals(ParzenWindow.FUNCTION.apply(RationalScalar.of(1, 10)), RationalScalar.of(101, 125));
-    assertEquals(ParzenWindow.FUNCTION.apply(RationalScalar.of(3, 10)), RationalScalar.of(16, 125));
+    assertEquals(ParzenWindow.FUNCTION.apply(Rational.of(1, 10)), Rational.of(101, 125));
+    assertEquals(ParzenWindow.FUNCTION.apply(Rational.of(3, 10)), Rational.of(16, 125));
   }
 
   @Test
   void testSemiExact() {
-    Scalar scalar = ParzenWindow.FUNCTION.apply(RationalScalar.HALF);
+    Scalar scalar = ParzenWindow.FUNCTION.apply(Rational.HALF);
     assertTrue(Scalars.isZero(scalar));
     ExactScalarQ.require(scalar);
   }
@@ -39,7 +39,7 @@ class ParzenWindowTest {
 
   @Test
   void testExact() {
-    Scalar scalar = ParzenWindow.FUNCTION.apply(RationalScalar.of(2, 5));
+    Scalar scalar = ParzenWindow.FUNCTION.apply(Rational.of(2, 5));
     ExactScalarQ.require(scalar);
     assertFalse(Scalars.isZero(scalar));
   }

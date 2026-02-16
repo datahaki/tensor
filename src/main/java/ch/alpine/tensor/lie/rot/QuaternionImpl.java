@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.MultiplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -169,7 +169,7 @@ import ch.alpine.tensor.sca.tri.Sin;
   public Quaternion sqrt() {
     Scalar w_abs = w.add(abs());
     Scalar nre = Sqrt.FUNCTION.apply(w_abs.add(w_abs));
-    return new QuaternionImpl(nre.multiply(RationalScalar.HALF), xyz.divide(nre));
+    return new QuaternionImpl(nre.multiply(Rational.HALF), xyz.divide(nre));
   }
 
   @Override // from MultiplexScalar

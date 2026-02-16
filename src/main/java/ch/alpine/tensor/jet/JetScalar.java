@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.MultiplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -179,7 +179,7 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from SqrtInterface
   public Scalar sqrt() {
-    return power(RationalScalar.HALF);
+    return power(Rational.HALF);
   }
 
   @Override // from TrigonometryInterface

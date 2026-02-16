@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.Chop;
 class OrthogonalMatrixQTest {
   @Test
   void testExact() {
-    Tensor matrix = Tensors.fromString("{{1, 1, 1, -1}, {-1, 1, 1, 1}}").multiply(RationalScalar.of(1, 2));
+    Tensor matrix = Tensors.fromString("{{1, 1, 1, -1}, {-1, 1, 1, 1}}").multiply(Rational.of(1, 2));
     assertTrue(OrthogonalMatrixQ.INSTANCE.test(matrix));
     new OrthogonalMatrixQ(Chop.NONE).require(matrix);
   }

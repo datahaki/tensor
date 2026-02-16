@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca.win;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -11,11 +11,11 @@ import ch.alpine.tensor.sca.exp.Exp;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GaussianWindow.html">GaussianWindow</a> */
 public class GaussianWindow extends ParameterizedWindow {
-  private static final Scalar HALF_NEGATE = RationalScalar.HALF.negate();
+  private static final Scalar HALF_NEGATE = Rational.HALF.negate();
   /** gaussian window with standard deviation of sigma 3/10,
    * which is the default in Mathematica and results in
    * GaussianWindow[1/2]=0.24935220877729616 */
-  public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.of(3, 10));
+  public static final ScalarUnaryOperator FUNCTION = of(Rational.of(3, 10));
 
   /** @param alpha
    * @return */

@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -97,7 +97,7 @@ class InfluenceMatrixTest {
     Tensor x = influenceMatrix.matrix();
     Tolerance.CHOP.requireClose(x.dot(w1), w1);
     Tolerance.CHOP.requireClose(w2.dot(x), w2);
-    Tensor w = w1.add(w2).multiply(RationalScalar.HALF);
+    Tensor w = w1.add(w2).multiply(Rational.HALF);
     SymmetricMatrixQ.INSTANCE.require(w);
     return w;
   }

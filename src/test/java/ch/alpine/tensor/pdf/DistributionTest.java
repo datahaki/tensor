@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -46,13 +46,13 @@ class DistributionTest {
 
   @Test
   void testBernoulliDistribution() {
-    _check(BernoulliDistribution.of(RationalScalar.of(2, 3)), 1000);
+    _check(BernoulliDistribution.of(Rational.of(2, 3)), 1000);
   }
 
   @Test
   void testBinomialDistribution() {
-    _check(BinomialDistribution.of(10, RationalScalar.of(1, 4)), 1000);
-    _check(BinomialDistribution.of(10, RationalScalar.of(7, 8)), 1000);
+    _check(BinomialDistribution.of(10, Rational.of(1, 4)), 1000);
+    _check(BinomialDistribution.of(10, Rational.of(7, 8)), 1000);
   }
 
   @Test

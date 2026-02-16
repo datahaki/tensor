@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -78,6 +78,6 @@ class IntegerDigitsTest {
 
   @Test
   void testRationalFail() {
-    assertThrows(Throw.class, () -> IntegerDigits.of(RationalScalar.of(10, 3)));
+    assertThrows(Throw.class, () -> IntegerDigits.of(Rational.of(10, 3)));
   }
 }

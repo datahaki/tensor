@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public final class RationalScalar extends AbstractRealScalar implements //
+public final class Rational extends AbstractRealScalar implements //
     NInterface, SqrtInterface, ExpInterface, TrigonometryInterface, Serializable {
   /** rational number {@code 1/2} with decimal value {@code 0.5} */
   public static final Scalar HALF = of(1, 2);
@@ -34,26 +34,26 @@ public final class RationalScalar extends AbstractRealScalar implements //
    * @param den denominator
    * @return scalar encoding the exact fraction num / den */
   public static Scalar of(BigInteger num, BigInteger den) {
-    return new RationalScalar(BigFraction.of(num, den));
+    return new Rational(BigFraction.of(num, den));
   }
 
   /** @param num numerator
    * @param den denominator
    * @return scalar encoding the exact fraction num / den */
   public static Scalar of(long num, long den) {
-    return new RationalScalar(BigFraction.of(num, den));
+    return new Rational(BigFraction.of(num, den));
   }
 
   /** @param num numerator
    * @return scalar encoding the exact fraction num / 1 */
   /* package */ static Scalar integer(long num) {
-    return new RationalScalar(BigFraction.integer(num));
+    return new Rational(BigFraction.integer(num));
   }
 
   /** @param num numerator
    * @return scalar encoding the exact fraction num / 1 */
   /* package */ static Scalar integer(BigInteger num) {
-    return new RationalScalar(BigFraction.integer(num));
+    return new Rational(BigFraction.integer(num));
   }
 
   // ---
@@ -62,41 +62,41 @@ public final class RationalScalar extends AbstractRealScalar implements //
   /** private constructor is only called from of(...)
    * 
    * @param bigFraction */
-  private RationalScalar(BigFraction bigFraction) {
+  private Rational(BigFraction bigFraction) {
     this.bigFraction = bigFraction;
   }
 
   @Override // from Scalar
-  public RationalScalar negate() {
-    return new RationalScalar(bigFraction.negate());
+  public Rational negate() {
+    return new Rational(bigFraction.negate());
   }
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    return scalar instanceof RationalScalar rationalScalar //
-        ? new RationalScalar(bigFraction.multiply(rationalScalar.bigFraction))
+    return scalar instanceof Rational rational //
+        ? new Rational(bigFraction.multiply(rational.bigFraction))
         : scalar.multiply(this);
   }
 
   @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
-    return scalar instanceof RationalScalar rationalScalar //
+    return scalar instanceof Rational rational //
         // default implementation in AbstractScalar uses 2x gcd
-        ? new RationalScalar(bigFraction.divide(rationalScalar.bigFraction))
+        ? new Rational(bigFraction.divide(rational.bigFraction))
         : scalar.under(this);
   }
 
   @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
-    return scalar instanceof RationalScalar rationalScalar
+    return scalar instanceof Rational rational
         // default implementation in AbstractScalar uses 2x gcd
-        ? new RationalScalar(rationalScalar.bigFraction.divide(bigFraction))
+        ? new Rational(rational.bigFraction.divide(bigFraction))
         : scalar.divide(this);
   }
 
   @Override // from Scalar
-  public RationalScalar reciprocal() {
-    return new RationalScalar(bigFraction.reciprocal());
+  public Rational reciprocal() {
+    return new Rational(bigFraction.reciprocal());
   }
 
   @Override // from Scalar
@@ -123,8 +123,8 @@ public final class RationalScalar extends AbstractRealScalar implements //
   // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    return scalar instanceof RationalScalar rationalScalar //
-        ? new RationalScalar(bigFraction.add(rationalScalar.bigFraction))
+    return scalar instanceof Rational rational //
+        ? new Rational(bigFraction.add(rational.bigFraction))
         : scalar.add(this);
   }
 
@@ -136,8 +136,8 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof RationalScalar rationalScalar)
-      return bigFraction.compareTo(rationalScalar.bigFraction);
+    if (scalar instanceof Rational rational)
+      return bigFraction.compareTo(rational.bigFraction);
     @SuppressWarnings("unchecked")
     Comparable<Scalar> comparable = (Comparable<Scalar>) scalar;
     return -comparable.compareTo(this);
@@ -182,7 +182,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   /** Example: sqrt(16/25) == 4/5
    * 
-   * @return {@link RationalScalar} precision if numerator and denominator are both squares */
+   * @return {@link Rational} precision if numerator and denominator are both squares */
   @Override // from AbstractRealScalar
   public Scalar sqrt() {
     boolean isNonNegative = isNonNegative();
@@ -229,7 +229,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
   }
 
   /** @return denominator as {@link BigInteger},
-   * the denominator of a {@link RationalScalar} is always positive */
+   * the denominator of a {@link Rational} is always positive */
   public BigInteger denominator() {
     return bigFraction.denominator();
   }
@@ -262,8 +262,8 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    return object instanceof RationalScalar rationalScalar //
-        ? bigFraction._equals(rationalScalar.bigFraction)
+    return object instanceof Rational rational //
+        ? bigFraction._equals(rational.bigFraction)
         : Objects.nonNull(object) && object.equals(this);
   }
 

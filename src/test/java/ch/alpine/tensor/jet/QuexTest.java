@@ -11,7 +11,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ComplexEmbedding;
@@ -44,12 +44,12 @@ class QuexTest {
 
   @Test
   void testSpecialAdd() {
-    assertInstanceOf(RationalScalar.class, Quex.of(2, 0, 2));
+    assertInstanceOf(Rational.class, Quex.of(2, 0, 2));
     Scalar a = Quex.of(4, 5, 2);
     assertInstanceOf(Quex.class, a);
     Scalar b = Quex.of(7, 5, 2);
     Scalar c = b.subtract(a);
-    assertInstanceOf(RationalScalar.class, c);
+    assertInstanceOf(Rational.class, c);
     assertEquals(c, RealScalar.of(3));
     Scalar d = a.add(RealScalar.of(10));
     assertEquals(d, Quex.of(14, 5, 2));
@@ -78,7 +78,7 @@ class QuexTest {
     Scalar a = Quex.of(2, 4, 2);
     Scalar b = Quex.of(-2, 4, 2);
     Scalar c = a.multiply(b);
-    assertInstanceOf(RationalScalar.class, c);
+    assertInstanceOf(Rational.class, c);
     assertEquals(c, RealScalar.of(28));
     Tolerance.CHOP.requireClose(N.DOUBLE.apply(a).multiply(b), N.DOUBLE.apply(c));
   }
@@ -95,13 +95,13 @@ class QuexTest {
   void testMulZero() {
     Scalar a = Quex.of(2, 3, 13);
     Scalar z = a.multiply(RealScalar.ZERO);
-    assertInstanceOf(RationalScalar.class, z);
+    assertInstanceOf(Rational.class, z);
     assertEquals(z, RealScalar.ZERO);
   }
 
   @Test
   void testZeroCases() {
-    assertInstanceOf(RationalScalar.class, Quex.of(4, 0, 2));
-    assertInstanceOf(RationalScalar.class, Quex.of(4, 2, 0));
+    assertInstanceOf(Rational.class, Quex.of(4, 0, 2));
+    assertInstanceOf(Rational.class, Quex.of(4, 2, 0));
   }
 }

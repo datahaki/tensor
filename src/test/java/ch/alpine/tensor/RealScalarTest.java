@@ -31,8 +31,8 @@ class RealScalarTest {
     assertEquals(Sign.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(+5)), RealScalar.ONE);
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(-5)), RealScalar.ONE.negate());
-    RealScalar r1 = (RealScalar) RationalScalar.of(1927365481254298736L, 1927365481254298737L);
-    RealScalar r2 = (RealScalar) RationalScalar.of(1927365481254298741L, -1927365481254298739L);
+    RealScalar r1 = (RealScalar) Rational.of(1927365481254298736L, 1927365481254298737L);
+    RealScalar r2 = (RealScalar) Rational.of(1927365481254298741L, -1927365481254298739L);
     assertEquals(Sign.FUNCTION.apply(r1), RealScalar.ONE);
     assertEquals(Sign.FUNCTION.apply(r2), RealScalar.ONE.negate());
   }
@@ -66,8 +66,8 @@ class RealScalarTest {
 
   @Test
   void testCompareRational() {
-    Scalar r1 = RationalScalar.of(1927365481254298736L, 1927365481254298737L);
-    Scalar r2 = RationalScalar.of(1927365481254298741L, 1927365481254298739L);
+    Scalar r1 = Rational.of(1927365481254298736L, 1927365481254298737L);
+    Scalar r2 = Rational.of(1927365481254298741L, 1927365481254298739L);
     assertEquals(Scalars.compare(r1, r2), -1);
     Scalar d1 = DoubleScalar.of(r1.number().doubleValue());
     Scalar d2 = DoubleScalar.of(r2.number().doubleValue());
@@ -81,10 +81,10 @@ class RealScalarTest {
     assertEquals(DoubleScalar.of(3.0), RealScalar.of(3.));
     assertEquals(DoubleScalar.of(3.0), RealScalar.of(3.f));
     assertEquals(RealScalar.of(3), RealScalar.of(3));
-    assertEquals(RationalScalar.of(3, 1), RealScalar.of(3));
-    assertEquals(RationalScalar.of(3, 1), RealScalar.of(3L));
-    assertEquals(RationalScalar.of(1, 1), RealScalar.of(BigInteger.ONE));
-    assertEquals(RationalScalar.of(1, 1), RealScalar.of(BigDecimal.ONE));
+    assertEquals(Rational.of(3, 1), RealScalar.of(3));
+    assertEquals(Rational.of(3, 1), RealScalar.of(3L));
+    assertEquals(Rational.of(1, 1), RealScalar.of(BigInteger.ONE));
+    assertEquals(Rational.of(1, 1), RealScalar.of(BigDecimal.ONE));
   }
 
   @Test
@@ -112,7 +112,7 @@ class RealScalarTest {
   @Test
   void testBigInteger() {
     Scalar scalar = RealScalar.of(new BigInteger("123"));
-    assertInstanceOf(RationalScalar.class, scalar);
+    assertInstanceOf(Rational.class, scalar);
     assertEquals(scalar, RealScalar.of(123));
   }
 

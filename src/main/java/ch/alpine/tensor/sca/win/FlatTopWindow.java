@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -15,11 +15,11 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 public enum FlatTopWindow implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar A0 = RationalScalar.of(215578947, 1000000000);
-  private static final Scalar A1 = RationalScalar.of(416631580, 1000000000);
-  private static final Scalar A2 = RationalScalar.of(277263158, 1000000000);
-  private static final Scalar A3 = RationalScalar.of(83578947, 1000000000);
-  private static final Scalar A4 = RationalScalar.of(6947368, 1000000000);
+  private static final Scalar A0 = Rational.of(215578947, 1000000000);
+  private static final Scalar A1 = Rational.of(416631580, 1000000000);
+  private static final Scalar A2 = Rational.of(277263158, 1000000000);
+  private static final Scalar A3 = Rational.of(83578947, 1000000000);
+  private static final Scalar A4 = Rational.of(6947368, 1000000000);
 
   @Override
   public Scalar apply(Scalar x) {

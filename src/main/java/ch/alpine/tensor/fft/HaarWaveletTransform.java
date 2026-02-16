@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.fft;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -73,8 +73,8 @@ public enum HaarWaveletTransform implements DiscreteFourierTransform {
         Tensor xb = Tensors.reserve(m);
         int index = -1;
         for (int j = 0; j < m; ++j) {
-          xt.append(vector.get(++index).multiply(RationalScalar.HALF));
-          xb.append(vector.get(++index).multiply(RationalScalar.HALF));
+          xt.append(vector.get(++index).multiply(Rational.HALF));
+          xb.append(vector.get(++index).multiply(Rational.HALF));
         }
         return Join.of(transform(xt.add(xb)), xt.subtract(xb));
       }

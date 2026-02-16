@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca.ply;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -51,7 +51,7 @@ public enum RootsBounds {
       return Total.ofVector(Tensor.of(monic.stream() //
           .map(Scalar.class::cast) //
           .map(Abs.FUNCTION) //
-          .map(ratio -> Power.of(ratio, RationalScalar.of(1, i.getAndDecrement()))) //
+          .map(ratio -> Power.of(ratio, Rational.of(1, i.getAndDecrement()))) //
           .sorted() //
           .skip(last - 2)));
     }
@@ -65,8 +65,8 @@ public enum RootsBounds {
       return monic.stream() //
           .map(Scalar.class::cast) //
           .map(Abs.FUNCTION) //
-          .map(ratio -> atomicBoolean.getAndSet(true) ? ratio : ratio.multiply(RationalScalar.HALF))
-          .map(ratio -> Power.of(ratio, RationalScalar.of(1, i.getAndDecrement()))) //
+          .map(ratio -> atomicBoolean.getAndSet(true) ? ratio : ratio.multiply(Rational.HALF))
+          .map(ratio -> Power.of(ratio, Rational.of(1, i.getAndDecrement()))) //
           .reduce(Max::of) //
           .map(max -> max.add(max)) //
           .orElseThrow();

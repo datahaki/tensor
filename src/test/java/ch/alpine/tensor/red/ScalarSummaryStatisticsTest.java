@@ -14,7 +14,7 @@ import java.util.IntSummaryStatistics;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -37,7 +37,7 @@ class ScalarSummaryStatisticsTest {
     assertEquals(scalarSummaryStatistics.getSum(), RealScalar.of(28));
     assertEquals(scalarSummaryStatistics.getMin(), RealScalar.of(1));
     assertEquals(scalarSummaryStatistics.getMax(), RealScalar.of(10));
-    assertEquals(scalarSummaryStatistics.getAverage(), RationalScalar.of(14, 3));
+    assertEquals(scalarSummaryStatistics.getAverage(), Rational.of(14, 3));
     assertEquals(scalarSummaryStatistics.getCount(), 6);
   }
 
@@ -48,7 +48,7 @@ class ScalarSummaryStatisticsTest {
     assertEquals(scalarSummaryStatistics.getSum(), RealScalar.of(28));
     assertEquals(scalarSummaryStatistics.getMin(), RealScalar.of(1));
     assertEquals(scalarSummaryStatistics.getMax(), RealScalar.of(10));
-    assertEquals(scalarSummaryStatistics.getAverage(), RationalScalar.of(14, 3));
+    assertEquals(scalarSummaryStatistics.getAverage(), Rational.of(14, 3));
     assertEquals(scalarSummaryStatistics.getCount(), 6);
   }
 
@@ -72,7 +72,7 @@ class ScalarSummaryStatisticsTest {
     assertEquals(stats.getSum(), RealScalar.of(28));
     assertEquals(stats.getMin(), RealScalar.of(1));
     assertEquals(stats.getMax(), RealScalar.of(10));
-    assertEquals(stats.getAverage(), RationalScalar.of(14, 3));
+    assertEquals(stats.getAverage(), Rational.of(14, 3));
     assertEquals(stats.getCount(), 6);
     assertEquals(stats.toString(), "ScalarSummaryStatistics{count=6, min=1, average=14/3, max=10}");
   }

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -116,7 +116,7 @@ class SingularValueDecompositionTest {
   void testSvdR1() {
     RandomGenerator randomGenerator = new Random(1);
     int n = 15;
-    Tensor matrix = Tensors.matrix((_, _) -> RationalScalar.of(randomGenerator.nextInt(1000) - 500, randomGenerator.nextInt(1000) + 1), n, n);
+    Tensor matrix = Tensors.matrix((_, _) -> Rational.of(randomGenerator.nextInt(1000) - 500, randomGenerator.nextInt(1000) + 1), n, n);
     SingularValueDecomposition svd = SingularValueDecompositionWrap.of(matrix);
     assumeTrue(MatrixRank.of(matrix) == n); // 1e-12 failed in the past
     Chop._08.requireClose(PseudoInverse.of(svd), Inverse.of(matrix));
@@ -125,13 +125,13 @@ class SingularValueDecompositionTest {
   @Test
   void testSvdR2() {
     Random random = new Random(1);
-    Tensor mat = Tensors.matrix((_, _) -> RationalScalar.of(random.nextInt(100) - 50, random.nextInt(100) + 1), 20, 4);
+    Tensor mat = Tensors.matrix((_, _) -> Rational.of(random.nextInt(100) - 50, random.nextInt(100) + 1), 20, 4);
     Tensor B = Tensors.matrix(new Scalar[][] { //
         // "{1, 2, 3, -1}"
-        { RationalScalar.of(1, 1), RationalScalar.of(2, 1), RationalScalar.of(3, 1), RationalScalar.of(-1, 1) }, //
-        { RationalScalar.of(0, 1), RationalScalar.of(0, 1), RationalScalar.of(4, 1), RationalScalar.of(2, 1) }, //
-        { RationalScalar.of(0, 1), RationalScalar.of(0, 1), RationalScalar.of(0, 1), RationalScalar.of(1, 1) }, //
-        { RationalScalar.of(0, 1), RationalScalar.of(0, 1), RationalScalar.of(0, 1), RationalScalar.of(0, 1) } });
+        { Rational.of(1, 1), Rational.of(2, 1), Rational.of(3, 1), Rational.of(-1, 1) }, //
+        { Rational.of(0, 1), Rational.of(0, 1), Rational.of(4, 1), Rational.of(2, 1) }, //
+        { Rational.of(0, 1), Rational.of(0, 1), Rational.of(0, 1), Rational.of(1, 1) }, //
+        { Rational.of(0, 1), Rational.of(0, 1), Rational.of(0, 1), Rational.of(0, 1) } });
     Tensor mat2 = mat.dot(B);
     SingularValueDecompositionWrap.of(mat.dot(B));
     assertEquals(MatrixRank.of(mat2), 3);
@@ -187,8 +187,8 @@ class SingularValueDecompositionTest {
     int n = 10;
     int k = 8;
     Tensor mat = Array.zeros(n, n);
-    mat.set(RationalScalar.of(1, 1), k - 4, k - 1);
-    mat.set(RationalScalar.of(1, 1), k - 1, k - 4);
+    mat.set(Rational.of(1, 1), k - 4, k - 1);
+    mat.set(Rational.of(1, 1), k - 1, k - 4);
     SingularValueDecomposition svd = SingularValueDecompositionWrap.of(mat);
     assertEquals(MatrixRank.of(mat), 2);
     assertEquals(Sort.of(svd.values()), Tensors.fromString("{0, 0, 0, 0, 0, 0, 0, 0, 1.0, 1.0}"));

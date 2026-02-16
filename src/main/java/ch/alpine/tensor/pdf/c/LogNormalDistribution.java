@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -90,7 +90,7 @@ public class LogNormalDistribution extends AbstractContinuousDistribution implem
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return Exp.FUNCTION.apply(variance.multiply(RationalScalar.HALF).add(mu));
+    return Exp.FUNCTION.apply(variance.multiply(Rational.HALF).add(mu));
   }
 
   @Override // from VarianceInterface

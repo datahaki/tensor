@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
@@ -32,6 +32,6 @@ public interface BinaryAverage {
    * @param q
    * @return midpoint along curve from p to q */
   default Tensor midpoint(Tensor p, Tensor q) {
-    return split(p, q, RationalScalar.HALF);
+    return split(p, q, Rational.HALF);
   }
 }

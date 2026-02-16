@@ -58,11 +58,11 @@ import ch.alpine.tensor.sca.pow.Sqrt;
     final Scalar w;
     if (Scalars.lessEquals(ca, da)) {
       Scalar c_d = c.divide(d);
-      Scalar fraction = Abs.FUNCTION.apply(c_d).add(Hypot.withOne(c_d)).multiply(RationalScalar.HALF);
+      Scalar fraction = Abs.FUNCTION.apply(c_d).add(Hypot.withOne(c_d)).multiply(Rational.HALF);
       w = Sqrt.FUNCTION.apply(da).multiply(Sqrt.FUNCTION.apply(fraction));
     } else {
       Scalar d_c = d.divide(c);
-      Scalar fraction = RealScalar.ONE.add(Hypot.withOne(d_c)).multiply(RationalScalar.HALF);
+      Scalar fraction = RealScalar.ONE.add(Hypot.withOne(d_c)).multiply(Rational.HALF);
       w = Sqrt.FUNCTION.apply(ca).multiply(Sqrt.FUNCTION.apply(fraction));
     }
     Scalar w2 = w.add(w);
@@ -76,6 +76,6 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   public static Scalar sqrtPolar(Scalar z) {
     return ComplexScalar.fromPolar( //
         Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(z)), //
-        Arg.FUNCTION.apply(z).multiply(RationalScalar.HALF));
+        Arg.FUNCTION.apply(z).multiply(Rational.HALF));
   }
 }

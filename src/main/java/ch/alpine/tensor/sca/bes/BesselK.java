@@ -9,7 +9,7 @@ package ch.alpine.tensor.sca.bes;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -109,7 +109,7 @@ public enum BesselK {
     if (x.equals(RealScalar.ZERO))
       return DoubleScalar.POSITIVE_INFINITY;
     if (Scalars.lessEquals(x, RealScalar.TWO))
-      return A_k0.apply(x.multiply(x)).subtract(Log.FUNCTION.apply(x.multiply(RationalScalar.HALF)).multiply(BesselI._0(x)));
+      return A_k0.apply(x.multiply(x)).subtract(Log.FUNCTION.apply(x.multiply(Rational.HALF)).multiply(BesselI._0(x)));
     return Exp.FUNCTION.apply(x.negate()).multiply(B_k0.apply(x)).divide(Sqrt.FUNCTION.apply(x));
   }
 
@@ -181,7 +181,7 @@ public enum BesselK {
    *
    * @param x the value to compute the bessel function of. */
   public static Scalar _1(Scalar x) {
-    Scalar z = x.multiply(RationalScalar.HALF);
+    Scalar z = x.multiply(Rational.HALF);
     if (Sign.isNegative(z)) {
       /* the real part of BesselK[0, x] is an ANTI-SYMMETRIC function */
       Scalar re = _0(x.negate()).negate();

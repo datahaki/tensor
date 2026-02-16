@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -46,17 +46,17 @@ class CategoricalDistributionTest {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(RealScalar.of(0)), RealScalar.ZERO);
-    assertEquals(pdf.at(RealScalar.of(1)), RationalScalar.of(9, 10));
-    assertEquals(pdf.at(RealScalar.of(2)), RationalScalar.of(1, 10));
+    assertEquals(pdf.at(RealScalar.of(1)), Rational.of(9, 10));
+    assertEquals(pdf.at(RealScalar.of(2)), Rational.of(1, 10));
   }
 
   @Test
   void testP_Equals() {
     CategoricalDistribution categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1, 5));
-    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(0)), RationalScalar.of(0, 1));
-    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(1)), RationalScalar.of(9, 15));
-    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(2)), RationalScalar.of(1, 15));
-    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(3)), RationalScalar.of(5, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(0)), Rational.of(0, 1));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(1)), Rational.of(9, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(2)), Rational.of(1, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(3)), Rational.of(5, 15));
   }
 
   @Test
@@ -66,10 +66,10 @@ class CategoricalDistributionTest {
     assertEquals(pdf.p_lessEquals(RealScalar.of(-0.1)), RealScalar.ZERO);
     assertEquals(pdf.p_lessEquals(RealScalar.of(0)), RealScalar.ZERO);
     assertEquals(pdf.p_lessEquals(RealScalar.of(0.1)), RealScalar.ZERO);
-    assertEquals(pdf.p_lessEquals(RealScalar.of(1)), RationalScalar.of(9, 10));
-    assertEquals(pdf.p_lessEquals(RealScalar.of(1.1)), RationalScalar.of(9, 10));
-    assertEquals(pdf.p_lessEquals(RealScalar.of(2)), RationalScalar.of(10, 10));
-    assertEquals(pdf.p_lessEquals(RealScalar.of(3)), RationalScalar.of(10, 10));
+    assertEquals(pdf.p_lessEquals(RealScalar.of(1)), Rational.of(9, 10));
+    assertEquals(pdf.p_lessEquals(RealScalar.of(1.1)), Rational.of(9, 10));
+    assertEquals(pdf.p_lessEquals(RealScalar.of(2)), Rational.of(10, 10));
+    assertEquals(pdf.p_lessEquals(RealScalar.of(3)), Rational.of(10, 10));
   }
 
   @Test
@@ -79,10 +79,10 @@ class CategoricalDistributionTest {
     assertEquals(pdf.p_lessThan(RealScalar.of(-0.1)), RealScalar.ZERO);
     assertEquals(pdf.p_lessThan(RealScalar.of(0)), RealScalar.ZERO);
     assertEquals(pdf.p_lessThan(RealScalar.of(0.1)), RealScalar.ZERO);
-    assertEquals(pdf.p_lessThan(RealScalar.of(1)), RationalScalar.of(0, 10));
-    assertEquals(pdf.p_lessThan(RealScalar.of(1.1)), RationalScalar.of(9, 10));
-    assertEquals(pdf.p_lessThan(RealScalar.of(2)), RationalScalar.of(9, 10));
-    assertEquals(pdf.p_lessThan(RealScalar.of(3)), RationalScalar.of(10, 10));
+    assertEquals(pdf.p_lessThan(RealScalar.of(1)), Rational.of(0, 10));
+    assertEquals(pdf.p_lessThan(RealScalar.of(1.1)), Rational.of(9, 10));
+    assertEquals(pdf.p_lessThan(RealScalar.of(2)), Rational.of(9, 10));
+    assertEquals(pdf.p_lessThan(RealScalar.of(3)), Rational.of(10, 10));
   }
 
   @Test
@@ -121,7 +121,7 @@ class CategoricalDistributionTest {
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
     assertEquals(distribution.quantile(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(0.5))), RealScalar.of(2));
-    assertEquals(distribution.quantile(RationalScalar.of(1, 2)), RealScalar.of(2));
+    assertEquals(distribution.quantile(Rational.of(1, 2)), RealScalar.of(2));
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(1.0))), RealScalar.of(4));
     assertEquals(distribution.quantile(RealScalar.of(1)), RealScalar.of(4));
     CDF cdf = CDF.of(distribution);
@@ -187,8 +187,8 @@ class CategoricalDistributionTest {
   @Test
   void testQuantity() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.fromString("{1[m], 2[m]}"));
-    assertEquals(PDF.of(distribution).at(RealScalar.of(0)), RationalScalar.of(1, 3));
-    assertEquals(PDF.of(distribution).at(RealScalar.of(1)), RationalScalar.of(2, 3));
+    assertEquals(PDF.of(distribution).at(RealScalar.of(0)), Rational.of(1, 3));
+    assertEquals(PDF.of(distribution).at(RealScalar.of(1)), Rational.of(2, 3));
   }
 
   @Test

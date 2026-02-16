@@ -88,7 +88,7 @@ import java.util.regex.Pattern;
     if (string.equals(I_SYMBOL))
       return ComplexScalar.I;
     if (PREDICATE_INTEGER.test(string))
-      return RationalScalar.integer(new BigInteger(string));
+      return Rational.integer(new BigInteger(string));
     if (PREDICATE_DOUBLE.test(string))
       return DoubleScalar.of(Double.parseDouble(string));
     int prime = string.indexOf(DECIMAL_PRIME); // check decimal
@@ -110,9 +110,9 @@ import java.util.regex.Pattern;
    * @param im
    * @return */
   public static String imagToString(Scalar im) {
-    if (im instanceof RationalScalar rationalScalar) {
-      BigInteger num = rationalScalar.numerator();
-      BigInteger den = rationalScalar.denominator();
+    if (im instanceof Rational rational) {
+      BigInteger num = rational.numerator();
+      BigInteger den = rational.denominator();
       if (num.equals(BigInteger.ONE))
         return fractionOfI(den);
       if (num.equals(BigInteger.ONE.negate()))

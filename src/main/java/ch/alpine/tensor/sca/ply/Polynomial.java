@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca.ply;
 
 import java.util.function.Predicate;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -190,7 +190,7 @@ public class Polynomial extends HornerScheme {
     Tensor tensor = Tensors.reserve(length + 1);
     tensor.append(a.multiply(zero));
     for (int index = 0; index < length; ++index)
-      tensor.append(coeffs.Get(index).multiply(RationalScalar.of(1, index + 1)));
+      tensor.append(coeffs.Get(index).multiply(Rational.of(1, index + 1)));
     return of(tensor);
   }
 

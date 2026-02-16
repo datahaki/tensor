@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.ex;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -34,7 +34,7 @@ public enum MatrixExp {
     } catch (Exception exception) {
       // ---
     }
-    return MatrixPower.of(MatrixExpSeries.FUNCTION.apply(matrix.multiply(RationalScalar.of(1, exponent))), exponent);
+    return MatrixPower.of(MatrixExpSeries.FUNCTION.apply(matrix.multiply(Rational.of(1, exponent))), exponent);
   }
 
   /** @param norm

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -63,7 +63,7 @@ class NormalizeTest {
 
   @Test
   void testVectorExact() {
-    Distribution distribution = NegativeBinomialDistribution.of(3, RationalScalar.of(2, 3));
+    Distribution distribution = NegativeBinomialDistribution.of(3, Rational.of(2, 3));
     _checkNormalizeAllNorms(RandomVariate.of(distribution, 1000));
   }
 

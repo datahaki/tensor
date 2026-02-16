@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.Round;
 class CsvHelperTest {
   @Test
   void testFraction() {
-    Scalar scalar = CsvHelper.FUNCTION.apply(RationalScalar.of(1, 2));
+    Scalar scalar = CsvHelper.FUNCTION.apply(Rational.of(1, 2));
     assertEquals(scalar.toString(), "0.5");
   }
 

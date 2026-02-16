@@ -9,7 +9,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -31,7 +31,7 @@ class AngleVectorTest {
   @RepeatedTest(10)
   void testNumeric(RepetitionInfo repetitionInfo) {
     int count = repetitionInfo.getCurrentRepetition();
-    Scalar scalar = N.DOUBLE.apply(RationalScalar.of(count, 12));
+    Scalar scalar = N.DOUBLE.apply(Rational.of(count, 12));
     Tensor tensor = AngleVector.turns(scalar);
     Tolerance.CHOP.requireClose(tensor, AngleVector.of(scalar.multiply(Pi.TWO)));
   }
@@ -56,10 +56,10 @@ class AngleVectorTest {
 
   @Test
   void testRotation() {
-    ExactTensorQ.require(AngleVector.turns(RationalScalar.of(-2, 2)));
-    assertEquals(AngleVector.turns(RationalScalar.of(-2, 2)), Tensors.vector(+1, 0));
-    assertEquals(AngleVector.turns(RationalScalar.of(0, 2)), Tensors.vector(+1, 0));
-    assertEquals(AngleVector.turns(RationalScalar.of(1, 2)), Tensors.vector(-1, 0));
+    ExactTensorQ.require(AngleVector.turns(Rational.of(-2, 2)));
+    assertEquals(AngleVector.turns(Rational.of(-2, 2)), Tensors.vector(+1, 0));
+    assertEquals(AngleVector.turns(Rational.of(0, 2)), Tensors.vector(+1, 0));
+    assertEquals(AngleVector.turns(Rational.of(1, 2)), Tensors.vector(-1, 0));
     assertFalse(ExactTensorQ.of(AngleVector.turns(RealScalar.of(-2.0))));
   }
 

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -100,7 +100,7 @@ class RandomVariateTest {
 
   @Test
   void testFormatList1() {
-    Distribution distribution = BinomialDistribution.of(3, RationalScalar.of(1, 2));
+    Distribution distribution = BinomialDistribution.of(3, Rational.of(1, 2));
     Tensor array = RandomVariate.of(distribution, 1);
     assertEquals(Dimensions.of(array), List.of(1));
     assertFalse(array instanceof Scalar);

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -40,8 +40,8 @@ class Factorial2Test {
   void testNegativeOff() {
     assertEquals(Factorial2.of(-1), RealScalar.ONE);
     assertEquals(Factorial2.of(-3), RealScalar.of(-1));
-    assertEquals(Factorial2.of(-5), RationalScalar.of(1, 3));
-    assertEquals(Factorial2.of(-7), RationalScalar.of(-1, 15));
+    assertEquals(Factorial2.of(-5), Rational.of(1, 3));
+    assertEquals(Factorial2.of(-7), Rational.of(-1, 15));
   }
 
   @Test

@@ -3,7 +3,7 @@ package ch.alpine.tensor.io;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.ObjectFormat;
@@ -53,7 +53,7 @@ public enum CsvFormat {
    * 
    * <p>Scalars of type
    * <ul>
-   * <li>{@link RationalScalar} are converted to {@link DoubleScalar} unless the
+   * <li>{@link Rational} are converted to {@link DoubleScalar} unless the
    * fraction has denominator == 1.
    * <li>{@link StringScalar} is enclosed in quotes if necessary. The result must
    * not contain any other quotes character.

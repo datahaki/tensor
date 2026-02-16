@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
@@ -38,7 +38,7 @@ class LCMTest {
 
   @Test
   void testRational() {
-    Scalar scalar = LCM.of(RationalScalar.of(3, 2), RationalScalar.of(2, 1));
+    Scalar scalar = LCM.of(Rational.of(3, 2), Rational.of(2, 1));
     assertEquals(scalar, RealScalar.of(6)); // Mathematica gives 6
   }
 

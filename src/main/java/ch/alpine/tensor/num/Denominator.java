@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.num;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -22,8 +22,8 @@ public enum Denominator implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    return scalar instanceof RationalScalar rationalScalar //
-        ? RealScalar.of(rationalScalar.denominator())
+    return scalar instanceof Rational rational //
+        ? RealScalar.of(rational.denominator())
         : scalar.one();
   }
 

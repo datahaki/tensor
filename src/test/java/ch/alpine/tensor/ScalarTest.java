@@ -78,8 +78,8 @@ class ScalarTest {
     assertNotEquals(null, Tensors.empty());
     assertNotEquals(null, RealScalar.ZERO);
     assertNotEquals(null, DoubleScalar.of(0.3));
-    assertNotEquals(null, RationalScalar.of(5, 3));
-    assertNotEquals(null, ComplexScalar.of(RationalScalar.of(5, 3), RationalScalar.of(5, 3)));
+    assertNotEquals(null, Rational.of(5, 3));
+    assertNotEquals(null, ComplexScalar.of(Rational.of(5, 3), Rational.of(5, 3)));
     assertNotEquals(null, Integer.valueOf(1233));
   }
 

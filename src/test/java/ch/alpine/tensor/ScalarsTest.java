@@ -38,7 +38,7 @@ class ScalarsTest {
   @ParameterizedTest
   @ValueSource(strings = { "123", "  123  ", "3 /  4", "0" })
   void testParseRationalScalar(String string) {
-    checkInvariant(string, RationalScalar.class);
+    checkInvariant(string, Rational.class);
   }
 
   @ParameterizedTest
@@ -211,7 +211,7 @@ class ScalarsTest {
 
   @Test
   void testIntValueExactFractionFail() {
-    assertThrows(Throw.class, () -> Scalars.intValueExact(RationalScalar.of(2, 3)));
+    assertThrows(Throw.class, () -> Scalars.intValueExact(Rational.of(2, 3)));
   }
 
   @Test
@@ -225,7 +225,7 @@ class ScalarsTest {
   @Test
   void testExample() {
     Scalar s = Scalars.fromString("(3+2)*I/(-1+4)+8-I");
-    Scalar c = ComplexScalar.of(RealScalar.of(8), RationalScalar.of(2, 3));
+    Scalar c = ComplexScalar.of(RealScalar.of(8), Rational.of(2, 3));
     assertEquals(c, s);
     assertEquals(s, c);
   }
@@ -250,8 +250,8 @@ class ScalarsTest {
     assertTrue(Scalars.divides(RealScalar.of(3), RealScalar.of(9)));
     assertFalse(Scalars.divides(RealScalar.of(9), RealScalar.of(3)));
     assertFalse(Scalars.divides(RealScalar.of(2), RealScalar.of(9)));
-    assertTrue(Scalars.divides(RationalScalar.of(3, 7), RationalScalar.of(18, 7)));
-    assertFalse(Scalars.divides(RationalScalar.of(3, 7), RationalScalar.of(8, 7)));
+    assertTrue(Scalars.divides(Rational.of(3, 7), Rational.of(18, 7)));
+    assertFalse(Scalars.divides(Rational.of(3, 7), Rational.of(8, 7)));
   }
 
   @Test

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.ply;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -30,7 +30,7 @@ public enum ChebyshevNodes {
     @Override
     public Tensor solve(Tensor rhs) {
       int n = rhs.length();
-      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+      Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(1, Integers.requirePositive(n)));
       // TODO !?
       return rhs.dot(FourierDCT._3.matrix(n)).multiply(scalar);
     }
@@ -38,7 +38,7 @@ public enum ChebyshevNodes {
 
   public Scalar of(int n, int k) {
     if (0 <= k && k < n)
-      return Cos.FUNCTION.apply(RationalScalar.of(k + k + ordinal(), n + n).multiply(Pi.VALUE));
+      return Cos.FUNCTION.apply(Rational.of(k + k + ordinal(), n + n).multiply(Pi.VALUE));
     throw new IllegalArgumentException();
   }
 

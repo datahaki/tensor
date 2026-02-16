@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -25,12 +25,12 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 class ArgTest {
   @Test
   void testArg() {
-    Scalar scalar = ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
+    Scalar scalar = ComplexScalar.of(Rational.of(-2, 3), Rational.of(-5, 100));
     assertEquals(Arg.FUNCTION.apply(scalar).toString(), "-3.066732805879026");
     assertEquals(Arg.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(Arg.FUNCTION.apply(DoubleScalar.of(0.2)), RealScalar.ZERO);
     assertEquals(Arg.FUNCTION.apply(DoubleScalar.of(-1)), DoubleScalar.of(Math.PI));
-    assertEquals(Arg.FUNCTION.apply(RationalScalar.of(-1, 3)), DoubleScalar.of(Math.PI));
+    assertEquals(Arg.FUNCTION.apply(Rational.of(-1, 3)), DoubleScalar.of(Math.PI));
   }
 
   @Test

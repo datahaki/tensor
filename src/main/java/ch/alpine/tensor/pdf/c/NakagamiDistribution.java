@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -69,12 +69,12 @@ public class NakagamiDistribution implements Distribution, //
 
   @Override
   public Scalar mean() {
-    return Sqrt.FUNCTION.apply(w.divide(mu)).multiply(Pochhammer.of(mu, RationalScalar.HALF));
+    return Sqrt.FUNCTION.apply(w.divide(mu)).multiply(Pochhammer.of(mu, Rational.HALF));
   }
 
   @Override
   public Scalar variance() {
-    Scalar f = Pochhammer.of(mu, RationalScalar.HALF);
+    Scalar f = Pochhammer.of(mu, Rational.HALF);
     return w.subtract(w.divide(mu).multiply(f).multiply(f));
   }
 

@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca.tri;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -42,7 +42,7 @@ import ch.alpine.tensor.sca.exp.Log;
 public enum ArcTan implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar I_HALF = ComplexScalar.I.multiply(RationalScalar.HALF);
+  private static final Scalar I_HALF = ComplexScalar.I.multiply(Rational.HALF);
 
   @Override
   public Scalar apply(Scalar scalar) {

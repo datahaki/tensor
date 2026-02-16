@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -26,7 +26,7 @@ class NTest {
 
   @Test
   void testReal() {
-    Scalar scalar = RationalScalar.of(3, 5);
+    Scalar scalar = Rational.of(3, 5);
     assertEquals(scalar.toString(), "3/5");
     assertEquals(N.DOUBLE.apply(scalar).toString(), "" + (3 / 5.0));
   }
@@ -63,7 +63,7 @@ class NTest {
 
   @Test
   void testQuantity() {
-    Quantity n = (Quantity) N.DECIMAL128.apply(Quantity.of(RationalScalar.of(1, 7), "cd^-2*K"));
+    Quantity n = (Quantity) N.DECIMAL128.apply(Quantity.of(Rational.of(1, 7), "cd^-2*K"));
     assertInstanceOf(DecimalScalar.class, n.value());
     assertEquals(Unit.of("  K * cd  ^  -2"), n.unit());
   }

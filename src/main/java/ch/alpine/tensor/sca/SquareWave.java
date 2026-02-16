@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -17,7 +17,7 @@ public enum SquareWave implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar t) {
-    return Scalars.lessThan(mod.apply(t), RationalScalar.HALF) //
+    return Scalars.lessThan(mod.apply(t), Rational.HALF) //
         ? RealScalar.ONE
         : minusOne;
   }

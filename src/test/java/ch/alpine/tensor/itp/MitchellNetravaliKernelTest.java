@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -21,12 +21,12 @@ class MitchellNetravaliKernelTest {
   @Test
   void testSimple() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(MitchellNetravaliKernel.of( //
-        RationalScalar.of(1, 5), //
-        RationalScalar.of(1, 3)));
-    Scalar s01 = scalarUnaryOperator.apply(RationalScalar.of(1, 4));
-    assertEquals(s01, RationalScalar.of(1561, 1920));
-    Scalar s12 = scalarUnaryOperator.apply(RationalScalar.of(5, 4));
-    assertEquals(s12, RationalScalar.of(-21, 640));
+        Rational.of(1, 5), //
+        Rational.of(1, 3)));
+    Scalar s01 = scalarUnaryOperator.apply(Rational.of(1, 4));
+    assertEquals(s01, Rational.of(1561, 1920));
+    Scalar s12 = scalarUnaryOperator.apply(Rational.of(5, 4));
+    assertEquals(s12, Rational.of(-21, 640));
   }
 
   @Test

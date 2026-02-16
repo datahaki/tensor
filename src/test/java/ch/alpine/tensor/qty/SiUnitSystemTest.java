@@ -15,7 +15,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -68,25 +68,25 @@ class SiUnitSystemTest {
 
   @Test
   void testMilli() {
-    int checked = _check(List.of("min"), "m", RationalScalar.of(1, 1000));
+    int checked = _check(List.of("min"), "m", Rational.of(1, 1000));
     assertTrue(10 <= checked);
   }
 
   @Test
   void testMicro() {
-    int checked = _check(List.of(), "u", RationalScalar.of(1, 1000000));
+    int checked = _check(List.of(), "u", Rational.of(1, 1000000));
     assertTrue(4 <= checked);
   }
 
   @Test
   void testNano() {
-    int checked = _check(List.of("nmi"), "n", RationalScalar.of(1, 1000000000));
+    int checked = _check(List.of("nmi"), "n", Rational.of(1, 1000000000));
     assertTrue(3 <= checked);
   }
 
   @Test
   void testPico() {
-    int checked = _check(Arrays.asList("pt", "ppt", "ppm"), "p", RationalScalar.of(1, 1000000000000L));
+    int checked = _check(Arrays.asList("pt", "ppt", "ppm"), "p", Rational.of(1, 1000000000000L));
     assertTrue(1 <= checked);
   }
 

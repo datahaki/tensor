@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -18,7 +18,7 @@ import ch.alpine.tensor.mat.sv.SingularValueList;
  * @see Matrix2Norm
  * @see MatrixInfinityNorm */
 public class SchattenNorm implements TensorScalarFunction {
-  /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
+  /** Hint: for enhanced precision, use p as instance of {@link Rational} if possible
    *
    * @param p exponent greater or equals 1
    * @return

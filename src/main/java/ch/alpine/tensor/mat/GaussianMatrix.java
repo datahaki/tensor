@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -21,7 +21,7 @@ public enum GaussianMatrix {
    * @return m x m matrix where m == 2 * r + 1
    * @throws Exception if r is zero or negative */
   public static Tensor of(int r) {
-    Scalar sigmas = AbsSquared.FUNCTION.apply(RationalScalar.of(r, 2));
+    Scalar sigmas = AbsSquared.FUNCTION.apply(Rational.of(r, 2));
     Scalar factor = sigmas.add(sigmas).negate();
     int m = 2 * r + 1;
     Tensor offset = Tensors.vector(-r, -r);

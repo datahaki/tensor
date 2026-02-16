@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -70,7 +70,7 @@ public class InverseGaussianDistribution extends AbstractContinuousDistribution 
     Scalar re = Sqrt.FUNCTION.apply(lambda.divide(x.add(x))).divide(mu);
     Scalar p1 = Erfc.FUNCTION.apply(re.multiply(mu.subtract(x)));
     Scalar p2 = Erfc.FUNCTION.apply(re.multiply(mu.add(x)));
-    return p1.add(Exp.FUNCTION.apply(lambda.add(lambda).divide(mu)).multiply(p2)).multiply(RationalScalar.HALF);
+    return p1.add(Exp.FUNCTION.apply(lambda.add(lambda).divide(mu)).multiply(p2)).multiply(Rational.HALF);
   }
 
   @Override // from MeanInterface

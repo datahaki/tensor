@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -112,7 +112,7 @@ public class CliffordAlgebra implements Serializable {
    * @param y
    * @return commutator product of multivectors of x and y */
   public Tensor cp(Tensor x, Tensor y) {
-    return gp(x, y).subtract(gp.dot(y).dot(x)).multiply(RationalScalar.HALF);
+    return gp(x, y).subtract(gp.dot(y).dot(x)).multiply(Rational.HALF);
   }
 
   /** @return geometric product as tensor of rank 3
@@ -124,7 +124,7 @@ public class CliffordAlgebra implements Serializable {
   /** @return commutator product tensor of rank 3 that satisfies {@link JacobiIdentity}
    * @see SparseArray */
   public Tensor cp() {
-    return gp.subtract(Transpose.of(gp, 0, 2, 1)).multiply(RationalScalar.HALF);
+    return gp.subtract(Transpose.of(gp, 0, 2, 1)).multiply(Rational.HALF);
   }
 
   /** @param x multivector

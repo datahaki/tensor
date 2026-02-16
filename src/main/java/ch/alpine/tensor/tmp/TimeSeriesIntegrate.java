@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.tmp;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
@@ -29,7 +29,7 @@ public enum TimeSeriesIntegrate {
       result.insert(prev, sum);
       for (Scalar next : timeSeries.keySet(clip, true)) {
         Clip interval = Clips.interval(prev, next);
-        Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
+        Scalar x = LinearInterpolation.of(interval).apply(Rational.HALF);
         sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
         result.insert(next, sum);
         prev = next;
@@ -62,12 +62,12 @@ public enum TimeSeriesIntegrate {
         Tensor sum = timeSeries.evaluate(prev).multiply(clip.width().zero());
         for (Scalar next : timeSeries.keySet(clip, true)) {
           Clip interval = Clips.interval(prev, next);
-          Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
+          Scalar x = LinearInterpolation.of(interval).apply(Rational.HALF);
           sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
           prev = next;
         }
         Clip interval = Clips.interval(prev, clip.max());
-        Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
+        Scalar x = LinearInterpolation.of(interval).apply(Rational.HALF);
         sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
         return sum;
       }

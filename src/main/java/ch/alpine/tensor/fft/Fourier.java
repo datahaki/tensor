@@ -3,7 +3,7 @@
 package ch.alpine.tensor.fft;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -45,9 +45,9 @@ public enum Fourier implements DiscreteFourierTransform {
      * <code>(i, j) -> sqrt(1/n) exp(i * j * 2pi/n *I)</code> */
     @Override
     public Tensor matrix(int n) {
-      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+      Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(1, Integers.requirePositive(n)));
       return Tensors.matrix((i, j) -> //
-      ComplexScalar.unit(RationalScalar.of(i * j, n).multiply(Pi.TWO)).multiply(scalar), n, n);
+      ComplexScalar.unit(Rational.of(i * j, n).multiply(Pi.TWO)).multiply(scalar), n, n);
     }
 
     @Override

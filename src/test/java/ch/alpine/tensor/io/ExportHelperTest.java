@@ -25,7 +25,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -209,7 +209,7 @@ class ExportHelperTest {
       bufferedImage = ImageIO.read(inputStream);
     }
     Tensor tensor = ImageFormat.from(bufferedImage);
-    Tensor kernel = Array.of(_ -> RationalScalar.of(1, 6), 3, 2, 1);
+    Tensor kernel = Array.of(_ -> Rational.of(1, 6), 3, 2, 1);
     Tensor array = ListConvolve.of(kernel, tensor);
     ImageFormat.of(array); // succeeds
   }
@@ -222,7 +222,7 @@ class ExportHelperTest {
       bufferedImage = ImageIO.read(inputStream);
     }
     Tensor tensor = ImageFormat.from(bufferedImage);
-    Tensor kernel = Array.of(_ -> RationalScalar.of(1, 1), 3, 5, 1);
+    Tensor kernel = Array.of(_ -> Rational.of(1, 1), 3, 5, 1);
     Tensor array = ListConvolve.of(kernel, tensor);
     assertThrows(IllegalArgumentException.class, () -> ImageFormat.of(array));
   }

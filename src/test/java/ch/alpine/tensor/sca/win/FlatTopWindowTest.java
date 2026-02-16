@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -17,28 +17,28 @@ class FlatTopWindowTest {
   @Test
   void testSimple() {
     ScalarUnaryOperator windowFunction = FlatTopWindow.FUNCTION;
-    Scalar scalar = windowFunction.apply(RationalScalar.HALF);
+    Scalar scalar = windowFunction.apply(Rational.HALF);
     Tolerance.CHOP.requireClose(scalar, Scalars.fromString("-210527/500000000"));
   }
 
   @Test
   void testQuarter() {
     ScalarUnaryOperator windowFunction = FlatTopWindow.FUNCTION;
-    Scalar scalar = windowFunction.apply(RationalScalar.of(1, 4));
+    Scalar scalar = windowFunction.apply(Rational.of(1, 4));
     Tolerance.CHOP.requireClose(scalar, Scalars.fromString("-54736843/1000000000"));
   }
 
   @Test
   void testThird() {
     ScalarUnaryOperator windowFunction = FlatTopWindow.FUNCTION;
-    Scalar scalar = windowFunction.apply(RationalScalar.of(1, 3));
+    Scalar scalar = windowFunction.apply(Rational.of(1, 3));
     Tolerance.CHOP.requireClose(scalar, Scalars.fromString("-51263159/1000000000"));
   }
 
   @Test
   void testTenth() {
     ScalarUnaryOperator windowFunction = FlatTopWindow.FUNCTION;
-    Scalar scalar = windowFunction.apply(RationalScalar.of(1, 10));
+    Scalar scalar = windowFunction.apply(Rational.of(1, 10));
     Tolerance.CHOP.requireClose(scalar, Scalars.fromString("0.60687214957621189799"));
   }
 

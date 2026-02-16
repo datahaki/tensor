@@ -3,7 +3,7 @@ package ch.alpine.tensor.chq;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 
@@ -23,10 +23,10 @@ import ch.alpine.tensor.Throw;
 public enum IntegerQ {
   ;
   /** @param scalar
-   * @return true, if given scalar is instance of {@link RationalScalar} with denominator == 1 */
+   * @return true, if given scalar is instance of {@link Rational} with denominator == 1 */
   public static boolean of(Scalar scalar) {
-    return Objects.requireNonNull(scalar) instanceof RationalScalar rationalScalar //
-        && rationalScalar.isInteger();
+    return Objects.requireNonNull(scalar) instanceof Rational rational //
+        && rational.isInteger();
   }
 
   /** @param scalar

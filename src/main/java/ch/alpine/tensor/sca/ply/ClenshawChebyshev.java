@@ -1,7 +1,7 @@
 // adapted from colt by jph
 package ch.alpine.tensor.sca.ply;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -47,7 +47,7 @@ public class ClenshawChebyshev implements ScalarUnaryOperator {
   }
 
   public static ScalarUnaryOperator forward(Clip clip, Tensor coef) {
-    Scalar den = clip.width().multiply(RationalScalar.HALF);
+    Scalar den = clip.width().multiply(Rational.HALF);
     Scalar aff = clip.min().add(den);
     return of(x -> x.subtract(aff).divide(den), coef);
   }
@@ -84,7 +84,7 @@ public class ClenshawChebyshev implements ScalarUnaryOperator {
       bk0 = x2.multiply(bk1).subtract(bk2).add(a[++k]);
     }
     // TODO TENSOR non permanent
-    Scalar r1 = bk0.subtract(bk2).add(a[k]).multiply(RationalScalar.HALF);
+    Scalar r1 = bk0.subtract(bk2).add(a[k]).multiply(Rational.HALF);
     Scalar r2 = x1.multiply(bk1).subtract(bk2).add(a[k]);
     Chop._08.requireClose(r1, r2);
     return r1;

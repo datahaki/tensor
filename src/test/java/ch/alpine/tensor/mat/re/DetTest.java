@@ -14,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -212,7 +212,7 @@ class DetTest {
   @Test
   void testHilbert() {
     Scalar det = Det.of(HilbertMatrix.of(8));
-    assertEquals(det, RationalScalar.of( //
+    assertEquals(det, Rational.of( //
         BigInteger.ONE, new BigInteger("365356847125734485878112256000000")));
   }
 

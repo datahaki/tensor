@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.OptionalInt;
 import java.util.function.Function;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -88,7 +88,7 @@ public class Binomial implements Serializable {
       Scalar x = RealScalar.ONE;
       row = Tensors.reserve(half + 1).append(x);
       for (int k = 1; k <= half; ++k)
-        row.append(x = x.multiply(RationalScalar.of(n - k + 1, k)));
+        row.append(x = x.multiply(Rational.of(n - k + 1, k)));
     } else
       row = Tensors.of(RealScalar.ONE);
   }
@@ -103,7 +103,7 @@ public class Binomial implements Serializable {
       synchronized (this) {
         Scalar x = Last.of(row);
         for (int j = row.length(); j <= k; ++j)
-          row.append(x = x.multiply(RationalScalar.of(n - j + 1, j)));
+          row.append(x = x.multiply(Rational.of(n - j + 1, j)));
         return x;
       }
     }

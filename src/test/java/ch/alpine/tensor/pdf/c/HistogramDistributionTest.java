@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -48,11 +48,11 @@ class HistogramDistributionTest {
     Distribution distribution = //
         HistogramDistribution.of(Tensors.vector(-3, -3, -2, -2, 10), RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
-    assertEquals(pdf.at(RealScalar.of(-3)), RationalScalar.of(1, 5));
-    assertEquals(pdf.at(RealScalar.of(-4)), RationalScalar.of(1, 5));
+    assertEquals(pdf.at(RealScalar.of(-3)), Rational.of(1, 5));
+    assertEquals(pdf.at(RealScalar.of(-4)), Rational.of(1, 5));
     assertEquals(pdf.at(RealScalar.of(-4.1)), RealScalar.ZERO);
     assertEquals(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
-    assertEquals(pdf.at(RealScalar.of(11)), RationalScalar.of(1, 10));
+    assertEquals(pdf.at(RealScalar.of(11)), Rational.of(1, 10));
     Clip c1 = Clips.interval(-4, 0);
     Clip c2 = Clips.interval(10, 12);
     Set<Scalar> set = new HashSet<>();
@@ -128,8 +128,8 @@ class HistogramDistributionTest {
     assertInstanceOf(Quantity.class, RandomVariate.of(distribution));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(Quantity.of(0, "m")), RealScalar.ZERO.divide(width));
-    assertEquals(pdf.at(Quantity.of(1.2, "m")), RationalScalar.of(1, 7).divide(width));
-    assertEquals(pdf.at(Quantity.of(4.15, "m")), RationalScalar.of(3, 7).divide(width));
+    assertEquals(pdf.at(Quantity.of(1.2, "m")), Rational.of(1, 7).divide(width));
+    assertEquals(pdf.at(Quantity.of(4.15, "m")), Rational.of(3, 7).divide(width));
     Clip clip = Clips.interval(Quantity.of(0.7, "m"), Quantity.of(4.2, "m"));
     Set<Scalar> set = new HashSet<>();
     for (int count = 0; count < 100; ++count) {
@@ -166,7 +166,7 @@ class HistogramDistributionTest {
   void testVariance1() {
     assertEquals( //
         Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5), RealScalar.of(1))), //
-        RationalScalar.of(1, 12));
+        Rational.of(1, 12));
     assertEquals( //
         Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5), RealScalar.of(2))), //
         Expectation.variance(UniformDistribution.of(0, 2)));
@@ -184,31 +184,31 @@ class HistogramDistributionTest {
 
   @Test
   void testVarianceIr1() {
-    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5, 1.5, 1.5), RealScalar.of(1))), RationalScalar.of(11, 36));
-    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5), RealScalar.of(1))), RationalScalar.of(11, 36));
+    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5, 1.5, 1.5), RealScalar.of(1))), Rational.of(11, 36));
+    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5), RealScalar.of(1))), Rational.of(11, 36));
   }
 
   @Test
   void testVarianceIr2() {
-    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(4.5, 4.5, 2.5), RealScalar.of(2))), RationalScalar.of(11, 9));
-    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5), RealScalar.of(2))), RationalScalar.of(11, 9));
+    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(4.5, 4.5, 2.5), RealScalar.of(2))), Rational.of(11, 9));
+    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5), RealScalar.of(2))), Rational.of(11, 9));
   }
 
   @Test
   void testVarianceIr3() {
-    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(4.5, 4.5, 2.5, 10.5), RealScalar.of(2))), RationalScalar.of(28, 3));
-    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5, 10.5), RealScalar.of(2))), RationalScalar.of(52, 3));
+    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(4.5, 4.5, 2.5, 10.5), RealScalar.of(2))), Rational.of(28, 3));
+    assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5, 10.5), RealScalar.of(2))), Rational.of(52, 3));
   }
 
   @Test
   void testCDF() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(0.5, 1.5, 1.5, 2.2), RealScalar.of(1));
     CDF cdf = CDF.of(distribution);
-    assertEquals(cdf.p_lessThan(RationalScalar.of(0, 1)), RationalScalar.of(0, 1));
-    assertEquals(cdf.p_lessThan(RationalScalar.of(1, 1)), RationalScalar.of(1, 4));
-    assertEquals(cdf.p_lessThan(RationalScalar.of(3, 2)), RationalScalar.of(1, 2));
-    assertEquals(cdf.p_lessThan(RationalScalar.of(2, 1)), RationalScalar.of(3, 4));
-    assertEquals(cdf.p_lessThan(RationalScalar.of(3, 1)), RationalScalar.of(1, 1));
+    assertEquals(cdf.p_lessThan(Rational.of(0, 1)), Rational.of(0, 1));
+    assertEquals(cdf.p_lessThan(Rational.of(1, 1)), Rational.of(1, 4));
+    assertEquals(cdf.p_lessThan(Rational.of(3, 2)), Rational.of(1, 2));
+    assertEquals(cdf.p_lessThan(Rational.of(2, 1)), Rational.of(3, 4));
+    assertEquals(cdf.p_lessThan(Rational.of(3, 1)), Rational.of(1, 1));
     TestMarkovChebyshev.markov(distribution);
   }
 
@@ -240,19 +240,19 @@ class HistogramDistributionTest {
       assertEquals(x, RealScalar.ZERO);
     }
     {
-      Scalar x = inverseCDF.quantile(RationalScalar.of(1, 2));
+      Scalar x = inverseCDF.quantile(Rational.of(1, 2));
       ExactScalarQ.require(x);
-      assertEquals(x, RationalScalar.of(3, 2));
+      assertEquals(x, Rational.of(3, 2));
     }
     {
-      Scalar x = inverseCDF.quantile(RationalScalar.of(1, 4));
+      Scalar x = inverseCDF.quantile(Rational.of(1, 4));
       ExactScalarQ.require(x);
-      assertEquals(x, RationalScalar.of(1, 1));
+      assertEquals(x, Rational.of(1, 1));
     }
     {
-      Scalar x = inverseCDF.quantile(RationalScalar.of(3, 4));
+      Scalar x = inverseCDF.quantile(Rational.of(3, 4));
       ExactScalarQ.require(x);
-      assertEquals(x, RationalScalar.of(2, 1));
+      assertEquals(x, Rational.of(2, 1));
     }
   }
 
@@ -267,14 +267,14 @@ class HistogramDistributionTest {
       assertEquals(x, Quantity.of(0, "m"));
     }
     {
-      Scalar x = inverseCDF.quantile(RationalScalar.of(2, 3));
+      Scalar x = inverseCDF.quantile(Rational.of(2, 3));
       ExactScalarQ.require(x);
-      assertEquals(x, Quantity.of(RationalScalar.of(3, 1), "m"));
+      assertEquals(x, Quantity.of(Rational.of(3, 1), "m"));
     }
     {
-      Scalar x = inverseCDF.quantile(RationalScalar.of(1, 2));
+      Scalar x = inverseCDF.quantile(Rational.of(1, 2));
       ExactScalarQ.require(x);
-      assertEquals(x, Quantity.of(RationalScalar.of(5, 2), "m"));
+      assertEquals(x, Quantity.of(Rational.of(5, 2), "m"));
     }
   }
 

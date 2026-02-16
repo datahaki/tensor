@@ -3,7 +3,7 @@ package ch.alpine.tensor.opt.fnd;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -57,6 +57,6 @@ import ch.alpine.tensor.sca.Clip;
         f2 = function.apply(x2);
       }
     // TODO TENSOR improve IEEE search
-    return (Scalar) LinearBinaryAverage.INSTANCE.split(a, b, RationalScalar.HALF);
+    return (Scalar) LinearBinaryAverage.INSTANCE.split(a, b, Rational.HALF);
   }
 }

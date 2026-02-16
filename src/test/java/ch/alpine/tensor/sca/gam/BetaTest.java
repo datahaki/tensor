@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -15,7 +15,7 @@ class BetaTest {
   @Test
   void testExact() {
     Scalar beta = Beta.of(5, 4);
-    Scalar exact = RationalScalar.of(1, 280);
+    Scalar exact = Rational.of(1, 280);
     Chop._14.requireClose(beta, exact);
   }
 

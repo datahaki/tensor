@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -27,7 +27,7 @@ class SubdivideTest {
     Integers.requirePositive(n);
     Tensor difference = endInclusive.subtract(startInclusive);
     return Tensor.of(IntStream.rangeClosed(0, n) //
-        .mapToObj(count -> startInclusive.add(difference.multiply(RationalScalar.of(count, n)))));
+        .mapToObj(count -> startInclusive.add(difference.multiply(Rational.of(count, n)))));
   }
 
   @Test

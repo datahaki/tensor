@@ -138,7 +138,7 @@ public enum Scalars {
    * 
    * <p>function succeeds if given scalar is
    * <ul>
-   * <li>instance of {@link RationalScalar}, with
+   * <li>instance of {@link Rational}, with
    * <li>numerator sufficiently small to encode as {@code int}, and
    * <li>denominator == 1
    * </ul>
@@ -171,7 +171,7 @@ public enum Scalars {
    * 
    * <p>function succeeds if given scalar is
    * <ul>
-   * <li>instance of {@link RationalScalar}, with
+   * <li>instance of {@link Rational}, with
    * <li>numerator sufficiently small to encode as {@code long}, and
    * <li>denominator == 1
    * </ul>
@@ -188,15 +188,15 @@ public enum Scalars {
   /** exact conversion to type {@code BigInteger}
    * 
    * <p>function succeeds if given scalar is instance of
-   * {@link RationalScalar} with denominator == 1.
+   * {@link Rational} with denominator == 1.
    * 
    * @param scalar
    * @return BigInteger that equals given scalar
    * @throws Exception if exact conversion is not possible
    * @see IntegerQ */
   public static BigInteger bigIntegerValueExact(Scalar scalar) {
-    if (scalar instanceof RationalScalar rationalScalar && rationalScalar.isInteger())
-      return rationalScalar.numerator();
+    if (scalar instanceof Rational rational && rational.isInteger())
+      return rational.numerator();
     throw new Throw(scalar);
   }
 
@@ -207,8 +207,8 @@ public enum Scalars {
    * or empty if given scalar does not represent an integer
    * @throws Exception if given scalar is null */
   public static Optional<BigInteger> optionalBigInteger(Scalar scalar) {
-    if (scalar instanceof RationalScalar rationalScalar && rationalScalar.isInteger())
-      return Optional.of(rationalScalar.numerator());
+    if (scalar instanceof Rational rational && rational.isInteger())
+      return Optional.of(rational.numerator());
     Objects.requireNonNull(scalar);
     return Optional.empty();
   }

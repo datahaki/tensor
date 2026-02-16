@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -78,7 +78,7 @@ class CauchyDistributionTest {
     pdf.at(a);
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(a);
-    assertEquals(RationalScalar.HALF, p_lessEquals);
+    assertEquals(Rational.HALF, p_lessEquals);
   }
 
   @Test
@@ -93,7 +93,7 @@ class CauchyDistributionTest {
     Sign.requirePositive(at);
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(a);
-    assertEquals(RationalScalar.HALF, p_lessEquals);
+    assertEquals(Rational.HALF, p_lessEquals);
   }
 
   @Test

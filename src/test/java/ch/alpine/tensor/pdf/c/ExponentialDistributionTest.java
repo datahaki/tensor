@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -83,7 +83,7 @@ class ExponentialDistributionTest {
     Distribution distribution = ExponentialDistribution.of(RealScalar.of(2));
     Scalar stdDev = StandardDeviation.of(distribution);
     ExactScalarQ.require(stdDev);
-    assertEquals(stdDev, RationalScalar.HALF);
+    assertEquals(stdDev, Rational.HALF);
   }
 
   @Test

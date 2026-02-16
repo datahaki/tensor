@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -19,8 +19,8 @@ class DivisibleTest {
   @Test
   void testSimple() {
     assertTrue(Divisible.of(RealScalar.of(9), RealScalar.of(3)));
-    assertTrue(Divisible.of(RationalScalar.of(18, 7), RationalScalar.of(3, 7)));
-    assertFalse(Divisible.of(RationalScalar.of(8, 7), RationalScalar.of(3, 7)));
+    assertTrue(Divisible.of(Rational.of(18, 7), Rational.of(3, 7)));
+    assertFalse(Divisible.of(Rational.of(8, 7), Rational.of(3, 7)));
   }
 
   @Test

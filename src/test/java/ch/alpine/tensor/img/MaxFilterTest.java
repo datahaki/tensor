@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -70,7 +70,7 @@ class MaxFilterTest {
   @Test
   void testNonArray() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
-    Flatten.scalars(matrix).forEach(RationalScalar.class::cast); // test if parsing went ok
+    Flatten.scalars(matrix).forEach(Rational.class::cast); // test if parsing went ok
     assertThrows(IllegalArgumentException.class, () -> MaxFilter.of(matrix, 1));
   }
 

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -31,14 +31,14 @@ import ch.alpine.tensor.sca.pow.Power;
 class NegativeBinomialDistributionTest {
   @Test
   void testSimple() throws ClassNotFoundException, IOException {
-    Distribution distribution = Serialization.copy(NegativeBinomialDistribution.of(4, RationalScalar.of(1, 3)));
-    assertEquals(PDF.of(distribution).at(RealScalar.of(3)), RationalScalar.of(160, 2187));
-    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(3)), RationalScalar.of(379, 2187));
+    Distribution distribution = Serialization.copy(NegativeBinomialDistribution.of(4, Rational.of(1, 3)));
+    assertEquals(PDF.of(distribution).at(RealScalar.of(3)), Rational.of(160, 2187));
+    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(3)), Rational.of(379, 2187));
     RandomVariate.of(distribution, 100);
     assertEquals(Mean.of(distribution), RealScalar.of(8));
     assertEquals(Variance.of(distribution), RealScalar.of(8 * 3));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertEquals(inverseCDF.quantile(RationalScalar.HALF), RealScalar.of(7));
+    assertEquals(inverseCDF.quantile(Rational.HALF), RealScalar.of(7));
     // confirmed with Mathematica, for instance
     // InverseCDF[NegativeBinomialDistribution[4, 1/3], 1 - 1*^-8]
     assertEquals(inverseCDF.quantile(RealScalar.of(1 - 1e-7)), RealScalar.of(57));
@@ -49,7 +49,7 @@ class NegativeBinomialDistributionTest {
 
   @Test
   void testLargeExact() {
-    Distribution distribution = NegativeBinomialDistribution.of(5, RationalScalar.of(1, 7));
+    Distribution distribution = NegativeBinomialDistribution.of(5, Rational.of(1, 7));
     PDF pdf = PDF.of(distribution);
     Scalar scalar = pdf.at(RealScalar.of(30));
     Scalar expect = Scalars.fromString("10252524100968730205960011776/378818692265664781682717625943"); // Mathematica
@@ -87,7 +87,7 @@ class NegativeBinomialDistributionTest {
 
   @Test
   void testFails() {
-    assertThrows(IllegalArgumentException.class, () -> NegativeBinomialDistribution.of(-1, RationalScalar.HALF));
+    assertThrows(IllegalArgumentException.class, () -> NegativeBinomialDistribution.of(-1, Rational.HALF));
     assertThrows(Throw.class, () -> NegativeBinomialDistribution.of(2, RealScalar.ZERO));
     assertThrows(Throw.class, () -> NegativeBinomialDistribution.of(2, RealScalar.of(1.1)));
   }

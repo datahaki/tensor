@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -58,11 +58,11 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
     this.v = v;
     this.w = w;
     v_w = v.divide(w);
-    Scalar p = Pochhammer.of(v, RationalScalar.HALF);
-    pow1 = Power.of(v_w, v.add(RealScalar.ONE).multiply(RationalScalar.HALF)).multiply(_4);
-    pow2 = Power.of(v_w, v.multiply(RationalScalar.HALF)).multiply(RealScalar.TWO);
+    Scalar p = Pochhammer.of(v, Rational.HALF);
+    pow1 = Power.of(v_w, v.add(RealScalar.ONE).multiply(Rational.HALF)).multiply(_4);
+    pow2 = Power.of(v_w, v.multiply(Rational.HALF)).multiply(RealScalar.TWO);
     mean = Times.of( //
-        RationalScalar.HALF, //
+        Rational.HALF, //
         Sqrt.FUNCTION.apply(Pi.VALUE), //
         Sqrt.FUNCTION.apply(v_w.reciprocal()), //
         p);

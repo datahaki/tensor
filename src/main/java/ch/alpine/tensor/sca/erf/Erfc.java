@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.erf;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -43,7 +43,7 @@ public enum Erfc implements ScalarUnaryOperator {
       d = ty.multiply(d).subtract(dd).add(COEFFS.Get(j));
       dd = tmp;
     }
-    Scalar exponent = RationalScalar.HALF.multiply(ty.multiply(d).add(COEFFS.Get(0))).subtract(dd).subtract(z.multiply(z));
+    Scalar exponent = Rational.HALF.multiply(ty.multiply(d).add(COEFFS.Get(0))).subtract(dd).subtract(z.multiply(z));
     return t.multiply(Exp.FUNCTION.apply(exponent));
   }
 

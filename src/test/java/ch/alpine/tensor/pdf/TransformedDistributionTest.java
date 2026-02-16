@@ -8,7 +8,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -37,7 +37,7 @@ class TransformedDistributionTest {
   @Test
   void testBinomialShifted() {
     Distribution d1 = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 3, 3, 1));
-    Distribution d2 = TransformedDistribution.shift(BinomialDistribution.of(3, RationalScalar.HALF), RealScalar.TWO);
+    Distribution d2 = TransformedDistribution.shift(BinomialDistribution.of(3, Rational.HALF), RealScalar.TWO);
     new DistributionEquality(d1, d2).checkRange(-4, 10);
   }
 

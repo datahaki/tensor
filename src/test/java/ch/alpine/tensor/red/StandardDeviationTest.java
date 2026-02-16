@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -24,7 +24,7 @@ class StandardDeviationTest {
   @Test
   void testSimple() {
     Scalar scalar = StandardDeviation.ofVector(Tensors.vector(1, 2, 6, 3, -2, 3, 10));
-    assertEquals(scalar, Sqrt.FUNCTION.apply(RationalScalar.of(102, 7)));
+    assertEquals(scalar, Sqrt.FUNCTION.apply(Rational.of(102, 7)));
   }
 
   @Test

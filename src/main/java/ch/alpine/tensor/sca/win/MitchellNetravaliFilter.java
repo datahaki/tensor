@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -10,7 +10,7 @@ import ch.alpine.tensor.itp.MitchellNetravaliKernel;
 /** not interpolatory */
 /* package */ class MitchellNetravaliFilter extends ParameterizedWindow {
   private static final Scalar _4 = RealScalar.of(4);
-  public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.THIRD);
+  public static final ScalarUnaryOperator FUNCTION = of(Rational.THIRD);
 
   /** @param c
    * @return */

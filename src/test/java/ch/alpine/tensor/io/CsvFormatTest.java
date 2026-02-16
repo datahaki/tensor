@@ -15,7 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
@@ -118,8 +118,8 @@ class CsvFormatTest {
   void testStrict() {
     Tensor matrix = Tensors.of(Tensors.of( //
         StringScalar.of("PUT"), //
-        RationalScalar.of(1, 2), //
-        RationalScalar.of(5, 1), //
+        Rational.of(1, 2), //
+        Rational.of(5, 1), //
         DoubleScalar.of(1.25)));
     Tensor strict = matrix.maps(CsvFormat.strict());
     assertEquals(strict.toString(), "{{\"PUT\", 0.5, 5, 1.25}}");

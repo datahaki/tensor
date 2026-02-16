@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -75,7 +75,7 @@ class QuantityMagnitudeTest {
 
   @Test
   void testConversionPa() {
-    Scalar scalar = Quantity.of(RationalScalar.of(8896443230521L, 1290320000).reciprocal(), "psi");
+    Scalar scalar = Quantity.of(Rational.of(8896443230521L, 1290320000).reciprocal(), "psi");
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     ScalarUnaryOperator suo = quantityMagnitude.in("Pa");
     Scalar result = suo.apply(scalar);
@@ -85,7 +85,7 @@ class QuantityMagnitudeTest {
 
   @Test
   void testConversionN() {
-    Scalar scalar = Quantity.of(RationalScalar.of(8896443230521L, 2000000000000L).reciprocal(), "lbf");
+    Scalar scalar = Quantity.of(Rational.of(8896443230521L, 2000000000000L).reciprocal(), "lbf");
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("N");
     Scalar result = scalarUnaryOperator.apply(scalar);
@@ -99,7 +99,7 @@ class QuantityMagnitudeTest {
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("wk");
     Scalar result = scalarUnaryOperator.apply(scalar);
-    assertEquals(result, RationalScalar.of(365, 84));
+    assertEquals(result, Rational.of(365, 84));
   }
 
   @Test
@@ -132,7 +132,7 @@ class QuantityMagnitudeTest {
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("t");
     Scalar _1kg_in_tons = scalarUnaryOperator.apply(Quantity.of(1000, "g"));
     ExactScalarQ.require(_1kg_in_tons);
-    assertEquals(_1kg_in_tons, RationalScalar.of(1, 1000));
+    assertEquals(_1kg_in_tons, Rational.of(1, 1000));
   }
 
   @Test

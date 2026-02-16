@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Clip;
@@ -12,7 +12,7 @@ import ch.alpine.tensor.sca.tri.Cos;
  * reviewed */
 /* package */ enum StaticHelper {
   ;
-  public static final Clip SEMI = Clips.absolute(RationalScalar.HALF);
+  public static final Clip SEMI = Clips.absolute(Rational.HALF);
   // ---
   private static final Scalar _2_PI = RealScalar.of(2 * Math.PI);
   private static final Scalar _4_PI = RealScalar.of(4 * Math.PI);

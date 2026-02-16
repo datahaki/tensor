@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -36,7 +36,7 @@ class OrderingTest {
 
   @Test
   void testRandomExact() {
-    Distribution d = BinomialDistribution.of(12, RationalScalar.of(1, 3));
+    Distribution d = BinomialDistribution.of(12, Rational.of(1, 3));
     Tensor vector = RandomVariate.of(d, 100);
     int[] array = Ordering.INCREASING.of(vector);
     Tensor ascending = Tensor.of( //

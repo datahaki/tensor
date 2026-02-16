@@ -82,8 +82,8 @@ public class DecimalScalar extends AbstractRealScalar implements //
       BigDecimal bigDecimal = value.multiply(decimalScalar.number(), mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
-    if (scalar instanceof RationalScalar)
-      return times((RationalScalar) scalar);
+    if (scalar instanceof Rational)
+      return times((Rational) scalar);
     return scalar.multiply(this);
   }
 
@@ -94,8 +94,8 @@ public class DecimalScalar extends AbstractRealScalar implements //
       BigDecimal bigDecimal = value.divide(decimalScalar.number(), mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
-    if (scalar instanceof RationalScalar rationalScalar)
-      return times(rationalScalar.reciprocal());
+    if (scalar instanceof Rational rational)
+      return times(rational.reciprocal());
     return scalar.under(this);
   }
 
@@ -106,9 +106,9 @@ public class DecimalScalar extends AbstractRealScalar implements //
       BigDecimal bigDecimal = decimalScalar.number().divide(value, mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
-    if (scalar instanceof RationalScalar rationalScalar) {
+    if (scalar instanceof Rational rational) {
       MathContext mathContext = mathContext();
-      BigDecimal bigDecimal = rationalScalar.toBigDecimal(mathContext).divide(value, mathContext);
+      BigDecimal bigDecimal = rational.toBigDecimal(mathContext).divide(value, mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
     return scalar.divide(this);
@@ -132,9 +132,9 @@ public class DecimalScalar extends AbstractRealScalar implements //
     return new MathContext(Math.min(precision, decimalScalar.precision), RoundingMode.HALF_EVEN);
   }
 
-  private Scalar times(RationalScalar rationalScalar) {
+  private Scalar times(Rational rational) {
     MathContext mathContext = mathContext();
-    BigDecimal bigDecimal = value.multiply(rationalScalar.toBigDecimal(mathContext), mathContext);
+    BigDecimal bigDecimal = value.multiply(rational.toBigDecimal(mathContext), mathContext);
     return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
@@ -146,9 +146,9 @@ public class DecimalScalar extends AbstractRealScalar implements //
       BigDecimal bigDecimal = value.add(decimalScalar.number(), mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
-    if (scalar instanceof RationalScalar rationalScalar) {
+    if (scalar instanceof Rational rational) {
       MathContext mathContext = mathContext();
-      BigDecimal bigDecimal = value.add(rationalScalar.toBigDecimal(mathContext));
+      BigDecimal bigDecimal = value.add(rational.toBigDecimal(mathContext));
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
     return scalar.add(this);
@@ -167,7 +167,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar ceiling() {
-    return RationalScalar.integer(StaticHelper.ceiling(value));
+    return Rational.integer(StaticHelper.ceiling(value));
   }
 
   @Override // from Comparable<Scalar>
@@ -181,7 +181,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar floor() {
-    return RationalScalar.integer(StaticHelper.floor(value));
+    return Rational.integer(StaticHelper.floor(value));
   }
 
   @Override // from NInterface
@@ -208,7 +208,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar round() {
-    return RationalScalar.integer(StaticHelper.round(value));
+    return Rational.integer(StaticHelper.round(value));
   }
 
   @Override // from AbstractRealScalar
@@ -233,8 +233,8 @@ public class DecimalScalar extends AbstractRealScalar implements //
       // "equal() only if given BigDecimal's are equal in value and scale,
       // thus 2.0 is not equal to 2.00 when compared by equals()."
       return value.compareTo(decimalScalar.number()) == 0;
-    if (object instanceof RationalScalar rationalScalar) {
-      BigDecimal bigDecimal = rationalScalar.toBigDecimal(mathContext());
+    if (object instanceof Rational rational) {
+      BigDecimal bigDecimal = rational.toBigDecimal(mathContext());
       return value.compareTo(bigDecimal) == 0;
     }
     if (object instanceof RealScalar realScalar)

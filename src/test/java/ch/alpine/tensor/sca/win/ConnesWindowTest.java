@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -28,7 +28,7 @@ class ConnesWindowTest {
 
   @Test
   void testExact() {
-    Scalar scalar = ConnesWindow.of(RationalScalar.of(7, 8)).apply(RationalScalar.of(2, 5));
+    Scalar scalar = ConnesWindow.of(Rational.of(7, 8)).apply(Rational.of(2, 5));
     ExactScalarQ.require(scalar);
     assertFalse(Scalars.isZero(scalar));
   }

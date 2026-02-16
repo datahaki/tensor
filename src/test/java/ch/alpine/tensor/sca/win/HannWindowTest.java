@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -32,36 +32,36 @@ class HannWindowTest {
   void testExact() {
     ScalarUnaryOperator scalarUnaryOperator = HannWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RealScalar.ZERO), RealScalar.ONE);
-    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(RationalScalar.of(+1, 3)), RationalScalar.of(1, 4));
-    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(RationalScalar.of(+1, 4)), RationalScalar.of(1, 2));
-    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(RationalScalar.of(+1, 6)), RationalScalar.of(3, 4));
-    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(RationalScalar.of(-1, 3)), RationalScalar.of(1, 4));
-    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(RationalScalar.of(-1, 4)), RationalScalar.of(1, 2));
-    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(RationalScalar.of(-1, 6)), RationalScalar.of(3, 4));
+    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(Rational.of(+1, 3)), Rational.of(1, 4));
+    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(Rational.of(+1, 4)), Rational.of(1, 2));
+    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(Rational.of(+1, 6)), Rational.of(3, 4));
+    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(Rational.of(-1, 3)), Rational.of(1, 4));
+    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(Rational.of(-1, 4)), Rational.of(1, 2));
+    Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(Rational.of(-1, 6)), Rational.of(3, 4));
   }
 
   @Test
   void testExactFallback() {
     ScalarUnaryOperator scalarUnaryOperator = HannWindow.FUNCTION;
-    Scalar scalar = scalarUnaryOperator.apply(RationalScalar.of(1, 7));
+    Scalar scalar = scalarUnaryOperator.apply(Rational.of(1, 7));
     assertEquals(scalar, RealScalar.of(0.8117449009293667));
   }
 
   @Test
   void testZero() {
     ScalarUnaryOperator scalarUnaryOperator = HannWindow.FUNCTION;
-    assertEquals(scalarUnaryOperator.apply(RationalScalar.of(7, 12)), RealScalar.ZERO);
+    assertEquals(scalarUnaryOperator.apply(Rational.of(7, 12)), RealScalar.ZERO);
   }
 
   @Test
   void testNumeric() {
     ScalarUnaryOperator scalarUnaryOperator = HannWindow.FUNCTION;
-    assertEquals(scalarUnaryOperator.apply(RealScalar.of(0.25)), RationalScalar.HALF);
+    assertEquals(scalarUnaryOperator.apply(RealScalar.of(0.25)), Rational.HALF);
   }
 
   @Test
   void testSemiExact() {
-    Scalar scalar = HannWindow.FUNCTION.apply(RationalScalar.HALF);
+    Scalar scalar = HannWindow.FUNCTION.apply(Rational.HALF);
     assertTrue(Scalars.isZero(scalar));
   }
 

@@ -6,12 +6,12 @@ import java.math.RoundingMode;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.api.NInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** provides the decimal representation of scalars that implement {@link NInterface}.
- * Supported types include {@link RationalScalar}, and {@link DecimalScalar}.
+ * Supported types include {@link Rational}, and {@link DecimalScalar}.
  * 
  * <p>In Mathematica, the N operator may be used with a parameter that specifies the precision.
  * If the parameter is omitted the result is in machine precision, i.e. 64-bit double.

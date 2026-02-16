@@ -2,7 +2,7 @@
 package ch.alpine.tensor.fft;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -56,7 +56,7 @@ public enum FourierDST implements DiscreteFourierTransform {
     @Override
     public Tensor matrix(int n) {
       Integers.requirePositive(n);
-      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(2, n + 1));
+      Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(2, n + 1));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + 1));
       return Tensors.matrix((i, j) -> //
       Sin.FUNCTION.apply(RealScalar.of((i + 1) * (j + 1)).multiply(factor)).multiply(scalar), n, n);
@@ -78,7 +78,7 @@ public enum FourierDST implements DiscreteFourierTransform {
 
     @Override
     public Tensor matrix(int n) {
-      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+      Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(1, Integers.requirePositive(n)));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + n));
       return Tensors.matrix((j, i) -> //
       Sin.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + 1)).multiply(factor)).multiply(scalar), n, n);
@@ -100,7 +100,7 @@ public enum FourierDST implements DiscreteFourierTransform {
 
     @Override
     public Tensor matrix(int n) {
-      Scalar s1 = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+      Scalar s1 = Sqrt.FUNCTION.apply(Rational.of(1, Integers.requirePositive(n)));
       Scalar s2 = s1.add(s1);
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + n));
       Tensor matrix = Tensors.matrix((i, j) -> //
@@ -125,7 +125,7 @@ public enum FourierDST implements DiscreteFourierTransform {
 
     @Override
     public Tensor matrix(int n) {
-      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(2, Integers.requirePositive(n)));
+      Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(2, Integers.requirePositive(n)));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(4 * n));
       return Tensors.matrix((i, j) -> //
       Sin.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + j + 1)).multiply(factor)).multiply(scalar), n, n);

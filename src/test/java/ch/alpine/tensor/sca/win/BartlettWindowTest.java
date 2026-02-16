@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -23,14 +23,14 @@ class BartlettWindowTest {
 
   @Test
   void testExact() {
-    Scalar scalar = BartlettWindow.FUNCTION.apply(RationalScalar.of(3, 3465));
+    Scalar scalar = BartlettWindow.FUNCTION.apply(Rational.of(3, 3465));
     ExactScalarQ.require(scalar);
-    assertEquals(scalar, RationalScalar.of(1153, 1155));
+    assertEquals(scalar, Rational.of(1153, 1155));
   }
 
   @Test
   void testExact2() {
-    Scalar scalar = BartlettWindow.FUNCTION.apply(RationalScalar.of(2, 5));
+    Scalar scalar = BartlettWindow.FUNCTION.apply(Rational.of(2, 5));
     ExactScalarQ.require(scalar);
     assertFalse(Scalars.isZero(scalar));
   }
@@ -43,7 +43,7 @@ class BartlettWindowTest {
 
   @Test
   void testSemiExact() {
-    Scalar scalar = BartlettWindow.FUNCTION.apply(RationalScalar.HALF);
+    Scalar scalar = BartlettWindow.FUNCTION.apply(Rational.HALF);
     assertTrue(Scalars.isZero(scalar));
     ExactScalarQ.require(scalar);
   }

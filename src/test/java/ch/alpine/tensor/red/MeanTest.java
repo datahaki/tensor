@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -48,6 +48,6 @@ class MeanTest {
 
   @Test
   void testDistribution() {
-    assertEquals(Mean.of(UniformDistribution.unit()), RationalScalar.of(1, 2));
+    assertEquals(Mean.of(UniformDistribution.unit()), Rational.of(1, 2));
   }
 }

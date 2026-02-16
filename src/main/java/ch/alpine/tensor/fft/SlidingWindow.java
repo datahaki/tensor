@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -42,7 +42,7 @@ public record SlidingWindow(Integer windowLength, Integer offset) implements Ser
         ? 1 << (Round.intValueExact(LOG2.apply(Sqrt.FUNCTION.apply(RealScalar.of(vector_length)))) + 1)
         : this.windowLength;
     int offset = Objects.isNull(this.offset) //
-        ? Round.intValueExact(RationalScalar.of(windowLength, 3))
+        ? Round.intValueExact(Rational.of(windowLength, 3))
         : this.offset;
     if (offset <= 0 || windowLength < offset)
       throw new IllegalArgumentException("windowLength=" + windowLength + " offset=" + offset);
@@ -83,6 +83,6 @@ public record SlidingWindow(Integer windowLength, Integer offset) implements Ser
   @PackageTestAccess
   static Tensor samples(int length) {
     int k = length - 1;
-    return Subdivide.increasing(Clips.absolute(RationalScalar.of(k, length + length)), k);
+    return Subdivide.increasing(Clips.absolute(Rational.of(k, length + length)), k);
   }
 }

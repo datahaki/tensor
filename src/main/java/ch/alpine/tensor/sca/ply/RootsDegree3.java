@@ -4,7 +4,7 @@ package ch.alpine.tensor.sca.ply;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -32,9 +32,9 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * computing roots of cubic polynomials. */
 /* package */ class RootsDegree3 {
   private static final Scalar _3 = RealScalar.of(3);
-  private static final Scalar N1_2 = RationalScalar.of(-1, 2);
-  private static final Scalar _1_3 = RationalScalar.THIRD;
-  private static final Scalar _2_3 = RationalScalar.of(2, 3);
+  private static final Scalar N1_2 = Rational.of(-1, 2);
+  private static final Scalar _1_3 = Rational.THIRD;
+  private static final Scalar _2_3 = Rational.of(2, 3);
   private static final Scalar _4 = RealScalar.of(4);
   private static final Scalar _6 = RealScalar.of(6);
   private static final Scalar _27 = RealScalar.of(27);

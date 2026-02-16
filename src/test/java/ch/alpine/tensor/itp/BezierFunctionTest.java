@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -19,7 +19,7 @@ class BezierFunctionTest {
   void testSimple() {
     Tensor control = Tensors.fromString("{{0, 1}, {1, 0}, {2, 1}}");
     ScalarTensorFunction scalarTensorFunction = new BezierFunction(LinearBinaryAverage.INSTANCE, control);
-    Tensor tensor = scalarTensorFunction.apply(RationalScalar.of(1, 4));
+    Tensor tensor = scalarTensorFunction.apply(Rational.of(1, 4));
     assertEquals(tensor, Tensors.fromString("{1/2, 5/8}"));
     ExactTensorQ.require(tensor);
   }

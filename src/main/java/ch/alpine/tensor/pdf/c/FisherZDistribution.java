@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -50,8 +50,8 @@ public class FisherZDistribution implements Distribution, //
   private FisherZDistribution(Scalar n, Scalar m) {
     this.n = n;
     this.m = m;
-    Scalar n_2 = n.multiply(RationalScalar.HALF);
-    Scalar m_2 = m.multiply(RationalScalar.HALF);
+    Scalar n_2 = n.multiply(Rational.HALF);
+    Scalar m_2 = m.multiply(Rational.HALF);
     scale = Times.of(RealScalar.TWO, Power.of(n, n_2), Power.of(m, m_2)).divide(Beta.of(n_2, m_2));
     power = Power.function(n_2.add(m_2).negate());
     rvi = FRatioDistribution.of(n, m);
@@ -67,7 +67,7 @@ public class FisherZDistribution implements Distribution, //
 
   @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
-    return Log.FUNCTION.apply(rvi.randomVariate(randomGenerator)).multiply(RationalScalar.HALF);
+    return Log.FUNCTION.apply(rvi.randomVariate(randomGenerator)).multiply(Rational.HALF);
   }
 
   @Override // from Object

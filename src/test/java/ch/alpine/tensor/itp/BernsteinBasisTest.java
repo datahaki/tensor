@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -30,7 +30,7 @@ import ch.alpine.tensor.sca.Clips;
 class BernsteinBasisTest {
   @Test
   void testSimple() {
-    Tensor actual = BernsteinBasis.of(5, RationalScalar.of(2, 3));
+    Tensor actual = BernsteinBasis.of(5, Rational.of(2, 3));
     Tensor expect = Tensors.fromString("{1/243, 10/243, 40/243, 80/243, 80/243, 32/243}");
     assertEquals(actual, expect);
     assertEquals(Total.of(actual), RealScalar.ONE);
@@ -38,7 +38,7 @@ class BernsteinBasisTest {
 
   @Test
   void testSimpleReverse() {
-    Tensor actual = BernsteinBasis.of(5, RationalScalar.of(1, 3));
+    Tensor actual = BernsteinBasis.of(5, Rational.of(1, 3));
     Tensor expect = Reverse.of(Tensors.fromString("{1/243, 10/243, 40/243, 80/243, 80/243, 32/243}"));
     assertEquals(actual, expect);
     assertEquals(Total.of(actual), RealScalar.ONE);
@@ -58,7 +58,7 @@ class BernsteinBasisTest {
    * @return weight mask of length n with entries that sum up to 1 */
   public static Tensor extrapolate(int n) {
     int nm1 = Integers.requirePositive(n) - 1;
-    Scalar p = RationalScalar.of(n, nm1);
+    Scalar p = Rational.of(n, nm1);
     return BernsteinBasis.of(nm1, p);
   }
 
@@ -77,7 +77,7 @@ class BernsteinBasisTest {
   @Test
   void testSimple2() throws ClassNotFoundException, IOException {
     ScalarTensorFunction scalarTensorFunction = Serialization.copy(of(2));
-    assertEquals(scalarTensorFunction.apply(RationalScalar.HALF), Tensors.fromString("{1/2, 1/2}"));
+    assertEquals(scalarTensorFunction.apply(Rational.HALF), Tensors.fromString("{1/2, 1/2}"));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(0)), Tensors.fromString("{1, 0}"));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(1)), Tensors.fromString("{0, 1}"));
   }
@@ -85,7 +85,7 @@ class BernsteinBasisTest {
   @Test
   void testSimple3() {
     ScalarTensorFunction scalarTensorFunction = of(3);
-    assertEquals(scalarTensorFunction.apply(RationalScalar.HALF), Tensors.fromString("{1/4, 1/2, 1/4}"));
+    assertEquals(scalarTensorFunction.apply(Rational.HALF), Tensors.fromString("{1/4, 1/2, 1/4}"));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(0)), Tensors.fromString("{1, 0, 0}"));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(1)), Tensors.fromString("{0, 0, 1}"));
   }
@@ -93,7 +93,7 @@ class BernsteinBasisTest {
   @Test
   void testDistribution() {
     for (int n = 5; n < 10; ++n)
-      for (Scalar p : new Scalar[] { RationalScalar.of(1, 3), RationalScalar.of(6, 7) }) {
+      for (Scalar p : new Scalar[] { Rational.of(1, 3), Rational.of(6, 7) }) {
         Tensor vector = of(n).apply(p);
         Distribution distribution = BinomialDistribution.of(n - 1, p);
         PDF pdf = PDF.of(distribution);
@@ -108,7 +108,7 @@ class BernsteinBasisTest {
   void testFunctionMatch() {
     int n = 5;
     ScalarTensorFunction scalarTensorFunction = new BezierFunction(LinearBinaryAverage.INSTANCE, IdentityMatrix.of(n));
-    Scalar p = RationalScalar.of(2, 7);
+    Scalar p = Rational.of(2, 7);
     Tensor vector = scalarTensorFunction.apply(p);
     Tensor weight = of(n).apply(p);
     ExactTensorQ.require(weight);
@@ -143,14 +143,14 @@ class BernsteinBasisTest {
   @Test
   void testTheory() {
     int n = 1207;
-    Scalar p = RationalScalar.of(2, 3);
+    Scalar p = Rational.of(2, 3);
     Tensor table = BernsteinBasis.of(n, Clips.unit().requireInside(p));
     assertEquals(Total.of(table), RealScalar.ONE);
   }
 
   @Test
   void testNegFail() {
-    assertEquals(BernsteinBasis.of(0, RationalScalar.of(2, 3)), Tensors.vector(1));
-    assertThrows(IllegalArgumentException.class, () -> BernsteinBasis.of(-1, RationalScalar.of(2, 3)));
+    assertEquals(BernsteinBasis.of(0, Rational.of(2, 3)), Tensors.vector(1));
+    assertThrows(IllegalArgumentException.class, () -> BernsteinBasis.of(-1, Rational.of(2, 3)));
   }
 }

@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -78,7 +78,7 @@ class LaplaceDistributionTest {
     PDF pdf = PDF.of(distribution);
     pdf.at(mean);
     CDF cdf = CDF.of(distribution);
-    assertEquals(RationalScalar.HALF, cdf.p_lessEquals(mean));
+    assertEquals(Rational.HALF, cdf.p_lessEquals(mean));
     assertEquals(Mean.of(distribution), mean);
   }
 

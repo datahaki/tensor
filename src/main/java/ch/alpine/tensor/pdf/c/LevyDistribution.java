@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -50,7 +50,7 @@ public class LevyDistribution extends AbstractContinuousDistribution implements 
   private LevyDistribution(Scalar mu, Scalar sigma) {
     this.mu = mu;
     this.sigma = sigma;
-    power = Power.function(RationalScalar.of(3, 2));
+    power = Power.function(Rational.of(3, 2));
   }
 
   @Override

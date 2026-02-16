@@ -9,7 +9,7 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.pow.Power;
 class PascalDistributionTest {
   @Test
   void testPDF() {
-    Scalar p = RationalScalar.of(2, 3);
+    Scalar p = Rational.of(2, 3);
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(5, p);
     PDF pdf = PDF.of(distribution);
     Scalar scalar = pdf.at(RealScalar.of(5));
@@ -43,33 +43,33 @@ class PascalDistributionTest {
 
   @Test
   void testCDF() {
-    Scalar p = RationalScalar.of(2, 3);
+    Scalar p = Rational.of(2, 3);
     Distribution distribution = PascalDistribution.of(5, p);
     CDF pdf = CDF.of(distribution);
     Scalar probability = pdf.p_lessEquals(RealScalar.of(14));
-    assertEquals(probability, RationalScalar.of(4763648, 4782969));
+    assertEquals(probability, Rational.of(4763648, 4782969));
     ExactScalarQ.require(probability);
   }
 
   @Test
   void testMean() {
-    Distribution distribution = PascalDistribution.of(5, RationalScalar.of(2, 3));
+    Distribution distribution = PascalDistribution.of(5, Rational.of(2, 3));
     assertTrue(distribution.toString().startsWith("PascalDistribution["));
     Scalar mean = Mean.of(distribution);
     Scalar var = Variance.of(distribution);
-    assertEquals(mean, RationalScalar.of(15, 2));
-    assertEquals(var, RationalScalar.of(15, 4));
+    assertEquals(mean, Rational.of(15, 2));
+    assertEquals(var, Rational.of(15, 4));
     ExactScalarQ.require(mean);
     ExactScalarQ.require(var);
   }
 
   @Test
   void testVariance() {
-    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(11, RationalScalar.of(5, 17));
+    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(11, Rational.of(5, 17));
     Scalar mean = Mean.of(distribution);
     Scalar var = Variance.of(distribution);
-    assertEquals(mean, RationalScalar.of(187, 5));
-    assertEquals(var, RationalScalar.of(2244, 25));
+    assertEquals(mean, Rational.of(187, 5));
+    assertEquals(var, Rational.of(2244, 25));
     ExactScalarQ.require(mean);
     ExactScalarQ.require(var);
     assertTrue(Scalars.lessEquals(RealScalar.of(172), distribution.inverse_cdf().lastEntry().getValue()));
@@ -77,7 +77,7 @@ class PascalDistributionTest {
 
   @Test
   void testRandomVariate() {
-    Scalar p = RationalScalar.of(3, 4);
+    Scalar p = Rational.of(3, 4);
     Distribution distribution = PascalDistribution.of(5, p);
     Tensor tensor = RandomVariate.of(distribution, 2300);
     Tensor mean = Mean.of(tensor);
@@ -88,7 +88,7 @@ class PascalDistributionTest {
 
   @Test
   void testInverseCdf() {
-    Scalar p = RationalScalar.of(1, 5);
+    Scalar p = Rational.of(1, 5);
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(5, p);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(RealScalar.of(0.999));
@@ -101,7 +101,7 @@ class PascalDistributionTest {
   @Test
   void testCDFMathematica() {
     int n = 5;
-    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
+    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, Rational.of(1, 4));
     CDF cdf = CDF.of(distribution);
     Tensor actual = Range.of(0, 10 + 1).maps(cdf::p_lessEquals);
     Tensor expect = Tensors.fromString("{0, 0, 0, 0, 0, 1/1024, 19/4096, 211/16384, 1789/65536, 6413/131072, 40961/524288}");
@@ -111,9 +111,9 @@ class PascalDistributionTest {
   @Test
   void testInverseCDFMathematica() {
     int n = 5;
-    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
+    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, Rational.of(1, 4));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    Scalar actual = inverseCDF.quantile(RationalScalar.of(19, 4096));
+    Scalar actual = inverseCDF.quantile(Rational.of(19, 4096));
     Scalar expect = RealScalar.of(6);
     assertEquals(actual, expect);
   }
@@ -121,7 +121,7 @@ class PascalDistributionTest {
   @Test
   void testCDFInverseCDF() {
     int n = 5;
-    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
+    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, Rational.of(1, 4));
     CDF cdf = CDF.of(distribution);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     for (Tensor _x : Range.of(n, n + 30)) {
@@ -134,7 +134,7 @@ class PascalDistributionTest {
 
   @Test
   void testLargeExact() {
-    Distribution distribution = PascalDistribution.of(5, RationalScalar.of(1, 7));
+    Distribution distribution = PascalDistribution.of(5, Rational.of(1, 7));
     PDF pdf = PDF.of(distribution);
     Scalar scalar = pdf.at(RealScalar.of(30));
     Scalar expect = Scalars.fromString("96463967285551476768768/3219905755813179726837607"); // Mathematica

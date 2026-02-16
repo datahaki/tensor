@@ -10,7 +10,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -53,7 +53,7 @@ class SparseArrayQTest {
   @Test
   void testVector2() {
     Tensor tensor = LeviCivitaTensor.of(3);
-    Tensor result = tensor.maps(s -> Tensors.of(s, s.one(), s, RationalScalar.HALF));
+    Tensor result = tensor.maps(s -> Tensors.of(s, s.one(), s, Rational.HALF));
     assertEquals(Dimensions.of(result), Arrays.asList(3, 3, 3, 4));
     // assertTrue(SparseArrayQ.of(result));
   }

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -13,9 +13,9 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 public enum ExactBlackmanWindow implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar A0 = RationalScalar.of(3969, 9304);
-  private static final Scalar A1 = RationalScalar.of(4620, 9304);
-  private static final Scalar A2 = RationalScalar.of(715, 9304);
+  private static final Scalar A0 = Rational.of(3969, 9304);
+  private static final Scalar A1 = Rational.of(4620, 9304);
+  private static final Scalar A2 = Rational.of(715, 9304);
 
   @Override
   public Scalar apply(Scalar x) {

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -11,10 +11,10 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 public enum KaiserBesselWindow implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar A0 = RationalScalar.of(402, 1000);
-  private static final Scalar A1 = RationalScalar.of(498, 1000);
-  private static final Scalar A2 = RationalScalar.of(99, 1000);
-  private static final Scalar A3 = RationalScalar.of(1, 1000);
+  private static final Scalar A0 = Rational.of(402, 1000);
+  private static final Scalar A1 = Rational.of(498, 1000);
+  private static final Scalar A2 = Rational.of(99, 1000);
+  private static final Scalar A3 = Rational.of(1, 1000);
 
   @Override
   public Scalar apply(Scalar x) {

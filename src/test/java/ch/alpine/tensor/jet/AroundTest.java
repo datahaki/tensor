@@ -14,7 +14,7 @@ import java.util.random.RandomGenerator;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -179,8 +179,8 @@ class AroundTest {
         Quantity.of(-3, "s"), //
         Quantity.of(7, "s")).reciprocal();
     assertEquals(scalar, Around.of( //
-        Quantity.of(RationalScalar.of(-1, 3), "s^-1"), //
-        Quantity.of(RationalScalar.of(7, 9), "s^-1")));
+        Quantity.of(Rational.of(-1, 3), "s^-1"), //
+        Quantity.of(Rational.of(7, 9), "s^-1")));
     assertNotEquals(scalar, Pi.VALUE);
     N.DOUBLE.apply(scalar);
     N.DECIMAL64.apply(scalar);
@@ -199,7 +199,7 @@ class AroundTest {
     Scalar c1 = a.multiply(b);
     Scalar c2 = b.multiply(a);
     assertEquals(c1, c2);
-    Scalar factor = RationalScalar.of(7, 9);
+    Scalar factor = Rational.of(7, 9);
     assertEquals(a.multiply(factor), factor.multiply(a));
   }
 
@@ -265,7 +265,7 @@ class AroundTest {
   void testLog() {
     Around around = (Around) Log.FUNCTION.apply(Around.of(2, 3));
     Chop._12.requireClose(around.mean(), RealScalar.of(0.6931471805599453));
-    assertEquals(around.standardDeviation(), RationalScalar.of(3, 2));
+    assertEquals(around.standardDeviation(), Rational.of(3, 2));
   }
 
   @Test
@@ -281,10 +281,10 @@ class AroundTest {
     assertEquals(Power.of(Around.of(-4, 3), RealScalar.of(3)), Around.of(-64, 144));
     assertEquals(Power.of(Around.of(-3, 2), RealScalar.of(2)), Around.of(9, 12));
     assertEquals(Power.of( //
-        Around.of(RationalScalar.HALF.negate(), RealScalar.TWO), RealScalar.of(-2)), //
+        Around.of(Rational.HALF.negate(), RealScalar.TWO), RealScalar.of(-2)), //
         Around.of(4, 32));
     assertEquals(Power.of( //
-        Around.of(RationalScalar.HALF.negate(), RealScalar.TWO), RealScalar.of(-3)), //
+        Around.of(Rational.HALF.negate(), RealScalar.TWO), RealScalar.of(-3)), //
         Around.of(-8, 96));
   }
 

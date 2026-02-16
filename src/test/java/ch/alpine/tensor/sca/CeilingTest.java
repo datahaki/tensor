@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -27,11 +27,11 @@ class CeilingTest {
   @Test
   void testCeiling() {
     assertEquals(Ceiling.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
-    assertEquals(Ceiling.FUNCTION.apply(RationalScalar.of(-5, 2)), RationalScalar.of(-2, 1));
-    assertEquals(Ceiling.FUNCTION.apply(RationalScalar.of(5, 2)), RationalScalar.of(3, 1));
+    assertEquals(Ceiling.FUNCTION.apply(Rational.of(-5, 2)), Rational.of(-2, 1));
+    assertEquals(Ceiling.FUNCTION.apply(Rational.of(5, 2)), Rational.of(3, 1));
     assertEquals(Ceiling.FUNCTION.apply(DoubleScalar.of(0.123)), RealScalar.ONE);
     assertEquals(Ceiling.FUNCTION.apply(RealScalar.ONE), RealScalar.ONE);
-    assertEquals(Ceiling.FUNCTION.apply(DoubleScalar.of(-0.123)), RationalScalar.of(0, 1));
+    assertEquals(Ceiling.FUNCTION.apply(DoubleScalar.of(-0.123)), Rational.of(0, 1));
   }
 
   @Test
@@ -62,12 +62,12 @@ class CeilingTest {
 
   @Test
   void testRational1() {
-    Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
+    Scalar s = Rational.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Ceiling.intValueExact(s), 18);
     assertEquals(Ceiling.longValueExact(s), 18);
     Scalar r = Ceiling.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(18));
-    assertInstanceOf(RationalScalar.class, r);
+    assertInstanceOf(Rational.class, r);
   }
 
   @Test
@@ -78,10 +78,10 @@ class CeilingTest {
 
   @Test
   void testRational2() {
-    Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
+    Scalar s = Rational.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Ceiling.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(55));
-    assertInstanceOf(RationalScalar.class, r);
+    assertInstanceOf(Rational.class, r);
   }
 
   @Test
@@ -90,7 +90,7 @@ class CeilingTest {
     Scalar s = RealScalar.of(bi);
     Scalar r = Ceiling.FUNCTION.apply(s);
     assertEquals(s, r);
-    assertInstanceOf(RationalScalar.class, r);
+    assertInstanceOf(Rational.class, r);
   }
 
   @Test

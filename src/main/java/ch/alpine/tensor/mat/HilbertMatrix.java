@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
@@ -15,7 +15,7 @@ public enum HilbertMatrix {
    * @throws Exception if input parameters are outside range */
   public static Tensor of(int n, int m) {
     if (0 < n && 0 < m)
-      return Tensors.matrix((i, j) -> RationalScalar.of(1, i + j + 1), n, m);
+      return Tensors.matrix((i, j) -> Rational.of(1, i + j + 1), n, m);
     throw new IllegalArgumentException(String.format("HilbertMatrix[%d,%d]", n, m));
   }
 

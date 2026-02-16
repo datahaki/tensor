@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -15,7 +15,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 class ExactTensorQTest {
   @Test
   void testAll() {
-    assertTrue(ExactTensorQ.of(RationalScalar.HALF));
+    assertTrue(ExactTensorQ.of(Rational.HALF));
     assertTrue(ExactTensorQ.of(Tensors.vector(1, 2, 3)));
     assertTrue(ExactTensorQ.of(HilbertMatrix.of(3, 2)));
     assertFalse(ExactTensorQ.of(Tensors.vector(1, 1, 1.)));

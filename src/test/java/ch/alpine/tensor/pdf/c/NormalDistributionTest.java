@@ -11,7 +11,7 @@ import java.time.Month;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -44,18 +44,18 @@ import ch.alpine.tensor.sca.Sign;
 class NormalDistributionTest {
   @Test
   void testExpectationMean() {
-    Scalar mean = RationalScalar.of(3, 5);
-    Distribution distribution = NormalDistribution.of(mean, RationalScalar.of(4, 9));
+    Scalar mean = Rational.of(3, 5);
+    Distribution distribution = NormalDistribution.of(mean, Rational.of(4, 9));
     assertEquals(Expectation.mean(distribution), mean);
   }
 
   @Test
   void testPDF() {
-    Scalar mean = RationalScalar.of(3, 5);
-    Scalar sigma = RationalScalar.of(4, 9);
+    Scalar mean = Rational.of(3, 5);
+    Scalar sigma = Rational.of(4, 9);
     Distribution distribution = NormalDistribution.of(mean, sigma);
     PDF pdf = PDF.of(distribution);
-    Scalar delta = RationalScalar.of(2, 3);
+    Scalar delta = Rational.of(2, 3);
     // for delta with numerical precision, a small deviation is introduced
     assertEquals(pdf.at(mean.subtract(delta)), pdf.at(mean.add(delta)));
     // 0.8976201309032235253648786348523592040707
@@ -95,7 +95,7 @@ class NormalDistributionTest {
     }
     Chop._07.requireClose( //
         CDF.of(distribution).p_lessEquals(mean), //
-        RationalScalar.of(1, 2));
+        Rational.of(1, 2));
     TestMarkovChebyshev.symmetricAroundMean(distribution);
     {
       UnivariateDistribution univariateDistribution = (UnivariateDistribution) distribution;
@@ -177,7 +177,7 @@ class NormalDistributionTest {
     Tolerance.CHOP.requireClose(p, Quantity.of(0.0011116453273056258, "s^-1"));
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(mean);
-    Tolerance.CHOP.requireClose(RationalScalar.HALF, p_lessEquals);
+    Tolerance.CHOP.requireClose(Rational.HALF, p_lessEquals);
     assertEquals(Mean.of(distribution), mean);
     assertEquals(StandardDeviation.of(distribution), sigma);
   }

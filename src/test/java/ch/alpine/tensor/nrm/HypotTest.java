@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -65,9 +65,9 @@ class HypotTest {
 
   private static void checkVectorExact(Tensor vec) {
     Scalar hyp = Hypot.ofVector(vec);
-    assertInstanceOf(RationalScalar.class, hyp);
+    assertInstanceOf(Rational.class, hyp);
     Scalar nrm = Vector2Norm.of(vec);
-    assertInstanceOf(RationalScalar.class, nrm);
+    assertInstanceOf(Rational.class, nrm);
     assertEquals(hyp, nrm);
   }
 

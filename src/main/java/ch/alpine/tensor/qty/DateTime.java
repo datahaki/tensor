@@ -15,7 +15,7 @@ import java.time.temporal.TemporalAmount;
 import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -254,7 +254,7 @@ public class DateTime extends AbstractScalar implements //
    * @return quantity with value equals to the number of seconds encoded in given duration and unit "s" */
   public static Scalar seconds(Duration duration) {
     Scalar seconds = RealScalar.of(duration.getSeconds());
-    Scalar faction = RationalScalar.of(duration.getNano(), NANOS_LONG);
+    Scalar faction = Rational.of(duration.getNano(), NANOS_LONG);
     return Quantity.of(seconds.add(faction), UNIT_S);
   }
 
@@ -285,7 +285,7 @@ public class DateTime extends AbstractScalar implements //
    * which is negative for dates before that threshold in exact precision */
   public Scalar toEpoch(ZoneOffset zoneOffset) {
     // function getNano() returns in the range 0 to 999,999,999
-    Scalar nanos = RationalScalar.of(localDateTime.getNano(), NANOS_LONG);
+    Scalar nanos = Rational.of(localDateTime.getNano(), NANOS_LONG);
     return Quantity.of(RealScalar.of(localDateTime.toEpochSecond(zoneOffset)).add(nanos), UNIT_S);
   }
 

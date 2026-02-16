@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -20,8 +20,8 @@ class MedianTest {
   void testEven() {
     /* Median[{1, 2, 3, 4, 5, 6, 7, 8}] == 9/2 */
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6, 7, 8);
-    assertEquals(Median.of(vector), RationalScalar.of(9, 2));
-    assertEquals(Median.of(Tensors.fromString("{1, 2}")), RationalScalar.of(3, 2));
+    assertEquals(Median.of(vector), Rational.of(9, 2));
+    assertEquals(Median.of(Tensors.fromString("{1, 2}")), Rational.of(3, 2));
   }
 
   @Test
@@ -29,7 +29,7 @@ class MedianTest {
     /* Median[{1, 2, 3, 4, 5, 6, 7}] == 4 */
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6, 7);
     assertEquals(Median.of(vector), RealScalar.of(4));
-    assertEquals(Median.of(Tensors.fromString("{1}")), RationalScalar.of(1, 1));
+    assertEquals(Median.of(Tensors.fromString("{1}")), Rational.of(1, 1));
   }
 
   @Test

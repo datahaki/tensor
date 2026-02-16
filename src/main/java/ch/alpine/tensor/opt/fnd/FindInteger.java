@@ -4,7 +4,7 @@ package ch.alpine.tensor.opt.fnd;
 import java.math.BigInteger;
 import java.util.function.Predicate;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -53,7 +53,7 @@ public enum FindInteger {
       Scalar width = hi.subtract(lo);
       if (width.equals(RealScalar.ONE))
         return hi;
-      Scalar xc = Floor.FUNCTION.apply(lo.add(width.multiply(RationalScalar.HALF)));
+      Scalar xc = Floor.FUNCTION.apply(lo.add(width.multiply(Rational.HALF)));
       boolean tc = predicate.test(xc);
       if (tc)
         hi = xc;

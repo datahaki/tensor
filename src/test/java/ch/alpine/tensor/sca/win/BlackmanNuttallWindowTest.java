@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -17,21 +17,21 @@ class BlackmanNuttallWindowTest {
   @Test
   void testSimple() {
     ScalarUnaryOperator windowFunction = BlackmanNuttallWindow.FUNCTION;
-    Scalar scalar = windowFunction.apply(RationalScalar.HALF);
+    Scalar scalar = windowFunction.apply(Rational.HALF);
     Tolerance.CHOP.requireClose(scalar, Scalars.fromString("907/2500000"));
   }
 
   @Test
   void testQuarter() {
     ScalarUnaryOperator windowFunction = BlackmanNuttallWindow.FUNCTION;
-    Scalar scalar = windowFunction.apply(RationalScalar.of(1, 4));
+    Scalar scalar = windowFunction.apply(Rational.of(1, 4));
     Tolerance.CHOP.requireClose(scalar, Scalars.fromString("17733/78125"));
   }
 
   @Test
   void testThird() {
     ScalarUnaryOperator windowFunction = BlackmanNuttallWindow.FUNCTION;
-    Scalar scalar = windowFunction.apply(RationalScalar.of(1, 3));
+    Scalar scalar = windowFunction.apply(Rational.of(1, 3));
     Tolerance.CHOP.requireClose(scalar, Scalars.fromString("122669/2000000"));
   }
 

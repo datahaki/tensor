@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.red;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.OrderedQ;
@@ -39,6 +39,6 @@ public enum Median {
    * @return median of given probability distribution
    * @throws Exception if distribution does not implement {@link InverseCDF} */
   public static Scalar of(Distribution distribution) {
-    return InverseCDF.of(distribution).quantile(RationalScalar.HALF);
+    return InverseCDF.of(distribution).quantile(Rational.HALF);
   }
 }

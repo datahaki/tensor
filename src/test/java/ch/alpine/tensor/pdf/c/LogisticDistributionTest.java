@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -84,7 +84,7 @@ class LogisticDistributionTest {
     assertEquals(pdf.at(a), Quantity.of(0.0020325203252032522, "s^-1"));
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(a);
-    Tolerance.CHOP.requireClose(RationalScalar.HALF, p_lessEquals);
+    Tolerance.CHOP.requireClose(Rational.HALF, p_lessEquals);
   }
 
   @Test

@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat.ev;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.num.Pi;
@@ -40,8 +40,8 @@ import ch.alpine.tensor.sca.tri.Sin;
     Scalar apq = Abs.FUNCTION.apply(hpq);
     Scalar phi1 = Arg.FUNCTION.apply(hpq);
     Scalar phi2 = ArcTan.of(hpp.subtract(hqq), apq.add(apq));
-    Scalar theta1 = phi1.subtract(Pi.HALF).multiply(RationalScalar.HALF);
-    Scalar theta2 = phi2.multiply(RationalScalar.HALF);
+    Scalar theta1 = phi1.subtract(Pi.HALF).multiply(Rational.HALF);
+    Scalar theta2 = phi2.multiply(Rational.HALF);
     GivensRotation givensRotation = new GivensComplex(theta1, theta2);
     givensRotation.transform(p, q);
     givensRotation.dot(p, q);

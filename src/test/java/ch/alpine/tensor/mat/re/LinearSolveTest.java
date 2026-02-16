@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -43,7 +43,7 @@ class LinearSolveTest {
         RealScalar.of(randomGenerator.nextInt(15)), //
         RealScalar.of(randomGenerator.nextInt(15))), n, n);
     assumeTrue(Scalars.nonZero(Det.of(A)));
-    Tensor b = Tensors.matrix((i, j) -> RationalScalar.of(i.equals(j) ? 1 : 0, 1), n, n + 3);
+    Tensor b = Tensors.matrix((i, j) -> Rational.of(i.equals(j) ? 1 : 0, 1), n, n + 3);
     Tensor X = LinearSolve.of(A, b);
     Tensor err = A.dot(X).subtract(b);
     assertEquals(err, b.maps(Scalar::zero));
@@ -56,7 +56,7 @@ class LinearSolveTest {
     RandomGenerator randomGenerator = ThreadLocalRandom.current();
     int n = 5 + randomGenerator.nextInt(6);
     Tensor A = Tensors.matrix((_, _) -> //
-    RationalScalar.of(randomGenerator.nextInt(100), randomGenerator.nextInt(100) + 1), n, n);
+    Rational.of(randomGenerator.nextInt(100), randomGenerator.nextInt(100) + 1), n, n);
     assumeTrue(Scalars.nonZero(Det.of(A)));
     Tensor b = Tensors.matrix((_, _) -> ComplexScalar.of(//
         RealScalar.of(randomGenerator.nextInt(15)), //
@@ -112,7 +112,7 @@ class LinearSolveTest {
     RandomGenerator randomGenerator = ThreadLocalRandom.current();
     int n = 5;
     Tensor A = Tensors.matrix((_, _) -> //
-    RationalScalar.of(randomGenerator.nextInt(100) - 50, randomGenerator.nextInt(100) + 1), n, n);
+    Rational.of(randomGenerator.nextInt(100) - 50, randomGenerator.nextInt(100) + 1), n, n);
     assumeTrue(Scalars.nonZero(Det.of(A)));
     Tensor b = IdentityMatrix.of(n);
     Tensor X = LinearSolve.of(A, b);

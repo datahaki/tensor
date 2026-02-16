@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -120,9 +120,9 @@ class SparseArrayTest {
   @Test
   void testHashCode2() {
     Tensor sparse = SparseArray.of(RealScalar.ZERO, 5, 4);
-    sparse.set(RationalScalar.HALF, 1, 2);
+    sparse.set(Rational.HALF, 1, 2);
     Tensor matrix = Array.zeros(5, 4);
-    matrix.set(RationalScalar.HALF, 1, 2);
+    matrix.set(Rational.HALF, 1, 2);
     assertEquals(sparse.hashCode(), matrix.hashCode());
   }
 
@@ -193,7 +193,7 @@ class SparseArrayTest {
     assertEquals(Dimensions.of(sparse), Arrays.asList(3, 5));
     assertEquals(Pretty.of(sparse), Pretty.of(tensor));
     sparse.toString();
-    Tensor result = sparse.divide(RationalScalar.HALF);
+    Tensor result = sparse.divide(Rational.HALF);
     assertEquals(result, tensor.multiply(RealScalar.TWO));
     ExactTensorQ.require(sparse);
     assertInstanceOf(SparseArray.class, result);

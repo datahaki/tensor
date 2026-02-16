@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -97,12 +97,12 @@ class QuantileTest {
   @Test
   void testDistribution() {
     ScalarUnaryOperator suo = Quantile.of(UniformDistribution.of(5, 10));
-    assertThrows(Throw.class, () -> suo.apply(RationalScalar.of(-1, 5)));
-    assertEquals(suo.apply(RationalScalar.of(0, 5)), RealScalar.of(5));
-    assertEquals(suo.apply(RationalScalar.of(1, 5)), RealScalar.of(6));
-    assertEquals(suo.apply(RationalScalar.of(2, 5)), RealScalar.of(7));
-    assertEquals(suo.apply(RationalScalar.of(5, 5)), RealScalar.of(10));
-    assertThrows(Throw.class, () -> suo.apply(RationalScalar.of(+6, 5)));
+    assertThrows(Throw.class, () -> suo.apply(Rational.of(-1, 5)));
+    assertEquals(suo.apply(Rational.of(0, 5)), RealScalar.of(5));
+    assertEquals(suo.apply(Rational.of(1, 5)), RealScalar.of(6));
+    assertEquals(suo.apply(Rational.of(2, 5)), RealScalar.of(7));
+    assertEquals(suo.apply(Rational.of(5, 5)), RealScalar.of(10));
+    assertThrows(Throw.class, () -> suo.apply(Rational.of(+6, 5)));
   }
 
   @Test

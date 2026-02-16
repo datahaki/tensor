@@ -88,7 +88,7 @@ public interface Scalar extends Tensor {
    * than the use of the reciprocal.
    * 
    * <p>For zero().reciprocal() there are two possible outcomes
-   * 1) throw an exception, example {@link RationalScalar}
+   * 1) throw an exception, example {@link Rational}
    * 2) result is encoded as "Infinity", example {@link DoubleScalar}
    * 
    * <p>The inverse is subject to numerical constraints, for instance
@@ -134,7 +134,7 @@ public interface Scalar extends Tensor {
 
   /** classes should override this method only if consistency is guaranteed,
    * as is the case for instances of RealScalar:
-   * {@link RationalScalar}, {@link DoubleScalar}, {@link DecimalScalar}.
+   * {@link Rational}, {@link DoubleScalar}, {@link DecimalScalar}.
    * 
    * <p>{@link ComplexScalar} and {@link Quaternion} are represented by more
    * than a single number namely the real and imaginary part, Therefore

@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -44,14 +44,14 @@ import ch.alpine.tensor.sca.pow.Sqrt;
   @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     if (Scalars.lessEquals(RealScalar.ONE, alpha)) {
-      Scalar d = alpha.subtract(RationalScalar.THIRD);
+      Scalar d = alpha.subtract(Rational.THIRD);
       Scalar c = Sqrt.FUNCTION.apply(RealScalar.of(9).multiply(d)).reciprocal();
       while (true) {
         Scalar Z = RandomVariate.of(NormalDistribution.standard(), randomGenerator);
         Scalar U = RandomVariate.of(UniformDistribution.unit(), randomGenerator);
         Scalar v = Power.of(c.multiply(Z).add(RealScalar.ONE), 3);
         if (Sign.isPositive(v)) {
-          Scalar s0 = Z.multiply(Z).multiply(RationalScalar.HALF);
+          Scalar s0 = Z.multiply(Z).multiply(Rational.HALF);
           Scalar dv = d.multiply(v);
           Scalar res = s0.add(d).subtract(dv).add(Log.FUNCTION.apply(v).multiply(d));
           if (Scalars.lessThan(Log.FUNCTION.apply(U), res))

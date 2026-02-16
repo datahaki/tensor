@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -50,7 +50,7 @@ class SymmetrizeTest {
     Distribution distribution = UniformDistribution.unit();
     Tensor tensor = RandomVariate.of(distribution, 3, 3);
     Tensor symmet = Symmetrize.of(tensor);
-    Tolerance.CHOP.requireClose(symmet, tensor.add(Transpose.of(tensor)).multiply(RationalScalar.HALF));
+    Tolerance.CHOP.requireClose(symmet, tensor.add(Transpose.of(tensor)).multiply(Rational.HALF));
   }
 
   @Test
@@ -58,7 +58,7 @@ class SymmetrizeTest {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     Tensor tensor = RandomVariate.of(distribution, 3, 3);
     Tensor symmet = Symmetrize.of(tensor);
-    Tolerance.CHOP.requireClose(symmet, tensor.add(Transpose.of(tensor)).multiply(RationalScalar.HALF));
+    Tolerance.CHOP.requireClose(symmet, tensor.add(Transpose.of(tensor)).multiply(Rational.HALF));
     ExactTensorQ.require(symmet);
   }
 

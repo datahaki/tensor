@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -53,7 +53,7 @@ class ClipTest {
   void testRescaleDateTime() {
     Clip clip = Clips.interval(DateTime.of(2020, 1, 2, 3, 4), DateTime.of(2023, 6, 2, 13, 24));
     Scalar rescale = clip.rescale(DateTime.of(2021, 7, 8, 2, 7));
-    assertEquals(rescale, RationalScalar.of(796263, 1796300));
+    assertEquals(rescale, Rational.of(796263, 1796300));
   }
 
   @Test
@@ -91,7 +91,7 @@ class ClipTest {
     Scalar max = Quantity.of(2, "m");
     Clip clip = Clips.interval(min, max);
     assertEquals(clip.rescale(Quantity.of(-3, "m")), RealScalar.ZERO);
-    assertEquals(clip.rescale(Quantity.of(-1, "m")), RationalScalar.of(2, 5));
+    assertEquals(clip.rescale(Quantity.of(-1, "m")), Rational.of(2, 5));
     assertEquals(clip.rescale(Quantity.of(2, "m")), RealScalar.ONE);
     assertEquals(clip.rescale(Quantity.of(10, "m")), RealScalar.ONE);
     assertEquals(clip.min(), min);

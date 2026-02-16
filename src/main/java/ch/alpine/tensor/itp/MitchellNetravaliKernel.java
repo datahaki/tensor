@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
  * Reference:
  * https://en.wikipedia.org/wiki/Mitchell%E2%80%93Netravali_filters */
 public class MitchellNetravaliKernel implements ScalarUnaryOperator {
-  private static final ScalarUnaryOperator STANDARD = of(RationalScalar.THIRD, RationalScalar.THIRD);
+  private static final ScalarUnaryOperator STANDARD = of(Rational.THIRD, Rational.THIRD);
 
   /** @param b typically inside unit interval
    * @param c typically inside unit interval
@@ -54,7 +54,7 @@ public class MitchellNetravaliKernel implements ScalarUnaryOperator {
     Scalar y_3 = RealScalar.of(12) //
         .add(RealScalar.of(-9).multiply(b)) //
         .add(RealScalar.of(-6).multiply(c));
-    y = Polynomial.of(Tensors.of(y_0, y_0.zero(), y_2, y_3).multiply(RationalScalar.of(1, 6)));
+    y = Polynomial.of(Tensors.of(y_0, y_0.zero(), y_2, y_3).multiply(Rational.of(1, 6)));
     // ---
     Scalar z_0 = RealScalar.of(8).multiply(b) //
         .add(RealScalar.of(24).multiply(c));
@@ -64,7 +64,7 @@ public class MitchellNetravaliKernel implements ScalarUnaryOperator {
         .add(RealScalar.of(30).multiply(c));
     Scalar z_3 = b.negate() //
         .add(RealScalar.of(-6).multiply(c));
-    z = Polynomial.of(Tensors.of(z_0, z_1, z_2, z_3).multiply(RationalScalar.of(1, 6)));
+    z = Polynomial.of(Tensors.of(z_0, z_1, z_2, z_3).multiply(Rational.of(1, 6)));
   }
 
   @Override

@@ -39,8 +39,8 @@ class TensorDotTest {
   void testDot4() {
     Tensor c = Tensors.vectorLong(1, 2, 6);
     Tensor d = Tensors.vectorLong(3, 4, 5);
-    assertInstanceOf(RationalScalar.class, c.dot(d));
-    assertEquals(c.dot(d), RationalScalar.of(3 + 8 + 30, 1));
+    assertInstanceOf(Rational.class, c.dot(d));
+    assertEquals(c.dot(d), Rational.of(3 + 8 + 30, 1));
   }
 
   @Test
@@ -48,7 +48,7 @@ class TensorDotTest {
     Tensor c = Tensors.vectorDouble(1, 2, 6.);
     Tensor d = Tensors.vectorLong(3, 4, 5);
     assertInstanceOf(DoubleScalar.class, c.dot(d));
-    assertEquals(c.dot(d), RationalScalar.of(3 + 8 + 30, 1));
+    assertEquals(c.dot(d), Rational.of(3 + 8 + 30, 1));
   }
 
   @Test

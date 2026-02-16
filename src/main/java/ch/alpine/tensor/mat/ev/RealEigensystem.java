@@ -5,7 +5,7 @@ package ch.alpine.tensor.mat.ev;
 import java.io.Serializable;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -69,7 +69,7 @@ public class RealEigensystem implements Serializable {
         else {
           Scalar x0 = matrixT[i + 0][i + 0];
           Scalar x1 = matrixT[i + 1][i + 1];
-          Scalar half = x1.subtract(x0).multiply(RationalScalar.HALF);
+          Scalar half = x1.subtract(x0).multiply(Rational.HALF);
           Scalar zr = x0.add(half); // mean
           Scalar zi = Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(half.multiply(half).add(matrixT[i + 1][i].multiply(matrixT[i][i + 1]))));
           eigenvalues[i] = ComplexScalar.of(zr, zi);

@@ -118,7 +118,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   }
 
   /** implementation is used by {@link DoubleScalar},
-   * and is a fallback option for {@link RationalScalar}
+   * and is a fallback option for {@link Rational}
    * 
    * @return {@link ComplexScalar} if negative */
   protected Scalar _sqrt() {

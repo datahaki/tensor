@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -110,7 +110,7 @@ class ErlangDistributionTest {
   void testInverseCDF() {
     Distribution distribution = ErlangDistribution.of(3, 1.8);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    Scalar p = RationalScalar.of(3, 10);
+    Scalar p = Rational.of(3, 10);
     Scalar scalar = inverseCDF.quantile(p);
     CDF cdf = CDF.of(distribution);
     Scalar q = cdf.p_lessThan(scalar);

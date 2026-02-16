@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -33,7 +33,7 @@ class CubicInterpolationTest {
   @Test
   void testTuple() {
     Interpolation interpolation = CubicInterpolation.of(Tensors.vector(3, 5));
-    Scalar scalar = interpolation.At(RationalScalar.HALF);
+    Scalar scalar = interpolation.At(Rational.HALF);
     assertEquals(scalar, RealScalar.of(4));
     ExactScalarQ.require(scalar);
   }

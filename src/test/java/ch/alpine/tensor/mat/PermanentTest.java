@@ -8,7 +8,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -28,13 +28,13 @@ class PermanentTest {
   @Test
   void testHilbert() {
     Scalar scalar = Permanent.of(HilbertMatrix.of(5));
-    assertEquals(scalar, RationalScalar.of(32104903, 470400000)); // confirmed with mathematica
+    assertEquals(scalar, Rational.of(32104903, 470400000)); // confirmed with mathematica
   }
 
   @RepeatedTest(4)
   void testMin(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
-    Tensor matrix = ConstantArray.of(RationalScalar.of(1, n), n, n);
+    Tensor matrix = ConstantArray.of(Rational.of(1, n), n, n);
     Scalar scalar = Permanent.of(matrix);
     assertEquals(scalar, Factorial.of(n).divide(Power.of(n, n)));
   }

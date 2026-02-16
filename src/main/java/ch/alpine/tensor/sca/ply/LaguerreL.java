@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalInt;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -49,8 +49,8 @@ public enum LaguerreL {
    * @return
    * @throws Exception if given parameters are not supported */
   public static Scalar of(Scalar n, Scalar x) {
-    if (n.equals(RationalScalar.HALF)) {
-      Scalar x2 = x.multiply(RationalScalar.HALF);
+    if (n.equals(Rational.HALF)) {
+      Scalar x2 = x.multiply(Rational.HALF);
       Scalar s1 = x.multiply(BesselI._1(x2));
       Scalar s2 = x.subtract(RealScalar.ONE).multiply(BesselI._0(x2));
       return s1.subtract(s2).multiply(Exp.FUNCTION.apply(x2));

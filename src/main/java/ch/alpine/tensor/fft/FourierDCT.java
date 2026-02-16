@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.fft;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -57,16 +57,16 @@ public enum FourierDCT implements DiscreteFourierTransform {
     public Tensor matrix(int n) {
       if (Integers.requirePositive(n) == 1)
         return IdentityMatrix.of(1);
-      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(2, n - 1));
+      Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(2, n - 1));
       Tensor matrix = Tensors.reserve(n);
-      matrix.append(ConstantArray.of(RationalScalar.HALF, n));
+      matrix.append(ConstantArray.of(Rational.HALF, n));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n - 1));
       for (int i = 1; i < n - 1; ++i) {
         int fi = i;
         matrix.append(Tensors.vector(j -> Cos.FUNCTION.apply(factor.multiply(RealScalar.of(fi * j))), n));
       }
-      Scalar neg_half = RationalScalar.HALF.negate();
-      matrix.append(Tensors.vector(i -> i % 2 == 0 ? RationalScalar.HALF : neg_half, n));
+      Scalar neg_half = Rational.HALF.negate();
+      matrix.append(Tensors.vector(i -> i % 2 == 0 ? Rational.HALF : neg_half, n));
       return Transpose.of(matrix.multiply(scalar));
     }
 
@@ -85,7 +85,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
 
     @Override
     public Tensor matrix(int n) {
-      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+      Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(1, Integers.requirePositive(n)));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + n));
       return Tensors.matrix((i, j) -> //
       Cos.FUNCTION.apply(RealScalar.of((j + j + 1) * i).multiply(factor)).multiply(scalar), n, n);
@@ -106,8 +106,8 @@ public enum FourierDCT implements DiscreteFourierTransform {
 
     @Override
     public Tensor matrix(int n) {
-      Scalar s1 = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
-      Scalar s2 = Sqrt.FUNCTION.apply(RationalScalar.of(4, n));
+      Scalar s1 = Sqrt.FUNCTION.apply(Rational.of(1, Integers.requirePositive(n)));
+      Scalar s2 = Sqrt.FUNCTION.apply(Rational.of(4, n));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(n + n));
       return Tensors.matrix((i, j) -> //
       j == 0 ? s1 : Cos.FUNCTION.apply(RealScalar.of(j * (i + i + 1)).multiply(factor)).multiply(s2), n, n);
@@ -122,7 +122,7 @@ public enum FourierDCT implements DiscreteFourierTransform {
   _4 {
     @Override
     public Tensor matrix(int n) {
-      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(2, Integers.requirePositive(n)));
+      Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(2, Integers.requirePositive(n)));
       Scalar factor = Pi.VALUE.divide(RealScalar.of(4 * n));
       return Tensors.matrix((i, j) -> //
       Cos.FUNCTION.apply(RealScalar.of((i + i + 1) * (j + j + 1)).multiply(factor)).multiply(scalar), n, n);

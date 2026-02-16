@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -207,7 +207,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
       return Sqrt.FUNCTION.apply(alpha_inv.multiply(b.subtract(a)).multiply(p)).add(a);
     // yB < y <= yC
     if (Scalars.lessEquals(p, yC))
-      return p.multiply(alpha_inv).add(a).add(b).multiply(RationalScalar.HALF);
+      return p.multiply(alpha_inv).add(a).add(b).multiply(Rational.HALF);
     // yC < y
     return d.subtract(Sqrt.FUNCTION.apply( //
         RealScalar.ONE.subtract(p).multiply(alpha_inv).multiply(d.subtract(c))));

@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -32,7 +32,7 @@ class GaussianWindowTest {
 
   @Test
   void testCustom() throws ClassNotFoundException, IOException {
-    ScalarUnaryOperator copy = Serialization.copy(GaussianWindow.of(RationalScalar.of(2, 10)));
+    ScalarUnaryOperator copy = Serialization.copy(GaussianWindow.of(Rational.of(2, 10)));
     Scalar apply = copy.apply(RealScalar.of(0.4));
     Scalar exact = RealScalar.of(0.13533528323661262);
     Tolerance.CHOP.requireClose(apply, exact);

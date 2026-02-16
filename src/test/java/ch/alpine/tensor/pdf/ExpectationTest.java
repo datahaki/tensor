@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -57,8 +57,8 @@ class ExpectationTest {
   @Test
   void testExact() {
     _check(DiscreteUniformDistribution.of(4, 10));
-    _check(BernoulliDistribution.of(RationalScalar.of(2, 7)));
-    _check(BinomialDistribution.of(10, RationalScalar.of(3, 7)));
+    _check(BernoulliDistribution.of(Rational.of(2, 7)));
+    _check(BinomialDistribution.of(10, Rational.of(3, 7)));
     _check(HypergeometricDistribution.of(10, 40, 100));
     _check(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(3, 2, 1, 4)));
   }
@@ -86,7 +86,7 @@ class ExpectationTest {
 
   @Test
   void testNumeric() {
-    _check(PoissonDistribution.of(RationalScalar.of(4, 3)));
+    _check(PoissonDistribution.of(Rational.of(4, 3)));
     _check(GeometricDistribution.of(RealScalar.of(0.3)));
     _check(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(3, 0.2, 1, 0.4)));
   }

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -27,7 +27,7 @@ class BinCountsTest {
   @Test
   void testWidthHalf() {
     Tensor values = Tensors.vector(6, 7, 1, 2, 3, 4, 2);
-    Tensor hist = BinCounts.of(values, RationalScalar.of(1, 2));
+    Tensor hist = BinCounts.of(values, Rational.of(1, 2));
     assertEquals(hist, Tensors.fromString("{0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1}"));
     assertEquals(Total.ofVector(hist).number().intValue(), values.length());
   }

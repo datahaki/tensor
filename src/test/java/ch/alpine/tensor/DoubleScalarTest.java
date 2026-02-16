@@ -22,7 +22,7 @@ class DoubleScalarTest {
   @Test
   void testZero() {
     assertEquals(RealScalar.ZERO, DoubleScalar.of(0));
-    assertFalse(DoubleScalar.of(0) instanceof RationalScalar);
+    assertFalse(DoubleScalar.of(0) instanceof Rational);
   }
 
   @Test
@@ -54,7 +54,7 @@ class DoubleScalarTest {
   @Test
   void testEquality() {
     assertEquals(RealScalar.ONE, DoubleScalar.of(1));
-    assertEquals(DoubleScalar.of(1), RationalScalar.of(1, 1));
+    assertEquals(DoubleScalar.of(1), Rational.of(1, 1));
     assertEquals(DoubleScalar.of(1), RealScalar.of(1));
   }
 

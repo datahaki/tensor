@@ -3,7 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -47,12 +47,12 @@ public class EqualizingDistribution extends AbstractContinuousDistribution imple
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return categoricalDistribution.mean().add(RationalScalar.HALF);
+    return categoricalDistribution.mean().add(Rational.HALF);
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return Expectation.variance(categoricalDistribution).add(RationalScalar.of(1, 12));
+    return Expectation.variance(categoricalDistribution).add(Rational.of(1, 12));
   }
 
   @Override // from CDF

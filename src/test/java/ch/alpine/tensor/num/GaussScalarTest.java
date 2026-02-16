@@ -22,7 +22,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -120,7 +120,7 @@ class GaussScalarTest {
     Scalar a = GaussScalar.of(4, 7);
     Scalar s = GaussScalar.of(2, 7);
     Scalar r1 = Sqrt.FUNCTION.apply(a);
-    Scalar r2 = Power.of(a, RationalScalar.HALF);
+    Scalar r2 = Power.of(a, Rational.HALF);
     assertEquals(r1, s);
     assertEquals(r2, s);
   }
@@ -386,7 +386,7 @@ class GaussScalarTest {
   void testPowerFail2() {
     Scalar scalar = GaussScalar.of(2, 7);
     assertThrows(Throw.class, () -> Power.of(scalar, 2.3));
-    assertThrows(Throw.class, () -> Power.of(scalar, RationalScalar.of(2, 3)));
+    assertThrows(Throw.class, () -> Power.of(scalar, Rational.of(2, 3)));
   }
 
   @Test

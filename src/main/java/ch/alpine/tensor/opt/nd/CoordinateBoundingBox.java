@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -105,7 +105,7 @@ public class CoordinateBoundingBox implements Serializable {
   }
 
   private static Scalar median(Clip clip) {
-    return clip.min().add(clip.width().multiply(RationalScalar.HALF));
+    return clip.min().add(clip.width().multiply(Rational.HALF));
   }
 
   // ---

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.red;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
@@ -31,7 +31,7 @@ public enum GeometricMean {
    * @return average of entries in tensor
    * @throws ArithmeticException if tensor is empty */
   public static Tensor of(Tensor tensor) {
-    return tensor.maps(Power.function(RationalScalar.of(1, tensor.length()))) //
+    return tensor.maps(Power.function(Rational.of(1, tensor.length()))) //
         .stream().reduce(Times::of).orElseThrow();
   }
 }

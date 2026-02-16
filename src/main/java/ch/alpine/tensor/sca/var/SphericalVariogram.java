@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca.var;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -45,9 +45,9 @@ public class SphericalVariogram implements ScalarUnaryOperator {
     this.b = b;
     series = Polynomial.of(Tensors.of( //
         RealScalar.ZERO, //
-        RationalScalar.of(+3, 2), //
+        Rational.of(+3, 2), //
         RealScalar.ZERO, //
-        RationalScalar.of(-1, 2)).multiply(b));
+        Rational.of(-1, 2)).multiply(b));
   }
 
   @Override

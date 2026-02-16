@@ -9,7 +9,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -67,7 +67,7 @@ class SchattenNormTest {
 
   @Test
   void testFormatFail() {
-    TensorScalarFunction tensorScalarFunction = SchattenNorm.of(RationalScalar.of(3, 2));
+    TensorScalarFunction tensorScalarFunction = SchattenNorm.of(Rational.of(3, 2));
     assertThrows(ClassCastException.class, () -> tensorScalarFunction.apply(LeviCivitaTensor.of(3)));
     assertThrows(Exception.class, () -> tensorScalarFunction.apply(Tensors.vector(1, 2, 3)));
     assertThrows(Exception.class, () -> tensorScalarFunction.apply(Tensors.empty()));

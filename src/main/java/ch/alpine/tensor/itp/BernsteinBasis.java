@@ -4,7 +4,7 @@ package ch.alpine.tensor.itp;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -33,7 +33,7 @@ public enum BernsteinBasis {
    * @throws Exception if p is not an instance of {@link RealScalar} */
   public static Tensor of(int n, Scalar p) {
     Integers.requirePositiveOrZero(n);
-    boolean reverse = Scalars.lessThan(RationalScalar.HALF, p);
+    boolean reverse = Scalars.lessThan(Rational.HALF, p);
     if (reverse)
       p = p.one().subtract(p);
     Scalar _1_p = p.one().subtract(p); // 1 - p
@@ -42,7 +42,7 @@ public enum BernsteinBasis {
     list.add(last);
     Scalar pratio = p.divide(_1_p);
     for (int k = 1; k <= n; ++k)
-      list.add(last = last.multiply(RationalScalar.of(n - k + 1, k).multiply(pratio)));
+      list.add(last = last.multiply(Rational.of(n - k + 1, k).multiply(pratio)));
     return Unprotect.using(reverse ? list.reversed() : list);
   }
 }

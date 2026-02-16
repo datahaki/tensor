@@ -46,15 +46,15 @@ class TensorsTest {
     Tensor vector = Tensors.vectorLong(2, 3, 4, 5);
     ExactTensorQ.require(vector);
     Scalar scalar = (Scalar) vector.dot(vector);
-    assertEquals(scalar, RationalScalar.of(4 + 9 + 16 + 25, 1));
+    assertEquals(scalar, Rational.of(4 + 9 + 16 + 25, 1));
     ExactScalarQ.require(scalar);
   }
 
   @Test
   void testNorm2() {
-    Tensor a = Tensors.of(RationalScalar.of(2, 3), RationalScalar.of(4, 5));
+    Tensor a = Tensors.of(Rational.of(2, 3), Rational.of(4, 5));
     Scalar s = (Scalar) a.dot(a);
-    assertEquals(s, RationalScalar.of(244, 225));
+    assertEquals(s, Rational.of(244, 225));
   }
 
   @Test
@@ -63,10 +63,10 @@ class TensorsTest {
     int m = 12;
     RandomGenerator random = ThreadLocalRandom.current();
     Tensor A = Tensors.matrix((_, _) -> //
-    RationalScalar.of( //
+    Rational.of( //
         random.nextInt(100) - 50, //
         random.nextInt(100) + 1), n, m);
-    Tensor c = Tensors.vector(_ -> RationalScalar.of(1, 1), n);
+    Tensor c = Tensors.vector(_ -> Rational.of(1, 1), n);
     assertEquals(Total.of(A), c.dot(A));
   }
 
@@ -75,14 +75,14 @@ class TensorsTest {
     Tensor p = Tensors.vector(Arrays.asList(3, 4, -5, 6));
     Tensor q = Tensors.vector(3, 4, -5, 6);
     Tensor r = Tensors.vector(3.0, 4.0, -5.0, 6.0);
-    assertInstanceOf(RationalScalar.class, p.Get(0));
-    assertInstanceOf(RationalScalar.class, p.Get(1));
-    assertInstanceOf(RationalScalar.class, p.Get(2));
-    assertInstanceOf(RationalScalar.class, p.Get(3));
-    assertInstanceOf(RationalScalar.class, q.Get(0));
-    assertInstanceOf(RationalScalar.class, q.Get(1));
-    assertInstanceOf(RationalScalar.class, q.Get(2));
-    assertInstanceOf(RationalScalar.class, q.Get(3));
+    assertInstanceOf(Rational.class, p.Get(0));
+    assertInstanceOf(Rational.class, p.Get(1));
+    assertInstanceOf(Rational.class, p.Get(2));
+    assertInstanceOf(Rational.class, p.Get(3));
+    assertInstanceOf(Rational.class, q.Get(0));
+    assertInstanceOf(Rational.class, q.Get(1));
+    assertInstanceOf(Rational.class, q.Get(2));
+    assertInstanceOf(Rational.class, q.Get(3));
     assertEquals(p, q);
     assertEquals(p, r);
   }
@@ -104,7 +104,7 @@ class TensorsTest {
   void testNumber() {
     Tensor p = Tensors.vector(Arrays.asList(3, 4, 5.3, 6));
     Tensor q = Tensors.vector(3, 4, 5.3, 6);
-    assertInstanceOf(RationalScalar.class, p.Get(0));
+    assertInstanceOf(Rational.class, p.Get(0));
     assertEquals(p, q);
   }
 

@@ -11,7 +11,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -31,17 +31,17 @@ import ch.alpine.tensor.sca.Chop;
 class GeometricDistributionTest {
   @Test
   void testPdf() {
-    PDF pdf = PDF.of(GeometricDistribution.of(RationalScalar.of(1, 3)));
-    assertEquals(pdf.at(RealScalar.ZERO), RationalScalar.of(1, 3));
-    assertEquals(pdf.at(RealScalar.of(1)), RationalScalar.of(2, 9));
-    assertEquals(pdf.at(RealScalar.of(2)), RationalScalar.of(4, 27));
-    assertEquals(pdf.at(RealScalar.of(1)), RationalScalar.of(1, 3).multiply(RationalScalar.of(2, 3)));
-    assertEquals(pdf.at(RealScalar.of(2)), RationalScalar.of(1, 3).multiply(RationalScalar.of(4, 9)));
+    PDF pdf = PDF.of(GeometricDistribution.of(Rational.of(1, 3)));
+    assertEquals(pdf.at(RealScalar.ZERO), Rational.of(1, 3));
+    assertEquals(pdf.at(RealScalar.of(1)), Rational.of(2, 9));
+    assertEquals(pdf.at(RealScalar.of(2)), Rational.of(4, 27));
+    assertEquals(pdf.at(RealScalar.of(1)), Rational.of(1, 3).multiply(Rational.of(2, 3)));
+    assertEquals(pdf.at(RealScalar.of(2)), Rational.of(1, 3).multiply(Rational.of(4, 9)));
   }
 
   @Test
   void testNarrow() throws ClassNotFoundException, IOException {
-    final Scalar p = RationalScalar.of(1, 19);
+    final Scalar p = Rational.of(1, 19);
     GeometricDistribution distribution = //
         (GeometricDistribution) Serialization.copy(GeometricDistribution.of(p));
     PDF pdf = PDF.of(distribution);
@@ -88,13 +88,13 @@ class GeometricDistributionTest {
 
   @Test
   void testOutside() {
-    PDF pdf = PDF.of(GeometricDistribution.of(RationalScalar.of(1, 3)));
+    PDF pdf = PDF.of(GeometricDistribution.of(Rational.of(1, 3)));
     assertEquals(pdf.at(RealScalar.of(-1)), RealScalar.ZERO);
   }
 
   @Test
   void testInverseCDF() {
-    Distribution distribution = GeometricDistribution.of(RationalScalar.of(1, 3));
+    Distribution distribution = GeometricDistribution.of(Rational.of(1, 3));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertEquals(inverseCDF.quantile(DoubleScalar.of(1)), DoubleScalar.POSITIVE_INFINITY);
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
@@ -102,7 +102,7 @@ class GeometricDistributionTest {
 
   @Test
   void testToString() {
-    Distribution distribution = GeometricDistribution.of(RationalScalar.of(1, 3));
+    Distribution distribution = GeometricDistribution.of(Rational.of(1, 3));
     assertEquals(distribution.toString(), "GeometricDistribution[1/3]");
   }
 
@@ -147,7 +147,7 @@ class GeometricDistributionTest {
   @Test
   void testQuantity() {
     assertThrows(Throw.class, () -> GeometricDistribution.of(Quantity.of(2, "s")));
-    final Scalar p = RationalScalar.of(1, 19);
+    final Scalar p = Rational.of(1, 19);
     GeometricDistribution distribution = (GeometricDistribution) GeometricDistribution.of(p);
     try {
       distribution.at(Quantity.of(-2, "s")); // for now this returns 0

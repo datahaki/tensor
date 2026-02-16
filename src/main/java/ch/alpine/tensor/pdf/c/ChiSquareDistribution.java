@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.util.OptionalInt;
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -48,7 +48,7 @@ public class ChiSquareDistribution extends GammaDistribution {
   private final int n;
 
   private ChiSquareDistribution(int n) {
-    super(RationalScalar.of(n, 2), TWO);
+    super(Rational.of(n, 2), TWO);
     this.n = n;
   }
 

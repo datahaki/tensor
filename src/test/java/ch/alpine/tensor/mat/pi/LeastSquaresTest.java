@@ -13,7 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -130,7 +130,7 @@ class LeastSquaresTest {
   @Test
   void testFullRank() {
     Tensor m = Tensors.matrix( //
-        (i, j) -> RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j), 4, 3);
+        (i, j) -> Rational.of(2 * i + 2 + j, 1 + 9 * i + j), 4, 3);
     Tensor b = Tensors.vector(1, 1, 1, 1);
     Tensor x1 = PseudoInverse.usingCholesky(m).dot(b);
     Tensor x2 = LeastSquares.usingSvd(m, b);
@@ -143,7 +143,7 @@ class LeastSquaresTest {
   @Test
   void testLowRank() {
     Tensor m = Tensors.matrix( //
-        (i, j) -> RationalScalar.of(2 * i + j, 9 + j), 4, 3);
+        (i, j) -> Rational.of(2 * i + j, 9 + j), 4, 3);
     assertEquals(MatrixRank.of(m), 2);
     Tensor b = Tensors.vector(1, 1, 1, 1);
     Tensor x2 = LeastSquares.usingSvd(m, b);
@@ -154,7 +154,7 @@ class LeastSquaresTest {
   void testFullRankComplex() {
     Tensor m = Tensors.matrix( //
         (i, j) -> ComplexScalar.of( //
-            RealScalar.of(i), RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j)),
+            RealScalar.of(i), Rational.of(2 * i + 2 + j, 1 + 9 * i + j)),
         4, 3);
     assertEquals(MatrixRank.of(m), 3);
     Tensor b = Tensors.vector(1, 1, 1, 1);
@@ -176,7 +176,7 @@ class LeastSquaresTest {
   void testFullRankComplex2() {
     Tensor m = Tensors.matrix( //
         (i, j) -> ComplexScalar.of( //
-            RealScalar.of(18 * i + j * 100), RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j)),
+            RealScalar.of(18 * i + j * 100), Rational.of(2 * i + 2 + j, 1 + 9 * i + j)),
         4, 3);
     assertEquals(MatrixRank.of(m), 3);
     Tensor pinv1 = PseudoInverse.usingCholesky(m);

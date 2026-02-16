@@ -12,7 +12,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -31,9 +31,9 @@ import ch.alpine.tensor.sca.Sign;
 class MixtureDistributionTest {
   @Test
   void testSimple() throws ClassNotFoundException, IOException {
-    Distribution d = BernoulliDistribution.of(RationalScalar.HALF);
+    Distribution d = BernoulliDistribution.of(Rational.HALF);
     Distribution d1 = Serialization.copy(MixtureDistribution.of(Tensors.vector(1, 2, 3), d, d, d));
-    Distribution d2 = BernoulliDistribution.of(RationalScalar.HALF);
+    Distribution d2 = BernoulliDistribution.of(Rational.HALF);
     Tensor domain = Range.of(-1, 3);
     assertEquals(domain.maps(PDF.of(d1)::at), domain.maps(PDF.of(d2)::at));
   }
@@ -59,7 +59,7 @@ class MixtureDistributionTest {
   void testMixDiscreteCont() {
     Distribution distribution = MixtureDistribution.of(Tensors.vector(1, 1), //
         NormalDistribution.of(0, 1), //
-        BernoulliDistribution.of(RationalScalar.HALF));
+        BernoulliDistribution.of(Rational.HALF));
     Tensor tensor = RandomVariate.of(distribution, 1000);
     Map<Scalar, Long> map = Tally.of(tensor.stream().map(Scalar.class::cast).filter(ExactScalarQ::of));
     assertTrue(150 < map.get(RealScalar.ZERO));

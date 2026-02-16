@@ -17,7 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -55,7 +55,7 @@ class UniformDistributionTest {
   void testCdf() {
     CDF cdf = CDF.of(UniformDistribution.of(RealScalar.ONE, RealScalar.of(3)));
     assertEquals(cdf.p_lessThan(RealScalar.ONE), RealScalar.ZERO);
-    assertEquals(cdf.p_lessThan(RealScalar.of(2)), RationalScalar.of(1, 2));
+    assertEquals(cdf.p_lessThan(RealScalar.of(2)), Rational.of(1, 2));
     assertEquals(cdf.p_lessThan(RealScalar.of(3)), RealScalar.ONE);
     assertEquals(cdf.p_lessThan(RealScalar.of(4)), RealScalar.ONE);
     Scalar prob = cdf.p_lessThan(RealScalar.of(2));
@@ -73,7 +73,7 @@ class UniformDistributionTest {
       Scalar value = pdf.at(clip.min());
       Tensor coeffs = Tensors.of(value, value.multiply(Unprotect.zero_negateUnit(clip.min())));
       Polynomial polynomial = Polynomial.of(coeffs);
-      Clip center = Clips.absolute(clip.width().multiply(RationalScalar.HALF));
+      Clip center = Clips.absolute(clip.width().multiply(Rational.HALF));
       Scalar moment = polynomial.moment(order, center);
       assertEquals(uni, moment);
     }
@@ -91,7 +91,7 @@ class UniformDistributionTest {
     Distribution distribution = UniformDistribution.of(Clips.positive(Quantity.of(2, "m")));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(Quantity.of(-1, "m")), Quantity.of(0, "m^-1"));
-    assertEquals(pdf.at(Quantity.of(+1, "m")), Quantity.of(RationalScalar.HALF, "m^-1"));
+    assertEquals(pdf.at(Quantity.of(+1, "m")), Quantity.of(Rational.HALF, "m^-1"));
   }
 
   @Test
@@ -100,15 +100,15 @@ class UniformDistributionTest {
     assertEquals(distribution.support(), Clips.interval(1, 3));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
-    assertEquals(pdf.at(RealScalar.of(1)), RationalScalar.HALF);
-    assertEquals(pdf.at(RealScalar.of(2)), RationalScalar.HALF);
-    assertEquals(pdf.at(RealScalar.of(3)), RationalScalar.HALF);
+    assertEquals(pdf.at(RealScalar.of(1)), Rational.HALF);
+    assertEquals(pdf.at(RealScalar.of(2)), Rational.HALF);
+    assertEquals(pdf.at(RealScalar.of(3)), Rational.HALF);
     assertEquals(pdf.at(DoubleScalar.POSITIVE_INFINITY), RealScalar.ZERO);
     assertEquals(CentralMoment.of(distribution, 3), RealScalar.ZERO);
     assertEquals(CentralMoment.of(distribution, 5), RealScalar.ZERO);
     // ---
-    assertEquals(CentralMoment.of(distribution, 4), RationalScalar.of(1, 5));
-    assertEquals(CentralMoment.of(distribution, 6), RationalScalar.of(1, 7));
+    assertEquals(CentralMoment.of(distribution, 4), Rational.of(1, 5));
+    assertEquals(CentralMoment.of(distribution, 6), Rational.of(1, 7));
     TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
@@ -116,8 +116,8 @@ class UniformDistributionTest {
   void testUnit() throws ClassNotFoundException, IOException {
     UniformDistribution distribution = //
         (UniformDistribution) Serialization.copy(UniformDistribution.unit());
-    assertEquals(distribution.mean(), RationalScalar.of(1, 2));
-    assertEquals(distribution.variance(), RationalScalar.of(1, 12));
+    assertEquals(distribution.mean(), Rational.of(1, 2));
+    assertEquals(distribution.variance(), Rational.of(1, 12));
   }
 
   @Test
@@ -145,17 +145,17 @@ class UniformDistributionTest {
       QuantityMagnitude.SI().in(Unit.of("lb^-1")).apply(prob);
       assertEquals(prob.toString(), "1/2[g^-1]");
     }
-    assertEquals(CDF.of(distribution).p_lessEquals(mean), RationalScalar.of(1, 2));
+    assertEquals(CDF.of(distribution).p_lessEquals(mean), Rational.of(1, 2));
   }
 
   @Test
   void testQuantile() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(6, "g"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertEquals(inverseCDF.quantile(RationalScalar.of(0, 3)), Quantity.of(3, "g"));
-    assertEquals(inverseCDF.quantile(RationalScalar.of(1, 3)), Quantity.of(4, "g"));
-    assertEquals(inverseCDF.quantile(RationalScalar.of(2, 3)), Quantity.of(5, "g"));
-    assertEquals(inverseCDF.quantile(RationalScalar.of(3, 3)), Quantity.of(6, "g"));
+    assertEquals(inverseCDF.quantile(Rational.of(0, 3)), Quantity.of(3, "g"));
+    assertEquals(inverseCDF.quantile(Rational.of(1, 3)), Quantity.of(4, "g"));
+    assertEquals(inverseCDF.quantile(Rational.of(2, 3)), Quantity.of(5, "g"));
+    assertEquals(inverseCDF.quantile(Rational.of(3, 3)), Quantity.of(6, "g"));
   }
 
   @Test
@@ -191,7 +191,7 @@ class UniformDistributionTest {
   @Test
   void testMatchTrapezoidalUnit() {
     Scalar a = Quantity.of(4, "m");
-    Scalar b = Quantity.of(RationalScalar.of(5 * 3 + 1, 3), "m"); // == 5.3333...
+    Scalar b = Quantity.of(Rational.of(5 * 3 + 1, 3), "m"); // == 5.3333...
     Distribution d1 = UniformDistribution.of(Clips.interval(a, b));
     Distribution d2 = TrapezoidalDistribution.of(a, a, b, b);
     assertEquals(Mean.of(d1), Mean.of(d2));
@@ -227,7 +227,7 @@ class UniformDistributionTest {
     Scalar x = DateTime.of(1970, 1, 1, 0, 0);
     assertEquals(pdf.at(x), Scalars.fromString("1/631152000[s^-1]"));
     CDF cdf = CDF.of(distribution);
-    assertEquals(cdf.p_lessThan(x), RationalScalar.of(3653, 7305));
+    assertEquals(cdf.p_lessThan(x), Rational.of(3653, 7305));
     assertEquals(Variance.of(distribution), CentralMoment.of(distribution, 2));
     assertEquals(CentralMoment.of(distribution, 3), Quantity.of(0, "s^3"));
     assertEquals(CentralMoment.of(distribution, 4), Scalars.fromString("1983562384948285014835200000000000[s^4]"));
@@ -241,7 +241,7 @@ class UniformDistributionTest {
     PDF pdf = PDF.of(distribution);
     Scalar x0 = lo;
     Scalar p = pdf.at(x0);
-    assertEquals(p, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+    assertEquals(p, Quantity.of(Rational.of(1000000000, 3), "s^-1"));
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessEquals(hi), RealScalar.ONE);
     assertEquals(InverseCDF.of(distribution).quantile(RealScalar.ONE), hi);
@@ -250,9 +250,9 @@ class UniformDistributionTest {
       Scalar p0 = pdf.at(x0);
       Scalar p1 = pdf.at(x0.add(dt));
       Scalar p2 = pdf.at(x0.add(Quantity.of(2, "ns")));
-      assertEquals(p0, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
-      assertEquals(p1, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
-      assertEquals(p2, Quantity.of(RationalScalar.of(1000000000, 3), "s^-1"));
+      assertEquals(p0, Quantity.of(Rational.of(1000000000, 3), "s^-1"));
+      assertEquals(p1, Quantity.of(Rational.of(1000000000, 3), "s^-1"));
+      assertEquals(p2, Quantity.of(Rational.of(1000000000, 3), "s^-1"));
       Tensor vector = Tensors.of( //
           p0.multiply(dt), //
           p1.multiply(dt), //

@@ -10,7 +10,7 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -46,8 +46,8 @@ class EqualizingDistributionTest {
     assertEquals(domain, domain.maps(cdf::p_lessEquals));
     PDF pdf = PDF.of(distribution);
     assertEquals(domain.maps(pdf::at), Tensors.vector(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0));
-    assertEquals(Mean.of(distribution), RationalScalar.HALF);
-    assertEquals(Variance.of(distribution), RationalScalar.of(1, 12));
+    assertEquals(Mean.of(distribution), Rational.HALF);
+    assertEquals(Variance.of(distribution), Rational.of(1, 12));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertEquals(domain.maps(inverseCDF::quantile), domain);
     RandomVariate.of(distribution, 30).maps(Clips.unit()::requireInside);
@@ -65,7 +65,7 @@ class EqualizingDistributionTest {
     assertEquals(Last.of(linear), RealScalar.of(30));
     Tensor uniform = Differences.of(linear);
     ExactTensorQ.require(uniform);
-    assertEquals(Tally.of(uniform), Collections.singletonMap(RationalScalar.of(33, 10), 10L));
+    assertEquals(Tally.of(uniform), Collections.singletonMap(Rational.of(33, 10), 10L));
     assertTrue(distribution.toString().startsWith("EqualizingDistribution"));
   }
 
@@ -87,10 +87,10 @@ class EqualizingDistributionTest {
     TestMarkovChebyshev.monotonous(distribution);
     UnivariateDistribution ud = (UnivariateDistribution) distribution;
     assertEquals(ud.support(), Clips.interval(0, 3));
-    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(1)), RationalScalar.of(3, 6));
-    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(2)), RationalScalar.of(5, 6));
-    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(3)), RationalScalar.of(6, 6));
-    assertEquals(CDF.of(distribution).p_lessThan(RealScalar.of(3)), RationalScalar.of(6, 6));
+    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(1)), Rational.of(3, 6));
+    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(2)), Rational.of(5, 6));
+    assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(3)), Rational.of(6, 6));
+    assertEquals(CDF.of(distribution).p_lessThan(RealScalar.of(3)), Rational.of(6, 6));
   }
 
   @Test

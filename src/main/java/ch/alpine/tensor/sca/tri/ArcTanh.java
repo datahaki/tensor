@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -22,7 +22,7 @@ public enum ArcTanh implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    return RationalScalar.HALF.multiply( //
+    return Rational.HALF.multiply( //
         Log.FUNCTION.apply(RealScalar.ONE.add(scalar)).subtract( //
             Log.FUNCTION.apply(RealScalar.ONE.subtract(scalar))));
   }

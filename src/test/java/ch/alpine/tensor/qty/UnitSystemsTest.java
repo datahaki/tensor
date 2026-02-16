@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
@@ -92,7 +92,7 @@ class UnitSystemsTest {
   void testEquivalentMinutes() {
     UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "s", "min");
     assertEquals(unitSystem.apply(Quantity.of(1, "h")), Quantity.of(60, "min"));
-    assertEquals(unitSystem.map().get("s"), Quantity.of(RationalScalar.of(1, 60), "min"));
+    assertEquals(unitSystem.map().get("s"), Quantity.of(Rational.of(1, 60), "min"));
     assertFalse(unitSystem.map().containsKey("min"));
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet())
       assertFalse(QuantityUnit.of(entry.getValue()).map().containsKey("s"));
@@ -109,7 +109,7 @@ class UnitSystemsTest {
   void testEquivalentKilometers() {
     UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "km");
     Scalar scalar = Quantity.of(1, "N");
-    assertEquals(unitSystem.apply(scalar), Quantity.of(RationalScalar.of(1, 1000), "kg*km*s^-2"));
+    assertEquals(unitSystem.apply(scalar), Quantity.of(Rational.of(1, 1000), "kg*km*s^-2"));
   }
 
   @Test

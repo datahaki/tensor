@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -38,7 +38,7 @@ class DegreeTest {
 
   @Test
   void testTurns() {
-    assertEquals(UnitSystem.SI().apply(Quantity.of(RationalScalar.HALF, turns)), Pi.VALUE);
+    assertEquals(UnitSystem.SI().apply(Quantity.of(Rational.HALF, turns)), Pi.VALUE);
     assertEquals(QuantityMagnitude.SI().in(Unit.ONE).apply(Quantity.of(1, turns)), Pi.TWO);
   }
 

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -50,8 +50,8 @@ public class FRatioDistribution implements Distribution, //
   private FRatioDistribution(Scalar n, Scalar m) {
     this.n = n;
     this.m = m;
-    Scalar n2 = n.multiply(RationalScalar.HALF);
-    Scalar m2 = m.multiply(RationalScalar.HALF);
+    Scalar n2 = n.multiply(Rational.HALF);
+    Scalar m2 = m.multiply(Rational.HALF);
     scale = Beta.of(n2, m2);
     f1 = Power.of(n, n2);
     f2 = Power.of(m, m2);

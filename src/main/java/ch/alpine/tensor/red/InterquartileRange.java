@@ -1,7 +1,7 @@
 // code by gjoel
 package ch.alpine.tensor.red;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.VectorQ;
@@ -17,8 +17,8 @@ import ch.alpine.tensor.pdf.InverseCDF;
  * <a href="https://reference.wolfram.com/language/ref/InterquartileRange.html">InterquartileRange</a> */
 public enum InterquartileRange {
   ;
-  private static final Scalar LO = RationalScalar.of(1, 4);
-  private static final Scalar HI = RationalScalar.of(3, 4);
+  private static final Scalar LO = Rational.of(1, 4);
+  private static final Scalar HI = Rational.of(3, 4);
 
   /** Example:
    * <code>InterquartileRange[{0, 1, 2, 3, 10}] == 2</code>

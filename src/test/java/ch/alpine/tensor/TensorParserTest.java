@@ -25,9 +25,9 @@ class TensorParserTest {
   @Test
   void testScalar() {
     assertEquals(Tensors.fromString("123"), RealScalar.of(123));
-    assertEquals(Tensors.fromString("5/4[A]"), Quantity.of(RationalScalar.of(5, 4), "A"));
+    assertEquals(Tensors.fromString("5/4[A]"), Quantity.of(Rational.of(5, 4), "A"));
     assertEquals(Tensors.fromString("-3"), RealScalar.of(-3));
-    assertEquals(Tensors.fromString("3/19"), RationalScalar.of(3, 19));
+    assertEquals(Tensors.fromString("3/19"), Rational.of(3, 19));
   }
 
   @Test
@@ -41,7 +41,7 @@ class TensorParserTest {
     assertEquals(Tensors.fromString(" {123}  "), Tensors.vector(123));
     assertEquals(Tensors.fromString(" { 1  , {2,2/3}    ,3 ,{},{   }  ,4}  "), Tensors.of( //
         RealScalar.of(1), //
-        Tensors.of(RealScalar.TWO, RationalScalar.of(2, 3)), //
+        Tensors.of(RealScalar.TWO, Rational.of(2, 3)), //
         RealScalar.of(3), //
         Tensors.empty(), //
         Tensors.empty(), //

@@ -4,7 +4,7 @@ package ch.alpine.tensor.sca;
 import java.util.Objects;
 
 import ch.alpine.tensor.MultiplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -147,7 +147,7 @@ public class Chop implements ScalarUnaryOperator {
 
   /** Careful:
    * if lhs and rhs are of exact precision, for instance instances of
-   * {@link RationalScalar}, the chop difference is non-zero
+   * {@link Rational}, the chop difference is non-zero
    * unless the scalars are exactly equal. Then, the function returns
    * false although numerically the values are sufficiently close.
    * 

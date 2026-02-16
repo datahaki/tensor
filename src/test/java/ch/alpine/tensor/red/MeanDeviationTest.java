@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
@@ -24,13 +24,13 @@ class MeanDeviationTest {
   @Test
   void testMathematica1() {
     Scalar value = MeanDeviation.ofVector(Tensors.fromString("{1, 2, 3, 7}"));
-    assertEquals(value, RationalScalar.of(15, 8));
+    assertEquals(value, Rational.of(15, 8));
   }
 
   @Test
   void testMathematica2() {
     Scalar value = MeanDeviation.ofVector(Tensors.fromString("{1, 2, 3, 7/11}"));
-    assertEquals(value, RationalScalar.of(37, 44));
+    assertEquals(value, Rational.of(37, 44));
     Chop._14.requireClose(N.DOUBLE.apply(value), RealScalar.of(0.84090909090909090909090909091));
   }
 

@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -127,7 +127,7 @@ class DeBoorTest {
     DeBoor deBoor = Serialization.copy(DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control));
     assertEquals(deBoor.degree(), 0);
     assertEquals(deBoor.apply(RealScalar.of(0)), RealScalar.of(90));
-    assertEquals(deBoor.apply(RationalScalar.of(1, 2)), RealScalar.of(90));
+    assertEquals(deBoor.apply(Rational.of(1, 2)), RealScalar.of(90));
     assertEquals(deBoor.apply(RealScalar.of(1)), RealScalar.of(90));
   }
 
@@ -138,7 +138,7 @@ class DeBoorTest {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     assertEquals(deBoor.degree(), 1);
     assertEquals(deBoor.apply(RealScalar.of(0)), RealScalar.of(90));
-    assertEquals(deBoor.apply(RationalScalar.of(1, 2)), RealScalar.of(95));
+    assertEquals(deBoor.apply(Rational.of(1, 2)), RealScalar.of(95));
     assertEquals(deBoor.apply(RealScalar.of(1)), RealScalar.of(100));
   }
 
@@ -149,7 +149,7 @@ class DeBoorTest {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     assertEquals(deBoor.degree(), 1);
     assertEquals(deBoor.apply(RealScalar.of(1)), RealScalar.of(100));
-    assertEquals(deBoor.apply(RationalScalar.of(3, 2)), RealScalar.of(110));
+    assertEquals(deBoor.apply(Rational.of(3, 2)), RealScalar.of(110));
     assertEquals(deBoor.apply(RealScalar.of(2)), RealScalar.of(120));
   }
 
@@ -161,8 +161,8 @@ class DeBoorTest {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     assertEquals(deBoor.degree(), 2);
     assertEquals(deBoor.apply(RealScalar.of(0)), RealScalar.of(0));
-    assertEquals(deBoor.apply(RationalScalar.of(1, 2)), RationalScalar.of(1, 8));
-    assertEquals(deBoor.apply(RealScalar.of(1)), RationalScalar.of(1, 2));
+    assertEquals(deBoor.apply(Rational.of(1, 2)), Rational.of(1, 8));
+    assertEquals(deBoor.apply(RealScalar.of(1)), Rational.of(1, 2));
   }
 
   @Test
@@ -171,9 +171,9 @@ class DeBoorTest {
     Tensor control = Tensors.vector(0, 1, 0).unmodifiable();
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     assertEquals(deBoor.degree(), 2);
-    assertEquals(deBoor.apply(RealScalar.of(1)), RationalScalar.of(1, 2));
-    assertEquals(deBoor.apply(RationalScalar.of(3, 2)), RationalScalar.of(3, 4));
-    assertEquals(deBoor.apply(RealScalar.of(2)), RationalScalar.of(1, 2));
+    assertEquals(deBoor.apply(RealScalar.of(1)), Rational.of(1, 2));
+    assertEquals(deBoor.apply(Rational.of(3, 2)), Rational.of(3, 4));
+    assertEquals(deBoor.apply(RealScalar.of(2)), Rational.of(1, 2));
   }
 
   @Test
@@ -182,9 +182,9 @@ class DeBoorTest {
     Tensor control = Tensors.vector(1, 0, 0).unmodifiable();
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     assertEquals(deBoor.degree(), 2);
-    assertEquals(deBoor.apply(RealScalar.of(2)), RationalScalar.of(1, 2));
-    assertEquals(deBoor.apply(RationalScalar.of(5, 2)), RationalScalar.of(1, 8));
-    assertEquals(deBoor.apply(RealScalar.of(3)), RationalScalar.of(0, 2));
+    assertEquals(deBoor.apply(RealScalar.of(2)), Rational.of(1, 2));
+    assertEquals(deBoor.apply(Rational.of(5, 2)), Rational.of(1, 8));
+    assertEquals(deBoor.apply(RealScalar.of(3)), Rational.of(0, 2));
   }
 
   /** example from Wikipedia */
@@ -195,7 +195,7 @@ class DeBoorTest {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     assertEquals(deBoor.degree(), 3);
     assertEquals(deBoor.apply(RealScalar.of(-2)), RealScalar.of(0));
-    assertEquals(deBoor.apply(RealScalar.of(-1.5)), RationalScalar.of(1, 8));
+    assertEquals(deBoor.apply(RealScalar.of(-1.5)), Rational.of(1, 8));
     assertEquals(deBoor.apply(RealScalar.of(-1)), RealScalar.of(1));
   }
 
@@ -206,7 +206,7 @@ class DeBoorTest {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     assertEquals(deBoor.degree(), 3);
     assertEquals(deBoor.apply(RealScalar.of(-1)), RealScalar.of(1));
-    assertEquals(deBoor.apply(RationalScalar.of(-1, 2)), RationalScalar.of(23, 8));
+    assertEquals(deBoor.apply(Rational.of(-1, 2)), Rational.of(23, 8));
     assertEquals(deBoor.apply(RealScalar.of(0)), RealScalar.of(4));
   }
 
@@ -217,7 +217,7 @@ class DeBoorTest {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     assertEquals(deBoor.degree(), 3);
     assertEquals(deBoor.apply(RealScalar.of(0)), RealScalar.of(4));
-    assertEquals(deBoor.apply(RationalScalar.of(1, 2)), RationalScalar.of(23, 8));
+    assertEquals(deBoor.apply(Rational.of(1, 2)), Rational.of(23, 8));
     assertEquals(deBoor.apply(RealScalar.of(1)), RealScalar.of(1));
   }
 
@@ -227,7 +227,7 @@ class DeBoorTest {
     Tensor control = Tensors.vector(6, 0, 0, 0).unmodifiable();
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     assertEquals(deBoor.apply(RealScalar.of(1)), RealScalar.of(1));
-    assertEquals(deBoor.apply(RationalScalar.of(3, 2)), RationalScalar.of(1, 8));
+    assertEquals(deBoor.apply(Rational.of(3, 2)), Rational.of(1, 8));
     assertEquals(deBoor.apply(RealScalar.of(2)), RealScalar.of(0));
   }
 

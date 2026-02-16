@@ -4,7 +4,7 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.MultiplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
@@ -81,7 +81,7 @@ public enum Round implements ScalarUnaryOperator {
   }
 
   /** for best results, the parameter increment should be an instance of
-   * {@link DecimalScalar}, or {@link RationalScalar}
+   * {@link DecimalScalar}, or {@link Rational}
    * Examples:
    * DecimalScalar.of(0.1), or RationalScalar.of(1, 10)
    * 

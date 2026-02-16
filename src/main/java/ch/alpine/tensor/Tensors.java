@@ -74,13 +74,13 @@ public enum Tensors {
   }
 
   /** @param values
-   * @return tensor of {@link RationalScalar} with given values */
+   * @return tensor of {@link Rational} with given values */
   public static Tensor vectorInt(int... values) {
     return Tensor.of(Arrays.stream(values).mapToObj(RealScalar::of));
   }
 
   /** @param values
-   * @return tensor of {@link RationalScalar} with given values */
+   * @return tensor of {@link Rational} with given values */
   public static Tensor vectorLong(long... values) {
     return Tensor.of(Arrays.stream(values).mapToObj(RealScalar::of));
   }
@@ -120,13 +120,13 @@ public enum Tensors {
   }
 
   /** @param data
-   * @return matrix with dimensions and {@link RationalScalar} entries as array data */
+   * @return matrix with dimensions and {@link Rational} entries as array data */
   public static Tensor matrixInt(int[][] data) {
     return Tensor.of(Arrays.stream(data).map(Tensors::vectorInt));
   }
 
   /** @param data
-   * @return matrix with dimensions and {@link RationalScalar} entries as array data */
+   * @return matrix with dimensions and {@link Rational} entries as array data */
   public static Tensor matrixLong(long[][] data) {
     return Tensor.of(Arrays.stream(data).map(Tensors::vectorLong));
   }

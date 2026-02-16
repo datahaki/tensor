@@ -21,7 +21,7 @@ class ThrowTest {
 
   @Test
   void testFullScalar() {
-    Exception exception = new Throw(Tensors.vector(1, 2), RationalScalar.HALF, Tensors.empty());
+    Exception exception = new Throw(Tensors.vector(1, 2), Rational.HALF, Tensors.empty());
     assertEquals(exception.getMessage(), "Throw[{1, 2}, 1/2, {}]");
   }
 

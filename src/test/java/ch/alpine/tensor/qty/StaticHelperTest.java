@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -73,14 +73,14 @@ class StaticHelperTest {
   void testConversion3() {
     Scalar scalar = StaticHelper.conversion(UnitSystem.SI(), "s", "min");
     ExactScalarQ.require(scalar);
-    assertEquals(scalar, Quantity.of(RationalScalar.of(1, 60), "min"));
+    assertEquals(scalar, Quantity.of(Rational.of(1, 60), "min"));
   }
 
   @Test
   void testConversion3b() {
     Scalar scalar = StaticHelper.conversion(UnitSystem.SI(), "m", "km");
     ExactScalarQ.require(scalar);
-    assertEquals(scalar, Quantity.of(RationalScalar.of(1, 1000), "km"));
+    assertEquals(scalar, Quantity.of(Rational.of(1, 1000), "km"));
   }
 
   @Test

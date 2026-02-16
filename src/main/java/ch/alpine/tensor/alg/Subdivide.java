@@ -4,7 +4,7 @@ package ch.alpine.tensor.alg;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -60,7 +60,7 @@ public enum Subdivide {
     Tensor delta = endInclusive.subtract(startInclusive);
     return Tensor.of(Stream.concat( //
         IntStream.range(0, n) //
-            .mapToObj(count -> startInclusive.add(delta.multiply(RationalScalar.of(count, n)))), //
+            .mapToObj(count -> startInclusive.add(delta.multiply(Rational.of(count, n)))), //
         Stream.of(endInclusive.copy())));
   }
 

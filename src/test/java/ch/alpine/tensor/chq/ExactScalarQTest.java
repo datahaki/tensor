@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
@@ -25,7 +25,7 @@ class ExactScalarQTest {
   @Test
   void testPositive() {
     assertTrue(ExactScalarQ.of(RealScalar.ZERO));
-    assertTrue(ExactScalarQ.of(RationalScalar.of(2, 3)));
+    assertTrue(ExactScalarQ.of(Rational.of(2, 3)));
     assertTrue(ExactScalarQ.of(GaussScalar.of(4, 7)));
   }
 
@@ -70,8 +70,8 @@ class ExactScalarQTest {
 
   @Test
   void testRequire() {
-    Scalar scalar = ExactScalarQ.require(RationalScalar.of(3, 7));
-    assertEquals(scalar, RationalScalar.of(3, 7));
+    Scalar scalar = ExactScalarQ.require(Rational.of(3, 7));
+    assertEquals(scalar, Rational.of(3, 7));
   }
 
   @Test

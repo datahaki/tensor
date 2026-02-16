@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -58,13 +58,13 @@ class DateTimeTest {
     assertEquals(dt1.add(scalar2), dt2);
     assertThrows(Throw.class, dt1::negate);
     assertThrows(Throw.class, () -> dt1.multiply(RealScalar.of(-1)));
-    assertThrows(Throw.class, () -> dt1.subtract(RationalScalar.HALF));
+    assertThrows(Throw.class, () -> dt1.subtract(Rational.HALF));
     assertEquals(dt2.subtract(dt1.multiply(RealScalar.of(1))), scalar2);
     Clip clip = Clips.interval(dt1, dt2);
     DateTime dt3 = DateTime.of(2021, 1, 3, 2, 12);
     Scalar scalar = clip.rescale(dt3);
     ExactScalarQ.require(scalar);
-    assertEquals(scalar, RationalScalar.of(3337, 5060));
+    assertEquals(scalar, Rational.of(3337, 5060));
     Scalar at = LinearInterpolation.of(clip).apply(scalar);
     assertEquals(at, dt3);
   }
@@ -356,7 +356,7 @@ class DateTimeTest {
     Tensor a = Tensors.of( //
         DateTime.of(1657, 11, 10, 4, 8), //
         DateTime.of(1857, 10, 5, 7, 18), //
-        RationalScalar.HALF);
+        Rational.HALF);
     Tensor b = Tensors.of( //
         DateTime.of(2021, 7, 3, 14, 48), //
         DateTime.of(1976, 4, 1, 17, 28), //

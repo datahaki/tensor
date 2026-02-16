@@ -12,7 +12,7 @@ import java.util.random.RandomGenerator;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -73,28 +73,28 @@ class TruncatedDistributionTest {
   @Test
   void testQuantity() {
     Distribution all = TriangularDistribution.with(Quantity.of(10, "m"), Quantity.of(2, "m"));
-    Clip clip = Clips.interval(Quantity.of(RationalScalar.of(95, 10), "m"), Quantity.of(12, "m"));
+    Clip clip = Clips.interval(Quantity.of(Rational.of(95, 10), "m"), Quantity.of(12, "m"));
     TruncatedDistribution cut = (TruncatedDistribution) TruncatedDistribution.of(all, clip);
     Clip clip_cdf = cut.clip_cdf();
     {
-      Scalar x = Quantity.of(RationalScalar.of(0, 10), "m");
+      Scalar x = Quantity.of(Rational.of(0, 10), "m");
       Scalar p1 = PDF.of(all).at(x);
       Scalar p2 = PDF.of(cut).at(x);
       assertEquals(p1, p2);
     }
     {
-      Scalar x = Quantity.of(RationalScalar.of(95, 10), "m");
+      Scalar x = Quantity.of(Rational.of(95, 10), "m");
       Scalar p1 = PDF.of(all).at(x);
       Scalar p2 = PDF.of(cut).at(x);
       Tolerance.CHOP.requireClose(p1.divide(clip_cdf.width()), p2);
     }
     {
-      Scalar x = Quantity.of(RationalScalar.of(95, 10), "m");
+      Scalar x = Quantity.of(Rational.of(95, 10), "m");
       Scalar p2 = CDF.of(cut).p_lessEquals(x);
       assertTrue(Scalars.isZero(p2));
     }
     {
-      Scalar x = Quantity.of(RationalScalar.of(105, 10), "m");
+      Scalar x = Quantity.of(Rational.of(105, 10), "m");
       Scalar p1 = CDF.of(all).p_lessEquals(x);
       Scalar p2 = CDF.of(cut).p_lessEquals(x);
       Tolerance.CHOP.requireClose(clip_cdf.rescale(p1), p2);

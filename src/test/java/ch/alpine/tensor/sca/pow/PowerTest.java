@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -34,14 +34,14 @@ class PowerTest {
 
   @Test
   void testSqrtExactHalfPos() {
-    Scalar scalar = Power.function(RationalScalar.HALF).apply(RealScalar.of(4));
+    Scalar scalar = Power.function(Rational.HALF).apply(RealScalar.of(4));
     assertEquals(ExactScalarQ.require(scalar), RealScalar.of(2));
   }
 
   @Test
   void testSqrtExactHalfNeg() {
-    Scalar scalar = Power.function(RationalScalar.HALF.negate()).apply(RealScalar.of(9));
-    assertEquals(ExactScalarQ.require(scalar), RationalScalar.of(1, 3));
+    Scalar scalar = Power.function(Rational.HALF.negate()).apply(RealScalar.of(9));
+    assertEquals(ExactScalarQ.require(scalar), Rational.of(1, 3));
   }
 
   @Test
@@ -60,7 +60,7 @@ class PowerTest {
 
   @Test
   void testNumberScalar() {
-    Scalar scalar = Power.of(2, RationalScalar.of(2, 3));
+    Scalar scalar = Power.of(2, Rational.of(2, 3));
     Chop._13.requireClose(scalar, Scalars.fromString("1.5874010519681994`"));
   }
 
@@ -166,7 +166,7 @@ class PowerTest {
     Scalar res = Power.of(qs1, RealScalar.of(3));
     Scalar act = Quantity.of(729, "m^6");
     assertEquals(res, act);
-    Scalar sqr = Power.of(qs1, RationalScalar.HALF);
+    Scalar sqr = Power.of(qs1, Rational.HALF);
     ExactScalarQ.require(sqr);
     assertEquals(sqr, Quantity.of(3, "m"));
   }

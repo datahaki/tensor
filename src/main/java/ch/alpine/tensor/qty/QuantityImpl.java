@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.MultiplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
@@ -224,7 +224,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
   public Scalar sqrt() {
     return new QuantityImpl( //
         Sqrt.FUNCTION.apply(value), //
-        unit.multiply(RationalScalar.HALF));
+        unit.multiply(Rational.HALF));
   }
 
   @Override // from MultiplexScalar

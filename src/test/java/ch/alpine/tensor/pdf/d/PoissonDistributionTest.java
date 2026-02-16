@@ -10,7 +10,7 @@ import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -103,7 +103,7 @@ class PoissonDistributionTest {
   @Test
   void testCDFMathematica() {
     int n = 5;
-    Distribution distribution = PoissonDistribution.of(RationalScalar.of(1, 4));
+    Distribution distribution = PoissonDistribution.of(Rational.of(1, 4));
     CDF cdf = CDF.of(distribution);
     Tensor actual = Range.of(0, n + 1).maps(cdf::p_lessEquals);
     Tensor expect = Tensors
@@ -113,7 +113,7 @@ class PoissonDistributionTest {
 
   @Test
   void testInverseCDFMathematica() {
-    Distribution distribution = PoissonDistribution.of(RationalScalar.of(1, 4));
+    Distribution distribution = PoissonDistribution.of(Rational.of(1, 4));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar actual = inverseCDF.quantile(RealScalar.of(0.9735009788392561));
     Scalar expect = RealScalar.ONE;

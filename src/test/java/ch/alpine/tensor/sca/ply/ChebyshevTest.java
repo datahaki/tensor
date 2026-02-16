@@ -14,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -79,7 +79,7 @@ class ChebyshevTest {
     int n = ThreadLocalRandom.current().nextInt(100);
     int m = ThreadLocalRandom.current().nextInt(100);
     Polynomial p1 = Chebyshev.T.of(n).times(Chebyshev.T.of(m));
-    Polynomial p2 = Chebyshev.T.of(n + m).plus(Chebyshev.T.of(Math.abs(m - n))).times(RationalScalar.HALF);
+    Polynomial p2 = Chebyshev.T.of(n + m).plus(Chebyshev.T.of(Math.abs(m - n))).times(Rational.HALF);
     assertEquals(p1, p2);
   }
 
@@ -90,11 +90,11 @@ class ChebyshevTest {
     Polynomial p1 = Chebyshev.T.of(m).times(Chebyshev.U.of(n));
     Polynomial p2 = null;
     if (n >= m) {
-      p2 = Chebyshev.U.of(n + m).plus(Chebyshev.U.of(n - m)).times(RationalScalar.HALF);
+      p2 = Chebyshev.U.of(n + m).plus(Chebyshev.U.of(n - m)).times(Rational.HALF);
       assertEquals(p1, p2);
     }
     if (n <= m - 2) {
-      p2 = Chebyshev.U.of(n + m).minus(Chebyshev.U.of(m - n - 2)).times(RationalScalar.HALF);
+      p2 = Chebyshev.U.of(n + m).minus(Chebyshev.U.of(m - n - 2)).times(Rational.HALF);
       assertEquals(p1, p2);
     }
   }

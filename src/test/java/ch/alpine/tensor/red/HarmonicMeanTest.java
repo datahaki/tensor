@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -17,9 +17,9 @@ class HarmonicMeanTest {
   @Test
   void testGeo1() {
     Tensor a = HarmonicMean.ofVector(Tensors.vector(8, 27, 525));
-    assertEquals(a, RationalScalar.of(113400, 6197));
+    assertEquals(a, Rational.of(113400, 6197));
     Tensor b = HarmonicMean.ofVector(Tensors.vector(8, -27, 3));
-    assertEquals(b, RationalScalar.of(648, 91));
+    assertEquals(b, Rational.of(648, 91));
   }
 
   @Test

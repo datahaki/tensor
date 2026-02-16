@@ -2,7 +2,7 @@
 // adapted from http://www.ics.uci.edu/~eppstein/numth/frap.c
 package ch.alpine.tensor.num;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -24,18 +24,18 @@ import ch.alpine.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Rationalize.html">Rationalize</a> */
 public class Rationalize implements ScalarUnaryOperator {
-  public static final ScalarUnaryOperator _1 = Round.toMultipleOf(RationalScalar.of(1, 10));
-  public static final ScalarUnaryOperator _2 = Round.toMultipleOf(RationalScalar.of(1, 100));
-  public static final ScalarUnaryOperator _3 = Round.toMultipleOf(RationalScalar.of(1, 1000));
-  public static final ScalarUnaryOperator _4 = Round.toMultipleOf(RationalScalar.of(1, 10000));
-  public static final ScalarUnaryOperator _5 = Round.toMultipleOf(RationalScalar.of(1, 100000));
-  public static final ScalarUnaryOperator _6 = Round.toMultipleOf(RationalScalar.of(1, 1000000));
-  public static final ScalarUnaryOperator _7 = Round.toMultipleOf(RationalScalar.of(1, 10000000));
-  public static final ScalarUnaryOperator _8 = Round.toMultipleOf(RationalScalar.of(1, 100000000));
-  public static final ScalarUnaryOperator _9 = Round.toMultipleOf(RationalScalar.of(1, 1000000000));
+  public static final ScalarUnaryOperator _1 = Round.toMultipleOf(Rational.of(1, 10));
+  public static final ScalarUnaryOperator _2 = Round.toMultipleOf(Rational.of(1, 100));
+  public static final ScalarUnaryOperator _3 = Round.toMultipleOf(Rational.of(1, 1000));
+  public static final ScalarUnaryOperator _4 = Round.toMultipleOf(Rational.of(1, 10000));
+  public static final ScalarUnaryOperator _5 = Round.toMultipleOf(Rational.of(1, 100000));
+  public static final ScalarUnaryOperator _6 = Round.toMultipleOf(Rational.of(1, 1000000));
+  public static final ScalarUnaryOperator _7 = Round.toMultipleOf(Rational.of(1, 10000000));
+  public static final ScalarUnaryOperator _8 = Round.toMultipleOf(Rational.of(1, 100000000));
+  public static final ScalarUnaryOperator _9 = Round.toMultipleOf(Rational.of(1, 1000000000));
 
   /** @param max positive integer
-   * @return {@link ScalarUnaryOperator} that returns the closest {@link RationalScalar} to the
+   * @return {@link ScalarUnaryOperator} that returns the closest {@link Rational} to the
    * given argument, with denominator less or equals to max, and ties rounding to positive infinity.
    * @throws Exception if max does not satisfy {@link IntegerQ}, or is negative */
   public static ScalarUnaryOperator withDenominatorLessEquals(Scalar max) {
@@ -43,7 +43,7 @@ public class Rationalize implements ScalarUnaryOperator {
   }
 
   /** @param max positive integer
-   * @return {@link ScalarUnaryOperator} that returns the closest {@link RationalScalar} to the
+   * @return {@link ScalarUnaryOperator} that returns the closest {@link Rational} to the
    * given argument, with denominator less or equals to max, and ties rounding to positive infinity.
    * @throws Exception if max is not strictly positive */
   public static ScalarUnaryOperator withDenominatorLessEquals(long max) {
@@ -77,7 +77,7 @@ public class Rationalize implements ScalarUnaryOperator {
    * we just keep the last partial product of these matrices."
    * 
    * @param scalar for instance Math.PI, or 2./3.
-   * @return approximation of given scalar as {@link RationalScalar} with denominator bounded by max */
+   * @return approximation of given scalar as {@link Rational} with denominator bounded by max */
   @Override
   public Scalar apply(final Scalar scalar) {
     Scalar m00 = RealScalar.ONE; // initialize matrix
@@ -103,7 +103,7 @@ public class Rationalize implements ScalarUnaryOperator {
     // approx as either 0 or 1/m where m is max that will fit in maxden
     Scalar sol0 = m00.divide(m10); // first try zero
     Scalar sol1 = affine(sol0, m01, max.subtract(m11)).divide(max); // now try other possibility
-    RationalScalar rs = (RationalScalar) sol1;
+    Rational rs = (Rational) sol1;
     if (Scalars.lessThan(max, RealScalar.of(rs.denominator())))
       return sol0;
     Scalar err0 = Abs.between(sol0, scalar);

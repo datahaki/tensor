@@ -53,13 +53,13 @@ class ScalarParserTest {
 
   @Test
   void testRational1() {
-    Scalar z = ComplexScalar.of(RationalScalar.of(1, 2), RationalScalar.of(1, 3));
+    Scalar z = ComplexScalar.of(Rational.of(1, 2), Rational.of(1, 3));
     assertEquals(Scalars.fromString(z.toString()), z);
   }
 
   @Test
   void testRational2() {
-    Scalar z = ComplexScalar.of(RationalScalar.of(1, 2), RationalScalar.of(-1, 3));
+    Scalar z = ComplexScalar.of(Rational.of(1, 2), Rational.of(-1, 3));
     assertEquals(Scalars.fromString(z.toString()), z);
   }
 

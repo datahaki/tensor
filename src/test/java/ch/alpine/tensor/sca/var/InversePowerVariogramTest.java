@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -35,8 +35,8 @@ class InversePowerVariogramTest {
 
   @Test
   void testInverse() {
-    assertEquals(InversePowerVariogram.of(1).apply(RealScalar.of(2)), RationalScalar.HALF);
-    assertEquals(InversePowerVariogram.of(2).apply(RealScalar.of(2)), RationalScalar.of(1, 4));
+    assertEquals(InversePowerVariogram.of(1).apply(RealScalar.of(2)), Rational.HALF);
+    assertEquals(InversePowerVariogram.of(2).apply(RealScalar.of(2)), Rational.of(1, 4));
   }
 
   @Test

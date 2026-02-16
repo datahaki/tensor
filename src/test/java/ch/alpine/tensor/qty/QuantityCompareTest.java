@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -38,7 +38,7 @@ class QuantityCompareTest {
 
   @Test
   void testEquals2() {
-    _checkEquals(RationalScalar.of(0, 1), Quantity.of(0, "m"), false);
+    _checkEquals(Rational.of(0, 1), Quantity.of(0, "m"), false);
     _checkEquals(DoubleScalar.of(0.0), Quantity.of(0, "m"), false);
     _checkEquals(DecimalScalar.of(new BigDecimal("0.0")), Quantity.of(0, "m"), false);
   }

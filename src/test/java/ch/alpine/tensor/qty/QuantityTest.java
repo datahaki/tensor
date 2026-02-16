@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -76,9 +76,9 @@ class QuantityTest {
     assertEquals(of, pr);
     Scalar n1 = UnitSystem.SI().apply(pr);
     ExactScalarQ.require(n1);
-    assertEquals(n1, RationalScalar.HALF);
+    assertEquals(n1, Rational.HALF);
     Scalar n2 = QuantityMagnitude.SI().in(Unit.ONE).apply(pr);
-    assertEquals(n2, RationalScalar.HALF);
+    assertEquals(n2, Rational.HALF);
   }
 
   @Test

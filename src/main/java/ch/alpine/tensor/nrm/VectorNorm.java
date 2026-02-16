@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.pow.Power;
  * <li>p==Infinity identical to {@link VectorInfinityNorm}
  * </ul> */
 public class VectorNorm implements TensorScalarFunction {
-  /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
+  /** Hint: for enhanced precision, use p as instance of {@link Rational} if possible
    * 
    * @param p exponent greater or equals 1
    * @return

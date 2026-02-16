@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -35,7 +35,7 @@ class JetScalarsTest {
     Tensor coeffs = Tensors.vector(2, 1, 3, 4);
     Polynomial f0 = Polynomial.of(coeffs);
     Polynomial f1 = f0.derivative();
-    Scalar value = RationalScalar.of(3, 17);
+    Scalar value = Rational.of(3, 17);
     Tensor gnd = Tensors.of(f0.apply(value), f1.apply(value));
     Scalar scalar = JetScalar.of(value, gnd.length());
     JetScalar der = (JetScalar) f0.apply(scalar);
@@ -48,7 +48,7 @@ class JetScalarsTest {
     Polynomial f0 = Polynomial.of(c0);
     Polynomial f1 = f0.derivative();
     Polynomial f2 = f1.derivative();
-    Scalar value = RationalScalar.of(3, 17);
+    Scalar value = Rational.of(3, 17);
     Tensor gnd = Tensors.of(f0.apply(value), f1.apply(value), f2.apply(value));
     Scalar scalar = JetScalar.of(value, gnd.length());
     JetScalar der = (JetScalar) f0.apply(scalar);
@@ -56,8 +56,8 @@ class JetScalarsTest {
   }
 
   public static final Distribution[] DISTRIBUTIONS = { //
-      ExponentialDistribution.of(RationalScalar.HALF), //
-      ParetoDistribution.of(RationalScalar.HALF, RealScalar.ONE), //
+      ExponentialDistribution.of(Rational.HALF), //
+      ParetoDistribution.of(Rational.HALF, RealScalar.ONE), //
       UniformDistribution.of(1, 10), //
       TrapezoidalDistribution.of(0, 4, 5, 8), //
       DagumDistribution.of(1, 2, 3), //

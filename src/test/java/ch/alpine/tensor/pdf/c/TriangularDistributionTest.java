@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -29,8 +29,8 @@ class TriangularDistributionTest {
     Scalar b = RealScalar.of(2);
     Scalar c = RealScalar.of(3);
     Distribution distribution = TriangularDistribution.of(a, b, c);
-    assertEquals(PDF.of(distribution).at(RationalScalar.of(3, 2)), RationalScalar.HALF);
-    assertEquals(PDF.of(distribution).at(RationalScalar.of(5, 2)), RationalScalar.HALF);
+    assertEquals(PDF.of(distribution).at(Rational.of(3, 2)), Rational.HALF);
+    assertEquals(PDF.of(distribution).at(Rational.of(5, 2)), Rational.HALF);
     assertEquals(PDF.of(distribution).at(b), RealScalar.ONE);
     assertEquals(PDF.of(distribution).at(RealScalar.of(100)), RealScalar.ZERO);
     TestMarkovChebyshev.symmetricAroundMean(distribution);
@@ -45,9 +45,9 @@ class TriangularDistributionTest {
     assertEquals(CDF.of(distribution).p_lessThan(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(CDF.of(distribution).p_lessThan(a), RealScalar.ZERO);
     assertEquals(CDF.of(distribution).p_lessEquals(a), RealScalar.ZERO);
-    assertEquals(CDF.of(distribution).p_lessThan(b), RationalScalar.HALF);
-    assertEquals(CDF.of(distribution).p_lessEquals(b), RationalScalar.HALF);
-    assertEquals(CDF.of(distribution).p_lessThan(RationalScalar.of(5, 2)), RationalScalar.of(7, 8));
+    assertEquals(CDF.of(distribution).p_lessThan(b), Rational.HALF);
+    assertEquals(CDF.of(distribution).p_lessEquals(b), Rational.HALF);
+    assertEquals(CDF.of(distribution).p_lessThan(Rational.of(5, 2)), Rational.of(7, 8));
     assertEquals(CDF.of(distribution).p_lessThan(c), RealScalar.ONE);
     assertEquals(CDF.of(distribution).p_lessEquals(c), RealScalar.ONE);
   }
@@ -85,8 +85,8 @@ class TriangularDistributionTest {
     Scalar b = RealScalar.of(2);
     Distribution distribution = TriangularDistribution.of(a, a, b);
     assertEquals(PDF.of(distribution).at(a), RealScalar.of(2));
-    assertEquals(PDF.of(distribution).at(RationalScalar.of(3, 2)), RealScalar.ONE);
-    assertEquals(PDF.of(distribution).at(RationalScalar.of(5, 2)), RealScalar.ZERO);
+    assertEquals(PDF.of(distribution).at(Rational.of(3, 2)), RealScalar.ONE);
+    assertEquals(PDF.of(distribution).at(Rational.of(5, 2)), RealScalar.ZERO);
     assertEquals(PDF.of(distribution).at(RealScalar.of(100)), RealScalar.ZERO);
   }
 
@@ -98,8 +98,8 @@ class TriangularDistributionTest {
     assertEquals(CDF.of(distribution).p_lessThan(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(CDF.of(distribution).p_lessThan(a), RealScalar.ZERO);
     assertEquals(CDF.of(distribution).p_lessEquals(a), RealScalar.ZERO);
-    assertEquals(CDF.of(distribution).p_lessThan(RationalScalar.of(3, 2)), RationalScalar.of(3, 4));
-    assertEquals(CDF.of(distribution).p_lessThan(RationalScalar.of(5, 2)), RealScalar.ONE);
+    assertEquals(CDF.of(distribution).p_lessThan(Rational.of(3, 2)), Rational.of(3, 4));
+    assertEquals(CDF.of(distribution).p_lessThan(Rational.of(5, 2)), RealScalar.ONE);
   }
 
   @Test
@@ -108,7 +108,7 @@ class TriangularDistributionTest {
     Scalar b = RealScalar.of(1);
     Scalar c = RealScalar.of(2);
     Distribution distribution = TriangularDistribution.of(a, b, c);
-    assertEquals(Mean.of(distribution), RationalScalar.of(4, 3));
+    assertEquals(Mean.of(distribution), Rational.of(4, 3));
     Scalar mean = Mean.ofVector(RandomVariate.of(distribution, 100));
     Clips.interval(1.2, 1.5).requireInside(mean);
   }
@@ -119,8 +119,8 @@ class TriangularDistributionTest {
     Scalar b = RealScalar.of(2);
     Distribution distribution = TriangularDistribution.of(a, b, b);
     assertEquals(PDF.of(distribution).at(RealScalar.ONE), RealScalar.ZERO);
-    assertEquals(PDF.of(distribution).at(RationalScalar.of(3, 2)), RealScalar.ONE);
-    assertEquals(PDF.of(distribution).at(RationalScalar.of(5, 2)), RealScalar.ZERO);
+    assertEquals(PDF.of(distribution).at(Rational.of(3, 2)), RealScalar.ONE);
+    assertEquals(PDF.of(distribution).at(Rational.of(5, 2)), RealScalar.ZERO);
     assertEquals(PDF.of(distribution).at(b), RealScalar.of(2));
     assertEquals(PDF.of(distribution).at(RealScalar.of(100)), RealScalar.ZERO);
   }
@@ -133,10 +133,10 @@ class TriangularDistributionTest {
     assertEquals(CDF.of(distribution).p_lessThan(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(CDF.of(distribution).p_lessThan(a), RealScalar.ZERO);
     assertEquals(CDF.of(distribution).p_lessEquals(a), RealScalar.ZERO);
-    assertEquals(CDF.of(distribution).p_lessThan(RationalScalar.of(3, 2)), RationalScalar.of(1, 4));
+    assertEquals(CDF.of(distribution).p_lessThan(Rational.of(3, 2)), Rational.of(1, 4));
     assertEquals(CDF.of(distribution).p_lessThan(b), RealScalar.ONE);
     assertEquals(CDF.of(distribution).p_lessEquals(b), RealScalar.ONE);
-    assertEquals(CDF.of(distribution).p_lessThan(RationalScalar.of(5, 2)), RealScalar.ONE);
+    assertEquals(CDF.of(distribution).p_lessThan(Rational.of(5, 2)), RealScalar.ONE);
   }
 
   @Test
@@ -144,7 +144,7 @@ class TriangularDistributionTest {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
     Distribution distribution = TriangularDistribution.of(a, b, b);
-    assertEquals(Mean.of(distribution), RationalScalar.of(5, 3));
+    assertEquals(Mean.of(distribution), Rational.of(5, 3));
     Scalar mean = Mean.ofVector(RandomVariate.of(distribution, 100));
     Clips.interval(1.5, 1.8).requireInside(mean);
   }

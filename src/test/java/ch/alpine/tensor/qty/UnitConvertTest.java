@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -103,7 +103,7 @@ class UnitConvertTest {
     Unit unit = Unit.of("kW*h");
     ScalarUnaryOperator suo = UnitConvert.SI().to(unit);
     Scalar scalar = suo.apply(Quantity.of(180, "W*s"));
-    assertEquals(scalar, Quantity.of(RationalScalar.of(1, 20000), unit));
+    assertEquals(scalar, Quantity.of(Rational.of(1, 20000), unit));
   }
 
   @Test

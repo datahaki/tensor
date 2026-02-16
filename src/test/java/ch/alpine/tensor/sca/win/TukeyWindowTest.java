@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -36,7 +36,7 @@ class TukeyWindowTest {
 
   @Test
   void testSmall() {
-    Tensor tensor = Tensors.of(RationalScalar.of(-1, 6), RealScalar.ZERO, RealScalar.of(0.01), RationalScalar.of(1, 6));
+    Tensor tensor = Tensors.of(Rational.of(-1, 6), RealScalar.ZERO, RealScalar.of(0.01), Rational.of(1, 6));
     Tensor mapped = tensor.maps(TukeyWindow.FUNCTION);
     Map<Tensor, Long> map = Tally.of(mapped);
     assertEquals(map.get(RealScalar.ONE).longValue(), tensor.length());

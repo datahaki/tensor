@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -88,7 +88,7 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return clip.width().multiply(RationalScalar.HALF).add(clip.min());
+    return clip.width().multiply(Rational.HALF).add(clip.min());
   }
 
   @Override // from VarianceInterface

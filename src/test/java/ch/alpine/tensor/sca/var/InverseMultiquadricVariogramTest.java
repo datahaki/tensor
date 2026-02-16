@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -17,7 +17,7 @@ class InverseMultiquadricVariogramTest {
   void testSimple() {
     ScalarUnaryOperator scalarUnaryOperator = InverseMultiquadricVariogram.of(3);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(4));
-    assertEquals(ExactScalarQ.require(scalar), RationalScalar.of(1, 5));
+    assertEquals(ExactScalarQ.require(scalar), Rational.of(1, 5));
   }
 
   @Test

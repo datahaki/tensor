@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -102,11 +102,11 @@ class ChopTest {
 
   @Test
   void testCloseExact() {
-    Scalar s1 = RationalScalar.of(1, 10000000);
-    Scalar s2 = RationalScalar.of(2, 10000000);
+    Scalar s1 = Rational.of(1, 10000000);
+    Scalar s2 = Rational.of(2, 10000000);
     assertFalse(Chop._05.isClose(s1, s2));
     assertTrue(Chop._05.isClose(N.DOUBLE.apply(s1), N.DOUBLE.apply(s2)));
-    Scalar s3 = RationalScalar.of(1, 10000000);
+    Scalar s3 = Rational.of(1, 10000000);
     assertTrue(Chop._05.isClose(s1, s3));
   }
 

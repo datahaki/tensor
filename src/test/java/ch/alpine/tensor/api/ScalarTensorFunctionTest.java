@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -23,7 +23,7 @@ class ScalarTensorFunctionTest {
   void testCompose() throws ClassNotFoundException, IOException {
     ScalarTensorFunction stf = ColorDataGradients.ALPINE.compose(Sin.FUNCTION);
     Serialization.copy(stf);
-    stf.apply(RationalScalar.HALF);
+    stf.apply(Rational.HALF);
   }
 
   @Test

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -14,9 +14,9 @@ import ch.alpine.tensor.sca.Abs;
 public enum BartlettHannWindow implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar A0 = RationalScalar.of(31, 50);
-  private static final Scalar A1 = RationalScalar.of(19, 50);
-  private static final Scalar L1 = RationalScalar.of(-12, 25);
+  private static final Scalar A0 = Rational.of(31, 50);
+  private static final Scalar A1 = Rational.of(19, 50);
+  private static final Scalar L1 = Rational.of(-12, 25);
 
   @Override
   public Scalar apply(Scalar x) {

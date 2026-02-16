@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -49,7 +49,7 @@ class ObjectFormatTest {
 
   @Test
   void testUnderClear() throws ClassNotFoundException, IOException, DataFormatException {
-    Scalar q1 = Quantity.of(ComplexScalar.of(RationalScalar.of(2, 7), RationalScalar.HALF.negate()), "m");
+    Scalar q1 = Quantity.of(ComplexScalar.of(Rational.of(2, 7), Rational.HALF.negate()), "m");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
     Scalar quc = q1.under(q2);
     Scalar expected = Scalars.fromString("-742/65+294/65*I");
@@ -70,7 +70,7 @@ class ObjectFormatTest {
 
   @Test
   void testUnderMix() throws ClassNotFoundException, IOException, DataFormatException {
-    Scalar q1 = Quantity.of(ComplexScalar.of(RationalScalar.of(2, 7), RationalScalar.HALF.negate()), "CHF");
+    Scalar q1 = Quantity.of(ComplexScalar.of(Rational.of(2, 7), Rational.HALF.negate()), "CHF");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
     Scalar quc = q1.under(q2);
     Scalar expected = Scalars.fromString("-742/65+294/65*I[m*CHF^-1]");

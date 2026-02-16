@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -45,7 +45,7 @@ class TrapezoidalDistributionTest {
   @Test
   void testPositive() {
     Random random = ThreadLocalRandom.current();
-    Scalar a = RationalScalar.of(random.nextInt(100), 1);
+    Scalar a = Rational.of(random.nextInt(100), 1);
     Scalar b = a.add(RealScalar.of(random.nextDouble() * 10));
     Scalar c = b.add(RealScalar.of(random.nextDouble() * 10));
     Scalar d = c.add(RealScalar.of(random.nextDouble() * 10));
@@ -59,10 +59,10 @@ class TrapezoidalDistributionTest {
 
   @Test
   void testPDF() throws ClassNotFoundException, IOException {
-    Scalar a = RationalScalar.of(1, 1);
-    Scalar b = RationalScalar.of(2, 1);
-    Scalar c = RationalScalar.of(3, 1);
-    Scalar d = RationalScalar.of(4, 1);
+    Scalar a = Rational.of(1, 1);
+    Scalar b = Rational.of(2, 1);
+    Scalar c = Rational.of(3, 1);
+    Scalar d = Rational.of(4, 1);
     Distribution distribution = Serialization.copy(TrapezoidalDistribution.of(a, b, c, d));
     {
       Scalar actual = PDF.of(distribution).at(RealScalar.of(3));
@@ -85,7 +85,7 @@ class TrapezoidalDistributionTest {
     // assertEquals(distribution.toString(), "TrapezoidalDistribution[1, 2, 3, 4]");
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessEquals(RealScalar.of(-1)), RealScalar.ZERO);
-    assertEquals(cdf.p_lessEquals(RealScalar.of(1.5)), RationalScalar.of(1, 16));
+    assertEquals(cdf.p_lessEquals(RealScalar.of(1.5)), Rational.of(1, 16));
     assertEquals(cdf.p_lessEquals(RealScalar.of(+4)), RealScalar.ONE);
   }
 
@@ -107,11 +107,11 @@ class TrapezoidalDistributionTest {
   @Test
   void testVariance() {
     // values confirmed with Mathematica
-    assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 3, 4)), RationalScalar.of(5, 12));
-    assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 4, 4)), RationalScalar.of(253, 450));
-    assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 4, 7)), RationalScalar.of(251, 144));
-    assertEquals(Variance.of(TrapezoidalDistribution.of(2, 2, 4, 13)), RationalScalar.of(6719, 1014));
-    assertEquals(Variance.of(TrapezoidalDistribution.of(-1, -1, 1, 1)), RationalScalar.of(1, 3));
+    assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 3, 4)), Rational.of(5, 12));
+    assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 4, 4)), Rational.of(253, 450));
+    assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 4, 7)), Rational.of(251, 144));
+    assertEquals(Variance.of(TrapezoidalDistribution.of(2, 2, 4, 13)), Rational.of(6719, 1014));
+    assertEquals(Variance.of(TrapezoidalDistribution.of(-1, -1, 1, 1)), Rational.of(1, 3));
   }
 
   @Test
@@ -139,7 +139,7 @@ class TrapezoidalDistributionTest {
     {
       Scalar prob = cdf.p_lessEquals(Quantity.of(4, "m"));
       ExactScalarQ.require(prob);
-      assertEquals(prob, RationalScalar.of(9, 10));
+      assertEquals(prob, Rational.of(9, 10));
     }
     {
       Scalar prob = cdf.p_lessEquals(Quantity.of(6, "m"));
@@ -180,7 +180,7 @@ class TrapezoidalDistributionTest {
     {
       Scalar prob = cdf.p_lessEquals(Quantity.of(4, "m"));
       ExactScalarQ.require(prob);
-      assertEquals(prob, RationalScalar.of(10, 10));
+      assertEquals(prob, Rational.of(10, 10));
     }
     {
       Scalar prob = cdf.p_lessEquals(Quantity.of(6, "m"));
@@ -265,9 +265,9 @@ class TrapezoidalDistributionTest {
   void testObviousMean() {
     Distribution distribution = TrapezoidalDistribution.of(4, 5, 6, 7);
     Scalar mean = Mean.of(distribution);
-    assertEquals(mean, RationalScalar.of(11, 2));
+    assertEquals(mean, Rational.of(11, 2));
     ExactScalarQ.require(mean);
-    assertEquals(Variance.of(distribution), RationalScalar.of(5, 12));
+    assertEquals(Variance.of(distribution), Rational.of(5, 12));
     TestMarkovChebyshev.chebyshev(distribution);
     TestMarkovChebyshev.markov(distribution);
   }
@@ -276,9 +276,9 @@ class TrapezoidalDistributionTest {
   void testTriangularVar() {
     Distribution distribution = TrapezoidalDistribution.of(4, 5, 5, 7);
     Scalar mean = Mean.of(distribution);
-    assertEquals(mean, RationalScalar.of(16, 3));
+    assertEquals(mean, Rational.of(16, 3));
     ExactScalarQ.require(mean);
-    assertEquals(Variance.of(distribution), RationalScalar.of(7, 18));
+    assertEquals(Variance.of(distribution), Rational.of(7, 18));
     TestMarkovChebyshev.chebyshev(distribution);
     TestMarkovChebyshev.markov(distribution);
   }
@@ -305,7 +305,7 @@ class TrapezoidalDistributionTest {
     pdf.at(t);
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(t);
-    assertEquals(p_lessEquals, RationalScalar.of(8225, 13026));
+    assertEquals(p_lessEquals, Rational.of(8225, 13026));
     // Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
     UnivariateDistribution ud = (UnivariateDistribution) distribution;
     assertEquals(ud.support(), Clips.interval(a, d));

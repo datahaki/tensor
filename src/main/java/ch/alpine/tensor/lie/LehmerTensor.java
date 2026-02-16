@@ -3,7 +3,7 @@ package ch.alpine.tensor.lie;
 
 import java.util.Collections;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.red.Max;
@@ -15,7 +15,7 @@ public enum LehmerTensor {
   /** @param d positive
    * @return tensor of rank d and dimensions d x d x ... x d */
   public static Tensor of(int d) {
-    return Array.of(list -> RationalScalar.of( //
+    return Array.of(list -> Rational.of( //
         list.stream().reduce(Math::min).orElseThrow() + 1, //
         list.stream().reduce(Math::max).orElseThrow() + 1), Collections.nCopies(d, d));
   }

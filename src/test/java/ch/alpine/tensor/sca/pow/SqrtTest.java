@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -53,7 +53,7 @@ class SqrtTest {
       scalar.zero();
     }
     {
-      Scalar tensor = RationalScalar.of(-2, 3);
+      Scalar tensor = Rational.of(-2, 3);
       Sqrt.FUNCTION.apply(tensor);
       Scalar scalar = Sqrt.FUNCTION.apply(tensor);
       scalar.zero();
@@ -76,15 +76,15 @@ class SqrtTest {
 
   @Test
   void testRational() {
-    assertEquals(Sqrt.FUNCTION.apply(RationalScalar.of(16, 25)).toString(), "4/5");
-    Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(-16, 25));
+    assertEquals(Sqrt.FUNCTION.apply(Rational.of(16, 25)).toString(), "4/5");
+    Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(-16, 25));
     assertInstanceOf(ComplexScalar.class, scalar);
     assertEquals(scalar.toString(), "4/5*I");
   }
 
   @Test
   void testReal() {
-    assertEquals(Sqrt.FUNCTION.apply(RationalScalar.of(-16, 25)).toString(), "4/5*I");
+    assertEquals(Sqrt.FUNCTION.apply(Rational.of(-16, 25)).toString(), "4/5*I");
     assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(16 / 25.)), Scalars.fromString("4/5"));
     assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(-16 / 25.)), Scalars.fromString("4/5*I"));
   }

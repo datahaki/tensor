@@ -6,7 +6,7 @@ import java.math.MathContext;
 import java.util.Objects;
 
 import ch.alpine.tensor.AbstractRealScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -27,9 +27,9 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
   }
 
   public static Scalar of(Scalar a, Scalar b, Scalar c) {
-    if (a instanceof RationalScalar && //
-        b instanceof RationalScalar && //
-        c instanceof RationalScalar)
+    if (a instanceof Rational && //
+        b instanceof Rational && //
+        c instanceof Rational)
       return Scalars.isZero(b) || Scalars.isZero(c) //
           ? a
           : new Quex(a, b, c);
@@ -58,7 +58,7 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
           a.multiply(quex.a).add(Times.of(b, quex.b, c)), //
           a.multiply(quex.b).add(b.multiply(quex.a)), //
           c);
-    return scalar instanceof RationalScalar //
+    return scalar instanceof Rational //
         ? of(a.multiply(scalar), b.multiply(scalar), c)
         : scalar.multiply(expand());
   }
@@ -128,7 +128,7 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
           b.add(quex.b), //
           c);
     Scalar probe = a.add(scalar);
-    return probe instanceof RationalScalar //
+    return probe instanceof Rational //
         ? of(probe, b, c)
         : expand().add(scalar);
   }

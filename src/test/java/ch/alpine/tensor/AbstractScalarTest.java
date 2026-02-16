@@ -59,7 +59,7 @@ class AbstractScalarTest {
 
   @Test
   void testGet2Fail() {
-    assertThrows(Throw.class, () -> RationalScalar.HALF.Get(1, 4));
+    assertThrows(Throw.class, () -> Rational.HALF.Get(1, 4));
     assertThrows(Throw.class, () -> Pi.TWO.get(new int[] { 1, 2 }));
   }
 

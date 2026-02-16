@@ -80,7 +80,7 @@ class BooleanScalarTest {
 
   @Test
   void testMapping() {
-    Tensor values = RandomVariate.of(BinomialDistribution.of(10, RationalScalar.of(3, 7)), 200);
+    Tensor values = RandomVariate.of(BinomialDistribution.of(10, Rational.of(3, 7)), 200);
     Tensor result = values.maps(s -> BooleanScalar.of(Scalars.lessThan(s, RealScalar.of(5))));
     Map<Tensor, Long> map = Tally.of(result);
     assertTrue(10 < map.get(BooleanScalar.TRUE));
@@ -89,7 +89,7 @@ class BooleanScalarTest {
 
   @Test
   void testNumber() {
-    Tensor values = RandomVariate.of(BinomialDistribution.of(10, RationalScalar.of(3, 7)), 200);
+    Tensor values = RandomVariate.of(BinomialDistribution.of(10, Rational.of(3, 7)), 200);
     Tensor result = Tensor.of(values.stream() //
         .map(Scalar.class::cast) //
         .map(s -> Scalars.lessThan(s, RealScalar.of(5))).map(BooleanScalar::of));
@@ -105,7 +105,7 @@ class BooleanScalarTest {
 
   @Test
   void testAccumulate() {
-    Tensor values = RandomVariate.of(BinomialDistribution.of(10, RationalScalar.of(3, 7)), 200);
+    Tensor values = RandomVariate.of(BinomialDistribution.of(10, Rational.of(3, 7)), 200);
     Tensor result = Tensor.of(values.stream() //
         .map(Scalar.class::cast) //
         .map(s -> Scalars.lessThan(s, RealScalar.of(5))).map(BooleanScalar::of));

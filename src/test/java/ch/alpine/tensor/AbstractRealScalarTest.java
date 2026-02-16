@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 class AbstractRealScalarTest {
   private final List<Scalar> SCALARS = Arrays.asList( //
       RealScalar.ZERO, RealScalar.ONE, //
-      RationalScalar.of(-7, 3), //
+      Rational.of(-7, 3), //
       // Quex.of(3, 4, 2), // TODO TENSOR
       RealScalar.of(-3.4), //
       Hold.zero(), //
@@ -36,10 +36,10 @@ class AbstractRealScalarTest {
       Pi.in(50), //
       ComplexScalar.of(2, 3), //
       ComplexScalar.of(6, -8.3), //
-      ComplexScalar.of(RealScalar.of(2.3), RationalScalar.of(2, 9)), //
-      ComplexScalar.of(Pi.in(40), RationalScalar.of(-4, 5)), //
-      ComplexScalar.of(RationalScalar.of(-2, 17), Pi.in(20)), //
-      ComplexScalar.of(RationalScalar.of(-7, 13), RationalScalar.of(53, 887)));
+      ComplexScalar.of(RealScalar.of(2.3), Rational.of(2, 9)), //
+      ComplexScalar.of(Pi.in(40), Rational.of(-4, 5)), //
+      ComplexScalar.of(Rational.of(-2, 17), Pi.in(20)), //
+      ComplexScalar.of(Rational.of(-7, 13), Rational.of(53, 887)));
 
   private static void _checkAdd(Scalar a, Scalar b) {
     {

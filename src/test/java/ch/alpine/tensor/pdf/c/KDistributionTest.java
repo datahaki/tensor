@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Serialization;
@@ -49,7 +49,7 @@ class KDistributionTest {
   void testInverseCDF() {
     Distribution distribution = KDistribution.of(1, 2.3);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    Scalar quantile = inverseCDF.quantile(RationalScalar.HALF);
+    Scalar quantile = inverseCDF.quantile(Rational.HALF);
     Chop._10.requireClose(quantile, RealScalar.of(0.9532822409824206)); // Mathematica
     Scalar quantile2 = inverseCDF.quantile(RealScalar.ONE);
     assertEquals(quantile2, DoubleScalar.POSITIVE_INFINITY);
@@ -66,7 +66,7 @@ class KDistributionTest {
   void testMean() {
     Distribution distribution = KDistribution.of(2, 8);
     Scalar mean = Mean.of(distribution);
-    Tolerance.CHOP.requireClose(mean, Pi.VALUE.multiply(RationalScalar.of(3, 4)));
+    Tolerance.CHOP.requireClose(mean, Pi.VALUE.multiply(Rational.of(3, 4)));
     Scalar variance = Variance.of(distribution);
     Tolerance.CHOP.requireClose(variance, RealScalar.of(2.448347524387236));
   }

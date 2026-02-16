@@ -9,7 +9,7 @@ import java.util.NavigableMap;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.chq.IntegerQ;
@@ -35,12 +35,12 @@ class EvaluatedDiscreteDistributionTest {
 
   @Test
   void testBernoulli() {
-    Scalar p = RationalScalar.of(1, 3);
+    Scalar p = Rational.of(1, 3);
     EvaluatedDiscreteDistribution distribution = //
         (EvaluatedDiscreteDistribution) BernoulliDistribution.of(p);
     NavigableMap<Scalar, Scalar> map = distribution.inverse_cdf();
-    assertEquals(map.get(RationalScalar.of(2, 3)), RealScalar.ZERO);
-    assertEquals(map.get(RationalScalar.of(1, 1)), RealScalar.ONE);
+    assertEquals(map.get(Rational.of(2, 3)), RealScalar.ZERO);
+    assertEquals(map.get(Rational.of(1, 1)), RealScalar.ONE);
   }
 
   @Test

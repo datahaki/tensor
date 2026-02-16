@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -65,7 +65,7 @@ public class RiceDistribution implements Distribution, //
   @Override // from PDF
   public Scalar at(Scalar x) {
     if (Scalars.lessThan(RealScalar.ZERO, x)) {
-      Scalar factor = Exp.FUNCTION.apply(x.multiply(x).add(a2).divide(b2).multiply(RationalScalar.HALF).negate());
+      Scalar factor = Exp.FUNCTION.apply(x.multiply(x).add(a2).divide(b2).multiply(Rational.HALF).negate());
       if (Scalars.nonZero(factor))
         return Times.of(factor, x, BesselI._0(x.multiply(alpha).divide(b2))).divide(b2);
     }
@@ -77,12 +77,12 @@ public class RiceDistribution implements Distribution, //
     return Times.of( //
         Sqrt.FUNCTION.apply(Pi.HALF), //
         beta, //
-        LaguerreL.of(RationalScalar.HALF, a2.divide(b2).multiply(RationalScalar.HALF).negate()));
+        LaguerreL.of(Rational.HALF, a2.divide(b2).multiply(Rational.HALF).negate()));
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    Scalar g = LaguerreL.of(RationalScalar.HALF, a2.divide(b2).multiply(RationalScalar.HALF).negate());
+    Scalar g = LaguerreL.of(Rational.HALF, a2.divide(b2).multiply(Rational.HALF).negate());
     Scalar f = Times.of(Pi.HALF, b2, g, g);
     return a2.add(b2).add(b2).subtract(f);
   }

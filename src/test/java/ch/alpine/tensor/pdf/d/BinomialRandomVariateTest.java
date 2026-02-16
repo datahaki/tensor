@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -28,7 +28,7 @@ class BinomialRandomVariateTest {
   @Test
   void testDivert() {
     assertEquals(BinomialDistribution.of(1200, DoubleScalar.of(0.5)).getClass(), BinomialRandomVariate.class);
-    assertEquals(BinomialDistribution.of(1200, RationalScalar.of(1, 2)).getClass(), BinomialDistribution.class);
+    assertEquals(BinomialDistribution.of(1200, Rational.of(1, 2)).getClass(), BinomialDistribution.class);
     assertEquals(BinomialDistribution.of(12000, DoubleScalar.of(0.1)).getClass(), BinomialRandomVariate.class);
     assertEquals(BinomialDistribution.of(120000, DoubleScalar.of(0.0001)).getClass(), BinomialRandomVariate.class);
   }

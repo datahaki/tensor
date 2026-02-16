@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -51,7 +51,7 @@ class RationalizeTest {
   }
 
   private static void betterEquals(Scalar value) {
-    Scalar eps = RationalScalar.of(1, 100);
+    Scalar eps = Rational.of(1, 100);
     Scalar hi = Ceiling.toMultipleOf(eps).apply(value);
     Scalar lo = Floor.toMultipleOf(eps).apply(value);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(100);
@@ -94,9 +94,9 @@ class RationalizeTest {
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(THND);
     // final Scalar THND = RealScalar.of(1000);
     // assertEquals(Rationalize.of(RealScalar.of(Math.PI), RealScalar.of(102)).toString(), "311/99");
-    assertEquals(suo.apply(RationalScalar.of(2, 3)), RationalScalar.of(2, 3));
+    assertEquals(suo.apply(Rational.of(2, 3)), Rational.of(2, 3));
     for (int num = 76510; num <= 76650; ++num) {
-      RationalScalar input = (RationalScalar) RationalScalar.of(num, 10000);
+      Rational input = (Rational) Rational.of(num, 10000);
       final Scalar result = suo.apply(input);
       if (Scalars.lessThan(THND, RealScalar.of(input.denominator()))) {
         assertNotEquals(input, result);
@@ -114,8 +114,8 @@ class RationalizeTest {
     Scalar tenth = RealScalar.of(0.1);
     // double comp = 1/6.0; // 0.1666...
     // System.out.println(comp);
-    assertEquals(suo.apply(tenth), RationalScalar.of(1, 6));
-    assertEquals(suo.apply(tenth.negate()), RationalScalar.of(-1, 6));
+    assertEquals(suo.apply(tenth), Rational.of(1, 6));
+    assertEquals(suo.apply(tenth.negate()), Rational.of(-1, 6));
   }
 
   @Test
@@ -133,8 +133,8 @@ class RationalizeTest {
 
   private static void denCheck(Scalar scalar, Scalar max) {
     Tensor re = Rationalize.withDenominatorLessEquals(max).apply(scalar);
-    RationalScalar rationalScalar = (RationalScalar) re;
-    assertTrue(Scalars.lessEquals(RealScalar.of(rationalScalar.denominator()), max));
+    Rational rational = (Rational) re;
+    assertTrue(Scalars.lessEquals(RealScalar.of(rational.denominator()), max));
   }
 
   @Test
@@ -149,11 +149,11 @@ class RationalizeTest {
 
   @Test
   void testRationalize() {
-    assertEquals(Rationalize._1.apply(DoubleScalar.of(12.435)), RationalScalar.of(124, 10));
-    assertEquals(Rationalize._2.apply(DoubleScalar.of(12.435)), RationalScalar.of(311, 25));
-    assertEquals(Rationalize._3.apply(DoubleScalar.of(12.435)), RationalScalar.of(12435, 1000));
-    assertEquals(Rationalize._4.apply(Pi.VALUE), RationalScalar.of(31416, 10000));
-    assertEquals(Rationalize._3.apply(Quantity.of(1.23456, "m")), Quantity.of(RationalScalar.of(1235, 1000), "m"));
+    assertEquals(Rationalize._1.apply(DoubleScalar.of(12.435)), Rational.of(124, 10));
+    assertEquals(Rationalize._2.apply(DoubleScalar.of(12.435)), Rational.of(311, 25));
+    assertEquals(Rationalize._3.apply(DoubleScalar.of(12.435)), Rational.of(12435, 1000));
+    assertEquals(Rationalize._4.apply(Pi.VALUE), Rational.of(31416, 10000));
+    assertEquals(Rationalize._3.apply(Quantity.of(1.23456, "m")), Quantity.of(Rational.of(1235, 1000), "m"));
   }
 
   @Test

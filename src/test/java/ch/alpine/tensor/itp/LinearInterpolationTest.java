@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -90,11 +90,11 @@ class LinearInterpolationTest {
     Tensor tensor = Tensors.matrix(new Number[][] { { 5, 5, 5 }, { 1, 10, 100 } });
     Interpolation interpolation = LinearInterpolation.of(tensor);
     {
-      Tensor res = interpolation.get(Tensors.vector(1, 3).multiply(RationalScalar.of(1, 2)));
+      Tensor res = interpolation.get(Tensors.vector(1, 3).multiply(Rational.of(1, 2)));
       assertEquals(res, RealScalar.of(30)); // 5+5+10+100==120 -> 120 / 4 == 30
     }
     {
-      Tensor res = interpolation.get(Tensors.of(RationalScalar.of(1, 2)));
+      Tensor res = interpolation.get(Tensors.of(Rational.of(1, 2)));
       Tensor from = Tensors.fromString("{3, 15/2, 105/2}");
       assertEquals(res, from);
     }
@@ -117,7 +117,7 @@ class LinearInterpolationTest {
     Interpolation interpolation = LinearInterpolation.of(arr);
     Scalar result = interpolation.Get(Tensors.vector(0.3, 1.8, 0.3));
     assertFalse(ExactScalarQ.of(result));
-    assertEquals(result, RationalScalar.of(3, 4));
+    assertEquals(result, Rational.of(3, 4));
   }
 
   @Test
@@ -137,20 +137,20 @@ class LinearInterpolationTest {
     Interpolation interpolation = LinearInterpolation.of(matrix);
     Scalar r1 = Quantity.of((1 + 4) * 0.5, "m");
     Scalar r2 = Quantity.of((9 + 6) * 0.5, "s");
-    Tensor vec = interpolation.get(Tensors.of(RationalScalar.HALF));
+    Tensor vec = interpolation.get(Tensors.of(Rational.HALF));
     assertEquals(vec, Tensors.of(r1, r2));
     ExactTensorQ.require(vec);
-    Tensor at = interpolation.at(RationalScalar.HALF);
+    Tensor at = interpolation.at(Rational.HALF);
     assertEquals(at, Tensors.of(r1, r2));
     ExactTensorQ.require(at);
   }
 
   @Test
   void testExact() {
-    Distribution distribution = GeometricDistribution.of(RationalScalar.of(1, 3));
+    Distribution distribution = GeometricDistribution.of(Rational.of(1, 3));
     Tensor matrix = RandomVariate.of(distribution, 3, 5);
     Interpolation interpolation = LinearInterpolation.of(matrix);
-    Scalar index = RationalScalar.of(45, 31);
+    Scalar index = Rational.of(45, 31);
     Tensor res1 = interpolation.at(index);
     Tensor res2 = interpolation.get(Tensors.of(index));
     VectorQ.requireLength(res1, 5);
@@ -197,7 +197,7 @@ class LinearInterpolationTest {
   void testClip() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator interpolation = Serialization.copy(LinearInterpolation.of(Clips.interval(10, 14)));
     assertEquals(ExactScalarQ.require(interpolation.apply(RealScalar.ZERO)), RealScalar.of(10));
-    assertEquals(ExactScalarQ.require(interpolation.apply(RationalScalar.of(1, 4))), RealScalar.of(11));
+    assertEquals(ExactScalarQ.require(interpolation.apply(Rational.of(1, 4))), RealScalar.of(11));
     assertEquals(ExactScalarQ.require(interpolation.apply(RealScalar.ONE)), RealScalar.of(14));
     assertThrows(Exception.class, () -> interpolation.apply(RealScalar.of(-0.1)));
     assertThrows(Exception.class, () -> interpolation.apply(RealScalar.of(1.1)));
@@ -206,13 +206,13 @@ class LinearInterpolationTest {
   @Test
   void testClipWidthZero() {
     ScalarUnaryOperator interpolation = LinearInterpolation.of(Clips.interval(3.0, 3.0));
-    assertEquals(interpolation.apply(RationalScalar.of(3, 10)), RealScalar.of(3.0));
+    assertEquals(interpolation.apply(Rational.of(3, 10)), RealScalar.of(3.0));
   }
 
   @Test
   void testLinterpWidthZero() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.vector(3.0, 3.0));
-    assertEquals(interpolation.at(RationalScalar.of(3, 10)), RealScalar.of(3.0));
+    assertEquals(interpolation.at(Rational.of(3, 10)), RealScalar.of(3.0));
   }
 
   @Test

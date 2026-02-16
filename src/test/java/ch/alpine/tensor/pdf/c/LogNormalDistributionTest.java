@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -36,8 +36,8 @@ class LogNormalDistributionTest {
   @Test
   void testSimple() throws ClassNotFoundException, IOException {
     LogNormalDistribution distribution = (LogNormalDistribution) Serialization.copy( //
-        LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(2, 3)));
-    Tolerance.CHOP.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(RationalScalar.of(13, 18)));
+        LogNormalDistribution.of(Rational.HALF, Rational.of(2, 3)));
+    Tolerance.CHOP.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(Rational.of(13, 18)));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(2.372521698687904));
     {
       Scalar cdf = distribution.p_lessThan(RealScalar.of(0.7));
@@ -70,10 +70,10 @@ class LogNormalDistributionTest {
 
   @Test
   void testMean() {
-    Distribution distribution = LogNormalDistribution.of(RationalScalar.of(4, 5), RationalScalar.of(2, 3));
+    Distribution distribution = LogNormalDistribution.of(Rational.of(4, 5), Rational.of(2, 3));
     Scalar value = Mean.ofVector(RandomVariate.of(distribution, 200));
     Clips.interval(2.25, 3.5).requireInside(value);
-    Tolerance.CHOP.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(RationalScalar.of(46, 45)));
+    Tolerance.CHOP.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(Rational.of(46, 45)));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(4.323016391513655));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
@@ -116,8 +116,8 @@ class LogNormalDistributionTest {
 
   @Test
   void testSigmaZero() {
-    Distribution distribution = LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO);
-    assertEquals(Mean.of(distribution), Exp.FUNCTION.apply(RationalScalar.HALF));
+    Distribution distribution = LogNormalDistribution.of(Rational.HALF, RealScalar.ZERO);
+    assertEquals(Mean.of(distribution), Exp.FUNCTION.apply(Rational.HALF));
     assertEquals(distribution.toString(), "LogDiracDeltaDistribution[1/2]");
   }
 
@@ -128,13 +128,13 @@ class LogNormalDistributionTest {
 
   @Test
   void testSigmaNonPositiveFail() {
-    assertThrows(Throw.class, () -> LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3)));
+    assertThrows(Throw.class, () -> LogNormalDistribution.of(Rational.HALF, Rational.of(-2, 3)));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> LogNormalDistribution.of(Quantity.of(RationalScalar.HALF, "m"), RationalScalar.of(2, 3)));
-    assertThrows(Throw.class, () -> LogNormalDistribution.of(RationalScalar.of(2, 3), Quantity.of(RationalScalar.HALF, "m")));
+    assertThrows(Throw.class, () -> LogNormalDistribution.of(Quantity.of(Rational.HALF, "m"), Rational.of(2, 3)));
+    assertThrows(Throw.class, () -> LogNormalDistribution.of(Rational.of(2, 3), Quantity.of(Rational.HALF, "m")));
   }
 
   @Test

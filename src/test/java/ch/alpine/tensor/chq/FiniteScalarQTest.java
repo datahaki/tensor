@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -68,7 +68,7 @@ class FiniteScalarQTest {
   @Test
   void testTrue() {
     assertTrue(FiniteScalarQ.of(Pi.HALF));
-    assertTrue(FiniteScalarQ.of(RationalScalar.HALF));
+    assertTrue(FiniteScalarQ.of(Rational.HALF));
     assertTrue(FiniteScalarQ.of(Scalars.fromString("2+3*I")));
     assertTrue(FiniteScalarQ.of(Scalars.fromString("2+3.4*I")));
     assertTrue(FiniteScalarQ.of(Scalars.fromString("2+3.4*I[s^3]")));

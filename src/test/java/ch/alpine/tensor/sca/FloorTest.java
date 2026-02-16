@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -25,11 +25,11 @@ class FloorTest {
   @Test
   void testFloor() {
     assertEquals(Floor.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
-    assertEquals(Floor.FUNCTION.apply(RationalScalar.of(-5, 2)), RationalScalar.of(-3, 1));
-    assertEquals(Floor.FUNCTION.apply(RationalScalar.of(5, 2)), RationalScalar.of(2, 1));
+    assertEquals(Floor.FUNCTION.apply(Rational.of(-5, 2)), Rational.of(-3, 1));
+    assertEquals(Floor.FUNCTION.apply(Rational.of(5, 2)), Rational.of(2, 1));
     assertEquals(Floor.FUNCTION.apply(DoubleScalar.of(0.123)), RealScalar.ZERO);
     assertEquals(Floor.FUNCTION.apply(RealScalar.ONE), RealScalar.ONE);
-    assertEquals(Floor.FUNCTION.apply(DoubleScalar.of(-0.123)), RationalScalar.of(-1, 1));
+    assertEquals(Floor.FUNCTION.apply(DoubleScalar.of(-0.123)), Rational.of(-1, 1));
   }
 
   @Test
@@ -61,12 +61,12 @@ class FloorTest {
 
   @Test
   void testRational1() {
-    Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
+    Scalar s = Rational.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Floor.intValueExact(s), 17);
     assertEquals(Floor.longValueExact(s), 17);
     Scalar r = Floor.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(17));
-    assertInstanceOf(RationalScalar.class, r);
+    assertInstanceOf(Rational.class, r);
   }
 
   @Test
@@ -77,10 +77,10 @@ class FloorTest {
 
   @Test
   void testRational2() {
-    Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
+    Scalar s = Rational.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Floor.FUNCTION.apply(s);
     assertEquals(r, RealScalar.of(54));
-    assertInstanceOf(RationalScalar.class, r);
+    assertInstanceOf(Rational.class, r);
   }
 
   @Test

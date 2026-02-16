@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -58,7 +58,7 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    Scalar p = Exp.FUNCTION.apply(Abs.between(x, mean).negate().divide(beta)).multiply(RationalScalar.HALF);
+    Scalar p = Exp.FUNCTION.apply(Abs.between(x, mean).negate().divide(beta)).multiply(Rational.HALF);
     return Scalars.lessEquals(mean, x) //
         ? RealScalar.ONE.subtract(p)
         : p;
@@ -77,7 +77,7 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
 
   @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
-    if (Scalars.lessEquals(p, RationalScalar.HALF))
+    if (Scalars.lessEquals(p, Rational.HALF))
       return mean.add(Log.FUNCTION.apply(p.add(p)).multiply(beta));
     Scalar c = RealScalar.ONE.subtract(p);
     return mean.subtract(Log.FUNCTION.apply(c.add(c)).multiply(beta));

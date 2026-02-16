@@ -3,7 +3,7 @@ package ch.alpine.tensor.mat.ex;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -42,7 +42,7 @@ import ch.alpine.tensor.sca.pow.Power;
     yk = matrix;
     Tensor id = StaticHelper.IDENTITY_MATRIX.apply(n);
     Tensor id2 = id.multiply(HALF);
-    ScalarUnaryOperator power = Power.function(RationalScalar.of(-1, n << 1));
+    ScalarUnaryOperator power = Power.function(Rational.of(-1, n << 1));
     // Incomplete square root cascade
     int max = MatrixSqrt.MAX_ITERATIONS.get();
     for (; iteration < max; ++iteration) {

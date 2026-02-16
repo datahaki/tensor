@@ -1,25 +1,25 @@
 // code by jph
 package ch.alpine.tensor.lie.bch;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
 /* package */ class BchSeries6 extends BchSeries {
-  private static final Scalar P1_2 = RationalScalar.of(1, 2);
-  private static final Scalar P1_12 = RationalScalar.of(1, 12);
-  private static final Scalar N1_12 = RationalScalar.of(-1, 12);
-  private static final Scalar N1_24 = RationalScalar.of(-1, 24);
-  private static final Scalar N1_720 = RationalScalar.of(-1, 720);
-  private static final Scalar N1_120 = RationalScalar.of(-1, 120);
-  private static final Scalar N1_360 = RationalScalar.of(-1, 360);
-  private static final Scalar P1_360 = RationalScalar.of(1, 360);
-  private static final Scalar P1_120 = RationalScalar.of(1, 120);
-  private static final Scalar P1_720 = RationalScalar.of(1, 720);
-  private static final Scalar N1_1440 = RationalScalar.of(-1, 1440);
-  private static final Scalar P1_240 = RationalScalar.of(1, 240);
-  private static final Scalar P1_1440 = RationalScalar.of(1, 1440);
+  private static final Scalar P1_2 = Rational.of(1, 2);
+  private static final Scalar P1_12 = Rational.of(1, 12);
+  private static final Scalar N1_12 = Rational.of(-1, 12);
+  private static final Scalar N1_24 = Rational.of(-1, 24);
+  private static final Scalar N1_720 = Rational.of(-1, 720);
+  private static final Scalar N1_120 = Rational.of(-1, 120);
+  private static final Scalar N1_360 = Rational.of(-1, 360);
+  private static final Scalar P1_360 = Rational.of(1, 360);
+  private static final Scalar P1_120 = Rational.of(1, 120);
+  private static final Scalar P1_720 = Rational.of(1, 720);
+  private static final Scalar N1_1440 = Rational.of(-1, 1440);
+  private static final Scalar P1_240 = Rational.of(1, 240);
+  private static final Scalar P1_1440 = Rational.of(1, 1440);
 
   public BchSeries6(Tensor ad) {
     super(ad);

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.TensorRank;
@@ -43,6 +43,6 @@ public enum Symmetrize {
   static Tensor _01(Tensor tensor) {
     Int i = new Int();
     return Tensor.of(tensor.stream() //
-        .map(row -> row.add(tensor.get(Tensor.ALL, i.getAndIncrement())).multiply(RationalScalar.HALF)));
+        .map(row -> row.add(tensor.get(Tensor.ALL, i.getAndIncrement())).multiply(Rational.HALF)));
   }
 }

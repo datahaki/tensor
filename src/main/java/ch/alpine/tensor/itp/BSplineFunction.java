@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -50,7 +50,7 @@ public abstract class BSplineFunction implements ScalarTensorFunction {
     this.sequence = Objects.requireNonNull(sequence);
     half = degree / 2;
     shift = Integers.isEven(degree) //
-        ? RationalScalar.HALF
+        ? Rational.HALF
         : RealScalar.ZERO;
   }
 

@@ -1,7 +1,7 @@
 // code by gjoel and jph
 package ch.alpine.tensor.pdf;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -31,7 +31,7 @@ public enum BinningMethods implements TensorScalarFunction {
     @Override
     public Scalar apply(Tensor tensor) {
       Scalar crt = crt_length(tensor);
-      return RationalScalar.of(7, 2).multiply(StandardDeviation.ofVector(tensor)).divide(crt);
+      return Rational.of(7, 2).multiply(StandardDeviation.ofVector(tensor)).divide(crt);
     }
   },
   /** Freedman-Diaconis' choice:

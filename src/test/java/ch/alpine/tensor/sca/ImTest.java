@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -24,7 +24,7 @@ class ImTest {
   @Test
   void testExact() {
     Scalar scalar = Im.FUNCTION.apply(Scalars.fromString("3+I*6/7"));
-    assertEquals(scalar, RationalScalar.of(6, 7));
+    assertEquals(scalar, Rational.of(6, 7));
     ExactScalarQ.require(scalar);
     assertTrue(Im.allZero(Pi.VALUE));
   }

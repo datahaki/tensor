@@ -9,7 +9,7 @@ import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -81,7 +81,7 @@ class BSplineFunctionCyclicTest {
   @Test
   void testExact() {
     Distribution distribution = UniformDistribution.of(0, 3);
-    ScalarUnaryOperator scalarUnaryOperator = Round.toMultipleOf(RationalScalar.of(1, 7));
+    ScalarUnaryOperator scalarUnaryOperator = Round.toMultipleOf(Rational.of(1, 7));
     for (int degree = 0; degree < 5; ++degree) {
       ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(degree, HilbertMatrix.of(3, 5));
       RandomVariate.of(distribution, 20).maps(scalarTensorFunction);

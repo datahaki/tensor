@@ -11,7 +11,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -138,7 +138,7 @@ class GompertzMakehamDistributionTest {
     assertThrows(Throw.class, () -> cdf.p_lessEquals(Quantity.of(-1, "m^2")));
     assertThrows(Throw.class, () -> cdf.p_lessEquals(Quantity.of(+1, "m^2")));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    Scalar quantile = inverseCDF.quantile(RationalScalar.of(1, 8));
+    Scalar quantile = inverseCDF.quantile(Rational.of(1, 8));
     Tolerance.CHOP.requireClose(quantile, Scalars.fromString("2.8271544195740326[m]"));
   }
 

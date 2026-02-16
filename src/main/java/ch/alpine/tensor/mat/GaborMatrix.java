@@ -4,7 +4,7 @@ package ch.alpine.tensor.mat;
 import java.util.Collections;
 import java.util.List;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -27,7 +27,7 @@ public enum GaborMatrix {
    * @param phi
    * @return */
   public static Tensor of(int r, Tensor k, Scalar phi) {
-    Scalar sigmas = AbsSquared.FUNCTION.apply(RationalScalar.of(r, 2));
+    Scalar sigmas = AbsSquared.FUNCTION.apply(Rational.of(r, 2));
     Scalar factor = sigmas.add(sigmas).negate();
     int m = 2 * r + 1;
     Scalar center = RealScalar.of(-r);

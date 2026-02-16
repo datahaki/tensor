@@ -17,7 +17,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -57,7 +57,7 @@ class ColorDataGradientsTest {
   @Test
   void testDeriveWithOpacity() {
     ColorDataGradient colorDataGradient1 = ColorDataGradients.CLASSIC.deriveWithOpacity(RealScalar.ONE);
-    ColorDataGradient colorDataGradient2 = ColorDataGradients.CLASSIC.deriveWithOpacity(RationalScalar.HALF);
+    ColorDataGradient colorDataGradient2 = ColorDataGradients.CLASSIC.deriveWithOpacity(Rational.HALF);
     Tensor rgba1 = colorDataGradient1.apply(RealScalar.of(0.5));
     Tensor rgba2 = colorDataGradient2.apply(RealScalar.of(0.5));
     assertEquals(rgba1, Tensors.vector(47.5, 195, 33.5, 255));
@@ -95,8 +95,8 @@ class ColorDataGradientsTest {
 
   @Test
   void testTemperatureCenter() {
-    assertEquals(ColorFormat.toColor(ColorDataGradients.TEMPERATURE.apply(RationalScalar.HALF)), Color.WHITE);
-    assertEquals(ColorFormat.toColor(ColorDataGradients.TEMPERATURE_LIGHT.apply(RationalScalar.HALF)), Color.WHITE);
+    assertEquals(ColorFormat.toColor(ColorDataGradients.TEMPERATURE.apply(Rational.HALF)), Color.WHITE);
+    assertEquals(ColorFormat.toColor(ColorDataGradients.TEMPERATURE_LIGHT.apply(Rational.HALF)), Color.WHITE);
   }
 
   @ParameterizedTest

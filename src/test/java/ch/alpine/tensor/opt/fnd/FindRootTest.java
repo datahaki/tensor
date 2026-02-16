@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
@@ -71,7 +71,7 @@ class FindRootTest {
     Scalar T = RealScalar.of(300);
     Scalar r = RealScalar.of(700);
     Scalar t2 = Log.FUNCTION.apply(c.divide(RealScalar.ONE.subtract(c))).multiply(T);
-    Scalar t1 = Times.of(c.subtract(RationalScalar.HALF), RealScalar.of(4), r);
+    Scalar t1 = Times.of(c.subtract(Rational.HALF), RealScalar.of(4), r);
     return t1.subtract(t2);
   }
 
@@ -104,13 +104,13 @@ class FindRootTest {
   @Test
   void testLinear2() {
     Scalar scalar = linear(Clips.interval(10, 11), RealScalar.of(5), RealScalar.of(-2));
-    assertEquals(scalar, RationalScalar.of(75, 7));
+    assertEquals(scalar, Rational.of(75, 7));
   }
 
   @Test
   void testOther() {
     Scalar scalar = linear(Clips.interval(5, 6), RealScalar.of(2), RealScalar.of(-1));
-    assertEquals(scalar, RationalScalar.of(5 * 3 + 2, 3));
+    assertEquals(scalar, Rational.of(5 * 3 + 2, 3));
   }
 
   @Test

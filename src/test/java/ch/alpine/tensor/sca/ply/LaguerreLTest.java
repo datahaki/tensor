@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
@@ -22,7 +22,7 @@ class LaguerreLTest {
 
   @Test
   void testHalf() {
-    Scalar result = LaguerreL.of(RationalScalar.HALF, RealScalar.of(2.34));
+    Scalar result = LaguerreL.of(Rational.HALF, RealScalar.of(2.34));
     Tolerance.CHOP.requireClose(result, RealScalar.of(-0.716753249916647));
   }
 

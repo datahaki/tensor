@@ -11,7 +11,7 @@ import java.util.NavigableMap;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -39,7 +39,7 @@ class HuKahngTest {
     Chop.NONE.requireAllZero(res);
     c.dot(sol);
     NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(c, m, b, true);
-    Tensor xs = navigableMap.get(Quantity.of(RationalScalar.of(216, 5), "USD"));
+    Tensor xs = navigableMap.get(Quantity.of(Rational.of(216, 5), "USD"));
     assertEquals(xs, Tensors.fromString("{{24/5, 24/5}}"));
     Tensor x = xs.get(0);
     Tensor mx = m.dot(x);
@@ -63,7 +63,7 @@ class HuKahngTest {
     Tensor m = Tensors.fromString("{{11[lb], 10[lb], 9[lb]}}");
     Tensor b = Tensors.fromString("{20[lb]}");
     NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(c, m, b, true);
-    Tensor sol1 = navigableMap.get(Quantity.of(RationalScalar.of(240, 11), "USD"));
+    Tensor sol1 = navigableMap.get(Quantity.of(Rational.of(240, 11), "USD"));
     assertEquals(sol1, Tensors.fromString("{{20/11, 0, 0}}"));
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
@@ -87,7 +87,7 @@ class HuKahngTest {
         Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
     Scalar scalar = new LinearProgramQ(lpd).check(true);
-    assertEquals(scalar, RationalScalar.of(10, 3));
+    assertEquals(scalar, Rational.of(10, 3));
   }
 
   @Test

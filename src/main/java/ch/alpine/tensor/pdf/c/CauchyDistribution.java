@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.io.MathematicaFormat;
@@ -28,7 +28,7 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
    * @param b positive
    * @return */
   public static Distribution of(Scalar a, Scalar b) {
-    a.add(b.multiply(RationalScalar.HALF));
+    a.add(b.multiply(Rational.HALF));
     return new CauchyDistribution( //
         Objects.requireNonNull(a), //
         Sign.requirePositive(StaticHelper.normal(a, b)));
@@ -68,7 +68,7 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    return ArcTan.of(b, x.subtract(a)).divide(Pi.VALUE).add(RationalScalar.HALF);
+    return ArcTan.of(b, x.subtract(a)).divide(Pi.VALUE).add(Rational.HALF);
   }
 
   @Override // from MeanInterface

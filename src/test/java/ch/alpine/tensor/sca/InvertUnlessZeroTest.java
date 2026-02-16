@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -27,7 +27,7 @@ class InvertUnlessZeroTest {
     Scalar scalar = Quantity.of(-2, "m");
     Scalar invert = InvertUnlessZero.FUNCTION.apply(scalar);
     ExactScalarQ.require(invert);
-    assertEquals(invert, Quantity.of(RationalScalar.HALF, "m^-1").negate());
+    assertEquals(invert, Quantity.of(Rational.HALF, "m^-1").negate());
   }
 
   @Test

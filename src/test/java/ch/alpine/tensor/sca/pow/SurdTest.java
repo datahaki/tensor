@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -56,8 +56,8 @@ class SurdTest {
   void testNegativeExp() {
     Scalar scalar = Surd.of(-1).apply(RealScalar.of(4));
     ExactScalarQ.require(scalar);
-    assertEquals(scalar, RationalScalar.of(1, 4));
-    assertEquals(Surd.of(-2).apply(RealScalar.of(4)), RationalScalar.of(1, 2));
+    assertEquals(scalar, Rational.of(1, 4));
+    assertEquals(Surd.of(-2).apply(RealScalar.of(4)), Rational.of(1, 2));
   }
 
   @Test
@@ -72,16 +72,16 @@ class SurdTest {
   void testNegativeN() {
     ScalarUnaryOperator suo = Surd.of(-3);
     assertEquals(suo.toString(), "Surd[-3]");
-    Tolerance.CHOP.requireClose(suo.apply(RationalScalar.of(1, 27)), RealScalar.of(3));
+    Tolerance.CHOP.requireClose(suo.apply(Rational.of(1, 27)), RealScalar.of(3));
   }
 
   @Test
   void testNNegativeTwo() {
     ScalarUnaryOperator suo = Surd.of(-2);
     assertEquals(suo.toString(), "Surd[-2]");
-    Scalar scalar = suo.apply(RationalScalar.of(9, 16));
+    Scalar scalar = suo.apply(Rational.of(9, 16));
     ExactScalarQ.require(scalar);
-    assertEquals(scalar, RationalScalar.of(4, 3));
+    assertEquals(scalar, Rational.of(4, 3));
   }
 
   @Test

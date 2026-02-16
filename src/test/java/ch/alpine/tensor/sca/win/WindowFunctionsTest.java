@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -55,7 +55,7 @@ class WindowFunctionsTest {
   @EnumSource
   void testDecimal(WindowFunctions windowFunctions) {
     Distribution distribution = UniformDistribution.unit(30);
-    Scalar x = RandomVariate.of(distribution).subtract(RationalScalar.HALF);
+    Scalar x = RandomVariate.of(distribution).subtract(Rational.HALF);
     assertInstanceOf(DecimalScalar.class, x);
     Scalar scalar = windowFunctions.get().apply(x);
     // if (scalar instanceof DoubleScalar) {

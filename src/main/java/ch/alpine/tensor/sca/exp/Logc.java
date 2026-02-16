@@ -2,7 +2,7 @@
 package ch.alpine.tensor.sca.exp;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -19,7 +19,7 @@ public enum Logc implements ScalarUnaryOperator {
   FUNCTION;
 
   private static final ScalarUnaryOperator SERIES = //
-      Polynomial.of(Tensors.vector(i -> RationalScalar.of(Integers.isEven(i) ? 1 : -1, i + 1), 10));
+      Polynomial.of(Tensors.vector(i -> Rational.of(Integers.isEven(i) ? 1 : -1, i + 1), 10));
   private static final Scalar _1 = DoubleScalar.of(1);
 
   @Override

@@ -12,7 +12,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -79,7 +79,7 @@ class CenteredIntervalTest {
 
   @Test
   void testInverse1() {
-    Scalar ci = CenteredInterval.of(Clips.interval(RationalScalar.of(9, 10), RationalScalar.of(11, 10)));
+    Scalar ci = CenteredInterval.of(Clips.interval(Rational.of(9, 10), Rational.of(11, 10)));
     Tensor matrix = Tensors.of( //
         Tensors.of(RealScalar.of(3), ci), //
         Tensors.of(RealScalar.of(2), RealScalar.of(4)));
@@ -90,15 +90,15 @@ class CenteredIntervalTest {
   @Test
   void testInverse2() {
     Tensor matrix = Tensors.of( //
-        Tensors.of(RealScalar.of(3), CenteredInterval.of(Clips.interval(RationalScalar.of(9, 10), RationalScalar.of(11, 10)))), //
-        Tensors.of(RealScalar.of(2), CenteredInterval.of(Clips.interval(RationalScalar.of(9, 10), RationalScalar.of(11, 10)))));
+        Tensors.of(RealScalar.of(3), CenteredInterval.of(Clips.interval(Rational.of(9, 10), Rational.of(11, 10)))), //
+        Tensors.of(RealScalar.of(2), CenteredInterval.of(Clips.interval(Rational.of(9, 10), Rational.of(11, 10)))));
     Sign.requirePositive(Det.of(matrix));
     Inverse.of(matrix, Pivots.FIRST_NON_ZERO);
   }
 
   @Test
   void testInverse3() {
-    Scalar ci = CenteredInterval.of(Clips.interval(RationalScalar.of(9, 10), RationalScalar.of(11, 10)));
+    Scalar ci = CenteredInterval.of(Clips.interval(Rational.of(9, 10), Rational.of(11, 10)));
     Tensor matrix = Tensors.of( //
         Tensors.of(RealScalar.of(1), ci), //
         Tensors.of(RealScalar.of(0), RealScalar.of(1)));

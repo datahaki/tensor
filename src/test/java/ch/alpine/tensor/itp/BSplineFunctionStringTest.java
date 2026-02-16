@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -55,7 +55,7 @@ class BSplineFunctionStringTest {
   void testLinear() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(1, Tensors.vector(2, 1, 5, 0, -2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
-    assertEquals(bSplineFunction.apply(RationalScalar.of(1, 2)), RationalScalar.of(3, 2));
+    assertEquals(bSplineFunction.apply(Rational.of(1, 2)), Rational.of(3, 2));
     assertEquals(bSplineFunction.apply(RealScalar.of(1)), RealScalar.of(1));
     assertEquals(bSplineFunction.apply(RealScalar.of(1.25)), RealScalar.of(2));
     assertEquals(bSplineFunction.apply(RealScalar.of(1.50)), RealScalar.of(3));
@@ -80,8 +80,8 @@ class BSplineFunctionStringTest {
   void testQuadratic() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(2, Tensors.vector(2, 1, 5, 0, -2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
-    assertEquals(bSplineFunction.apply(RealScalar.of(1)), RationalScalar.of(5, 3));
-    assertEquals(bSplineFunction.apply(RealScalar.of(2)), RationalScalar.of(31, 8));
+    assertEquals(bSplineFunction.apply(RealScalar.of(1)), Rational.of(5, 3));
+    assertEquals(bSplineFunction.apply(RealScalar.of(2)), Rational.of(31, 8));
     assertEquals(bSplineFunction.apply(RealScalar.of(4)), RealScalar.of(-2));
   }
 
@@ -100,8 +100,8 @@ class BSplineFunctionStringTest {
   void testCubic() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, Tensors.vector(2, 1, 5, 0, -2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
-    assertEquals(bSplineFunction.apply(RationalScalar.HALF), RationalScalar.of(173, 96));
-    assertEquals(bSplineFunction.apply(RealScalar.of(1)), RationalScalar.of(23, 12));
+    assertEquals(bSplineFunction.apply(Rational.HALF), Rational.of(173, 96));
+    assertEquals(bSplineFunction.apply(RealScalar.of(1)), Rational.of(23, 12));
     assertEquals(bSplineFunction.apply(RealScalar.of(4)), RealScalar.of(-2));
   }
 
@@ -109,7 +109,7 @@ class BSplineFunctionStringTest {
   void testCubicLinear() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, Tensors.vector(2, 1, 0, -1, -2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
-    assertEquals(bSplineFunction.apply(RealScalar.of(1)), RationalScalar.of(13, 12));
+    assertEquals(bSplineFunction.apply(RealScalar.of(1)), Rational.of(13, 12));
     assertEquals(bSplineFunction.apply(RealScalar.of(2)), RealScalar.of(0));
     Tolerance.CHOP.requireClose(bSplineFunction.apply(RealScalar.of(3.999999999999)), RealScalar.of(-2));
     assertEquals(bSplineFunction.apply(RealScalar.of(4)), RealScalar.of(-2));

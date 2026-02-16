@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -35,7 +35,7 @@ class CentralMomentTest {
     Distribution distribution = TrapezoidalDistribution.of(2, 3, 4, 7);
     Scalar scalar = CentralMoment.of(distribution, 3);
     ExactScalarQ.require(scalar);
-    assertEquals(scalar, RationalScalar.of(326, 729));
+    assertEquals(scalar, Rational.of(326, 729));
     assertEquals(CentralMoment.of(distribution, 2), Variance.of(distribution));
     assertThrows(IllegalArgumentException.class, () -> CentralMoment.of(distribution, -1));
   }

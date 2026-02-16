@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import java.io.Serializable;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -24,7 +24,7 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
     StandardDeviationInterface, Serializable {
   private static final Scalar _4 = RealScalar.of(4);
   private static final Scalar _5 = RealScalar.of(5);
-  private static final Distribution STANDARD = of(RealScalar.of(1), RationalScalar.of(3, 2));
+  private static final Distribution STANDARD = of(RealScalar.of(1), Rational.of(3, 2));
 
   /** @param alpha positive real scalar
    * @param lambda positive real scalar
@@ -83,12 +83,12 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
     Scalar xl = x.multiply(lambda);
     Scalar div = alpha.multiply(Sqrt.FUNCTION.apply(xl));
     Scalar y = xl.subtract(RealScalar.ONE).divide(div).divide(Sqrt.FUNCTION.apply(RealScalar.TWO));
-    return Erfc.FUNCTION.apply(y.negate()).multiply(RationalScalar.HALF);
+    return Erfc.FUNCTION.apply(y.negate()).multiply(Rational.HALF);
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return RealScalar.ONE.add(alpha2.multiply(RationalScalar.HALF)).divide(lambda);
+    return RealScalar.ONE.add(alpha2.multiply(Rational.HALF)).divide(lambda);
   }
 
   @Override // from VarianceInterface

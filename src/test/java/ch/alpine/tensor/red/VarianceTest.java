@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -20,8 +20,8 @@ class VarianceTest {
   @Test
   void testVariance() {
     Tensor A = Tensors.vector(1, 2, 5, 7);
-    assertEquals(Mean.of(A), RationalScalar.of(15, 4));
-    assertEquals(Variance.ofVector(A), RationalScalar.of(91, 12));
+    assertEquals(Mean.of(A), Rational.of(15, 4));
+    assertEquals(Variance.ofVector(A), Rational.of(91, 12));
   }
 
   @Test
@@ -44,7 +44,7 @@ class VarianceTest {
 
   @Test
   void testDistribution() {
-    assertEquals(Variance.of(UniformDistribution.unit()), RationalScalar.of(1, 12));
+    assertEquals(Variance.of(UniformDistribution.unit()), Rational.of(1, 12));
   }
 
   @Test

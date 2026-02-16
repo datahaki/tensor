@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -31,14 +31,14 @@ class MetricPrefixTest {
   void testHecto() {
     assertEquals(MetricPrefix.HECTO.prefix("m"), "hm");
     assertEquals(MetricPrefix.HECTO.english("Meter"), "Hectometer");
-    assertEquals(MetricPrefix.HECTO.factor(), RationalScalar.of(100, 1));
+    assertEquals(MetricPrefix.HECTO.factor(), Rational.of(100, 1));
   }
 
   @Test
   void testMicro() {
     assertEquals(MetricPrefix.MICRO.prefix("s"), "us");
     assertEquals(MetricPrefix.MICRO.english("Seconds"), "Microseconds");
-    assertEquals(MetricPrefix.MICRO.factor(), RationalScalar.of(1, 1_000_000));
+    assertEquals(MetricPrefix.MICRO.factor(), Rational.of(1, 1_000_000));
   }
 
   @Test

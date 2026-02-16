@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -57,7 +57,7 @@ public class StudentTDistribution implements Distribution, //
     this.sigma = sigma;
     this.v = v;
     power = Power.function(RealScalar.ONE.add(v).divide(RealScalar.TWO));
-    factor = Sqrt.FUNCTION.apply(v).multiply(sigma).multiply(Beta.of(v.multiply(RationalScalar.HALF), RationalScalar.HALF));
+    factor = Sqrt.FUNCTION.apply(v).multiply(sigma).multiply(Beta.of(v.multiply(Rational.HALF), Rational.HALF));
   }
 
   @Override // from PDF

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -47,7 +47,7 @@ class BorelTannerDistributionTest {
 
   @Test
   void testExact() throws ClassNotFoundException, IOException {
-    Scalar alpha = RationalScalar.of(2, 3);
+    Scalar alpha = Rational.of(2, 3);
     Distribution distribution = Serialization.copy(BorelTannerDistribution.of(alpha, 7));
     CDF cdf = CDF.of(distribution);
     Tolerance.CHOP.requireClose(cdf.p_lessEquals(RealScalar.of(30)), RealScalar.of(0.8419882919812596));

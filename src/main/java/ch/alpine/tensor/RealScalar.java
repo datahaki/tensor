@@ -21,7 +21,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
  * 
  * <p>encodings provided by the tensor library are
  * <ul>
- * <li>integer fraction {@link RationalScalar}
+ * <li>integer fraction {@link Rational}
  * <li>decimal with double precision {@link DoubleScalar}
  * <li>decimal with extra precision {@link DecimalScalar}
  * </ul> */
@@ -29,17 +29,17 @@ public interface RealScalar extends Scalar, //
     AbsInterface, ArcTanInterface, ArgInterface, Comparable<Scalar>, ComplexEmbedding, //
     ConjugateInterface, LogInterface, PowerInterface, RoundingInterface, //
     SignInterface {
-  /** real scalar 0 as a {@link RationalScalar} */
-  Scalar ZERO = RationalScalar.integer(0);
-  /** real scalar 1 as a {@link RationalScalar} */
-  Scalar ONE = RationalScalar.integer(1);
-  /** real scalar 2 as a {@link RationalScalar} */
-  Scalar TWO = RationalScalar.integer(2);
+  /** real scalar 0 as a {@link Rational} */
+  Scalar ZERO = Rational.integer(0);
+  /** real scalar 1 as a {@link Rational} */
+  Scalar ONE = Rational.integer(1);
+  /** real scalar 2 as a {@link Rational} */
+  Scalar TWO = Rational.integer(2);
 
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(long value) {
-    return RationalScalar.integer(value);
+    return Rational.integer(value);
   }
 
   /** @param value
@@ -51,19 +51,19 @@ public interface RealScalar extends Scalar, //
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(Integer value) {
-    return RationalScalar.integer(value);
+    return Rational.integer(value);
   }
 
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(Long value) {
-    return RationalScalar.integer(value);
+    return Rational.integer(value);
   }
 
   /** @param bigInteger
    * @return real scalar of given integer value */
   static Scalar of(BigInteger bigInteger) {
-    return RationalScalar.integer(bigInteger);
+    return Rational.integer(bigInteger);
   }
 
   /** @param bigDecimal
@@ -73,7 +73,7 @@ public interface RealScalar extends Scalar, //
   }
 
   /** depending on the derived class of the given {@link Number},
-   * the value is encoded as {@link RationalScalar},
+   * the value is encoded as {@link Rational},
    * {@link DoubleScalar}, or {@link DecimalScalar}.
    * 
    * @param number non-null
@@ -86,12 +86,12 @@ public interface RealScalar extends Scalar, //
         number instanceof Byte || //
         number instanceof AtomicInteger || //
         number instanceof AtomicLong)
-      return RationalScalar.integer(number.longValue());
+      return Rational.integer(number.longValue());
     if (number instanceof Double || //
         number instanceof Float)
       return DoubleScalar.of(number.doubleValue());
     if (number instanceof BigInteger)
-      return RationalScalar.integer((BigInteger) number);
+      return Rational.integer((BigInteger) number);
     if (number instanceof BigDecimal)
       return DecimalScalar.of((BigDecimal) number);
     Objects.requireNonNull(number);

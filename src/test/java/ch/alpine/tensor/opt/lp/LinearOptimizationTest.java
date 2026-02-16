@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
@@ -116,13 +116,13 @@ class LinearOptimizationTest {
     Tensor xp = LinearOptimization.of(lpd);
     assertEquals(xp, Tensors.fromString("{2/3, 4/3}"));
     Tensor solp = SimplexCorners.of(lpd);
-    assertEquals(solp.dot(lpd.c).Get(0), RationalScalar.of(10, 9));
+    assertEquals(solp.dot(lpd.c).Get(0), Rational.of(10, 9));
     assertEquals(xp, solp.get(0));
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
     // LinearProgramming.of(lpd); // TODO TENSOR LP throws exception due to "unbounded"
     Tensor sold = SimplexCorners.of(lpp);
-    assertEquals(sold.dot(lpp.c).Get(0), RationalScalar.of(10, 9));
+    assertEquals(sold.dot(lpp.c).Get(0), Rational.of(10, 9));
     assertThrows(IllegalArgumentException.class, () -> lpp.requireFeasible(Tensors.vector(1, 1)));
     // TODO TENSOR LP primal vs dual
     // LinearProgramQ.check(lpp, false);

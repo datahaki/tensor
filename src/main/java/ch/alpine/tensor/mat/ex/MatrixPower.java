@@ -3,7 +3,7 @@ package ch.alpine.tensor.mat.ex;
 
 import java.math.BigInteger;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -60,9 +60,9 @@ public enum MatrixPower {
   public static Tensor of(Tensor matrix, Scalar exponent) {
     if (IntegerQ.of(exponent))
       return of(matrix, Scalars.bigIntegerValueExact(exponent));
-    if (exponent.equals(RationalScalar.HALF))
+    if (exponent.equals(Rational.HALF))
       return MatrixSqrt.of(matrix).sqrt();
-    if (exponent.equals(RationalScalar.HALF.negate()))
+    if (exponent.equals(Rational.HALF.negate()))
       return MatrixSqrt.of(matrix).sqrt_inverse();
     return MatrixExp.of(MatrixLog.of(matrix).multiply(exponent));
   }

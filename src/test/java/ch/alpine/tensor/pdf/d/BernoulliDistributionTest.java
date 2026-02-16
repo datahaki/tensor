@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -28,44 +28,44 @@ import ch.alpine.tensor.sca.N;
 class BernoulliDistributionTest {
   @Test
   void testEquals() {
-    Scalar p = RationalScalar.of(1, 3);
+    Scalar p = Rational.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
     PDF pdf = PDF.of(distribution);
     // PDF[BernoulliDistribution[1/3], 0] == 2/3
-    assertEquals(pdf.at(RealScalar.of(0)), RationalScalar.of(2, 3));
-    assertEquals(pdf.at(RealScalar.of(1)), RationalScalar.of(1, 3));
+    assertEquals(pdf.at(RealScalar.of(0)), Rational.of(2, 3));
+    assertEquals(pdf.at(RealScalar.of(1)), Rational.of(1, 3));
     assertEquals(pdf.at(RealScalar.of(2)), RealScalar.ZERO);
   }
 
   @Test
   void testLessThan() {
-    Scalar p = RationalScalar.of(1, 3);
+    Scalar p = Rational.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessThan(RealScalar.of(0)), RealScalar.ZERO);
-    assertEquals(cdf.p_lessThan(RealScalar.of(1)), RationalScalar.of(2, 3));
+    assertEquals(cdf.p_lessThan(RealScalar.of(1)), Rational.of(2, 3));
     assertEquals(cdf.p_lessThan(RealScalar.of(2)), RealScalar.ONE);
   }
 
   @Test
   void testLessEquals() {
-    Scalar p = RationalScalar.of(1, 3);
+    Scalar p = Rational.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
     CDF cdf = CDF.of(distribution);
-    assertEquals(cdf.p_lessEquals(RealScalar.of(0)), RationalScalar.of(2, 3));
+    assertEquals(cdf.p_lessEquals(RealScalar.of(0)), Rational.of(2, 3));
     assertEquals(cdf.p_lessEquals(RealScalar.of(1)), RealScalar.ONE);
     assertEquals(cdf.p_lessEquals(RealScalar.of(2)), RealScalar.ONE);
   }
 
   @Test
   void testSample() {
-    final Scalar p = RationalScalar.of(1, 3);
+    final Scalar p = Rational.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
     Tensor list = RandomVariate.of(distribution, 2000);
     Map<Tensor, Long> map = Tally.of(list);
     long v0 = map.get(RealScalar.ZERO);
     long v1 = map.get(RealScalar.ONE);
-    Scalar ratio = RationalScalar.of(v1, v0 + v1);
+    Scalar ratio = Rational.of(v1, v0 + v1);
     Scalar dev = N.DOUBLE.apply(Abs.between(ratio, p));
     assertTrue(Scalars.lessThan(dev, RealScalar.of(0.07)));
   }
@@ -96,8 +96,8 @@ class BernoulliDistributionTest {
 
   @Test
   void testFailP() {
-    assertThrows(Throw.class, () -> BernoulliDistribution.of(RationalScalar.of(-1, 3)));
-    assertThrows(Throw.class, () -> BernoulliDistribution.of(RationalScalar.of(4, 3)));
+    assertThrows(Throw.class, () -> BernoulliDistribution.of(Rational.of(-1, 3)));
+    assertThrows(Throw.class, () -> BernoulliDistribution.of(Rational.of(4, 3)));
   }
 
   @Test

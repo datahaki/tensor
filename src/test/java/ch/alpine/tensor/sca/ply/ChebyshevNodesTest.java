@@ -7,7 +7,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
@@ -30,7 +30,7 @@ class ChebyshevNodesTest {
     final Tensor m1 = ChebyshevNodes._1.matrix(n);
     final Tensor m2 = FourierDCT._2.matrix(n);
     final Scalar ratio = m1.Get(0, 0).divide(m2.Get(0, 0));
-    final Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, Integers.requirePositive(n)));
+    final Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(1, Integers.requirePositive(n)));
     Tolerance.CHOP.requireClose(ratio, scalar.reciprocal());
     Tolerance.CHOP.requireClose(m1, m2.multiply(ratio));
     final Tensor m3 = FourierDCT._3.matrix(n);

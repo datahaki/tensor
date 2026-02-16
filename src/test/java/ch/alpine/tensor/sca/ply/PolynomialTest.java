@@ -14,7 +14,7 @@ import java.util.random.RandomGenerator;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RandomQuaternion;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -437,13 +437,13 @@ class PolynomialTest {
     assertEquals(pd.coeffs(), al.coeffs());
     assertEquals(pd.coeffs(), Tensors.vector(10, 44, 59, 72, 66, 24, 21, 3));
     {
-      Scalar x = RationalScalar.HALF;
+      Scalar x = Rational.HALF;
       Scalar t1 = c1.apply(x).multiply(c2.apply(x));
       Scalar t2 = pd.apply(x);
       assertEquals(t1, t2);
     }
     {
-      JetScalar x = JetScalar.of(RationalScalar.HALF, 3);
+      JetScalar x = JetScalar.of(Rational.HALF, 3);
       Scalar t1 = c1.apply(x).multiply(c2.apply(x));
       Scalar t2 = pd.apply(x);
       assertEquals(t1, t2);
@@ -458,7 +458,7 @@ class PolynomialTest {
     assertEquals(c2.getUnitValues(), Unit.of("m^-1"));
     Polynomial pd = c1.times(c2);
     {
-      Scalar x = Quantity.of(RationalScalar.HALF, "m");
+      Scalar x = Quantity.of(Rational.HALF, "m");
       Scalar t1 = c1.apply(x).multiply(c2.apply(x));
       Scalar t2 = pd.apply(x);
       assertEquals(t1, t2);
@@ -492,7 +492,7 @@ class PolynomialTest {
     Tensor ydata = Tensors.vector(5, -2);
     Polynomial polynomial = Polynomial.fit(Tensors.vector(10, 11), ydata, 0);
     assertEquals(polynomial.coeffs().toString(), "{3/2}");
-    assertEquals(Mean.of(ydata), RationalScalar.of(3, 2));
+    assertEquals(Mean.of(ydata), Rational.of(3, 2));
   }
 
   @Test

@@ -7,7 +7,7 @@ import java.util.NavigableMap;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -38,7 +38,7 @@ class SimplexCornersTest {
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
     NavigableMap<Scalar, Tensor> map = SimplexCorners.of(c, m, b, true);
     // 2/3 4/3
-    assertTrue(map.containsKey(RationalScalar.of(-10, 9)));
+    assertTrue(map.containsKey(Rational.of(-10, 9)));
     // SimplexCorners.show(map);
   }
 
@@ -66,7 +66,7 @@ class SimplexCornersTest {
     Tensor b = Tensors.fromString("{2, 1, 2, 1, -1, 2, 1/2}");
     // Tensor x = LinearProgramming.minEquals(c, m, b);
     NavigableMap<Scalar, Tensor> map = SimplexCorners.of(c, m, b, true);
-    assertTrue(map.containsKey(RationalScalar.of(-2, 3)));
+    assertTrue(map.containsKey(Rational.of(-2, 3)));
     // assertEquals(x.extract(0, 2), Tensors.vector(0, 2));
     // System.out.println(map);
   }

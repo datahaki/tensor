@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.MultiplexScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -154,7 +154,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
   @Override // from SqrtInterface
   public Scalar sqrt() {
     Scalar sqrt = Sqrt.FUNCTION.apply(mean);
-    return of(sqrt, RationalScalar.HALF.multiply(sigma).divide(sqrt));
+    return of(sqrt, Rational.HALF.multiply(sigma).divide(sqrt));
   }
 
   @Override // from MeanInterface

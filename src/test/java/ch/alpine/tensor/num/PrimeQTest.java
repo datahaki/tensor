@@ -11,7 +11,7 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.Import;
@@ -20,7 +20,7 @@ class PrimeQTest {
   @Test
   void testPrimes() {
     for (Tensor _x : Import.of("/ch/alpine/tensor/num/primes.vector")) {
-      RationalScalar x = (RationalScalar) _x;
+      Rational x = (Rational) _x;
       assertTrue(x.numerator().isProbablePrime(100));
       assertTrue(PrimeQ.of(x));
       assertEquals(PrimeQ.require(x), x);
@@ -45,8 +45,8 @@ class PrimeQTest {
   void testPrimeFail() {
     assertThrows(IllegalArgumentException.class, () -> PrimeQ.require(BigInteger.TEN));
     assertThrows(Throw.class, () -> PrimeQ.require(Pi.HALF));
-    assertThrows(Throw.class, () -> PrimeQ.require(RationalScalar.of(2, 3)));
-    assertThrows(IllegalArgumentException.class, () -> PrimeQ.require(RationalScalar.of(200, 1)));
+    assertThrows(Throw.class, () -> PrimeQ.require(Rational.of(2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> PrimeQ.require(Rational.of(200, 1)));
   }
 
   @Test

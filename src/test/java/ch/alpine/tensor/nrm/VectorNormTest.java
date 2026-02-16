@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -58,7 +58,7 @@ class VectorNormTest {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(4, "m");
     Tensor vec = Tensors.of(qs1, qs2);
-    Scalar lhs = VectorNorm.of(RationalScalar.of(7, 3)).apply(vec);
+    Scalar lhs = VectorNorm.of(Rational.of(7, 3)).apply(vec);
     Scalar rhs = Quantity.of(4.774145448367236, "m");
     Chop._13.requireClose(lhs, rhs);
   }

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -28,7 +28,7 @@ class AbsSquaredTest {
   void testAbsAndSquared() {
     Tensor tensor = Tensors.of( //
         Quaternion.of(1, 2, 3, 4), //
-        RationalScalar.HALF, RationalScalar.of(2, 7), RealScalar.TWO, //
+        Rational.HALF, Rational.of(2, 7), RealScalar.TWO, //
         ComplexScalar.I, ComplexScalar.of(2, 3), ComplexScalar.of(2.0, 3.3), //
         RealScalar.of(-3), Pi.VALUE, Pi.HALF.negate(), //
         Quantity.of(2.3, "m*s^-3"), Quantity.of(ComplexScalar.of(2, 3), "m^2*s^-1"));

@@ -23,7 +23,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -49,7 +49,7 @@ class XsvFormatTest {
   void testCsvR() {
     RandomGenerator randomGenerator = ThreadLocalRandom.current();
     convertCheck( //
-        Tensors.matrix((_, _) -> RationalScalar.of(randomGenerator.nextInt(100) - 50, randomGenerator.nextInt(100) + 1), 20, 4));
+        Tensors.matrix((_, _) -> Rational.of(randomGenerator.nextInt(100) - 50, randomGenerator.nextInt(100) + 1), 20, 4));
     convertCheck(Tensors.matrix((_, _) -> DoubleScalar.of(randomGenerator.nextGaussian() * 1e-50), 20, 10));
     convertCheck(Tensors.matrix((_, _) -> DoubleScalar.of(randomGenerator.nextGaussian() * 1e+50), 20, 10));
   }

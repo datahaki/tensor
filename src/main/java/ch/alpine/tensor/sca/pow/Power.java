@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -72,9 +72,9 @@ public enum Power {
     if (exponent.equals(RealScalar.ONE))
       return s -> s;
     // TODO TENSOR exponents of the form 1/4, etc. could also be valid
-    if (exponent instanceof RationalScalar rationalScalar && //
-        rationalScalar.denominator().equals(TWO))
-      return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rationalScalar.numerator()));
+    if (exponent instanceof Rational rational && //
+        rational.denominator().equals(TWO))
+      return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rational.numerator()));
     Objects.requireNonNull(exponent);
     return scalar -> evaluate(scalar, exponent);
   }

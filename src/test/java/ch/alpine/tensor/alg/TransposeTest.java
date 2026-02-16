@@ -14,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -75,7 +75,7 @@ class TransposeTest {
    * Dimensions[Transpose[m, {2, 3, 1}]] == {5, 2, 3} */
   @Test
   void testTranspose3() {
-    Tensor m = Partition.of(Tensors.matrix((i, j) -> RationalScalar.of(i * 5 + j, 1), 6, 5), 3);
+    Tensor m = Partition.of(Tensors.matrix((i, j) -> Rational.of(i * 5 + j, 1), 6, 5), 3);
     assertEquals(m, Tensors.fromString( //
         "{{{0, 1, 2, 3, 4}, {5, 6, 7, 8, 9}, {10, 11, 12, 13, 14}}, {{15, 16, 17, 18, 19}, {20, 21, 22, 23, 24}, {25, 26, 27, 28, 29}}}"));
     assertEquals(Dimensions.of(m), Arrays.asList(2, 3, 5));

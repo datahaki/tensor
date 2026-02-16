@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.var;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -33,7 +33,7 @@ public class CubicVariogram implements ScalarUnaryOperator {
     if (Scalars.lessEquals(b, r))
       return a;
     if (Scalars.lessEquals(b.zero(), r))
-      return Times.of(polynomial.apply(r), r, r, a, Power.of(b, -7), RationalScalar.of(1, 4));
+      return Times.of(polynomial.apply(r), r, r, a, Power.of(b, -7), Rational.of(1, 4));
     throw new Throw(r);
   }
 

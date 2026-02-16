@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -14,7 +14,7 @@ import ch.alpine.tensor.mat.Tolerance;
 class GudermannianTest {
   @Test
   void testSimple() {
-    Scalar scalar = Gudermannian.FUNCTION.apply(RationalScalar.HALF);
+    Scalar scalar = Gudermannian.FUNCTION.apply(Rational.HALF);
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(0.48038107913372944860)); // mathematica
   }
 

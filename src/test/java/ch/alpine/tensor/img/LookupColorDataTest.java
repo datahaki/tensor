@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -23,7 +23,7 @@ class LookupColorDataTest {
   @Test
   void testColor() {
     assertEquals(ColorFormat.toColor(LookupColorData.GRAYSCALE.apply(RealScalar.ZERO)), Color.BLACK);
-    assertEquals(ColorFormat.toColor(LookupColorData.GRAYSCALE.apply(RationalScalar.HALF)), Color.GRAY);
+    assertEquals(ColorFormat.toColor(LookupColorData.GRAYSCALE.apply(Rational.HALF)), Color.GRAY);
     assertEquals(ColorFormat.toColor(LookupColorData.GRAYSCALE.apply(RealScalar.ONE)), Color.WHITE);
   }
 

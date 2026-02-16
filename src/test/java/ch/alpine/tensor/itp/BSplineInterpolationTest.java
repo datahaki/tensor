@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -52,7 +52,7 @@ class BSplineInterpolationTest {
         Tensor result = interpolation.at(RealScalar.of(index));
         assertEquals(result, tensor.get(index));
         Tensor svalue = interpolation.get(Tensors.vector(1, 2));
-        assertEquals(svalue, RationalScalar.of(1, 4));
+        assertEquals(svalue, Rational.of(1, 4));
         Tensor vvalue = interpolation.get(Tensors.vector(3));
         assertEquals(vvalue, tensor.get(3));
       }

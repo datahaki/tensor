@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -40,7 +40,7 @@ class MathematicaFormatTest {
     Tensor a = Tensors.matrix((_, _) -> //
     randomGenerator.nextInt(3) == 0 ? //
         DoubleScalar.of(randomGenerator.nextDouble()) : //
-        RationalScalar.of(randomGenerator.nextLong(), randomGenerator.nextLong()), n, m);
+        Rational.of(randomGenerator.nextLong(), randomGenerator.nextLong()), n, m);
     assertEquals(MathematicaFormat.of(a).count(), n); // count rows
     assertEquals(a, MathematicaFormat.parse(MathematicaFormat.of(a))); // full circle
   }
