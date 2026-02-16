@@ -11,18 +11,16 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.img.ImageResize;
 
-class ImplementationDiscoveryTest {
+class InstanceDiscoveryTest {
   @Test
   void testWinProv() {
-    ImplementationDiscovery<ScalarUnaryOperator> classDiscUtils = new ImplementationDiscovery<>(ScalarUnaryOperator.class);
-    List<ScalarUnaryOperator> list = classDiscUtils.getInstances("ch.alpine");
+    List<ScalarUnaryOperator> list = InstanceDiscovery.of("ch.alpine", ScalarUnaryOperator.class);
     assertTrue(150 <= list.size());
   }
 
   @Test
   void testDateTimeInterval() {
-    ImplementationDiscovery<ImageResize> classDiscUtils = new ImplementationDiscovery<>(ImageResize.class);
-    List<ImageResize> list = classDiscUtils.getInstances("ch.alpine");
+    List<ImageResize> list = InstanceDiscovery.of("ch.alpine", ImageResize.class);
     assertEquals(list.size(), ImageResize.values().length);
   }
 }
