@@ -17,21 +17,24 @@ import ch.alpine.tensor.chq.IntegerQ;
  * This class is immutable and thread-safe. */
 public interface Rational extends Scalar {
   /** rational number {@code 1/2} with decimal value {@code 0.5} */
-  static final Scalar HALF = of(1, 2);
-  static final Scalar THIRD = of(1, 3);
+  Scalar HALF = of(1, 2);
+  Scalar THIRD = of(1, 3);
+  String DIVIDE = "/";
 
   /** @param num numerator
    * @param den denominator
    * @return scalar encoding the exact fraction num / den */
   static Scalar of(BigInteger num, BigInteger den) {
-    return new RationalImpl(BigFraction.of(num, den));
+    if (den.signum() == 0)
+      throw new ArithmeticException(num + DIVIDE + den);
+    return RationalImpl.simplify(num, den);
   }
 
   /** @param num numerator
    * @param den denominator
    * @return scalar encoding the exact fraction num / den */
   static Scalar of(long num, long den) {
-    return new RationalImpl(BigFraction.of(num, den));
+    return of(BigInteger.valueOf(num), BigInteger.valueOf(den));
   }
 
   @Override
@@ -50,7 +53,9 @@ public interface Rational extends Scalar {
 
   /** @return
    * @see IntegerQ */
-  boolean isInteger();
+  default boolean isInteger() {
+    return denominator().equals(BigInteger.ONE);
+  }
 
   /** @param mathContext
    * @return */

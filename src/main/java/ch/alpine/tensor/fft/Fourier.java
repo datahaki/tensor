@@ -9,6 +9,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.VandermondeMatrix;
@@ -110,5 +111,10 @@ public enum Fourier implements DiscreteFourierTransform {
       }
     }
     return Tensors.of(array).divide(Sqrt.FUNCTION.apply(RealScalar.of(n)));
+  }
+
+  @Override
+  public String toString() {
+    return MathematicaFormat.concise("Fourier", name());
   }
 }

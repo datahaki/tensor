@@ -7,6 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Join;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.lie.KroneckerProduct;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -90,5 +91,10 @@ public enum HaarWaveletTransform implements DiscreteFourierTransform {
     public DiscreteFourierTransform inverse() {
       return FORWARD;
     }
+  };
+
+  @Override
+  public String toString() {
+    return MathematicaFormat.concise("HaarWaveletTransform", name());
   }
 }

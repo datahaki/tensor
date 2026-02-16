@@ -39,7 +39,7 @@ public interface RealScalar extends Scalar, //
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(long value) {
-    return new RationalImpl(BigFraction.integer(value));
+    return RationalImpl.integer(value);
   }
 
   /** @param value
@@ -51,19 +51,19 @@ public interface RealScalar extends Scalar, //
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(Integer value) {
-    return new RationalImpl(BigFraction.integer(value));
+    return RationalImpl.integer(value);
   }
 
   /** @param value
    * @return real scalar of given integer value */
   static Scalar of(Long value) {
-    return new RationalImpl(BigFraction.integer(value));
+    return RationalImpl.integer(value);
   }
 
   /** @param bigInteger
    * @return real scalar of given integer value */
   static Scalar of(BigInteger bigInteger) {
-    return new RationalImpl(BigFraction.integer(bigInteger));
+    return RationalImpl.integer(bigInteger);
   }
 
   /** @param bigDecimal
@@ -86,14 +86,14 @@ public interface RealScalar extends Scalar, //
         number instanceof Byte || //
         number instanceof AtomicInteger || //
         number instanceof AtomicLong)
-      return new RationalImpl(BigFraction.integer(number.longValue()));
+      return RationalImpl.integer(number.longValue());
     if (number instanceof Double || //
         number instanceof Float)
       return DoubleScalar.of(number.doubleValue());
-    if (number instanceof BigInteger)
-      return new RationalImpl(BigFraction.integer((BigInteger) number));
-    if (number instanceof BigDecimal)
-      return DecimalScalar.of((BigDecimal) number);
+    if (number instanceof BigInteger bigInteger)
+      return RationalImpl.integer(bigInteger);
+    if (number instanceof BigDecimal bigDecimal)
+      return DecimalScalar.of(bigDecimal);
     Objects.requireNonNull(number);
     throw new IllegalArgumentException(number.toString());
   }

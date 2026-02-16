@@ -25,46 +25,91 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * This class is immutable and thread-safe. */
 /* package */ class RationalImpl extends AbstractRealScalar implements Rational, //
     NInterface, SqrtInterface, ExpInterface, TrigonometryInterface, Serializable {
-  private final BigFraction bigFraction;
+  /** @param bigInteger
+   * @return scalar that represents the integer value */
+  public static Scalar integer(BigInteger bigInteger) {
+    return new RationalImpl(bigInteger, BigInteger.ONE);
+  }
+
+  /** @param value
+   * @return big fraction that represents the integer value */
+  public static Scalar integer(long value) {
+    return new RationalImpl(BigInteger.valueOf(value), BigInteger.ONE);
+  }
+
+  /** @param num numerator
+   * @param den denominator non-zero
+   * @return
+   * @throws {@link ArithmeticException} if den is zero */
+  static Rational simplify(BigInteger num, BigInteger den) {
+    BigInteger gcd = num.gcd(den);
+    BigInteger res = den.divide(gcd);
+    return res.signum() == 1 //
+        ? new RationalImpl(num.divide(gcd), res) //
+        : new RationalImpl(num.divide(gcd).negate(), res.negate());
+  }
 
   /** private constructor is only called from of(...)
    * 
    * @param bigFraction */
-  public RationalImpl(BigFraction bigFraction) {
-    this.bigFraction = bigFraction;
+  /** numerator */
+  private final BigInteger num;
+  /** denominator (always greater than zero) */
+  private final BigInteger den;
+
+  private RationalImpl(BigInteger num, BigInteger den) {
+    this.num = num;
+    this.den = den;
   }
 
   @Override // from Scalar
   public Rational negate() {
-    return new RationalImpl(bigFraction.negate());
+    return new RationalImpl(num.negate(), den);
   }
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
     return scalar instanceof RationalImpl rational //
-        ? new RationalImpl(bigFraction.multiply(rational.bigFraction))
+        ? simplify( //
+            num.multiply(rational.num), //
+            den.multiply(rational.den)) // denominators are non-zero
         : scalar.multiply(this);
   }
 
   @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
-    return scalar instanceof RationalImpl rational //
-        // default implementation in AbstractScalar uses 2x gcd
-        ? new RationalImpl(bigFraction.divide(rational.bigFraction))
-        : scalar.under(this);
+    if (scalar instanceof RationalImpl rational) { //
+      // default implementation in AbstractScalar uses 2x gcd
+      if (rational.signum() == 0)
+        throw new ArithmeticException(rational.den + Rational.DIVIDE + rational.num);
+      return simplify( //
+          num.multiply(rational.den), //
+          den.multiply(rational.num));
+    }
+    return scalar.under(this);
   }
 
   @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
-    return scalar instanceof RationalImpl rational
-        // default implementation in AbstractScalar uses 2x gcd
-        ? new RationalImpl(rational.bigFraction.divide(bigFraction))
-        : scalar.divide(this);
+    if (scalar instanceof RationalImpl rational) {
+      // default implementation in AbstractScalar uses 2x gcd
+      if (signum() == 0)
+        throw new ArithmeticException(num + Rational.DIVIDE + den);
+      return simplify( //
+          den.multiply(rational.num), //
+          num.multiply(rational.den));
+    }
+    return scalar.divide(this);
   }
 
   @Override // from Scalar
   public Rational reciprocal() {
-    return new RationalImpl(bigFraction.reciprocal());
+    int signum = signum();
+    if (signum == 0)
+      throw new ArithmeticException(den + Rational.DIVIDE + num);
+    return signum == 1 //
+        ? new RationalImpl(den, num) //
+        : new RationalImpl(den.negate(), num.negate()); //
   }
 
   @Override // from Scalar
@@ -92,7 +137,9 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     return scalar instanceof RationalImpl rational //
-        ? new RationalImpl(bigFraction.add(rational.bigFraction))
+        ? simplify( //
+            num.multiply(rational.den).add(rational.num.multiply(den)), //
+            den.multiply(rational.den))
         : scalar.add(this);
   }
 
@@ -105,7 +152,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
     if (scalar instanceof RationalImpl rational)
-      return bigFraction.compareTo(rational.bigFraction);
+      return num.multiply(rational.den).compareTo(rational.num.multiply(den));
     @SuppressWarnings("unchecked")
     Comparable<Scalar> comparable = (Comparable<Scalar>) scalar;
     return -comparable.compareTo(this);
@@ -132,8 +179,8 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
     if (optionalInt.isPresent()) {
       int expInt = optionalInt.orElseThrow();
       return 0 <= expInt //
-          ? Rational.of(numerator().pow(expInt), denominator().pow(expInt))
-          : Rational.of(denominator().pow(-expInt), numerator().pow(-expInt));
+          ? simplify(num.pow(expInt), den.pow(expInt))
+          : Rational.of(den.pow(-expInt), num.pow(-expInt)); // num could be zero
     }
     return super.power(exponent);
   }
@@ -145,7 +192,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
   @Override // from AbstractRealScalar
   protected int signum() {
-    return bigFraction.signum();
+    return num.signum();
   }
 
   /** Example: sqrt(16/25) == 4/5
@@ -192,25 +239,19 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
   @Override
   public BigInteger numerator() {
-    return bigFraction.numerator();
+    return num;
   }
 
   @Override
   public BigInteger denominator() {
-    return bigFraction.denominator();
-  }
-
-  @Override
-  public boolean isInteger() {
-    return bigFraction.isInteger();
+    return den;
   }
 
   /** @param roundingMode
    * @return for instance HALF_UP[5/3] == 2, or FLOOR[5/3] == 1 */
   private Scalar round(RoundingMode roundingMode) {
-    return new RationalImpl(BigFraction.integer(new BigDecimal(numerator()) //
-        .divide(new BigDecimal(denominator()), 0, roundingMode) //
-        .toBigIntegerExact()));
+    return integer(new BigDecimal(num).divide(new BigDecimal(den), 0, roundingMode) //
+        .toBigIntegerExact());
   }
 
   @Override
@@ -219,20 +260,22 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
   }
 
   // ---
-  @Override // from AbstractScalar
+  @Override // from Object
   public int hashCode() {
-    return bigFraction.hashCode();
+    return num.hashCode() + 31 * den.hashCode();
   }
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
     return object instanceof RationalImpl rational //
-        ? bigFraction._equals(rational.bigFraction)
+        ? num.equals(rational.num) && den.equals(rational.den) // sufficient since in normal form
         : Objects.nonNull(object) && object.equals(this);
   }
 
-  @Override // from AbstractScalar
+  @Override // from Object
   public String toString() {
-    return bigFraction.toString();
+    return isInteger() //
+        ? num.toString()
+        : num.toString() + Rational.DIVIDE + den.toString();
   }
 }
