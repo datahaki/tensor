@@ -137,20 +137,11 @@ public class Rational extends AbstractRealScalar implements //
   @Override // from Scalar
   public Number number() {
     if (isInteger()) {
-      BigInteger bigInteger = numerator();
-      if (bigInteger.bitLength() < 32) // quick hint
-        try {
-          return bigInteger.intValueExact();
-        } catch (Exception exception) {
-          // ---
-        }
-      if (bigInteger.bitLength() < 64) // quick hint
-        try {
-          return bigInteger.longValueExact();
-        } catch (Exception exception) {
-          // ---
-        }
-      return bigInteger;
+      if (num.bitLength() < Integer.SIZE) // quick hint
+        return num.intValueExact();
+      if (num.bitLength() < Long.SIZE) // quick hint
+        return num.longValueExact();
+      return num;
     }
     return toBigDecimal(MathContext.DECIMAL64).doubleValue();
   }

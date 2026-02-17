@@ -14,8 +14,10 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.ZeroDefectArrayQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.pi.LinearSubspace;
 
 class VectorQTest {
   @Test
@@ -69,6 +71,24 @@ class VectorQTest {
     Tensor empty = VectorQ.require(Tensors.empty());
     assertTrue(Tensors.isEmpty(empty));
     assertThrows(Throw.class, () -> VectorQ.require(HilbertMatrix.of(3)));
+  }
+
+  @Test
+  void testSubspace() {
+    int n = 3;
+    ZeroDefectArrayQ zdaq = VectorQ.ofLength(n);
+    LinearSubspace linearSubspace = LinearSubspace.of(zdaq::defect, n);
+    assertEquals(linearSubspace.dimensions(), n);
+    assertTrue(linearSubspace.basis().stream().allMatch(zdaq));
+  }
+
+  @Test
+  void testSubspaceGen() {
+    int n = 5;
+    ZeroDefectArrayQ zdaq = VectorQ.INSTANCE;
+    LinearSubspace linearSubspace = LinearSubspace.of(zdaq::defect, n);
+    assertEquals(linearSubspace.dimensions(), n);
+    assertTrue(linearSubspace.basis().stream().allMatch(zdaq));
   }
 
   @Test

@@ -8,21 +8,23 @@ import java.util.Objects;
  * <a href="https://reference.wolfram.com/language/ref/FileBaseName.html">FileBaseName</a>
  * <a href="https://reference.wolfram.com/language/ref/FileExtension.html">FileExtension</a>
  * 
+ * @param path
  * @param parent may be null
  * @param title
  * @param extension */
-public record PathName(Path parent, String title, String extension, boolean hasDot) {
+public record PathName(Path path, Path parent, String title, String extension, boolean hasDot) {
   private static final char DOT = '.';
 
   public static PathName of(Path path) {
-    return of(path.getParent(), path.getFileName().toString());
+    return of(path, path.getFileName().toString());
   }
 
-  public static PathName of(Path parent, String string) {
+  public static PathName of(Path path, String string) {
     int index = string.lastIndexOf(DOT);
+    Path parent = path.getParent();
     return 0 < index //
-        ? new PathName(parent, string.substring(0, index), string.substring(index + 1), true)
-        : new PathName(parent, string, "", false);
+        ? new PathName(path, parent, string.substring(0, index), string.substring(index + 1), true)
+        : new PathName(path, parent, string, "", false);
   }
 
   /** @return */

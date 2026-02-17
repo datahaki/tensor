@@ -19,7 +19,7 @@ public class LogisticMap implements Supplier<Scalar> {
    * @param seed usually in the unit interval
    * @return */
   public static Supplier<Scalar> of(Number r, Number seed) {
-    return new LogisticMap(RealScalar.of(r), RealScalar.of(seed));
+    return of(RealScalar.of(r), RealScalar.of(seed));
   }
 
   // ---

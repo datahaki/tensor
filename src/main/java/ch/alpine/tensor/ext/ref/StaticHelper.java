@@ -8,6 +8,7 @@ package ch.alpine.tensor.ext.ref;
     if (pkg == null)
       return false;
     String string = pkg.getName();
-    return string.equals(basePackage) || string.startsWith(basePackage + ".");
+    return string.equals(basePackage) //
+        || string.startsWith(basePackage + ".");
   }
 }

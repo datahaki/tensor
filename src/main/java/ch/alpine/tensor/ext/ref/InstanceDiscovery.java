@@ -29,7 +29,7 @@ public record InstanceDiscovery<T>(String basePackage, Class<T> cls, Consumer<T>
     if (StaticHelper.isInSubpackageOf(subcls, basePackage) && //
         cls.isAssignableFrom(subcls)) { // this narrow is deliberate
       for (Field field : subcls.getDeclaredFields())
-        if (Modifier.isStatic(field.getModifiers()))
+        if (Modifier.isStatic(field.getModifiers())) {
           try {
             field.setAccessible(true); // mandatory
             Object object = field.get(null);
@@ -37,8 +37,9 @@ public record InstanceDiscovery<T>(String basePackage, Class<T> cls, Consumer<T>
               consumer.accept(cls.cast(object));
             }
           } catch (Exception exception) {
-            System.err.println("error " + exception.getMessage());
+            System.err.println("error " + exception);
           }
+        }
       // ---
       if (subcls.isEnum()) {
         // enum constants are handled as fields above

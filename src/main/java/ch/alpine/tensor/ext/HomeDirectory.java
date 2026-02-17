@@ -14,6 +14,8 @@ import java.util.Arrays;
  * inspired by
  * <a href="https://reference.wolfram.com/language/ref/$HomeDirectory.html">$HomeDirectory</a> */
 public enum HomeDirectory {
+  /** for files entirely managed by software, not intended for
+   * human inspection */
   _local_share(".local", "share"),
   /** database */
   Database,
@@ -23,7 +25,8 @@ public enum HomeDirectory {
   Documents,
   /** Where browsers save files by default */
   Downloads,
-  /** auto-generated and machine-read files */
+  /** auto-generated and machine-read files, intended for
+   * human inspection */
   Ephemeral,
   /** Audio files */
   Music,
@@ -65,7 +68,13 @@ public enum HomeDirectory {
     return join(path, strings);
   }
 
-  public Path createDirectories(String... strings) {
+  /** {@link #resolve(String...)}
+   * with
+   * {@link Files#createDirectories(Path, java.nio.file.attribute.FileAttribute...)}
+   * 
+   * @param strings
+   * @return */
+  public Path mk_dirs(String... strings) {
     Path path = resolve(strings);
     if (!Files.isDirectory(path))
       try {

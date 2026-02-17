@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.Objects;
 import java.util.jar.JarEntry;
@@ -27,7 +29,8 @@ public class ClassDiscovery {
     this.classVisitor = classVisitor;
   }
 
-  private void visitDirectory(URLClassLoader cldr, String classpath_entry, File dir, String visiting_classpath) {
+  private void visitDirectory(URLClassLoader cldr, String classpath_entry, Path path, String visiting_classpath) {
+    File dir = path.toFile();
     if (!dir.canRead())
       return;
     for (File file : dir.listFiles()) {
@@ -41,7 +44,7 @@ public class ClassDiscovery {
           continue;
         // Modified by Jan in order to enable nested packages
         String vc = visiting_classpath.isEmpty() ? fname : visiting_classpath + "." + fname;
-        visitDirectory(cldr, classpath_entry, file, vc);
+        visitDirectory(cldr, classpath_entry, file.toPath(), vc);
       } else //
       if (file.isFile() && fname.endsWith(".class")) {
         // found a .class file. Construct its full classname and pass
@@ -100,10 +103,9 @@ public class ClassDiscovery {
             IO.println("Error extracting " + item);
           }
         } else {
-          File file = new File(item);
-          if (!file.isDirectory())
-            continue;
-          visitDirectory(urlClassLoader, item, file, "");
+          Path path = Path.of(item);
+          if (Files.isDirectory(path))
+            visitDirectory(urlClassLoader, item, path, "");
         }
     } catch (Exception exception) {
       throw new RuntimeException(exception);

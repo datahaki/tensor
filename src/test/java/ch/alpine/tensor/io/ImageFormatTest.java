@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.ResourceData;
@@ -90,5 +92,11 @@ class ImageFormatTest {
       bufferedImage.getRaster().getPixel(index, 0, pixel);
       assertEquals(index, pixel[0]);
     }
+  }
+
+  @Test
+  void testFails() {
+    assertThrows(Exception.class, () -> ImageFormat.of(Array.zeros(10, 10, 3), 0));
+    assertThrows(Exception.class, () -> ImageFormat.of(Array.zeros(10, 10, 5), 0));
   }
 }
