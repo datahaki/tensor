@@ -16,12 +16,9 @@ public record PathName(Path path, Path parent, String title, String extension, b
   private static final char DOT = '.';
 
   public static PathName of(Path path) {
-    return of(path, path.getFileName().toString());
-  }
-
-  public static PathName of(Path path, String string) {
-    int index = string.lastIndexOf(DOT);
     Path parent = path.getParent();
+    String string = path.getFileName().toString();
+    int index = string.lastIndexOf(DOT);
     return 0 < index //
         ? new PathName(path, parent, string.substring(0, index), string.substring(index + 1), true)
         : new PathName(path, parent, string, "", false);
@@ -29,7 +26,7 @@ public record PathName(Path path, Path parent, String title, String extension, b
 
   /** @return */
   public PathName truncate() {
-    return of(parent, title);
+    return of(parent.resolve(title));
   }
 
   /** @param string
