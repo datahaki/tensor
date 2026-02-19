@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -10,6 +11,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -20,6 +23,14 @@ import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.exp.Log10;
 
 class MetricPrefixTest {
+  @ParameterizedTest
+  @EnumSource
+  void testAll(MetricPrefix metricPrefix) {
+    String string = metricPrefix.english("Phantasy");
+    assertTrue(string.endsWith("hantasy"));
+    ExactScalarQ.require(metricPrefix.factor());
+  }
+
   @Test
   void testGiga() {
     assertEquals(MetricPrefix.GIGA.prefix("Hz"), "GHz");

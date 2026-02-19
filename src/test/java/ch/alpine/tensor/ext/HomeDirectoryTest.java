@@ -51,10 +51,18 @@ class HomeDirectoryTest {
       Path path = HomeDirectory.Documents.resolve(s1, s2);
       assertFalse(Files.exists(path));
     }
-    Path path = HomeDirectory.Documents.mk_dirs(s1, s2);
-    assertTrue(Files.isDirectory(path));
-    Files.delete(path);
-    assertFalse(Files.exists(path));
+    {
+      Path path = HomeDirectory.Documents.mk_dirs(s1, s2);
+      assertTrue(Files.isDirectory(path));
+      Files.delete(path);
+      assertFalse(Files.exists(path));
+    }
+    {
+      Path path = HomeDirectory.Documents.mk_dirs(s1);
+      assertTrue(Files.isDirectory(path));
+      Files.delete(path);
+      assertFalse(Files.exists(path));
+    }
   }
 
   @Test

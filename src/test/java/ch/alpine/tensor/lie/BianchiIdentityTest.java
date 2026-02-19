@@ -2,6 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
@@ -39,6 +40,11 @@ class BianchiIdentityTest {
     LinearSubspace linearSubspace = LinearSubspace.of(BianchiIdentity.INSTANCE::defect, list);
     assertEquals(linearSubspace.dimensions(), expect);
     ExactTensorQ.of(linearSubspace.basis());
+  }
+
+  @Test
+  void testFalse() {
+    assertFalse(BianchiIdentity.INSTANCE.test(Array.zeros(2, 2, 3, 2)));
   }
 
   @Test

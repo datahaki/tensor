@@ -91,7 +91,7 @@ public class SchurDecomposition implements Serializable {
         hmt[iu][iu] = hmt[iu][iu].add(shift.exShift);
         hmt[iu - 1][iu - 1] = hmt[iu - 1][iu - 1].add(shift.exShift);
         if (Sign.isPositiveOrZero(q)) {
-          Scalar z = Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(q)); // TODO TENSOR ABS should be obsolete
+          Scalar z = Sqrt.FUNCTION.apply(q);
           z = Sign.isPositiveOrZero(p) //
               ? p.add(z)
               : p.subtract(z);

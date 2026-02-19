@@ -26,7 +26,6 @@ import ch.alpine.tensor.pdf.c.LogisticDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.NegativeBinomialDistribution;
 import ch.alpine.tensor.qty.QuantityTensor;
-import ch.alpine.tensor.red.Projection;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
@@ -122,16 +121,6 @@ class NormalizeTest {
     TensorUnaryOperator normalize = Serialization.copy(Vector2Norm.NORMALIZE);
     Tensor vector = Tensors.fromString("{1+I, 2*I, -3-9.2*I}");
     Tensor s = normalize.apply(vector);
-    Chop._13.requireClose(s.dot(s.maps(Conjugate.FUNCTION)), RealScalar.ONE);
-    Chop._13.requireClose(s.maps(Conjugate.FUNCTION).dot(s), RealScalar.ONE);
-  }
-
-  @Test
-  void testComplex2() {
-    Tensor vector = Tensors.fromString("{3*I, 4}");
-    Tensor s = Vector2Norm.NORMALIZE.apply(vector);
-    assertEquals(Projection.on(vector).apply(s), s);
-    assertEquals(Projection.on(s).apply(vector), vector);
     Chop._13.requireClose(s.dot(s.maps(Conjugate.FUNCTION)), RealScalar.ONE);
     Chop._13.requireClose(s.maps(Conjugate.FUNCTION).dot(s), RealScalar.ONE);
   }

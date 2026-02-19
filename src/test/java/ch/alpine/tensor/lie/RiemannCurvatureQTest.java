@@ -2,14 +2,17 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.pi.LinearSubspace;
 
@@ -29,5 +32,10 @@ class RiemannCurvatureQTest {
       boolean allMatch = linearSubspace.basis().stream().allMatch(BianchiIdentity.INSTANCE);
       assertTrue(allMatch);
     }
+  }
+
+  @Test
+  void testFalse() {
+    assertFalse(RiemannCurvatureQ.INSTANCE.test(Array.zeros(2, 2, 3, 2)));
   }
 }
