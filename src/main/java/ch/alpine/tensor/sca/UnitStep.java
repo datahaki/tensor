@@ -18,6 +18,8 @@ import ch.alpine.tensor.qty.Quantity;
  * {@link Quantity}:
  * Mathematica::UnitStep[Quantity[1, "Meters"]] == UnitStep[Quantity[1, "Meters"]]
  * 
+ * UnitStep can be considered the derivative of {@link Ramp}
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UnitStep.html">UnitStep</a> */
 public enum UnitStep implements ScalarUnaryOperator {

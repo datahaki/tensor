@@ -14,6 +14,7 @@ public enum DLogisticSigmoid implements ScalarUnaryOperator {
       return exp.divide(den.multiply(den)); // Exp[x] / (1+Exp[x])^2
     }
   },
+  /** quadratic polynomial with zeros at 0 and 1 */
   NESTED {
     @Override
     public Scalar apply(Scalar x) {

@@ -15,6 +15,8 @@ import ch.alpine.tensor.red.Max;
  * Ramp[x] == Max[x.zero(), x]
  * </pre>
  * 
+ * ReLU activation
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Ramp.html">Ramp</a> */
 public enum Ramp implements ScalarUnaryOperator {

@@ -3,7 +3,7 @@ package ch.alpine.tensor.num;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.nrm.Vector1Norm;
+import ch.alpine.tensor.nrm.NormalizeTotal;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.sca.exp.Exp;
 
@@ -16,6 +16,6 @@ public enum SoftmaxLayer {
    * @throws Exception if vector is empty */
   public static Tensor of(Tensor vector) {
     Scalar n_max = vector.stream().reduce(Max::of).map(Scalar.class::cast).orElseThrow().negate();
-    return Vector1Norm.NORMALIZE.apply(vector.maps(s -> Exp.FUNCTION.apply(s.add(n_max))));
+    return NormalizeTotal.FUNCTION.apply(vector.maps(n_max::add).maps(Exp.FUNCTION));
   }
 }
