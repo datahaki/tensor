@@ -7,9 +7,10 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /** implementation of class visitor to extract implementation of cls */
-public record InstanceDiscovery<T>(String basePackage, Class<T> cls, Consumer<T> consumer) implements ClassVisitor {
+public record InstanceDiscovery<T>(String basePackage, Class<T> cls, Consumer<Supplier<T>> consumer) implements ClassVisitor {
   /** function to discover instances of a certain class nested in basePackage
    * 
    * Example use:
@@ -18,8 +19,8 @@ public record InstanceDiscovery<T>(String basePackage, Class<T> cls, Consumer<T>
    * @param basePackage
    * @param cls
    * @return */
-  public static <T> List<T> of(String basePackage, Class<T> cls) {
-    List<T> list = new ArrayList<>();
+  public static <T> List<Supplier<T>> of(String basePackage, Class<T> cls) {
+    List<Supplier<T>> list = new ArrayList<>();
     ClassDiscovery.execute(ClassPaths.getDefault(), new InstanceDiscovery<>(basePackage, cls, list::add));
     return list;
   }
@@ -34,7 +35,8 @@ public record InstanceDiscovery<T>(String basePackage, Class<T> cls, Consumer<T>
             field.setAccessible(true); // mandatory
             Object object = field.get(null);
             if (cls.isInstance(object)) {
-              consumer.accept(cls.cast(object));
+              T cast = cls.cast(object);
+              consumer.accept(() -> cast);
             }
           } catch (Exception exception) {
             System.err.println("error " + exception);
@@ -54,10 +56,22 @@ public record InstanceDiscovery<T>(String basePackage, Class<T> cls, Consumer<T>
         // ---
       } else //
         try {
-          Constructor<?> constructor = subcls.getDeclaredConstructor();
-          constructor.setAccessible(true);
-          Object object = constructor.newInstance();
-          consumer.accept(cls.cast(object));
+          {
+            Constructor<?> constructor = subcls.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            Object object = constructor.newInstance();
+            cls.cast(object);
+          }
+          consumer.accept(() -> {
+            try {
+              Constructor<?> constructor = subcls.getDeclaredConstructor();
+              constructor.setAccessible(true);
+              Object object = constructor.newInstance();
+              return cls.cast(object);
+            } catch (Exception exception) {
+              throw new RuntimeException(exception);
+            }
+          });
         } catch (Exception exception) {
           // default constructor may not exist
         }

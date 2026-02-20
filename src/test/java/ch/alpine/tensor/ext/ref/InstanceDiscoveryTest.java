@@ -4,9 +4,10 @@ package ch.alpine.tensor.ext.ref;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -19,21 +20,21 @@ import ch.alpine.tensor.img.ImageResize;
 class InstanceDiscoveryTest implements Consumer<DiscreteFourierTransform> {
   @Test
   void testWinProv() {
-    List<ScalarUnaryOperator> list = InstanceDiscovery.of("ch.alpine", ScalarUnaryOperator.class);
+    List<Supplier<ScalarUnaryOperator>> list = InstanceDiscovery.of("ch.alpine", ScalarUnaryOperator.class);
     assertTrue(150 <= list.size());
   }
 
   @Test
   void testDateTimeInterval() {
-    List<ImageResize> list = InstanceDiscovery.of("ch.alpine", ImageResize.class);
+    List<Supplier<ImageResize>> list = InstanceDiscovery.of("ch.alpine", ImageResize.class);
     assertEquals(list.size(), ImageResize.values().length);
   }
 
   @TestFactory
-  Collection<DynamicTest> dynamicTests() {
+  Stream<DynamicTest> dynamicTests() {
     return InstanceDiscovery.of("ch.alpine", DiscreteFourierTransform.class).stream() //
-        .map(instance -> DynamicTest.dynamicTest("=" + instance.toString(), () -> accept(instance))) //
-        .toList();
+        .map(Supplier::get) //
+        .map(instance -> DynamicTest.dynamicTest("=" + instance.toString(), () -> accept(instance)));
   }
 
   @Override
