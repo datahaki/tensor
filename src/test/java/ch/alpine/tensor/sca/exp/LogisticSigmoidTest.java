@@ -16,6 +16,8 @@ class LogisticSigmoidTest {
     assertEquals(LogisticSigmoid.FUNCTION.apply(RealScalar.of(0.)), RealScalar.of(0.5));
     assertEquals(LogisticSigmoid.FUNCTION.apply(RealScalar.of(1e3)), RealScalar.ONE);
     assertEquals(LogisticSigmoid.FUNCTION.apply(RealScalar.of(-1e3)), RealScalar.ZERO);
+    assertEquals(LogisticSigmoid.FUNCTION.apply(RealScalar.of(1e10)), RealScalar.ONE);
+    assertEquals(LogisticSigmoid.FUNCTION.apply(RealScalar.of(-1e10)), RealScalar.ZERO);
   }
 
   @Test

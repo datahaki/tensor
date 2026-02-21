@@ -4,6 +4,7 @@ package ch.alpine.tensor.sca.exp;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.sca.Sign;
 
 /** The logistic function 1 / (1 + Exp[-z]) is a solution to the differential equation y' == y * (1 - y)
  * 
@@ -20,6 +21,12 @@ public enum LogisticSigmoid implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    return RealScalar.ONE.add(Exp.FUNCTION.apply(scalar.negate())).reciprocal();
+    if (Sign.isPositiveOrZero(scalar)) {
+      Scalar z = Exp.FUNCTION.apply(scalar.negate());
+      return RealScalar.ONE.add(z).reciprocal();
+    } else {
+      Scalar z = Exp.FUNCTION.apply(scalar);
+      return RealScalar.ONE.add(z).under(z);
+    }
   }
 }
