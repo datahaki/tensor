@@ -12,8 +12,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.sca.tri.ArcSin;
-import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.ArcCos;
+import ch.alpine.tensor.sca.tri.Cos;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ArcSinDistribution.html">ArcSinDistribution</a> */
@@ -32,16 +32,12 @@ public class ArcSinDistribution extends AbstractContinuousDistribution implement
 
   @Override
   public Scalar p_lessThan(Scalar x) {
-    Scalar arg = Sqrt.FUNCTION.apply(x.one().add(x).multiply(Rational.HALF));
-    Scalar val = ArcSin.FUNCTION.apply(arg);
-    return val.add(val).divide(Pi.VALUE);
+    return RealScalar.ONE.subtract(ArcCos.FUNCTION.apply(x).divide(Pi.VALUE));
   }
 
   @Override
   protected Scalar protected_quantile(Scalar p) {
-    Scalar sin = Sin.FUNCTION.apply(Pi.HALF.multiply(p));
-    Scalar sq = sin.multiply(sin);
-    return sq.add(sq).subtract(RealScalar.ONE);
+    return Cos.FUNCTION.apply(Pi.VALUE.multiply(p)).negate();
   }
 
   @Override
