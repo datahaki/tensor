@@ -540,7 +540,62 @@ public class DoubleDouble {
 
   @Override
   public String toString() {
-    return toString(31); // full double-double precision
+    return toShortestString();
+  }
+
+  public String toShortestString() {
+    if (Double.isNaN(hi))
+      return "NaN";
+    if (Double.isInfinite(hi))
+      return (hi > 0) ? "Infinity" : "-Infinity";
+    if (hi == 0.0 && lo == 0.0)
+      return "0";
+    // 1️⃣ Exact decimal value
+    BigDecimal exact = toBigDecimal();
+    // 2️⃣ Start with enough digits to uniquely identify a 106-bit value
+    // 34 digits is safely above the ~32 needed.
+    MathContext mc = new MathContext(34, RoundingMode.HALF_EVEN);
+    String full = exact.round(mc).toString();
+    // Normalize form (remove trailing zeros etc.)
+    full = new BigDecimal(full).stripTrailingZeros().toString();
+    // 3️⃣ Try removing digits while preserving round-trip identity
+    String best = full;
+    int ePos = Math.max(full.indexOf('e'), full.indexOf('E'));
+    String mantissa = (ePos >= 0) ? full.substring(0, ePos) : full;
+    String exponent = (ePos >= 0) ? full.substring(ePos) : "";
+    int dot = mantissa.indexOf('.');
+    if (dot < 0)
+      return best; // already an integer form
+    String digits = mantissa.replace(".", "");
+    int intDigits = dot;
+    // Try progressively shortening the fractional tail
+    for (int cut = digits.length() - 1; cut >= intDigits + 1; cut--) {
+      String candidateDigits = digits.substring(0, cut);
+      String candidate = candidateDigits.substring(0, intDigits) + "." + candidateDigits.substring(intDigits) + exponent;
+      candidate = stripTrailingDotZeros(candidate);
+      // 4️⃣ Round-trip test
+      DoubleDouble reparsed = Parse.parse(candidate);
+      if (this.equalsExact(reparsed)) {
+        best = candidate;
+      } else {
+        break; // went too far — last one was shortest valid
+      }
+    }
+    return best;
+  }
+
+  public boolean equalsExact(DoubleDouble o) {
+    return Double.doubleToLongBits(this.hi) == Double.doubleToLongBits(o.hi) && Double.doubleToLongBits(this.lo) == Double.doubleToLongBits(o.lo);
+  }
+
+  private static String stripTrailingDotZeros(String s) {
+    if (!s.contains("."))
+      return s;
+    while (s.endsWith("0"))
+      s = s.substring(0, s.length() - 1);
+    if (s.endsWith("."))
+      s = s.substring(0, s.length() - 1);
+    return s;
   }
 
   public String toString(int precision) {
