@@ -5,10 +5,10 @@ import java.util.Locale;
 
 enum Parse {
   ;
-  public static DoubleDouble parse(String s) {
+  public static BigDouble parse(String s) {
     ParsedDecimal pd = parseDecimal(s);
     // exact integer value
-    DoubleDouble value = fromBigInteger(pd.digits);
+    BigDouble value = fromBigInteger(pd.digits);
     int k = pd.exp10;
     if (k > 0) {
       // multiply by 10^k = 2^k * 5^k
@@ -23,9 +23,9 @@ enum Parse {
     return value;
   }
 
-  private static DoubleDouble pow5(int n) {
-    DoubleDouble result = DoubleDouble.ONE;
-    DoubleDouble base = new DoubleDouble(5.0, 0.0);
+  private static BigDouble pow5(int n) {
+    BigDouble result = BigDouble.ONE;
+    BigDouble base = new BigDouble(5.0, 0.0);
     while (n != 0) {
       if ((n & 1) != 0)
         result = result.mul(base);
@@ -35,17 +35,17 @@ enum Parse {
     return result;
   }
 
-  private static final DoubleDouble[] POW5 = new DoubleDouble[32];
+  private static final BigDouble[] POW5 = new BigDouble[32];
   static {
-    POW5[0] = DoubleDouble.ONE;
-    DoubleDouble five = new DoubleDouble(5.0, 0.0);
+    POW5[0] = BigDouble.ONE;
+    BigDouble five = new BigDouble(5.0, 0.0);
     for (int i = 1; i < POW5.length; i++)
       POW5[i] = POW5[i - 1].mul(five);
   }
 
-  private static DoubleDouble fromBigInteger(BigInteger x) {
+  private static BigDouble fromBigInteger(BigInteger x) {
     if (x.signum() == 0)
-      return DoubleDouble.ZERO;
+      return BigDouble.ZERO;
     int bitLen = x.bitLength();
     int shift = Math.max(0, bitLen - 53); // keep top 53 bits
     BigInteger hiInt = x.shiftRight(shift);
@@ -53,8 +53,8 @@ enum Parse {
     // remainder = exact error
     BigInteger rem = x.subtract(hiInt.shiftLeft(shift));
     double lo = rem.doubleValue();
-    DoubleDouble result = new DoubleDouble(hi, 0.0);
-    result = result.add(new DoubleDouble(lo, 0.0));
+    BigDouble result = new BigDouble(hi, 0.0);
+    result = result.add(new BigDouble(lo, 0.0));
     result = result.scalb(shift); // multiply by 2^shift
     return result;
   }

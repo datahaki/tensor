@@ -13,30 +13,30 @@ import ch.alpine.tensor.ext.PackageTestAccess;
  * value = hi + lo (lo stores the rounding error of hi)
  *
  * Based on Dekker (1971) and Shewchuk (1997) error-free transforms. */
-public class DoubleDouble {
+public class BigDouble {
   private static final double SPLIT = 134217729.0; // 2^27 + 1
-  public static final DoubleDouble ZERO = new DoubleDouble(0.0, 0.0);
-  public static final DoubleDouble ONE = new DoubleDouble(1.0, 0.0);
-  public static final DoubleDouble TWO = new DoubleDouble(2.0, 0.0);
-  public static final DoubleDouble HALF = new DoubleDouble(0.5, 0.0);
-  public static final DoubleDouble PI = new DoubleDouble(3.141592653589793116, 1.224646799147353207e-16);
-  public static final DoubleDouble TWO_PI = PI.mul(fromLong(2));
-  public static final DoubleDouble HALF_PI = PI.mul(DoubleDouble.of(0.5));
-  public static final DoubleDouble E = new DoubleDouble(2.718281828459045091, 1.445646891729250158e-16);
-  public static final DoubleDouble LN2 = new DoubleDouble(0.693147180559945286, 2.319046813846299558e-17);
+  public static final BigDouble ZERO = of(0);
+  public static final BigDouble ONE = of(1);
+  public static final BigDouble TWO = of(2);
+  public static final BigDouble HALF = of(0.5);
+  public static final BigDouble PI = new BigDouble(3.141592653589793116, 1.224646799147353207e-16);
+  public static final BigDouble TWO_PI = PI.mul(fromLong(2));
+  public static final BigDouble HALF_PI = PI.mul(BigDouble.of(0.5));
+  public static final BigDouble E = new BigDouble(2.718281828459045091, 1.445646891729250158e-16);
+  public static final BigDouble LN2 = new BigDouble(0.693147180559945286, 2.319046813846299558e-17);
   /* 2/pi split into double-double pieces.
    * These are derived from a >200-bit expansion and rounded
    * so that multiplication is exact in double-double arithmetic. */
-  private static final DoubleDouble TWO_OVER_PI = new DoubleDouble(0.63661977236758138243, -3.9357353350364971764e-17);
+  private static final BigDouble TWO_OVER_PI = new BigDouble(0.63661977236758138243, -3.9357353350364971764e-17);
   /* π/2 split the same way */
-  private static final DoubleDouble PI_OVER_TWO = new DoubleDouble(1.57079632679489655800, 6.1232339957367660359e-17);
+  private static final BigDouble PI_OVER_TWO = new BigDouble(1.57079632679489655800, 6.1232339957367660359e-17);
 
-  public static DoubleDouble of(double x) {
-    return new DoubleDouble(x, 0.0);
+  public static BigDouble of(double x) {
+    return new BigDouble(x, 0.0);
   }
 
-  public static DoubleDouble fromLong(long x) {
-    return new DoubleDouble((double) x, 0.0);
+  public static BigDouble fromLong(long x) {
+    return new BigDouble((double) x, 0.0);
   }
 
   /* ---------------- Constructors ---------------- */
@@ -44,7 +44,7 @@ public class DoubleDouble {
   private final double lo;
 
   @PackageTestAccess
-  DoubleDouble(double hi, double lo) {
+  BigDouble(double hi, double lo) {
     double s = hi + lo;
     double e = lo - (s - hi);
     this.hi = s;
@@ -61,15 +61,15 @@ public class DoubleDouble {
   /* ---------------- Basic Error-Free Ops ---------------- */
 
   /** Computes a + b exactly as (sum, err). */
-  private static DoubleDouble twoSum(double a, double b) {
+  private static BigDouble twoSum(double a, double b) {
     double s = a + b;
     double bb = s - a;
     double err = (a - (s - bb)) + (b - bb);
-    return new DoubleDouble(s, err);
+    return new BigDouble(s, err);
   }
 
   /** Computes a * b exactly as (prod, err). */
-  private static DoubleDouble twoProd(double a, double b) {
+  private static BigDouble twoProd(double a, double b) {
     double p = a * b;
     double ca = SPLIT * a;
     double ah = ca - (ca - a);
@@ -78,7 +78,7 @@ public class DoubleDouble {
     double bh = cb - (cb - b);
     double bl = b - bh;
     double err = ((ah * bh - p) + ah * bl + al * bh) + al * bl;
-    return new DoubleDouble(p, err);
+    return new BigDouble(p, err);
   }
 
   /* ---------------- Arithmetic ---------------- */
@@ -86,43 +86,43 @@ public class DoubleDouble {
     return Double.compare(hi, 0.0);
   }
 
-  public DoubleDouble abs() {
+  public BigDouble abs() {
     return signum() < 0 ? negate() : this;
   }
 
-  public DoubleDouble negate() {
-    return new DoubleDouble(-hi, -lo);
+  public BigDouble negate() {
+    return new BigDouble(-hi, -lo);
   }
 
-  public DoubleDouble add(DoubleDouble y) {
-    DoubleDouble s = twoSum(this.hi, y.hi);
+  public BigDouble add(BigDouble y) {
+    BigDouble s = twoSum(this.hi, y.hi);
     double e = this.lo + y.lo + s.lo;
     return quickNormalize(s.hi, e);
   }
 
-  public DoubleDouble sub(DoubleDouble y) {
-    DoubleDouble s = twoSum(this.hi, -y.hi);
+  public BigDouble sub(BigDouble y) {
+    BigDouble s = twoSum(this.hi, -y.hi);
     double e = this.lo - y.lo + s.lo;
     return quickNormalize(s.hi, e);
   }
 
-  public DoubleDouble mul(DoubleDouble y) {
-    DoubleDouble p = twoProd(this.hi, y.hi);
+  public BigDouble mul(BigDouble y) {
+    BigDouble p = twoProd(this.hi, y.hi);
     double e = this.hi * y.lo + this.lo * y.hi + p.lo;
     return quickNormalize(p.hi, e);
   }
 
-  public DoubleDouble div(DoubleDouble y) {
+  public BigDouble div(BigDouble y) {
     // Approximate quotient
     double q1 = this.hi / y.hi;
-    DoubleDouble q1dd = DoubleDouble.of(q1);
-    DoubleDouble r = this.sub(y.mul(q1dd));
+    BigDouble q1dd = BigDouble.of(q1);
+    BigDouble r = this.sub(y.mul(q1dd));
     // Refinement step (Newton correction)
     double q2 = r.hi / y.hi;
-    return q1dd.add(DoubleDouble.of(q2));
+    return q1dd.add(BigDouble.of(q2));
   }
 
-  public DoubleDouble sqrt() {
+  public BigDouble sqrt() {
     if (hi <= 0.0) {
       if (hi == 0.0)
         return this;
@@ -130,24 +130,24 @@ public class DoubleDouble {
     }
     // Start with hardware sqrt
     double x = Math.sqrt(hi);
-    DoubleDouble xdd = DoubleDouble.of(x);
+    BigDouble xdd = BigDouble.of(x);
     // One Newton iteration:
     // x_{n+1} = 0.5 * (x + a/x)
-    DoubleDouble ax = this.div(xdd);
-    DoubleDouble sum = xdd.add(ax);
-    return sum.mul(DoubleDouble.of(0.5));
+    BigDouble ax = this.div(xdd);
+    BigDouble sum = xdd.add(ax);
+    return sum.mul(BigDouble.of(0.5));
   }
 
-  public DoubleDouble exp() {
+  public BigDouble exp() {
     if (hi == 0.0)
-      return DoubleDouble.of(1.0);
+      return BigDouble.of(1.0);
     // k = nearest integer to x / ln2
     double kd = Math.rint(this.div(LN2).hi);
     long k = (long) kd;
-    DoubleDouble r = this.sub(LN2.mul(fromLong(k)));
+    BigDouble r = this.sub(LN2.mul(fromLong(k)));
     // exp(r) via Taylor (|r| small)
-    DoubleDouble term = DoubleDouble.of(1.0);
-    DoubleDouble sum = DoubleDouble.of(1.0);
+    BigDouble term = BigDouble.of(1.0);
+    BigDouble sum = BigDouble.of(1.0);
     for (int i = 1; i <= 30; i++) {
       term = term.mul(r).div(fromLong(i));
       sum = sum.add(term);
@@ -158,20 +158,20 @@ public class DoubleDouble {
     return sum.scalb((int) k);
   }
 
-  public DoubleDouble log() {
+  public BigDouble log() {
     if (this.signum() <= 0)
       throw new ArithmeticException("log domain error");
     // initial guess from hardware log
-    DoubleDouble y = DoubleDouble.of(Math.log(this.hi));
+    BigDouble y = BigDouble.of(Math.log(this.hi));
     for (int i = 0; i < 5; i++) {
-      DoubleDouble ey = y.exp();
-      DoubleDouble diff = this.sub(ey);
+      BigDouble ey = y.exp();
+      BigDouble diff = this.sub(ey);
       y = y.add(diff.div(ey));
     }
     return y;
   }
 
-  public DoubleDouble pow(DoubleDouble y) {
+  public BigDouble pow(BigDouble y) {
     if (this.signum() <= 0)
       throw new ArithmeticException("pow base must be > 0");
     return this.log().mul(y).exp();
@@ -179,10 +179,10 @@ public class DoubleDouble {
   /* ---------------- Payne–Hanek Constants ---------------- */
 
   private static final class ReducerResult {
-    final DoubleDouble r; // reduced argument
+    final BigDouble r; // reduced argument
     final int quadrant; // n mod 4
 
-    ReducerResult(DoubleDouble r, int quadrant) {
+    ReducerResult(BigDouble r, int quadrant) {
       this.r = r;
       this.quadrant = quadrant;
     }
@@ -192,14 +192,14 @@ public class DoubleDouble {
    *
    * Reduces x into r such that |r| ≤ π/4 and also returns
    * the quadrant (multiple of π/2). */
-  private static ReducerResult payneHanekReduce(DoubleDouble x) {
+  private static ReducerResult payneHanekReduce(BigDouble x) {
     // n ≈ x * 2/pi (computed in double-double precision)
-    DoubleDouble q = x.mul(TWO_OVER_PI);
+    BigDouble q = x.mul(TWO_OVER_PI);
     // nearest integer to q
     long n = Math.round(q.hi);
-    DoubleDouble nDD = DoubleDouble.fromLong(n);
+    BigDouble nDD = BigDouble.fromLong(n);
     // r = x − n*(π/2)
-    DoubleDouble r = x.sub(PI_OVER_TWO.mul(nDD));
+    BigDouble r = x.sub(PI_OVER_TWO.mul(nDD));
     return new ReducerResult(r, (int) (n & 3));
   }
   /* ---------------- Cody–Waite Constants ---------------- */
@@ -211,7 +211,7 @@ public class DoubleDouble {
 
   /** Fast Cody–Waite argument reduction.
    * Valid for |x| < about 2^19 * π (~1e6). Beyond that we fall back. */
-  private static ReducerResult codyWaiteReduce(DoubleDouble x) {
+  private static ReducerResult codyWaiteReduce(BigDouble x) {
     // Estimate quadrant using hardware precision
     double xn = Math.rint(x.hi * INV_PIO2);
     long n = (long) xn;
@@ -221,14 +221,14 @@ public class DoubleDouble {
     r -= xn * PIO2_MID;
     r -= xn * PIO2_LO;
     // Bring along the low component
-    DoubleDouble rr = new DoubleDouble(r, x.lo);
+    BigDouble rr = new BigDouble(r, x.lo);
     return new ReducerResult(rr, (int) (n & 3));
   }
 
   private static final double CW_LIMIT = 1.0e6;
 
   /** Hybrid reducer (like real libm implementations). */
-  private static ReducerResult reduceHybrid(DoubleDouble x) {
+  private static ReducerResult reduceHybrid(BigDouble x) {
     if (Math.abs(x.hi) < CW_LIMIT) {
       return codyWaiteReduce(x); // fast path
     } else {
@@ -240,10 +240,10 @@ public class DoubleDouble {
   private static final double INV_PIO2 = 0.6366197723675814;
 
   public static final class SinCos {
-    public final DoubleDouble sin;
-    public final DoubleDouble cos;
+    public final BigDouble sin;
+    public final BigDouble cos;
 
-    private SinCos(DoubleDouble sin, DoubleDouble cos) {
+    private SinCos(BigDouble sin, BigDouble cos) {
       this.sin = sin;
       this.cos = cos;
     }
@@ -251,14 +251,14 @@ public class DoubleDouble {
 
   /** Core kernel valid for |x| ≤ π/4.
    * Computes sin(x) and cos(x) together. */
-  private static SinCos sinCosPoly(DoubleDouble x) {
-    DoubleDouble x2 = x.mul(x).negate();
+  private static SinCos sinCosPoly(BigDouble x) {
+    BigDouble x2 = x.mul(x).negate();
     // ---- sine series ----
-    DoubleDouble sinTerm = x;
-    DoubleDouble sinSum = x;
+    BigDouble sinTerm = x;
+    BigDouble sinSum = x;
     // ---- cosine series ----
-    DoubleDouble cosTerm = DoubleDouble.of(1.0);
-    DoubleDouble cosSum = cosTerm;
+    BigDouble cosTerm = BigDouble.of(1.0);
+    BigDouble cosSum = cosTerm;
     for (int i = 2; i <= 38; i += 2) {
       // cosine update first (uses previous cosine term)
       cosTerm = cosTerm.mul(x2).div(fromLong((i - 1) * i));
@@ -277,11 +277,11 @@ public class DoubleDouble {
   public SinCos sinCos() {
     // Hybrid Cody–Waite / Payne–Hanek reduction
     ReducerResult red = reduceHybrid(this);
-    DoubleDouble xr = red.r;
+    BigDouble xr = red.r;
     // Compute both on reduced interval
     SinCos sc = sinCosPoly(xr);
-    DoubleDouble s = sc.sin;
-    DoubleDouble c = sc.cos;
+    BigDouble s = sc.sin;
+    BigDouble c = sc.cos;
     // Rotate according to quadrant
     switch (red.quadrant) {
     case 0:
@@ -295,33 +295,33 @@ public class DoubleDouble {
     }
   }
 
-  public DoubleDouble sin() {
+  public BigDouble sin() {
     return sinCos().sin;
   }
 
-  public DoubleDouble cos() {
+  public BigDouble cos() {
     return sinCos().cos;
   }
 
-  public DoubleDouble atan() {
+  public BigDouble atan() {
     boolean negate = false;
-    DoubleDouble x = this;
+    BigDouble x = this;
     if (x.signum() < 0) {
       negate = true;
       x = x.negate();
     }
-    DoubleDouble result;
+    BigDouble result;
     if (x.hi > 1.0) {
       // atan(x) = pi/2 − atan(1/x)
-      result = HALF_PI.sub(DoubleDouble.of(1.0).div(x).atan());
+      result = HALF_PI.sub(BigDouble.of(1.0).div(x).atan());
     } else {
       // Taylor series for |x| ≤ 1
-      DoubleDouble term = x;
-      DoubleDouble sum = x;
-      DoubleDouble x2 = x.mul(x).negate();
+      BigDouble term = x;
+      BigDouble sum = x;
+      BigDouble x2 = x.mul(x).negate();
       for (int i = 3; i <= 59; i += 2) {
         term = term.mul(x2).div(fromLong(i - 2));
-        DoubleDouble add = term.div(fromLong(i));
+        BigDouble add = term.div(fromLong(i));
         sum = sum.add(add);
         if (Math.abs(add.hi) < 1e-34)
           break;
@@ -331,7 +331,7 @@ public class DoubleDouble {
     return negate ? result.negate() : result;
   }
 
-  public static DoubleDouble atan2(DoubleDouble y, DoubleDouble x) {
+  public static BigDouble atan2(BigDouble y, BigDouble x) {
     if (x.hi == 0.0) {
       if (y.hi > 0.0)
         return HALF_PI;
@@ -339,7 +339,7 @@ public class DoubleDouble {
         return HALF_PI.negate();
       throw new ArithmeticException("atan2(0,0)");
     }
-    DoubleDouble atan = y.div(x).atan();
+    BigDouble atan = y.div(x).atan();
     if (x.hi > 0.0) {
       return atan;
     } else {
@@ -347,69 +347,69 @@ public class DoubleDouble {
     }
   }
 
-  public DoubleDouble sinh() {
+  public BigDouble sinh() {
     if (hi == 0.0)
       return this;
-    DoubleDouble ex = this.exp();
-    DoubleDouble emx = DoubleDouble.of(1.0).div(ex);
-    return ex.sub(emx).mul(DoubleDouble.of(0.5));
+    BigDouble ex = this.exp();
+    BigDouble emx = BigDouble.of(1.0).div(ex);
+    return ex.sub(emx).mul(BigDouble.of(0.5));
   }
 
-  public DoubleDouble cosh() {
+  public BigDouble cosh() {
     if (hi == 0.0)
-      return DoubleDouble.of(1.0);
-    DoubleDouble ex = this.exp();
-    DoubleDouble emx = DoubleDouble.of(1.0).div(ex);
-    return ex.add(emx).mul(DoubleDouble.of(0.5));
+      return BigDouble.of(1.0);
+    BigDouble ex = this.exp();
+    BigDouble emx = BigDouble.of(1.0).div(ex);
+    return ex.add(emx).mul(BigDouble.of(0.5));
   }
 
-  public DoubleDouble asin() {
-    DoubleDouble one = DoubleDouble.of(1.0);
-    DoubleDouble x2 = this.mul(this);
-    DoubleDouble inside = one.sub(x2);
+  public BigDouble asin() {
+    BigDouble one = BigDouble.of(1.0);
+    BigDouble x2 = this.mul(this);
+    BigDouble inside = one.sub(x2);
     if (inside.signum() < 0) {
       throw new ArithmeticException("asin domain error");
     }
-    DoubleDouble denom = inside.sqrt();
+    BigDouble denom = inside.sqrt();
     return this.div(denom).atan();
   }
 
-  public DoubleDouble acos() {
+  public BigDouble acos() {
     return HALF_PI.sub(this.asin());
   }
 
-  public static DoubleDouble hypot(DoubleDouble x, DoubleDouble y) {
-    DoubleDouble ax = x.abs();
-    DoubleDouble ay = y.abs();
+  public static BigDouble hypot(BigDouble x, BigDouble y) {
+    BigDouble ax = x.abs();
+    BigDouble ay = y.abs();
     // Ensure ax >= ay
     if (ax.hi < ay.hi) {
-      DoubleDouble tmp = ax;
+      BigDouble tmp = ax;
       ax = ay;
       ay = tmp;
     }
     if (ax.hi == 0.0)
-      return DoubleDouble.of(0.0);
+      return BigDouble.of(0.0);
     // Compute ay/ax safely
-    DoubleDouble r = ay.div(ax);
+    BigDouble r = ay.div(ax);
     // ax * sqrt(1 + r^2)
-    return ax.mul(DoubleDouble.of(1.0).add(r.mul(r)).sqrt());
+    return ax.mul(BigDouble.of(1.0).add(r.mul(r)).sqrt());
   }
 
-  public DoubleDouble erf() {
-    DoubleDouble x = this;
-    DoubleDouble ax = x.abs();
+  public BigDouble erf() {
+    BigDouble x = this;
+    BigDouble ax = x.abs();
     // For very small x, erf(x) ≈ 2x/√π
     if (ax.hi < 1e-8) {
       return x.mul(TWO_DIV_SQRT_PI());
     }
     // Use power series:
     // erf(x)=2/√π * Σ (-1)^n x^(2n+1)/(n!(2n+1))
-    DoubleDouble xsq = x.mul(x);
-    DoubleDouble term = x;
-    DoubleDouble sum = x;
+    BigDouble xsq = x.mul(x);
+    BigDouble term = x;
+    BigDouble sum = x;
     for (int n = 1; n < 50; n++) {
       term = term.mul(xsq).negate().div(fromLong(n));
-      DoubleDouble add = term.div(fromLong(2 * n + 1));
+      BigDouble add = term.div(fromLong(2 * n + 1));
       sum = sum.add(add);
       if (Math.abs(add.hi) < 1e-34)
         break;
@@ -417,9 +417,9 @@ public class DoubleDouble {
     return sum.mul(TWO_DIV_SQRT_PI());
   }
 
-  private static DoubleDouble TWO_DIV_SQRT_PI() {
+  private static BigDouble TWO_DIV_SQRT_PI() {
     // 2/sqrt(pi)
-    return DoubleDouble.of(2.0).div(PI.sqrt());
+    return BigDouble.of(2.0).div(PI.sqrt());
   }
 
   private static final double[] LANCZOS = { //
@@ -432,57 +432,57 @@ public class DoubleDouble {
       9.9843695780195716e-6, //
       1.5056327351493116e-7 };
 
-  public DoubleDouble gamma() {
-    DoubleDouble z = this;
+  public BigDouble gamma() {
+    BigDouble z = this;
     if (z.hi < 0.5) {
       // Reflection formula:
       // Γ(z)=π/(sin(πz)Γ(1−z))
-      DoubleDouble piZ = PI.mul(z);
-      return PI.div(piZ.sin().mul(DoubleDouble.of(1.0).sub(z).gamma()));
+      BigDouble piZ = PI.mul(z);
+      return PI.div(piZ.sin().mul(BigDouble.of(1.0).sub(z).gamma()));
     }
-    z = z.sub(DoubleDouble.of(1.0));
-    DoubleDouble x = DoubleDouble.of(0.99999999999980993);
+    z = z.sub(BigDouble.of(1.0));
+    BigDouble x = BigDouble.of(0.99999999999980993);
     for (int i = 0; i < LANCZOS.length; i++) {
-      x = x.add(DoubleDouble.of(LANCZOS[i]).div(z.add(fromLong(i + 1))));
+      x = x.add(BigDouble.of(LANCZOS[i]).div(z.add(fromLong(i + 1))));
     }
-    DoubleDouble g = DoubleDouble.of(LANCZOS.length - 0.5);
-    DoubleDouble t = z.add(g);
+    BigDouble g = BigDouble.of(LANCZOS.length - 0.5);
+    BigDouble t = z.add(g);
     // sqrt(2π)
-    DoubleDouble sqrtTwoPi = PI.mul(DoubleDouble.of(2.0)).sqrt();
-    return sqrtTwoPi.mul(t.pow(z.add(DoubleDouble.of(0.5)))).mul(t.negate().exp()).mul(x);
+    BigDouble sqrtTwoPi = PI.mul(BigDouble.of(2.0)).sqrt();
+    return sqrtTwoPi.mul(t.pow(z.add(BigDouble.of(0.5)))).mul(t.negate().exp()).mul(x);
   }
 
-  public DoubleDouble logGamma() {
-    DoubleDouble z = this;
+  public BigDouble logGamma() {
+    BigDouble z = this;
     // Reflection formula for z < 0.5:
     // logΓ(z) = log(π) − log(sin(πz)) − logΓ(1−z)
     if (z.hi < 0.5) {
-      DoubleDouble piZ = PI.mul(z);
-      return PI.log().sub(piZ.sin().log()).sub(DoubleDouble.of(1.0).sub(z).logGamma());
+      BigDouble piZ = PI.mul(z);
+      return PI.log().sub(piZ.sin().log()).sub(BigDouble.of(1.0).sub(z).logGamma());
     }
     // Lanczos evaluation
-    z = z.sub(DoubleDouble.of(1.0));
-    DoubleDouble x = DoubleDouble.of(0.99999999999980993);
+    z = z.sub(BigDouble.of(1.0));
+    BigDouble x = BigDouble.of(0.99999999999980993);
     for (int i = 0; i < LANCZOS.length; i++) {
-      x = x.add(DoubleDouble.of(LANCZOS[i]).div(z.add(fromLong(i + 1))));
+      x = x.add(BigDouble.of(LANCZOS[i]).div(z.add(fromLong(i + 1))));
     }
-    DoubleDouble g = DoubleDouble.of(LANCZOS.length - 0.5);
-    DoubleDouble t = z.add(g);
+    BigDouble g = BigDouble.of(LANCZOS.length - 0.5);
+    BigDouble t = z.add(g);
     // log(sqrt(2π)) computed in DD precision
-    DoubleDouble logSqrtTwoPi = PI.mul(DoubleDouble.of(2.0)).sqrt().log();
-    return logSqrtTwoPi.add(z.add(DoubleDouble.of(0.5)).mul(t.log())).sub(t).add(x.log());
+    BigDouble logSqrtTwoPi = PI.mul(BigDouble.of(2.0)).sqrt().log();
+    return logSqrtTwoPi.add(z.add(BigDouble.of(0.5)).mul(t.log())).sub(t).add(x.log());
   }
   /* ---------------- Normalization ---------------- */
 
   /** Fast renormalization ensuring |lo| <= 0.5 ulp(hi) */
-  private static DoubleDouble quickNormalize(double hi, double lo) {
+  private static BigDouble quickNormalize(double hi, double lo) {
     double s = hi + lo;
     double e = lo - (s - hi);
-    return new DoubleDouble(s, e);
+    return new BigDouble(s, e);
   }
 
   /* ---------------- Utilities ---------------- */
-  public DoubleDouble scalb(int n) {
+  public BigDouble scalb(int n) {
     if (hi == 0.0)
       return this;
     double newHi = Math.scalb(hi, n);
@@ -490,7 +490,7 @@ public class DoubleDouble {
     // Renormalize to maintain non-overlapping representation
     double s = newHi + newLo;
     double e = newLo - (s - newHi);
-    return new DoubleDouble(s, e);
+    return new BigDouble(s, e);
   }
 
   public double toDouble() {
@@ -533,32 +533,24 @@ public class DoubleDouble {
     return hiBD.add(loBD);
   }
 
-  public String toDecimalString(int digits) {
-    MathContext mc = new MathContext(digits, RoundingMode.HALF_EVEN);
-    return toBigDecimal().round(mc).toPlainString();
-  }
-
   @Override
   public String toString() {
-    return toShortestString();
-  }
-
-  public String toShortestString() {
     if (Double.isNaN(hi))
       return "NaN";
     if (Double.isInfinite(hi))
-      return (hi > 0) ? "Infinity" : "-Infinity";
-    if (hi == 0.0 && lo == 0.0)
+      return 0 < hi //
+          ? "Infinity"
+          : "-Infinity";
+    if (equals(ZERO))
       return "0";
-    // 1️⃣ Exact decimal value
     BigDecimal exact = toBigDecimal();
-    // 2️⃣ Start with enough digits to uniquely identify a 106-bit value
+    // Start with enough digits to uniquely identify a 106-bit value
     // 34 digits is safely above the ~32 needed.
     MathContext mc = new MathContext(34, RoundingMode.HALF_EVEN);
     String full = exact.round(mc).toString();
     // Normalize form (remove trailing zeros etc.)
     full = new BigDecimal(full).stripTrailingZeros().toString();
-    // 3️⃣ Try removing digits while preserving round-trip identity
+    // Try removing digits while preserving round-trip identity
     String best = full;
     int ePos = Math.max(full.indexOf('e'), full.indexOf('E'));
     String mantissa = (ePos >= 0) ? full.substring(0, ePos) : full;
@@ -572,67 +564,62 @@ public class DoubleDouble {
     for (int cut = digits.length() - 1; cut >= intDigits + 1; cut--) {
       String candidateDigits = digits.substring(0, cut);
       String candidate = candidateDigits.substring(0, intDigits) + "." + candidateDigits.substring(intDigits) + exponent;
-      candidate = stripTrailingDotZeros(candidate);
-      // 4️⃣ Round-trip test
-      DoubleDouble reparsed = Parse.parse(candidate);
-      if (this.equalsExact(reparsed)) {
+      candidate = simplify(candidate);
+      // Round-trip test
+      if (Parse.parse(candidate).equalsExact(this))
         best = candidate;
-      } else {
+      else
         break; // went too far — last one was shortest valid
-      }
     }
     return best;
   }
 
-  public boolean equalsExact(DoubleDouble o) {
+  private static String simplify(String string) {
+    if (!string.contains("."))
+      return string;
+    while (string.endsWith("0"))
+      string = string.substring(0, string.length() - 1);
+    if (string.endsWith("."))
+      string = string.substring(0, string.length() - 1);
+    return string;
+  }
+
+  public boolean isZero() {
+    // handles +0.0 and -0.0 in either component
+    return hi == 0.0 && lo == 0.0;
+  }
+
+  public boolean isNaN() {
+    return Double.isNaN(hi);
+  }
+
+  @Override
+  public int hashCode() {
+    if (isZero())
+      return 0;
+    long h = Double.doubleToLongBits(hi);
+    long l = Double.doubleToLongBits(lo);
+    return (int) (h ^ (h >>> 32) ^ l ^ (l >>> 32));
+  }
+
+  public boolean equalsExact(BigDouble o) {
     return Double.doubleToLongBits(this.hi) == Double.doubleToLongBits(o.hi) && Double.doubleToLongBits(this.lo) == Double.doubleToLongBits(o.lo);
   }
 
-  private static String stripTrailingDotZeros(String s) {
-    if (!s.contains("."))
-      return s;
-    while (s.endsWith("0"))
-      s = s.substring(0, s.length() - 1);
-    if (s.endsWith("."))
-      s = s.substring(0, s.length() - 1);
-    return s;
-  }
-
-  public String toString(int precision) {
-    if (Double.isNaN(hi))
-      return "NaN";
-    if (Double.isInfinite(hi))
-      return (hi > 0) ? "Infinity" : "-Infinity";
-    // Round the exact value to the requested significant digits
-    MathContext mc = new MathContext(precision, RoundingMode.HALF_EVEN);
-    BigDecimal bd = toBigDecimal().round(mc);
-    // Remove trailing zeros to avoid ugly output like 1.2300000
-    bd = bd.stripTrailingZeros();
-    return bd.toString(); // uses scientific notation when appropriate
-  }
-
-  public String toHighPrecisionString() {
-    // crude but useful diagnostic form
-    return String.format("hi=%.17g lo=%.17g (≈ %.31g)", hi, lo, hi + lo);
-  }
-
-  public static void main(String[] args) {
-    DoubleDouble a = DoubleDouble.of(1e16);
-    DoubleDouble b = DoubleDouble.of(1.0);
-    // This fails in double:
-    double broken = (1e16 + 1.0) - 1e16;
-    // This works:
-    DoubleDouble precise = a.add(b).sub(a);
-    System.out.println("double result      = " + broken);
-    System.out.println("double-double      = " + precise.toHighPrecisionString());
-    // π via sqrt example
-    DoubleDouble two = DoubleDouble.of(2.0);
-    DoubleDouble sqrt2 = two.sqrt();
-    System.out.println("sqrt(2) ≈ " + sqrt2.toString());
-    DoubleDouble x = DoubleDouble.of(1e16).add(DoubleDouble.of(1));
-    DoubleDouble y = x.sub(DoubleDouble.of(1e16));
-    System.out.println("DoubleDouble : " + y.toDecimalString(40));
-    BigDecimal bd = y.toBigDecimal();
-    System.out.println("BigDecimal   : " + bd.toPlainString());
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj instanceof BigDouble bigDouble) {
+      // Treat all zeros as equal (+0.0 == -0.0)
+      if (isZero() && bigDouble.isZero())
+        return true;
+      // NaNs are not equal to anything (match Double semantics)
+      if (isNaN() || bigDouble.isNaN())
+        return false;
+      // Exact comparison otherwise
+      return equalsExact(bigDouble);
+    }
+    return false;
   }
 }
