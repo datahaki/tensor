@@ -44,14 +44,11 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
    * @return the result of applying function to given key
    * @throws Exception if key is null */
   @Override
-  public V apply(K key) {
-    V value = map.get(key);
-    if (Objects.isNull(value)) {
-      value = Objects.requireNonNull(function.apply(key));
-      synchronized (map) {
-        map.put(key, value);
-      }
-    }
+  public synchronized V apply(K key) {
+    if (map.containsKey(key))
+      return map.get(key);
+    V value = function.apply(key);
+    map.put(key, value);
     return value;
   }
 
@@ -61,9 +58,7 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
   }
 
   /** removes all the mappings from this cache */
-  public void clear() {
-    synchronized (map) {
-      map.clear();
-    }
+  public synchronized void clear() {
+    map.clear();
   }
 }

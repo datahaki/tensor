@@ -32,7 +32,7 @@ public record InstanceDiscovery<T>(String basePackage, Class<T> cls, Consumer<Su
       for (Field field : subcls.getDeclaredFields())
         if (Modifier.isStatic(field.getModifiers())) {
           try {
-            field.setAccessible(true); // mandatory
+            field.trySetAccessible(); // mandatory
             Object object = field.get(null);
             if (cls.isInstance(object)) {
               T cast = cls.cast(object);

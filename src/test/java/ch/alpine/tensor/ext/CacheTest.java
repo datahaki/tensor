@@ -7,8 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.Duration;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
+import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +28,34 @@ class CacheTest {
     double double1 = function.apply("eth");
     double double2 = function.apply("eth");
     assertEquals(double1, double2);
+  }
+
+  @Test
+  void testNullValue() {
+    Cache<Integer, Integer> cache = Cache.of(_ -> null, 3);
+    assertEquals(cache.size(), 0);
+    cache.apply(10);
+    assertEquals(cache.size(), 1);
+    cache.apply(10);
+    assertEquals(cache.size(), 1);
+    cache.apply(11);
+    assertEquals(cache.size(), 2);
+    cache.apply(10);
+    assertEquals(cache.size(), 2);
+    cache.apply(12);
+    assertEquals(cache.size(), 3);
+    cache.apply(11);
+    assertEquals(cache.size(), 3);
+    cache.apply(13);
+    assertEquals(cache.size(), 3);
+  }
+
+  @Test
+  void testParalle() {
+    RandomGenerator randomGenerator = ThreadLocalRandom.current();
+    Cache<Integer, Integer> cache = Cache.of(k -> k, 3);
+    Stream.generate(() -> randomGenerator.nextInt(5)).limit(100000).parallel().forEach(cache::apply);
+    assertEquals(cache.size(), 3);
   }
 
   @Test
