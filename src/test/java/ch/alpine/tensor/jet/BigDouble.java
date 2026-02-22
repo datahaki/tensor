@@ -36,7 +36,7 @@ public class BigDouble {
   }
 
   public static BigDouble fromLong(long x) {
-    return new BigDouble((double) x, 0.0);
+    return new BigDouble(x, 0.0);
   }
 
   /* ---------------- Constructors ---------------- */
@@ -235,9 +235,8 @@ public class BigDouble {
   private static ReducerResult reduceHybrid(BigDouble x) {
     if (Math.abs(x.hi) < CW_LIMIT) {
       return codyWaiteReduce(x); // fast path
-    } else {
-      return payneHanekReduce(x); // large argument path
     }
+    return payneHanekReduce(x); // large argument path
   }
 
   /* 2/π for fast multiply */
@@ -346,9 +345,8 @@ public class BigDouble {
     BigDouble atan = y.div(x).atan();
     if (x.hi > 0.0) {
       return atan;
-    } else {
-      return (y.hi >= 0.0) ? atan.add(PI) : atan.sub(PI);
     }
+    return (y.hi >= 0.0) ? atan.add(PI) : atan.sub(PI);
   }
 
   public BigDouble sinh() {

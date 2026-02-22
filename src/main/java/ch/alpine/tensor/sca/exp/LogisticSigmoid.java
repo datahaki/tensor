@@ -24,9 +24,8 @@ public enum LogisticSigmoid implements ScalarUnaryOperator {
     if (Sign.isPositiveOrZero(scalar)) {
       Scalar z = Exp.FUNCTION.apply(scalar.negate());
       return RealScalar.ONE.add(z).reciprocal();
-    } else {
-      Scalar z = Exp.FUNCTION.apply(scalar);
-      return RealScalar.ONE.add(z).under(z);
     }
+    Scalar z = Exp.FUNCTION.apply(scalar);
+    return RealScalar.ONE.add(z).under(z);
   }
 }

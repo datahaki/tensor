@@ -14,6 +14,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -111,12 +112,18 @@ class SubdivideTest {
   void testImagingIncr() {
     Tensor tensor = Subdivide.intermediate_increasing(Clips.interval(-3, 3), 3);
     assertEquals(tensor, Tensors.vector(-2, 0, 2));
+    Tensor res = Subdivide.intermediate_increasing(Clips.interval(3, 5), 1);
+    assertEquals(res, Tensors.vector(4));
+    ExactTensorQ.require(res);
   }
 
   @Test
   void testImagingDecr() {
     Tensor tensor = Subdivide.intermediate_decreasing(Clips.interval(-2, 4), 3);
     assertEquals(tensor, Tensors.vector(3, 1, -1));
+    Tensor res = Subdivide.intermediate_decreasing(Clips.interval(3, 5), 1);
+    assertEquals(res, Tensors.vector(4));
+    ExactTensorQ.require(res);
   }
 
   @Test

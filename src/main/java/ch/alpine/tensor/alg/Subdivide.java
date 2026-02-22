@@ -8,6 +8,7 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
@@ -101,18 +102,24 @@ public enum Subdivide {
   }
 
   /** @param clip
-   * @param n
+   * @param n strictly positive
    * @return tensor of length n (!) */
   public static Tensor intermediate_increasing(Clip clip, int n) {
     Scalar delta = clip.width().divide(RealScalar.of(2 * n));
-    return of(clip.min().add(delta), clip.max().subtract(delta), n - 1);
+    Scalar startInclusive = clip.min().add(delta);
+    if (n == 1)
+      return Tensors.of(startInclusive);
+    return of(startInclusive, clip.max().subtract(delta), n - 1);
   }
 
   /** @param clip
-   * @param n
+   * @param n strictly positive
    * @return tensor of length n (!) */
   public static Tensor intermediate_decreasing(Clip clip, int n) {
     Scalar delta = clip.width().divide(RealScalar.of(2 * n));
-    return of(clip.max().subtract(delta), clip.min().add(delta), n - 1);
+    Scalar startInclusive = clip.max().subtract(delta);
+    if (n == 1)
+      return Tensors.of(startInclusive);
+    return of(startInclusive, clip.min().add(delta), n - 1);
   }
 }
