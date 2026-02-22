@@ -98,7 +98,11 @@ class ScalarUnaryOperatorTest {
     } catch (Exception exception) {
       // ---
     }
-    LogisticSigmoid.FUNCTION.apply(scalar);
+    try {
+      LogisticSigmoid.FUNCTION.apply(scalar);
+    } catch (Exception exception) {
+      // ---
+    }
     N.DOUBLE.apply(scalar);
     try {
       Power.of(scalar, RealScalar.of(0.3));

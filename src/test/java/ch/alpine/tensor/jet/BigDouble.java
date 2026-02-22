@@ -176,6 +176,10 @@ public class BigDouble {
       throw new ArithmeticException("pow base must be > 0");
     return this.log().mul(y).exp();
   }
+
+  public BigDouble reciprocal() {
+    return ONE.div(this);
+  }
   /* ---------------- Payne–Hanek Constants ---------------- */
 
   private static final class ReducerResult {
@@ -313,7 +317,7 @@ public class BigDouble {
     BigDouble result;
     if (x.hi > 1.0) {
       // atan(x) = pi/2 − atan(1/x)
-      result = HALF_PI.sub(BigDouble.of(1.0).div(x).atan());
+      result = HALF_PI.sub(BigDouble.ONE.div(x).atan());
     } else {
       // Taylor series for |x| ≤ 1
       BigDouble term = x;

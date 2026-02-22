@@ -59,6 +59,8 @@ class BigDoubleTest {
     String m = "0.909297426825681695396019865911745";
     BigDouble bd = BigDouble.TWO.sin();
     // IO.println(bd.toString());
+    m.toString();
+    bd.toString();
   }
 
   @Test
@@ -67,25 +69,5 @@ class BigDoubleTest {
     BigDouble big2 = new BigDouble(-0.0, -0.0);
     assertFalse(big1.equalsExact(big2));
     assertEquals(big1, big2);
-  }
-
-  @Test
-  void testDemo() {
-    BigDouble a = BigDouble.of(1e16);
-    BigDouble b = BigDouble.of(1.0);
-    // This fails in double:
-    double broken = (1e16 + 1.0) - 1e16;
-    // This works:
-    BigDouble precise = a.add(b).sub(a);
-    // System.out.println("double result = " + broken);
-    // π via sqrt example
-    BigDouble two = BigDouble.of(2.0);
-    BigDouble sqrt2 = two.sqrt();
-    // System.out.println("sqrt(2) ≈ " + sqrt2.toString());
-    BigDouble x = BigDouble.of(1e16).add(BigDouble.of(1));
-    BigDouble y = x.sub(BigDouble.of(1e16));
-    // System.out.println("DoubleDouble : " + y.toBigDecimal());
-    BigDecimal bd = y.toBigDecimal();
-    // System.out.println("BigDecimal : " + bd.toPlainString());
   }
 }
