@@ -68,8 +68,6 @@ class TimeSeriesTest {
     TimeSeries timeSeries = TimeSeries.path(p1, ResamplingMethod.LINEAR_INTERPOLATION);
     Tensor path = timeSeries.path();
     path.set(r -> r.append(RealScalar.ZERO), 0);
-    // System.out.println(path);
-    // System.out.println(timeSeries.path());
   }
 
   @Test

@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.jet;
 
 import java.math.BigInteger;

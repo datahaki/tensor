@@ -80,8 +80,8 @@ class EigensystemTest {
     if (!Tolerance.CHOP.isClose(matrix, recons)) {
       System.err.println(err);
       // System.err.println("error");
-      System.out.println("n=" + n);
-      System.out.println(matrix);
+      IO.println("n=" + n);
+      IO.println(matrix);
       // TODO TENSOR store somewhere consistent
       Export.of(HomeDirectory.Ephemeral.resolve("eigensystem_fail_" + System.currentTimeMillis() + ".csv"), matrix);
       fail();
@@ -121,7 +121,6 @@ class EigensystemTest {
         Array.zeros(n - 4)).maps(s -> Quantity.of(s, "m"));
     Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
     Tensor matrix = Transpose.of(x).dot(Times.of(v, x));
-    // System.out.println(Pretty.of(matrix.map(Round._1)));
     assertEquals(MatrixRank.of(matrix), r);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     eigensystem.values().maps(QuantityMagnitude.singleton("m"));

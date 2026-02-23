@@ -70,7 +70,6 @@ class GumbelDistributionTest {
         RealScalar.of(2.5938671136008074));
     assertEquals(inverseCDF.quantile(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
-    // System.out.println(gmd.randomVariate(0.0));
     assertTrue(FiniteScalarQ.of(gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0)))));
   }
 

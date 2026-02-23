@@ -17,7 +17,7 @@ public enum HomeDirectory {
   /** for files entirely managed by software, not intended for
    * human inspection */
   _local_share(".local", "share"),
-  /** database */
+  /** for human and machine curated databases */
   Database,
   /** Items shown on the desktop */
   Desktop,
@@ -26,7 +26,9 @@ public enum HomeDirectory {
   /** Where browsers save files by default */
   Downloads,
   /** auto-generated and machine-read files, intended for
-   * human inspection */
+   * human inspection. for visualizations of software results,
+   * bulk exports. most of which are somewhat temporary, and
+   * marked for removal later as the software evolves. */
   Ephemeral,
   /** Audio files */
   Music,

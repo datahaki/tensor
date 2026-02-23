@@ -58,14 +58,14 @@ public record InstanceDiscovery<T>(String basePackage, Class<T> cls, Consumer<Su
         try {
           {
             Constructor<?> constructor = subcls.getDeclaredConstructor();
-            constructor.setAccessible(true);
+            constructor.trySetAccessible();
             Object object = constructor.newInstance();
             cls.cast(object);
           }
           consumer.accept(() -> {
             try {
               Constructor<?> constructor = subcls.getDeclaredConstructor();
-              constructor.setAccessible(true);
+              constructor.trySetAccessible();
               Object object = constructor.newInstance();
               return cls.cast(object);
             } catch (Exception exception) {

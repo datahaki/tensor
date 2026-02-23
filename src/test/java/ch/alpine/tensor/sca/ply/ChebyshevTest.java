@@ -133,11 +133,9 @@ class ChebyshevTest {
             .map(t -> new TsEntry(t, Times.of(w.apply(t), p1.apply(t), p2.apply(t)))), //
             ResamplingMethod.LINEAR_INTERPOLATION);
         Scalar result = (Scalar) TimeSeriesIntegrate.of(timeSeries, timeSeries.domain());
-        // System.out.println(k+" "+j+" "+result);
         if (k != j)
           Tolerance.CHOP.requireZero(result);
       }
-      // System.out.println("---");
     }
   }
 }
