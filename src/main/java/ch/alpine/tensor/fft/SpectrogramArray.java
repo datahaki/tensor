@@ -16,8 +16,6 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
  * 
  * @see WindowFunctions */
 public interface SpectrogramArray extends TensorUnaryOperator {
-  SpectrogramArray SPECTROGRAM = of(Fourier.FORWARD::transform);
-
   /** @param process
    * @param windowLength
    * @param offset positive and not greater than windowLength, or null
@@ -35,7 +33,9 @@ public interface SpectrogramArray extends TensorUnaryOperator {
     return of(process, null, null, null);
   }
 
-  /** @param vector
+  /** performs apply(vector) and then removes half of the result due to symmetry
+   * 
+   * @param vector
    * @param window for instance {@link HannWindow#FUNCTION}
    * @return truncated and transposed spectrogram array for visualization
    * @throws Exception if input is not a vector */

@@ -3,28 +3,18 @@ package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.DeterminateScalarQ;
 
-class CepstrogramArrayTest {
-  static List<SpectrogramArray> spectrogramArrays() {
-    return Arrays.asList( //
-        CepstrogramArray.POWER, //
-        CepstrogramArray.REAL, //
-        CepstrogramArray.REAL1 //
-    );
-  }
-
+class SpectrogramArraysTest {
   @ParameterizedTest
-  @MethodSource("spectrogramArrays")
-  void testMathematica(SpectrogramArray spectrogramArray) {
+  @EnumSource
+  void testMathematica(SpectrogramArrays spectrogramArrays) {
+    SpectrogramArray spectrogramArray = spectrogramArrays.operator();
     Tensor tensor = spectrogramArray.apply(TestHelper.signal());
     boolean status = Flatten.scalars(tensor) //
         .allMatch(DeterminateScalarQ::of);

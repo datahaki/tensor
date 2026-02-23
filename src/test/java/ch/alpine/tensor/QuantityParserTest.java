@@ -24,4 +24,12 @@ class QuantityParserTest {
   void testNestedFail() {
     assertThrows(IllegalArgumentException.class, () -> QuantityParser.of("1[s][m]"));
   }
+
+  @Test
+  void testMutationTest() {
+    assertThrows(Exception.class, () -> ScalarParser.of("[m]"));
+    assertThrows(Exception.class, () -> QuantityParser.of("[m]"));
+    assertThrows(Exception.class, () -> QuantityParser.of("12[m"));
+    assertThrows(Exception.class, () -> QuantityParser.of("12][m"));
+  }
 }

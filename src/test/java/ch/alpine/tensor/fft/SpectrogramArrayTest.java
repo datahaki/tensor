@@ -70,28 +70,29 @@ class SpectrogramArrayTest {
     Tensor tensor = Tensor.of(IntStream.range(0, 500) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(d -> Quantity.of(d, "m")));
-    Tensor array = SpectrogramArray.SPECTROGRAM.apply(tensor);
+    Tensor array = SpectrogramArrays.FOURIER.operator().apply(tensor);
     ScalarUnaryOperator suo = QuantityMagnitude.SI().in("km");
     Tensor array2 = array.maps(suo);
     int windowLength = Unprotect.dimension1(array2);
     assertEquals(windowLength, 32);
-    Tensor matrix = SpectrogramArray.SPECTROGRAM.half_abs(tensor);
+    Tensor matrix = SpectrogramArrays.FOURIER.operator().half_abs(tensor);
     MatrixQ.require(matrix);
     matrix.maps(suo);
   }
 
   @Test
   void testStaticOps() {
-    SpectrogramArray.SPECTROGRAM.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), HannWindow.FUNCTION);
-    SpectrogramArray.SPECTROGRAM.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), 10, TukeyWindow.FUNCTION);
+    SpectrogramArrays.FOURIER.operator().of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), HannWindow.FUNCTION);
+    SpectrogramArrays.FOURIER.operator().of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), 10, TukeyWindow.FUNCTION);
   }
 
   @Disabled
   @Test
   void testStaticOpsFail() {
-    assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.SPECTROGRAM.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1"), NuttallWindow.FUNCTION));
     assertThrows(IllegalArgumentException.class,
-        () -> SpectrogramArray.SPECTROGRAM.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"), BlackmanHarrisWindow.FUNCTION));
+        () -> SpectrogramArrays.FOURIER.operator().of(Quantity.of(0, "s"), Quantity.of(100, "s^-1"), NuttallWindow.FUNCTION));
+    assertThrows(IllegalArgumentException.class,
+        () -> SpectrogramArrays.FOURIER.operator().of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"), BlackmanHarrisWindow.FUNCTION));
   }
 
   @RepeatedTest(7)
@@ -122,8 +123,8 @@ class SpectrogramArrayTest {
   void testQuantity2() {
     Tensor signal = Tensors.vector(1, 2, 1, 4, 3, 2, 3, 4, 3, 4);
     Tensor vector = signal.maps(s -> Quantity.of(s, "m"));
-    Tensor array1 = SpectrogramArray.SPECTROGRAM.apply(signal);
-    Tensor array2 = SpectrogramArray.SPECTROGRAM.apply(vector);
+    Tensor array1 = SpectrogramArrays.FOURIER.operator().apply(signal);
+    Tensor array2 = SpectrogramArrays.FOURIER.operator().apply(vector);
     Tolerance.CHOP.requireClose(array1.maps(s -> Quantity.of(s, "m")), array2);
   }
   // @Test
@@ -143,7 +144,7 @@ class SpectrogramArrayTest {
 
   @Test
   void testNullFail() {
-    assertThrows(NullPointerException.class, () -> SpectrogramArray.SPECTROGRAM.half_abs(null));
+    assertThrows(NullPointerException.class, () -> SpectrogramArrays.FOURIER.operator().half_abs(null));
   }
   // @Test
   // void testDimensionsFail() {
@@ -154,11 +155,11 @@ class SpectrogramArrayTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> SpectrogramArray.SPECTROGRAM.apply(RealScalar.ONE));
+    assertThrows(Throw.class, () -> SpectrogramArrays.FOURIER.operator().apply(RealScalar.ONE));
   }
 
   @Test
   void testMatrixFail() {
-    assertThrows(ClassCastException.class, () -> SpectrogramArray.SPECTROGRAM.apply(HilbertMatrix.of(32)));
+    assertThrows(ClassCastException.class, () -> SpectrogramArrays.FOURIER.operator().apply(HilbertMatrix.of(32)));
   }
 }

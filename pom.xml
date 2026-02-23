@@ -17,6 +17,7 @@
 	</properties>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -81,7 +82,32 @@
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>3.5.5</version>
 			</plugin>
-
+			<!-- 
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.22.1</version>
+				<configuration>
+					<verbose>false</verbose>
+					<withHistory>true</withHistory>
+					<threads>2</threads>
+					<targetClasses>
+						<param>ch.alpine.tensor.*</param>
+					</targetClasses>
+					<targetTests>
+						<param>ch.alpine.tensor.*</param>
+					</targetTests>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>mutationCoverage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			-->
 			<plugin>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>3.1.1</version>
