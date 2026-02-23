@@ -4,6 +4,7 @@ package ch.alpine.tensor.ext;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -30,8 +31,16 @@ public class AnimatedGifWriter implements AutoCloseable {
     // trailing bytes of the existing file are not removed
     if (Files.isRegularFile(path))
       Files.delete(path);
-    ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(Files.newOutputStream(path));
-    return new AnimatedGifWriter(imageOutputStream, period, loop);
+    return of(Files.newOutputStream(path), period, loop);
+  }
+
+  /** @param outputStream
+   * @param period
+   * @param loop
+   * @return
+   * @throws IOException */
+  public static AnimatedGifWriter of(OutputStream outputStream, int period, boolean loop) throws IOException {
+    return new AnimatedGifWriter(ImageIO.createImageOutputStream(outputStream), period, loop);
   }
 
   // ---

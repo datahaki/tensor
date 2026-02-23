@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -72,6 +74,18 @@ class HomeDirectoryTest {
     assertEquals(base, HomeDirectory.Pictures.resolve(""));
     assertEquals(base, HomeDirectory.Pictures.resolve("", ""));
     assertEquals(base, HomeDirectory.Pictures.resolve("", "", ""));
+  }
+
+  @Test
+  void test() {
+    String string = getClass().getName();
+    String[] splits = string.split("\\.");
+    assertEquals(splits.length, 5);
+    List<String> list = Arrays.asList(splits);
+    assertEquals(list.size(), 5);
+    Path path0 = HomeDirectory._local_share.resolve();
+    Path path1 = HomeDirectory._local_share.resolve(splits);
+    assertEquals(path0.getNameCount() + splits.length, path1.getNameCount());
   }
 
   @Test

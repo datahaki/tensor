@@ -1,12 +1,16 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import javax.swing.ImageIcon;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -53,6 +57,18 @@ class AnimatedGifWriterTest {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
     }
     assertTrue(Files.isRegularFile(path));
+  }
+
+  @Test
+  void testByteBuff() throws IOException {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(baos, 200, true)) {
+      animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
+      animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
+    }
+    ImageIcon imageIcon = new ImageIcon(baos.toByteArray());
+    assertEquals(imageIcon.getIconHeight(), 3);
+    assertEquals(imageIcon.getIconWidth(), 2);
   }
 
   @Test
