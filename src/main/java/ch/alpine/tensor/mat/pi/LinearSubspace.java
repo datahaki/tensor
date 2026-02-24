@@ -39,6 +39,7 @@ public interface LinearSubspace extends TensorUnaryOperator {
     return of(constraint, Integers.asList(size));
   }
 
+  /** @return dimensions of the subspace, equivalent to basis().length() */
   default int dimensions() {
     return basis().length();
   }
