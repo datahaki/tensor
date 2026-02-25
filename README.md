@@ -12,6 +12,14 @@ The tensor library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
 * API and string expressions inspired by `Mathematica`
 
+```xml
+<dependency>
+  <groupId>io.github.datahaki</groupId>
+  <artifactId>tensor</artifactId>
+  <version>1.1.0</version>
+</dependency>
+```
+
 Diverse projects rely on the tensor library:
 
 <table>
