@@ -103,7 +103,7 @@ class ComplexHelperTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.bulk.TestDistributions#distributions")
+  @MethodSource("test.bulk.TestDistributions#distributions")
   void testSqrt(Distribution distribution) {
     Scalar re = RandomVariate.of(distribution);
     Scalar im = RandomVariate.of(distribution);
