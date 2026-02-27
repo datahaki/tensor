@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,9 +27,14 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
+import test.bulk.TestDistributions;
 
 class QuaternionToRotationMatrixTest {
   private static final Tensor ID3 = IdentityMatrix.of(3);
+
+  static Stream<Distribution> distributions2() {
+    return TestDistributions.distributions2();
+  }
 
   @Test
   void testSimple() {
@@ -45,7 +51,7 @@ class QuaternionToRotationMatrixTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.bulk.TestDistributions#distributions")
+  @MethodSource("distributions2")
   void testRandom(Distribution distribution) {
     Tensor wxyz = RandomVariate.of(distribution, 4);
     Quaternion q = Quaternion.of(wxyz.Get(0), wxyz.extract(1, 4));
@@ -59,7 +65,7 @@ class QuaternionToRotationMatrixTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "test.bulk.TestDistributions#distributions")
+  @MethodSource("distributions2")
   void testQuaternionVector(Distribution distribution) {
     RandomGenerator randomGenerator = ThreadLocalRandom.current();
     Quaternion quaternion = Quaternion.of(randomGenerator.nextGaussian(), randomGenerator.nextGaussian(), randomGenerator.nextGaussian(),

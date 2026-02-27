@@ -30,6 +30,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * 
  * therefore the implementation below is chosen as default when
  * computing roots of cubic polynomials. */
+// TODO TENSOR can be enhanced since one could check for exact rational solutions
 /* package */ class RootsDegree3 {
   private static final Scalar _3 = RealScalar.of(3);
   private static final Scalar N1_2 = Rational.of(-1, 2);

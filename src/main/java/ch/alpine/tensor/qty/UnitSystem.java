@@ -15,6 +15,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * <pre>
  * UnitSystem.SI().apply(Quantity.of(1, "V")) == 1[A^-1*kg*m^2*s^-3]
  * UnitSystem.SI().apply(Quantity.of(125, "mi")) == 201168[m]
+ * UnitSystem.SI().apply(Quantity.of(180, "deg")) == 3.141592653589793 == Pi.VALUE
  * </pre>
  * 
  * <p>{@link SimpleUnitSystem} is a reference implementation of the interface
