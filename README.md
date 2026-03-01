@@ -2,7 +2,8 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java 25.
+Math Library with exact precision, and physical units
+for tensor computations in Java 25.
 
 ![](https://github.com/datahaki/tensor/actions/workflows/mvn_test.yml/badge.svg)
 

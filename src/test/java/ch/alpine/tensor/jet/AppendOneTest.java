@@ -22,4 +22,11 @@ class AppendOneTest {
   void testEmptyFail() {
     assertThrows(Exception.class, () -> AppendOne.FUNCTION.apply(Tensors.empty()));
   }
+
+  @Test
+  void testBlub() {
+    Tensor v = Tensors.fromString("{2[m],1}");
+    Tensor m = Tensors.fromString("{{1[m^-1],1},{1[m^-1],1}}");
+    m.dot(v);
+  }
 }

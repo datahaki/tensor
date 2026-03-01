@@ -253,9 +253,20 @@ class DetTest {
     Tensor ve1 = Tensors.of(qs1.multiply(qs1), qs2.multiply(qs3));
     Tensor ve2 = Tensors.of(qs2.multiply(qs3), qs4.multiply(qs4));
     Tensor mat = Tensors.of(ve1, ve2);
+    Tensor expect = Tensors.fromString("{{1[m^2], 6[m*rad]}, {6[m*rad], 16[rad^2]}}");
+    assertEquals(expect, mat);
     Scalar det = Det.of(mat);
     ExactScalarQ.require(det);
     assertEquals(det, Scalars.fromString("-20[m^2*rad^2]"));
+  }
+
+  @Test
+  void testAffinePlane() {
+    Tensor mat = Tensors.fromString("{{1, 6[m]}, {6[m^-1], 16}}");
+    // IO.println(Pretty.of(mat));
+    Scalar det = Det.of(mat);
+    ExactScalarQ.require(det);
+    assertEquals(det, RealScalar.of(-20));
   }
 
   @Test

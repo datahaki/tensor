@@ -11,6 +11,12 @@ import org.junit.jupiter.api.Test;
 
 class UserNameTest {
   @Test
+  void testShow() {
+    if (!UserName.is("datahaki"))
+      IO.println("WHOAMI=[" + UserName.whoami() + "]");
+  }
+
+  @Test
   void testGetProperty() {
     String name = System.getProperty("user.name");
     assertFalse(name.isEmpty());

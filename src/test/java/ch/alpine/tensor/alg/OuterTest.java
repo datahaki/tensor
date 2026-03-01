@@ -4,16 +4,20 @@ package ch.alpine.tensor.alg;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Hypot;
+import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
+import ch.alpine.tensor.sca.Clips;
 
 class OuterTest {
   @Test
@@ -56,5 +60,18 @@ class OuterTest {
     Tensor tensor = Outer.of(Tensor::append, matrix, Tensors.vector(1, 7, 9));
     assertEquals(matrix, HilbertMatrix.of(2));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 3, 3));
+  }
+
+  @Test
+  void testCompare() {
+    CoordinateBoundingBox cbb = CoordinateBoundingBox.of(Clips.interval(1, 2), Clips.interval(3, 4));
+    Tensor dx = Subdivide.intermediate_increasing(cbb.clip(0), 3);
+    Tensor dy = Subdivide.intermediate_decreasing(cbb.clip(1), 5);
+    Tensor matrix = Tensor.of(dy.stream() //
+        .map(Scalar.class::cast) //
+        .map(y -> Tensor.of(dx.stream().map(Scalar.class::cast).map(x -> Unprotect.using(List.of(x, y))))));
+    Tensor compar = Outer.of((x, y) -> Unprotect.using(List.of(y, x)), dy, dx);
+    assertEquals(Dimensions.of(matrix), Dimensions.of(compar));
+    assertEquals(matrix, compar);
   }
 }

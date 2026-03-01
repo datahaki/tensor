@@ -49,6 +49,8 @@ public record SlidingWindow(Integer windowLength, Integer offset) implements Ser
     return new SlidingWindow(windowLength, offset);
   }
 
+  /** @param window may be null
+   * @return */
   TensorUnaryOperator tuo(ScalarUnaryOperator window) {
     return Objects.isNull(window) //
         ? t -> t // emulates DirichletWindow
@@ -62,6 +64,9 @@ public record SlidingWindow(Integer windowLength, Integer offset) implements Ser
         : PadRight.with(EqualsReduce.zero(vector), highestOneBit * 2);
   }
 
+  /** @param vector
+   * @param window may be null
+   * @return */
   public Stream<Tensor> stream(Tensor vector, ScalarUnaryOperator window) {
     return Partition.stream(vector, windowLength, offset).map(tuo(window)).map(padding(vector));
   }

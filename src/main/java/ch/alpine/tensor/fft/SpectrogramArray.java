@@ -5,8 +5,11 @@ import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.win.DirichletWindow;
 import ch.alpine.tensor.sca.win.HannWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
@@ -33,19 +36,12 @@ public interface SpectrogramArray extends TensorUnaryOperator {
     return of(process, null, null, null);
   }
 
-  /** performs apply(vector) and then removes half of the result due to symmetry
-   * 
-   * @param vector
-   * @param window for instance {@link HannWindow#FUNCTION}
-   * @return truncated and transposed spectrogram array for visualization
-   * @throws Exception if input is not a vector */
-  Tensor half_abs(Tensor vector);
-
   /** @param windowDuration
    * @param samplingFrequency
    * @param offset positive
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return */
+  // TODO rename deriveFixed
   TensorUnaryOperator of( //
       Scalar windowDuration, Scalar samplingFrequency, int offset, ScalarUnaryOperator window);
 
@@ -53,5 +49,18 @@ public interface SpectrogramArray extends TensorUnaryOperator {
    * @param samplingFrequency
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return spectrogram operator with default offset */
-  TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window);
+  TensorUnaryOperator of( //
+      Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window);
+
+  /** performs apply(vector) and then removes half of the result due to symmetry
+   * 
+   * @param vector
+   * @param window for instance {@link HannWindow#FUNCTION}
+   * @return truncated and transposed spectrogram array for visualization
+   * @throws Exception if input is not a vector */
+  default Tensor half_abs(Tensor vector) {
+    Tensor tensor = apply(vector);
+    int half = Math.divideExact(Unprotect.dimension1Hint(tensor), 2);
+    return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).maps(Abs.FUNCTION), half);
+  }
 }
