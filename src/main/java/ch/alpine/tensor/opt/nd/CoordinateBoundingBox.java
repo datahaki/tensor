@@ -10,6 +10,7 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.MemberQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Clip;
@@ -60,6 +61,11 @@ public class CoordinateBoundingBox implements MemberQ {
   public Tensor mapInside(Tensor vector) {
     return Tensors.vector(i -> clip(i).apply(vector.Get(i)), //
         Integers.requireEquals(dimensions(), vector.length()));
+  }
+
+  /** @return */
+  public TensorUnaryOperator mapInside() {
+    return this::mapInside;
   }
 
   /** @param vector
