@@ -56,7 +56,7 @@ class ChiSquareDistributionTest {
   @Test
   void testInverseCdfFails() {
     assertThrows(Exception.class, () -> InverseCDF.of(ChiSquareDistribution.of(3)));
-    // assertThrows(UnsupportedOperationException.class, () -> cdf.quantile(RationalScalar.HALF));
+    // assertThrows(UnsupportedOperationException.class, () -> cdf.quantile(Rational.HALF));
   }
 
   @RepeatedTest(4)

@@ -80,7 +80,7 @@ class FindRootTest {
     FindRoot findRoot = FindRoot.of(FindRootTest::func);
     Scalar x = findRoot.inside(Clips.interval(0.001, 0.499));
     Tolerance.CHOP.requireClose(x, RealScalar.of(0.01024075603728308));
-    // System.out.println("1/2 -> " + func(RationalScalar.HALF));
+    // System.out.println("1/2 -> " + func(Rational.HALF));
     // System.out.println(x + " -> " + func(x));
     // System.out.println(x + " -> " + func(RealScalar.ONE.subtract(x)));
   }

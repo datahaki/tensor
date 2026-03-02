@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -21,6 +22,8 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.pdf.Distribution;
@@ -161,6 +164,55 @@ class RationalizeTest {
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(10_000);
     Scalar scalar = suo.apply(RealScalar.of(0.0));
     ExactScalarQ.require(scalar);
+  }
+
+  @Disabled
+  @Test
+  void testRationalizeQuantity() {
+    Scalar s = Quantity.of(0.25, "m");
+    ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(10_000);
+    Scalar scalar = suo.apply(s);
+    IO.println(scalar);
+  }
+
+  static Tensor t(Scalar v) {
+    return Tensors.matrix(new Scalar[][] { { v.one(), v }, { Unprotect.zero_negateUnit(v), v.one() } });
+  }
+
+  private static Tensor cfm(Scalar v) {
+    Scalar one = v.one();
+    if (v instanceof Quantity q) {
+      one = Quantity.of(q.value().one(), q.unit());
+    }
+    return Tensors.matrix(new Scalar[][] { { v, one }, { v.one(), v.one().zero() } });
+  }
+
+  private static Tensor cfm(int v) {
+    return cfm(RealScalar.of(v));
+  }
+
+  @Test
+  void testDemo() {
+    Tensor mat = Dot.of(cfm(Quantity.of(1, "m")), cfm(2), cfm(3));
+    Tensor S = Tensors.fromString("{{0,-1},{1,0}}");
+    S.copy();
+    mat.copy();
+    // IO.println(Pretty.of(mat));
+    // IO.println(Pretty.of(t(Quantity.of(3, "m"))));
+  }
+
+  @Test
+  void testExact() {
+    assertEquals(Rationalize.full(0.25), Rational.of(1, 4));
+    assertEquals(Rationalize.full(-13.75), Rational.of(-55, 4));
+    assertEquals(Rationalize.full(0), Rational.of(0, 1));
+    double[] tests = { 0.1, Double.MIN_VALUE, Math.PI, Math.E };
+    for (double d : tests) {
+      Scalar scalar = Rationalize.full(d);
+      scalar.zero();
+      // IO.println(d);
+      // IO.println(scalar);
+    }
   }
 
   @Test

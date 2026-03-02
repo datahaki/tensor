@@ -13,7 +13,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
  * 
  * implementation uses exponentiation by squaring
  * 
- * interface used by MatrixPower, RationalScalar, ComplexScalar, and GaussScalar
+ * interface used by MatrixPower, Rational, ComplexScalar, and GaussScalar
  * 
  * @param <T> may also be Integer etc. */
 public final class BinaryPower<T> implements Serializable {

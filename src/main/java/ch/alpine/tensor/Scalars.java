@@ -21,7 +21,7 @@ public enum Scalars {
    * 
    * <p>Examples:
    * <pre>
-   * "7/9" -> RationalScalar.of(7, 9)
+   * "7/9" -> Rational.of(7, 9)
    * "3.14" -> DoubleScalar.of(3.14)
    * "1E-20" -> DoubleScalar.of(1E-20)
    * "(3+2)*I/(-1+4)+8-I" -> ComplexScalar.of(8, 2/3) == "8+2/3*I"

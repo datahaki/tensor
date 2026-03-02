@@ -83,7 +83,7 @@ public enum Round implements ScalarUnaryOperator {
   /** for best results, the parameter increment should be an instance of
    * {@link DecimalScalar}, or {@link Rational}
    * Examples:
-   * DecimalScalar.of(0.1), or RationalScalar.of(1, 10)
+   * DecimalScalar.of(0.1), or Rational.of(1, 10)
    * 
    * <p>if instead increment is a {@link DoubleScalar} the return value
    * may suffer from numeric round off error in the style of "3.4000000000000004"

@@ -306,7 +306,7 @@ class TrapezoidalDistributionTest {
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(t);
     assertEquals(p_lessEquals, Rational.of(8225, 13026));
-    // Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+    // Chop._01.requireClose(Rational.HALF, p_lessEquals);
     UnivariateDistribution ud = (UnivariateDistribution) distribution;
     assertEquals(ud.support(), Clips.interval(a, d));
   }

@@ -2,10 +2,13 @@
 // adapted from http://www.ics.uci.edu/~eppstein/numth/frap.c
 package ch.alpine.tensor.num;
 
+import java.math.BigInteger;
+
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.red.Max;
@@ -79,13 +82,14 @@ public class Rationalize implements ScalarUnaryOperator {
    * @param scalar for instance Math.PI, or 2./3.
    * @return approximation of given scalar as {@link Rational} with denominator bounded by max */
   @Override
-  public Scalar apply(final Scalar scalar) {
-    Scalar m00 = RealScalar.ONE; // initialize matrix
-    Scalar m01 = RealScalar.ZERO;
-    Scalar m10 = RealScalar.ZERO;
-    Scalar m11 = RealScalar.ONE;
+  public Scalar apply(Scalar scalar) {
+    // TODO write as 2x2 matrices
+    Scalar m00 = scalar.one(); // initialize matrix
+    Scalar m01 = scalar.zero();
+    Scalar m10 = scalar.zero();
+    Scalar m11 = scalar.one();
     Scalar x = scalar;
-    Scalar ain = Floor.FUNCTION.apply(x);
+    Scalar ain = Floor.FUNCTION.apply(Unprotect.withoutUnit(x));
     // loop finding terms until denominator gets too big
     while (Scalars.lessEquals(affine(m10, m11, ain), max)) {
       Scalar tmp = affine(m00, m01, ain);
@@ -118,5 +122,38 @@ public class Rationalize implements ScalarUnaryOperator {
   // helper function
   private static Scalar affine(Scalar m0, Scalar m1, Scalar x) {
     return m0.multiply(x).add(m1);
+  }
+
+  /** IEEE 754
+   * 
+   * @param value
+   * @return */
+  // adapted from chatgpt
+  public static Scalar full(double value) {
+    if (!Double.isFinite(value))
+      throw new IllegalArgumentException();
+    if (value == 0.0)
+      return RealScalar.ZERO;
+    long bits = Double.doubleToLongBits(value);
+    int sign = ((bits >>> 63) == 0) ? 1 : -1;
+    int exponent = (int) ((bits >>> 52) & 0x7FFL);
+    long mantissa = bits & 0xFFFFFFFFFFFFFL;
+    if (exponent == 0)
+      // Subnormal numbers
+      exponent = 1 - 1023;
+    else {
+      // Normal numbers - add implicit leading 1
+      mantissa |= (1L << 52);
+      exponent -= 1023;
+    }
+    BigInteger num = BigInteger.valueOf(mantissa);
+    BigInteger den = BigInteger.ONE.shiftLeft(52);
+    if (0 < exponent)
+      num = num.shiftLeft(exponent);
+    else if (exponent < 0)
+      den = den.shiftLeft(-exponent);
+    if (sign < 0)
+      num = num.negate();
+    return Rational.of(num, den);
   }
 }

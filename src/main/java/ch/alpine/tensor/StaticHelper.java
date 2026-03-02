@@ -5,6 +5,7 @@ package ch.alpine.tensor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.ListIterator;
 import java.util.Optional;
 
 import ch.alpine.tensor.api.ComplexEmbedding;
@@ -115,5 +116,46 @@ import ch.alpine.tensor.sca.tri.ArcTan;
   public static Scalar round(BigDecimal bigDecimal) {
     BigInteger bigInteger = bigDecimal.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact();
     return Rational.integer(bigInteger);
+  }
+
+  // ---
+  public static <T> ListIterator<T> unmodifiable(ListIterator<T> listIterator) {
+    return new ListIterator<>() {
+      public boolean hasNext() {
+        return listIterator.hasNext();
+      }
+
+      public T next() {
+        return listIterator.next();
+      }
+
+      public boolean hasPrevious() {
+        return listIterator.hasPrevious();
+      }
+
+      public T previous() {
+        return listIterator.previous();
+      }
+
+      public int nextIndex() {
+        return listIterator.nextIndex();
+      }
+
+      public int previousIndex() {
+        return listIterator.previousIndex();
+      }
+
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }
+
+      public void set(T e) {
+        throw new UnsupportedOperationException();
+      }
+
+      public void add(T e) {
+        throw new UnsupportedOperationException();
+      }
+    };
   }
 }

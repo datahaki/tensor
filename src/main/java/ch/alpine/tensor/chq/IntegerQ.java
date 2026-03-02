@@ -11,8 +11,8 @@ import ch.alpine.tensor.Throw;
  * 
  * <p>Examples:
  * <pre>
- * IntegerQ.of(RationalScalar.of(7, 1)) == true
- * IntegerQ.of(RationalScalar.of(7, 2)) == false
+ * IntegerQ.of(Rational.of(7, 1)) == true
+ * IntegerQ.of(Rational.of(7, 2)) == false
  * IntegerQ.of(DoubleScalar.of(7)) == false
  * </pre>
  * 

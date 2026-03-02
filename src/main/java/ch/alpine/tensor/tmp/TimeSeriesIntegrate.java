@@ -37,7 +37,7 @@ public enum TimeSeriesIntegrate {
       // TODO TENSOR why is this last block necessary? perhaps for INFTY?
       // Clip interval = Clips.interval(prev, clip.max());
       // System.out.println("intervalWidth=" + interval.width());
-      // Scalar x = LinearInterpolation.of(interval).apply(RationalScalar.HALF);
+      // Scalar x = LinearInterpolation.of(interval).apply(Rational.HALF);
       // sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
       // result.insert(prev, sum);
     }

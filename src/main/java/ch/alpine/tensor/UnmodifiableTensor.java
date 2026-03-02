@@ -1,8 +1,8 @@
 // code by jph
 package ch.alpine.tensor;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -60,19 +60,7 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
-  public Iterator<Tensor> iterator() {
-    Iterator<Tensor> iterator = super.iterator();
-    return new Iterator<>() {
-      @Override
-      public boolean hasNext() {
-        return iterator.hasNext();
-      }
-
-      @Override
-      public Tensor next() {
-        return iterator.next().unmodifiable();
-      }
-      // default implementation of Iterator#remove() throws an UnsupportedOperationException
-    };
+  public ListIterator<Tensor> iterator() {
+    return StaticHelper.unmodifiable(super.iterator());
   }
 }

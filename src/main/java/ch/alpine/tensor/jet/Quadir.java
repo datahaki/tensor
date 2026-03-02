@@ -20,8 +20,10 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/** EXPERIMENTAL */
-public class Quex extends AbstractRealScalar implements NInterface, Serializable {
+/** EXPERIMENTAL
+ * 
+ * Name inspired by Mathematica's QuadraticIrrationalQ */
+public class Quadir extends AbstractRealScalar implements NInterface, Serializable {
   public static Scalar of(long a, long b, long c) {
     return of(RealScalar.of(a), RealScalar.of(b), RealScalar.of(c));
   }
@@ -32,7 +34,7 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
         c instanceof Rational)
       return Scalars.isZero(b) || Scalars.isZero(c) //
           ? a
-          : new Quex(a, b, c);
+          : new Quadir(a, b, c);
     return Sqrt.FUNCTION.apply(c).multiply(b).add(a);
   }
 
@@ -41,7 +43,7 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
   private final Scalar b;
   private final Scalar c;
 
-  private Quex(Scalar a, Scalar b, Scalar c) {
+  private Quadir(Scalar a, Scalar b, Scalar c) {
     this.a = a;
     this.b = b;
     this.c = c;
@@ -53,7 +55,7 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
 
   @Override
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof Quex quex && quex.c.equals(c))
+    if (scalar instanceof Quadir quex && quex.c.equals(c))
       return of( //
           a.multiply(quex.a).add(Times.of(b, quex.b, c)), //
           a.multiply(quex.b).add(b.multiply(quex.a)), //
@@ -74,13 +76,13 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
 
   @Override
   public Scalar negate() {
-    return new Quex(a.negate(), b.negate(), c);
+    return new Quadir(a.negate(), b.negate(), c);
   }
 
   @Override
   public Scalar reciprocal() {
     Scalar den = a.multiply(a).subtract(Times.of(b, b, c));
-    return new Quex(a.divide(den), b.negate().divide(den), c);
+    return new Quadir(a.divide(den), b.negate().divide(den), c);
   }
 
   @Override
@@ -90,7 +92,7 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
 
   @Override
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof Quex quex)
+    if (scalar instanceof Quadir quex)
       return Scalars.compare(expand(), quex.expand());
     return Scalars.compare(expand(), scalar);
   }
@@ -122,7 +124,7 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
 
   @Override
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof Quex quex && quex.c.equals(c))
+    if (scalar instanceof Quadir quex && quex.c.equals(c))
       return of( //
           a.add(quex.a), //
           b.add(quex.b), //
@@ -151,7 +153,7 @@ public class Quex extends AbstractRealScalar implements NInterface, Serializable
 
   @Override
   public boolean equals(Object object) {
-    return object instanceof Quex quex //
+    return object instanceof Quadir quex //
         && quex.a.equals(a) //
         && quex.b.equals(b) //
         && quex.c.equals(c);

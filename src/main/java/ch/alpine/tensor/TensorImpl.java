@@ -2,8 +2,8 @@
 package ch.alpine.tensor;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -170,8 +170,8 @@ import ch.alpine.tensor.jet.Hold;
   }
 
   @Override // from Iterable
-  public Iterator<Tensor> iterator() {
-    return list.iterator();
+  public ListIterator<Tensor> iterator() {
+    return list.listIterator();
   }
 
   @Override // from Object

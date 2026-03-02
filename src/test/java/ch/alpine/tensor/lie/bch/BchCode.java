@@ -66,7 +66,7 @@ public enum BchCode {
         Scalar num = Numerator.FUNCTION.apply(value);
         Scalar den = Denominator.FUNCTION.apply(value);
         String cns = (Sign.isPositiveOrZero(num) ? "P" + num : "N" + num.negate()) + "_" + den;
-        String rat = "private static final Scalar " + cns + " = RationalScalar.of(" + num + ", " + den + ");";
+        String rat = "private static final Scalar " + cns + " = Rational.of(" + num + ", " + den + ");";
         IO.println(rat);
       }
   }

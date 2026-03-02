@@ -16,9 +16,9 @@ import ch.alpine.tensor.sca.exp.ExpInterface;
 import ch.alpine.tensor.sca.pow.SqrtInterface;
 import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
-/** a RationalScalar corresponds to an element from the field of rational numbers.
+/** a Rational corresponds to an element from the field of rational numbers.
  * 
- * a RationalScalar represents an integer fraction, for instance 17/42, or -6/1.
+ * a Rational represents an integer fraction, for instance 17/42, or -6/1.
  * 
  * zero().reciprocal() throws a {@link ArithmeticException}.
  * 

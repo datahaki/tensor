@@ -51,7 +51,7 @@ class SimplexCornersTest {
     Tensor b = Tensors.fromString("{-1, -1/3}").negate();
     NavigableMap<Scalar, Tensor> map = SimplexCorners.of(c, m, b, false);
     map.clear();
-    // assertTrue(map.containsKey(RationalScalar.of(-10, 9)));
+    // assertTrue(map.containsKey(Rational.of(-10, 9)));
     // System.out.println("dual");
     // SimplexCorners.show(map);
   }

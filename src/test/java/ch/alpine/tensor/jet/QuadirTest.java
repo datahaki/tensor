@@ -18,65 +18,65 @@ import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.N;
 
-class QuexTest {
+class QuadirTest {
   @Test
   void testBasics() {
-    Scalar a = Quex.of(4, 5, 2);
-    Scalar b = Quex.of(7, 3, 2);
+    Scalar a = Quadir.of(4, 5, 2);
+    Scalar b = Quadir.of(7, 3, 2);
     Scalar c = a.multiply(b);
-    assertInstanceOf(Quex.class, c);
+    assertInstanceOf(Quadir.class, c);
     Tolerance.CHOP.requireClose(N.DOUBLE.apply(a).multiply(b), N.DOUBLE.apply(c));
     Scalar d = a.add(b);
-    assertInstanceOf(Quex.class, d);
+    assertInstanceOf(Quadir.class, d);
     Tolerance.CHOP.requireClose(N.DOUBLE.apply(a).add(b), N.DOUBLE.apply(d));
     Scalar e = a.divide(b);
-    assertInstanceOf(Quex.class, e);
+    assertInstanceOf(Quadir.class, e);
     Tolerance.CHOP.requireClose(N.DOUBLE.apply(a).divide(b), N.DOUBLE.apply(e));
     Scalar f = a.subtract(b);
-    assertInstanceOf(Quex.class, f);
+    assertInstanceOf(Quadir.class, f);
     Tolerance.CHOP.requireClose(N.DOUBLE.apply(a).subtract(b), N.DOUBLE.apply(f));
   }
 
   @Test
   void testComplexEmbedding() {
-    assertInstanceOf(ComplexEmbedding.class, Quex.of(4, 5, 2));
+    assertInstanceOf(ComplexEmbedding.class, Quadir.of(4, 5, 2));
   }
 
   @Test
   void testSpecialAdd() {
-    assertInstanceOf(Rational.class, Quex.of(2, 0, 2));
-    Scalar a = Quex.of(4, 5, 2);
-    assertInstanceOf(Quex.class, a);
-    Scalar b = Quex.of(7, 5, 2);
+    assertInstanceOf(Rational.class, Quadir.of(2, 0, 2));
+    Scalar a = Quadir.of(4, 5, 2);
+    assertInstanceOf(Quadir.class, a);
+    Scalar b = Quadir.of(7, 5, 2);
     Scalar c = b.subtract(a);
     assertInstanceOf(Rational.class, c);
     assertEquals(c, RealScalar.of(3));
     Scalar d = a.add(RealScalar.of(10));
-    assertEquals(d, Quex.of(14, 5, 2));
-    assertEquals(a.multiply(RealScalar.of(10)), Quex.of(40, 50, 2));
+    assertEquals(d, Quadir.of(14, 5, 2));
+    assertEquals(a.multiply(RealScalar.of(10)), Quadir.of(40, 50, 2));
     assertEquals(a.multiply(RealScalar.of(1.)), N.DOUBLE.apply(a));
   }
 
   @Test
   void testSpecialBlub() {
-    Scalar a = Quex.of(4, 5, 2);
+    Scalar a = Quadir.of(4, 5, 2);
     assertEquals(a, a);
-    Scalar b = Quex.of(7, 5, 3);
+    Scalar b = Quadir.of(7, 5, 3);
     assertNotEquals(a, b);
     Scalar c = b.subtract(a);
     assertInstanceOf(DoubleScalar.class, c);
     Set<Object> set = new HashSet<>();
     set.add(a);
     set.add(b);
-    set.add(Quex.of(4, 5, 2));
+    set.add(Quadir.of(4, 5, 2));
     assertEquals(set.size(), 2);
     assertEquals(a.toString(), "(4+5*Sqrt[2])");
   }
 
   @Test
   void testSpecialMul() {
-    Scalar a = Quex.of(2, 4, 2);
-    Scalar b = Quex.of(-2, 4, 2);
+    Scalar a = Quadir.of(2, 4, 2);
+    Scalar b = Quadir.of(-2, 4, 2);
     Scalar c = a.multiply(b);
     assertInstanceOf(Rational.class, c);
     assertEquals(c, RealScalar.of(28));
@@ -85,15 +85,15 @@ class QuexTest {
 
   @Test
   void testReciprocal() {
-    Scalar a = Quex.of(2, 3, 13);
-    Scalar b = Quex.of(-2, 7, 13);
+    Scalar a = Quadir.of(2, 3, 13);
+    Scalar b = Quadir.of(-2, 7, 13);
     assertEquals(a.divide(b), b.under(a));
     assertEquals(a.reciprocal().multiply(a), a.one());
   }
 
   @Test
   void testMulZero() {
-    Scalar a = Quex.of(2, 3, 13);
+    Scalar a = Quadir.of(2, 3, 13);
     Scalar z = a.multiply(RealScalar.ZERO);
     assertInstanceOf(Rational.class, z);
     assertEquals(z, RealScalar.ZERO);
@@ -101,7 +101,7 @@ class QuexTest {
 
   @Test
   void testZeroCases() {
-    assertInstanceOf(Rational.class, Quex.of(4, 0, 2));
-    assertInstanceOf(Rational.class, Quex.of(4, 2, 0));
+    assertInstanceOf(Rational.class, Quadir.of(4, 0, 2));
+    assertInstanceOf(Rational.class, Quadir.of(4, 2, 0));
   }
 }

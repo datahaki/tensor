@@ -18,7 +18,7 @@ import ch.alpine.tensor.qty.Quantity;
  * 
  * <p>Examples:
  * <pre>
- * ExactScalarQ.of(RationalScalar.of(2, 3)) == true
+ * ExactScalarQ.of(Rational.of(2, 3)) == true
  * ExactScalarQ.of(ComplexScalar.of(3, 4)) == true
  * ExactScalarQ.of(GaussScalar.of(4, 7)) == true
  * ExactScalarQ.of(Quantity.of(3, "m")) == true
