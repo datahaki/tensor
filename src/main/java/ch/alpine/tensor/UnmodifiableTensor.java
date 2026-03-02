@@ -61,6 +61,52 @@ import java.util.stream.Stream;
 
   @Override // from TensorImpl
   public ListIterator<Tensor> iterator() {
-    return StaticHelper.unmodifiable(super.iterator());
+    ListIterator<Tensor> listIterator = super.iterator();
+    return new ListIterator<>() {
+      @Override
+      public boolean hasNext() {
+        return listIterator.hasNext();
+      }
+
+      @Override
+      public Tensor next() {
+        return listIterator.next().unmodifiable();
+      }
+
+      @Override
+      public boolean hasPrevious() {
+        return listIterator.hasPrevious();
+      }
+
+      @Override
+      public Tensor previous() {
+        return listIterator.previous().unmodifiable();
+      }
+
+      @Override
+      public int nextIndex() {
+        return listIterator.nextIndex();
+      }
+
+      @Override
+      public int previousIndex() {
+        return listIterator.previousIndex();
+      }
+
+      @Override
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }
+
+      @Override
+      public void set(Tensor tensor) {
+        throw new UnsupportedOperationException();
+      }
+
+      @Override
+      public void add(Tensor tensor) {
+        throw new UnsupportedOperationException();
+      }
+    };
   }
 }
