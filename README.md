@@ -52,7 +52,7 @@ Autonomous Gokart
 </tr>
 </table>
 
-## Features
+## ✨ Features
 
 * multi-dimensional arrays: scalars, vectors, matrices, n-linear forms, Lie-algebra ad-tensor, ...
 * unstructured, nested tensors, for instance `{{1+2*I[A], -3/4}, {{5.678}, 9[kg*s^-1], 2[m^3]}}`
@@ -68,7 +68,7 @@ Autonomous Gokart
 * spectral analysis: `Fourier`, `SpectrogramArray`
 * import from and export to `Mathematica`, `CSV`, and image files
 
-## Gallery
+## 📸 Gallery
 
 <table>
 <tr>
@@ -99,9 +99,9 @@ Newton's method
 </tr>
 </table>
 
-## Examples
+## 📚 Examples
 
-### Exact Precision
+### 🎯 Exact Precision
 
 Solving systems of linear equations
 
@@ -165,7 +165,7 @@ System.out.println("P(X=3)=" + pdf.at(RealScalar.of(3)));
 P(X=3)=84000/742729
 ```
 
-### Physical Quantities
+### 📐 Physical Quantities
 
 The tensor library implements `Quantity`, i.e. numbers with physical units.
 Several algorithms are verified to work with scalars of type `Quantity`.
@@ -207,7 +207,7 @@ System.out.println(force_N);
 
 The scalar type `Quantity` was developed in collaboration with *SwissTrolley+*.
 
-### Date and Time
+### 📅 Date and Time
 
 The tensor library implements `DateTime` for calendar arithmetic and data sets with calendar entries.
 The arithmetic and string expressions are identical to those of the java class `LocalDateTime`.
@@ -226,7 +226,7 @@ System.out.println(guess);
 
 The scalar type `DateTime` was developed in collaboration with *GRZ Technologies*.
 
-### Miscellaneous
+### 📦 Miscellaneous
 
 Tensors of rank 3
 
@@ -279,7 +279,7 @@ System.out.println(matrix.get(Tensor.ALL, 3)); // extraction of the 4th column
 {0, 0, 5}
 ```
 
-### Optimization
+### 📈 Optimization
 
 Distance-based queries for point sets in Euclidean space
 
@@ -300,7 +300,7 @@ radius search
 </tr>
 </table>
 
-### Visualization
+### 🎨 Visualization
 
 Predefined color gradients
 
