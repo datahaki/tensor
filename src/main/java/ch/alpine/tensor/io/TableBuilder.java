@@ -3,11 +3,13 @@ package ch.alpine.tensor.io;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Flatten;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 
 /** Several applications require to export tables as CSV files for analysis,
  * and visualization in Mathematica, or Excel. The applications typically
@@ -77,5 +79,16 @@ public final class TableBuilder implements Serializable {
    * @return unmodifiable tensor with rows of table builder as entries. */
   public Tensor getTable() {
     return tensor.unmodifiable();
+  }
+
+  public Tensor getRow(int index) {
+    return tensor.get(index);
+  }
+
+  /** @param list
+   * @return */
+  public Tensor getColumns(int... list) {
+    TensorUnaryOperator extract = row -> Tensor.of(IntStream.of(list).mapToObj(row::Get));
+    return extract.slash(tensor);
   }
 }
