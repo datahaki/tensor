@@ -3,54 +3,34 @@ package ch.alpine.tensor.fft;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.win.DirichletWindow;
 import ch.alpine.tensor.sca.win.HannWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a>
  * 
+ * @see SpectrogramArrays
  * @see WindowFunctions */
 public interface SpectrogramArray extends TensorUnaryOperator {
-  /** @param process
-   * @param windowLength
-   * @param offset positive and not greater than windowLength, or null
-   * @param window */
-  static SpectrogramArray of( //
-      TensorUnaryOperator process, Integer windowLength, Integer offset, ScalarUnaryOperator window) {
-    return new SpectrogramArrayImpl( //
-        Objects.requireNonNull(process), //
-        new SlidingWindow(windowLength, offset), //
-        window);
-  }
-
-  /** @param process for instance Fourier.FORWARD::transform */
+  /** @param process for example Fourier.FORWARD::transform */
   static SpectrogramArray of(TensorUnaryOperator process) {
-    return of(process, null, null, null);
+    return new SpectrogramArrayImpl(Objects.requireNonNull(process), new SlidingWindow(null, null), null);
   }
 
-  /** @param windowDuration
-   * @param samplingFrequency
-   * @param offset positive
-   * @param window for instance {@link DirichletWindow#FUNCTION}
+  /** @param windowLength positive, or null
+   * @param offset positive and not greater than windowLength, or null
    * @return */
-  // TODO rename deriveFixed
-  TensorUnaryOperator of( //
-      Scalar windowDuration, Scalar samplingFrequency, int offset, ScalarUnaryOperator window);
+  SpectrogramArray config(Integer windowLength, Integer offset);
 
-  /** @param windowDuration
-   * @param samplingFrequency
-   * @param window for instance {@link DirichletWindow#FUNCTION}
-   * @return spectrogram operator with default offset */
-  TensorUnaryOperator of( //
-      Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window);
+  /** @param window
+   * @return */
+  SpectrogramArray config(ScalarUnaryOperator window);
 
   /** performs apply(vector) and then removes half of the result due to symmetry
    * 

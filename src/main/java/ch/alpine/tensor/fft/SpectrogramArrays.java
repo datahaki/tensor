@@ -2,16 +2,13 @@
 package ch.alpine.tensor.fft;
 
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Re;
 import ch.alpine.tensor.sca.exp.Log;
 
-public enum SpectrogramArrays implements SpectrogramArray {
+public enum SpectrogramArrays {
   /** reproduces
    * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a> */
   FOURIER(Fourier.FORWARD::transform),
@@ -36,33 +33,13 @@ public enum SpectrogramArrays implements SpectrogramArray {
       .maps(Log.FUNCTION))//
       .maps(Re.FUNCTION));
 
-  private final SpectrogramArray spectrogramArray;
+  private final TensorUnaryOperator process;
 
   SpectrogramArrays(TensorUnaryOperator process) {
-    spectrogramArray = SpectrogramArray.of(process);
+    this.process = process;
   }
 
   public SpectrogramArray operator() {
-    return spectrogramArray;
-  }
-
-  @Override
-  public Tensor apply(Tensor vector) {
-    return spectrogramArray.apply(vector);
-  }
-
-  @Override
-  public Tensor half_abs(Tensor vector) {
-    return spectrogramArray.half_abs(vector);
-  }
-
-  @Override
-  public TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency, int offset, ScalarUnaryOperator window) {
-    return spectrogramArray.of(windowDuration, samplingFrequency, offset, window);
-  }
-
-  @Override
-  public TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window) {
-    return spectrogramArray.of(windowDuration, samplingFrequency, window);
+    return SpectrogramArray.of(process);
   }
 }

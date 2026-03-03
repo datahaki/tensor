@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
@@ -31,6 +30,7 @@ import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
+import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.win.BlackmanHarrisWindow;
 import ch.alpine.tensor.sca.win.HannWindow;
 import ch.alpine.tensor.sca.win.NuttallWindow;
@@ -40,7 +40,7 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
 class SpectrogramArrayTest {
   @Test
   void testOperator() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator tuo = SpectrogramArray.of(Fourier.INVERSE::transform, 1345, 300, null);
+    TensorUnaryOperator tuo = SpectrogramArray.of(Fourier.INVERSE::transform).config(1345, 300);
     Serialization.copy(tuo);
     tuo.apply(TestHelper.signal());
     assertTrue(tuo.toString().startsWith("SpectrogramArray["));
@@ -48,7 +48,7 @@ class SpectrogramArrayTest {
 
   @Test
   void testDimension() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(SpectrogramArray.of(Fourier.FORWARD::transform, 8, 8, null));
+    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(SpectrogramArray.of(Fourier.FORWARD::transform).config(8, 8));
     Tensor tensor = tensorUnaryOperator.apply(Range.of(0, 128));
     assertEquals(Dimensions.of(tensor), Arrays.asList(16, 8));
     // assertTrue(tensorUnaryOperator.toString().startsWith("SpectrogramArray["));
@@ -60,7 +60,7 @@ class SpectrogramArrayTest {
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(RealScalar::of));
     for (WindowFunctions windowFunctions : WindowFunctions.values()) {
-      int windowLength = Unprotect.dimension1(SpectrogramArray.of(Fourier.FORWARD::transform, null, null, windowFunctions.get()).apply(tensor));
+      int windowLength = Unprotect.dimension1(SpectrogramArray.of(Fourier.FORWARD::transform).config(windowFunctions.get()).apply(tensor));
       assertEquals(windowLength, 32);
     }
   }
@@ -82,24 +82,28 @@ class SpectrogramArrayTest {
 
   @Test
   void testStaticOps() {
-    SpectrogramArrays.FOURIER.operator().of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), HannWindow.FUNCTION);
-    SpectrogramArrays.FOURIER.operator().of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), 10, TukeyWindow.FUNCTION);
+    int windowLength = Round.intValueExact(Quantity.of(1, "s").multiply(Quantity.of(100, "s^-1")));
+    SpectrogramArrays.FOURIER.operator().config(windowLength, null).config(HannWindow.FUNCTION);
+    SpectrogramArrays.FOURIER.operator().config(windowLength, 10).config(TukeyWindow.FUNCTION);
   }
 
-  @Disabled
   @Test
   void testStaticOpsFail() {
-    assertThrows(IllegalArgumentException.class,
-        () -> SpectrogramArrays.FOURIER.operator().of(Quantity.of(0, "s"), Quantity.of(100, "s^-1"), NuttallWindow.FUNCTION));
-    assertThrows(IllegalArgumentException.class,
-        () -> SpectrogramArrays.FOURIER.operator().of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"), BlackmanHarrisWindow.FUNCTION));
+    int windowLength = Round.intValueExact(Quantity.of(0, "s").multiply(Quantity.of(100, "s^-1")));
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArrays.FOURIER.operator().config(windowLength, null).config(NuttallWindow.FUNCTION));
+  }
+
+  @Test
+  void testStaticOpsFail2() {
+    int windowLength = Round.intValueExact(Quantity.of(1, "s").multiply(Quantity.of(0.100, "s^-1")));
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArrays.FOURIER.operator().config(windowLength, null).config(BlackmanHarrisWindow.FUNCTION));
   }
 
   @RepeatedTest(7)
   void testPreallocate(RepetitionInfo repetitionInfo) {
     int windowLength = repetitionInfo.getCurrentRepetition();
     for (int offset = 1; offset <= windowLength; ++offset) {
-      TensorUnaryOperator tensorUnaryOperator = SpectrogramArray.of(Fourier.FORWARD::transform, windowLength, offset, null);
+      TensorUnaryOperator tensorUnaryOperator = SpectrogramArray.of(Fourier.FORWARD::transform).config(windowLength, offset);
       for (int length = 10; length < 20; ++length) {
         Tensor signal = Range.of(0, length);
         tensorUnaryOperator.apply(signal);
