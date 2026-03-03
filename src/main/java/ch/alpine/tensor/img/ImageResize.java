@@ -90,22 +90,13 @@ public enum ImageResize {
   public Tensor of(Tensor tensor, Dimension dimension) {
     return of(tensor, dimension.height, dimension.width);
   }
-
   // ---
-  /** function uses nearest neighbor interpolation
-   * 
-   * @param tensor of rank 2 or 3
-   * @param factor positive integer
-   * @return */
-  public static Tensor nearest(Tensor tensor, int factor) {
-    return nearest(tensor, factor, factor);
-  }
 
   /** function uses nearest neighbor interpolation
    * 
    * @param tensor of rank 2 or 3
-   * @param fx positive scaling along x axis
-   * @param fy positive scaling along y axis
+   * @param fx positive scaling of height
+   * @param fy positive scaling of width
    * @return
    * @throws Exception if either fx or fy is zero or negative */
   public static Tensor nearest(Tensor tensor, int fx, int fy) {

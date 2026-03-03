@@ -43,7 +43,7 @@ class ImageResizeTest {
     Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(path);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
-    Tensor image = ImageResize.nearest(tensor, 2);
+    Tensor image = ImageResize.nearest(tensor, 2, 2);
     assertEquals(Dimensions.of(image), Arrays.asList(66, 30, 4));
   }
 
@@ -127,7 +127,7 @@ class ImageResizeTest {
   @Test
   void testBlub1() {
     Tensor tensor = Tensors.fromString("{{0, 1}, {0, 0}}");
-    Tensor resize = ImageResize.nearest(tensor, 3);
+    Tensor resize = ImageResize.nearest(tensor, 3, 3);
     assertEquals(resize.get(1), Tensors.vector(0, 0, 0, 1, 1, 1));
     Chop.NONE.requireAllZero(resize.get(Tensor.ALL, 2));
     assertEquals(resize.get(Tensor.ALL, 3), Tensors.vector(1, 1, 1, 0, 0, 0));
@@ -150,7 +150,7 @@ class ImageResizeTest {
   @Test
   void testRank4() {
     Tensor image = Array.zeros(2, 3, 2, 3);
-    Tensor tensor = ImageResize.nearest(image, 2);
+    Tensor tensor = ImageResize.nearest(image, 2, 2);
     assertEquals(tensor, Array.zeros(4, 6, 2, 3));
     ExactTensorQ.require(tensor);
   }
@@ -158,9 +158,9 @@ class ImageResizeTest {
   @Test
   void testFail() {
     Tensor image = Array.zeros(10, 10, 4);
-    ImageResize.nearest(image, 2);
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, 0));
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, -1));
+    ImageResize.nearest(image, 2, 2);
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, 0, 1));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, -1, -1));
     assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, -1, 2));
     assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, 2, -1));
   }
