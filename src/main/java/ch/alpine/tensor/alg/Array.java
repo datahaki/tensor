@@ -4,6 +4,7 @@ package ch.alpine.tensor.alg;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -61,6 +62,26 @@ public enum Array {
   }
 
   // ---
+  /** @param function
+   * @param dimensions */
+  public static void forEach(Consumer<List<Integer>> function, List<Integer> dimensions) {
+    dimensions.forEach(Integers::requirePositiveOrZero);
+    forEach(function, 0, dimensions, new ArrayList<>(dimensions));
+  }
+
+  // helper function
+  private static void forEach(Consumer<List<Integer>> function, int level, List<Integer> dimensions, List<Integer> index) {
+    if (level == dimensions.size())
+      function.accept(index);
+    else
+      IntStream.range(0, dimensions.get(level)) //
+          .forEach(count -> {
+            index.set(level, count);
+            forEach(function, level + 1, dimensions, index);
+          });
+  }
+  // ---
+
   /** @param supplier
    * @param dimensions
    * @return */

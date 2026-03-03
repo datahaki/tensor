@@ -48,6 +48,15 @@ class TuplesTest {
   }
 
   @Test
+  void testTuples() {
+    Tensor tensor = Tuples.of(Tensors.vector(0, 1, 2), Tensors.vector(5, 6), Tensors.vector(8, 9));
+    assertEquals(tensor.length(), 3 * 2 * 2);
+    String string = "{{0, 5, 8}, {0, 5, 9}, {0, 6, 8}, {0, 6, 9}, {1, 5, 8}, {1, 5, 9}, {1, 6, 8}, {1, 6, 9}, {2, 5, 8}, {2, 5, 9}, {2, 6, 8}, {2, 6, 9}}";
+    Tensor expect = Tensors.fromString(string);
+    assertEquals(tensor, expect);
+  }
+
+  @Test
   void testFailNegative() {
     assertThrows(IllegalArgumentException.class, () -> Tuples.of(Tensors.vector(1, 2, 3), -1));
   }
