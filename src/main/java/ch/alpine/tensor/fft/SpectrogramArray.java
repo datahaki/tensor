@@ -32,7 +32,8 @@ public interface SpectrogramArray extends TensorUnaryOperator {
    * @return */
   SpectrogramArray config(ScalarUnaryOperator window);
 
-  /** performs apply(vector) and then removes half of the result due to symmetry
+  /** performs apply(vector), removes half of the result, entrywise abs, transpose and flip
+   * particularly suitable in case vector consists entirely of real scalars
    * 
    * @param vector
    * @param window for instance {@link HannWindow#FUNCTION}

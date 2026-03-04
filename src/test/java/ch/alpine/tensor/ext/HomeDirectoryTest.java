@@ -60,7 +60,7 @@ class HomeDirectoryTest {
       assertFalse(Files.exists(path));
     }
     {
-      Path path = HomeDirectory.Documents.mk_dirs(s1);
+      Path path = HomeDirectory.Documents.resolve(s1);
       assertTrue(Files.isDirectory(path));
       Files.delete(path);
       assertFalse(Files.exists(path));
