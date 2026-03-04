@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.ex;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.BitSet;
 
@@ -32,6 +33,7 @@ import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
@@ -193,11 +195,18 @@ class MatrixPowerTest {
     int prime = 7879;
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
     Scalar one = GaussScalar.of(1, prime);
-    Tensor matrix = RandomVariate.of(distribution, n, n).maps(s -> GaussScalar.of(s.number().intValue(), prime));
-    Tensor result = MatrixPower.of(matrix, +343386231231234L);
-    Tensor revers = MatrixPower.of(matrix, -343386231231234L);
-    MatrixQ.requireSize(result, n, n);
-    assertEquals(DiagonalMatrix.of(n, one), Dot.of(result, revers));
+    for (int attempt = 0; attempt < 10; ++attempt) {
+      Tensor matrix = RandomVariate.of(distribution, n, n).maps(s -> GaussScalar.of(s.number().intValue(), prime));
+      Tensor result = MatrixPower.of(matrix, +343386231231234L);
+      Scalar det = Det.of(matrix);
+      if (Scalars.nonZero(det)) {
+        Tensor revers = MatrixPower.of(matrix, -343386231231234L);
+        MatrixQ.requireSize(result, n, n);
+        assertEquals(DiagonalMatrix.of(n, one), Dot.of(result, revers));
+        return;
+      }
+    }
+    fail();
   }
 
   @Test
