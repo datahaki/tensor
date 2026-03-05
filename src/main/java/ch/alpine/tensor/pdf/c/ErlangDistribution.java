@@ -7,6 +7,8 @@ import java.util.random.RandomGenerator;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.PackageTestAccess;
@@ -20,14 +22,14 @@ import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.gam.Factorial;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/** ErlangDistribution[k, lambda] == GammaDistribution[k, 1 / lambda]
+/** when lambda is unitless:
+ * ErlangDistribution[k, lambda] == GammaDistribution[k, 1 / lambda]
  * 
  * <p>The CDF of the Erlang-distribution[k, lambda] is the function
  * GammaRegularized[k, 0, x * lambda]
@@ -58,6 +60,7 @@ public class ErlangDistribution extends AbstractContinuousDistribution implement
   private final int k;
   private final Scalar _k;
   private final Scalar lambda;
+  private final Scalar rec_lambda_zero;
   private final Scalar factor;
   private final ScalarUnaryOperator power;
   private final Scalar mean;
@@ -67,6 +70,7 @@ public class ErlangDistribution extends AbstractContinuousDistribution implement
     this.k = k;
     _k = RealScalar.of(k);
     this.lambda = lambda;
+    rec_lambda_zero = Unprotect.zero_negateUnit(lambda);
     factor = Power.of(lambda, k).divide(Factorial.of(k - 1));
     power = Power.function(k - 1);
     mean = _k.divide(lambda);
@@ -74,24 +78,28 @@ public class ErlangDistribution extends AbstractContinuousDistribution implement
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    if (Sign.isNegative(x))
-      return lambda.zero();
-    Scalar xlambda = x.multiply(lambda);
-    Scalar exp = Exp.FUNCTION.apply(xlambda.negate());
-    return Times.of(exp, power.apply(x), factor);
+    if (Scalars.lessEquals(rec_lambda_zero, x)) {
+      Scalar xlambda = x.multiply(lambda);
+      Scalar exp = Exp.FUNCTION.apply(xlambda.negate());
+      return Times.of(exp, power.apply(x), factor);
+    }
+    return lambda.zero();
   }
 
   @Override // from CDF requires GammaRegularized
   public Scalar p_lessThan(Scalar x) {
-    Scalar sum = RealScalar.ONE;
-    Scalar fac = RealScalar.ONE;
-    Scalar xlambda = x.multiply(lambda);
-    for (int n = 1; n < k; ++n) {
-      fac = fac.multiply(xlambda).divide(RealScalar.of(n));
-      sum = sum.add(fac);
+    if (Scalars.lessEquals(rec_lambda_zero, x)) {
+      Scalar sum = RealScalar.ONE;
+      Scalar fac = RealScalar.ONE;
+      Scalar xlambda = x.multiply(lambda);
+      for (int n = 1; n < k; ++n) {
+        fac = fac.multiply(xlambda).divide(RealScalar.of(n));
+        sum = sum.add(fac);
+      }
+      Scalar exp = Exp.FUNCTION.apply(xlambda.negate());
+      return RealScalar.ONE.subtract(sum.multiply(exp));
     }
-    Scalar exp = Exp.FUNCTION.apply(xlambda.negate());
-    return RealScalar.ONE.subtract(sum.multiply(exp));
+    return RealScalar.ZERO;
   }
 
   @Override // from InverseCDF

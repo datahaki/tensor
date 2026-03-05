@@ -1,4 +1,4 @@
-// code by gjoel and jph
+// code by gjoel, jph
 package ch.alpine.tensor.pdf;
 
 import ch.alpine.tensor.Rational;

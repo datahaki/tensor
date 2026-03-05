@@ -71,6 +71,11 @@ class ErlangDistributionTest {
     Distribution distribution = ErlangDistribution.of(5, Quantity.of(10, "m"));
     Scalar mean = Expectation.mean(distribution);
     assertEquals(mean, Scalars.fromString("1/2[m^-1]"));
+    PDF pdf = PDF.of(distribution);
+    pdf.at(Quantity.of(2, "m^-1"));
+    CDF cdf = CDF.of(distribution);
+    cdf.p_lessThan(Quantity.of(2, "m^-1"));
+    assertEquals(cdf.p_lessThan(Quantity.of(-2, "m^-1")), RealScalar.of(0));
   }
 
   @Test
