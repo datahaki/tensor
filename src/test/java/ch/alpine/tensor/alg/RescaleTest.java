@@ -21,6 +21,7 @@ import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import test.wrap.SerializableQ;
 
 class RescaleTest {
   @Test
@@ -105,6 +106,7 @@ class RescaleTest {
     Tensor vector = Tensors.fromString("{3[s], Infinity[s], 6[s], 2[s]}");
     Tensor result = Tensors.fromString("{1/4, Infinity, 1, 0}");
     Rescale rescale = new Rescale(vector);
+    SerializableQ.require(rescale);
     Clip scalarSummaryStatistics = rescale.clip();
     // assertEquals(scalarSummaryStatistics.count(), 3);
     assertEquals(scalarSummaryStatistics.min(), Quantity.of(2, "s"));

@@ -32,6 +32,7 @@ import ch.alpine.tensor.pdf.c.StudentTDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.c.WeibullDistribution;
 import ch.alpine.tensor.sca.Chop;
+import test.wrap.SerializableQ;
 
 class InverseCDFTest {
   static final Distribution[] DISTRIBS = { //
@@ -78,5 +79,6 @@ class InverseCDFTest {
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(x);
     Chop._10.requireClose(p, p_lessEquals);
+    SerializableQ.require(distribution);
   }
 }

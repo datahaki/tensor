@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -25,7 +26,7 @@ import ch.alpine.tensor.sca.Clip;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Rescale.html">Rescale</a> */
-public class Rescale {
+public class Rescale implements Serializable {
   /** RealScalar.ZERO is used instead of {@link Scalar#zero()}
    * to eliminate unit of {@link Quantity}. */
   private static final ScalarUnaryOperator FINITE_NUMBER_ZERO = //
