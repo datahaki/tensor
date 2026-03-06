@@ -27,12 +27,14 @@ public class ArcSinDistribution extends AbstractContinuousDistribution implement
   public Scalar at(Scalar x) {
     Scalar f1 = x.one().subtract(x);
     Scalar f2 = x.one().add(x);
-    return Sqrt.FUNCTION.apply(f1.multiply(f2)).multiply(Pi.VALUE).reciprocal();
+    return support().isInside(x) //
+        ? Sqrt.FUNCTION.apply(f1.multiply(f2)).multiply(Pi.VALUE).reciprocal()
+        : RealScalar.ZERO;
   }
 
   @Override
   public Scalar p_lessThan(Scalar x) {
-    return RealScalar.ONE.subtract(ArcCos.FUNCTION.apply(x).divide(Pi.VALUE));
+    return RealScalar.ONE.subtract(ArcCos.FUNCTION.apply(support().apply(x)).divide(Pi.VALUE));
   }
 
   @Override

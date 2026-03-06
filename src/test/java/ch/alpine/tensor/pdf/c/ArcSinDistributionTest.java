@@ -1,11 +1,13 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -23,6 +25,10 @@ class ArcSinDistributionTest {
     Distribution d = ArcSinDistribution.INSTANCE;
     PDF pdf = PDF.of(d);
     CDF cdf = CDF.of(d);
+    assertEquals(pdf.at(RealScalar.of(-2)), RealScalar.ZERO);
+    assertEquals(pdf.at(RealScalar.of(+2)), RealScalar.ZERO);
+    assertEquals(cdf.p_lessEquals(RealScalar.of(-2)), RealScalar.ZERO);
+    assertEquals(cdf.p_lessEquals(RealScalar.of(+2)), RealScalar.ONE);
     InverseCDF inv = InverseCDF.of(d);
     Distribution uni = UniformDistribution.of(Clips.absoluteOne());
     Scalar x0 = RandomVariate.of(uni);
