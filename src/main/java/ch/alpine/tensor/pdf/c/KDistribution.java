@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 public class KDistribution extends AbstractContinuousDistribution implements Serializable {
   private static final Scalar _4 = RealScalar.of(4.0);
 
-  /** @param v positive
+  /** @param v positive integer
    * @param w positive
    * @return K distribution with shape parameters v and w */
   public static Distribution of(Scalar v, Scalar w) {
@@ -38,7 +38,7 @@ public class KDistribution extends AbstractContinuousDistribution implements Ser
         Sign.requirePositive(w));
   }
 
-  /** @param v positive
+  /** @param v positive integer
    * @param w standard deviation
    * @return K distribution with shape parameters v and w */
   public static Distribution of(Number v, Number w) {
