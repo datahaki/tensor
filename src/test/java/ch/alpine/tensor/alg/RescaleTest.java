@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -27,6 +28,9 @@ class RescaleTest {
   @Test
   void testEmpty() {
     assertEquals(Rescale.of(Tensors.empty()), Tensors.empty());
+    Rescale rescale = new Rescale(Tensors.empty());
+    assertEquals(rescale.result(), Tensors.empty());
+    assertNull(rescale.clip());
   }
 
   @Test
