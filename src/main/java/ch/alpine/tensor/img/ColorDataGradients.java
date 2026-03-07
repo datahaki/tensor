@@ -38,6 +38,8 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** approximate default color scheme for Spectrogram
    * white , yellow, orange, red, violet, black, */
   SUNSET_REVERSED,
+  /** similar to sunset without the extremes */
+  EMBER,
   /** [0, 1] corresponds to wavelengths [380, 750] */
   VISIBLE_SPECTRUM,
   /** extracted from
