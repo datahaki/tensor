@@ -19,6 +19,18 @@ class UnitParserTest {
   }
 
   @Test
+  void testDiv1() {
+    assertEquals(UnitParser.of("m/s^2"), UnitParser.of("m*s^-2"));
+    assertEquals(UnitParser.of("m/s^2"), UnitParser.of("m*s^-2"));
+    assertEquals(UnitParser.of("kg*m/s^2"), UnitParser.of("kg*m*s^-2"));
+    assertEquals(UnitParser.of("m^3/s^2"), UnitParser.of("m^3*s^-2"));
+    assertThrows(Exception.class, () -> UnitParser.of("1/s"));
+    assertThrows(Exception.class, () -> UnitParser.of("/s^2"));
+    assertThrows(Exception.class, () -> UnitParser.of("1/s^2"));
+    assertThrows(Exception.class, () -> UnitParser.of("m/s^2/kg"));
+  }
+
+  @Test
   void testLookup() {
     UnitParser.of("A*kg^-1*s^2");
     UnitParser.of("HaqiuytasdMAM");

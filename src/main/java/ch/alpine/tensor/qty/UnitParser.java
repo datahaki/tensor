@@ -15,14 +15,43 @@ import ch.alpine.tensor.Scalars;
 /** associates strings with instances of unit */
 /* package */ enum UnitParser {
   ;
-  /** @param string, for instance "A*kg^-1*s^2"
+  private static final char DIV_DELIMITER = '/';
+
+  /** examples of convertible strings are:
+   * "m^3"
+   * "kg*m*s^-2"
+   * "m/s^2"
+   * "CHF/s"
+   * "%"
+   * "FUBA^-1*m*m"
+   * 
+   * @param string, for instance "A*kg^-1*s^2"
    * @return unit
    * @throws Exception if string is not a valid expression for a unit */
   public static Unit of(String string) {
-    NavigableMap<String, Scalar> navigableMap = new TreeMap<>();
-    StringTokenizer stringTokenizer = new StringTokenizer(string, Unit.JOIN_DELIMITER);
-    while (stringTokenizer.hasMoreTokens()) {
-      String token = stringTokenizer.nextToken();
+    int index = string.indexOf(DIV_DELIMITER);
+    if (0 < index) {
+      Builder num = new Builder();
+      num.handle(string.substring(0, index));
+      Builder den = new Builder();
+      den.token(string.substring(index + 1));
+      return num.digest().add(den.digest().negate());
+    }
+    Builder builder = new Builder();
+    builder.handle(string);
+    return builder.digest();
+  }
+
+  private static class Builder {
+    private final NavigableMap<String, Scalar> navigableMap = new TreeMap<>();
+
+    void handle(String string) {
+      StringTokenizer stringTokenizer = new StringTokenizer(string, Unit.JOIN_DELIMITER);
+      while (stringTokenizer.hasMoreTokens())
+        token(stringTokenizer.nextToken());
+    }
+
+    void token(String token) {
       int index = token.indexOf(Unit.POWER_DELIMITER);
       if (0 <= index) {
         String key = requireAtomic(token.substring(0, index).strip());
@@ -35,7 +64,10 @@ import ch.alpine.tensor.Scalars;
           merge(navigableMap, requireAtomic(key), RealScalar.ONE);
       }
     }
-    return UnitImpl.create(navigableMap);
+
+    Unit digest() {
+      return UnitImpl.create(navigableMap);
+    }
   }
 
   /** atomic unit may consist of roman letters in lower case a-z,
