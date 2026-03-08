@@ -58,7 +58,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
 
   @Override // from ColorDataGradient
   public LinearColorDataGradient deriveWithOpacity(Scalar opacity) {
-    return new LinearColorDataGradient(Tensor.of(tensor.stream().map(withOpacity(opacity))));
+    return new LinearColorDataGradient(withOpacity(opacity).slash(tensor));
   }
 
   /** @param opacity in the interval [0, 1]

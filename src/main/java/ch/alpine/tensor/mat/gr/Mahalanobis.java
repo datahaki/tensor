@@ -102,6 +102,7 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
   public Scalar norm_squared(Tensor vector) {
     // theory guarantees that leverage is in interval [0, 1]
     // so far the numerics did not result in values below 0 here
+    // TODO should there be a conjugate for one of the vectors?
     return (Scalar) sigma_inverse.dot(vector).dot(vector);
   }
 

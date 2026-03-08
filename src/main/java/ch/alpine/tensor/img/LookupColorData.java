@@ -1,8 +1,8 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Clips;
   public static final ColorDataGradient GRAYSCALE = new LookupColorData(createBW(255));
 
   private static Tensor[] createBW(int alpha) {
-    return Stream.of(StaticHelper.LOOKUP) //
+    return Arrays.stream(StaticHelper.LOOKUP) //
         .map(value -> Tensors.of(value, value, value, StaticHelper.LOOKUP[alpha])) //
         .toArray(Tensor[]::new);
   }
@@ -48,7 +48,7 @@ import ch.alpine.tensor.sca.Clips;
   public ColorDataGradient deriveWithOpacity(Scalar opacity) {
     double value = Clips.unit().requireInside(opacity).number().doubleValue(); // in [0, 1]
     Scalar alpha = RealScalar.of(toInt(value)); // in [0, 255]
-    return new LookupColorData(Stream.of(tensors) //
+    return new LookupColorData(Arrays.stream(tensors) //
         .map(rgba -> rgba.extract(0, 3).append(alpha)) //
         .toArray(Tensor[]::new));
   }

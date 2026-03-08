@@ -16,6 +16,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
+import ch.alpine.tensor.mat.pi.LinearSubspace;
 
 class MatrixQTest {
   @Test
@@ -68,6 +69,13 @@ class MatrixQTest {
   @Test
   void testAd() {
     assertFalse(MatrixQ.of(Array.zeros(3, 3, 3)));
+  }
+
+  @Test
+  void testBasis() {
+    LinearSubspace linearSubspace = LinearSubspace.of(_ -> RealScalar.ZERO, 2, 3);
+    int dimensions = linearSubspace.dimensions();
+    assertEquals(dimensions, 6);
   }
 
   @Test

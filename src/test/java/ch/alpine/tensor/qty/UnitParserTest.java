@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Modifier;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -18,6 +19,7 @@ class UnitParserTest {
     assertThrows(Exception.class, () -> UnitParser.of(string));
   }
 
+  @Disabled
   @Test
   void testDiv1() {
     assertEquals(UnitParser.of("m|s^2"), UnitParser.of("m*s^-2"));
@@ -28,6 +30,8 @@ class UnitParserTest {
     assertEquals(UnitParser.of("|s^2"), UnitParser.of("s^-2"));
     assertThrows(Exception.class, () -> UnitParser.of("m|s^2|T"));
     assertThrows(Exception.class, () -> UnitParser.of("m|s^2*T"));
+    assertEquals(Unit.of("m|m"), Unit.of(""));
+    assertEquals(Unit.of("m*m|m^2"), Unit.of(""));
   }
 
   @Test

@@ -23,8 +23,6 @@ class UnitQTest {
   @Test
   void testDouble() {
     assertEquals(Unit.of("m*m^3"), Unit.of("m*m^2*m"));
-    assertEquals(Unit.of("m|m"), Unit.of(""));
-    assertEquals(Unit.of("m*m|m^2"), Unit.of(""));
     assertTrue(UnitQ.isOne(Unit.of("m*m^-1")));
     assertTrue(UnitQ.isOne(Unit.of("s^2*m*s^-1*m^-1*s^-1")));
   }

@@ -15,6 +15,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 
 class EqualsReduceTest {
@@ -31,6 +33,17 @@ class EqualsReduceTest {
     assertEquals(EqualsReduce.zero(Tensors.vector(2, 3, 4)), RealScalar.ZERO);
     assertEquals(EqualsReduce.zero(Tensors.fromString("{{1[m],2+I[m],3[m]}}")), Quantity.of(0, "m"));
     assertEquals(EqualsReduce.zero(DiagonalMatrix.of(3, Quantity.of(1, "s^2*m^-1"))), Quantity.of(0, "s^2*m^-1"));
+  }
+
+  @Test
+  void testOne() {
+    assertEquals(EqualsReduce.one(Tensors.fromString("{2,2.1,3[m],2+I}")), RealScalar.ONE);
+    GaussScalar gs1 = GaussScalar.of(1, 5);
+    GaussScalar gs2 = GaussScalar.of(2, 5);
+    assertEquals(EqualsReduce.one(Tensors.of(gs1, gs2)), gs1);
+    GaussScalar gs3 = GaussScalar.of(2, 7);
+    assertThrows(Exception.class, () -> EqualsReduce.one(Tensors.of(gs1, gs3)));
+    assertThrows(Exception.class, () -> EqualsReduce.one(Tensors.of(gs1, Pi.VALUE)));
   }
   // @Test
   // void testFailUnique() {

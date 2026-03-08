@@ -24,6 +24,9 @@ import ch.alpine.tensor.sca.Sign;
  * Rationalize.of(-11.5, 1) == -11
  * </code>
  * 
+ * @see ContinuedFraction
+ * @see FromContinuedFraction
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Rationalize.html">Rationalize</a> */
 public class Rationalize implements ScalarUnaryOperator {

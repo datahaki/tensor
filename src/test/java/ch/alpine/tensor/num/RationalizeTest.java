@@ -202,6 +202,13 @@ class RationalizeTest {
   }
 
   @Test
+  void testFinite() {
+    assertThrows(Exception.class, () -> Rationalize.full(Double.NaN));
+    assertThrows(Exception.class, () -> Rationalize.full(Double.POSITIVE_INFINITY));
+    assertThrows(Exception.class, () -> Rationalize.full(Double.NEGATIVE_INFINITY));
+  }
+
+  @Test
   void testExact() {
     assertEquals(Rationalize.full(0.25), Rational.of(1, 4));
     assertEquals(Rationalize.full(-13.75), Rational.of(-55, 4));

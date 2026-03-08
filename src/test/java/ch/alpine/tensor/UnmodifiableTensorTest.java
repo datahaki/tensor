@@ -11,12 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.num.Pi;
 
 class UnmodifiableTensorTest {
   @Test
@@ -127,6 +129,20 @@ class UnmodifiableTensorTest {
     Tensor tensor = HilbertMatrix.of(4).unmodifiable();
     AbstractTensor abstractTensor = (AbstractTensor) tensor;
     assertThrows(UnsupportedOperationException.class, () -> abstractTensor.byRef(2).set(RealScalar.ZERO, 0));
+  }
+
+  @Test
+  void testListIterator() {
+    Tensor tensor = Tensors.vector(1, 2, 3).unmodifiable();
+    ListIterator<Tensor> li = (ListIterator<Tensor>) tensor.iterator();
+    assertTrue(li.hasNext());
+    assertEquals(li.next(), RealScalar.ONE);
+    assertEquals(li.previousIndex(), 0);
+    assertTrue(li.hasPrevious());
+    assertThrows(Exception.class, () -> li.set(Pi._3_4));
+    assertEquals(li.previous(), RealScalar.ONE);
+    assertEquals(li.nextIndex(), 0);
+    assertThrows(Exception.class, () -> li.add(Pi._3_4));
   }
 
   @Test

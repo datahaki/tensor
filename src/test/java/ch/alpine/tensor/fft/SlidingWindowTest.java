@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.fft;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -17,5 +18,10 @@ class SlidingWindowTest {
       Integer windowLength = slidingWindow.complete(k).windowLength();
       assertTrue(Integers.isPowerOf2(windowLength));
     }
+  }
+
+  @Test
+  void testFail() {
+    assertThrows(Exception.class, () -> new SlidingWindow(3, 4));
   }
 }

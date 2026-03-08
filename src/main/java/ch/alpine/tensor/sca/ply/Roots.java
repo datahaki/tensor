@@ -1,8 +1,8 @@
 // code by jph
 package ch.alpine.tensor.sca.ply;
 
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -59,7 +59,7 @@ public enum Roots {
   public static Scalar bound(Tensor coeffs) {
     Polynomial polynomial = Polynomial.of(coeffs);
     Scalar zero = polynomial.getZeroDomain();
-    return Stream.of(zero instanceof Quantity //
+    return Arrays.stream(zero instanceof Quantity //
         ? QUANTITY_ROOTS_BOUNDS
         : RootsBounds.values()) //
         .map(rootsBounds -> rootsBounds.of(coeffs)) //

@@ -39,6 +39,7 @@ class PlausibleRationalTest {
     Scalar scalar = suo.apply(RealScalar.of(0.0));
     ExactScalarQ.require(scalar);
     assertEquals(suo.apply(Pi.VALUE), Pi.VALUE);
+    assertEquals(suo.apply(Rational.THIRD), Rational.THIRD);
   }
 
   @Test

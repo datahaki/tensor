@@ -15,8 +15,7 @@ import ch.alpine.tensor.Scalars;
 /** associates strings with instances of unit */
 /* package */ enum UnitParser {
   ;
-  private static final char DIV_DELIMITER = '|';
-
+  // private static final char DIV_DELIMITER = '|';
   /** examples of convertible strings are:
    * "m^3"
    * "kg*m*s^-2"
@@ -24,27 +23,28 @@ import ch.alpine.tensor.Scalars;
    * "CHF|s"
    * "%"
    * "FUBA^-1*m*m"
-   * "|s" equals to "s^-1"
-   * "|s^2" equals to "s^-2"
-   * 
-   * examples that are not parsed
-   * after the pipe | there may only be 1 unit
-   * "m|s*T" FAILS
-   * there cannot be two slashes | in the string
-   * "m|s|T"
    * 
    * @param string, for instance "A*kg^-1*s^2"
    * @return unit
    * @throws Exception if string is not a valid expression for a unit */
   public static Unit of(String string) {
-    int index = string.indexOf(DIV_DELIMITER);
-    if (0 <= index) {
-      Builder num = new Builder();
-      num.handle(string.substring(0, index));
-      Builder den = new Builder();
-      den.token(string.substring(index + 1));
-      return num.digest().add(den.digest().negate());
-    }
+    // * "|s" equals to "s^-1"
+    // * "|s^2" equals to "s^-2"
+    // *
+    // * examples that are not parsed
+    // * after the pipe | there may only be 1 unit
+    // * "m|s*T" FAILS
+    // * there cannot be two slashes | in the string
+    // * "m|s|T"
+    // *
+    // int index = string.indexOf(DIV_DELIMITER);
+    // if (0 <= index) {
+    // Builder num = new Builder();
+    // num.handle(string.substring(0, index));
+    // Builder den = new Builder();
+    // den.token(string.substring(index + 1));
+    // return num.digest().add(den.digest().negate());
+    // }
     Builder builder = new Builder();
     builder.handle(string);
     return builder.digest();
