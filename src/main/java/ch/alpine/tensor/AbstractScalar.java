@@ -145,14 +145,4 @@ public abstract class AbstractScalar implements Scalar {
   /** @param scalar
    * @return this plus given scalar */
   protected abstract Scalar plus(Scalar scalar);
-
-  // ---
-  @Override // from Object
-  public abstract int hashCode();
-
-  @Override // from Object
-  public abstract boolean equals(Object object);
-
-  @Override // from Object
-  public abstract String toString();
 }
