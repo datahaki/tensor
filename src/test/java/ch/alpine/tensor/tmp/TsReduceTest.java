@@ -90,7 +90,7 @@ class TsReduceTest {
 
   @Test
   void testTable() {
-    Tensor tensor = Import.of("/ch/alpine/tensor/io/dateobject.csv");
+    Tensor tensor = Import.of("ch/alpine/tensor/io/dateobject.csv");
     TimeSeries timeSeries = TimeSeries.table(tensor.stream(), ResamplingMethod.HOLD_VALUE_FROM_LEFT);
     Optional<Tensor> value = TsReduce.lastValue(timeSeries);
     assertEquals(value.orElseThrow(), Tensors.fromString("{2398749, 2233.2[m]}"));
