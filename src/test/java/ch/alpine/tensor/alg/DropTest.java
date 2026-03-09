@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
@@ -20,6 +21,16 @@ class DropTest {
   void testMatrix() {
     assertEquals(Drop.tail(HilbertMatrix.of(10, 10), 2), HilbertMatrix.of(8, 10));
     assertEquals(Drop.head(HilbertMatrix.of(10, 10), 2), HilbertMatrix.of(10, 10).extract(2, 10));
+  }
+
+  @Test
+  void testIndex() {
+    Tensor v = Tensors.vector(0, 1, 2, 3, 4);
+    assertEquals(Drop.index(v, 0), Tensors.vector(1, 2, 3, 4));
+    assertEquals(Drop.index(v, 1), Tensors.vector(0, 2, 3, 4));
+    assertEquals(Drop.index(v, 4), Tensors.vector(0, 1, 2, 3));
+    assertThrows(Exception.class, () -> Drop.index(v, -1));
+    assertThrows(Exception.class, () -> Drop.index(v, 5));
   }
 
   @Test
