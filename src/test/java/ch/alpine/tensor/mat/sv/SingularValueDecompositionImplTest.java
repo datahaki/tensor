@@ -41,43 +41,43 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testResource() throws Exception {
-    _check(Get.of(Unprotect.resourcePath("/ch/alpine/tensor/mat/sv/svd0.mathematica")));
+    _check(Get.of(Unprotect.resourcePath("ch/alpine/tensor/mat/sv/svd0.mathematica")));
   }
 
   @Test
   void testCondition1() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd3.csv");
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/sv/svd3.csv");
     SingularValueDecompositionWrap.of(matrix);
   }
 
   @Test
   void testCondition2() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv");
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/sv/svd2.csv");
     SingularValueDecompositionWrap.of(matrix);
   }
 
   @Test
   void testCondition1UnitA() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd3.csv");
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/sv/svd3.csv");
     SingularValueDecompositionWrap.of(matrix.maps(s -> Quantity.of(s, "m")));
   }
 
   @Test
   void testCondition1UnitB() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd3.csv").maps(s -> Quantity.of(s, "m"));
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/sv/svd3.csv").maps(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     SingularValueDecompositionWrap.of(matrix);
   }
 
   @Test
   void testCondition2UnitA() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv").maps(s -> Quantity.of(s, "m"));
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/sv/svd2.csv").maps(s -> Quantity.of(s, "m"));
     SingularValueDecompositionWrap.of(matrix);
   }
 
   @Test
   void testCondition2UnitB() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/sv/svd2.csv").maps(s -> Quantity.of(s, "m"));
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/sv/svd2.csv").maps(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     SingularValueDecompositionWrap.of(matrix);
   }

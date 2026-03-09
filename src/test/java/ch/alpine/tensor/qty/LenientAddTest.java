@@ -46,7 +46,7 @@ class LenientAddTest {
 
   @Test
   void testPhysicalConstants() {
-    Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/physical_constants.properties");
+    Properties properties = ResourceData.properties("ch/alpine/tensor/qty/physical_constants.properties");
     {
       Scalar scalar = Scalars.fromString(properties.getProperty("na"));
       assertTrue(ExactScalarQ.of(scalar));

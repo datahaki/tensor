@@ -129,7 +129,7 @@ class InfluenceMatrixTest {
 
   @Test
   void testBicChallenge() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/pi/bic_fail.csv");
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/pi/bic_fail.csv");
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(matrix);
     influenceMatrix.leverages();
   }
@@ -194,7 +194,7 @@ class InfluenceMatrixTest {
 
   @Test
   void testSvdWithUnits() {
-    Tensor design = Import.of("/ch/alpine/tensor/mat/sv/svd1.csv");
+    Tensor design = Import.of("ch/alpine/tensor/mat/sv/svd1.csv");
     SingularValueDecompositionWrap.of(design);
     InfluenceMatrix.of(design);
   }

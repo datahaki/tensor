@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.Unitize;
 class ImportHelperTest {
   @Test
   void testGif() throws Exception {
-    String string = "/ch/alpine/tensor/img/rgba7x3.gif"; // file consist of a single line break character
+    String string = "ch/alpine/tensor/img/rgba7x3.gif"; // file consist of a single line break character
     Tensor tempor = Import.of(string);
     Path path = Unprotect.resourcePath(string);
     Tensor tensor = Import.of(path);
@@ -46,7 +46,7 @@ class ImportHelperTest {
 
   @Test
   void testTiff() {
-    Tensor tensor = Import.of("/ch/alpine/tensor/img/rgb14x11.tiff");
+    Tensor tensor = Import.of("ch/alpine/tensor/img/rgb14x11.tiff");
     assertEquals(Dimensions.of(tensor), Arrays.asList(11, 14, 4));
     Tensor rgba = Flatten.of(tensor, 1);
     assertEquals(Dimensions.of(rgba), Arrays.asList(11 * 14, 4));

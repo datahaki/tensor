@@ -19,7 +19,7 @@ import ch.alpine.tensor.io.Import;
 class PrimeQTest {
   @Test
   void testPrimes() {
-    for (Tensor _x : Import.of("/ch/alpine/tensor/num/primes.vector")) {
+    for (Tensor _x : Import.of("ch/alpine/tensor/num/primes.vector")) {
       Rational x = (Rational) _x;
       assertTrue(x.numerator().isProbablePrime(100));
       assertTrue(PrimeQ.of(x));

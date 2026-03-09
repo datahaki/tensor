@@ -8,10 +8,10 @@ import ch.alpine.tensor.io.Import;
 public enum ExAd {
   SO3(LeviCivitaTensor.of(3).negate()),
   SE2("{{{0, 0, 0}, {0, 0, -1}, {0, 1, 0}}, {{0, 0, 1}, {0, 0, 0}, {-1, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}}"),
-  SE3(Import.of("/ch/alpine/tensor/io/se3_ad.mathematica")),
+  SE3(Import.of("ch/alpine/tensor/io/se3_ad.mathematica")),
   SL2("{{{0, 0, 0}, {0, 0, 1}, {0, -1, 0}}, {{0, 0, 1}, {0, 0, 0}, {-1, 0, 0}}, {{0, -1, 0}, {1, 0, 0}, {0, 0, 0}}}"),
   HE1("{{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, -1}, {0, 0, 0}, {1, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}}"),
-  HE2(Import.of("/ch/alpine/tensor/io/he2_ad.mathematica")), //
+  HE2(Import.of("ch/alpine/tensor/io/he2_ad.mathematica")), //
   ;
 
   private final Tensor ad;

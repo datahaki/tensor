@@ -172,7 +172,7 @@ class UnprotectTest {
 
   @Test
   void testFile() throws IOException {
-    String string = "/ch/alpine/tensor/io/basic.mathematica";
+    String string = "ch/alpine/tensor/io/basic.mathematica";
     Path path = Unprotect.resourcePath(string);
     assertTrue(Files.isRegularFile(path));
     Import.of(string);
@@ -181,17 +181,19 @@ class UnprotectTest {
 
   @Test
   void testDirectory() {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/io");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/io");
     assertTrue(Files.isDirectory(path));
   }
 
   @Test
   void testFileFail() {
+    assertThrows(Exception.class, () -> Unprotect.resourcePath("does/not/exist.txt"));
     assertThrows(Exception.class, () -> Unprotect.resourcePath("/does/not/exist.txt"));
   }
 
   @Test
   void testFile2Fail() {
+    assertThrows(Exception.class, () -> Unprotect.class.getResource("does/not/exist.txt").getFile());
     assertThrows(Exception.class, () -> Unprotect.class.getResource("/does/not/exist.txt").getFile());
   }
 }

@@ -33,7 +33,7 @@ class MatrixMarketTest {
 
   @Test
   void testCoordinate() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/well1033.mtx.gz");
+    Tensor matrix = Import.of("ch/alpine/tensor/io/mtx/well1033.mtx.gz");
     Tensor block = matrix.block(List.of(0, 0), List.of(7, 10));
     assertFalse(Chop._04.allZero(block));
     assertEquals(block.get(0), block.get(1));
@@ -47,13 +47,13 @@ class MatrixMarketTest {
 
   @Test
   void testCoordinateSymmetric() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/bcsstk13.mtx.gz");
+    Tensor matrix = Import.of("ch/alpine/tensor/io/mtx/bcsstk13.mtx.gz");
     SymmetricMatrixQ.INSTANCE.require(matrix);
   }
 
   @Test
   void testArray() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/well1033_rhs1.mtx.gz");
+    Tensor matrix = Import.of("ch/alpine/tensor/io/mtx/well1033_rhs1.mtx.gz");
     assertEquals(Dimensions.of(matrix), List.of(1033, 1));
     assertFalse(Chop._04.allZero(matrix));
   }
@@ -62,9 +62,9 @@ class MatrixMarketTest {
   @Test
   void testLeastSquares() {
     // [1033, 320] matrix
-    Tensor matrix = Import.of("/ch/alpine/tensor/io/mtx/well1033.mtx.gz");
+    Tensor matrix = Import.of("ch/alpine/tensor/io/mtx/well1033.mtx.gz");
     assertInstanceOf(SparseArray.class, matrix);
-    Tensor rhs = Flatten.of(Import.of("/ch/alpine/tensor/io/mtx/well1033_rhs1.mtx.gz"));
+    Tensor rhs = Flatten.of(Import.of("ch/alpine/tensor/io/mtx/well1033_rhs1.mtx.gz"));
     {
       Timing t1 = Timing.started();
       LeastSquares.of(matrix, rhs);

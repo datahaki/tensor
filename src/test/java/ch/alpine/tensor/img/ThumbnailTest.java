@@ -33,7 +33,7 @@ class ThumbnailTest {
 
   @Test
   void testSimple() {
-    Tensor tensor = Import.of("/ch/alpine/tensor/img/rgba15x33.png");
+    Tensor tensor = Import.of("ch/alpine/tensor/img/rgba15x33.png");
     Tensor square = Thumbnail.of(tensor, 7);
     List<Integer> list = Dimensions.of(square);
     assertEquals(list, Arrays.asList(7, 7, 4));
@@ -49,11 +49,11 @@ class ThumbnailTest {
 
   @Test
   void testAuGray() {
-    Tensor tensor1 = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
+    Tensor tensor1 = Import.of("ch/alpine/tensor/img/album_au_gray.jpg");
     Tensor square1 = Thumbnail.of(tensor1, 64);
     List<Integer> list1 = Dimensions.of(square1);
     assertEquals(list1, Arrays.asList(64, 64));
-    Tensor tensor2 = Transpose.of(Import.of("/ch/alpine/tensor/img/album_au_gray.jpg"));
+    Tensor tensor2 = Transpose.of(Import.of("ch/alpine/tensor/img/album_au_gray.jpg"));
     Tensor square2 = Thumbnail.of(tensor2, 64);
     List<Integer> list2 = Dimensions.of(square2);
     assertEquals(list2, Arrays.asList(64, 64));
@@ -62,7 +62,7 @@ class ThumbnailTest {
 
   @Test
   void testAuGrayBufferedImage() throws IOException {
-    BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
+    BufferedImage original = ResourceData.bufferedImage("ch/alpine/tensor/img/album_au_gray.jpg");
     BufferedImage expected = Thumbnail.of(original, 64);
     Path path = tempDir.resolve("file.jpg");
     assertFalse(Files.exists(path));
@@ -74,7 +74,7 @@ class ThumbnailTest {
 
   @Test
   void testAuGray1() {
-    Tensor tensor = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
+    Tensor tensor = Import.of("ch/alpine/tensor/img/album_au_gray.jpg");
     assertThrows(IllegalArgumentException.class, () -> Thumbnail.of(tensor, -3));
   }
 }

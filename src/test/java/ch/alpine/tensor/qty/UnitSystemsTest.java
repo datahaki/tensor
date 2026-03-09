@@ -152,7 +152,7 @@ class UnitSystemsTest {
 
   @Test
   void testCurrency() {
-    UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/ch/alpine/tensor/qty/chf.properties"));
+    UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("ch/alpine/tensor/qty/chf.properties"));
     assertTrue(baseSystem.map().containsKey("EUR"));
     UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "EUR");
     assertFalse(unitSystem.map().containsKey("EUR"));
@@ -163,7 +163,7 @@ class UnitSystemsTest {
 
   @Test
   void testIdentity() throws ClassNotFoundException, IOException {
-    UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/ch/alpine/tensor/qty/chf.properties"));
+    UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("ch/alpine/tensor/qty/chf.properties"));
     UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "CHF");
     assertSame(baseSystem, unitSystem);
     assertFalse(unitSystem.map().containsKey("CHF"));

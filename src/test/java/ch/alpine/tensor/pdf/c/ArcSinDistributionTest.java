@@ -16,6 +16,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 import test.wrap.SerializableQ;
 
@@ -40,6 +42,8 @@ class ArcSinDistributionTest {
     JetScalar js2 = (JetScalar) pdf.at(x);
     Tolerance.CHOP.requireClose(js1.vector().extract(1, 4), js2.vector().extract(0, 3));
     assertTrue(d.toString().startsWith("ArcSinDistribution"));
+    assertEquals(Mean.of(d), RealScalar.ZERO);
+    assertEquals(Variance.of(d), Rational.HALF);
   }
 
   @Test

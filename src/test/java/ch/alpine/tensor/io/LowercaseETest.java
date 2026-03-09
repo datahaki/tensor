@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.ReadLine;
-import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.SquareMatrixQ;
 
@@ -33,7 +32,7 @@ import ch.alpine.tensor.mat.SquareMatrixQ;
  * After importing the csv file using {@link Import}
  * the check StringScalarQ.any(tensor) should return false. */
 class LowercaseETest {
-  private final String RESOURCE = "/ch/alpine/tensor/io/lowercase_e.csv";
+  private final String RESOURCE = "ch/alpine/tensor/io/lowercase_e.csv";
 
   @Test
   void testConventional() {
@@ -47,7 +46,8 @@ class LowercaseETest {
   }
 
   public static Tensor importMatlabCsv(String string) throws IOException {
-    try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) { // auto closeable
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    try (InputStream inputStream = classLoader.getResourceAsStream(string)) { // auto closeable
       return XsvFormat.CSV.parse(ReadLine.of(inputStream).map(String::toUpperCase));
     }
   }

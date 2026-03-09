@@ -21,12 +21,12 @@ import javax.imageio.ImageIO;
  * 
  * <p>Tensor resources provided by the tensor library include
  * <pre>
- * /ch/alpine/tensor/img/colorscheme/classic.csv
+ * ch/alpine/tensor/img/colorscheme/classic.csv
  * </pre>
  * 
  * <p>Properties provided by the tensor library include
  * <pre>
- * /ch/alpine/tensor/qty/si.properties
+ * ch/alpine/tensor/qty/si.properties
  * </pre>
  * 
  * <p>inspired by
@@ -37,7 +37,8 @@ public enum ResourceData {
    * @return imported object
    * @throws Exception if resource could not be loaded */
   public static <T> T object(String string) {
-    try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    try (InputStream inputStream = classLoader.getResourceAsStream(string)) {
       if (Objects.nonNull(inputStream))
         return ObjectFormat.parse(inputStream);
       throw new IllegalArgumentException(string);
@@ -59,7 +60,8 @@ public enum ResourceData {
    * @return imported properties
    * @throws Exception if resource could not be loaded */
   public static Properties properties(String string, Charset charset) {
-    try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    try (InputStream inputStream = classLoader.getResourceAsStream(string)) {
       if (Objects.nonNull(inputStream))
         try (Reader reader = new InputStreamReader(inputStream, charset)) {
           return properties(reader);
@@ -81,7 +83,8 @@ public enum ResourceData {
    * @return imported image
    * @throws Exception if resource could not be loaded */
   public static BufferedImage bufferedImage(String string) {
-    try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    try (InputStream inputStream = classLoader.getResourceAsStream(string)) {
       if (Objects.nonNull(inputStream))
         return ImageIO.read(inputStream);
       throw new IllegalArgumentException(string);
@@ -97,7 +100,8 @@ public enum ResourceData {
    * @return list of lines in resource
    * @throws Exception if resource could not be loaded */
   public static List<String> lines(String string) {
-    try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    try (InputStream inputStream = classLoader.getResourceAsStream(string)) {
       if (Objects.nonNull(inputStream))
         return ReadLine.of(inputStream).collect(Collectors.toList());
       throw new IllegalArgumentException(string);

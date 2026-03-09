@@ -217,7 +217,7 @@ class LinearInterpolationTest {
 
   @Test
   void testCsv() {
-    Tensor tensor = Import.of("/ch/alpine/tensor/io/dateobject.csv");
+    Tensor tensor = Import.of("ch/alpine/tensor/io/dateobject.csv");
     assertInstanceOf(DateTime.class, tensor.Get(0, 0));
     Tensor result = Subdivide.of(0, 2, 20).maps(LinearInterpolation.of(tensor)::at);
     assertEquals(result.get(0).toString(), tensor.get(0).toString());

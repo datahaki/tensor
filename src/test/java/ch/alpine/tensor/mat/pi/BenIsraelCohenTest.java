@@ -56,8 +56,8 @@ class BenIsraelCohenTest {
 
   @Test
   void testMathematica() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/pi/bic1.csv");
-    Tensor mathem = Import.of("/ch/alpine/tensor/mat/pi/bic1pinv.csv");
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/pi/bic1.csv");
+    Tensor mathem = Import.of("ch/alpine/tensor/mat/pi/bic1pinv.csv");
     Tensor pinv = BenIsraelCohen.of(matrix);
     Tolerance.CHOP.requireClose(pinv, mathem);
     SingularValueDecomposition svd = SingularValueDecompositionWrap.of(matrix);
@@ -116,7 +116,7 @@ class BenIsraelCohenTest {
 
   @Test
   void testExceedIters() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/pi/bic_fail.csv");
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/pi/bic_fail.csv");
     MatrixQ.require(matrix);
     assertThrows(Throw.class, () -> BenIsraelCohen.of(matrix));
   }

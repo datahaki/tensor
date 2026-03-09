@@ -29,7 +29,7 @@ class ImageFormatTest {
   @Test
   void testRGBAFile() throws Exception {
     Tensor tensor = ExportHelperTest._readRGBA();
-    String string = "/ch/alpine/tensor/img/rgba15x33.png";
+    String string = "ch/alpine/tensor/img/rgba15x33.png";
     BufferedImage bufferedImage = ResourceData.bufferedImage(string);
     Tensor image = ImageFormat.from(bufferedImage);
     assertEquals(image, Import.of(string));
@@ -67,7 +67,7 @@ class ImageFormatTest {
 
   @Test
   void testGrayFile() {
-    String string = "/ch/alpine/tensor/img/gray15x9.png";
+    String string = "ch/alpine/tensor/img/gray15x9.png";
     BufferedImage bufferedImage = ResourceData.bufferedImage(string);
     Tensor tensor = ImageFormat.from(bufferedImage);
     assertEquals(tensor, Import.of(string));

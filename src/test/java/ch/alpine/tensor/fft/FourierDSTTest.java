@@ -155,7 +155,7 @@ class FourierDSTTest {
   @ParameterizedTest
   @EnumSource
   void testFromResource(FourierDST fourierDST) {
-    Tensor expect = Transpose.of(Import.of("/ch/alpine/tensor/fft/dstmatrix" + fourierDST.name() + ".csv"));
+    Tensor expect = Transpose.of(Import.of("ch/alpine/tensor/fft/dstmatrix" + fourierDST.name() + ".csv"));
     Tensor actual = fourierDST.matrix(5);
     Tolerance.CHOP.requireClose(expect, actual);
   }

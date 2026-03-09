@@ -113,7 +113,7 @@ class InverseTest {
 
   @Test
   void testDet0() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
     assertThrows(Throw.class, () -> Inverse.of(matrix));
     assertThrows(Throw.class, () -> Inverse.of(matrix.maps(N.DOUBLE)));

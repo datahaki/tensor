@@ -40,7 +40,7 @@ import ch.alpine.tensor.sca.Chop;
 class ImageResizeTest {
   @Test
   void testImage1() throws Exception {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(path);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2, 2);
@@ -49,7 +49,7 @@ class ImageResizeTest {
 
   @Test
   void testImage2() throws Exception {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(path);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2, 3);
@@ -59,7 +59,7 @@ class ImageResizeTest {
   @ParameterizedTest
   @EnumSource
   void testImage3(ImageResize imageResize) throws IOException {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/rgba15x33.png");
     Tensor tensor = Import.of(path);
     Tensor resize = imageResize.of(tensor, new Dimension(40, 60));
     assertEquals(Dimensions.of(resize), Arrays.asList(60, 40, 4));
@@ -68,7 +68,7 @@ class ImageResizeTest {
   @ParameterizedTest
   @EnumSource
   void testBufferedImageColorNoResize(ImageResize imageResize) {
-    BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/rgba15x33.png");
+    BufferedImage original = ResourceData.bufferedImage("ch/alpine/tensor/img/rgba15x33.png");
     BufferedImage bufferedImage = imageResize.of(original, original.getWidth(), original.getHeight());
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);
@@ -80,7 +80,7 @@ class ImageResizeTest {
   @ParameterizedTest
   @EnumSource
   void testFactor(ImageResize imageResize) {
-    Tensor tensor = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
+    Tensor tensor = Import.of("ch/alpine/tensor/img/album_au_gray.jpg");
     Tensor dimens = imageResize.of(tensor, Pi.VALUE);
     assertEquals(Dimensions.of(dimens), Arrays.asList(314, 418));
     imageResize.of(tensor, Pi.HALF);
@@ -90,14 +90,14 @@ class ImageResizeTest {
   @ParameterizedTest
   @EnumSource
   void testFactorNegativeFail(ImageResize imageResize) {
-    Tensor tensor = Import.of("/ch/alpine/tensor/img/album_au_gray.jpg");
+    Tensor tensor = Import.of("ch/alpine/tensor/img/album_au_gray.jpg");
     assertThrows(IllegalArgumentException.class, () -> imageResize.of(tensor, Pi.VALUE.negate()));
   }
 
   @ParameterizedTest
   @EnumSource
   void testBufferedImage(ImageResize imageResize) {
-    BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
+    BufferedImage original = ResourceData.bufferedImage("ch/alpine/tensor/img/album_au_gray.jpg");
     BufferedImage bufferedImage = imageResize.of(original, 12, 3);
     assertEquals(bufferedImage.getWidth(), 12);
     assertEquals(bufferedImage.getHeight(), 3);
@@ -107,7 +107,7 @@ class ImageResizeTest {
   @ParameterizedTest
   @EnumSource
   void testBufferedImageGrayscaleNoResize(ImageResize imageResize) {
-    BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
+    BufferedImage original = ResourceData.bufferedImage("ch/alpine/tensor/img/album_au_gray.jpg");
     BufferedImage bufferedImage = imageResize.of(original, original.getWidth(), original.getHeight());
     Tensor t1 = ImageFormat.from(original);
     Tensor t2 = ImageFormat.from(bufferedImage);

@@ -155,14 +155,14 @@ class JacobiMethodTest {
 
   @Test
   void testChallenge1() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/ev/jacobi1.csv");
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/ev/jacobi1.csv");
     Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
     checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
   void testChallenge2() {
-    Tensor matrix = Import.of("/ch/alpine/tensor/mat/ev/jacobi2.csv");
+    Tensor matrix = Import.of("ch/alpine/tensor/mat/ev/jacobi2.csv");
     Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
     checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
   }

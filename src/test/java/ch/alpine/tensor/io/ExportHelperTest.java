@@ -105,7 +105,7 @@ class ExportHelperTest {
   }
 
   static Tensor _readRGBA() throws IOException {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/rgba15x33.png");
     assertTrue(Files.isRegularFile(path));
     BufferedImage bufferedImage = null;
     try (InputStream inputStream = Files.newInputStream(path)) {
@@ -124,7 +124,7 @@ class ExportHelperTest {
 
   @Test
   void testGrayFile() throws Exception {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/gray15x9.png");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/gray15x9.png");
     assertTrue(Files.isReadable(path));
     BufferedImage bufferedImage = null;
     try (InputStream inputStream = Files.newInputStream(path)) {
@@ -140,7 +140,7 @@ class ExportHelperTest {
 
   @Test
   void testGrayJpg() throws Exception {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/gray15x9.jpg");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/gray15x9.jpg");
     assertTrue(Files.isRegularFile(path));
     BufferedImage bufferedImage = null;
     try (InputStream inputStream = Files.newInputStream(path)) {
@@ -157,7 +157,7 @@ class ExportHelperTest {
 
   @Test
   void testGrayJpg1() throws Exception {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/gray15x9.jpg");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/gray15x9.jpg");
     assertTrue(Files.isRegularFile(path));
     Tensor tensor = Import.of(path);
     assertEquals(Dimensions.of(tensor), List.of(9, 15));
@@ -170,7 +170,7 @@ class ExportHelperTest {
   @ParameterizedTest
   @ValueSource(strings = { "jpg", "png" })
   void testGray(String ext) throws Exception {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/gray5x3." + ext);
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/gray5x3." + ext);
     assertTrue(Files.isRegularFile(path));
     Tensor tensor = Import.of(path);
     assertEquals(Dimensions.of(tensor), List.of(5, 3));
@@ -192,7 +192,7 @@ class ExportHelperTest {
 
   @Test
   void testRGBAConvert() throws Exception {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/rgba15x33.png");
     BufferedImage bufferedImage = null;
     try (InputStream inputStream = Files.newInputStream(path)) {
       bufferedImage = ImageIO.read(inputStream);
@@ -203,7 +203,7 @@ class ExportHelperTest {
 
   @Test
   void testRGBASmooth() throws Exception {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/rgba15x33.png");
     BufferedImage bufferedImage = null;
     try (InputStream inputStream = Files.newInputStream(path)) {
       bufferedImage = ImageIO.read(inputStream);
@@ -216,7 +216,7 @@ class ExportHelperTest {
 
   @Test
   void testRGBAInvalid() throws Exception {
-    Path path = Unprotect.resourcePath("/ch/alpine/tensor/img/rgba15x33.png");
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img/rgba15x33.png");
     BufferedImage bufferedImage = null;
     try (InputStream inputStream = Files.newInputStream(path)) {
       bufferedImage = ImageIO.read(inputStream);

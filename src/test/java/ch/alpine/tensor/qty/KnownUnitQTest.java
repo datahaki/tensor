@@ -52,7 +52,7 @@ class KnownUnitQTest {
 
   @Test
   void testCurrencies() {
-    UnitSystem unitSystem = SimpleUnitSystem.from(ResourceData.properties("/ch/alpine/tensor/qty/chf.properties"));
+    UnitSystem unitSystem = SimpleUnitSystem.from(ResourceData.properties("ch/alpine/tensor/qty/chf.properties"));
     KnownUnitQ knownUnitQ = KnownUnitQ.in(unitSystem);
     knownUnitQ.require(Unit.of("CHF"));
     knownUnitQ.require(Unit.of("AUD"));

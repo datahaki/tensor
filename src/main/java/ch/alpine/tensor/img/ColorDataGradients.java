@@ -134,7 +134,7 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** @return n x 4 table with entries between 0 and 255
    * @throws Exception if this color data gradient is not backed by such a table */
   private Tensor _tableRgba() {
-    return Import.of("/ch/alpine/tensor/img/colorscheme/" + name().toLowerCase() + ".csv");
+    return Import.of("ch/alpine/tensor/img/colorscheme/" + name().toLowerCase() + ".csv");
   }
 
   /** @return n x 4 table with entries between 0 and 255, or empty

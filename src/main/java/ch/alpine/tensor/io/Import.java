@@ -59,7 +59,8 @@ public enum Import {
    * @return imported tensor
    * @throws Exception if resource could not be loaded */
   public static Tensor of(String string) {
-    try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    try (InputStream inputStream = classLoader.getResourceAsStream(string)) {
       if (Objects.nonNull(inputStream))
         return ImportHelper.of(PathName.of(Path.of(string)), inputStream);
       throw new IllegalArgumentException(string);
