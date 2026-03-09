@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -59,8 +60,8 @@ public enum ResourceData {
       try (Reader reader = new InputStreamReader(inputStream, charset)) {
         return properties(reader);
       }
-    } catch (Exception exception) {
-      throw new RuntimeException(exception);
+    } catch (IOException ioException) {
+      throw new UncheckedIOException(ioException);
     }
   }
 
@@ -77,8 +78,8 @@ public enum ResourceData {
   public static BufferedImage bufferedImage(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
       return ImageIO.read(inputStream);
-    } catch (Exception exception) {
-      throw new RuntimeException(exception);
+    } catch (IOException ioException) {
+      throw new UncheckedIOException(ioException);
     }
   }
 
@@ -91,8 +92,8 @@ public enum ResourceData {
   public static List<String> lines(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
       return ReadLine.of(inputStream).collect(Collectors.toList());
-    } catch (Exception exception) {
-      throw new RuntimeException(exception);
+    } catch (IOException ioException) {
+      throw new UncheckedIOException(ioException);
     }
   }
 }

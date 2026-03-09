@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -58,10 +59,14 @@ public enum Import {
    * @return imported tensor
    * @throws Exception if resource could not be loaded */
   public static Tensor of(String string) {
+    PathName pathName = PathName.of(Path.of(string));
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ImportHelper.of(PathName.of(Path.of(string)), inputStream);
-    } catch (Exception exception) {
-      throw new RuntimeException(exception);
+      return ImportHelper.of(pathName, inputStream);
+    } catch (IOException ioException) {
+      System.err.println("path fail:");
+      System.err.println(string);
+      System.err.println(pathName);
+      throw new UncheckedIOException(ioException);
     }
   }
 

@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -152,8 +154,8 @@ public enum Unprotect {
   public static void Export(Path path, Tensor tensor) {
     try {
       Export.of(path, tensor);
-    } catch (Exception exception) {
-      throw new RuntimeException(exception);
+    } catch (IOException ioException) {
+      throw new UncheckedIOException(ioException);
     }
   }
 
@@ -163,8 +165,8 @@ public enum Unprotect {
   public static Tensor Import(Path path) {
     try {
       return Import.of(path);
-    } catch (Exception exception) {
-      throw new RuntimeException(exception);
+    } catch (IOException ioException) {
+      throw new UncheckedIOException(ioException);
     }
   }
 }
