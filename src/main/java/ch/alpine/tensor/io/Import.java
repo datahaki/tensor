@@ -59,13 +59,11 @@ public enum Import {
    * @return imported tensor
    * @throws Exception if resource could not be loaded */
   public static Tensor of(String string) {
-    PathName pathName = PathName.of(Path.of(string));
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ImportHelper.of(pathName, inputStream);
+      if (Objects.nonNull(inputStream))
+        return ImportHelper.of(PathName.of(Path.of(string)), inputStream);
+      throw new IllegalArgumentException(string);
     } catch (IOException ioException) {
-      System.err.println("path fail:");
-      System.err.println(string);
-      System.err.println(pathName);
       throw new UncheckedIOException(ioException);
     }
   }

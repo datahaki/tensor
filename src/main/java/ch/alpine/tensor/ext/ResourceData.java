@@ -10,6 +10,7 @@ import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,9 @@ public enum ResourceData {
    * @throws Exception if resource could not be loaded */
   public static <T> T object(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ObjectFormat.parse(inputStream);
+      if (Objects.nonNull(inputStream))
+        return ObjectFormat.parse(inputStream);
+      throw new IllegalArgumentException(string);
     } catch (Exception exception) {
       throw new RuntimeException(exception);
     }
@@ -57,9 +60,11 @@ public enum ResourceData {
    * @throws Exception if resource could not be loaded */
   public static Properties properties(String string, Charset charset) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      try (Reader reader = new InputStreamReader(inputStream, charset)) {
-        return properties(reader);
-      }
+      if (Objects.nonNull(inputStream))
+        try (Reader reader = new InputStreamReader(inputStream, charset)) {
+          return properties(reader);
+        }
+      throw new IllegalArgumentException(string);
     } catch (IOException ioException) {
       throw new UncheckedIOException(ioException);
     }
@@ -77,7 +82,9 @@ public enum ResourceData {
    * @throws Exception if resource could not be loaded */
   public static BufferedImage bufferedImage(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ImageIO.read(inputStream);
+      if (Objects.nonNull(inputStream))
+        return ImageIO.read(inputStream);
+      throw new IllegalArgumentException(string);
     } catch (IOException ioException) {
       throw new UncheckedIOException(ioException);
     }
@@ -91,7 +98,9 @@ public enum ResourceData {
    * @throws Exception if resource could not be loaded */
   public static List<String> lines(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ReadLine.of(inputStream).collect(Collectors.toList());
+      if (Objects.nonNull(inputStream))
+        return ReadLine.of(inputStream).collect(Collectors.toList());
+      throw new IllegalArgumentException(string);
     } catch (IOException ioException) {
       throw new UncheckedIOException(ioException);
     }
