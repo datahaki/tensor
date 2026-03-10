@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.sv;
 
+import java.util.stream.IntStream;
+
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.Ordering;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 
 /** Quote: "The image of the unit sphere under any m x n matrix is a hyperellipse."
@@ -17,7 +21,7 @@ public interface SingularValueDecomposition {
    * <ul>
    * <li>u.dot(DiagonalMatrix[values()]).dot(Transpose.of(v)) == matrix
    * <li>Transpose.of(U).dot(U) == IdentityMatrix
-   * <li>V.dot(Transpose.of(V) == IdentityMatrix
+   * <li>V.dot(Transpose.of(V)) == IdentityMatrix
    * <li>Transpose.of(V).dot(V) == IdentityMatrix
    * </ul>
    * 
@@ -31,7 +35,6 @@ public interface SingularValueDecomposition {
     return new SingularValueDecompositionImpl(new Init(matrix));
   }
 
-  // ---
   /** @return matrix of dimensions rows x cols with unitless entries */
   Tensor getU();
 
@@ -43,4 +46,14 @@ public interface SingularValueDecomposition {
 
   /** @return square matrix of dimensions cols x cols with unitless entries */
   Tensor getV();
+
+  default SingularValueDecomposition decreasing() {
+    Tensor values = values();
+    int[] ordering = Ordering.DECREASING.of(values);
+    TensorUnaryOperator reorder = vector -> Tensor.of(IntStream.of(ordering).mapToObj(vector::Get));
+    return new SVDRecord( //
+        reorder.slash(getU()), //
+        reorder.apply(values), //
+        reorder.slash(getV()));
+  }
 }

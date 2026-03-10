@@ -26,6 +26,12 @@ import ch.alpine.tensor.sca.Sign;
 public enum SingularValueDecompositionWrap {
   ;
   public static SingularValueDecomposition of(Tensor matrix) {
+    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
+    of(matrix, svd.decreasing());
+    return of(matrix, svd);
+  }
+
+  public static SingularValueDecomposition of(Tensor matrix, SingularValueDecomposition svd) {
     Init init = new Init(matrix);
     {
       assertTrue(Unprotect.isUnitUnique(init.u));
@@ -34,7 +40,6 @@ public enum SingularValueDecompositionWrap {
           EqualsReduce.zero(init.w), //
           EqualsReduce.zero(init.r));
     }
-    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
     Unit unit = QuantityUnit.of(EqualsReduce.zero(matrix));
     List<Integer> dims = Dimensions.of(matrix);
     int N = dims.get(1);
