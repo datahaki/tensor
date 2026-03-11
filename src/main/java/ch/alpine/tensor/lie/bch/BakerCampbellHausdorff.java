@@ -66,6 +66,9 @@ public class BakerCampbellHausdorff extends BchSeries {
   private final int degree;
   private final Chop chop;
 
+  /** @param ad tensor of rank 3 that satisfies the Jacobi identity
+   * @param degree strictly positive, depth of series
+   * @param chop tolerance for truncation of recursive calls */
   public BakerCampbellHausdorff(Tensor ad, int degree, Chop chop) {
     super(ad);
     this.degree = Integers.requirePositive(degree);

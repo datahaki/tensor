@@ -30,8 +30,8 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ImportTest {
   private static Tensor load(String string) throws IOException {
-    Path file = Unprotect.resourcePath(string);
-    Tensor tensor = Import.of(file);
+    Path path = Unprotect.resourcePath(string);
+    Tensor tensor = Import.of(path);
     assertEquals(tensor, Import.of(string));
     return tensor;
   }
