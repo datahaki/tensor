@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -24,6 +25,7 @@ import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.nrm.FrobeniusNorm;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Floor;
 
 class JpegTest {
@@ -58,5 +60,14 @@ class JpegTest {
     Tensor readb = Import.of(path);
     Tensor diff = image.subtract(readb);
     Flatten.of(diff);
+  }
+
+  @Test
+  void testBgr() {
+    Tensor image = RandomVariate.of(DiscreteUniformDistribution.forArray(256), 30, 100, 4);
+    BufferedImage bufferedImage = ImageFormat.of(image);
+    assertEquals(bufferedImage.getType(), BufferedImage.TYPE_INT_ARGB);
+    BufferedImage bgr = Jpeg.bgr(bufferedImage);
+    assertEquals(bgr.getType(), BufferedImage.TYPE_3BYTE_BGR);
   }
 }

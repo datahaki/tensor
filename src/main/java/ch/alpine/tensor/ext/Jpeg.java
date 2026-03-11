@@ -34,6 +34,13 @@ public enum Jpeg {
     put(bufferedImage, Files.newOutputStream(path), quality);
   }
 
+  /** @param bufferedImage
+   * @return instance of {@link BufferedImage} with type TYPE_3BYTE_BGR */
+  public static BufferedImage bgr(BufferedImage bufferedImage) {
+    return new ColorConvertOp(null) //
+        .filter(bufferedImage, new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_3BYTE_BGR));
+  }
+
   public static void put(BufferedImage bufferedImage, OutputStream outputStream, float quality) throws IOException {
     if (TYPES.contains(bufferedImage.getType()))
       try (ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(outputStream)) {
@@ -48,10 +55,7 @@ public enum Jpeg {
       }
     else {
       // if (true) {
-      ColorConvertOp op = new ColorConvertOp(null);
-      BufferedImage target = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-      op.filter(bufferedImage, target);
-      put(target, outputStream, quality);
+      put(bgr(bufferedImage), outputStream, quality);
       // } else {
       // BufferedImage converted = new BufferedImage( //
       // bufferedImage.getWidth(), //
