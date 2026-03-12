@@ -63,7 +63,7 @@ public class CoordinateBoundingBox implements MemberQ {
         Integers.requireEquals(dimensions(), vector.length()));
   }
 
-  /** @return */
+  /** @return operator of map inside */
   public TensorUnaryOperator mapInside() {
     return this::mapInside;
   }

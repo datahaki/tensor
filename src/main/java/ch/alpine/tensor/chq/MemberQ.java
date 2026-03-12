@@ -2,8 +2,8 @@
 package ch.alpine.tensor.chq;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Predicate;
 
 import ch.alpine.tensor.Tensor;
@@ -22,23 +22,23 @@ import ch.alpine.tensor.Throw;
 @FunctionalInterface
 public interface MemberQ extends Predicate<Tensor>, Serializable {
   /** @param collection
-   * @return */
+   * @return predicate all match */
   static MemberQ all(Collection<MemberQ> collection) {
     return tensor -> collection.stream().allMatch(memberQ -> memberQ.test(tensor));
   }
 
   static MemberQ all(MemberQ... memberQs) {
-    return all(List.of(memberQs));
+    return tensor -> Arrays.stream(memberQs).allMatch(memberQ -> memberQ.test(tensor));
   }
 
   /** @param collection
-   * @return */
+   * @return predicate any match */
   static MemberQ any(Collection<MemberQ> collection) {
     return tensor -> collection.stream().anyMatch(memberQ -> memberQ.test(tensor));
   }
 
   static MemberQ any(MemberQ... memberQs) {
-    return any(List.of(memberQs));
+    return tensor -> Arrays.stream(memberQs).anyMatch(memberQ -> memberQ.test(tensor));
   }
 
   /** @param tensor

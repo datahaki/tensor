@@ -2,8 +2,10 @@
 package ch.alpine.tensor.sca.var;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.pdf.BinningMethods;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -18,13 +20,23 @@ import ch.alpine.tensor.sca.exp.Exp;
  * @see BinningMethods
  * 
  * @param r0 positive */
-public record GaussianVariogram(Scalar r0) implements ScalarUnaryOperator {
-  public GaussianVariogram {
-    Sign.requirePositive(r0);
+public class GaussianVariogram implements ScalarUnaryOperator {
+  /** @param r0 non-negative */
+  public static ScalarUnaryOperator of(Scalar r0) {
+    return Scalars.isZero(r0) //
+        ? r -> Boole.of(Scalars.isZero(r))
+        : new GaussianVariogram(Sign.requirePositiveOrZero(r0));
+  }
+
+  private final Scalar r0;
+
+  private GaussianVariogram(Scalar r0) {
+    this.r0 = Sign.requirePositive(r0);
   }
 
   @Override
   public Scalar apply(Scalar r) {
+    Sign.requirePositiveOrZero(r);
     Scalar factor = r.divide(r0);
     return Exp.FUNCTION.apply(factor.multiply(factor).negate());
   }

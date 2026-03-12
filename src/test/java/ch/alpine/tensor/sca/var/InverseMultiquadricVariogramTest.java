@@ -24,4 +24,13 @@ class InverseMultiquadricVariogramTest {
   void testNegativeFail() {
     assertThrows(Exception.class, () -> InverseMultiquadricVariogram.of(-3));
   }
+
+  @Test
+  void testCorner() {
+    ScalarUnaryOperator suo = InversePowerVariogram.of(2);
+    Scalar ref1 = suo.apply(RealScalar.ZERO);
+    ScalarUnaryOperator su2 = InverseMultiquadricVariogram.of(0);
+    Scalar ref2 = su2.apply(RealScalar.ZERO);
+    assertEquals(ref1, ref2);
+  }
 }

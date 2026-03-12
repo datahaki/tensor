@@ -23,9 +23,11 @@ public class SphericalVariogram implements ScalarUnaryOperator {
    * @param b
    * @return */
   public static ScalarUnaryOperator of(Scalar a, Scalar b) {
-    return new SphericalVariogram( //
-        Sign.requirePositive(a), //
-        Objects.requireNonNull(b));
+    return Scalars.isZero(a) //
+        ? ConstantOneVariogram.INSTANCE // TODO should have unit of b ?
+        : new SphericalVariogram( //
+            Sign.requirePositive(a), //
+            Objects.requireNonNull(b));
   }
 
   /** @param a positive

@@ -7,6 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 
 /** Does not work properly with units?
@@ -17,11 +18,9 @@ public class InversePowerVariogram implements ScalarUnaryOperator {
   /** @param exponent for instance 2
    * @return */
   public static ScalarUnaryOperator of(Scalar exponent) {
-    if (exponent.equals(RealScalar.ZERO))
-      return _ -> RealScalar.ONE;
-    return new InversePowerVariogram(exponent.equals(RealScalar.ONE) //
-        ? Scalar::reciprocal
-        : Power.function(exponent.negate()));
+    return Scalars.isZero(exponent) //
+        ? ConstantOneVariogram.INSTANCE
+        : new InversePowerVariogram(exponent);
   }
 
   /** @param exponent for instance 2
@@ -31,14 +30,17 @@ public class InversePowerVariogram implements ScalarUnaryOperator {
   }
 
   // ---
+  private final Scalar exponent;
   private final ScalarUnaryOperator power;
 
-  private InversePowerVariogram(ScalarUnaryOperator power) {
-    this.power = power;
+  private InversePowerVariogram(Scalar exponent) {
+    this.exponent = exponent;
+    this.power = Power.function(exponent.negate());
   }
 
   @Override
   public Scalar apply(Scalar r) {
+    Sign.requirePositiveOrZero(r);
     return Scalars.isZero(r) //
         ? DoubleScalar.POSITIVE_INFINITY
         : power.apply(r);
@@ -46,6 +48,6 @@ public class InversePowerVariogram implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("InversePowerVariogram", power);
+    return MathematicaFormat.concise("InversePowerVariogram", exponent);
   }
 }

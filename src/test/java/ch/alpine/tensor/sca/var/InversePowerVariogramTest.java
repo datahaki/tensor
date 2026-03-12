@@ -42,7 +42,7 @@ class InversePowerVariogramTest {
   @Test
   void testExponentZero() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator suo = Serialization.copy(InversePowerVariogram.of(0));
-    Tensor domain = Subdivide.of(-1, 1, 6);
+    Tensor domain = Subdivide.of(0, 1, 6);
     assertEquals(domain.maps(suo), ConstantArray.of(RealScalar.ONE, 7));
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca.var;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.pdf.BinningMethods;
 import ch.alpine.tensor.sca.Sign;
@@ -15,7 +16,9 @@ import ch.alpine.tensor.sca.Sign;
 public class InverseMultiquadricVariogram extends MultiquadricVariogram {
   /** @param r0 non-negative */
   public static ScalarUnaryOperator of(Scalar r0) {
-    return new InverseMultiquadricVariogram(Sign.requirePositiveOrZero(r0));
+    return Scalars.isZero(r0) //
+        ? InversePowerVariogram.of(2)
+        : new InverseMultiquadricVariogram(Sign.requirePositiveOrZero(r0));
   }
 
   /** @param r0 non-negative */

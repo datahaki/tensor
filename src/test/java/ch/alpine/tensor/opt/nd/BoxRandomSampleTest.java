@@ -2,6 +2,7 @@
 package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,6 +20,8 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.pdf.RandomSample;
 import ch.alpine.tensor.pdf.RandomSampleInterface;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Clips;
 import test.wrap.SerializableQ;
@@ -53,6 +56,15 @@ class BoxRandomSampleTest {
       VectorQ.requireLength(tensor, 3);
       assertTrue(cbb.test(tensor));
     }
+  }
+
+  @Test
+  void testMapInsideSlash() {
+    CoordinateBoundingBox cbb = CoordinateBoundingBox.of(Clips.unit(), Clips.unit());
+    Tensor points = RandomVariate.of(NormalDistribution.standard(), 100, 2);
+    assertFalse(points.stream().allMatch(cbb::test));
+    Tensor tensor = cbb.mapInside().slash(points);
+    assertTrue(tensor.stream().allMatch(cbb::test));
   }
 
   @Test
