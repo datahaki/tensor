@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.pi;
 
 import java.util.List;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ArrayReshape;
@@ -11,14 +12,19 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LeftNullSpace;
+import ch.alpine.tensor.mat.Tolerance;
 
 /** operator that maps a vector of length == LS.dimensions()
  * to a tensor in the linear subspace */
 public interface LinearSubspace extends TensorUnaryOperator {
-  /** @param constraint as homogeneous equations
+  /** @param constraint as homogeneous linear equations
    * @param size
    * @return */
   static LinearSubspace of(TensorUnaryOperator constraint, List<Integer> size) {
+    if (size.isEmpty())
+      return Tolerance.CHOP.allZero(constraint.apply(RealScalar.ONE)) //
+          ? LinearSubspaceLine.INSTANCE
+          : new LinearSubspaceNull(size);
     size.forEach(Integers::requirePositive);
     int cumprod = size.stream().reduce(Math::multiplyExact).orElseThrow();
     TensorUnaryOperator reshape = v -> ArrayReshape.of(v, size);
@@ -42,6 +48,11 @@ public interface LinearSubspace extends TensorUnaryOperator {
   /** @return dimensions of the subspace, equivalent to basis().length() */
   default int dimensions() {
     return basis().length();
+  }
+
+  @Override
+  default Tensor apply(Tensor weights) {
+    return weights.dot(basis());
   }
 
   /** @return vector of basis elements, i.e. the result is a tensor

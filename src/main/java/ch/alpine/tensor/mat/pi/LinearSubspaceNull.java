@@ -12,7 +12,7 @@ import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.io.MathematicaFormat;
 
-/* package */ record LinearSubspaceNull(List<Integer> size) implements LinearSubspace {
+record LinearSubspaceNull(List<Integer> size) implements LinearSubspace {
   @Override
   public Tensor apply(Tensor weights) {
     Throw.unless(Tensors.empty().equals(weights));
@@ -33,6 +33,6 @@ import ch.alpine.tensor.io.MathematicaFormat;
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("LinearSubspace", 0, size);
+    return MathematicaFormat.concise("LinearSubspaceZero", size);
   }
 }

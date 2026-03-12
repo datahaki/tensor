@@ -6,19 +6,14 @@ import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.MathematicaFormat;
 
-/* package */ class LinearSubspaceImpl implements LinearSubspace {
+class LinearSubspaceImpl implements LinearSubspace {
   /** pinv has dimensions rows x cols with rows <= cols */
   private final Tensor pinv;
   private final Tensor basis;
 
   public LinearSubspaceImpl(Tensor nullSpace, Tensor basis) {
     this.pinv = PseudoInverse.of(Transpose.of(nullSpace));
-    this.basis = basis;
-  }
-
-  @Override
-  public Tensor apply(Tensor weights) {
-    return weights.dot(basis);
+    this.basis = basis.unmodifiable();
   }
 
   @Override
@@ -31,7 +26,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
     return apply(pinv.dot(Flatten.of(v)));
   }
 
-  @Override // from Object
+  @Override
   public String toString() {
     return MathematicaFormat.concise("LinearSubspace", basis());
   }

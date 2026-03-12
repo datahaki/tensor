@@ -24,6 +24,8 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.Max;
+import ch.alpine.tensor.red.Min;
 
 class ClipsTest {
   @Test
@@ -256,6 +258,19 @@ class ClipsTest {
     Clip clip = Clips.solitary(value);
     assertEquals(clip.width(), Quantity.of(0, "s"));
     assertTrue(clip.isInside(value));
+  }
+
+  private static Clip cover(Clip clip, Scalar scalar) {
+    return Clips.interval( //
+        Min.of(clip.min(), scalar), //
+        Max.of(clip.max(), scalar));
+  }
+
+  @Test
+  void testSimple() {
+    assertEquals(cover(Clips.interval(2, 4), RealScalar.of(1)), Clips.interval(1, 4));
+    assertEquals(cover(Clips.interval(2, 4), RealScalar.of(3)), Clips.interval(2, 4));
+    assertEquals(cover(Clips.interval(2, 4), RealScalar.of(5)), Clips.interval(2, 5));
   }
 
   @Test
