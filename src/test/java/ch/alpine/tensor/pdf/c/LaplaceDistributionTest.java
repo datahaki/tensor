@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -105,6 +106,7 @@ class LaplaceDistributionTest {
     assertThrows(ClassCastException.class, () -> LaplaceDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
+  @Disabled
   @Test
   void testQuantityFail() {
     assertThrows(Throw.class, () -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));

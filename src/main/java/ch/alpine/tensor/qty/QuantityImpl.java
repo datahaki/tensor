@@ -167,7 +167,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
     if (scalar instanceof QuantityCompatibleScalar quantityCompatible)
       return quantityCompatible.add(this);
     // ---
-    throw new Throw(this, scalar);
+    return UnitDimensions.INSTANCE.get().plus(this, scalar);
   }
 
   // ---

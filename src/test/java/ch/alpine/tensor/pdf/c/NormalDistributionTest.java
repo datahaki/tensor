@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Month;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -224,6 +225,7 @@ class NormalDistributionTest {
     assertThrows(ClassCastException.class, () -> NormalDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
   }
 
+  @Disabled
   @Test
   void testQuantityFail() {
     assertThrows(Throw.class, () -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));

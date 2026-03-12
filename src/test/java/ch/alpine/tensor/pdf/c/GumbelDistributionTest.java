@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Month;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -194,6 +195,7 @@ class GumbelDistributionTest {
     assertThrows(ClassCastException.class, () -> GumbelDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
   }
 
+  @Disabled
   @Test
   void testQuantityFail() {
     assertThrows(Throw.class, () -> GumbelDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));

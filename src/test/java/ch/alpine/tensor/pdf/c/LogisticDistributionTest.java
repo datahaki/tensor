@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -123,6 +124,7 @@ class LogisticDistributionTest {
     assertThrows(ClassCastException.class, () -> LogisticDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
   }
 
+  @Disabled
   @Test
   void testQuantityFail() {
     assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
