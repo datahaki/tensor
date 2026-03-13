@@ -13,6 +13,8 @@ public interface UnitDimensions {
   /** Quantity::add delegates to {@link #plus(Scalar, Scalar)}, i.e. this function
    * when a.add(b) is invoked on Quantity a and Scalar b in case unit are not identical
    * 
+   * function is symmetric plus(a, b) == plus(b, a)
+   * 
    * @param a
    * @param b
    * @return */

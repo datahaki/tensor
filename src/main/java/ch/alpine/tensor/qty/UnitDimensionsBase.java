@@ -48,11 +48,8 @@ public class UnitDimensionsBase implements UnitDimensions, Serializable {
         return sab.compareTo(sba) < 0 ? aqb : bqa;
       return la < lb ? aqb : bqa;
     }
-    // TODO this is not simplified yet
     Scalar qa = normalForm(a);
     Scalar qb = normalForm(b);
-    if (QuantityUnit.of(qa).equals(QuantityUnit.of(qb)))
-      return qa.add(qb);
-    throw new Throw(a, b);
+    return qa.add(qb);
   }
 }
