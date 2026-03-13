@@ -91,6 +91,23 @@ class PathNameTest {
   }
 
   @Test
+  void testWithExt() {
+    PathName pathName = PathName.of(Path.of("title.ext"));
+    Path path = pathName.withExtension("new");
+    assertEquals(path, Path.of("title.new"));
+    String string = pathName.name();
+    assertEquals(string, "title.ext");
+  }
+
+  @Test
+  void testName() {
+    PathName pathName = PathName.of(Path.of("/root/some/title.ext"));
+    assumeTrue(pathName.hasDot());
+    String string = pathName.name();
+    assertEquals(string, "title.ext");
+  }
+
+  @Test
   void testString4() {
     assertEquals(PathName.of(Path.of("/asd/.git")).extension(), "");
     assertEquals(PathName.of(Path.of("/asd/a.git")).extension(), "git");

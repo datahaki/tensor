@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -18,6 +17,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.UnitDimensions;
+import ch.alpine.tensor.qty.UnitDimensionsDate;
 
 class CosTest {
   @Test
@@ -42,10 +43,11 @@ class CosTest {
     assertTrue(Objects.toString(s0).startsWith(mathematica.substring(0, 30)));
   }
 
-  @Disabled
   @Test
   void testQuantityFail() {
+    UnitDimensions.INSTANCE.set(UnitDimensionsDate.INSTANCE);
     assertThrows(Exception.class, () -> Cos.FUNCTION.apply(Quantity.of(1, "deg")));
+    UnitDimensions.INSTANCE.remove();
   }
 
   @Test

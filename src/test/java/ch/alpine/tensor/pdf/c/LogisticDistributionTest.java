@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -31,6 +30,8 @@ import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.UnitConvert;
+import ch.alpine.tensor.qty.UnitDimensions;
+import ch.alpine.tensor.qty.UnitDimensionsDate;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
@@ -124,10 +125,11 @@ class LogisticDistributionTest {
     assertThrows(ClassCastException.class, () -> LogisticDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
   }
 
-  @Disabled
   @Test
   void testQuantityFail() {
+    UnitDimensions.INSTANCE.set(UnitDimensionsDate.INSTANCE);
     assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    UnitDimensions.INSTANCE.remove();
     assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
     assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }

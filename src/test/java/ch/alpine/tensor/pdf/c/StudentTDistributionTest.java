@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.Random;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -30,6 +29,8 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
+import ch.alpine.tensor.qty.UnitDimensions;
+import ch.alpine.tensor.qty.UnitDimensionsDate;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Sign;
@@ -102,10 +103,11 @@ class StudentTDistributionTest {
     assertThrows(ClassCastException.class, () -> StudentTDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE, RealScalar.ONE));
   }
 
-  @Disabled
   @Test
   void testQuantityFail() {
+    UnitDimensions.INSTANCE.set(UnitDimensionsDate.INSTANCE);
     assertThrows(Throw.class, () -> StudentTDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km"), RealScalar.ONE));
+    UnitDimensions.INSTANCE.remove();
     assertThrows(Throw.class, () -> StudentTDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m"), RealScalar.ONE));
     assertThrows(Throw.class, () -> StudentTDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m"), RealScalar.ONE));
   }

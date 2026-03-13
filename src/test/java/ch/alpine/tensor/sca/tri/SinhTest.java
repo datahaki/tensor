@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -22,6 +21,8 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.UnitDimensions;
+import ch.alpine.tensor.qty.UnitDimensionsDate;
 
 class SinhTest {
   @Test
@@ -56,15 +57,15 @@ class SinhTest {
     assertTrue(Objects.toString(s0).startsWith(mathematica.substring(0, 30)));
   }
 
-  @Disabled
   @Test
   void testQuantityFail() {
+    UnitDimensions.INSTANCE.set(UnitDimensionsDate.INSTANCE);
     assertThrows(Throw.class, () -> Sinh.FUNCTION.apply(Quantity.of(1, "deg")));
+    UnitDimensions.INSTANCE.remove();
   }
 
-  @Disabled
   @Test
   void testGaussScalarFail() {
-    assertThrows(Throw.class, () -> Sinh.FUNCTION.apply(GaussScalar.of(6, 7)));
+    assertThrows(Exception.class, () -> Sinh.FUNCTION.apply(GaussScalar.of(6, 7)));
   }
 }

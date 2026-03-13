@@ -6,8 +6,8 @@ import java.io.Serializable;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 
-public record BaseUnitDimensions(UnitSystem unitSystem) implements UnitDimensions, Serializable {
-  public static final UnitDimensions SI = new BaseUnitDimensions(UnitSystem.SI());
+public record UnitDimensionsBase(UnitSystem unitSystem) implements UnitDimensions, Serializable {
+  public static final UnitDimensions SI = new UnitDimensionsBase(UnitSystem.SI());
 
   @Override
   public Scalar normalForm(Scalar scalar) {

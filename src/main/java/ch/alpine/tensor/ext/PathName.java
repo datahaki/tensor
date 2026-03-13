@@ -45,7 +45,7 @@ public record PathName(Path path, Path parent, String title, String extension, b
   }
 
   public String name() {
-    return title + (hasDot ? "" : DOT + extension);
+    return path.getFileName().toString();
   }
 
   public Path asDirectory() {

@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalar;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/UnitDimensions.html">UnitDimensions</a> */
 public interface UnitDimensions {
-  ThreadLocal<UnitDimensions> INSTANCE = ThreadLocal.withInitial(() -> BaseUnitDimensions.SI);
+  ThreadLocal<UnitDimensions> INSTANCE = ThreadLocal.withInitial(() -> UnitDimensionsBase.SI);
 
   Scalar normalForm(Scalar a);
 
