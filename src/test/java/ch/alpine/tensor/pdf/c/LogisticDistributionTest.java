@@ -127,9 +127,9 @@ class LogisticDistributionTest {
 
   @Test
   void testQuantityFail() {
-    UnitDimensions.INSTANCE.set(UnitDimensionsDate.INSTANCE);
+    UnitDimensions.THREAD_LOCAL.set(UnitDimensionsDate.INSTANCE);
     assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    UnitDimensions.INSTANCE.remove();
+    UnitDimensions.THREAD_LOCAL.remove();
     assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
     assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }

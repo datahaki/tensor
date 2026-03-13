@@ -59,9 +59,9 @@ class SinhTest {
 
   @Test
   void testQuantityFail() {
-    UnitDimensions.INSTANCE.set(UnitDimensionsDate.INSTANCE);
+    UnitDimensions.THREAD_LOCAL.set(UnitDimensionsDate.INSTANCE);
     assertThrows(Throw.class, () -> Sinh.FUNCTION.apply(Quantity.of(1, "deg")));
-    UnitDimensions.INSTANCE.remove();
+    UnitDimensions.THREAD_LOCAL.remove();
   }
 
   @Test

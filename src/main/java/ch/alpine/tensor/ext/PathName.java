@@ -44,11 +44,8 @@ public record PathName(Path path, Path parent, String title, String extension, b
     return string.equalsIgnoreCase(extension);
   }
 
+  /** @return */
   public String name() {
     return path.getFileName().toString();
-  }
-
-  public Path asDirectory() {
-    return parent.resolve(title);
   }
 }

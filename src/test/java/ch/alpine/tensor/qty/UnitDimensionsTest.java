@@ -8,6 +8,6 @@ import org.junit.jupiter.api.Test;
 class UnitDimensionsTest {
   @Test
   void test() {
-    assertNotNull(UnitDimensions.INSTANCE.get());
+    assertNotNull(UnitDimensions.THREAD_LOCAL.get());
   }
 }

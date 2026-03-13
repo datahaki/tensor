@@ -62,9 +62,9 @@ class SinTest {
 
   @Test
   void testQuantityFail() {
-    UnitDimensions.INSTANCE.set(UnitDimensionsDate.INSTANCE);
+    UnitDimensions.THREAD_LOCAL.set(UnitDimensionsDate.INSTANCE);
     assertThrows(Exception.class, () -> Sin.FUNCTION.apply(Quantity.of(1, "deg")));
-    UnitDimensions.INSTANCE.remove();
+    UnitDimensions.THREAD_LOCAL.remove();
   }
 
   @Test

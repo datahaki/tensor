@@ -164,7 +164,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
     // ---
-    return UnitDimensions.INSTANCE.get().plus(this, scalar);
+    return UnitDimensions.THREAD_LOCAL.get().plus(this, scalar);
   }
 
   // ---
