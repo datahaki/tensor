@@ -143,6 +143,9 @@ public enum Tensors {
     return Tensor.of(Arrays.stream(data).map(Tensors::vectorDouble));
   }
 
+  public static final ThreadLocal<Function<String, Scalar>> SCALAR_PARSER = //
+      ThreadLocal.withInitial(() -> Scalars::fromString);
+
   /** Example:
    * Tensors.fromString("{1+3/2*I, {3.7[m*s], 9/4[kg^-1]}}");
    * 
@@ -155,7 +158,7 @@ public enum Tensors {
    * @throws Exception if given string is null
    * @see StringScalar */
   public static Tensor fromString(String string) {
-    return TensorParser.of(string, Scalars::fromString);
+    return TensorParser.of(string, SCALAR_PARSER.get());
   }
 
   /** @param string

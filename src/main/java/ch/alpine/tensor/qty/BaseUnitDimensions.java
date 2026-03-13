@@ -6,8 +6,8 @@ import java.io.Serializable;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 
-public record SiUnitDimensions(UnitSystem unitSystem) implements UnitDimensions, Serializable {
-  public static final UnitDimensions SI = new SiUnitDimensions(UnitSystem.SI());
+public record BaseUnitDimensions(UnitSystem unitSystem) implements UnitDimensions, Serializable {
+  public static final UnitDimensions SI = new BaseUnitDimensions(UnitSystem.SI());
 
   @Override
   public Scalar normalForm(Scalar scalar) {
@@ -16,8 +16,11 @@ public record SiUnitDimensions(UnitSystem unitSystem) implements UnitDimensions,
 
   @Override
   public Scalar plus(Scalar a, Scalar b) {
-    Scalar qa = unitSystem.apply(a);
-    Scalar qb = unitSystem.apply(b);
+    if (b instanceof DateTime)
+      return b.add(a);
+    // TODO this can be improved, eg kW and MW could be compiled into kW
+    Scalar qa = normalForm(a);
+    Scalar qb = normalForm(b);
     if (QuantityUnit.of(qa).equals(QuantityUnit.of(qb)))
       return qa.add(qb);
     throw new Throw(a, b);

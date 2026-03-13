@@ -164,9 +164,6 @@ import ch.alpine.tensor.sca.tri.ArcTan;
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
     // ---
-    if (scalar instanceof QuantityCompatibleScalar quantityCompatible)
-      return quantityCompatible.add(this);
-    // ---
     return UnitDimensions.INSTANCE.get().plus(this, scalar);
   }
 

@@ -104,8 +104,7 @@ import ch.alpine.tensor.sca.Floor;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class DateTime extends AbstractScalar implements //
-    Comparable<Scalar>, QuantityCompatibleScalar, RoundingInterface, Serializable {
+public class DateTime extends AbstractScalar implements Comparable<Scalar>, RoundingInterface, Serializable {
   private static final long NANOS_LONG = 1_000_000_000;
   private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
   private static final Unit UNIT_S = Unit.of("s");
