@@ -84,4 +84,12 @@ public enum RandomVariate {
   public static Stream<Scalar> stream(Distribution distribution) {
     return stream(distribution, ThreadLocalRandom.current());
   }
+
+  public static RandomSampleInterface array(Distribution distribution, List<Integer> dimensions) {
+    return randomGenerator -> RandomVariate.of(distribution, randomGenerator, dimensions);
+  }
+
+  public static RandomSampleInterface array(Distribution distribution, int... dimensions) {
+    return array(distribution, Integers.asList(dimensions));
+  }
 }
