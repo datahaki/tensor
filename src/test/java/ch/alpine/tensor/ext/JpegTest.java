@@ -67,7 +67,7 @@ class JpegTest {
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.forArray(256), 30, 100, 4);
     BufferedImage bufferedImage = ImageFormat.of(image);
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_INT_ARGB);
-    BufferedImage bgr = Jpeg.bgr(bufferedImage);
+    BufferedImage bgr = Jpeg.bgr(bufferedImage, BufferedImage.TYPE_3BYTE_BGR);
     assertEquals(bgr.getType(), BufferedImage.TYPE_3BYTE_BGR);
   }
 }

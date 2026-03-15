@@ -20,7 +20,7 @@ public enum Jpeg {
   ;
   private static final Set<Integer> TYPES = Set.of( //
       BufferedImage.TYPE_BYTE_GRAY, //
-      BufferedImage.TYPE_INT_BGR, // TODO TENSOR not sure
+      BufferedImage.TYPE_INT_BGR, //
       BufferedImage.TYPE_3BYTE_BGR);
 
   /** Reference:
@@ -36,11 +36,15 @@ public enum Jpeg {
 
   /** @param bufferedImage
    * @return instance of {@link BufferedImage} with type TYPE_3BYTE_BGR */
-  public static BufferedImage bgr(BufferedImage bufferedImage) {
-    return new ColorConvertOp(null) //
-        .filter(bufferedImage, new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_3BYTE_BGR));
+  public static BufferedImage bgr(BufferedImage bufferedImage, int type) {
+    return new ColorConvertOp(null).filter(bufferedImage, //
+        new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), type));
   }
 
+  /** @param bufferedImage
+   * @param outputStream
+   * @param quality
+   * @throws IOException */
   public static void put(BufferedImage bufferedImage, OutputStream outputStream, float quality) throws IOException {
     if (TYPES.contains(bufferedImage.getType()))
       try (ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(outputStream)) {
@@ -53,26 +57,7 @@ public enum Jpeg {
         imageWriter.write(null, new IIOImage(bufferedImage, null, null), imageWriteParam);
         imageWriter.dispose();
       }
-    else {
-      // if (true) {
-      put(bgr(bufferedImage), outputStream, quality);
-      // } else {
-      // BufferedImage converted = new BufferedImage( //
-      // bufferedImage.getWidth(), //
-      // bufferedImage.getHeight(), //
-      // BufferedImage.TYPE_3BYTE_BGR);
-      // Graphics2D graphics = converted.createGraphics();
-      // graphics.drawImage(bufferedImage, 0, 0, null);
-      // graphics.dispose();
-      // put(converted, object, quality);
-      // }
-    }
-    // put(new AffineTransformOp(new AffineTransform(), AffineTransformOp.TYPE_NEAREST_NEIGHBOR).filter( //
-    // bufferedImage, //
-    // new BufferedImage( //
-    // bufferedImage.getWidth(), //
-    // bufferedImage.getHeight(), //
-    // BufferedImage.TYPE_3BYTE_BGR)),
-    // object, quality);
+    else
+      put(bgr(bufferedImage, BufferedImage.TYPE_3BYTE_BGR), outputStream, quality);
   }
 }
