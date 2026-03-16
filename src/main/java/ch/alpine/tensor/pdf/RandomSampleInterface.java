@@ -13,6 +13,8 @@ public interface RandomSampleInterface extends Serializable {
   /** @return randomGenerator sample from continuous or discrete set */
   Tensor randomSample(RandomGenerator randomGenerator);
 
+  /** @param tuo
+   * @return tuo.apply(random) */
   default RandomSampleInterface andThen(TensorUnaryOperator tuo) {
     return randomGenerator -> tuo.apply(randomSample(randomGenerator));
   }
