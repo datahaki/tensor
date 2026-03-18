@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.function.Predicate;
 
 import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.io.StringScalar;
@@ -89,6 +90,30 @@ public enum Scalars {
    * @return true if s1 <= s2 */
   public static boolean lessEquals(Scalar s1, Scalar s2) {
     return compare(s1, s2) <= 0;
+  }
+
+  /** @param reference
+   * @return */
+  public static Predicate<Scalar> lessThan(Scalar reference) {
+    return scalar -> lessThan(scalar, reference);
+  }
+
+  /** @param reference
+   * @return */
+  public static Predicate<Scalar> lessEquals(Scalar reference) {
+    return scalar -> lessEquals(scalar, reference);
+  }
+
+  /** @param reference
+   * @return */
+  public static Predicate<Scalar> greaterThan(Scalar reference) {
+    return scalar -> lessThan(reference, scalar);
+  }
+
+  /** @param reference
+   * @return */
+  public static Predicate<Scalar> greaterEquals(Scalar reference) {
+    return scalar -> lessEquals(reference, scalar);
   }
 
   /** @param scalar

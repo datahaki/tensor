@@ -4,7 +4,7 @@
 
 Math Library with exact precision, and physical units
 for tensor computations in Java 25.
- 
+
 ![](https://github.com/datahaki/tensor/actions/workflows/mvn_test.yml/badge.svg)
 
 The tensor library was developed with the following objectives in mind

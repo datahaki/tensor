@@ -25,6 +25,9 @@ import ch.alpine.tensor.sca.gam.Factorial;
  * The following identity holds
  * Log[Exp[-y] Exp[-x]] = -Log[Exp[x] Exp[y]]
  * 
+ * "if working with a matrix Lie algebra and | ⋅ | is a given submultiplicative
+ * matrix norm, convergence is guaranteed if | X | + | Y | < (log⁡ 2) / 2"
+ * 
  * <p>The BakerCampbellHausdorff series has a linear convergence rate, that means each
  * additional term in the series improves the precision by a certain number of digits.
  * 
