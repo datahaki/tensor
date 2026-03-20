@@ -28,14 +28,17 @@ class MatrixGradientTest {
 
   @RepeatedTest(5)
   void testSmall(RepetitionInfo repetitionInfo) {
-    int k = repetitionInfo.getCurrentRepetition();
+    int k = 2 + repetitionInfo.getCurrentRepetition();
     Tensor matrix = HilbertMatrix.of(k, 3);
     MatrixGradient matrixGradient = MatrixGradient.of(matrix);
     assertEquals(Dimensions.of(matrix), Dimensions.of(matrixGradient.dx()));
     assertEquals(Dimensions.of(matrix), Dimensions.of(matrixGradient.dy()));
-    Tensor diff = matrixGradient.array();
-    List<Integer> list = Dimensions.of(diff);
+    List<Integer> list = Dimensions.of(matrixGradient.array());
+    assertEquals(list.subList(0, 2), Dimensions.of(matrix));
     assertEquals(list.get(2), 2);
+    Tensor cross = matrixGradient.cross();
+    assertEquals(cross.get(0, 0), matrixGradient.cross(0, 0));
+    assertEquals(cross.get(0, 1), matrixGradient.cross(0, 1));
   }
 
   @Test

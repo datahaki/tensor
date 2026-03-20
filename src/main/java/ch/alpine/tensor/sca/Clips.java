@@ -197,6 +197,10 @@ public enum Clips {
         clip.max().add(value));
   }
 
+  public static Clip symmetrize(Clip clip) {
+    return Clips.absolute(Max.of(clip.min().negate(), clip.max()));
+  }
+
   // ---
   // helper function
   private static Clip create(Scalar min, Scalar max) {

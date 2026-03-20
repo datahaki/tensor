@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.ply;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import ch.alpine.tensor.RealScalar;
@@ -8,7 +9,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.AdjacentReduce;
-import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 
 /** the implementation uses quadratic extrapolation at the boundaries
@@ -21,35 +21,37 @@ public abstract class TripleReduceExtrapolation implements TensorUnaryOperator {
       InterpolatingPolynomial.of(Tensors.vector(1, 2, 3));
   private static final Scalar LAST = RealScalar.of(4);
 
-  /** @param points of the form {{p1x, p1y}, {p2x, p2y}, ..., {pNx, pNy}}
+  /** @param sequence
    * @return vector with same length as points */
   @Override
-  public final Tensor apply(Tensor points) {
-    int length = points.length();
-    // TODO SOPHUS UNIT for length <= 2 might not produce the right units
-    Tensor vector = Array.zeros(length);
+  public final Tensor apply(Tensor sequence) {
+    int length = sequence.length();
+    Tensor[] tensor = new Tensor[length];
     if (2 < length) {
-      Iterator<Tensor> iterator = points.iterator();
+      Iterator<Tensor> iterator = sequence.iterator();
       Tensor p = iterator.next();
       Tensor q = iterator.next();
       int index = 0;
       while (iterator.hasNext())
-        vector.set(reduce(p, p = q, q = iterator.next()), ++index);
+        tensor[++index] = reduce(p, p = q, q = iterator.next());
       int last = length - 1;
       if (4 < length) {
-        vector.set(INTERPOLATING_POLYNOMIAL.scalarUnaryOperator(vector.extract(1, 4)).apply(RealScalar.ZERO), 0);
-        vector.set(INTERPOLATING_POLYNOMIAL.scalarUnaryOperator(vector.extract(length - 4, last)).apply(LAST), last);
+        Tensor prefix = Tensors.of(tensor[1], tensor[2], tensor[3]);
+        tensor[0] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(prefix).apply(RealScalar.ZERO);
+        Tensor suffix = Tensors.of(tensor[last - 3], tensor[last - 2], tensor[last - 1]);
+        tensor[last] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(suffix).apply(LAST);
       } else {
-        vector.set(vector.Get(1), 0);
-        vector.set(vector.Get(length - 2), last);
+        tensor[0] = tensor[1];
+        tensor[last] = tensor[length - 2];
       }
-    }
-    return vector;
+    } else
+      throw new RuntimeException();
+    return Tensor.of(Arrays.stream(tensor));
   }
 
   /** @param p
    * @param q
    * @param r
    * @return */
-  protected abstract Scalar reduce(Tensor p, Tensor q, Tensor r);
+  protected abstract Tensor reduce(Tensor p, Tensor q, Tensor r);
 }
