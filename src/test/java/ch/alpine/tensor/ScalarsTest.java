@@ -16,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -180,6 +181,38 @@ class ScalarsTest {
     checkCmp(0, Double.NEGATIVE_INFINITY);
     checkCmp(-10, Double.POSITIVE_INFINITY);
     checkCmp(-30, Double.NEGATIVE_INFINITY);
+  }
+
+  @Test
+  void testPredLessThan() {
+    Predicate<Scalar> predicate = Scalars.lessThan(Pi.VALUE);
+    assertFalse(predicate.test(Pi.TWO));
+    assertFalse(predicate.test(Pi.VALUE));
+    assertTrue(predicate.test(Pi.HALF));
+  }
+
+  @Test
+  void testPredLessEq() {
+    Predicate<Scalar> predicate = Scalars.lessEquals(Pi.VALUE);
+    assertFalse(predicate.test(Pi.TWO));
+    assertTrue(predicate.test(Pi.VALUE));
+    assertTrue(predicate.test(Pi.HALF));
+  }
+
+  @Test
+  void testPredGreaterThan() {
+    Predicate<Scalar> predicate = Scalars.greaterThan(Pi.VALUE);
+    assertTrue(predicate.test(Pi.TWO));
+    assertFalse(predicate.test(Pi.VALUE));
+    assertFalse(predicate.test(Pi.HALF));
+  }
+
+  @Test
+  void testPredGreaterEq() {
+    Predicate<Scalar> predicate = Scalars.greaterEquals(Pi.VALUE);
+    assertTrue(predicate.test(Pi.TWO));
+    assertTrue(predicate.test(Pi.VALUE));
+    assertFalse(predicate.test(Pi.HALF));
   }
 
   @Test

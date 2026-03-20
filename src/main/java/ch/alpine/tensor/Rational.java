@@ -71,9 +71,6 @@ public class Rational extends AbstractRealScalar implements //
         : new Rational(num.divide(gcd).negate(), res.negate());
   }
 
-  /** private constructor is only called from of(...)
-   * 
-   * @param bigFraction */
   /** numerator */
   private final BigInteger num;
   /** denominator (always greater than zero) */

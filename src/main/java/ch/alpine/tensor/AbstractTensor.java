@@ -5,7 +5,9 @@ import java.util.function.Function;
 
 import ch.alpine.tensor.ext.Int;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.spa.SparseArray;
 
+/** base class for {@link TensorImpl} and {@link SparseArray} */
 public abstract class AbstractTensor implements Tensor {
   /** @param i in the range 0, 1, ..., length() - 1
    * @return reference to i-th element */
