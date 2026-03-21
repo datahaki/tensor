@@ -280,6 +280,13 @@ class ClipsTest {
   }
 
   @Test
+  void testSymmetrize() {
+    assertEquals(Clips.symmetrize(Clips.interval(-3, -2)), Clips.interval(-3, 3));
+    assertEquals(Clips.symmetrize(Clips.interval(-1, +3)), Clips.interval(-3, 3));
+    assertEquals(Clips.symmetrize(Clips.interval(+1, +3)), Clips.interval(-3, 3));
+  }
+
+  @Test
   void testSolitaryNullFail() {
     assertThrows(Exception.class, () -> Clips.solitary((Scalar) null));
   }

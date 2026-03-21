@@ -26,26 +26,28 @@ public abstract class TripleReduceExtrapolation implements TensorUnaryOperator {
   @Override
   public final Tensor apply(Tensor sequence) {
     int length = sequence.length();
+    if (length < 3)
+      return petite(sequence);
     Tensor[] tensor = new Tensor[length];
-    if (2 < length) {
+    {
       Iterator<Tensor> iterator = sequence.iterator();
       Tensor p = iterator.next();
       Tensor q = iterator.next();
       int index = 0;
       while (iterator.hasNext())
         tensor[++index] = reduce(p, p = q, q = iterator.next());
-      int last = length - 1;
-      if (4 < length) {
-        Tensor prefix = Tensors.of(tensor[1], tensor[2], tensor[3]);
-        tensor[0] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(prefix).apply(RealScalar.ZERO);
-        Tensor suffix = Tensors.of(tensor[last - 3], tensor[last - 2], tensor[last - 1]);
-        tensor[last] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(suffix).apply(LAST);
-      } else {
-        tensor[0] = tensor[1];
-        tensor[last] = tensor[length - 2];
-      }
-    } else
-      throw new RuntimeException();
+    }
+    int zero = 0;
+    int last = length - 1;
+    if (5 <= length) {
+      Tensor prefix = Tensors.of(tensor[zero + 1], tensor[zero + 2], tensor[zero + 3]);
+      tensor[zero] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(prefix).apply(RealScalar.ZERO);
+      Tensor suffix = Tensors.of(tensor[last - 3], tensor[last - 2], tensor[last - 1]);
+      tensor[last] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(suffix).apply(LAST);
+    } else {
+      tensor[zero] = tensor[zero + 1].copy();
+      tensor[last] = tensor[last - 1].copy();
+    }
     return Tensor.of(Arrays.stream(tensor));
   }
 
@@ -54,4 +56,8 @@ public abstract class TripleReduceExtrapolation implements TensorUnaryOperator {
    * @param r
    * @return */
   protected abstract Tensor reduce(Tensor p, Tensor q, Tensor r);
+
+  /** @param sequence of length 0, 1, or 2
+   * @return */
+  protected abstract Tensor petite(Tensor sequence);
 }

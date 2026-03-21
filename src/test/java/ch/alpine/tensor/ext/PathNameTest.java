@@ -97,6 +97,19 @@ class PathNameTest {
     assertEquals(path, Path.of("title.new"));
     String string = pathName.name();
     assertEquals(string, "title.ext");
+    Path emptyExt = pathName.withExtension("");
+    assertEquals(emptyExt, Path.of("title"));
+  }
+
+  @Test
+  void testWithExt2() {
+    PathName pathName = PathName.of(Path.of("ti.tle.ext"));
+    Path path = pathName.withExtension("new");
+    assertEquals(path, Path.of("ti.tle.new"));
+    String string = pathName.name();
+    assertEquals(string, "ti.tle.ext");
+    Path emptyExt = pathName.withExtension("");
+    assertEquals(emptyExt, Path.of("ti.tle"));
   }
 
   @Test

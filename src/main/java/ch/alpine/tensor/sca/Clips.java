@@ -197,6 +197,8 @@ public enum Clips {
         clip.max().add(value));
   }
 
+  /** @param clip
+   * @return */
   public static Clip symmetrize(Clip clip) {
     return Clips.absolute(Max.of(clip.min().negate(), clip.max()));
   }
