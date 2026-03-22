@@ -21,6 +21,10 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Cosh;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.Sinh;
 
 /** The addition of quantities with different units is not resolved by Mathematica.
  * 
@@ -188,6 +192,26 @@ import ch.alpine.tensor.sca.tri.ArcTan;
   @Override // from ArgInterface
   public Scalar arg() {
     return Arg.FUNCTION.apply(value);
+  }
+
+  @Override
+  public Scalar cos() {
+    return Cos.FUNCTION.apply(UnitDimensions.THREAD_LOCAL.get().strip(this));
+  }
+
+  @Override
+  public Scalar cosh() {
+    return Cosh.FUNCTION.apply(UnitDimensions.THREAD_LOCAL.get().strip(this));
+  }
+
+  @Override
+  public Scalar sin() {
+    return Sin.FUNCTION.apply(UnitDimensions.THREAD_LOCAL.get().strip(this));
+  }
+
+  @Override
+  public Scalar sinh() {
+    return Sinh.FUNCTION.apply(UnitDimensions.THREAD_LOCAL.get().strip(this));
   }
 
   @Override // from ConjugateInterface

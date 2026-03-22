@@ -13,6 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -23,7 +24,9 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.sca.Chop;
 
 class TimesTest {
   /** The return value has {@link Dimensions} of input tensor reduced by 1.
@@ -132,6 +135,17 @@ class TimesTest {
         Tensors.vectorLong(3, 6, 9), //
         Tensors.vectorLong(6, -2, -2));
     assertEquals(Times.of(b, a), c);
+  }
+
+  @Test
+  void testWhatever() {
+    Distribution distribution = NormalDistribution.standard();
+    Tensor a = RandomVariate.of(distribution, 3, 3);
+    Tensor v = RandomVariate.of(distribution, 3);
+    Tensor b = DiagonalMatrix.sparse(v);
+    Tensor c = RandomVariate.of(distribution, 3, 3);
+    Chop._09.requireClose(Dot.of(b, c), Times.of(v, c));
+    Chop._09.requireClose(Dot.of(a, b, c), a.dot(Times.of(v, c)));
   }
 
   @Test

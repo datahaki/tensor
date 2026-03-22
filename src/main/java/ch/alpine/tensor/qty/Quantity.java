@@ -18,6 +18,7 @@ import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.sca.pow.PowerInterface;
 import ch.alpine.tensor.sca.pow.SqrtInterface;
 import ch.alpine.tensor.sca.tri.ArcTanInterface;
+import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** {@link Quantity} represents a magnitude and unit.
  * <pre>
@@ -59,7 +60,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
  * <a href="https://reference.wolfram.com/language/ref/Quantity.html">Quantity</a> */
 public interface Quantity extends Scalar, //
     AbsInterface, ArcTanInterface, ArgInterface, Comparable<Scalar>, ComplexEmbedding, //
-    ConjugateInterface, PowerInterface, SignInterface, SqrtInterface {
+    ConjugateInterface, PowerInterface, SignInterface, SqrtInterface, TrigonometryInterface {
   char UNIT_OPENING_BRACKET = '[';
   char UNIT_CLOSING_BRACKET = ']';
 

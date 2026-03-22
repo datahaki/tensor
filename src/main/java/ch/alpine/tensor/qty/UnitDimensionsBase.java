@@ -27,6 +27,14 @@ public class UnitDimensionsBase implements UnitDimensions, Serializable {
   }
 
   @Override
+  public Scalar strip(Scalar scalar) {
+    Scalar apply = unitSystem.apply(scalar);
+    if (apply instanceof Quantity)
+      throw new Throw(scalar, apply);
+    return apply;
+  }
+
+  @Override
   public Scalar plus(Scalar a, Scalar b) {
     if (b instanceof DateTime)
       return b.add(a);

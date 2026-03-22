@@ -10,6 +10,8 @@ public interface UnitDimensions {
 
   Scalar normalForm(Scalar a);
 
+  Scalar strip(Scalar a);
+
   /** Quantity::add delegates to {@link #plus(Scalar, Scalar)}, i.e. this function
    * when a.add(b) is invoked on Quantity a and Scalar b in case unit are not identical
    * 
