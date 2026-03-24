@@ -36,7 +36,7 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
    * 
    * @param p matrix
    * @param q matrix
-   * @return
+   * @return LFT that maps each p_i to the corresponding q_i
    * @throws Exception if input is degenerate */
   public static LinearFractionalTransform fit(Tensor p, Tensor q) {
     final int d = Unprotect.dimension1(p);
@@ -64,7 +64,6 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
   // TODO TENSOR allow arbitrary matrix without ==1 contraint
   // .. check for Det != 0
 
-  // ---
   private final Tensor matrix;
   private final int n;
 
