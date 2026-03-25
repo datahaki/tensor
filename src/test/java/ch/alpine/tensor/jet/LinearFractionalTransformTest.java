@@ -3,10 +3,9 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.IOException;
-import java.util.Random;
-import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -25,6 +24,7 @@ import ch.alpine.tensor.mat.ev.RealEigensystem;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.ex.MatrixLog;
 import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Prime;
 import ch.alpine.tensor.pdf.Distribution;
@@ -107,29 +107,33 @@ class LinearFractionalTransformTest {
     Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
     Tensor xy = RandomVariate.of(distribution, n, d);
     Tensor uv = RandomVariate.of(distribution, n, d);
+    assumeTrue(MatrixRank.of(xy) == d);
+    assumeTrue(MatrixRank.of(uv) == d);
     _checkExact(xy, uv);
   }
 
   @RepeatedTest(5)
   void testQuantity(RepetitionInfo repetitionInfo) {
-    Random random = new Random(13);
     int d = repetitionInfo.getCurrentRepetition();
     int n = d + 2;
     Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
-    Tensor xy = RandomVariate.of(distribution, random, n, d).maps(s -> Quantity.of(s, "m"));
-    Tensor uv = RandomVariate.of(distribution, random, n, d).maps(s -> Quantity.of(s, "m"));
+    Tensor xy = RandomVariate.of(distribution, n, d).maps(s -> Quantity.of(s, "m"));
+    Tensor uv = RandomVariate.of(distribution, n, d).maps(s -> Quantity.of(s, "m"));
+    assumeTrue(MatrixRank.of(xy) == d);
+    assumeTrue(MatrixRank.of(uv) == d);
     _checkExact(xy, uv);
   }
 
   @RepeatedTest(5)
   void testGauss(RepetitionInfo repetitionInfo) {
-    RandomGenerator randomGenerator = new Random(1);
     int d = repetitionInfo.getCurrentRepetition();
     int n = d + 2;
     int p = Prime.of(3000).number().intValue();
     Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
-    Tensor xy = RandomVariate.of(distribution, randomGenerator, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
-    Tensor uv = RandomVariate.of(distribution, randomGenerator, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
+    Tensor xy = RandomVariate.of(distribution, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
+    Tensor uv = RandomVariate.of(distribution, n, d).maps(s -> GaussScalar.of(s.number().intValue(), p));
+    assumeTrue(MatrixRank.of(xy) == d);
+    assumeTrue(MatrixRank.of(uv) == d);
     _checkExact(xy, uv);
   }
 
