@@ -48,10 +48,10 @@ class SpectrogramArrayTest {
 
   @Test
   void testDimension() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(SpectrogramArray.of(Fourier.FORWARD::transform).config(8, 8));
-    Tensor tensor = tensorUnaryOperator.apply(Range.of(0, 128));
+    TensorUnaryOperator tuo = Serialization.copy(SpectrogramArray.of(Fourier.FORWARD::transform).config(8, 8));
+    Tensor tensor = tuo.apply(Range.of(0, 128));
     assertEquals(Dimensions.of(tensor), Arrays.asList(16, 8));
-    // assertTrue(tensorUnaryOperator.toString().startsWith("SpectrogramArray["));
+    assertTrue(tuo.toString().startsWith("SpectrogramArray["));
   }
 
   @Test
@@ -131,31 +131,33 @@ class SpectrogramArrayTest {
     Tensor array2 = SpectrogramArrays.FOURIER.operator().apply(vector);
     Tolerance.CHOP.requireClose(array1.maps(s -> Quantity.of(s, "m")), array2);
   }
-  // @Test
-  // void testFailWindowLength() {
-  // assertThrows(IllegalArgumentException.class, () -> XtrogramArray.SPECTROGRAM.of(0, 8));
-  // }
-  //
-  // @Test
-  // void testFailWindowLengthOffset() {
-  // assertThrows(IllegalArgumentException.class, () -> XtrogramArray.SPECTROGRAM.of(4, 8));
-  // }
-  //
-  // @Test
-  // void testFailOffset() {
-  // assertThrows(IllegalArgumentException.class, () -> XtrogramArray.SPECTROGRAM.of(4, 0));
-  // }
+
+  @Test
+  void testFailWindowLength() {
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArrays.FOURIER.operator().config(0, 8));
+  }
+
+  @Test
+  void testFailWindowLengthOffset() {
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArrays.FOURIER.operator().config(4, 8));
+  }
+
+  @Test
+  void testFailOffset() {
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArrays.FOURIER.operator().config(4, 0));
+  }
 
   @Test
   void testNullFail() {
     assertThrows(NullPointerException.class, () -> SpectrogramArrays.FOURIER.operator().half_abs(null));
   }
-  // @Test
-  // void testDimensionsFail() {
-  // TensorUnaryOperator tensorUnaryOperator = XtrogramArray.SPECTROGRAM.of(32, 8);
-  // assertThrows(Throw.class, () -> tensorUnaryOperator.apply(RealScalar.ONE));
-  // assertThrows(ClassCastException.class, () -> tensorUnaryOperator.apply(HilbertMatrix.of(32)));
-  // }
+
+  @Test
+  void testDimensionsFail() {
+    TensorUnaryOperator tensorUnaryOperator = SpectrogramArrays.FOURIER.operator().config(32, 8);
+    assertThrows(Throw.class, () -> tensorUnaryOperator.apply(RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> tensorUnaryOperator.apply(HilbertMatrix.of(32)));
+  }
 
   @Test
   void testScalarFail() {

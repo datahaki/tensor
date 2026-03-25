@@ -15,8 +15,10 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Flatten;
+import ch.alpine.tensor.alg.Fold;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -159,24 +161,27 @@ class TimesTest {
     Tensor r = Tensors.fromString("{{3, 8, 18}, {-27, 2, 2}}");
     assertEquals(Times.of(a, c), r);
   }
-  // @Test
-  // void testChain() {
-  // Tensor tensor = Times.of( //
-  // Tensors.fromString("{1,2,3}"), //
-  // Tensors.fromString("{1,2,3}"), //
-  // Tensors.fromString("{1[s],2[m],3[N]}"), //
-  // Tensors.fromString("{5,1/2,1/9}"));
-  // ExactTensorQ.require(tensor);
-  // assertEquals(tensor, Tensors.fromString("{5[s], 4[m], 3[N]}"));
-  // }
-  // @Test
-  // void testSingleCopy() {
-  // Tensor tensor = Tensors.fromString("{1,2,3}");
-  // Tensor result = Times.of(tensor);
-  // tensor.set(RealScalar.of(0), 0);
-  // assertEquals(tensor, Tensors.vector(0, 2, 3));
-  // assertEquals(result, Tensors.vector(1, 2, 3));
-  // }
+
+  @Test
+  void testChain() {
+    Tensor tensor = Tensors.of( //
+        Tensors.fromString("{1,2,3}"), //
+        Tensors.fromString("{1,2,3}"), //
+        Tensors.fromString("{1[s],2[m],3[N]}"), //
+        Tensors.fromString("{5,1/2,1/9}"));
+    ExactTensorQ.require(tensor);
+    Tensor reduce = tensor.stream().reduce(Times::of).orElseThrow();
+    assertEquals(reduce, Tensors.fromString("{5[s], 4[m], 3[N]}"));
+  }
+
+  @Test
+  void testSingleCopy() {
+    Tensor tensor = Tensors.fromString("{1,2,3}");
+    Tensor result = Fold.of(Times::of, tensor, Tensors.empty());
+    tensor.set(RealScalar.of(0), 0);
+    assertEquals(tensor, Tensors.vector(0, 2, 3));
+    assertEquals(result, Tensors.vector(1, 2, 3));
+  }
 
   @Test
   void testDiagonalMatrix() {
