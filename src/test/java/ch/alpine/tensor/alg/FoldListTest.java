@@ -35,13 +35,27 @@ class FoldListTest {
 
   @Test
   void testFail() {
-    assertThrows(IllegalArgumentException.class, () -> FoldList.of(Tensor::add, RealScalar.of(31)));
+    assertThrows(Exception.class, () -> FoldList.of(Tensor::add, RealScalar.of(31)));
   }
 
   @Test
   void testAddUpPrependZero() {
     Tensor tensor = FoldList.of(Tensor::add, RealScalar.ZERO, Tensors.vector(1, 2, 3));
     assertEquals(tensor, Tensors.vector(0, 1, 3, 6));
+    ExactTensorQ.require(tensor);
+  }
+
+  @Test
+  void testAddUpPrepend1Zero() {
+    Tensor tensor = FoldList.of(Tensor::add, RealScalar.TWO, Tensors.vector(3));
+    assertEquals(tensor, Tensors.vector(2, 5));
+    ExactTensorQ.require(tensor);
+  }
+
+  @Test
+  void testAddUpPrepend2Zero() {
+    Tensor tensor = FoldList.of(Tensor::add, RealScalar.TWO, Tensors.vector(3, 4));
+    assertEquals(tensor, Tensors.vector(2, 5, 9));
     ExactTensorQ.require(tensor);
   }
 
@@ -54,8 +68,8 @@ class FoldListTest {
 
   @Test
   void testAddUpEmpty() {
-    Tensor r = FoldList.of(Tensor::add, RealScalar.ONE, Tensors.unmodifiableEmpty());
-    assertEquals(r, Tensors.vector(1));
+    Tensor r = FoldList.of(Tensor::add, RealScalar.TWO, Tensors.unmodifiableEmpty());
+    assertEquals(r, Tensors.vector(2));
   }
 
   @Test

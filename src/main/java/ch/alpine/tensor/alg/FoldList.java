@@ -1,6 +1,9 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import java.util.stream.Gatherers;
+import java.util.stream.Stream;
+
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -19,15 +22,12 @@ public enum FoldList {
    * @param tensor must not be a {@link Scalar}
    * @return see description above */
   public static Tensor of(TensorBinaryOperator binaryOperator, Tensor tensor) {
-    int length = tensor.length();
-    Tensor result = Tensors.reserve(length); // throws an exception if tensor is a scalar
-    if (0 < length) {
-      Tensor entry = tensor.get(0);
-      result.append(entry);
-      for (int index = 1; index < length; ++index)
-        result.append(entry = binaryOperator.apply(entry, tensor.get(index)));
-    }
-    return result;
+    if (Tensors.isEmpty(tensor))
+      return Tensors.empty();
+    Tensor head = tensor.get(0);
+    return Tensor.of(Stream.concat( //
+        Stream.of(head), //
+        tensor.stream().skip(1).gather(Gatherers.scan(() -> head, binaryOperator))));
   }
 
   /** <pre>
@@ -40,10 +40,8 @@ public enum FoldList {
    * @return */
   public static Tensor of(TensorBinaryOperator binaryOperator, Tensor x, Tensor tensor) {
     ScalarQ.thenThrow(tensor);
-    int length = tensor.length();
-    Tensor result = Tensors.reserve(length + 1).append(x);
-    for (int index = 0; index < length; ++index)
-      result.append(x = binaryOperator.apply(x, tensor.get(index)));
-    return result;
+    return Tensor.of(Stream.concat( //
+        Stream.of(x.copy()), //
+        tensor.stream().gather(Gatherers.scan(() -> x, binaryOperator))));
   }
 }

@@ -52,12 +52,12 @@ class AccumulateTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(IllegalArgumentException.class, () -> Accumulate.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Accumulate.of(RealScalar.ONE));
   }
 
   @Test
   void testScalarProdFail() {
-    assertThrows(IllegalArgumentException.class, () -> Accumulate.prod(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Accumulate.prod(RealScalar.ONE));
   }
 
   @Test
