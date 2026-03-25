@@ -19,8 +19,8 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-/* package */ class TimeSeriesImpl implements TimeSeries, Serializable {
-  /* package */ final NavigableMap<Scalar, Tensor> navigableMap;
+class TimeSeriesImpl implements TimeSeries, Serializable {
+  final NavigableMap<Scalar, Tensor> navigableMap;
   private final ResamplingMethod resamplingMethod;
 
   public TimeSeriesImpl(NavigableMap<Scalar, Tensor> navigableMap, ResamplingMethod resamplingMethod) {

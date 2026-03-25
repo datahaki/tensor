@@ -10,7 +10,7 @@ import java.util.Set;
 
 import ch.alpine.tensor.Scalar;
 
-/* package */ class UnitSystemInflator {
+class UnitSystemInflator {
   public static final char INFLATOR = '_';
 
   /** @param properties

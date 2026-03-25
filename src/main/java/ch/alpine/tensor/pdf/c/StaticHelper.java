@@ -6,7 +6,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.UnitConvert;
 
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   private static final ScalarUnaryOperator CONVERT_S = UnitConvert.SI().to("s");
 

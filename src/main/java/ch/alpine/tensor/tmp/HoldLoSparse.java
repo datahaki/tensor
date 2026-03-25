@@ -9,7 +9,7 @@ import java.util.Objects;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
-/* package */ class HoldLoSparse extends HoldLo {
+class HoldLoSparse extends HoldLo {
   @Override // from BaseResamplingMethod
   public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
     // if given key is higher than existing max key, or map is empty

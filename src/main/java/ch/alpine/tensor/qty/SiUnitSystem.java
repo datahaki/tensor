@@ -4,7 +4,7 @@ package ch.alpine.tensor.qty;
 import ch.alpine.tensor.ext.ResourceData;
 
 /** Initialization On Demand Holder Idiom */
-/* package */ enum SiUnitSystem {
+enum SiUnitSystem {
   INSTANCE;
 
   /** Cached field instance. */

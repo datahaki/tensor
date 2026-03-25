@@ -7,7 +7,7 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Scalar;
 
 /** reviewed */
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   public static final Scalar _1 = DecimalScalar.of(new BigDecimal("0.1"));
   public static final Scalar _2 = DecimalScalar.of(new BigDecimal("0.01"));

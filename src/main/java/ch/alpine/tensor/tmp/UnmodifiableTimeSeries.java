@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
-/* package */ class UnmodifiableTimeSeries extends TimeSeriesImpl {
+class UnmodifiableTimeSeries extends TimeSeriesImpl {
   public UnmodifiableTimeSeries(NavigableMap<Scalar, Tensor> navigableMap, ResamplingMethod resamplingMethod) {
     super(navigableMap, resamplingMethod);
   }

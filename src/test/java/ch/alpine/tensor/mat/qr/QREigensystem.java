@@ -11,7 +11,7 @@ import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.sca.Chop;
 
-/* package */ enum QREigensystem {
+enum QREigensystem {
   ;
   private static final int MAX_ITERATIONS = 20;
   // ---

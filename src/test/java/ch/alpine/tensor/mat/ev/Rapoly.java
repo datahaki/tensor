@@ -15,7 +15,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
  * 
  * wrapper of a polynomial that simplifies to a real/complex scalar when
  * higher coefficients are zero. */
-/* package */ class Rapoly extends MultiplexScalar {
+class Rapoly extends MultiplexScalar {
   /** @param polynomial
    * @return */
   public static Scalar of(Polynomial polynomial) {

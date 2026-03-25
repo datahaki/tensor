@@ -4,7 +4,7 @@ package ch.alpine.tensor;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 
-/* package */ enum QuantityParser {
+enum QuantityParser {
   ;
   /** Example:
    * "9.81[m*s^-2]" -> Quantity.of(9.81, "m*s^-2")

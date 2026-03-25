@@ -24,7 +24,7 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Sign;
 
 /** traditional simplex algorithm that performs poorly on Klee-Minty cube */
-/* package */ class SimplexMethod {
+class SimplexMethod {
   /** @param c
    * @param A
    * @param b

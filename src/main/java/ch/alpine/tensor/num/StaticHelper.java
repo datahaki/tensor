@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Abs;
 
 /** reviewed */
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   // TODO TENSOR NUM function does not result in Mathematica standard for all input
   public static Scalar normalForm(Scalar scalar) {

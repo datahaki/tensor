@@ -85,7 +85,7 @@ public class JetScalar extends MultiplexScalar implements //
   // ---
   private final Tensor vector;
 
-  /* package */ JetScalar(Tensor vector) {
+  JetScalar(Tensor vector) {
     this.vector = vector;
   }
 

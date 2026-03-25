@@ -7,7 +7,7 @@ import java.util.NavigableMap;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
-/* package */ abstract class BaseResamplingMethod implements ResamplingMethod, Serializable {
+abstract class BaseResamplingMethod implements ResamplingMethod, Serializable {
   @Override
   public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
     navigableMap.put(key, value);

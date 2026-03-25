@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.IntPredicate;
 
-/* package */ abstract class ArgBase<T> implements IntPredicate {
+abstract class ArgBase<T> implements IntPredicate {
   /** -1 is the Java standard, see also {@link String#indexOf(int)} */
   public static final int EMPTY = -1;
 

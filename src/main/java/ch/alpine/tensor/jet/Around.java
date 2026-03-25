@@ -49,7 +49,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class Around extends MultiplexScalar implements //
+class Around extends MultiplexScalar implements //
     AbsInterface, ExpInterface, LogInterface, MeanInterface, PowerInterface, //
     SqrtInterface, StandardDeviationInterface, Serializable {
   private static final String SEPARATOR = "\u00B1";

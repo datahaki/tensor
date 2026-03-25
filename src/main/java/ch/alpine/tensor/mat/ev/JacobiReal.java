@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * Quote: "You cannot find eigenvectors (or eigenvalues) in a finite number of
  * exact "arithmetic" steps for matrices of size n > 4." */
-/* package */ class JacobiReal extends JacobiMethod {
+class JacobiReal extends JacobiMethod {
   /** @param matrix symmetric */
   public static Eigensystem of(Tensor matrix) {
     return new JacobiReal(matrix).solve();
@@ -65,7 +65,7 @@ import ch.alpine.tensor.sca.Sign;
    * s == t / ci
    * then
    * 1/ci ^ 2 + s ^ 2 == 1 */
-  /* package */ class GivensReal implements GivensRotation {
+  class GivensReal implements GivensRotation {
     private final Scalar ci;
     private final Scalar t;
 

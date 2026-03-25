@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.Clips;
 
-/* package */ class LookupColorData implements ColorDataGradient {
+class LookupColorData implements ColorDataGradient {
   public static final ColorDataGradient GRAYSCALE = new LookupColorData(createBW(255));
 
   private static Tensor[] createBW(int alpha) {

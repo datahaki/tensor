@@ -15,7 +15,7 @@ import ch.alpine.tensor.sca.Sign;
 
 /** implements "thin" svd, i.e. u has the same format as given matrix
  * instead of being square */
-/* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
+class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
   /** rows x cols */
   private final Tensor u;
   private final Tensor w;

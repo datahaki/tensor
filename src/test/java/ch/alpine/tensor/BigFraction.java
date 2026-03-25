@@ -8,7 +8,7 @@ import java.math.BigInteger;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ final class BigFraction implements Comparable<BigFraction>, Serializable {
+final class BigFraction implements Comparable<BigFraction>, Serializable {
   private static final String DIVIDE = "/";
 
   /** @param value

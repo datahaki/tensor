@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.Sign;
 /** Reference:
  * "Linear Algebra Learning from Data"
  * by G. Strang, 2019 */
-/* package */ class PolarDecompositionSvd extends PolarDecompositionBase implements Serializable {
+class PolarDecompositionSvd extends PolarDecompositionBase implements Serializable {
   /** @param matrix
    * @return */
   public static PolarDecompositionSvd up(Tensor matrix) {

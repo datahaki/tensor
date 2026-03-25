@@ -8,7 +8,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.LinearSolve;
 
-/* package */ enum MatrixSqrtNewton {
+enum MatrixSqrtNewton {
   ;
   private static final int MAX_ITERATIONS = 250;
   private static final Scalar HALF = RealScalar.of(0.5);

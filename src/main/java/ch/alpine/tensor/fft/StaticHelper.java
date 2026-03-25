@@ -5,7 +5,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.sca.Im;
 import ch.alpine.tensor.sca.Re;
 
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   /** function truncates to real output depending on all-real input
    * 

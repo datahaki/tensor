@@ -13,7 +13,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
  * @see MatrixExp
  * @see MatrixLog
  * @see MatrixPower */
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   public static final Function<Integer, Tensor> IDENTITY_MATRIX = Cache.of(IdentityMatrix::of, 16);
   // ---

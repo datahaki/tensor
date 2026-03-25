@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
 
-/* package */ abstract class ParameterizedWindow implements ScalarUnaryOperator {
+abstract class ParameterizedWindow implements ScalarUnaryOperator {
   protected final Scalar alpha;
 
   protected ParameterizedWindow(Scalar alpha) {

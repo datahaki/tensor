@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.gam.Factorial2;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/* package */ enum StandardNormalDistribution implements UnivariateDistribution, //
+enum StandardNormalDistribution implements UnivariateDistribution, //
     CentralMomentInterface, KurtosisInterface {
   INSTANCE;
 

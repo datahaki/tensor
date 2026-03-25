@@ -6,7 +6,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Hue;
 import ch.alpine.tensor.sca.Clips;
 
-/* package */ class HueColorData implements ColorDataGradient {
+class HueColorData implements ColorDataGradient {
   public static final ColorDataGradient DEFAULT = new HueColorData(1.0);
   // ---
   private final double opacity;

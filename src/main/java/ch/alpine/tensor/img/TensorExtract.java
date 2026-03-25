@@ -11,7 +11,7 @@ import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.ext.Integers;
 
-/* package */ class TensorExtract {
+class TensorExtract {
   /** @param tensor not a scalar
    * @param radius non-negative
    * @param function

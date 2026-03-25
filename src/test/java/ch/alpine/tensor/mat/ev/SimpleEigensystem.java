@@ -16,7 +16,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Det;
 
 /** Careful: only for use with small matrices */
-/* package */ enum SimpleEigensystem {
+enum SimpleEigensystem {
   ;
   private static final Scalar XN = Rapoly.of(Tensors.vector(0, -1));
 

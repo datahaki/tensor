@@ -125,7 +125,7 @@ public enum PseudoInverse {
     return usingSvd(matrix, chop, matrix.length(), Unprotect.dimension1Hint(matrix));
   }
 
-  /* package */ static Tensor usingSvd(Tensor matrix, Chop chop, int n, int m) {
+  static Tensor usingSvd(Tensor matrix, Chop chop, int n, int m) {
     return m <= n //
         ? of(SingularValueDecomposition.of(matrix), chop) //
         : Transpose.of(of(SingularValueDecomposition.of(Transpose.of(matrix)), chop));

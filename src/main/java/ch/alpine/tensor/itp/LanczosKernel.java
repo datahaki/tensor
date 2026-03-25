@@ -11,7 +11,7 @@ import ch.alpine.tensor.sca.tri.Sinc;
 /** The Lanczos kernel is the function t -> sinc[t] Sinc[t/semi]
  * 
  * The implementation only evaluates the kernel in [-semi, semi] */
-/* package */ class LanczosKernel implements ScalarUnaryOperator {
+class LanczosKernel implements ScalarUnaryOperator {
   public static final LanczosKernel _3 = new LanczosKernel(3);
   // ---
   private final int semi;

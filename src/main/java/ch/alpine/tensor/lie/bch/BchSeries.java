@@ -13,7 +13,7 @@ import ch.alpine.tensor.red.Total;
  * 1) Neeb
  * 2) "Baker-Campbell-Hausdorff formula" Wikipedia
  * https://en.wikipedia.org/wiki/Baker%E2%80%93Campbell%E2%80%93Hausdorff_formula */
-/* package */ abstract class BchSeries implements TensorBinaryOperator {
+abstract class BchSeries implements TensorBinaryOperator {
   protected final Tensor ad;
 
   protected BchSeries(Tensor ad) {

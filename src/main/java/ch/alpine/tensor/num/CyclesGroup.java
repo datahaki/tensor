@@ -3,7 +3,7 @@ package ch.alpine.tensor.num;
 
 import ch.alpine.tensor.api.GroupInterface;
 
-/* package */ enum CyclesGroup implements GroupInterface<Cycles> {
+enum CyclesGroup implements GroupInterface<Cycles> {
   INSTANCE;
 
   @Override // from GroupInterface

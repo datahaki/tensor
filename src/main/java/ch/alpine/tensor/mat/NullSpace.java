@@ -78,7 +78,7 @@ public enum NullSpace {
 
   /** @param matrix of dimensions n x m with exact precision entries
    * @return tensor of vectors that span the kernel of given matrix */
-  /* package */ static Tensor usingRowReduce(Tensor matrix) {
+  static Tensor usingRowReduce(Tensor matrix) {
     return LeftNullSpace.usingRowReduce(Transpose.of(matrix));
   }
 

@@ -14,7 +14,7 @@ public class NdMatch<V> implements Serializable {
 
   /** @param ndEntry
    * @param distance */
-  /* package */ NdMatch(NdEntry<V> ndEntry, Scalar distance) {
+  NdMatch(NdEntry<V> ndEntry, Scalar distance) {
     this.ndEntry = ndEntry;
     this.distance = distance;
   }

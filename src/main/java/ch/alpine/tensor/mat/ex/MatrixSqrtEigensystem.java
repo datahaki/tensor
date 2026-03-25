@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * Edited by Xavier Pennec, Sommer, P. Thomas Fletcher, p. 80
  * 
  * @see MatrixPower */
-/* package */ record MatrixSqrtEigensystem(Eigensystem eigensystem) implements MatrixSqrt, Serializable {
+record MatrixSqrtEigensystem(Eigensystem eigensystem) implements MatrixSqrt, Serializable {
   @Override // from MatrixSqrt
   public Tensor sqrt() {
     return eigensystem.map(Sqrt.FUNCTION);

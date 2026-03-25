@@ -12,7 +12,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Mod;
 
-/* package */ class ExtendedGCDWrap implements Serializable {
+class ExtendedGCDWrap implements Serializable {
   // TODO TENSOR API is dubious
   public ExtendedGCD function(Tensor vector) {
     return new ExtendedGCDImpl(vector);

@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 
 /** @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class QuaternionImpl extends MultiplexScalar implements Quaternion, //
+class QuaternionImpl extends MultiplexScalar implements Quaternion, //
     Serializable {
   private final Scalar w;
   private final Tensor xyz;

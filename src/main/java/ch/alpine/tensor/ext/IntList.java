@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  * <p>A sublist of an {@link IntList} is {@link Serializable}. This
  * is in contrast to a sublist of {@link Arrays#asList(Object...)}
  * or {@link ArrayList}, which are not serializable. */
-/* package */ class IntList implements List<Integer>, RandomAccess, Serializable {
+class IntList implements List<Integer>, RandomAccess, Serializable {
   /** @param array non-null
    * @return unmodifiable list */
   public static List<Integer> wrap(int[] array) {

@@ -7,7 +7,7 @@ import ch.alpine.tensor.Tensors;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Transparent.html">Transparent</a> */
-/* package */ enum Transparent {
+enum Transparent {
   ;
   private static final Tensor RGBA = Tensors.vector(_ -> RealScalar.ZERO, 4);
 

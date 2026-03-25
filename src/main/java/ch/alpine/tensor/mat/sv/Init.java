@@ -20,7 +20,7 @@ import ch.alpine.tensor.red.EqualsReduce;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/* package */ class Init {
+class Init {
   /** Difference between 1.0 and the minimum double greater than 1.0
    * DBL_EPSILON == 2.220446049250313E-16 */
   private static final Scalar DBL_EPSILON = DoubleScalar.of(Math.nextUp(1.0) - 1.0);

@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 
 /** Reference:
  * https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices */
-/* package */ class JacobiComplex extends JacobiMethod {
+class JacobiComplex extends JacobiMethod {
   /** @param matrix hermitian */
   public static Eigensystem of(Tensor matrix) {
     return new JacobiComplex(matrix).solve();
@@ -51,7 +51,7 @@ import ch.alpine.tensor.sca.tri.Sin;
    * 
    * Reference:
    * https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices */
-  /* package */ class GivensComplex implements GivensRotation {
+  class GivensComplex implements GivensRotation {
     final Scalar rpp;
     final Scalar rpq;
     final Scalar rqp;

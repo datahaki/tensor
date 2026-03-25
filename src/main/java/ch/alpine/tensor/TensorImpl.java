@@ -15,7 +15,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.jet.Hold;
 
 /** reference implementation of the interface Tensor */
-/* package */ class TensorImpl extends AbstractTensor implements Serializable {
+class TensorImpl extends AbstractTensor implements Serializable {
   private final List<Tensor> list;
 
   /** @param list to be guaranteed non-null */

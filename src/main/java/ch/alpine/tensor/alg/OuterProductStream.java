@@ -4,7 +4,7 @@ package ch.alpine.tensor.alg;
 import java.util.stream.IntStream;
 
 /** utility class for {@link Transpose} */
-/* package */ class OuterProductStream {
+class OuterProductStream {
   /** @param size
    * @param sigma
    * @return */

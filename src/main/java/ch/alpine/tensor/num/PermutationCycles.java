@@ -20,7 +20,7 @@ public enum PermutationCycles {
     return unsafe(Integers.requirePermutation(sigma));
   }
 
-  /* package */ static Cycles unsafe(int... sigma) {
+  static Cycles unsafe(int... sigma) {
     NavigableMap<Integer, Integer> navigableMap = new TreeMap<>();
     for (int index = 0; index < sigma.length; ++index)
       if (index != sigma[index])

@@ -11,7 +11,7 @@ import java.util.Set;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
-/* package */ class LinearSparse extends Linear {
+class LinearSparse extends Linear {
   @Override // from ResamplingMethod
   public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
     navigableMap.put(key, value);

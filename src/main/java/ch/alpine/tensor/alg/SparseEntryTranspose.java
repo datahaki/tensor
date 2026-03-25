@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.spa.SparseEntryVisitor;
 
-/* package */ class SparseEntryTranspose implements SparseEntryVisitor<Tensor> {
+class SparseEntryTranspose implements SparseEntryVisitor<Tensor> {
   private final int[] sigma;
   private final int[] array;
   private final List<Integer> index;

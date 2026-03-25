@@ -15,7 +15,7 @@ import ch.alpine.tensor.sca.Conjugate;
 
 /** computes dot product {I - TensorProduct[vc, vr]) . tensor
  * followed by negating the k-th row */
-/* package */ class QRReflection {
+class QRReflection {
   private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Vector2Norm::of);
   // ---
   private final int k;

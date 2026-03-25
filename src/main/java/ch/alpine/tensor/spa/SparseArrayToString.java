@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import ch.alpine.tensor.Scalar;
 
 /** SparseArray[{{1, 1} -> 1, {2, 2} -> 2, {3, 3} -> 3, {1, 3} -> 5}, {3, 3}] */
-/* package */ class SparseArrayToString implements SparseEntryVisitor<String> {
+class SparseArrayToString implements SparseEntryVisitor<String> {
   private static final Collector<CharSequence, ?, String> EMBRACE = Collectors.joining(", ", "{", "}");
   // ---
   private final List<String> result = new LinkedList<>();

@@ -9,7 +9,7 @@ import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Re;
 
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   /** @param tensor
    * @param chop

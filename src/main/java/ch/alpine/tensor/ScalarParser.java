@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-/* package */ enum ScalarParser {
+enum ScalarParser {
   ;
   private static final char OPENING_BRACKET = '(';
   private static final char CLOSING_BRACKET = ')';

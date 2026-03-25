@@ -16,7 +16,7 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.red.EqualsReduce;
 
-/* package */ abstract class HungarianAlgorithmGraph implements BipartiteMatching, Serializable {
+abstract class HungarianAlgorithmGraph implements BipartiteMatching, Serializable {
   private final int rows;
   private final int cols;
   protected final Scalar[][] matrix;

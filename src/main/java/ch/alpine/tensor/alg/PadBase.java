@@ -9,7 +9,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Lists;
 
-/* package */ abstract class PadBase implements TensorUnaryOperator {
+abstract class PadBase implements TensorUnaryOperator {
   private final Tensor element;
   private final List<Integer> dimensions;
 

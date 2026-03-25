@@ -29,7 +29,7 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
  * However, this approach requires that n over m equations be solved, which
  * is not practical unless n is small."
  * Reference: Linear and Integer Programming made Easy, 2016 */
-/* package */ enum SimplexCorners {
+enum SimplexCorners {
   ;
   public static Tensor of(LinearProgram linearProgram) {
     LinearProgram lp_equality = linearProgram.standard();

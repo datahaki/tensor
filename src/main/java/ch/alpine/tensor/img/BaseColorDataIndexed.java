@@ -11,7 +11,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 
-/* package */ abstract class BaseColorDataIndexed implements ColorDataIndexed {
+abstract class BaseColorDataIndexed implements ColorDataIndexed {
   private final Tensor tensor;
   protected final Color[] colors;
 

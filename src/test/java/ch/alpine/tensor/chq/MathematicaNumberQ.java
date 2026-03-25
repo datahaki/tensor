@@ -35,7 +35,7 @@ import ch.alpine.tensor.qty.Quantity;
  * 
  * @see ExactScalarQ
  * @see IntegerQ */
-/* package */ enum MathematicaNumberQ {
+enum MathematicaNumberQ {
   ;
   /** @param scalar
    * @return whether scalar satisfies the NumberQ predicate */

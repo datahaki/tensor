@@ -62,7 +62,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return of(Tensors.fromString(string));
   }
 
-  /* package */ static Cycles single(int[] cycle) {
+  static Cycles single(int[] cycle) {
     IntStream.of(cycle).forEach(Integers::requirePositiveOrZero);
     if (cycle.length < 2)
       return IDENTITY;
@@ -108,7 +108,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
   private final NavigableMap<Integer, Integer> navigableMap;
 
   /** @param navigableMap without entries of the form i -> i */
-  /* package */ Cycles(NavigableMap<Integer, Integer> navigableMap) {
+  Cycles(NavigableMap<Integer, Integer> navigableMap) {
     this.navigableMap = navigableMap;
   }
 
@@ -184,7 +184,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return unsafe_replace(Integers.requirePositiveOrZero(index));
   }
 
-  /* package */ int unsafe_replace(int index) {
+  int unsafe_replace(int index) {
     return navigableMap.getOrDefault(index, index);
   }
 

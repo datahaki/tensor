@@ -13,7 +13,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 
-/* package */ class HoldLo extends BaseResamplingMethod {
+class HoldLo extends BaseResamplingMethod {
   @Override // from ResamplingMethod
   public final Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
     Scalar last = navigableMap.lastKey();

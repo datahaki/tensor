@@ -13,7 +13,7 @@ import ch.alpine.tensor.sca.SoftThreshold;
  * Alternating Direction Method of Multipliers"
  * 6.1 Least Absolute Deviations
  * by Stephen Boyd, Neal Parikh, Eric Chu, Borja Peleato, and Jonathan Eckstein, 2011 */
-/* package */ enum LeastAbsoluteDeviations {
+enum LeastAbsoluteDeviations {
   ;
   /** @param A
    * @param b

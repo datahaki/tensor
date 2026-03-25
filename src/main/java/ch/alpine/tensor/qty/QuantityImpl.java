@@ -82,7 +82,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class QuantityImpl extends MultiplexScalar implements Quantity, //
+class QuantityImpl extends MultiplexScalar implements Quantity, //
     Serializable {
   /** @param value is assumed to be not instance of {@link Quantity}
    * @param unit

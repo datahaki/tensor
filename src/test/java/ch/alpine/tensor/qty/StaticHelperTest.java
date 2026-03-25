@@ -30,7 +30,7 @@ class StaticHelperTest {
   }
 
   // only used in tests
-  /* package */ static Set<Unit> atoms(Unit unit) {
+  static Set<Unit> atoms(Unit unit) {
     return unit.map().entrySet().stream() //
         .map(StaticHelperTest::format) //
         .collect(Collectors.toSet());

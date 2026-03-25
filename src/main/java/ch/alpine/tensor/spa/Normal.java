@@ -25,7 +25,7 @@ public class Normal implements TensorUnaryOperator {
 
   private final Function<Scalar, ? extends Tensor> function;
 
-  /* package */ Normal(Function<Scalar, ? extends Tensor> function) {
+  Normal(Function<Scalar, ? extends Tensor> function) {
     this.function = function;
   }
 

@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 
 /** base class of {@link Det}, {@link GaussianElimination} and {@link RowReduce} */
-/* package */ class AbstractReduce {
+class AbstractReduce {
   protected final Tensor[] lhs;
   private final Pivot pivot;
   private final int[] ind;

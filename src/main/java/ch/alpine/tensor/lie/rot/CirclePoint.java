@@ -13,7 +13,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Sin;
 
-/* package */ enum CirclePoint {
+enum CirclePoint {
   INSTANCE;
 
   private final Map<Scalar, Tensor> map = new HashMap<>();

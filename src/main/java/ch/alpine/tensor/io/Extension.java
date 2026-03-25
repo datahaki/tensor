@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
  * 
  * @see ImportHelper
  * @see ExportHelper */
-/* package */ enum Extension {
+enum Extension {
   /** uncompressed loss-less image format, no alpha channel */
   BMP,
   /** table with comma-separated values */

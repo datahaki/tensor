@@ -10,7 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.red.Min;
 
-/* package */ class HungarianAlgorithmTree {
+class HungarianAlgorithmTree {
   private final Bipartition bipartition;
   private final Set<Integer> S = new HashSet<>();
   private final Set<Integer> nlsMinusT = new HashSet<>();

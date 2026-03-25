@@ -14,7 +14,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * by the Persian mathematician Sharaf al-Din al-Ṭusi.
  * 
  * <p>https://en.wikipedia.org/wiki/Horner%27s_method */
-/* package */ class HornerScheme implements ScalarUnaryOperator {
+class HornerScheme implements ScalarUnaryOperator {
   private final Scalar head;
   private final Tensor rest;
 

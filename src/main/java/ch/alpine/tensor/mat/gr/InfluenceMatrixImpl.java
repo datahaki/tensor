@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * 
  * {@link #leverages()} are obtained by dotting each rows of the design matrix
  * with the corresponding column in the pseudoinverse design^+. */
-/* package */ class InfluenceMatrixImpl implements InfluenceMatrix, Serializable {
+class InfluenceMatrixImpl implements InfluenceMatrix, Serializable {
   private final Tensor design;
   private final Tensor d_pinv;
   private final boolean dotMatrix;

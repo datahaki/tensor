@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** GammaDistribution[alpha, 1] */
-/* package */ class Gamma1Distribution implements Distribution, //
+class Gamma1Distribution implements Distribution, //
     PDF, MeanInterface, VarianceInterface, StandardDeviationInterface, Serializable {
   final Scalar alpha;
   private final Scalar factor;

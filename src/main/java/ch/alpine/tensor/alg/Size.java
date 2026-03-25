@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.ext.Integers;
 
 /** utility class for {@link Transpose} */
-/* package */ class Size {
+class Size {
   /** @param list for instance Dimensions[tensor]
    * @return */
   public static Size of(List<Integer> list) {

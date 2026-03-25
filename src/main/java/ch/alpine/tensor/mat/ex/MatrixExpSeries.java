@@ -9,7 +9,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-/* package */ enum MatrixExpSeries implements TensorUnaryOperator {
+enum MatrixExpSeries implements TensorUnaryOperator {
   FUNCTION;
 
   /** @param matrix square

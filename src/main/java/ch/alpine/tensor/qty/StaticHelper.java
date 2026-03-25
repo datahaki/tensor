@@ -16,7 +16,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.sca.pow.Power;
 
 /** reviewed */
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   /** @param scalar
    * @param base

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
-/* package */ abstract class BSplineBasisDouble {
+abstract class BSplineBasisDouble {
   public static final BSplineBasisDouble constant = new BSplineBasisDouble() {
     @Override
     public double at(double t) {

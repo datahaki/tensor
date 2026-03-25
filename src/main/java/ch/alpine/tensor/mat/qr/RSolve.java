@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Abs;
  * 
  * class is not public, since the input is not checked for correctness,
  * i.e. whether matrix is {@link UpperTriangularize} */
-/* package */ enum RSolve {
+enum RSolve {
   ;
   public static Tensor of(QRDecomposition qrDecomposition, Tensor rhs) {
     return of(qrDecomposition.getR(), qrDecomposition.sigma(), rhs);

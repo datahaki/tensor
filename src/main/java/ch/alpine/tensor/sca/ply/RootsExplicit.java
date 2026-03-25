@@ -8,7 +8,7 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/* package */ enum RootsExplicit implements TensorUnaryOperator {
+enum RootsExplicit implements TensorUnaryOperator {
   /** implementation permits coefficients of type {@link GaussScalar}
    * 
    * @param coeffs {a, b} representing a + b * x == 0

@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.N;
  * with complex entries, i.e. scalars of type {@link ComplexScalar}.
  * 
  * Reference: Pseudo Inverse Wikipedia */
-/* package */ class BenIsraelCohen {
+class BenIsraelCohen {
   /** @param matrix
    * @return pseudo inverse of given matrix */
   public static Tensor of(Tensor matrix) {

@@ -6,7 +6,7 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;
 import ch.alpine.tensor.sca.Im;
 
-/* package */ class SqrtUp extends PolarDecompositionSqrt {
+class SqrtUp extends PolarDecompositionSqrt {
   /** @param matrix
    * @return */
   public static PolarDecompositionSqrt of(Tensor matrix) {

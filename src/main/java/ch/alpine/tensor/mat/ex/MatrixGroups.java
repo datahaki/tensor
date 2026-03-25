@@ -8,7 +8,7 @@ import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.num.BinaryPower;
 
 /** for the group of invertible, square matrices */
-/* package */ enum MatrixGroups implements GroupInterface<Tensor> {
+enum MatrixGroups implements GroupInterface<Tensor> {
   GENERAL_LINEAR {
     @Override // from GroupInterface
     public Tensor invert(Tensor matrix) {

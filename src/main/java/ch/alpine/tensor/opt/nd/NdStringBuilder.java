@@ -6,7 +6,7 @@ import java.util.List;
 
 import ch.alpine.tensor.Scalar;
 
-/* package */ class NdStringBuilder<V> implements NdVisitor<V> {
+class NdStringBuilder<V> implements NdVisitor<V> {
   private final List<String> list = new ArrayList<>();
   private int depth;
 

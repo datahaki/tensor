@@ -57,7 +57,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
   private final List<Integer> size;
   private final NavigableMap<Integer, Tensor> navigableMap;
 
-  /* package */ SparseArray(Scalar fallback, List<Integer> size, NavigableMap<Integer, Tensor> navigableMap) {
+  SparseArray(Scalar fallback, List<Integer> size, NavigableMap<Integer, Tensor> navigableMap) {
     this.fallback = fallback;
     this.size = size;
     this.navigableMap = navigableMap;

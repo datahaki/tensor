@@ -8,7 +8,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
 /** arithmetic of BooleanScalar is as for an element of the finite field F with cardinality |F|=2
  * multiplication is logical AND
  * addition is logical XOR */
-/* package */ final class BooleanScalar extends AbstractScalar implements //
+final class BooleanScalar extends AbstractScalar implements //
     Comparable<Scalar>, SqrtInterface, Serializable {
   /** instance with value true, toString() == "true" */
   public static final Scalar TRUE = new BooleanScalar(true);

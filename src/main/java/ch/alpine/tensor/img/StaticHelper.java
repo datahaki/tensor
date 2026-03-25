@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   /** there are only [0, 1, ..., 255] possible values for red, green, blue, and alpha.
    * We preallocate instances of these scalars in a lookup table to save memory and

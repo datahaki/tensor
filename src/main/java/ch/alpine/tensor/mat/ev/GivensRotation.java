@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat.ev;
 
 /** https://en.wikipedia.org/wiki/Givens_rotation */
-/* package */ interface GivensRotation {
+interface GivensRotation {
   /** multiplication from both sides
    * 
    * @param p

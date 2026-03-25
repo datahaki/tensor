@@ -4,7 +4,7 @@ package ch.alpine.tensor.opt.hun;
 import java.util.Set;
 import java.util.stream.Stream;
 
-/* package */ interface Bipartition {
+interface Bipartition {
   /** @param index to add as node */
   void add(int index);
 

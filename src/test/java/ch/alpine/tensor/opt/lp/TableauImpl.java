@@ -21,7 +21,7 @@ import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Sign;
 
-/* package */ class TableauImpl {
+class TableauImpl {
   public static Tensor of(Tensor c, Tensor A, Tensor b) {
     int m = A.length() - 1;
     int n = Unprotect.dimension1(A) - 1;

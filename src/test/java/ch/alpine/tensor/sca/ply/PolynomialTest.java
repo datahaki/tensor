@@ -168,7 +168,7 @@ class PolynomialTest {
    * does not give the multiplicative neutral element!
    * 
    * @return polynomial x -> x where units of domain and values are identical as this polynomial */
-  /* package */ static Polynomial series01(Tensor coeffs) {
+  static Polynomial series01(Tensor coeffs) {
     Polynomial polynomial = Polynomial.of(coeffs);
     Tensor c01 = coeffs.extract(0, 2);
     c01.set(Scalar::zero, 0);

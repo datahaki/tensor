@@ -13,7 +13,7 @@ import ch.alpine.tensor.ext.ReadLine;
 import ch.alpine.tensor.ext.ResourceData;
 
 /** functionality used in {@link Import} and {@link ResourceData} */
-/* package */ enum ImportHelper {
+enum ImportHelper {
   ;
   /** @param pathName
    * @param inputStream

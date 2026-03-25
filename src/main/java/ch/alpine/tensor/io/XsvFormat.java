@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Flatten;
 
 /** implementation for comma- or tab- separated values file format */
-/* package */ enum XsvFormat {
+enum XsvFormat {
   /** comma separated values format */
   CSV(',') {
     @Override

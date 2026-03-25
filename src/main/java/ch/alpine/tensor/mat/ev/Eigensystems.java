@@ -12,7 +12,7 @@ import ch.alpine.tensor.mat.NullSpace;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.ply.Polynomial;
 
-/* package */ enum Eigensystems {
+enum Eigensystems {
   ;
   /** @param matrix
    * @return */

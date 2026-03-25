@@ -5,7 +5,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Chop;
 
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   // 0.9999999999999999
   // .^....^....^....^.

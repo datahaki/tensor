@@ -21,7 +21,7 @@ import ch.alpine.tensor.red.Min;
  * All entries in the output array are unique.
  * 
  * https://en.wikipedia.org/wiki/Hungarian_algorithm */
-/* package */ class HungarianAlgorithm extends HungarianAlgorithmGraph {
+class HungarianAlgorithm extends HungarianAlgorithmGraph {
   private transient final HungarianAlgorithmTree hungarianAlgorithmTree;
   private transient final Set<Integer> freeX = new HashSet<>();
   private int iterations = 0;

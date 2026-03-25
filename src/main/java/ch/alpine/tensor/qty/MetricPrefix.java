@@ -6,7 +6,7 @@ import ch.alpine.tensor.sca.pow.Power;
 
 /** Reference:
  * https://en.wikipedia.org/wiki/Metric_prefix */
-/* package */ enum MetricPrefix {
+enum MetricPrefix {
   // YOTTA("Y", 24), //
   // ZETTA("Z", 21), //
   // EXA("E", 18), //

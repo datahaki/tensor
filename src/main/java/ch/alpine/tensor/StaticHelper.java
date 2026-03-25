@@ -12,7 +12,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   /** code from java.lang.Double */
   private static final String Digits = "(\\p{Digit}+)";

@@ -27,7 +27,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class ComplexScalarImpl extends MultiplexScalar implements ComplexScalar, //
+class ComplexScalarImpl extends MultiplexScalar implements ComplexScalar, //
     SqrtInterface, TrigonometryInterface, Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarGroups.MUL);
 

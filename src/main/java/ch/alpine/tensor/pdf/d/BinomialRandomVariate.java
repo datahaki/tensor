@@ -21,7 +21,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
  * 
  * @see BinomialDistribution
  * @author Claudio Ruch */
-/* package */ class BinomialRandomVariate implements Distribution, //
+class BinomialRandomVariate implements Distribution, //
     MeanInterface, VarianceInterface, Serializable {
   private final int n;
   private final Scalar p;

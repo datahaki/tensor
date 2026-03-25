@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.NInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
-/* package */ abstract class NBase implements ScalarUnaryOperator {
+abstract class NBase implements ScalarUnaryOperator {
   @Override
   public final Scalar apply(Scalar scalar) {
     if (scalar instanceof NInterface nInterface)

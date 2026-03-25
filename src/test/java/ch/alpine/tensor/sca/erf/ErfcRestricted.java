@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
  * RESTRICTED TO A BOUNDED INTERVAL AROUND ZERO
  * 
  * the purpose is only for comparison */
-/* package */ enum ErfcRestricted implements ScalarUnaryOperator {
+enum ErfcRestricted implements ScalarUnaryOperator {
   FUNCTION;
 
   private static final ScalarUnaryOperator POLYNOMIAL = Polynomial.of(Tensors.vector( //

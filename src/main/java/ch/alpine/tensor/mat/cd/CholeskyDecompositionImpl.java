@@ -16,7 +16,7 @@ import ch.alpine.tensor.qty.LenientAdd;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 
-/* package */ class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
+class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
   private final Chop chop;
   private final Tensor l;
   private final Tensor d;

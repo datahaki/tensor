@@ -10,7 +10,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Cache;
 
 /** contains routines for JetScalar */
-/* package */ enum JetScalars {
+enum JetScalars {
   ;
   private static final JetScalar EMPTY = new JetScalar(Tensors.empty());
   public static final Cache<Integer, JetScalar> CACHE_ONE = Cache.of(JetScalars::build_one, 16);

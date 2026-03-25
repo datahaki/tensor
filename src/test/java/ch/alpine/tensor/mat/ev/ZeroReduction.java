@@ -72,7 +72,7 @@ public final class ZeroReduction implements Consumer<Scalar> {
         "{count=" + cnt;
   }
 
-  /* package */ enum ZeroReductionCollector implements //
+  enum ZeroReductionCollector implements //
       Collector<Scalar, ZeroReduction, ZeroReduction> {
     INSTANCE;
 

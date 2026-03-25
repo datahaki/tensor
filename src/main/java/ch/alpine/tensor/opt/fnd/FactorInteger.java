@@ -64,7 +64,7 @@ public class FactorInteger {
 
   private static final BigInteger TWO = BigInteger.valueOf(2);
 
-  /* package */ static BigInteger factor(BigInteger n) {
+  static BigInteger factor(BigInteger n) {
     if (!n.testBit(0))
       return TWO;
     if (PrimeQ.of(n))

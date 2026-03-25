@@ -116,5 +116,5 @@ public enum RootsBounds {
    * 
    * @param monic vector
    * @return upper bound on absolute value of any root of given polynomial */
-  /* package */ abstract Scalar ofMonic(Tensor monic);
+  abstract Scalar ofMonic(Tensor monic);
 }

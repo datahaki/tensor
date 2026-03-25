@@ -27,7 +27,7 @@ import ch.alpine.tensor.sca.pow.Power;
  * for interior-point algorithms.
  * 
  * <p>https://en.wikipedia.org/wiki/Klee%E2%80%93Minty_cube */
-/* package */ class KleeMintyCube {
+class KleeMintyCube {
   private static Scalar coefficient(int i, int j) {
     if (i < j)
       return RealScalar.ZERO;

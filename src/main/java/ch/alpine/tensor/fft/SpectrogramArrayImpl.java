@@ -9,7 +9,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
 /** @param process
  * @param slidingWindow
  * @param window may be null */
-/* package */ record SpectrogramArrayImpl( //
+record SpectrogramArrayImpl( //
     TensorUnaryOperator process, SlidingWindow slidingWindow, ScalarUnaryOperator window) implements SpectrogramArray {
   @Override
   public SpectrogramArray config(Integer windowLength, Integer offset) {

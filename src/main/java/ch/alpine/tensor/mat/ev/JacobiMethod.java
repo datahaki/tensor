@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Conjugate;
 
 /** vector of eigenvalues has strictly zero imaginary part */
-/* package */ abstract class JacobiMethod {
+abstract class JacobiMethod {
   protected static final Scalar DBL_EPSILON = DoubleScalar.of(Math.ulp(1.0));
   private static final Scalar HUNDRED = DoubleScalar.of(100);
   // TODO TENSOR MAT reintroduce adapted phase, but cap at 4?

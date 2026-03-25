@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class ClipPoint extends ClipInterval {
+class ClipPoint extends ClipInterval {
   public ClipPoint(Scalar value, Scalar width) {
     super(value, value, width);
   }

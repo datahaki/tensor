@@ -66,7 +66,7 @@ public enum ImageFormat {
     return of(tensor, BufferedImage.TYPE_INT_ARGB);
   }
 
-  /* package */ static BufferedImage _of(Tensor tensor, Extension extension) {
+  static BufferedImage _of(Tensor tensor, Extension extension) {
     return of(tensor, extension.colorType());
   }
 
@@ -74,7 +74,7 @@ public enum ImageFormat {
   /** @param tensor
    * @param imageType fallback
    * @return */
-  /* package */ static BufferedImage of(Tensor tensor, int imageType) {
+  static BufferedImage of(Tensor tensor, int imageType) {
     List<Integer> dims = Dimensions.of(tensor);
     int width = dims.get(1);
     int height = dims.get(0);

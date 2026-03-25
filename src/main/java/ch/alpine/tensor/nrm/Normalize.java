@@ -79,7 +79,7 @@ public class Normalize implements TensorUnaryOperator {
   /** @param vector
    * @param scalar equals to tensorScalarFunction.apply(vector)
    * @return */
-  /* package */ Tensor normalize(Tensor vector, Scalar scalar) {
+  Tensor normalize(Tensor vector, Scalar scalar) {
     vector = vector.divide(scalar); // eliminate common Unit if present
     scalar = tensorScalarFunction.apply(vector); // for verification
     Scalar error_next = Abs.between(scalar, scalar.one()); // error

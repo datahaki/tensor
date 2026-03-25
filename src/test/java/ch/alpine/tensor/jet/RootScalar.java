@@ -40,7 +40,7 @@ public class RootScalar extends MultiplexScalar implements //
   private final Scalar im;
   private final Scalar ba;
 
-  /* package */ RootScalar(Scalar re, Scalar im, Scalar ba) {
+  RootScalar(Scalar re, Scalar im, Scalar ba) {
     this.re = re;
     this.im = im;
     this.ba = ba;

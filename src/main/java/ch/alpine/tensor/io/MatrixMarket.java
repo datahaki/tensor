@@ -17,7 +17,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.spa.SparseArray;
 
-/* package */ enum MatrixMarket {
+enum MatrixMarket {
   ;
   private enum Symmetry {
     GENERAL,

@@ -12,7 +12,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
 
 /** iteration to converge to sqrt of matrix */
-/* package */ class DenmanBeavers implements MatrixSqrt, Serializable {
+class DenmanBeavers implements MatrixSqrt, Serializable {
   private static final int MAX_ITERATIONS = 100;
   private static final Scalar HALF = RealScalar.of(0.5);
   // ---

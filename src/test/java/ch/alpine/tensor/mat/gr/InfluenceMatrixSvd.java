@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
 /** {@link GramSchmidt} supersedes InfluenceMatrixSvd */
-/* package */ class InfluenceMatrixSvd {
+class InfluenceMatrixSvd {
   /** matrix u is svd.getU() with columns associated to non-zero singular value
    * u may be of the form {{}, {}, ..., {}} */
   private final Tensor u;

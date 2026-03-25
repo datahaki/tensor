@@ -13,7 +13,7 @@ import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.sca.Clips;
 
-/* package */ class Linear extends BaseResamplingMethod {
+class Linear extends BaseResamplingMethod {
   @Override // from ResamplingMethod
   public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
     Entry<Scalar, Tensor> e_lo = navigableMap.floorEntry(x);

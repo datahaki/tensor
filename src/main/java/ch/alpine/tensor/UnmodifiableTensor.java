@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  * are overloaded.
  * 
  * <p>The copy {@link UnmodifiableTensor#copy()} is modifiable. */
-/* package */ class UnmodifiableTensor extends TensorImpl {
+class UnmodifiableTensor extends TensorImpl {
   /** @param list to be guaranteed non-null */
   public UnmodifiableTensor(List<Tensor> list) {
     super(list);

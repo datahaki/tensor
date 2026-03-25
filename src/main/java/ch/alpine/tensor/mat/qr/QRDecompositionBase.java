@@ -10,7 +10,7 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 
-/* package */ abstract class QRDecompositionBase implements QRDecomposition {
+abstract class QRDecompositionBase implements QRDecomposition {
   @Override // from QRDecomposition
   public final Tensor getQ() {
     return ConjugateTranspose.of(getQConjugateTranspose()); // n x min(n, m)

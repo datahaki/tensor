@@ -16,7 +16,7 @@ import ch.alpine.tensor.nrm.Vector2Norm;
 /** decomposition Q.R = A with Det[Q] == +1
  * householder with even number of reflections
  * reproduces example on wikipedia */
-/* package */ class QRDecompositionImpl extends QRDecompositionBase implements Serializable {
+class QRDecompositionImpl extends QRDecompositionBase implements Serializable {
   private final int m;
   private final Tensor r;
   private final Tensor qInv;

@@ -8,7 +8,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.itp.MitchellNetravaliKernel;
 
 /** not interpolatory */
-/* package */ class MitchellNetravaliFilter extends ParameterizedWindow {
+class MitchellNetravaliFilter extends ParameterizedWindow {
   private static final Scalar _4 = RealScalar.of(4);
   public static final ScalarUnaryOperator FUNCTION = of(Rational.THIRD);
 

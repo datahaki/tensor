@@ -18,7 +18,7 @@ import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.nrm.Matrix2Norm;
 import ch.alpine.tensor.sca.exp.Log;
 
-/* package */ enum MatrixLogs {
+enum MatrixLogs {
   ;
   /** @param matrix of size 1 x 1
    * @return */

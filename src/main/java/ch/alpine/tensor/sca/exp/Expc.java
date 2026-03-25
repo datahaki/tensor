@@ -27,7 +27,7 @@ public enum Expc implements ScalarUnaryOperator {
         : evaluate(mu);
   }
 
-  /* package */ static Scalar evaluate(Scalar mu) {
+  static Scalar evaluate(Scalar mu) {
     return Exp.FUNCTION.apply(mu).subtract(RealScalar.ONE).divide(mu);
   }
 }

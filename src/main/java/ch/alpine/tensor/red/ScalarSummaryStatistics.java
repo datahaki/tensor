@@ -132,7 +132,7 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
         ", max=" + getMax() + "}";
   }
 
-  /* package */ enum ScalarSummaryStatisticsCollector implements //
+  enum ScalarSummaryStatisticsCollector implements //
       Collector<Scalar, ScalarSummaryStatistics, ScalarSummaryStatistics> {
     INSTANCE;
 

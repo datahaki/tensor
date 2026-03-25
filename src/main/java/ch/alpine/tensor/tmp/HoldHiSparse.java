@@ -10,7 +10,7 @@ import java.util.Set;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
-/* package */ class HoldHiSparse extends HoldHi {
+class HoldHiSparse extends HoldHi {
   @Override // from BaseResamplingMethod
   public void insert(NavigableMap<Scalar, Tensor> navigableMap, Scalar key, Tensor value) {
     Entry<Scalar, Tensor> entry = navigableMap.ceilingEntry(key);

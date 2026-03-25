@@ -11,7 +11,7 @@ import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.N;
 
-/* package */ enum CsvHelper implements ScalarUnaryOperator {
+enum CsvHelper implements ScalarUnaryOperator {
   FUNCTION;
 
   private static final Scalar EMPTY = StringScalar.of("\"\"");

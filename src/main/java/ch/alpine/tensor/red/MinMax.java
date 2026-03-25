@@ -54,7 +54,7 @@ public final class MinMax implements Consumer<Scalar> {
   private Scalar min = null;
   private Scalar max = null;
 
-  /* package */ MinMax() {
+  MinMax() {
     // ---
   }
 
@@ -91,7 +91,7 @@ public final class MinMax implements Consumer<Scalar> {
         : Clips.interval(min, max);
   }
 
-  /* package */ enum MinMaxCollector implements Collector<Scalar, MinMax, MinMax> {
+  enum MinMaxCollector implements Collector<Scalar, MinMax, MinMax> {
     INSTANCE;
 
     @Override // from Collector

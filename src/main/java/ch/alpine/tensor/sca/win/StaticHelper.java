@@ -10,7 +10,7 @@ import ch.alpine.tensor.sca.tri.Cos;
 
 /** helper functions to evaluate window functions
  * reviewed */
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   public static final Clip SEMI = Clips.absolute(Rational.HALF);
   // ---

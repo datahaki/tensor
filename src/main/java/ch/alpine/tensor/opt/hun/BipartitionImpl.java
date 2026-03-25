@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-/* package */ class BipartitionImpl implements Bipartition {
+class BipartitionImpl implements Bipartition {
   public static Bipartition empty(int dim) {
     return new BipartitionImpl(IntStream.range(0, dim).boxed());
   }

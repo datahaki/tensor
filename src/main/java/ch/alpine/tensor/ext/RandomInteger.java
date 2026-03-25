@@ -40,7 +40,7 @@ public enum RandomInteger {
    * BigInteger.
    * @throws IllegalArgumentException {@code numBits} is negative.
    * @see #bitLength() */
-  /* package */ static BigInteger random(int numBits, RandomGenerator randomGenerator) {
+  static BigInteger random(int numBits, RandomGenerator randomGenerator) {
     if (numBits < 0)
       throw new IllegalArgumentException("numBits must be non-negative");
     if (numBits == 0)

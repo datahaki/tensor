@@ -275,7 +275,7 @@ class RootsTest {
    *
    * @param b linear coefficient
    * @param d cubic coefficient */
-  /* package */ record InverseSteerCubic(Scalar b, Scalar d) implements ScalarUnaryOperator {
+  record InverseSteerCubic(Scalar b, Scalar d) implements ScalarUnaryOperator {
     @Override
     public Scalar apply(Scalar y) {
       return Roots.of(Tensors.of(y.negate(), b, RealScalar.ZERO, d)).Get(1);

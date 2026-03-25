@@ -6,7 +6,7 @@ import java.io.Serializable;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;
 
-/* package */ abstract class PolarDecompositionSqrt extends PolarDecompositionBase implements Serializable {
+abstract class PolarDecompositionSqrt extends PolarDecompositionBase implements Serializable {
   final Tensor matrix;
   final MatrixSqrt matrixSqrt;
 

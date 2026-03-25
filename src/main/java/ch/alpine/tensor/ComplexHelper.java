@@ -8,7 +8,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** auxiliary functions used in {@link ComplexScalarImpl} */
-/* package */ enum ComplexHelper {
+enum ComplexHelper {
   ;
   /** complex division with emphasis on numerical accuracy
    * 

@@ -10,7 +10,7 @@ import ch.alpine.tensor.io.MathematicaFormat;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class ClipInterval implements Clip {
+class ClipInterval implements Clip {
   private final Scalar min;
   private final Scalar max;
   private final Scalar width;

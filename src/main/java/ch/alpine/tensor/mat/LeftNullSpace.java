@@ -33,7 +33,7 @@ public enum LeftNullSpace {
 
   /** @param matrix with exact precision
    * @return */
-  /* package */ static Tensor usingRowReduce(Tensor matrix) {
+  static Tensor usingRowReduce(Tensor matrix) {
     ExactTensorQ.require(matrix);
     return usingRowReduce(matrix, Pivots.FIRST_NON_ZERO);
   }

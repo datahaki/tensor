@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 import ch.alpine.tensor.io.StringScalar;
 
-/* package */ enum TensorParser {
+enum TensorParser {
   ;
   private static final char COMMA = ',';
 

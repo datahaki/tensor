@@ -60,7 +60,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
   private final BigDecimal value;
   private final int precision;
 
-  /* package */ DecimalScalar(BigDecimal value, int precision) {
+  DecimalScalar(BigDecimal value, int precision) {
     this.value = value;
     this.precision = precision;
   }

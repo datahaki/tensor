@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Jpeg;
 import ch.alpine.tensor.ext.PathName;
 
-/* package */ enum ExportHelper {
+enum ExportHelper {
   ;
   /** @param filename
    * @param tensor

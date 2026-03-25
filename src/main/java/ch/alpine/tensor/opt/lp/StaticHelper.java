@@ -8,7 +8,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Sign;
 
 /** reviewed */
-/* package */ enum StaticHelper {
+enum StaticHelper {
   ;
   /** @param vector
    * @return true if all entries in vector are non-negative */

@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-/* package */ class BchSeries8 extends BchSeries {
+class BchSeries8 extends BchSeries {
   private static final Scalar P1_2 = Rational.of(1, 2);
   private static final Scalar P1_12 = Rational.of(1, 12);
   private static final Scalar N1_12 = Rational.of(-1, 12);

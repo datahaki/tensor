@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 
-/* package */ final class None extends BaseResamplingMethod {
+final class None extends BaseResamplingMethod {
   @Override // from ResamplingMethod
   public Tensor evaluate(NavigableMap<Scalar, Tensor> navigableMap, Scalar x) {
     return Objects.requireNonNull(navigableMap.get(x));

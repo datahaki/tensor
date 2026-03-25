@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.exp.Log;
  * 
  * "A Precision Approximation of the Gamma Function"
  * by C. Lanczos, 1964 */
-/* package */ enum LogGammaRestricted implements ScalarUnaryOperator {
+enum LogGammaRestricted implements ScalarUnaryOperator {
   FUNCTION;
 
   private static final Tensor COEFFS = Tensors.vector( //

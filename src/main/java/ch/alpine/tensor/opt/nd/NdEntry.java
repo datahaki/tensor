@@ -11,7 +11,7 @@ public class NdEntry<V> implements Serializable {
   private final Tensor location;
   private final V value;
 
-  /* package */ NdEntry(Tensor location, V value) {
+  NdEntry(Tensor location, V value) {
     this.location = location;
     this.value = value;
   }
