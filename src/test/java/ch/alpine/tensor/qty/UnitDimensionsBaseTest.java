@@ -11,6 +11,14 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class UnitDimensionsBaseTest {
   @Test
+  void test() {
+    Scalar a = Quantity.of(300, "m");
+    Scalar b = Quantity.of(1, "km");
+    Scalar c = a.add(b);
+    assertEquals(c, Quantity.of(1300, "m"));
+  }
+
+  @Test
   void testWatt() {
     Scalar scalar = UnitDimensionsBase.SI.plus(Quantity.of(3, "MW"), Quantity.of(100, "kW"));
     assertEquals(scalar, Quantity.of(3100, "kW"));
