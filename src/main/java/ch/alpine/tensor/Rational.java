@@ -190,7 +190,7 @@ public class Rational extends AbstractRealScalar implements //
       int expInt = optionalInt.orElseThrow();
       return 0 <= expInt //
           ? new Rational(num.pow(expInt), den.pow(expInt))
-          : simplify(den.pow(-expInt), num.pow(-expInt));
+          : of(den.pow(-expInt), num.pow(-expInt)); // TODO gcd is unnecessary
     }
     return super.power(exponent);
   }
