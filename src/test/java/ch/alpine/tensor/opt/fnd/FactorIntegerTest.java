@@ -41,8 +41,8 @@ class FactorIntegerTest {
 
   @Test
   void testTwo() {
-    Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.valueOf(2));
-    assertEquals(map, Collections.singletonMap(BigInteger.valueOf(2), 1));
+    Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.TWO);
+    assertEquals(map, Collections.singletonMap(BigInteger.TWO, 1));
   }
 
   @Test

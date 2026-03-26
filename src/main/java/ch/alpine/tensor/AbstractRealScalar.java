@@ -98,7 +98,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   public Scalar power(Scalar exponent) {
     if (Scalars.isZero(this)) {
       if (Scalars.isZero(exponent))
-        return ONE; // Mathematica evaluates 0^0 as Indeterminate
+        return one(); // Mathematica evaluates 0^0 as Indeterminate
       if (exponent instanceof ComplexEmbedding complexEmbedding)
         if (Sign.isPositive(complexEmbedding.real()))
           return zero();
@@ -109,7 +109,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
       if (result == result) // !Double::isNaN
         return DoubleScalar.of(result);
     }
-    return Exp.FUNCTION.apply(exponent.multiply(Log.FUNCTION.apply(this)));
+    return Exp.FUNCTION.apply(Log.FUNCTION.apply(this).multiply(exponent));
   }
 
   @Override // from SignInterface

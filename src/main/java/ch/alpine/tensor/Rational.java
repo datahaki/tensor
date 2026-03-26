@@ -189,8 +189,8 @@ public class Rational extends AbstractRealScalar implements //
     if (optionalInt.isPresent()) {
       int expInt = optionalInt.orElseThrow();
       return 0 <= expInt //
-          ? simplify(num.pow(expInt), den.pow(expInt))
-          : Rational.of(den.pow(-expInt), num.pow(-expInt)); // num could be zero
+          ? new Rational(num.pow(expInt), den.pow(expInt))
+          : simplify(den.pow(-expInt), num.pow(-expInt));
     }
     return super.power(exponent);
   }
@@ -215,7 +215,7 @@ public class Rational extends AbstractRealScalar implements //
     if (sqrtnum.isPresent()) {
       Optional<BigInteger> sqrtden = StaticHelper.sqrt(denominator());
       if (sqrtden.isPresent()) {
-        Scalar sqrt = Rational.of(sqrtnum.orElseThrow(), sqrtden.orElseThrow());
+        Scalar sqrt = of(sqrtnum.orElseThrow(), sqrtden.orElseThrow());
         return isNonNegative ? sqrt : ComplexScalarImpl.of(ZERO, sqrt);
       }
     }

@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 
-import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -39,7 +38,7 @@ public enum Power {
    * @param exponent
    * @return scalar ^ exponent */
   public static Scalar of(Scalar scalar, Scalar exponent) {
-    return function(exponent).apply(scalar);
+    return evaluate(scalar, exponent);
   }
 
   /** @param scalar
@@ -63,18 +62,26 @@ public enum Power {
     return of(RealScalar.of(number), RealScalar.of(exponent));
   }
 
-  // ---
-  private static final BigInteger TWO = BigInteger.valueOf(2);
-
   /** @param exponent
    * @return function that maps a scalar to scalar ^ exponent */
   public static ScalarUnaryOperator function(Scalar exponent) {
-    if (exponent.equals(RealScalar.ONE))
-      return s -> s;
-    // TODO TENSOR exponents of the form 1/4, etc. could also be valid
-    if (exponent instanceof Rational rational && //
-        rational.denominator().equals(TWO))
-      return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rational.numerator()));
+    // if (exponent instanceof Rational rational) {
+    // BigInteger num = rational.numerator();
+    // BigInteger den = rational.denominator();
+    // if (den.equals(BigInteger.ONE)) {
+    // if (num.equals(BigInteger.ONE))
+    // return s -> s;
+    // if (num.equals(BigInteger.ONE.negate()))
+    // return s -> s.reciprocal();
+    // if (num.equals(BigInteger.TWO))
+    // return s -> s.multiply(s);
+    // if (num.equals(BigInteger.TWO.negate()))
+    // return s -> s.multiply(s).reciprocal();
+    // }
+    // // TODO TENSOR exponents of the form 1/4, etc. could also be valid
+    // if (den.equals(BigInteger.TWO))
+    // return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rational.numerator()));
+    // }
     Objects.requireNonNull(exponent);
     return scalar -> evaluate(scalar, exponent);
   }

@@ -55,7 +55,7 @@ class CategoricalDistributionTest {
     CategoricalDistribution categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1, 5));
     assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(0)), Rational.of(0, 1));
     assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(1)), Rational.of(9, 15));
-    assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(2)), Rational.of(1, 15));
+    assertEquals(categoricalDistribution.p_equals(BigInteger.TWO), Rational.of(1, 15));
     assertEquals(categoricalDistribution.p_equals(BigInteger.valueOf(3)), Rational.of(5, 15));
   }
 

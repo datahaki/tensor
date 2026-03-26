@@ -62,11 +62,9 @@ public class FactorInteger {
     }
   }
 
-  private static final BigInteger TWO = BigInteger.valueOf(2);
-
   static BigInteger factor(BigInteger n) {
     if (!n.testBit(0))
-      return TWO;
+      return BigInteger.TWO;
     if (PrimeQ.of(n))
       return n;
     Distribution distribution = DiscreteUniformDistribution.forArray(n);
