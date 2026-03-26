@@ -14,6 +14,7 @@ import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.sca.Chop;
 
 class SqrtPuTest {
   @Test
@@ -37,7 +38,7 @@ class SqrtPuTest {
   void testComplex(int n) {
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n);
     PolarDecompositionSqrt sqrtPu = SqrtPu.of(matrix);
-    UnitaryMatrixQ.INSTANCE.require(sqrtPu.getUnitary());
+    new UnitaryMatrixQ(Chop._08).require(sqrtPu.getUnitary());
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));
   }
 
@@ -46,7 +47,7 @@ class SqrtPuTest {
   void testComplex1(int n) {
     Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, n + 2);
     PolarDecompositionSqrt sqrtPu = SqrtPu.of(matrix);
-    UnitaryMatrixQ.INSTANCE.require(sqrtPu.getUnitary());
+    new UnitaryMatrixQ(Chop._08).require(sqrtPu.getUnitary());
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));
   }
 }
