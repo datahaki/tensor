@@ -59,7 +59,7 @@ public record LagrangeMultiplier(int n, Tensor matrix) implements Serializable {
   /** @param linear matrix of dimensions d x n
    * @return */
   public static LagrangeMultiplier id_t(Tensor linear_t) {
-    // TODO unfinished business
+    // TODO TENSOR unfinished business
     return id(Transpose.of(linear_t));
   }
 
@@ -98,7 +98,7 @@ public record LagrangeMultiplier(int n, Tensor matrix) implements Serializable {
    * 
    * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
   public Tensor usingSvd(Tensor target, Tensor rhs) {
-    // FIXME use LinSolve.any !?
+    // FIXME TENSOR use LinSolve.any !?
     return Tensor.of(LeastSquares.usingSvd(matrix, b(target, rhs)).stream().limit(n));
   }
 

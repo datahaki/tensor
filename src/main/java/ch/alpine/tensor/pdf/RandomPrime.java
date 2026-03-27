@@ -41,7 +41,7 @@ public class RandomPrime implements Distribution, Serializable {
   @Override
   public Scalar randomVariate(RandomGenerator randomGenerator) {
     Scalar count = width.zero();
-    while (Scalars.lessEquals(count, width)) { // TODO not a good choice
+    while (Scalars.lessEquals(count, width)) { // TODO TENSOR not a good choice
       Scalar scalar = RandomVariate.of(distribution, randomGenerator);
       if (PrimeQ.of(scalar))
         return scalar;

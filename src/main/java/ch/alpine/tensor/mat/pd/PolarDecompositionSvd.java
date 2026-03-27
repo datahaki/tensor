@@ -47,7 +47,7 @@ class PolarDecompositionSvd extends PolarDecompositionBase implements Serializab
 
   @Override // from PolarDecomposition
   public Tensor getPositiveSemidefinite() {
-    // TODO can this be simplified?
+    // TODO TENSOR can this be simplified?
     return MatrixDotTranspose.of(Times.operator(svd.values()).slash(basis), basis);
   }
 

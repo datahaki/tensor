@@ -54,7 +54,7 @@ public class RootScalar extends MultiplexScalar implements //
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
     if (scalar instanceof RealScalar)
-      // TODO ASCONA ALG check for exact precision
+      // TODO TENSOR ALG check for exact precision
       return new RootScalar(re.multiply(scalar), im.multiply(scalar), ba);
     if (scalar instanceof RootScalar rootScalar) {
       if (ba.equals(rootScalar.ba))

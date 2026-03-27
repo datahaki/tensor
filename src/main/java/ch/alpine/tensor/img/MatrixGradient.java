@@ -20,6 +20,7 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.ply.TripleReduceExtrapolation;
 
+// TODO TENSOR document
 public record MatrixGradient(Tensor dx, Tensor dy) implements Serializable {
   private static final TripleReduceExtrapolation INSTANCE = new TripleReduceExtrapolation() {
     @Override
@@ -29,7 +30,7 @@ public record MatrixGradient(Tensor dx, Tensor dy) implements Serializable {
 
     @Override
     protected Tensor petite(Tensor matrix) {
-      // TODO could be improved
+      // TODO TENSOR could be improved
       return matrix.maps(Scalar::zero);
     }
   };

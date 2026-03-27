@@ -51,7 +51,7 @@ class InverseCDFTest {
       LaplaceDistribution.of(-2.3, 2), //
       LevyDistribution.of(-2.3, 1.2), //
       LogisticDistribution.of(-1.2, 2), //
-      // TODO
+      // TODO TENSOR
       // MaxwellDistribution.of(0.4), //
       // MaxwellDistribution.of(1.4), //
       NakagamiDistribution.of(0.3, 0.4), //

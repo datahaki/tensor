@@ -16,7 +16,7 @@ class HalfNormalDistribution extends AbstractContinuousDistribution implements S
     this.theta = theta;
   }
 
-  // TODO Auto-generated method stub
+  // TODO TENSOR Auto-generated method stub
   @Override
   public Scalar at(Scalar x) {
     return null;

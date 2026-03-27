@@ -86,7 +86,7 @@ public class Rationalize implements ScalarUnaryOperator {
    * @return approximation of given scalar as {@link Rational} with denominator bounded by max */
   @Override
   public Scalar apply(Scalar scalar) {
-    // TODO write as 2x2 matrices
+    // TODO TENSOR write as 2x2 matrices
     Scalar m00 = scalar.one(); // initialize matrix
     Scalar m01 = scalar.zero();
     Scalar m10 = scalar.zero();
