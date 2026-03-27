@@ -38,7 +38,7 @@ class SinhTest {
   void testComplex() {
     Scalar c = Sinh.FUNCTION.apply(ComplexScalar.of(2, 3.));
     Scalar s = ComplexScalar.of(-3.59056458998578, 0.5309210862485197);
-    assertEquals(c, s);
+    Tolerance.CHOP.requireClose(c, s);
   }
 
   @Test

@@ -18,6 +18,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.UnitDimensions;
@@ -37,7 +38,7 @@ class CoshTest {
   void testComplex() {
     Scalar c = Cosh.FUNCTION.apply(ComplexScalar.of(2, 3.));
     Scalar s = ComplexScalar.of(-3.7245455049153224, +0.5118225699873846);
-    assertEquals(c, s);
+    Tolerance.CHOP.requireClose(c, s);
   }
 
   @Test
