@@ -59,10 +59,10 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   /** @param clip
    * @return uniform distribution over the half-open interval [clip.min(), clip.max())
-   * @throws Exception if {@link Clip#width()} is not finite
+   * @throws Exception if {@link Clip#length()} is not finite
    * @see FiniteScalarQ */
   public static Distribution of(Clip clip) {
-    Scalar width = clip.width();
+    Scalar width = clip.length();
     if (Scalars.isZero(width))
       return DiracDeltaDistribution.of(clip.min());
     FiniteScalarQ.require(width);
@@ -126,7 +126,7 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   @Override // from PDF
   public final Scalar at(Scalar x) {
-    Scalar inverse = clip.width().reciprocal();
+    Scalar inverse = clip.length().reciprocal();
     return x.one().multiply(clip.isInside(x) ? inverse : inverse.zero());
   }
 
@@ -137,7 +137,7 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
-    return p.multiply(clip.width()).add(clip.min());
+    return p.multiply(clip.length()).add(clip.min());
   }
 
   @Override // from MeanInterface
@@ -147,12 +147,12 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   @Override // from VarianceInterface
   public final Scalar variance() {
-    return clip.width().multiply(clip.width()).multiply(_1_12);
+    return clip.length().multiply(clip.length()).multiply(_1_12);
   }
 
   @Override // from StandardDeviationInterface
   public final Scalar standardDeviation() {
-    return clip.width().multiply(Sqrt.FUNCTION.apply(_1_12));
+    return clip.length().multiply(Sqrt.FUNCTION.apply(_1_12));
   }
 
   @Override // from KurtosisInterface
@@ -166,8 +166,8 @@ public class UniformDistribution extends AbstractContinuousDistribution //
     // for k uneven 0
     // consistent with Polynomial # moment
     return order % 2 == 0 //
-        ? Power.of(clip.width().multiply(Rational.HALF), order).divide(RealScalar.of(order + 1))
-        : Power.of(clip.width().zero(), order);
+        ? Power.of(clip.length().multiply(Rational.HALF), order).divide(RealScalar.of(order + 1))
+        : Power.of(clip.length().zero(), order);
   }
 
   @Override // from Object

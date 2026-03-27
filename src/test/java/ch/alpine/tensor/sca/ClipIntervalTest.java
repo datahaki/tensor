@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 
@@ -25,6 +26,7 @@ class ClipIntervalTest {
   @Test
   void testEqualsQuantity() {
     Clip c1 = Clips.interval(3, 7);
+    assertTrue(c1.isNonDegenerate());
     Clip c2 = Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "m"));
     assertNotEquals(c1, c2);
     assertNotEquals(c2, c1);
@@ -58,7 +60,7 @@ class ClipIntervalTest {
     DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30);
     DateTime dt2 = DateTime.of(2020, 12, 21, 4, 30);
     Clip clip = Clips.interval(dt1, dt2);
-    assertEquals(clip.width(), Quantity.of(86400, "s"));
+    assertEquals(clip.length(), Quantity.of(86400, "s"));
   }
 
   @Test

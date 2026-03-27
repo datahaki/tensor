@@ -67,7 +67,10 @@ public interface Clip extends ScalarUnaryOperator {
   Scalar max();
 
   /** @return difference between upper and lower bound of clip interval */
-  Scalar width();
+  Scalar length();
+
+  /** @return whether length is non-zero */
+  boolean isNonDegenerate();
 
   @Override // from Object
   int hashCode();

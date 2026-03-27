@@ -96,7 +96,7 @@ class ClipTest {
     assertEquals(clip.rescale(Quantity.of(10, "m")), RealScalar.ONE);
     assertEquals(clip.min(), min);
     assertEquals(clip.max(), max);
-    assertEquals(clip.width(), Quantity.of(5, "m"));
+    assertEquals(clip.length(), Quantity.of(5, "m"));
   }
 
   @Test
@@ -107,7 +107,7 @@ class ClipTest {
     assertEquals(clip.rescale(RealScalar.of(20)), RealScalar.of(3 / 4.0));
     assertEquals(clip.min(), RealScalar.of(5));
     assertEquals(clip.max(), RealScalar.of(25));
-    assertEquals(clip.width(), RealScalar.of(20));
+    assertEquals(clip.length(), RealScalar.of(20));
   }
 
   @Test
@@ -115,7 +115,7 @@ class ClipTest {
     Clip clip = Clips.interval(3, 5);
     assertEquals(clip.min(), RealScalar.of(3));
     assertEquals(clip.max(), RealScalar.of(5));
-    assertEquals(clip.width(), RealScalar.of(2));
+    assertEquals(clip.length(), RealScalar.of(2));
   }
 
   @Test

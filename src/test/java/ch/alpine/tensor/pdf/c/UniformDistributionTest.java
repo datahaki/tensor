@@ -73,7 +73,7 @@ class UniformDistributionTest {
       Scalar value = pdf.at(clip.min());
       Tensor coeffs = Tensors.of(value, value.multiply(Unprotect.zero_negateUnit(clip.min())));
       Polynomial polynomial = Polynomial.of(coeffs);
-      Clip center = Clips.absolute(clip.width().multiply(Rational.HALF));
+      Clip center = Clips.absolute(clip.length().multiply(Rational.HALF));
       Scalar moment = polynomial.moment(order, center);
       assertEquals(uni, moment);
     }

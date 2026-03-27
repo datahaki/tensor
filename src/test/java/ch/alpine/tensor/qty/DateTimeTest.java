@@ -181,7 +181,7 @@ class DateTimeTest {
     Scalar ldtStart = DateTime.of(year, 1, 1, 0, 0);
     Scalar ldtEnd = DateTime.of(year, 12, 31, 0, 0);
     Clip clip = Clips.interval(ldtStart, ldtEnd);
-    assertEquals(clip.width(), Quantity.of(31449600, "s"));
+    assertEquals(clip.length(), Quantity.of(31449600, "s"));
     Clips.positive(ldtEnd.subtract(ldtStart)).requireInside(Quantity.of(234445, "s"));
   }
 

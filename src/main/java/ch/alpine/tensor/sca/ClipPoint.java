@@ -18,4 +18,9 @@ class ClipPoint extends ClipInterval {
     apply(scalar);
     return RealScalar.ZERO;
   }
+
+  @Override
+  public boolean isNonDegenerate() {
+    return false;
+  }
 }

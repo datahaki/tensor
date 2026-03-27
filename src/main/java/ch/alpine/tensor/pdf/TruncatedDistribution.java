@@ -29,13 +29,13 @@ public class TruncatedDistribution extends AbstractContinuousDistribution implem
    * @throws if CDF of given distribution is not monotonous over given interval */
   public static Distribution of(Distribution distribution, Clip clip) {
     Objects.requireNonNull(distribution);
-    if (Scalars.isZero(clip.width()))
+    if (Scalars.isZero(clip.length()))
       return DiracDeltaDistribution.of(clip.min());
     if (distribution instanceof UnivariateDistribution univariateDistribution) {
       Clip clip_cdf = Clips.interval( //
           univariateDistribution.p_lessThan(clip.min()), //
           univariateDistribution.p_lessEquals(clip.max()));
-      if (Scalars.isZero(clip_cdf.width()))
+      if (Scalars.isZero(clip_cdf.length()))
         throw new IllegalArgumentException();
       return new TruncatedDistribution(univariateDistribution, clip, clip_cdf);
     }
@@ -63,7 +63,7 @@ public class TruncatedDistribution extends AbstractContinuousDistribution implem
   public Scalar at(Scalar x) {
     Scalar p = univariateDistribution.at(x);
     return clip.isInside(x) //
-        ? p.divide(clip_cdf.width())
+        ? p.divide(clip_cdf.length())
         : p.zero();
   }
 

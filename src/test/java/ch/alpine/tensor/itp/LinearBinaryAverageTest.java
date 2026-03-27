@@ -7,12 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.DateTime;
 
 class LinearBinaryAverageTest {
@@ -29,6 +32,14 @@ class LinearBinaryAverageTest {
     Tensor split = LinearBinaryAverage.INSTANCE.split(dt1, dt2, Rational.of(1, 3));
     assertInstanceOf(DateTime.class, split);
     assertEquals(LinearBinaryAverage.INSTANCE.split(dt1, dt2, Rational.of(1, 1)), dt2);
+  }
+
+  @Test
+  void testNaNInf() {
+    Tolerance.CHOP.requireClose(Pi.VALUE, LinearBinaryAverage.INSTANCE.split( //
+        DoubleScalar.INDETERMINATE, Pi.VALUE, RealScalar.of(1.0)));
+    Tolerance.CHOP.requireClose(Pi.VALUE, LinearBinaryAverage.INSTANCE.split( //
+        DoubleScalar.POSITIVE_INFINITY, Pi.VALUE, RealScalar.of(1.0)));
   }
 
   @Test

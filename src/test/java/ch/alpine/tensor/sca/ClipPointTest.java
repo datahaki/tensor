@@ -22,6 +22,7 @@ class ClipPointTest {
   @Test
   void testZeroWidth() {
     Clip clip = Clips.interval(2, 2);
+    assertFalse(clip.isNonDegenerate());
     assertEquals(clip.apply(RealScalar.of(3)), RealScalar.of(2));
     assertTrue(clip.isInside(RealScalar.of(2)));
     assertFalse(clip.isInside(RealScalar.of(-2)));
@@ -44,8 +45,8 @@ class ClipPointTest {
     Scalar value = Quantity.of(3, "s");
     Clip clip = Clips.interval(value, value);
     assertEquals(clip.apply(Quantity.of(2, "s")), value);
-    assertEquals(clip.width(), Quantity.of(0, "s"));
-    assertNotEquals(clip.width(), RealScalar.ZERO);
+    assertEquals(clip.length(), Quantity.of(0, "s"));
+    assertNotEquals(clip.length(), RealScalar.ZERO);
     assertEquals(clip.requireInside(value), value);
   }
 

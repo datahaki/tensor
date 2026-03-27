@@ -41,7 +41,7 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     Objects.requireNonNull(clip);
     return ratio -> ratio.equals(RealScalar.ONE) //
         ? clip.max()
-        : clip.min().add(clip.width().multiply(Clips.unit().requireInside(ratio)));
+        : clip.min().add(clip.length().multiply(Clips.unit().requireInside(ratio)));
   }
 
   // ---

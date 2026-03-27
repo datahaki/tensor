@@ -58,9 +58,9 @@ public class Rescale implements Serializable {
   public Rescale(Tensor tensor, Clip clip) {
     ScalarQ.thenThrow(tensor);
     this.clip = clip;
-    result = tensor.maps(Objects.nonNull(clip) && Scalars.nonZero(clip.width()) //
+    result = tensor.maps(Objects.nonNull(clip) && Scalars.nonZero(clip.length()) //
         // operation is not identical to Clip#rescale for non-finite values
-        ? scalar -> scalar.subtract(clip.min()).divide(clip.width())
+        ? scalar -> scalar.subtract(clip.min()).divide(clip.length())
         // set all finite number entries to 0, but keep non-finite values
         : FINITE_NUMBER_ZERO);
   }

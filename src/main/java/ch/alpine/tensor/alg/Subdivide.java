@@ -105,7 +105,7 @@ public enum Subdivide {
    * @param n strictly positive
    * @return tensor of length n (!) */
   public static Tensor intermediate_increasing(Clip clip, int n) {
-    Scalar delta = clip.width().divide(RealScalar.of(2 * n));
+    Scalar delta = clip.length().divide(RealScalar.of(2 * n));
     Scalar startInclusive = clip.min().add(delta);
     if (n == 1)
       return Tensors.of(startInclusive);
@@ -116,7 +116,7 @@ public enum Subdivide {
    * @param n strictly positive
    * @return tensor of length n (!) */
   public static Tensor intermediate_decreasing(Clip clip, int n) {
-    Scalar delta = clip.width().divide(RealScalar.of(2 * n));
+    Scalar delta = clip.length().divide(RealScalar.of(2 * n));
     Scalar startInclusive = clip.max().subtract(delta);
     if (n == 1)
       return Tensors.of(startInclusive);

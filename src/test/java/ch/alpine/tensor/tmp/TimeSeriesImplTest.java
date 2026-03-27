@@ -66,7 +66,7 @@ class TimeSeriesImplTest {
     assertEquals(timeSeries.size(), 4);
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();
-    assertEquals(clip.width(), UnitSystem.SI().apply(Quantity.of(24, "h")));
+    assertEquals(clip.length(), UnitSystem.SI().apply(Quantity.of(24, "h")));
     assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
     assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(1, 2, 3));
     assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(-1, "h"))));
@@ -94,7 +94,7 @@ class TimeSeriesImplTest {
     assertEquals(timeSeries.size(), 3);
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();
-    assertEquals(clip.width(), UnitSystem.SI().apply(Quantity.of(24, "h")));
+    assertEquals(clip.length(), UnitSystem.SI().apply(Quantity.of(24, "h")));
     assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
     assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(1, 2, 3));
     assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(-1, "h"))));
@@ -123,7 +123,7 @@ class TimeSeriesImplTest {
     assertEquals(timeSeries.size(), 3);
     assertFalse(timeSeries.isEmpty());
     Clip clip = timeSeries.domain();
-    assertEquals(clip.width(), UnitSystem.SI().apply(Quantity.of(24, "h")));
+    assertEquals(clip.length(), UnitSystem.SI().apply(Quantity.of(24, "h")));
     assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(0, "h"))), Tensors.vector(1, 2, 3));
     assertEquals(timeSeries.evaluate(dateTime.add(Quantity.of(1, "h"))), Tensors.vector(2, 3, 0));
     assertThrows(Exception.class, () -> timeSeries.evaluate(dateTime.add(Quantity.of(-1, "h"))));

@@ -206,9 +206,9 @@ public enum Clips {
   // ---
   // helper function
   private static Clip create(Scalar min, Scalar max) {
-    Scalar width = max.subtract(min);
+    Scalar length = max.subtract(min);
     return min.equals(max) //
-        ? new ClipPoint(min, width)
-        : new ClipInterval(min, max, Sign.requirePositive(width));
+        ? new ClipPoint(min, length)
+        : new ClipInterval(min, max, Sign.requirePositive(length));
   }
 }

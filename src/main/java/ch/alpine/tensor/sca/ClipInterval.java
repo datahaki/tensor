@@ -13,12 +13,12 @@ import ch.alpine.tensor.io.MathematicaFormat;
 class ClipInterval implements Clip {
   private final Scalar min;
   private final Scalar max;
-  private final Scalar width;
+  private final Scalar length;
 
-  public ClipInterval(Scalar min, Scalar max, Scalar width) {
+  public ClipInterval(Scalar min, Scalar max, Scalar length) {
     this.min = min;
     this.max = max;
-    this.width = width;
+    this.length = length;
   }
 
   @Override
@@ -49,7 +49,7 @@ class ClipInterval implements Clip {
 
   @Override // from Clip
   public Scalar rescale(Scalar scalar) {
-    return apply(scalar).subtract(min).divide(width);
+    return apply(scalar).subtract(min).divide(length);
   }
 
   @Override // from Clip
@@ -63,8 +63,13 @@ class ClipInterval implements Clip {
   }
 
   @Override // from Clip
-  public final Scalar width() {
-    return width;
+  public final Scalar length() {
+    return length;
+  }
+
+  @Override
+  public boolean isNonDegenerate() {
+    return true;
   }
 
   // ---

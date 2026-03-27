@@ -48,7 +48,7 @@ public class CenteredInterval extends AbstractScalar implements //
   /** @param clip with [min, max]
    * @return */
   public static Scalar of(Clip clip) {
-    return Scalars.isZero(clip.width()) //
+    return Scalars.isZero(clip.length()) //
         ? clip.min()
         : new CenteredInterval(clip);
   }
@@ -77,7 +77,7 @@ public class CenteredInterval extends AbstractScalar implements //
   private CenteredInterval(Clip clip) {
     this.clip = clip;
     Scalar one = clip.min().one();
-    radius = clip.width().divide(one.add(one));
+    radius = clip.length().divide(one.add(one));
     center = clip.min().add(radius);
   }
 

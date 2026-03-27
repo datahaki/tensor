@@ -47,7 +47,7 @@ public class ClenshawChebyshev implements ScalarUnaryOperator {
   }
 
   public static ScalarUnaryOperator forward(Clip clip, Tensor coef) {
-    Scalar den = clip.width().multiply(Rational.HALF);
+    Scalar den = clip.length().multiply(Rational.HALF);
     Scalar aff = clip.min().add(den);
     return of(x -> x.subtract(aff).divide(den), coef);
   }

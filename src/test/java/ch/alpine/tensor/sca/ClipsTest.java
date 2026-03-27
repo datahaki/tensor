@@ -51,7 +51,7 @@ class ClipsTest {
     assertTrue(clip.isInside(Pi.VALUE));
     assertEquals(clip.min(), RealScalar.ZERO);
     assertEquals(clip.max(), DoubleScalar.POSITIVE_INFINITY);
-    assertEquals(clip.width(), DoubleScalar.POSITIVE_INFINITY);
+    assertEquals(clip.length(), DoubleScalar.POSITIVE_INFINITY);
     clip.requireInside(DoubleScalar.POSITIVE_INFINITY);
     assertFalse(clip.isInside(DoubleScalar.NEGATIVE_INFINITY));
   }
@@ -63,7 +63,7 @@ class ClipsTest {
     assertTrue(clip.isInside(Pi.VALUE));
     assertEquals(clip.min(), DoubleScalar.NEGATIVE_INFINITY);
     assertEquals(clip.max(), DoubleScalar.POSITIVE_INFINITY);
-    assertEquals(clip.width(), DoubleScalar.POSITIVE_INFINITY);
+    assertEquals(clip.length(), DoubleScalar.POSITIVE_INFINITY);
     clip.requireInside(DoubleScalar.NEGATIVE_INFINITY);
     clip.requireInside(DoubleScalar.POSITIVE_INFINITY);
   }
@@ -179,7 +179,7 @@ class ClipsTest {
   @Test
   void testCenteredDT() {
     Clip clip = Clips.centered(DateTime.now(), Quantity.of(3, "h"));
-    assertEquals(clip.width(), Quantity.of(21600, "s"));
+    assertEquals(clip.length(), Quantity.of(21600, "s"));
     assertInstanceOf(DateTime.class, clip.min());
     assertInstanceOf(DateTime.class, clip.max());
   }
@@ -242,13 +242,13 @@ class ClipsTest {
     NavigableSet<DateTime> navigableSet = new TreeSet<>();
     assertThrows(Exception.class, () -> Clips.setcover(navigableSet));
     navigableSet.add(DateTime.now());
-    assertEquals(Clips.setcover(navigableSet).width(), Quantity.of(0, "s"));
+    assertEquals(Clips.setcover(navigableSet).length(), Quantity.of(0, "s"));
   }
 
   @Test
   void testSolitary() {
     Clip clip = Clips.solitary(3);
-    assertEquals(clip.width(), RealScalar.ZERO);
+    assertEquals(clip.length(), RealScalar.ZERO);
     assertTrue(clip.isInside(RealScalar.of(3)));
   }
 
@@ -256,7 +256,7 @@ class ClipsTest {
   void testSolitaryDateTime() {
     Scalar value = DateTime.now();
     Clip clip = Clips.solitary(value);
-    assertEquals(clip.width(), Quantity.of(0, "s"));
+    assertEquals(clip.length(), Quantity.of(0, "s"));
     assertTrue(clip.isInside(value));
   }
 

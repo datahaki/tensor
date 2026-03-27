@@ -43,7 +43,7 @@ public class BrownianBridgeProcess implements Serializable {
    * @return distribution at given parameter t
    * @throws Exception if t is outside clip */
   public Distribution at(Clip clip, Scalar y0, Scalar y1, Scalar t) {
-    Scalar ratio = t.subtract(clip.min()).divide(clip.width());
+    Scalar ratio = t.subtract(clip.min()).divide(clip.length());
     return NormalDistribution.of( //
         LinearInterpolation.of(Tensors.of(y0, y1)).At(ratio), //
         Sqrt.FUNCTION.apply(clip.max().subtract(t).multiply(ratio)).multiply(sigma));

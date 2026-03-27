@@ -86,7 +86,7 @@ class TruncatedDistributionTest {
       Scalar x = Quantity.of(Rational.of(95, 10), "m");
       Scalar p1 = PDF.of(all).at(x);
       Scalar p2 = PDF.of(cut).at(x);
-      Tolerance.CHOP.requireClose(p1.divide(clip_cdf.width()), p2);
+      Tolerance.CHOP.requireClose(p1.divide(clip_cdf.length()), p2);
     }
     {
       Scalar x = Quantity.of(Rational.of(95, 10), "m");

@@ -77,8 +77,8 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
 
   private DiscreteUniformDistribution(BigInteger min, BigInteger max) {
     clip = Clips.interval(min, max);
-    width = Scalars.bigIntegerValueExact(clip.width());
-    p = clip.width().add(RealScalar.ONE).reciprocal();
+    width = Scalars.bigIntegerValueExact(clip.length());
+    p = clip.length().add(RealScalar.ONE).reciprocal();
   }
 
   @Override // from UnivariateDistribution
@@ -88,12 +88,12 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return clip.width().multiply(Rational.HALF).add(clip.min());
+    return clip.length().multiply(Rational.HALF).add(clip.min());
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return RealScalar.TWO.add(clip.width()).multiply(clip.width()).divide(_12);
+    return RealScalar.TWO.add(clip.length()).multiply(clip.length()).divide(_12);
   }
 
   @Override // from Distribution
@@ -110,7 +110,7 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
 
   @Override // from InverseCDF
   protected Scalar protected_quantile(Scalar q) {
-    return clip.min().add(Max.of(RealScalar.ONE, Ceiling.FUNCTION.apply(clip.width().add(RealScalar.ONE).multiply(q)))).subtract(RealScalar.ONE);
+    return clip.min().add(Max.of(RealScalar.ONE, Ceiling.FUNCTION.apply(clip.length().add(RealScalar.ONE).multiply(q)))).subtract(RealScalar.ONE);
   }
 
   @Override // from AbstractDiscreteDistribution

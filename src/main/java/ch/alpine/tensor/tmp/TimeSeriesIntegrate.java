@@ -25,12 +25,12 @@ public enum TimeSeriesIntegrate {
     if (!timeSeries.isEmpty()) {
       Clip clip = timeSeries.domain();
       Scalar prev = clip.min();
-      Tensor sum = timeSeries.evaluate(prev).multiply(clip.width().zero());
+      Tensor sum = timeSeries.evaluate(prev).multiply(clip.length().zero());
       result.insert(prev, sum);
       for (Scalar next : timeSeries.keySet(clip, true)) {
         Clip interval = Clips.interval(prev, next);
         Scalar x = LinearInterpolation.of(interval).apply(Rational.HALF);
-        sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
+        sum = sum.add(timeSeries.evaluate(x).multiply(interval.length()));
         result.insert(next, sum);
         prev = next;
       }
@@ -59,16 +59,16 @@ public enum TimeSeriesIntegrate {
       Clip domain = timeSeries.domain();
       if (clip.equals(Clips.intersection(domain, clip))) {
         Scalar prev = clip.min();
-        Tensor sum = timeSeries.evaluate(prev).multiply(clip.width().zero());
+        Tensor sum = timeSeries.evaluate(prev).multiply(clip.length().zero());
         for (Scalar next : timeSeries.keySet(clip, true)) {
           Clip interval = Clips.interval(prev, next);
           Scalar x = LinearInterpolation.of(interval).apply(Rational.HALF);
-          sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
+          sum = sum.add(timeSeries.evaluate(x).multiply(interval.length()));
           prev = next;
         }
         Clip interval = Clips.interval(prev, clip.max());
         Scalar x = LinearInterpolation.of(interval).apply(Rational.HALF);
-        sum = sum.add(timeSeries.evaluate(x).multiply(interval.width()));
+        sum = sum.add(timeSeries.evaluate(x).multiply(interval.length()));
         return sum;
       }
       throw new Throw(domain, clip);

@@ -8,7 +8,6 @@ import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
@@ -97,12 +96,13 @@ public class WienerProcess implements RandomProcess, Serializable {
       Clip interval = Clips.interval( //
           navigableSet.floor(x), //
           navigableSet.ceiling(x));
-      if (Scalars.isZero(interval.width()))
+      if (interval.isNonDegenerate())
+        distribution = brownianBridgeProcess.at( //
+            interval, //
+            (Scalar) timeSeries.evaluate(interval.min()), //
+            (Scalar) timeSeries.evaluate(interval.max()), x);
+      else
         return (Scalar) timeSeries.evaluate(x);
-      distribution = brownianBridgeProcess.at( //
-          interval, //
-          (Scalar) timeSeries.evaluate(interval.min()), //
-          (Scalar) timeSeries.evaluate(interval.max()), x);
     } else {
       Scalar max = clip.max();
       Scalar t = Sign.requirePositive(x.subtract(max));

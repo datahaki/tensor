@@ -15,7 +15,7 @@ public enum MinimumTimeIncrement {
    * @return */
   public static Scalar of(TimeSeries timeSeries) {
     Clip clip = timeSeries.domain();
-    Scalar min = clip.width();
+    Scalar min = clip.length();
     Iterator<Scalar> iterator = timeSeries.keySet(clip, true).iterator();
     Scalar prev = iterator.next();
     while (iterator.hasNext()) {

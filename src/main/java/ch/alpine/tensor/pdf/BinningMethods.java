@@ -84,6 +84,6 @@ public enum BinningMethods implements TensorScalarFunction {
     return tensor.stream() //
         .map(Scalar.class::cast) //
         .collect(MinMax.toClip()) //
-        .width();
+        .length();
   }
 }

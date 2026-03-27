@@ -101,7 +101,7 @@ public class CoordinateBoundingBox implements MemberQ {
   }
 
   private static Scalar median(Clip clip) {
-    return clip.min().add(clip.width().multiply(Rational.HALF));
+    return clip.min().add(clip.length().multiply(Rational.HALF));
   }
 
   // ---
