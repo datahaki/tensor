@@ -106,6 +106,19 @@ class RescaleTest {
   }
 
   @Test
+  void testNonono() {
+    Tensor vec = Tensors.fromString("{NaN,NaN,NaN}");
+    Tensor tensor = Rescale.of(vec);
+    assertEquals(vec.toString(), tensor.toString());
+    Rescale rescale = new Rescale(vec);
+    Clip clip = rescale.clip();
+    assertNull(clip);
+    Tensor result = rescale.result();
+    assertEquals(result.toString(), vec.toString());
+    assertEquals(Rescale.of(Tensors.empty()), Tensors.empty());
+  }
+
+  @Test
   void testQuantityExStats() {
     Tensor vector = Tensors.fromString("{3[s], Infinity[s], 6[s], 2[s]}");
     Tensor result = Tensors.fromString("{1/4, Infinity, 1, 0}");
