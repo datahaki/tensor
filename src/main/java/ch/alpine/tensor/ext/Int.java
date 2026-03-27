@@ -15,10 +15,17 @@ public class Int { // MutableInt
     this(0);
   }
 
+  /** @return */
+  public int intValue() {
+    return value;
+  }
+
+  /** @return */
   public int getAndIncrement() {
     return value++;
   }
 
+  /** @return */
   public int getAndDecrement() {
     return value--;
   }

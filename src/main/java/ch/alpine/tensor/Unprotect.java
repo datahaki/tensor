@@ -3,9 +3,11 @@ package ch.alpine.tensor;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -137,15 +139,15 @@ public enum Unprotect {
   public static Path resourcePath(String string) {
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
     URL url = classLoader.getResource(string);
-    try {
-      if (Objects.nonNull(url)) {
-        Path path = Path.of(url.toURI());
+    if (Objects.nonNull(url))
+      try {
+        URI uri = url.toURI();
+        Path path = Paths.get(uri);
         if (Files.exists(path))
           return path;
+      } catch (Exception exception) {
+        // ---
       }
-    } catch (Exception exception) {
-      throw new RuntimeException(exception);
-    }
     throw new IllegalArgumentException(string);
   }
 

@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -183,6 +184,12 @@ class UnprotectTest {
   void testDirectory() {
     Path path = Unprotect.resourcePath("ch/alpine/tensor/io");
     assertTrue(Files.isDirectory(path));
+  }
+
+  @Test
+  void testIoFail() {
+    assertThrows(Exception.class, () -> Unprotect.Export(HomeDirectory.Ephemeral.resolve("does", "not", "exist"), Pi._3_4));
+    assertThrows(Exception.class, () -> Unprotect.Import(HomeDirectory.Ephemeral.resolve("does", "not", "exist")));
   }
 
   @Test

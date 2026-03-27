@@ -4,6 +4,7 @@ package ch.alpine.tensor.alg;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 
 /** Reference:
  * https://www.techempower.com/blog/2016/10/19/efficient-multiple-stream-concatenation-in-java/
@@ -24,9 +25,9 @@ public enum Insert {
    * @throws Exception if index is out of range */
   public static Tensor of(Tensor tensor, Tensor element, int index) {
     return Tensor.of(Stream.of( //
-        tensor.extract(0, index).stream(), //
-        Stream.of(element.copy()), //
-        tensor.extract(index, tensor.length()).stream()) //
-        .flatMap(stream -> stream));
+        tensor.extract(0, index), //
+        Tensors.of(element), //
+        tensor.extract(index, tensor.length())) //
+        .flatMap(Tensor::stream));
   }
 }

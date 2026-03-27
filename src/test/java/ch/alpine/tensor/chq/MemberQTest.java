@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -37,5 +39,7 @@ class MemberQTest {
     Tensor v = Tensors.vector(1, 0);
     assertTrue(MemberQ.any(m0, m1).test(v));
     assertFalse(MemberQ.all(m0, m1).test(v));
+    assertTrue(MemberQ.any(List.of(m0, m1)).test(v));
+    assertFalse(MemberQ.all(List.of(m0, m1)).test(v));
   }
 }

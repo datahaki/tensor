@@ -24,6 +24,10 @@ import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Cosh;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.Sinh;
 
 class QuantityImplTest {
   @Test
@@ -98,6 +102,14 @@ class QuantityImplTest {
     Scalar s3 = q1.divide(q2);
     assertInstanceOf(Rational.class, s3);
     assertInstanceOf(Rational.class, q1.under(q2));
+  }
+
+  @Test
+  void testTrig() {
+    Sin.FUNCTION.apply(Quantity.of(1, "deg"));
+    Cos.FUNCTION.apply(Quantity.of(1, "deg"));
+    Sinh.FUNCTION.apply(Quantity.of(1, "deg"));
+    Cosh.FUNCTION.apply(Quantity.of(1, "deg"));
   }
 
   @Test

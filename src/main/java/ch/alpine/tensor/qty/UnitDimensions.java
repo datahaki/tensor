@@ -8,9 +8,12 @@ import ch.alpine.tensor.Scalar;
 public interface UnitDimensions {
   ThreadLocal<UnitDimensions> THREAD_LOCAL = ThreadLocal.withInitial(() -> UnitDimensionsBase.SI);
 
-  Scalar normalForm(Scalar a);
+  Scalar normalForm(Scalar scalar);
 
-  Scalar strip(Scalar a);
+  /** @param scalar
+   * @return equivalent scalar that is not an instance of {@link Quantity}
+   * @throws Exception */
+  Scalar strip(Scalar scalar);
 
   /** Quantity::add delegates to {@link #plus(Scalar, Scalar)}, i.e. this function
    * when a.add(b) is invoked on Quantity a and Scalar b in case unit are not identical

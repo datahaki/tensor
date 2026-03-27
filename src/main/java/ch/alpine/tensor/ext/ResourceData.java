@@ -61,12 +61,11 @@ public enum ResourceData {
    * @throws Exception if resource could not be loaded */
   public static Properties properties(String string, Charset charset) {
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-    try (InputStream inputStream = classLoader.getResourceAsStream(string)) {
-      if (Objects.nonNull(inputStream))
-        try (Reader reader = new InputStreamReader(inputStream, charset)) {
-          return properties(reader);
-        }
+    InputStream inputStream = classLoader.getResourceAsStream(string);
+    if (Objects.isNull(inputStream))
       throw new IllegalArgumentException(string);
+    try (Reader reader = new InputStreamReader(inputStream, charset)) {
+      return properties(reader);
     } catch (IOException ioException) {
       throw new UncheckedIOException(ioException);
     }

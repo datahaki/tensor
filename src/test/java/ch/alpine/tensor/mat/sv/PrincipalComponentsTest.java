@@ -33,5 +33,6 @@ class PrincipalComponentsTest {
     assertTrue(status);
     Tensor values = pc.svd().values();
     OrderedQ.require(Reverse.of(values));
+    pc.scaled_directions();
   }
 }
