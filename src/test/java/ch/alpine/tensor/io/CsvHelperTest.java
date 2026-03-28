@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
@@ -74,7 +74,7 @@ class CsvHelperTest {
 
   @Test
   void testComplexFail() {
-    assertThrows(Throw.class, () -> CsvHelper.FUNCTION.apply(ComplexScalar.of(3, 4)));
+    assertThrows(Throw.class, () -> CsvHelper.FUNCTION.apply(Complex.of(3, 4)));
   }
 
   @Test

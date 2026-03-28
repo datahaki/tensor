@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Chop;
@@ -21,15 +21,15 @@ class ArcSinhTest {
 
   @Test
   void testComplex() {
-    Scalar r = ArcSinh.FUNCTION.apply(ComplexScalar.of(5, -7));
-    Chop._12.requireClose(r, ComplexScalar.of(2.8440976626506525285, -0.9473406443130488244));
+    Scalar r = ArcSinh.FUNCTION.apply(Complex.of(5, -7));
+    Chop._12.requireClose(r, Complex.of(2.8440976626506525285, -0.9473406443130488244));
   }
 
   @Test
   void testArcSinh() {
-    Scalar s = ComplexScalar.of(5, -7);
+    Scalar s = Complex.of(5, -7);
     Scalar r = ArcSinh.FUNCTION.apply(s);
-    Scalar a = ComplexScalar.of(2.8440976626506527, -0.9473406443130489);
+    Scalar a = Complex.of(2.8440976626506527, -0.9473406443130489);
     Chop._14.requireClose(a, r);
     assertEquals(a, ArcSinh.FUNCTION.apply(s));
   }

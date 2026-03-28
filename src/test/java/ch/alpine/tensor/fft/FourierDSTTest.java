@@ -6,21 +6,19 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Set;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.Import;
-import ch.alpine.tensor.io.Pretty;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -30,7 +28,6 @@ import ch.alpine.tensor.pdf.ComplexUniformDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Im;
-import ch.alpine.tensor.sca.Round;
 import test.wrap.DFTConsistency;
 
 class FourierDSTTest {
@@ -71,7 +68,7 @@ class FourierDSTTest {
 
   @Test
   void test1Complex() {
-    Tensor vector = Tensors.of(ComplexScalar.of(1, 2), ComplexScalar.of(0, 0.3), RealScalar.ONE);
+    Tensor vector = Tensors.of(Complex.of(1, 2), Complex.of(0, 0.3), RealScalar.ONE);
     _consistent1(vector);
   }
 
@@ -213,13 +210,6 @@ class FourierDSTTest {
     Tolerance.CHOP.requireClose(r3, vector);
     Tensor r4 = FourierDST._3.matrix(n).dot(r1);
     Tolerance.CHOP.requireClose(r3, r4);
-  }
-
-  @Disabled
-  @Test
-  void testFour() {
-    Tensor matrix = FourierDST._2.matrix(4);
-    IO.println(Pretty.of(matrix.maps(Round._3)));
   }
 
   @ParameterizedTest

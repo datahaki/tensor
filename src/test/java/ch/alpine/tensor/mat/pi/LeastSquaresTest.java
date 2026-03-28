@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -153,7 +153,7 @@ class LeastSquaresTest {
   @Test
   void testFullRankComplex() {
     Tensor m = Tensors.matrix( //
-        (i, j) -> ComplexScalar.of( //
+        (i, j) -> Complex.of( //
             RealScalar.of(i), Rational.of(2 * i + 2 + j, 1 + 9 * i + j)),
         4, 3);
     assertEquals(MatrixRank.of(m), 3);
@@ -175,7 +175,7 @@ class LeastSquaresTest {
   @Test
   void testFullRankComplex2() {
     Tensor m = Tensors.matrix( //
-        (i, j) -> ComplexScalar.of( //
+        (i, j) -> Complex.of( //
             RealScalar.of(18 * i + j * 100), Rational.of(2 * i + 2 + j, 1 + 9 * i + j)),
         4, 3);
     assertEquals(MatrixRank.of(m), 3);

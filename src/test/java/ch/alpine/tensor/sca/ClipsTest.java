@@ -13,7 +13,7 @@ import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -331,7 +331,7 @@ class ClipsTest {
 
   @Test
   void testComplexFail() {
-    assertThrows(ClassCastException.class, () -> Clips.absolute(ComplexScalar.I));
+    assertThrows(ClassCastException.class, () -> Clips.absolute(Complex.I));
   }
 
   @Test

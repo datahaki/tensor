@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.pow;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -25,7 +25,7 @@ public enum Sqrt implements ScalarUnaryOperator {
     if (scalar instanceof RealScalar)
       return Sign.isPositiveOrZero(scalar) //
           ? series(scalar)
-          : ComplexScalar.of(scalar.zero(), series(scalar.negate()));
+          : Complex.of(scalar.zero(), series(scalar.negate()));
     return series(scalar);
   }
 

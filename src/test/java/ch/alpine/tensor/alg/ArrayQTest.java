@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -23,7 +23,7 @@ class ArrayQTest {
   @Test
   void testScalar() {
     assertTrue(ArrayQ.of(RealScalar.ONE));
-    assertTrue(ArrayQ.of(ComplexScalar.fromPolar(3.7, 9.8)));
+    assertTrue(ArrayQ.of(Complex.fromPolar(3.7, 9.8)));
     assertTrue(ArrayQ.of(Quantity.of(4, "m")));
   }
 

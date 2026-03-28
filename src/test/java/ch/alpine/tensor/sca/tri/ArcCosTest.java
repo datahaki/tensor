@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -23,7 +23,7 @@ class ArcCosTest {
   void testRealOutside() {
     Scalar s = RealScalar.of(3);
     Scalar r = ArcCos.FUNCTION.apply(s);
-    assertEquals(r, ComplexScalar.of(0, +1.7627471740390872));
+    assertEquals(r, Complex.of(0, +1.7627471740390872));
   }
 
   @Test
@@ -31,12 +31,12 @@ class ArcCosTest {
     Scalar s = RealScalar.of(-3);
     Scalar r = ArcCos.FUNCTION.apply(s);
     assertEquals(r, ArcCos.FUNCTION.apply(s));
-    Chop._14.requireClose(r, ComplexScalar.of(3.141592653589793, -1.762747174039086));
+    Chop._14.requireClose(r, Complex.of(3.141592653589793, -1.762747174039086));
   }
 
   @Test
   void testComplex() {
-    Scalar s = ComplexScalar.of(5, -7);
+    Scalar s = Complex.of(5, -7);
     Scalar r = ArcCos.FUNCTION.apply(s);
     assertEquals(r, ArcCos.FUNCTION.apply(s));
     // num/(double)den double conversion:
@@ -48,6 +48,6 @@ class ArcCosTest {
     // _14 is insufficient on aarch64
     // aarch64: 0.9537320301188748+2.8462888282083836*I
     // x86_64 : 0.9537320301188659+2.846288828208396*I
-    Tolerance.CHOP.requireClose(r, ComplexScalar.of(0.9537320301188659, +2.846288828208396));
+    Tolerance.CHOP.requireClose(r, Complex.of(0.9537320301188659, +2.846288828208396));
   }
 }

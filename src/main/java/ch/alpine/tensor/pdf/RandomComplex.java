@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 
 /** <p>inspired by
@@ -12,7 +12,7 @@ import ch.alpine.tensor.Scalar;
 public enum RandomComplex {
   ;
   public static Scalar of(RandomGenerator randomGenerator) {
-    return ComplexScalar.of( //
+    return Complex.of( //
         randomGenerator.nextDouble(), //
         randomGenerator.nextDouble());
   }

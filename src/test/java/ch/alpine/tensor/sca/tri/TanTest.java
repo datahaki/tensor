@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -26,8 +26,8 @@ class TanTest {
 
   @Test
   void testComplex() {
-    Scalar c = Tan.FUNCTION.apply(ComplexScalar.of(2, 3.));
-    Scalar s = ComplexScalar.of(-0.0037640256415042484, 1.0032386273536098);
+    Scalar c = Tan.FUNCTION.apply(Complex.of(2, 3.));
+    Scalar s = Complex.of(-0.0037640256415042484, 1.0032386273536098);
     Chop._15.requireClose(s, c);
   }
 

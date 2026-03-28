@@ -7,17 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
@@ -33,16 +35,16 @@ class GammaTest {
 
   @Test
   void testPositiveMathematica() {
-    Scalar expect = ComplexScalar.of(0.25437472214867807, -1.9167734838293429);
-    Scalar z = ComplexScalar.of(4.2, 3.4);
+    Scalar expect = Complex.of(0.25437472214867807, -1.9167734838293429);
+    Scalar z = Complex.of(4.2, 3.4);
     Scalar result = Gamma.FUNCTION.apply(z);
     Tolerance.CHOP.requireClose(expect, result);
   }
 
   @Test
   void testNegativeMathematica() {
-    Scalar expect = ComplexScalar.of(-0.00004914938770081672, -0.00043368292844823665);
-    Scalar z = ComplexScalar.of(-2.2, -3.3);
+    Scalar expect = Complex.of(-0.00004914938770081672, -0.00043368292844823665);
+    Scalar z = Complex.of(-2.2, -3.3);
     Scalar result = Gamma.FUNCTION.apply(z);
     Tolerance.CHOP.requireClose(expect, result);
   }
@@ -71,16 +73,16 @@ class GammaTest {
     assertEquals(Gamma.FUNCTION.apply(RealScalar.of(1000.2)), DoubleScalar.POSITIVE_INFINITY);
   }
 
-  @Disabled
   @Test
   void testLargeNegativeInteger() {
-    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(-100000000000L)));
+    Scalar scalar = Gamma.FUNCTION.apply(RealScalar.of(-100000000000L));
+    assertFalse(DeterminateScalarQ.of(scalar));
   }
 
-  @Disabled
   @Test
   void testLargeNegativeIntegerDouble() {
-    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
+    Scalar scalar = Gamma.FUNCTION.apply(DecimalScalar.of(new BigDecimal("-100000000000.0")));
+    assertFalse(DeterminateScalarQ.of(scalar));
   }
 
   @Test
@@ -96,29 +98,29 @@ class GammaTest {
 
   @Test
   void testComplex1() {
-    Scalar result = Gamma.FUNCTION.apply(ComplexScalar.of(1.1, 0.3));
-    Scalar actual = ComplexScalar.of(0.886904759534451, -0.10608824042449128);
+    Scalar result = Gamma.FUNCTION.apply(Complex.of(1.1, 0.3));
+    Scalar actual = Complex.of(0.886904759534451, -0.10608824042449128);
     Tolerance.CHOP.requireClose(result, actual);
   }
 
   @Test
   void testComplex2() {
-    Scalar result = Gamma.FUNCTION.apply(ComplexScalar.of(0, 1));
-    Scalar actual = ComplexScalar.of(-0.15494982830181073, -0.4980156681183565);
+    Scalar result = Gamma.FUNCTION.apply(Complex.of(0, 1));
+    Scalar actual = Complex.of(-0.15494982830181073, -0.4980156681183565);
     Tolerance.CHOP.requireClose(result, actual);
   }
 
   @Test
   void testNest1() {
-    Scalar seed = ComplexScalar.of(-1.0894117647058823, -0.07745098039215685);
-    Scalar expect = ComplexScalar.of(-4.371039232490273e-18, 1.9336913999047586e-17); // Mathematica
+    Scalar seed = Complex.of(-1.0894117647058823, -0.07745098039215685);
+    Scalar expect = Complex.of(-4.371039232490273e-18, 1.9336913999047586e-17); // Mathematica
     Scalar result = Nest.of(Gamma.FUNCTION, seed, 3);
     Chop._25.requireClose(expect, result);
   }
 
   @Test
   void testNest2() {
-    Scalar seed = ComplexScalar.of(-1.0486274509803923, -0.028431372549019604);
+    Scalar seed = Complex.of(-1.0486274509803923, -0.028431372549019604);
     seed = Gamma.FUNCTION.apply(seed);
     seed = Gamma.FUNCTION.apply(seed);
     seed = Gamma.FUNCTION.apply(seed);
@@ -127,34 +129,17 @@ class GammaTest {
 
   @Test
   void testMathematica() {
-    Scalar z = ComplexScalar.of(3.2363893230567875, 2.665896822743508);
+    Scalar z = Complex.of(3.2363893230567875, 2.665896822743508);
     Scalar result = Gamma.FUNCTION.apply(z);
-    Scalar expect = ComplexScalar.of(-0.8000736272450161, 0.09101285585260227);
+    Scalar expect = Complex.of(-0.8000736272450161, 0.09101285585260227);
     Tolerance.CHOP.requireClose(result, expect);
   }
 
-  @Disabled
-  @Test
-  void testInt0Fail() {
-    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(0)));
-  }
-
-  @Disabled
-  @Test
-  void testIntN1Fail() {
-    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(-1)));
-  }
-
-  @Disabled
-  @Test
-  void testDouble0Fail() {
-    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(0.0)));
-  }
-
-  @Disabled
-  @Test
-  void testDoubleN1Fail() {
-    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(RealScalar.of(-1.0)));
+  @ParameterizedTest
+  @ValueSource(ints = { 0, -1, -2 })
+  void testInt0Fail(int val) {
+    assertFalse(DeterminateScalarQ.of(Gamma.FUNCTION.apply(RealScalar.of(val))));
+    assertFalse(DeterminateScalarQ.of(Gamma.FUNCTION.apply(DoubleScalar.of(val))));
   }
 
   @Test

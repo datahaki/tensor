@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -26,19 +26,19 @@ class MapThreadTest {
 
   @Test
   void testEmptyZero() {
-    Tensor result = MapThread.of(_ -> ComplexScalar.I, Collections.emptyList(), 0);
-    assertEquals(ComplexScalar.I, result);
+    Tensor result = MapThread.of(_ -> Complex.I, Collections.emptyList(), 0);
+    assertEquals(Complex.I, result);
   }
 
   @Test
   void testNegFail() {
-    assertThrows(IllegalArgumentException.class, () -> MapThread.of(_ -> ComplexScalar.I, Collections.emptyList(), -1));
+    assertThrows(IllegalArgumentException.class, () -> MapThread.of(_ -> Complex.I, Collections.emptyList(), -1));
   }
 
   @Test
   void testFail() {
     List<Tensor> list = Arrays.asList(HilbertMatrix.of(2, 3), HilbertMatrix.of(3, 3));
-    MapThread.of(_ -> ComplexScalar.I, list, 0);
-    assertThrows(Throw.class, () -> MapThread.of(_ -> ComplexScalar.I, list, 1));
+    MapThread.of(_ -> Complex.I, list, 0);
+    assertThrows(Throw.class, () -> MapThread.of(_ -> Complex.I, list, 1));
   }
 }

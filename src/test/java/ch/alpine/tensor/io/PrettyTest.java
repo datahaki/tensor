@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -19,7 +19,7 @@ class PrettyTest {
 
   @Test
   void testScalar() {
-    Scalar scalar = ComplexScalar.of(3, 4);
+    Scalar scalar = Complex.of(3, 4);
     String string = Pretty.of(scalar);
     assertEquals(string, scalar.toString());
   }

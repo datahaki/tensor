@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -167,7 +167,7 @@ class ScalarUnaryOperatorTest {
   void testSerializable() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator scalarUnaryOperator = t -> t;
     ScalarUnaryOperator copy = Serialization.copy(scalarUnaryOperator);
-    assertEquals(copy.apply(ComplexScalar.I), ComplexScalar.I);
+    assertEquals(copy.apply(Complex.I), Complex.I);
   }
 
   @Test

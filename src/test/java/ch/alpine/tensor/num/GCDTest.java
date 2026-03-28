@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -55,15 +55,15 @@ class GCDTest {
 
   @Test
   void testComplex1() {
-    Scalar scalar = GCD.of(ComplexScalar.of(2, 1), ComplexScalar.of(3, 1));
-    assertEquals(scalar, ComplexScalar.I); // Mathematica gives 1
+    Scalar scalar = GCD.of(Complex.of(2, 1), Complex.of(3, 1));
+    assertEquals(scalar, Complex.I); // Mathematica gives 1
   }
 
   @Test
   void testComplex2() {
     // GCD[9 + 3 I, 123 + 9 I]
-    Scalar scalar = GCD.of(ComplexScalar.of(9, 3), ComplexScalar.of(123, 9));
-    assertEquals(scalar, ComplexScalar.of(-3, 3));
+    Scalar scalar = GCD.of(Complex.of(9, 3), Complex.of(123, 9));
+    assertEquals(scalar, Complex.of(-3, 3));
   }
 
   @Test

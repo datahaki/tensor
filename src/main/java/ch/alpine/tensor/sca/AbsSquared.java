@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.AbsInterface;
@@ -9,7 +9,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.lie.rot.Quaternion;
 
 /** the purpose of AbsSquared is to preserve the precision when working with complex numbers.
- * Since {@link ComplexScalar}::abs involves a square root the square of the absolute value
+ * Since {@link Complex}::abs involves a square root the square of the absolute value
  * is better computed using <code>z * conjugate(z)</code>. Analogous for {@link Quaternion}s.
  * 
  * <p>If a {@link Scalar} does not implement {@link AbsInterface}, then the function

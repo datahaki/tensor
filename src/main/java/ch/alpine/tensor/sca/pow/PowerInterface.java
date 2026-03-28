@@ -1,12 +1,12 @@
 // code by jph
 package ch.alpine.tensor.sca.pow;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 
 /** interface may be implemented by {@link Scalar} to support the computation of exponents.
- * Supported types include {@link RealScalar}, {@link ComplexScalar}. */
+ * Supported types include {@link RealScalar}, {@link Complex}. */
 @FunctionalInterface
 public interface PowerInterface {
   /** @param exponent

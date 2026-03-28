@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -26,15 +26,15 @@ class Log10Test {
   @Test
   void testLog() {
     Scalar s = DoubleScalar.of(-3);
-    Scalar r = ComplexScalar.of(0.4771212547196624, 1.3643763538418412);
+    Scalar r = Complex.of(0.4771212547196624, 1.3643763538418412);
     Tolerance.CHOP.requireClose(Log10.FUNCTION.apply(s), r);
     assertEquals(Log10.FUNCTION.apply(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
   }
 
   @Test
   void testComplex() {
-    Scalar s = ComplexScalar.of(-2, 1);
-    Scalar r = ComplexScalar.of(0.3494850021680094, 1.1630167557051545);
+    Scalar s = Complex.of(-2, 1);
+    Scalar r = Complex.of(0.3494850021680094, 1.1630167557051545);
     Tolerance.CHOP.requireClose(Log10.FUNCTION.apply(s), r);
   }
 

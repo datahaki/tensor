@@ -119,7 +119,7 @@ class UnprotectTest {
   void testWithoutUnit() {
     assertEquals(Unprotect.withoutUnit(Pi.VALUE), Pi.VALUE);
     assertEquals(Unprotect.withoutUnit(Quantity.of(3, "h*km")), RealScalar.of(3));
-    assertEquals(Unprotect.withoutUnit(Quantity.of(ComplexScalar.I, "h*km")), ComplexScalar.I);
+    assertEquals(Unprotect.withoutUnit(Quantity.of(Complex.I, "h*km")), Complex.I);
     assertEquals(Unprotect.withoutUnit(StringScalar.of("abd123")), StringScalar.of("abd123"));
     assertEquals(Unprotect.withoutUnit(Quantity.of(3, "s")), RealScalar.of(3));
     assertEquals(Unprotect.withoutUnit(RealScalar.of(5)), RealScalar.of(5));

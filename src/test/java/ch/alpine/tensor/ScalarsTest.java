@@ -51,7 +51,7 @@ class ScalarsTest {
       "123123*I", //
       "123E-123*I" })
   void testParseComplexScalar(String string) {
-    checkInvariant(string, ComplexScalarImpl.class);
+    checkInvariant(string, ComplexImpl.class);
   }
 
   @Test
@@ -70,8 +70,8 @@ class ScalarsTest {
 
   @Test
   void testSpacing() {
-    checkInvariant("-1.0348772853950305  +  0.042973906265653894 * I", ComplexScalarImpl.class);
-    checkInvariant("-1.0348772853950305  -  0.042973906265653894 * I", ComplexScalarImpl.class);
+    checkInvariant("-1.0348772853950305  +  0.042973906265653894 * I", ComplexImpl.class);
+    checkInvariant("-1.0348772853950305  -  0.042973906265653894 * I", ComplexImpl.class);
   }
 
   @Test
@@ -108,37 +108,37 @@ class ScalarsTest {
 
   @Test
   void testParseComplex() {
-    checkInvariant(ComplexScalar.of(-1e-14, -1e-15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(+1e-14, -1e-15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(-1e+14, -1e-15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(+1e+14, -1e-15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(-1e-14, -1e+15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(+1e-14, -1e+15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(-1e+14, -1e+15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(+1e+14, -1e+15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(-1e-14, +1e-15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(+1e-14, +1e-15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(-1e+14, +1e-15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(+1e+14, +1e-15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(-1e-14, +1e+15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(+1e-14, +1e+15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(-1e+14, +1e+15).toString(), ComplexScalarImpl.class);
-    checkInvariant(ComplexScalar.of(+1e+14, +1e+15).toString(), ComplexScalarImpl.class);
+    checkInvariant(Complex.of(-1e-14, -1e-15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(+1e-14, -1e-15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(-1e+14, -1e-15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(+1e+14, -1e-15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(-1e-14, -1e+15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(+1e-14, -1e+15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(-1e+14, -1e+15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(+1e+14, -1e+15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(-1e-14, +1e-15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(+1e-14, +1e-15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(-1e+14, +1e-15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(+1e+14, +1e-15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(-1e-14, +1e+15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(+1e-14, +1e+15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(-1e+14, +1e+15).toString(), ComplexImpl.class);
+    checkInvariant(Complex.of(+1e+14, +1e+15).toString(), ComplexImpl.class);
   }
 
   @Test
   void testImagUnit() {
-    assertEquals("I", ComplexScalar.I.toString());
-    assertEquals("-I", ComplexScalar.I.negate().toString());
-    assertEquals("2+I", RealScalar.of(2).add(ComplexScalar.I).toString());
-    assertEquals("2-I", RealScalar.of(2).subtract(ComplexScalar.I).toString());
+    assertEquals("I", Complex.I.toString());
+    assertEquals("-I", Complex.I.negate().toString());
+    assertEquals("2+I", RealScalar.of(2).add(Complex.I).toString());
+    assertEquals("2-I", RealScalar.of(2).subtract(Complex.I).toString());
     // ---
-    assertEquals("3*I", ComplexScalar.of(0, 3).toString());
-    assertEquals("3-3*I", ComplexScalar.of(3, -3).toString());
-    assertEquals("3+3*I", ComplexScalar.of(3, 3).toString());
-    assertEquals("-3*I", ComplexScalar.of(0, -3).toString());
-    assertEquals("-3-3*I", ComplexScalar.of(-3, -3).toString());
-    assertEquals("-3+3*I", ComplexScalar.of(-3, 3).toString());
+    assertEquals("3*I", Complex.of(0, 3).toString());
+    assertEquals("3-3*I", Complex.of(3, -3).toString());
+    assertEquals("3+3*I", Complex.of(3, 3).toString());
+    assertEquals("-3*I", Complex.of(0, -3).toString());
+    assertEquals("-3-3*I", Complex.of(-3, -3).toString());
+    assertEquals("-3+3*I", Complex.of(-3, 3).toString());
   }
 
   @Test
@@ -258,7 +258,7 @@ class ScalarsTest {
   @Test
   void testExample() {
     Scalar s = Scalars.fromString("(3+2)*I/(-1+4)+8-I");
-    Scalar c = ComplexScalar.of(RealScalar.of(8), Rational.of(2, 3));
+    Scalar c = Complex.of(RealScalar.of(8), Rational.of(2, 3));
     assertEquals(c, s);
     assertEquals(s, c);
   }
@@ -289,7 +289,7 @@ class ScalarsTest {
 
   @Test
   void testComplex() {
-    Scalar c2 = ComplexScalar.of(2, 3);
+    Scalar c2 = Complex.of(2, 3);
     Scalar c1 = c2.multiply(RealScalar.of(3));
     assertFalse(Scalars.divides(c1, c2));
     assertTrue(Scalars.divides(c2, c1));
@@ -297,8 +297,8 @@ class ScalarsTest {
 
   @Test
   void testGaussian() {
-    Scalar c1 = ComplexScalar.of(3, 1);
-    Scalar c2 = ComplexScalar.of(2, -1);
+    Scalar c1 = Complex.of(3, 1);
+    Scalar c2 = Complex.of(2, -1);
     assertFalse(Scalars.divides(c1, c2));
     assertTrue(Scalars.divides(c2, c1));
   }

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.ply.Polynomial;
 class PlausibleRationalTest {
   @Test
   void testComplex() {
-    Scalar scalar = PlausibleRational.of(10).apply(ComplexScalar.of(0.5, 0.2344523));
+    Scalar scalar = PlausibleRational.of(10).apply(Complex.of(0.5, 0.2344523));
     assertEquals(Rational.HALF.toString(), Re.FUNCTION.apply(scalar).toString());
   }
 

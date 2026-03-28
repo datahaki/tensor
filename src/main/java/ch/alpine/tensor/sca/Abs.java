@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -10,7 +10,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.qty.Quantity;
 
-/** Abs is consistent with Mathematica for {@link RealScalar}, {@link ComplexScalar},
+/** Abs is consistent with Mathematica for {@link RealScalar}, {@link Complex},
  * {@link Quaternion}, and {@link Quantity}.
  * 
  * <pre>

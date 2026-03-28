@@ -79,7 +79,7 @@ class ScalarTest {
     assertNotEquals(null, RealScalar.ZERO);
     assertNotEquals(null, DoubleScalar.of(0.3));
     assertNotEquals(null, Rational.of(5, 3));
-    assertNotEquals(null, ComplexScalar.of(Rational.of(5, 3), Rational.of(5, 3)));
+    assertNotEquals(null, Complex.of(Rational.of(5, 3), Rational.of(5, 3)));
     assertNotEquals(null, Integer.valueOf(1233));
   }
 

@@ -136,7 +136,7 @@ public interface Scalar extends Tensor {
    * as is the case for instances of RealScalar:
    * {@link Rational}, {@link DoubleScalar}, {@link DecimalScalar}.
    * 
-   * <p>{@link ComplexScalar} and {@link Quaternion} are represented by more
+   * <p>{@link Complex} and {@link Quaternion} are represented by more
    * than a single number namely the real and imaginary part, Therefore
    * calling the function throws an exception.
    * 

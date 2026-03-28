@@ -12,7 +12,7 @@ import java.math.RoundingMode;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
@@ -145,10 +145,10 @@ class RoundTest {
 
   @Test
   void testParsing() {
-    Scalar scalar = ComplexScalar.of(RealScalar.of(2.3), Rational.of(5, 8));
-    assertEquals(Round.FUNCTION.apply(scalar), ComplexScalar.of(2, 1));
-    assertEquals(Ceiling.FUNCTION.apply(scalar), ComplexScalar.of(3, 1));
-    assertEquals(Floor.FUNCTION.apply(scalar), ComplexScalar.of(2, 0));
+    Scalar scalar = Complex.of(RealScalar.of(2.3), Rational.of(5, 8));
+    assertEquals(Round.FUNCTION.apply(scalar), Complex.of(2, 1));
+    assertEquals(Ceiling.FUNCTION.apply(scalar), Complex.of(3, 1));
+    assertEquals(Floor.FUNCTION.apply(scalar), Complex.of(2, 0));
   }
 
   @Test

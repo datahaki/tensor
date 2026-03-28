@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -19,13 +19,13 @@ class IntegerQTest {
   void testPositive() {
     assertTrue(IntegerQ.of(Scalars.fromString("9/3")));
     assertTrue(IntegerQ.of(Scalars.fromString("-529384765923478653476593847659876237486")));
-    assertTrue(IntegerQ.of(ComplexScalar.of(-2, 0)));
+    assertTrue(IntegerQ.of(Complex.of(-2, 0)));
   }
 
   @Test
   void testNegative() {
     assertFalse(IntegerQ.of(Scalars.fromString("9.0")));
-    assertFalse(IntegerQ.of(ComplexScalar.of(2, 3)));
+    assertFalse(IntegerQ.of(Complex.of(2, 3)));
     assertFalse(IntegerQ.of(Scalars.fromString("abc")));
   }
 

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -92,7 +92,7 @@ class Matrix2NormTest {
     Distribution distribution = LogisticDistribution.of(2, 3);
     Tensor re = RandomVariate.of(distribution, 5, 3);
     Tensor im = RandomVariate.of(distribution, 5, 3);
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
+    Tensor matrix = Entrywise.with(Complex::of).apply(re, im);
     Scalar norm2bound1 = Matrix2Norm.bound(matrix);
     assertEquals(Im.FUNCTION.apply(norm2bound1), RealScalar.ZERO);
     Scalar norm2bound2 = Matrix2Norm.bound(Transpose.of(matrix));

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -41,7 +41,7 @@ class JacobiComplexTest {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
     Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
+    Tensor matrix = Entrywise.with(Complex::of).apply(real, imag);
     HermitianMatrixQ.INSTANCE.require(matrix);
     JacobiComplex jacobiComplex = new JacobiComplex(matrix);
     Eigensystem eigensystem = jacobiComplex.solve();
@@ -98,7 +98,7 @@ class JacobiComplexTest {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
     Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
+    Tensor matrix = Entrywise.with(Complex::of).apply(real, imag);
     HermitianMatrixQ.INSTANCE.require(matrix);
     Eigensystem eigensystem = JacobiComplex.of(matrix);
     new EigensystemQ(matrix).require(eigensystem);

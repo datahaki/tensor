@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.util.Optional;
 
 import ch.alpine.tensor.AbstractScalar;
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
@@ -81,8 +81,8 @@ public class GaussScalar extends AbstractScalar implements //
       return in(value.multiply(requireCommonPrime((GaussScalar) scalar)), prime);
     if (scalar instanceof Quantity)
       return scalar.multiply(this);
-    if (scalar instanceof ComplexScalar complexScalar)
-      return ComplexScalar.of( //
+    if (scalar instanceof Complex complexScalar)
+      return Complex.of( //
           multiply(complexScalar.real()), //
           multiply(complexScalar.imag()));
     throw new Throw(this, scalar);
@@ -90,8 +90,8 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
-    if (scalar instanceof ComplexScalar complexScalar)
-      return ComplexScalar.of( //
+    if (scalar instanceof Complex complexScalar)
+      return Complex.of( //
           divide(complexScalar.real()), //
           divide(complexScalar.imag()));
     return super.divide(scalar);
@@ -99,9 +99,9 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
-    if (scalar instanceof ComplexScalar complexScalar) {
+    if (scalar instanceof Complex complexScalar) {
       GaussScalar reciprocal = reciprocal();
-      return ComplexScalar.of( //
+      return Complex.of( //
           reciprocal.multiply(complexScalar.real()), //
           reciprocal.multiply(complexScalar.imag()));
     }

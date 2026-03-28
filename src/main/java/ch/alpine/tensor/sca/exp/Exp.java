@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.exp;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -10,7 +10,7 @@ import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.sca.N;
 
 /** gives the exponential of a {@link Scalar} that implements {@link ExpInterface}.
- * Supported types include {@link RealScalar}, and {@link ComplexScalar}.
+ * Supported types include {@link RealScalar}, and {@link Complex}.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Exp.html">Exp</a>

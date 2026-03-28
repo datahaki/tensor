@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -22,16 +22,16 @@ class DeterminateScalarQTest {
 
   @Test
   void testComplex() {
-    assertTrue(DeterminateScalarQ.of(ComplexScalar.of(3, Double.POSITIVE_INFINITY)));
-    assertFalse(DeterminateScalarQ.of(ComplexScalar.of(3, Double.NaN)));
+    assertTrue(DeterminateScalarQ.of(Complex.of(3, Double.POSITIVE_INFINITY)));
+    assertFalse(DeterminateScalarQ.of(Complex.of(3, Double.NaN)));
   }
 
   @Test
   void testQuantity() {
     assertTrue(DeterminateScalarQ.of(Quantity.of(Double.POSITIVE_INFINITY, "m")));
     assertFalse(DeterminateScalarQ.of(Quantity.of(Double.NaN, "m")));
-    assertTrue(DeterminateScalarQ.of(Quantity.of(ComplexScalar.of(3, Double.POSITIVE_INFINITY), "m")));
-    assertFalse(DeterminateScalarQ.of(Quantity.of(ComplexScalar.of(3, Double.NaN), "m")));
+    assertTrue(DeterminateScalarQ.of(Quantity.of(Complex.of(3, Double.POSITIVE_INFINITY), "m")));
+    assertFalse(DeterminateScalarQ.of(Quantity.of(Complex.of(3, Double.NaN), "m")));
   }
 
   @Test
@@ -41,7 +41,7 @@ class DeterminateScalarQTest {
 
   @Test
   void testIsNaN() {
-    assertFalse(DeterminateScalarQ.of(ComplexScalar.of(Double.NaN, Double.NaN)));
+    assertFalse(DeterminateScalarQ.of(Complex.of(Double.NaN, Double.NaN)));
     assertFalse(DeterminateScalarQ.of(RealScalar.of(Double.NaN)));
     assertFalse(DeterminateScalarQ.of(Quantity.of(Double.NaN, "s")));
     assertTrue(DeterminateScalarQ.of(RealScalar.of(Double.POSITIVE_INFINITY)));

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -35,7 +35,7 @@ public enum Tanh implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RealScalar)
       return DoubleScalar.of(Math.tanh(scalar.number().doubleValue()));
-    if (scalar instanceof ComplexScalar z)
+    if (scalar instanceof Complex z)
       return Sinh.FUNCTION.apply(z).divide(Cosh.FUNCTION.apply(z));
     throw new Throw(scalar);
   }

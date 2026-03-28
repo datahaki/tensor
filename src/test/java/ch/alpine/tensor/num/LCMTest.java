@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -44,7 +44,7 @@ class LCMTest {
 
   @Test
   void testComplex() {
-    Scalar scalar = LCM.of(ComplexScalar.of(2, 1), ComplexScalar.of(3, 1));
-    assertEquals(scalar, ComplexScalar.of(5, -5)); // Mathematica gives 5 + 5 I
+    Scalar scalar = LCM.of(Complex.of(2, 1), Complex.of(3, 1));
+    assertEquals(scalar, Complex.of(5, -5)); // Mathematica gives 5 + 5 I
   }
 }

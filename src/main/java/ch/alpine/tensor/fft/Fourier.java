@@ -2,7 +2,7 @@
 // adapted by jph
 package ch.alpine.tensor.fft;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -48,7 +48,7 @@ public enum Fourier implements DiscreteFourierTransform {
     public Tensor matrix(int n) {
       Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(1, Integers.requirePositive(n)));
       return Tensors.matrix((i, j) -> //
-      ComplexScalar.unit(Rational.of(i * j, n).multiply(Pi.TWO)).multiply(scalar), n, n);
+      Complex.unit(Rational.of(i * j, n).multiply(Pi.TWO)).multiply(scalar), n, n);
     }
 
     @Override
@@ -98,7 +98,7 @@ public enum Fourier implements DiscreteFourierTransform {
       int istep = mmax << 1;
       double thalf = b * Math.PI / istep;
       double wtemp = Math.sin(thalf);
-      Scalar wp = ComplexScalar.of(1.0 - 2.0 * wtemp * wtemp, Math.sin(thalf + thalf));
+      Scalar wp = Complex.of(1.0 - 2.0 * wtemp * wtemp, Math.sin(thalf + thalf));
       Scalar w = wp.one();
       for (int m = 0; m < mmax; ++m) {
         for (int i = m; i < n; i += istep) {

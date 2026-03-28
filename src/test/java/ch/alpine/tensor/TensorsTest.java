@@ -160,7 +160,7 @@ class TensorsTest {
 
   @Test
   void testScalarArrays() {
-    Scalar[][] data = new Scalar[][] { { RealScalar.ZERO, RealScalar.ONE }, {}, { ComplexScalar.of(2, 3) } };
+    Scalar[][] data = new Scalar[][] { { RealScalar.ZERO, RealScalar.ONE }, {}, { Complex.of(2, 3) } };
     Tensor actual = Tensors.matrix(data);
     Tensor expected = Tensors.fromString("{{0, 1}, {}, {2+3*I}}");
     assertEquals(expected, actual);

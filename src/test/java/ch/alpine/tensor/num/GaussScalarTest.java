@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -271,7 +271,7 @@ class GaussScalarTest {
     ExactScalarQ.require(g);
     Scalar d = DoubleScalar.of(4.33);
     Scalar z = RealScalar.ZERO;
-    Scalar c = ComplexScalar.of(RealScalar.of(2.), RealScalar.of(3.4));
+    Scalar c = Complex.of(RealScalar.of(2.), RealScalar.of(3.4));
     Set<Scalar> set = new HashSet<>();
     set.add(g);
     set.add(d);

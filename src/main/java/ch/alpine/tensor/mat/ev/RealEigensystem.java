@@ -4,7 +4,7 @@ package ch.alpine.tensor.mat.ev;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -72,7 +72,7 @@ public class RealEigensystem implements Serializable {
           Scalar half = x1.subtract(x0).multiply(Rational.HALF);
           Scalar zr = x0.add(half); // mean
           Scalar zi = Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(half.multiply(half).add(matrixT[i + 1][i].multiply(matrixT[i][i + 1]))));
-          eigenvalues[i] = ComplexScalar.of(zr, zi);
+          eigenvalues[i] = Complex.of(zr, zi);
           eigenvalues[i + 1] = Conjugate.FUNCTION.apply(eigenvalues[i]);
           ++i;
         }
@@ -160,8 +160,8 @@ public class RealEigensystem implements Serializable {
             zi = sa;
           } else {
             l = i;
-            Scalar rsa = ComplexScalar.of(ra, sa);
-            Scalar wq = ComplexScalar.of(w, q);
+            Scalar rsa = Complex.of(ra, sa);
+            Scalar wq = Complex.of(w, q);
             if (Scalars.isZero(Im.FUNCTION.apply(eigenvalues[i]))) {
               complexWrap.set(i, idx, rsa.divide(wq).negate());
             } else {
@@ -173,17 +173,17 @@ public class RealEigensystem implements Serializable {
               if (Scalars.isZero(vr) && Scalars.isZero(vi))
                 // case not covered by tests
                 vr = Times.of(EPSILON, norm, Vector1Norm.of(Tensors.of(w, q, x, y, z)));
-              Scalar zq = ComplexScalar.of(z, q);
+              Scalar zq = Complex.of(z, q);
               {
-                Scalar rs = ComplexScalar.of(zr, zi);
-                Scalar vz = ComplexScalar.of(vr, vi);
+                Scalar rs = Complex.of(zr, zi);
+                Scalar vz = Complex.of(vr, vi);
                 complexWrap.set(i, idx, x.multiply(rs).subtract(zq.multiply(rsa)).divide(vz));
               }
-              Scalar cc = ComplexScalar.of(matrixT[i][idx - 1], matrixT[i][idx]);
+              Scalar cc = Complex.of(matrixT[i][idx - 1], matrixT[i][idx]);
               if (Scalars.lessThan(Abs.FUNCTION.apply(z).add(Abs.FUNCTION.apply(q)), Abs.FUNCTION.apply(x)))
                 complexWrap.set(i + 1, idx, wq.multiply(cc).add(rsa).divide(x).negate());
               else {
-                Scalar rs = ComplexScalar.of(zr, zi);
+                Scalar rs = Complex.of(zr, zi);
                 complexWrap.set(i + 1, idx, rs.add(y.multiply(cc)).divide(zq).negate());
               }
             }
@@ -194,7 +194,7 @@ public class RealEigensystem implements Serializable {
             if (Scalars.lessThan(RealScalar.ONE, Times.of(EPSILON, t, t)))
               // case not covered by tests
               for (int j = i; j <= idx; ++j)
-                complexWrap.set(j, idx, ComplexScalar.of(matrixT[j][idx - 1], matrixT[j][idx]).divide(t));
+                complexWrap.set(j, idx, Complex.of(matrixT[j][idx - 1], matrixT[j][idx]).divide(t));
           }
         }
       }

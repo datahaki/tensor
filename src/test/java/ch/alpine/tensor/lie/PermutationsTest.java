@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -94,7 +94,7 @@ class PermutationsTest {
   @Test
   void testNonComparable() {
     Tensor tensor = Tensors.of( //
-        ComplexScalar.I, //
+        Complex.I, //
         Quaternion.of(3, 2, 3, 4), //
         Quantity.of(2, "s"), Quantity.of(2, "s"), //
         Quantity.of(-1, "m"));

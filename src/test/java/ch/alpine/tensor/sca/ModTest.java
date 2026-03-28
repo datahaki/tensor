@@ -13,7 +13,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -130,10 +130,10 @@ class ModTest {
   @Test
   void testComplex() {
     // Mathematica Mod[10, 2 + 3 I] == -2 I
-    Mod mod = Mod.function(ComplexScalar.of(2, 3));
+    Mod mod = Mod.function(Complex.of(2, 3));
     Scalar res = mod.apply(RealScalar.of(10));
     // -2 I + (2 + 3 I) + I (2 + 3 I) == -1 + 3 I
-    assertEquals(res, ComplexScalar.of(-1, 3));
+    assertEquals(res, Complex.of(-1, 3));
   }
 
   @Test
@@ -152,7 +152,7 @@ class ModTest {
     Set<Scalar> set = new HashSet<>();
     for (Tensor re : Range.of(-7, 8))
       for (Tensor im : Range.of(-7, 8)) {
-        Scalar z = ComplexScalar.of((Scalar) re, (Scalar) im);
+        Scalar z = Complex.of((Scalar) re, (Scalar) im);
         set.add(mod.apply(z));
       }
     // size is consistent with Mathematica
@@ -166,7 +166,7 @@ class ModTest {
 
   @Test
   void testComplexSet() {
-    _checkComplexSet(ComplexScalar.of(2, 3), 13);
+    _checkComplexSet(Complex.of(2, 3), 13);
     // _checkComplexSet(ComplexScalar.of(1, 3), 13); // not consistent with Mathematica
     // _checkComplexSet(ComplexScalar.of(2, 4), 13);
   }

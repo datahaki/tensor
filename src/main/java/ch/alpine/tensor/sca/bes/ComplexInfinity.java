@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.bes;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 
@@ -9,7 +9,7 @@ import ch.alpine.tensor.Scalar;
  * <a href="https://reference.wolfram.com/language/ref/ComplexInfinity.html">ComplexInfinity</a> */
 public enum ComplexInfinity {
   ;
-  public static final Scalar INSTANCE = ComplexScalar.of( //
+  public static final Scalar INSTANCE = Complex.of( //
       DoubleScalar.POSITIVE_INFINITY, //
       DoubleScalar.POSITIVE_INFINITY);
 }

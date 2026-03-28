@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.zip.DataFormatException;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -180,13 +180,14 @@ class ImportTest {
     assertThrows(IOException.class, () -> Import.object(path));
   }
 
-  @Disabled
   @Test
   void testTensor() throws Exception {
     Path path = Files.createTempFile("file", ".object");
     Export.object(path, Tensors.vector(1, 2, 3, 4));
     Tensor vector = Import.object(path);
     assertEquals(vector, Tensors.vector(1, 2, 3, 4));
+    Files.delete(path);
+    assertFalse(Files.isRegularFile(path));
   }
 
   @Test

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -32,8 +32,8 @@ class BesselJTest {
 
   @Test
   void test0Complex() {
-    Scalar scalar = BesselJ._0(ComplexScalar.of(1.2, 3.4));
-    Chop._04.requireClose(scalar, ComplexScalar.of(3.460244764532168, -5.544948494375138)); // mathematica
+    Scalar scalar = BesselJ._0(Complex.of(1.2, 3.4));
+    Chop._04.requireClose(scalar, Complex.of(3.460244764532168, -5.544948494375138)); // mathematica
   }
 
   @Test
@@ -62,8 +62,8 @@ class BesselJTest {
 
   @Test
   void test1Complex() {
-    Scalar scalar = BesselJ._1(ComplexScalar.of(1.2, 3.4));
-    Chop._04.requireClose(scalar, ComplexScalar.of(4.966740719480319, 2.654040063652766)); // mathematica
+    Scalar scalar = BesselJ._1(Complex.of(1.2, 3.4));
+    Chop._04.requireClose(scalar, Complex.of(4.966740719480319, 2.654040063652766)); // mathematica
   }
 
   @Test

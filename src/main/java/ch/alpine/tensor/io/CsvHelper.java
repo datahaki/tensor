@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
@@ -26,7 +26,7 @@ enum CsvHelper implements ScalarUnaryOperator {
           : N.DOUBLE.apply(scalar);
     if (scalar instanceof DecimalScalar)
       return N.DOUBLE.apply(scalar);
-    if (scalar instanceof ComplexScalar)
+    if (scalar instanceof Complex)
       throw new Throw(scalar);
     if (scalar instanceof Quantity)
       throw new Throw(scalar);

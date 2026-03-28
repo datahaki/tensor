@@ -27,23 +27,23 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** @implSpec
  * This class is immutable and thread-safe. */
-class ComplexScalarImpl extends MultiplexScalar implements ComplexScalar, //
+class ComplexImpl extends MultiplexScalar implements Complex, //
     SqrtInterface, TrigonometryInterface, Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarGroups.MUL);
 
   /** creator with package visibility
    * 
-   * @param re neither a {@link ComplexScalar}, or {@link Quantity}
-   * @param im neither a {@link ComplexScalar}, or {@link Quantity}
+   * @param re neither a {@link Complex}, or {@link Quantity}
+   * @param im neither a {@link Complex}, or {@link Quantity}
    * @return */
   public static Scalar of(Scalar re, Scalar im) {
     return Scalars.isZero(im) //
         ? re
-        : new ComplexScalarImpl(re, im);
+        : new ComplexImpl(re, im);
   }
 
   /** @param scalar
-   * @return true if operation is carried out in {@link ComplexScalarImpl} */
+   * @return true if operation is carried out in {@link ComplexImpl} */
   private static boolean isLocal(Scalar scalar) {
     return scalar instanceof ComplexEmbedding //
         && !(scalar instanceof Quantity);
@@ -53,14 +53,14 @@ class ComplexScalarImpl extends MultiplexScalar implements ComplexScalar, //
   private final Scalar re;
   private final Scalar im;
 
-  private ComplexScalarImpl(Scalar re, Scalar im) {
+  private ComplexImpl(Scalar re, Scalar im) {
     this.re = re;
     this.im = im;
   }
 
   @Override // from Scalar
   public Scalar negate() {
-    return new ComplexScalarImpl(re.negate(), im.negate());
+    return new ComplexImpl(re.negate(), im.negate());
   }
 
   @Override // from Scalar
@@ -150,7 +150,7 @@ class ComplexScalarImpl extends MultiplexScalar implements ComplexScalar, //
   @Override // from ExpInterface
   public Scalar exp() {
     // construct in polar coordinates
-    return ComplexScalar.fromPolar(Exp.FUNCTION.apply(real()), imag());
+    return Complex.fromPolar(Exp.FUNCTION.apply(real()), imag());
   }
 
   @Override // from LogInterface

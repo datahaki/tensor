@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -22,7 +22,7 @@ class ArcSinTest {
   void testRealOutside() {
     Scalar s = RealScalar.of(3);
     Scalar r = ArcSin.FUNCTION.apply(s);
-    Chop._14.requireClose(r, ComplexScalar.of(1.5707963267948966, -1.762747174039086));
+    Chop._14.requireClose(r, Complex.of(1.5707963267948966, -1.762747174039086));
   }
 
   @Test
@@ -30,14 +30,14 @@ class ArcSinTest {
     Scalar s = RealScalar.of(-3);
     Scalar r = ArcSin.FUNCTION.apply(s);
     assertEquals(r, ArcSin.FUNCTION.apply(s));
-    Chop._14.requireClose(r, ComplexScalar.of(-1.5707963267948966, +1.7627471740390872));
+    Chop._14.requireClose(r, Complex.of(-1.5707963267948966, +1.7627471740390872));
   }
 
   @Test
   void testComplex() {
-    Scalar s = ComplexScalar.of(5, -7);
+    Scalar s = Complex.of(5, -7);
     Scalar r = ArcSin.FUNCTION.apply(s);
     assertEquals(r, ArcSin.FUNCTION.apply(s));
-    Chop._14.requireClose(r, ComplexScalar.of(0.6170642966759935, -2.8462888282083862));
+    Chop._14.requireClose(r, Complex.of(0.6170642966759935, -2.8462888282083862));
   }
 }

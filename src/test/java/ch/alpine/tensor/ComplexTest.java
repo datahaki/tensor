@@ -15,38 +15,38 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 
-class ComplexScalarTest {
+class ComplexTest {
   @Test
   void testSign() {
-    Scalar scalar = ComplexScalar.of(4, 3);
+    Scalar scalar = Complex.of(4, 3);
     Scalar result = Sign.FUNCTION.apply(scalar);
     Tolerance.CHOP.requireClose(scalar, result.multiply(RealScalar.of(5)));
   }
 
   @Test
   void testSignEps() {
-    Scalar scalar = ComplexScalar.of(0, Double.MIN_VALUE);
+    Scalar scalar = Complex.of(0, Double.MIN_VALUE);
     Scalar result = Sign.FUNCTION.apply(scalar);
-    Tolerance.CHOP.requireClose(result, ComplexScalar.I);
+    Tolerance.CHOP.requireClose(result, Complex.I);
   }
 
   @Test
   void testSignEpsReIm() {
-    Scalar scalar = ComplexScalar.of(Double.MIN_VALUE, Double.MIN_VALUE);
+    Scalar scalar = Complex.of(Double.MIN_VALUE, Double.MIN_VALUE);
     Scalar result = Sign.FUNCTION.apply(scalar);
-    Tolerance.CHOP.requireClose(result, ComplexScalar.of(0.7071067811865475, 0.7071067811865475));
+    Tolerance.CHOP.requireClose(result, Complex.of(0.7071067811865475, 0.7071067811865475));
   }
 
   @Test
   void testSignEpsReImNeg() {
-    Scalar scalar = ComplexScalar.of(Double.MIN_VALUE, -Double.MIN_VALUE);
+    Scalar scalar = Complex.of(Double.MIN_VALUE, -Double.MIN_VALUE);
     Scalar result = Sign.FUNCTION.apply(scalar);
-    Tolerance.CHOP.requireClose(result, ComplexScalar.of(0.7071067811865475, -0.7071067811865475));
+    Tolerance.CHOP.requireClose(result, Complex.of(0.7071067811865475, -0.7071067811865475));
   }
 
   @Test
   void testOne() {
-    Scalar scalar = ComplexScalar.of(56, 217);
+    Scalar scalar = Complex.of(56, 217);
     assertEquals(scalar.one().multiply(scalar), scalar);
     assertEquals(scalar.multiply(scalar.one()), scalar);
   }
@@ -55,38 +55,38 @@ class ComplexScalarTest {
   void testConstructFail() {
     // assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
     // assertThrows(Throw.class, () -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
-    assertThrows(Throw.class, () -> ComplexScalar.of(Quaternion.ONE, RealScalar.ONE));
+    assertThrows(Throw.class, () -> Complex.of(Quaternion.ONE, RealScalar.ONE));
     // assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, Quaternion.ONE));
   }
 
   @Test
   void testNullFail() {
-    assertThrows(NullPointerException.class, () -> ComplexScalar.of(RealScalar.ONE, null));
-    assertThrows(NullPointerException.class, () -> ComplexScalar.of(null, RealScalar.ONE));
-    assertThrows(NullPointerException.class, () -> ComplexScalar.of(null, RealScalar.ZERO));
+    assertThrows(NullPointerException.class, () -> Complex.of(RealScalar.ONE, null));
+    assertThrows(NullPointerException.class, () -> Complex.of(null, RealScalar.ONE));
+    assertThrows(NullPointerException.class, () -> Complex.of(null, RealScalar.ZERO));
   }
 
   @Test
   void testPolarFail() {
-    assertThrows(Throw.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, ComplexScalar.I));
-    assertThrows(ClassCastException.class, () -> ComplexScalar.fromPolar(ComplexScalar.I, RealScalar.ONE));
-    assertThrows(ClassCastException.class, () -> ComplexScalar.fromPolar(ComplexScalar.I, ComplexScalar.I));
+    assertThrows(Throw.class, () -> Complex.fromPolar(RealScalar.ONE, Complex.I));
+    assertThrows(ClassCastException.class, () -> Complex.fromPolar(Complex.I, RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> Complex.fromPolar(Complex.I, Complex.I));
   }
 
   @Test
   void testPolarQuantityFail() {
-    assertThrows(Throw.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
+    assertThrows(Throw.class, () -> Complex.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
   }
 
   @Test
   void testPolar() {
-    assertInstanceOf(ComplexScalar.class, ComplexScalar.fromPolar(1, 3));
-    assertInstanceOf(RealScalar.class, ComplexScalar.fromPolar(1, 0));
+    assertInstanceOf(Complex.class, Complex.fromPolar(1, 3));
+    assertInstanceOf(RealScalar.class, Complex.fromPolar(1, 0));
   }
 
   @Test
   void testPolarNumberFail() {
-    assertThrows(Throw.class, () -> ComplexScalar.fromPolar(-1, 3));
+    assertThrows(Throw.class, () -> Complex.fromPolar(-1, 3));
   }
 
   private static void _checkNaN(Scalar scalar) {
@@ -95,22 +95,22 @@ class ComplexScalarTest {
 
   @Test
   void testNaN() {
-    _checkNaN(Abs.FUNCTION.apply(ComplexScalar.of(Double.NaN, 3)));
-    _checkNaN(Abs.FUNCTION.apply(ComplexScalar.of(3, Double.NaN)));
-    _checkNaN(Abs.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN)));
+    _checkNaN(Abs.FUNCTION.apply(Complex.of(Double.NaN, 3)));
+    _checkNaN(Abs.FUNCTION.apply(Complex.of(3, Double.NaN)));
+    _checkNaN(Abs.FUNCTION.apply(Complex.of(Double.NaN, Double.NaN)));
   }
 
   @Test
   void testUnitExp() {
     Scalar theta = RealScalar.of(0.3);
     Tolerance.CHOP.requireClose( //
-        Exp.FUNCTION.apply(theta.multiply(ComplexScalar.I)), //
-        ComplexScalar.unit(theta));
+        Exp.FUNCTION.apply(theta.multiply(Complex.I)), //
+        Complex.unit(theta));
   }
 
   @Test
   void testGaussScalar() {
-    Scalar scalar = ComplexScalar.of(GaussScalar.of(3, 7), GaussScalar.of(2, 7));
+    Scalar scalar = Complex.of(GaussScalar.of(3, 7), GaussScalar.of(2, 7));
     Scalar invers = scalar.reciprocal();
     assertEquals(scalar.multiply(invers), GaussScalar.of(1, 7));
     assertEquals(invers.multiply(scalar), GaussScalar.of(1, 7));
@@ -119,7 +119,7 @@ class ComplexScalarTest {
   @Test
   void testGaussScalarCommute() {
     int p = 43;
-    Scalar cs = ComplexScalar.of(GaussScalar.of(31, p), GaussScalar.of(22, p));
+    Scalar cs = Complex.of(GaussScalar.of(31, p), GaussScalar.of(22, p));
     Scalar gs = GaussScalar.of(16, p);
     assertEquals(cs.multiply(gs), gs.multiply(cs));
     assertEquals(cs.divide(gs), gs.under(cs));
@@ -134,7 +134,7 @@ class ComplexScalarTest {
       Scalar neutral = GaussScalar.of(1, p);
       for (int i = 0; i < p; ++i)
         for (int j = (0 < i ? 0 : 1); j < p; ++j) {
-          Scalar scalar = ComplexScalar.of(GaussScalar.of(i, p), GaussScalar.of(j, p));
+          Scalar scalar = Complex.of(GaussScalar.of(i, p), GaussScalar.of(j, p));
           assertEquals(scalar.reciprocal().multiply(scalar), neutral);
           assertEquals(scalar.multiply(scalar.reciprocal()), neutral);
           assertEquals(scalar.divide(scalar), neutral);
@@ -145,16 +145,16 @@ class ComplexScalarTest {
 
   @Test
   void testQuantityQuantity() {
-    Scalar r1 = ComplexScalar.of(Quantity.of(3, "m"), Quantity.of(4, "m"));
-    Scalar r2 = Quantity.of(ComplexScalar.of(3, 4), "m");
+    Scalar r1 = Complex.of(Quantity.of(3, "m"), Quantity.of(4, "m"));
+    Scalar r2 = Quantity.of(Complex.of(3, 4), "m");
     assertEquals(r1, r2);
     assertEquals(r1.toString(), "3+4*I[m]");
   }
 
   @Test
   void testQuantityMulQuantity() {
-    Scalar r1 = ComplexScalar.of(Quantity.of(3, "m"), Quantity.of(4, "m"));
-    Scalar r2 = ComplexScalar.of(Quantity.of(5, "m"), Quantity.of(6, "m"));
+    Scalar r1 = Complex.of(Quantity.of(3, "m"), Quantity.of(4, "m"));
+    Scalar r2 = Complex.of(Quantity.of(5, "m"), Quantity.of(6, "m"));
     Scalar r3 = r1.multiply(r2);
     assertInstanceOf(Quantity.class, r3);
     assertEquals(r3.toString(), "-9+38*I[m^2]");
@@ -165,8 +165,8 @@ class ComplexScalarTest {
    * real part of im.zero() */
   static Scalar withIm(Scalar im) {
     return im instanceof MultiplexScalar //
-        ? im.multiply(ComplexScalar.I)
-        : ComplexScalar.of(im.zero(), im);
+        ? im.multiply(Complex.I)
+        : Complex.of(im.zero(), im);
   }
 
   @Test
@@ -179,13 +179,13 @@ class ComplexScalarTest {
 
   @Test
   void testString() {
-    assertEquals(ComplexScalar.of(0, 1).toString(), "I");
-    assertEquals(ComplexScalar.of(0, 1.0).toString(), "1.0*I");
+    assertEquals(Complex.of(0, 1).toString(), "I");
+    assertEquals(Complex.of(0, 1.0).toString(), "1.0*I");
   }
 
   @Test
   void testUnitFail() {
-    assertThrows(Throw.class, () -> ComplexScalar.unit(ComplexScalar.of(-1, 3)));
-    assertThrows(Throw.class, () -> ComplexScalar.unit(Quantity.of(3, "s")));
+    assertThrows(Throw.class, () -> Complex.unit(Complex.of(-1, 3)));
+    assertThrows(Throw.class, () -> Complex.unit(Quantity.of(3, "s")));
   }
 }

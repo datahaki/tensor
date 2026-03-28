@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -114,7 +114,7 @@ class QuantileTest {
   void testFailComplex() {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
-    Tensor weight = Tensors.of(RealScalar.ONE, ComplexScalar.of(1, 2));
+    Tensor weight = Tensors.of(RealScalar.ONE, Complex.of(1, 2));
     assertThrows(Throw.class, () -> weight.maps(scalarUnaryOperator));
   }
 

@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -13,7 +13,7 @@ import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.qty.Quantity;
 
-/** Sign is consistent with Mathematica for {@link RealScalar}, {@link ComplexScalar},
+/** Sign is consistent with Mathematica for {@link RealScalar}, {@link Complex},
  * {@link Quaternion}, and {@link Quantity}.
  *
  * <p>Sign gives the signum of a scalar provided by the implementation of {@link SignInterface}.

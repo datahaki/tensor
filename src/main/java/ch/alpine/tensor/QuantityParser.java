@@ -12,7 +12,7 @@ enum QuantityParser {
    * @param string
    * @return
    * @throws Exception if given string cannot be parsed to a scalar of instance
-   * {@link RealScalar}, {@link ComplexScalar}, or {@link Quantity} */
+   * {@link RealScalar}, {@link Complex}, or {@link Quantity} */
   public static Scalar of(String string) {
     int index = string.indexOf(Quantity.UNIT_OPENING_BRACKET);
     if (0 < index) {

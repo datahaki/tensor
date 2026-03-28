@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.gam;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.tri.Sinc;
  * Gamma[x + 1] == x Gamma[x]
  * </pre>
  * 
- * <p>implementation also works for {@link ComplexScalar}s
+ * <p>implementation also works for {@link Complex}s
  *
  * <p>the function is not defined at non-positive integers
  * Gamma[0], Gamma[-1], Gamma[-2] == ComplexInfinity

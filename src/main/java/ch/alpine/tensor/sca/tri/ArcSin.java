@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 public enum ArcSin implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar I_NEGATE = ComplexScalar.I.negate();
+  private static final Scalar I_NEGATE = Complex.I.negate();
 
   @Override
   public Scalar apply(Scalar scalar) {
@@ -37,6 +37,6 @@ public enum ArcSin implements ScalarUnaryOperator {
         return DoubleScalar.INDETERMINATE;
     }
     Scalar o_x2 = Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(scalar.multiply(scalar)));
-    return I_NEGATE.multiply(Log.FUNCTION.apply(ComplexScalar.I.multiply(scalar).add(o_x2)));
+    return I_NEGATE.multiply(Log.FUNCTION.apply(Complex.I.multiply(scalar).add(o_x2)));
   }
 }

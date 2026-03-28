@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.api;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Throw;
@@ -14,7 +14,7 @@ import ch.alpine.tensor.lie.rot.Quaternion;
  * scalar == Sign[scalar] * Abs[scalar]
  * </pre>
  * 
- * The absolute value of {@link RealScalar}, {@link ComplexScalar}, or {@link Quaternion}
+ * The absolute value of {@link RealScalar}, {@link Complex}, or {@link Quaternion}
  * is a non-negative instance of {@link RealScalar}. */
 public interface AbsInterface {
   /** absolute value

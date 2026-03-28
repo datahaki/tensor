@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -26,7 +26,7 @@ class ReTest {
 
   @Test
   void testComplex() {
-    Scalar scalar = ComplexScalar.of(11, 3.5);
+    Scalar scalar = Complex.of(11, 3.5);
     assertEquals(Re.FUNCTION.apply(scalar), RealScalar.of(11));
     assertEquals(Im.FUNCTION.apply(scalar), RealScalar.of(3.5));
     assertEquals(Re.FUNCTION.apply(scalar), RealScalar.of(11));

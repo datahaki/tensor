@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -127,7 +127,7 @@ class BenIsraelCohenTest {
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
     Tensor re = RandomVariate.of(distribution, 5, r);
     Tensor im = RandomVariate.of(distribution, 5, r);
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
+    Tensor matrix = Entrywise.with(Complex::of).apply(re, im);
     Tensor refine = BenIsraelCohen.of(matrix);
     Tolerance.CHOP.requireClose(refine.dot(matrix), IdentityMatrix.of(r));
     Tensor pinvtr = BenIsraelCohen.of(Transpose.of(matrix));
@@ -138,10 +138,10 @@ class BenIsraelCohenTest {
   @ValueSource(ints = { 1, 2, 3, 4 })
   void testComplexRankDeficient(int r) {
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
-    Tensor p1 = Entrywise.with(ComplexScalar::of).apply( //
+    Tensor p1 = Entrywise.with(Complex::of).apply( //
         RandomVariate.of(distribution, 5, r), //
         RandomVariate.of(distribution, 5, r));
-    Tensor p2 = Entrywise.with(ComplexScalar::of).apply( //
+    Tensor p2 = Entrywise.with(Complex::of).apply( //
         RandomVariate.of(distribution, r, 4), //
         RandomVariate.of(distribution, r, 4));
     Tensor matrix = p1.dot(p2);

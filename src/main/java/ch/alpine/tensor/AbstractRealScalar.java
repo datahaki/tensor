@@ -68,7 +68,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   // or handling of NaN
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
-    if (x instanceof ComplexScalar)
+    if (x instanceof Complex)
       return StaticHelper.arcTan(x, this);
     if (x instanceof RealScalar)
       return DoubleScalar.of(Math.atan2( //
@@ -91,7 +91,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
         return DoubleScalar.of(Math.log1p(subtract(one()).number().doubleValue()));
       return DoubleScalar.of(Math.log(value));
     }
-    return ComplexScalarImpl.of(Log.FUNCTION.apply(negate()), Pi.VALUE);
+    return ComplexImpl.of(Log.FUNCTION.apply(negate()), Pi.VALUE);
   }
 
   @Override // from PowerInterface
@@ -120,10 +120,10 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   /** implementation is used by {@link DoubleScalar},
    * and is a fallback option for {@link Rational}
    * 
-   * @return {@link ComplexScalar} if negative */
+   * @return {@link Complex} if negative */
   protected Scalar _sqrt() {
     if (isNonNegative())
       return DoubleScalar.of(Math.sqrt(number().doubleValue()));
-    return ComplexScalarImpl.of(zero(), DoubleScalar.of(Math.sqrt(-number().doubleValue())));
+    return ComplexImpl.of(zero(), DoubleScalar.of(Math.sqrt(-number().doubleValue())));
   }
 }

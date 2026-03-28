@@ -12,7 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -50,10 +50,10 @@ class FourierDCTTest {
     Tensor vector = Tensors.fromString("{1 - I, 3 + 2*I, 5 - 4*I, 2 + 9*I}");
     Tensor r2 = FourierDCT._1.transform(vector);
     Tensor r3 = Tensors.of( // result of Mathematica
-        ComplexScalar.of(7.756717518813398, 1.632993161855452), //
-        ComplexScalar.of(-1.224744871391589, -1.6329931618554523), //
-        ComplexScalar.of(-2.041241452319315, 4.08248290463863), //
-        ComplexScalar.of(1.224744871391589, -8.981462390204987));
+        Complex.of(7.756717518813398, 1.632993161855452), //
+        Complex.of(-1.224744871391589, -1.6329931618554523), //
+        Complex.of(-2.041241452319315, 4.08248290463863), //
+        Complex.of(1.224744871391589, -8.981462390204987));
     // IO.println(r2);
     // IO.println(r3);
     Tolerance.CHOP.requireClose(r2, r3);
@@ -64,11 +64,11 @@ class FourierDCTTest {
     Tensor vector = Tensors.fromString("{2 + I, 1 - I, 3 + 2*I, 5 - 4*I, 2 + 9*I}");
     Tensor r2 = FourierDCT._1.transform(vector);
     Tensor r3 = Tensors.of( // result of Mathematica
-        ComplexScalar.of(7.778174593052022, 1.4142135623730954), //
-        ComplexScalar.of(-2, -1.3284271247461898), //
-        ComplexScalar.of(-0.7071067811865475, 2.121320343559643), //
-        ComplexScalar.of(2., -4.32842712474619), //
-        ComplexScalar.of(-0.7071067811865475, 8.48528137423857));
+        Complex.of(7.778174593052022, 1.4142135623730954), //
+        Complex.of(-2, -1.3284271247461898), //
+        Complex.of(-0.7071067811865475, 2.121320343559643), //
+        Complex.of(2., -4.32842712474619), //
+        Complex.of(-0.7071067811865475, 8.48528137423857));
     Tolerance.CHOP.requireClose(r2, r3);
   }
 
@@ -85,10 +85,10 @@ class FourierDCTTest {
   @Test
   void testComplex() {
     Tensor tensor = FourierDCT._2.transform(Tensors.fromString("{0.3-2*I, I, 1+2*I, 1}"));
-    Tolerance.CHOP.requireClose(tensor.Get(0), ComplexScalar.of(1.15, 0.5));
-    Tolerance.CHOP.requireClose(tensor.Get(1), ComplexScalar.of(-0.5146995525614952, -1.1152212486938315));
-    Tolerance.CHOP.requireClose(tensor.Get(2), ComplexScalar.of(0.10606601717798216, -1.7677669529663689));
-    Tolerance.CHOP.requireClose(tensor.Get(3), ComplexScalar.of(0.32800056492786195, +0.07925633389055353));
+    Tolerance.CHOP.requireClose(tensor.Get(0), Complex.of(1.15, 0.5));
+    Tolerance.CHOP.requireClose(tensor.Get(1), Complex.of(-0.5146995525614952, -1.1152212486938315));
+    Tolerance.CHOP.requireClose(tensor.Get(2), Complex.of(0.10606601717798216, -1.7677669529663689));
+    Tolerance.CHOP.requireClose(tensor.Get(3), Complex.of(0.32800056492786195, +0.07925633389055353));
   }
 
   @Test

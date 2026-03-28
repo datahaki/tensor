@@ -1,13 +1,13 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 
 /** functions used in {@link Sin}, {@link Sinh}, {@link Cos}, and {@link Cosh}.
  * Scalar types that implement {@link TrigonometryInterface} include
- * {@link RealScalar} and {@link ComplexScalar} */
+ * {@link RealScalar} and {@link Complex} */
 public interface TrigonometryInterface {
   /** @return cos of this */
   Scalar cos();

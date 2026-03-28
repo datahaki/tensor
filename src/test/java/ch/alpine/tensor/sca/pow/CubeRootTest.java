@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -54,7 +54,7 @@ class CubeRootTest {
 
   @Test
   void testComplexFail() {
-    Scalar scalar = ComplexScalar.of(12, 23);
+    Scalar scalar = Complex.of(12, 23);
     assertThrows(ClassCastException.class, () -> CubeRoot.FUNCTION.apply(scalar));
   }
 }

@@ -18,7 +18,7 @@ import ch.alpine.tensor.qty.Unit;
  * or signals simultaneously on the same circuit or channel"
  * 
  * Examples:
- * {@link ComplexScalar} consists of 2 scalar components, namely
+ * {@link Complex} consists of 2 scalar components, namely
  * real and imaginary part.
  * {@link Quaternion} consists of 4 scalar components.
  * {@link Quantity} consists of 1 scalar component and a {@link Unit}. */

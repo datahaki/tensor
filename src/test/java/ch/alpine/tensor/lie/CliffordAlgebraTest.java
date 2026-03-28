@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -67,8 +67,8 @@ class CliffordAlgebraTest {
     Tensor x = Tensors.vector(2, 5);
     Tensor y = Tensors.vector(1, -3);
     Tensor m = cliffordAlgebra.gp(x, y);
-    Scalar cx = ComplexScalar.of(2, 5);
-    Scalar cy = ComplexScalar.of(1, -3);
+    Scalar cx = Complex.of(2, 5);
+    Scalar cy = Complex.of(1, -3);
     Scalar cm = cx.multiply(cy);
     assertEquals(Re.FUNCTION.apply(cm), m.Get(0));
     assertEquals(Im.FUNCTION.apply(cm), m.Get(1));

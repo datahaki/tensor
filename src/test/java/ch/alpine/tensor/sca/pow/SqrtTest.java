@@ -13,7 +13,7 @@ import java.math.RoundingMode;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
@@ -62,9 +62,9 @@ class SqrtTest {
 
   @Test
   void testComplex() {
-    Scalar scalar = ComplexScalar.of(0, 2);
+    Scalar scalar = Complex.of(0, 2);
     Scalar root = Sqrt.FUNCTION.apply(scalar);
-    Scalar res = ComplexScalar.of(1, 1);
+    Scalar res = Complex.of(1, 1);
     Tolerance.CHOP.requireClose(root, res);
   }
 
@@ -78,7 +78,7 @@ class SqrtTest {
   void testRational() {
     assertEquals(Sqrt.FUNCTION.apply(Rational.of(16, 25)).toString(), "4/5");
     Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(-16, 25));
-    assertInstanceOf(ComplexScalar.class, scalar);
+    assertInstanceOf(Complex.class, scalar);
     assertEquals(scalar.toString(), "4/5*I");
   }
 
@@ -106,7 +106,7 @@ class SqrtTest {
   void testNegativeInfty() {
     assertEquals( //
         Sqrt.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), //
-        ComplexScalar.of(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
+        Complex.of(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
   }
 
   @Test
@@ -162,7 +162,7 @@ class SqrtTest {
         new MathContext(100, RoundingMode.HALF_EVEN));
     DecimalScalar ds1 = (DecimalScalar) DecimalScalar.of(bd1);
     Scalar rt1 = Sqrt.FUNCTION.apply(ds1);
-    assertInstanceOf(ComplexScalar.class, rt1);
+    assertInstanceOf(Complex.class, rt1);
     // mathematica N[Sqrt[2], 100] gives
     String m = "1.414213562373095048801688724209698078569671875376948073176679737990732478462107038850387534327641573";
     assertEquals(Im.FUNCTION.apply(rt1).toString().substring(0, 70), m.substring(0, 70));

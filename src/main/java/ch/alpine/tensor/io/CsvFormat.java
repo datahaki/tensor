@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.alg.Dimensions;
@@ -57,7 +57,7 @@ public enum CsvFormat {
    * fraction has denominator == 1.
    * <li>{@link StringScalar} is enclosed in quotes if necessary. The result must
    * not contain any other quotes character.
-   * <li>{@link ComplexScalar}, or {@link Quantity} are not allowed.
+   * <li>{@link Complex}, or {@link Quantity} are not allowed.
    * </ul>
    * 
    * <p>Example use:

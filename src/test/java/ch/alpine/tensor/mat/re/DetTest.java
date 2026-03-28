@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -137,8 +137,8 @@ class DetTest {
         { -1, 9, 0 }, //
         { 8, 0, 1 } //
     });
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
-    assertEquals(Det.of(matrix), ComplexScalar.of(270, -63));
+    Tensor matrix = Entrywise.with(Complex::of).apply(re, im);
+    assertEquals(Det.of(matrix), Complex.of(270, -63));
   }
 
   @Test
@@ -153,8 +153,8 @@ class DetTest {
         { -1, 9, 0 }, //
         { 8, 0, 1 } //
     });
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
-    assertEquals(Det.of(matrix), ComplexScalar.of(387, 108));
+    Tensor matrix = Entrywise.with(Complex::of).apply(re, im);
+    assertEquals(Det.of(matrix), Complex.of(387, 108));
   }
 
   @Test
@@ -169,8 +169,8 @@ class DetTest {
         { -1, 9, 0 }, //
         { 8, -2, 1 } //
     });
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
-    assertEquals(Det.of(matrix), ComplexScalar.of(421, 120));
+    Tensor matrix = Entrywise.with(Complex::of).apply(re, im);
+    assertEquals(Det.of(matrix), Complex.of(421, 120));
   }
 
   @ParameterizedTest

@@ -22,11 +22,13 @@ import ch.alpine.tensor.sca.tri.Sin;
  * <p>function {@link #number()} is not supported
  * 
  * <p>interface {@link Comparable} is not implemented */
-public interface ComplexScalar extends Scalar, //
+public interface Complex extends Scalar, //
     AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, //
     ExpInterface, LogInterface, PowerInterface, SignInterface {
   /** complex number I == 0+1*I */
   Scalar I = of(0, 1);
+  /** for the lack of modeling ComplexInfinity */
+  Scalar INFINITY = DoubleScalar.INDETERMINATE;
 
   /** Hint: the function {@link #of(Scalar, Scalar)} can be used to combine two
    * tensors, one as real and the other as imaginary part into a single tensor
@@ -41,14 +43,14 @@ public interface ComplexScalar extends Scalar, //
   static Scalar of(Scalar re, Scalar im) {
     return re instanceof MultiplexScalar || im instanceof MultiplexScalar //
         ? im.multiply(I).add(re)
-        : ComplexScalarImpl.of(Objects.requireNonNull(re), im);
+        : ComplexImpl.of(Objects.requireNonNull(re), im);
   }
 
   /** @param re
    * @param im
    * @return scalar with re as real part and im as imaginary part */
   static Scalar of(Number re, Number im) {
-    return ComplexScalarImpl.of(RealScalar.of(re), RealScalar.of(im));
+    return ComplexImpl.of(RealScalar.of(re), RealScalar.of(im));
   }
 
   /** @param abs radius, may be instance of {@link Quantity}
@@ -68,8 +70,8 @@ public interface ComplexScalar extends Scalar, //
   /** @param arg angle
    * @return Exp[I * angle], i.e. complex number on unit circle with given argument */
   static Scalar unit(Scalar arg) {
-    if (arg instanceof ComplexScalar)
+    if (arg instanceof Complex)
       throw new Throw(arg);
-    return ComplexScalarImpl.of(Cos.FUNCTION.apply(arg), Sin.FUNCTION.apply(arg));
+    return ComplexImpl.of(Cos.FUNCTION.apply(arg), Sin.FUNCTION.apply(arg));
   }
 }

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -66,7 +66,7 @@ class StringScalarTest {
 
   @Test
   void testMultiplyFail() {
-    assertThrows(Throw.class, () -> ComplexScalar.I.multiply(StringScalar.of("asd")));
+    assertThrows(Throw.class, () -> Complex.I.multiply(StringScalar.of("asd")));
   }
 
   @Test

@@ -5,7 +5,7 @@ import ch.alpine.tensor.api.GroupInterface;
 import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.num.BinaryPower;
 
-/** implementation computes integer powers of {@link ComplexScalar},
+/** implementation computes integer powers of {@link Complex},
  * {@link Quaternion}, etc. */
 enum ScalarGroups implements GroupInterface<Scalar> {
   ADD {

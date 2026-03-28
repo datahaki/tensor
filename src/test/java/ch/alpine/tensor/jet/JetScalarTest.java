@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -50,8 +50,8 @@ class JetScalarTest {
 
   @Test
   void testComplex() {
-    Scalar s1 = JetScalar.of(Tensors.of(ComplexScalar.of(7, 5), ComplexScalar.of(4, 2)));
-    Scalar s2 = JetScalar.of(Tensors.of(ComplexScalar.of(-2, 3), ComplexScalar.of(1, -1)));
+    Scalar s1 = JetScalar.of(Tensors.of(Complex.of(7, 5), Complex.of(4, 2)));
+    Scalar s2 = JetScalar.of(Tensors.of(Complex.of(-2, 3), Complex.of(1, -1)));
     Scalar s12 = s1.multiply(s2);
     Scalar s21 = s2.multiply(s1);
     assertEquals(s12, s21);

@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -36,23 +36,23 @@ class LogGammaTest {
   @Test
   void testMathematica() {
     _check( //
-        ComplexScalar.of(3.2363893230567875, 2.665896822743508), //
-        ComplexScalar.of(-0.21662285857756203, 3.028323956886318));
+        Complex.of(3.2363893230567875, 2.665896822743508), //
+        Complex.of(-0.21662285857756203, 3.028323956886318));
     _check( //
-        ComplexScalar.of(+0.2, -3.2), //
-        ComplexScalar.of(-4.455761789013493, -0.04978161106944923));
+        Complex.of(+0.2, -3.2), //
+        Complex.of(-4.455761789013493, -0.04978161106944923));
     _check( //
-        ComplexScalar.of(+1.5, +3.2), //
-        ComplexScalar.of(-2.9323985022616412, +1.9509796800608825));
+        Complex.of(+1.5, +3.2), //
+        Complex.of(-2.9323985022616412, +1.9509796800608825));
     _check( //
-        ComplexScalar.of(+2.7, +8.4), //
-        ComplexScalar.of(-7.570209329344152, +12.652654015719346));
+        Complex.of(+2.7, +8.4), //
+        Complex.of(-7.570209329344152, +12.652654015719346));
   }
 
   @Test
   void testNegativeMathematica() {
-    _check(ComplexScalar.of(-0.2, +0.3), ComplexScalar.of(+1.0734581009508424, -2.429743746722234)); // mathematica
-    _check(ComplexScalar.of(-0.3, -0.2), ComplexScalar.of(+1.2259360301379854, +2.789379730848464)); // mathematica
+    _check(Complex.of(-0.2, +0.3), Complex.of(+1.0734581009508424, -2.429743746722234)); // mathematica
+    _check(Complex.of(-0.3, -0.2), Complex.of(+1.2259360301379854, +2.789379730848464)); // mathematica
     // not consistent with Mathematica
     // _check(ComplexScalar.of(-0.7, -.2), ComplexScalar.of(+1.2068474867912489, +3.483554001467165)); // mathematica
     // _check(ComplexScalar.of(-0.4, 1.0), ComplexScalar.of(-0.7317745484911662, -2.7553511672879787)); // mathematica
@@ -66,7 +66,7 @@ class LogGammaTest {
     Distribution distribution = UniformDistribution.of(0.2, 3.5);
     Scalar re = RandomVariate.of(distribution);
     Scalar im = RandomVariate.of(distribution);
-    Scalar x = ComplexScalar.of(re, im);
+    Scalar x = Complex.of(re, im);
     Scalar gamma1 = Exp.FUNCTION.apply(LogGamma.FUNCTION.apply(x));
     Scalar gamma2 = Gamma.FUNCTION.apply(x);
     Tolerance.CHOP.requireClose(gamma1, gamma2);

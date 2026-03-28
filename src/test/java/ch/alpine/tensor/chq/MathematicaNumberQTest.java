@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -26,14 +26,14 @@ class MathematicaNumberQTest {
 
   @Test
   void testComplex() {
-    assertTrue(MathematicaNumberQ.of(ComplexScalar.of(0., 0.3)));
-    assertTrue(MathematicaNumberQ.of(ComplexScalar.of(0., 2)));
+    assertTrue(MathematicaNumberQ.of(Complex.of(0., 0.3)));
+    assertTrue(MathematicaNumberQ.of(Complex.of(0., 2)));
   }
 
   @Test
   void testComplexCorner() {
-    assertFalse(MathematicaNumberQ.of(ComplexScalar.of(Double.POSITIVE_INFINITY, 0.3)));
-    assertFalse(MathematicaNumberQ.of(ComplexScalar.of(0., Double.NaN)));
+    assertFalse(MathematicaNumberQ.of(Complex.of(Double.POSITIVE_INFINITY, 0.3)));
+    assertFalse(MathematicaNumberQ.of(Complex.of(0., Double.NaN)));
   }
 
   @Test

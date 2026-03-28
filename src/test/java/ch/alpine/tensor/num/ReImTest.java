@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -24,8 +24,8 @@ class ReImTest {
   @Test
   void testSimple() {
     assertEquals(ReIm.of(RealScalar.ONE).vector(), UnitVector.of(2, 0));
-    assertEquals(ReIm.of(ComplexScalar.I).vector(), UnitVector.of(2, 1));
-    assertEquals(ReIm.of(ComplexScalar.of(3, 4)).vector(), Tensors.vector(3, 4));
+    assertEquals(ReIm.of(Complex.I).vector(), UnitVector.of(2, 1));
+    assertEquals(ReIm.of(Complex.of(3, 4)).vector(), Tensors.vector(3, 4));
   }
 
   @Test
@@ -40,19 +40,19 @@ class ReImTest {
 
   @Test
   void testProd() {
-    Scalar z = ComplexScalar.of(2, 3);
-    Scalar a = ComplexScalar.of(5, 11);
+    Scalar z = Complex.of(2, 3);
+    Scalar a = Complex.of(5, 11);
     Tensor vector = Tensors.vector(5, 11);
     Tensor tensor = ReIm.of(z).rotate(vector);
     assertEquals(tensor, Tensors.vector(-23, 37));
     ExactTensorQ.require(tensor);
     Scalar compare = z.multiply(a);
-    assertEquals(compare, ComplexScalar.of(-23, 37));
+    assertEquals(compare, Complex.of(-23, 37));
   }
 
   @Test
   void testSerialization() throws ClassNotFoundException, IOException {
-    ReIm reIm = ReIm.of(ComplexScalar.of(2, 5));
+    ReIm reIm = ReIm.of(Complex.of(2, 5));
     Serialization.copy(reIm);
   }
 }

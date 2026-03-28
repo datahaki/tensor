@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
@@ -46,9 +46,9 @@ class ExactScalarQTest {
 
   @Test
   void testComplex() {
-    assertTrue(ExactScalarQ.of(ComplexScalar.of(3, 4)));
-    assertFalse(ExactScalarQ.of(ComplexScalar.of(3., 4)));
-    assertFalse(ExactScalarQ.of(ComplexScalar.of(3, 4.)));
+    assertTrue(ExactScalarQ.of(Complex.of(3, 4)));
+    assertFalse(ExactScalarQ.of(Complex.of(3., 4)));
+    assertFalse(ExactScalarQ.of(Complex.of(3, 4.)));
   }
 
   @Test

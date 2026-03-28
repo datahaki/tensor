@@ -10,7 +10,7 @@ import java.time.Month;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -192,8 +192,8 @@ class GumbelDistributionTest {
 
   @Test
   void testComplexFail() {
-    assertThrows(ClassCastException.class, () -> GumbelDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
-    assertThrows(ClassCastException.class, () -> GumbelDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
+    assertThrows(ClassCastException.class, () -> GumbelDistribution.of(Complex.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> GumbelDistribution.of(RealScalar.ONE, Complex.of(1, 2)));
   }
 
   @Test

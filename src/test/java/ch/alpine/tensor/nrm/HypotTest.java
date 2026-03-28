@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -93,8 +93,8 @@ class HypotTest {
 
   @Test
   void testComplex() {
-    Scalar c1 = ComplexScalar.of(1, -5);
-    Scalar c2 = ComplexScalar.of(2, 4);
+    Scalar c1 = Complex.of(1, -5);
+    Scalar c2 = Complex.of(2, 4);
     Scalar pair = Hypot.of(c1, c2);
     assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(46)), pair);
     Scalar value = Hypot.ofVector(Tensors.of(c1, c2));
@@ -119,7 +119,7 @@ class HypotTest {
     assertFalse(Scalars.isZero(s2));
     try {
       Scalar s3 = Hypot.of(s1, s2); // NaN+NaN*I
-      assertInstanceOf(ComplexScalar.class, s3);
+      assertInstanceOf(Complex.class, s3);
       assertFalse(Scalars.isZero(s3));
       @SuppressWarnings("unused")
       Scalar s4 = ArcTan.FUNCTION.apply(s2);

@@ -14,7 +14,7 @@ import java.util.zip.DataFormatException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -49,20 +49,20 @@ class ObjectFormatTest {
 
   @Test
   void testUnderClear() throws ClassNotFoundException, IOException, DataFormatException {
-    Scalar q1 = Quantity.of(ComplexScalar.of(Rational.of(2, 7), Rational.HALF.negate()), "m");
-    Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
+    Scalar q1 = Quantity.of(Complex.of(Rational.of(2, 7), Rational.HALF.negate()), "m");
+    Scalar q2 = Quantity.of(Complex.of(-1, 7), "m");
     Scalar quc = q1.under(q2);
     Scalar expected = Scalars.fromString("-742/65+294/65*I");
     assertEquals(quc, expected);
     assertEquals(Serialization.copy(quc), expected);
-    assertInstanceOf(ComplexScalar.class, quc);
+    assertInstanceOf(Complex.class, quc);
     byte[] bytes = ObjectFormat.of(quc);
     Scalar copy = ObjectFormat.parse(bytes);
     assertEquals(copy, expected);
     Scalar cdq = q2.divide(q1);
-    assertInstanceOf(ComplexScalar.class, cdq);
+    assertInstanceOf(Complex.class, cdq);
     Scalar qrc = q1.reciprocal().multiply(q2);
-    assertInstanceOf(ComplexScalar.class, qrc);
+    assertInstanceOf(Complex.class, qrc);
     assertEquals(quc, qrc);
     assertEquals(quc, cdq);
     ExactScalarQ.require(quc);
@@ -70,8 +70,8 @@ class ObjectFormatTest {
 
   @Test
   void testUnderMix() throws ClassNotFoundException, IOException, DataFormatException {
-    Scalar q1 = Quantity.of(ComplexScalar.of(Rational.of(2, 7), Rational.HALF.negate()), "CHF");
-    Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
+    Scalar q1 = Quantity.of(Complex.of(Rational.of(2, 7), Rational.HALF.negate()), "CHF");
+    Scalar q2 = Quantity.of(Complex.of(-1, 7), "m");
     Scalar quc = q1.under(q2);
     Scalar expected = Scalars.fromString("-742/65+294/65*I[m*CHF^-1]");
     assertEquals(quc, expected);

@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.util.function.Supplier;
+
 import ch.alpine.tensor.io.MathematicaFormat;
 
 /** Exception thrown when a problem is encountered related to the types
@@ -20,8 +22,18 @@ public class Throw extends RuntimeException {
     super(string);
   }
 
+  /** @param enforce
+   * @throws Exception unless enforce == true */
   public static void unless(boolean enforce) {
     if (!enforce)
       throw new Throw();
+  }
+
+  /** @param enforce
+   * @param supplier
+   * @throws Exception unless enforce == true with message provided by given supplier */
+  public static void unless(boolean enforce, Supplier<String> supplier) {
+    if (!enforce)
+      throw new Throw(supplier.get());
   }
 }

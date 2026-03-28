@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.erf;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 public enum Fresnel implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar FACTOR = ComplexScalar.of(Rational.HALF, Rational.HALF);
+  private static final Scalar FACTOR = Complex.of(Rational.HALF, Rational.HALF);
   private static final Scalar SCALE = Conjugate.FUNCTION.apply(FACTOR).multiply(Sqrt.FUNCTION.apply(Pi.VALUE));
 
   @Override

@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -91,7 +91,7 @@ class TraceTest {
 
   @Test
   void testMatrix1X1() {
-    assertEquals(Trace.of(Tensors.fromString("{{3+2*I}}")), ComplexScalar.of(3, 2));
+    assertEquals(Trace.of(Tensors.fromString("{{3+2*I}}")), Complex.of(3, 2));
   }
 
   @Test

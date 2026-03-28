@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -34,14 +34,14 @@ class LogTest {
   @Test
   void testLog() {
     Scalar scalar = DoubleScalar.of(-3);
-    Chop._14.requireClose(Log.FUNCTION.apply(scalar), ComplexScalar.of(1.0986122886681098, 3.141592653589793));
+    Chop._14.requireClose(Log.FUNCTION.apply(scalar), Complex.of(1.0986122886681098, 3.141592653589793));
     assertEquals(Log.FUNCTION.apply(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
   }
 
   @Test
   void testComplex() {
-    Scalar s = ComplexScalar.of(2, 3);
-    Scalar r = ComplexScalar.of(1.2824746787307681, 0.982793723247329);
+    Scalar s = Complex.of(2, 3);
+    Scalar r = Complex.of(1.2824746787307681, 0.982793723247329);
     Chop._14.requireClose(Log.FUNCTION.apply(s), r);
   }
 
@@ -80,7 +80,7 @@ class LogTest {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(-0.1);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(3));
     // Mathematica ................. -0.1667368328837891, -0.22749179210112070I
-    Scalar result = ComplexScalar.of(-0.1667368328837892, -0.22749179210112075);
+    Scalar result = Complex.of(-0.1667368328837892, -0.22749179210112075);
     Tolerance.CHOP.requireClose(scalar, result);
   }
 

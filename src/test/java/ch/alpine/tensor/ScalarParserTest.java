@@ -22,20 +22,20 @@ class ScalarParserTest {
   @Test
   void testComplex() {
     Scalar scalar = ScalarParser.of("3.14`30.123+2.12`99.322*I");
-    assertEquals(scalar, ComplexScalar.of(3.14, 2.12));
+    assertEquals(scalar, Complex.of(3.14, 2.12));
   }
 
   @Test
   void testDivisions() {
     Scalar scalar = ScalarParser.of("40*3/4/5/6");
-    assertEquals(scalar, ComplexScalar.of(1, 0));
+    assertEquals(scalar, Complex.of(1, 0));
     ExactScalarQ.require(scalar);
   }
 
   @Test
   void testMix() {
     Scalar scalar = ScalarParser.of("80*3/4/2*5/6");
-    assertEquals(scalar, ComplexScalar.of(25, 0));
+    assertEquals(scalar, Complex.of(25, 0));
     ExactScalarQ.require(scalar);
   }
 
@@ -53,26 +53,26 @@ class ScalarParserTest {
 
   @Test
   void testRational1() {
-    Scalar z = ComplexScalar.of(Rational.of(1, 2), Rational.of(1, 3));
+    Scalar z = Complex.of(Rational.of(1, 2), Rational.of(1, 3));
     assertEquals(Scalars.fromString(z.toString()), z);
   }
 
   @Test
   void testRational2() {
-    Scalar z = ComplexScalar.of(Rational.of(1, 2), Rational.of(-1, 3));
+    Scalar z = Complex.of(Rational.of(1, 2), Rational.of(-1, 3));
     assertEquals(Scalars.fromString(z.toString()), z);
   }
 
   @Test
   void testDecimal() {
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("1"))).toString(), "I");
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("-1"))).toString(), "-I");
+    assertEquals(Complex.of(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("1"))).toString(), "I");
+    assertEquals(Complex.of(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("-1"))).toString(), "-I");
   }
 
   @Test
   void testDoubleImag() {
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DoubleScalar.of(1)).toString(), "1.0*I");
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DoubleScalar.of(-1)).toString(), "-1.0*I");
+    assertEquals(Complex.of(RealScalar.ZERO, DoubleScalar.of(1)).toString(), "1.0*I");
+    assertEquals(Complex.of(RealScalar.ZERO, DoubleScalar.of(-1)).toString(), "-1.0*I");
   }
 
   @Test

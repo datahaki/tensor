@@ -7,19 +7,19 @@ import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/** auxiliary functions used in {@link ComplexScalarImpl} */
+/** auxiliary functions used in {@link ComplexImpl} */
 enum ComplexHelper {
   ;
   /** complex division with emphasis on numerical accuracy
    * 
-   * @param n_re not instance of {@link ComplexScalar}
-   * @param n_im not instance of {@link ComplexScalar}
-   * @param d_re not instance of {@link ComplexScalar}
-   * @param d_im not instance of {@link ComplexScalar}
+   * @param n_re not instance of {@link Complex}
+   * @param n_im not instance of {@link Complex}
+   * @param d_re not instance of {@link Complex}
+   * @param d_im not instance of {@link Complex}
    * @return (n_re + n_im * I) / (d_re + d_im * I) */
   public static Scalar division(Scalar n_re, Scalar n_im, Scalar d_re, Scalar d_im) {
     if (Scalars.isZero(d_im))
-      return ComplexScalarImpl.of(n_re.divide(d_re), n_im.divide(d_re));
+      return ComplexImpl.of(n_re.divide(d_re), n_im.divide(d_re));
     final Scalar res_re1;
     final Scalar res_im1;
     if (Scalars.isZero(d_re)) {
@@ -33,7 +33,7 @@ enum ComplexHelper {
     Scalar r2 = c_dcd(d_im, d_re);
     Scalar res_re2 = n_im.divide(r2);
     Scalar res_im2 = n_re.divide(r2).negate();
-    return ComplexScalarImpl.of(res_re1.add(res_re2), res_im1.add(res_im2));
+    return ComplexImpl.of(res_re1.add(res_re2), res_im1.add(res_im2));
   }
 
   /** function is motivated by the expression c / (c^2 + d^2)
@@ -67,14 +67,14 @@ enum ComplexHelper {
     }
     Scalar w2 = w.add(w);
     if (Sign.isPositiveOrZero(c))
-      return ComplexScalarImpl.of(w, d.divide(w2));
+      return ComplexImpl.of(w, d.divide(w2));
     if (Sign.isPositiveOrZero(d))
-      return ComplexScalarImpl.of(da.divide(w2), w);
-    return ComplexScalarImpl.of(da.divide(w2), w.negate());
+      return ComplexImpl.of(da.divide(w2), w);
+    return ComplexImpl.of(da.divide(w2), w.negate());
   }
 
   public static Scalar sqrtPolar(Scalar z) {
-    return ComplexScalar.fromPolar( //
+    return Complex.fromPolar( //
         Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(z)), //
         Arg.FUNCTION.apply(z).multiply(Rational.HALF));
   }

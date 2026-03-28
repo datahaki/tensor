@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -94,7 +94,7 @@ class QuantityMultiplicativeTest {
 
   @Test
   void testDivision3() {
-    Scalar s1 = ComplexScalar.of(1, 2);
+    Scalar s1 = Complex.of(1, 2);
     Scalar s2 = Quantity.of(3, "m");
     assertEquals(s1.divide(s2), s2.under(s1));
     assertEquals(s2.divide(s1), s1.under(s2));

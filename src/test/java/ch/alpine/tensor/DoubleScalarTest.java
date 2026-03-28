@@ -149,7 +149,7 @@ class DoubleScalarTest {
   @Test
   void testEquals() {
     assertFalse(DoubleScalar.of(3.14).equals(null));
-    assertFalse(DoubleScalar.of(3.14).equals(ComplexScalar.of(1, 2)));
+    assertFalse(DoubleScalar.of(3.14).equals(Complex.of(1, 2)));
   }
 
   @Test

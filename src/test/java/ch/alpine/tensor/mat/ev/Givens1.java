@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -17,12 +17,12 @@ record Givens1(int n, Scalar theta, int p, int q) {
     Chop.NONE.requireZero(Im.FUNCTION.apply(theta));
     Tensor tensor = IdentityMatrix.of(n);
     {
-      Scalar t_n = ComplexScalar.unit(theta.negate()); // Exp[I*theta]
+      Scalar t_n = Complex.unit(theta.negate()); // Exp[I*theta]
       tensor.set(t_n.divide(SQRT2), p, p);
       tensor.set(t_n.divide(SQRT2), q, p);
     }
     {
-      Scalar t_p = ComplexScalar.unit(theta); // exp[I*theta]
+      Scalar t_p = Complex.unit(theta); // exp[I*theta]
       tensor.set(t_p.divide(SQRT2).negate(), p, q);
       tensor.set(t_p.divide(SQRT2), q, q);
     }

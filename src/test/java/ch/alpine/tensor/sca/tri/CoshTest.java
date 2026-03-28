@@ -12,7 +12,7 @@ import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -36,8 +36,8 @@ class CoshTest {
 
   @Test
   void testComplex() {
-    Scalar c = Cosh.FUNCTION.apply(ComplexScalar.of(2, 3.));
-    Scalar s = ComplexScalar.of(-3.7245455049153224, +0.5118225699873846);
+    Scalar c = Cosh.FUNCTION.apply(Complex.of(2, 3.));
+    Scalar s = Complex.of(-3.7245455049153224, +0.5118225699873846);
     Tolerance.CHOP.requireClose(c, s);
   }
 

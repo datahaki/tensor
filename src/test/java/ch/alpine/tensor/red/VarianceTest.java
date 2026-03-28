@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -37,7 +37,7 @@ class VarianceTest {
 
   @Test
   void testComplex() {
-    Tensor vector = Tensors.of(ComplexScalar.of(1, 7), ComplexScalar.of(2, -3), ComplexScalar.of(3, 2));
+    Tensor vector = Tensors.of(Complex.of(1, 7), Complex.of(2, -3), Complex.of(3, 2));
     Tensor v = Variance.ofVector(vector);
     assertEquals(v, RealScalar.of(26));
   }

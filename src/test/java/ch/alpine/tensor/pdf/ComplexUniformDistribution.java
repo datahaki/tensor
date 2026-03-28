@@ -3,7 +3,7 @@ package ch.alpine.tensor.pdf;
 
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Clip;
@@ -32,7 +32,7 @@ public class ComplexUniformDistribution implements Distribution {
 
   @Override // from Distribution
   public Scalar randomVariate(RandomGenerator randomGenerator) {
-    return ComplexScalar.of( //
+    return Complex.of( //
         RandomVariate.of(distribution_re, randomGenerator), //
         RandomVariate.of(distribution_im, randomGenerator));
   }

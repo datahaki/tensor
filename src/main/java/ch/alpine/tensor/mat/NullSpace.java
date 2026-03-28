@@ -3,7 +3,7 @@ package ch.alpine.tensor.mat;
 
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
@@ -70,7 +70,7 @@ public enum NullSpace {
     int rows = matrix.length();
     int cols = Unprotect.dimension1Hint(matrix);
     boolean isComplex = Flatten.stream(matrix, 1) //
-        .anyMatch(scalar -> scalar instanceof ComplexScalar);
+        .anyMatch(scalar -> scalar instanceof Complex);
     return rows < cols || isComplex //
         ? usingQR(matrix)
         : usingSvd(matrix);

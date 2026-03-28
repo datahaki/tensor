@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RandomQuaternion;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -66,11 +66,11 @@ class QuaternionTest {
   @Test
   void testComplex() {
     Quaternion q1 = Quaternion.of( //
-        ComplexScalar.of(1, 2), //
-        ComplexScalar.of(2, 3), ComplexScalar.of(-1, 8), ComplexScalar.of(7, 9));
+        Complex.of(1, 2), //
+        Complex.of(2, 3), Complex.of(-1, 8), Complex.of(7, 9));
     Quaternion q2 = Quaternion.of( //
-        ComplexScalar.of(-1, 10), //
-        ComplexScalar.of(-1, 4), ComplexScalar.of(0, 2), ComplexScalar.of(1, -33));
+        Complex.of(-1, 10), //
+        Complex.of(-1, 4), Complex.of(0, 2), Complex.of(1, -33));
     Quaternion res = q1.multiply(q2);
     ExactScalarQ.require(res);
   }
@@ -86,7 +86,7 @@ class QuaternionTest {
 
   @Test
   void testContruct() {
-    Scalar c1 = ComplexScalar.of(1, 3);
+    Scalar c1 = Complex.of(1, 3);
     Scalar q1 = Quaternion.of(1, 3, 0, 0);
     assertEquals(q1, q1);
     assertNotEquals(c1, Quaternion.of(1, 3, 1, 0));
@@ -124,7 +124,7 @@ class QuaternionTest {
 
   @Test
   void testMultiplyComplex() {
-    Scalar c1 = ComplexScalar.of(2, 3);
+    Scalar c1 = Complex.of(2, 3);
     Scalar q1 = Quaternion.of(7, 9, -6, 4);
     Scalar r1 = c1.multiply(q1);
     assertEquals(r1, Quaternion.of(-13, 39, 0, 26));

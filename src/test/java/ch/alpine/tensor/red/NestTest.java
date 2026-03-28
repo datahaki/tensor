@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -38,8 +38,8 @@ class NestTest {
 
   @Test
   void testGamma() {
-    Scalar expected = ComplexScalar.of(0.024484718696096586, -0.3838080212320521);
-    Scalar actual = Nest.of(Gamma.FUNCTION, ComplexScalar.of(0.3, 0.9), 3);
+    Scalar expected = Complex.of(0.024484718696096586, -0.3838080212320521);
+    Scalar actual = Nest.of(Gamma.FUNCTION, Complex.of(0.3, 0.9), 3);
     Chop._08.requireClose(expected, actual);
   }
 

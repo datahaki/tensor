@@ -9,7 +9,7 @@ import java.math.MathContext;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
@@ -98,7 +98,7 @@ class PowerTest {
 
   @Test
   void testZeroComplex1Fail() {
-    assertThrows(Throw.class, () -> Power.of(RealScalar.ZERO, ComplexScalar.I));
+    assertThrows(Throw.class, () -> Power.of(RealScalar.ZERO, Complex.I));
   }
 
   @Test
@@ -115,24 +115,24 @@ class PowerTest {
   @Test
   void testNegativeFractional() {
     Scalar result = Power.of(-2.2, 1.3);
-    Scalar gndtru = ComplexScalar.of(-1.6382047104755275, -2.254795345529229);
+    Scalar gndtru = Complex.of(-1.6382047104755275, -2.254795345529229);
     Tolerance.CHOP.requireClose(result, gndtru);
   }
 
   @Test
   void testNegativeFractionalNeg() {
     Scalar result = Power.of(-2.2, -1.3);
-    Scalar gndtru = ComplexScalar.of(-0.21089641642663778, 0.290274014661784);
+    Scalar gndtru = Complex.of(-0.21089641642663778, 0.290274014661784);
     Tolerance.CHOP.requireClose(result, gndtru);
   }
 
   @Test
   void testComplex() {
-    Scalar a = ComplexScalar.of(2, +3);
-    Scalar b = ComplexScalar.of(4, -2);
+    Scalar a = Complex.of(2, +3);
+    Scalar b = Complex.of(4, -2);
     Scalar c = Power.of(a, b);
     // Mathematica: 245.099 + 1181.35 I
-    assertEquals(c, ComplexScalar.of(245.09854196562927, 1181.3509801973048));
+    assertEquals(c, Complex.of(245.09854196562927, 1181.3509801973048));
   }
 
   @Test

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -48,8 +48,8 @@ class RootsDegree3Test {
     // roots obtained by Mathematica:
     Scalar cR = RealScalar.of(-1.2487729899770943);
     Chop._12.requireZero(polynomial.apply(cR));
-    Scalar cP = ComplexScalar.of(0.3943861563603456, +0.9486756887529066);
-    Scalar cN = ComplexScalar.of(0.3943861563603456, -0.9486756887529066);
+    Scalar cP = Complex.of(0.3943861563603456, +0.9486756887529066);
+    Scalar cN = Complex.of(0.3943861563603456, -0.9486756887529066);
     Chop._12.requireZero(polynomial.apply(cP));
     Chop._12.requireZero(polynomial.apply(cN));
     Tensor roots = Roots.of(coeffs);
@@ -197,8 +197,8 @@ class RootsDegree3Test {
   void testCubicChallenge() {
     Tensor coeffs = Tensors.vector(1.8850384838238452, -0.07845356111460325, -0.6128180724984655, -1.5845220466594934);
     Tensor roots = Roots.of(coeffs);
-    Scalar m0 = ComplexScalar.of(-0.6590816994450482, -0.9180824258012533);
-    Scalar m1 = ComplexScalar.of(-0.6590816994450482, +0.9180824258012533);
+    Scalar m0 = Complex.of(-0.6590816994450482, -0.9180824258012533);
+    Scalar m1 = Complex.of(-0.6590816994450482, +0.9180824258012533);
     Scalar m2 = RealScalar.of(0.9314107665802999);
     assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m0)));
     assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m1)));

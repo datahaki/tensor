@@ -25,13 +25,13 @@ enum ScalarParser {
       Pattern.compile("\\d+").asMatchPredicate(); // optional sign is obsolete
   private static final Predicate<String> PREDICATE_DOUBLE = //
       Pattern.compile(StaticHelper.fpRegex).asMatchPredicate();
-  /** suffix that is appended to imaginary part of {@link ComplexScalar} in function toString() */
+  /** suffix that is appended to imaginary part of {@link Complex} in function toString() */
   private static final String I_SYMBOL = "I";
 
   /** @param _string
    * @return
    * @throws Exception if given string cannot be parsed to a scalar of instance
-   * {@link RealScalar} or {@link ComplexScalar} */
+   * {@link RealScalar} or {@link Complex} */
   public static Scalar of(final String _string) {
     final String string = _string.strip();
     final char[] chars = string.toCharArray();
@@ -86,7 +86,7 @@ enum ScalarParser {
     if (chars[0] == '(' && chars[last] == ')')
       return of(string.substring(1, last));
     if (string.equals(I_SYMBOL))
-      return ComplexScalar.I;
+      return Complex.I;
     if (PREDICATE_INTEGER.test(string))
       return Rational.integer(new BigInteger(string));
     if (PREDICATE_DOUBLE.test(string))

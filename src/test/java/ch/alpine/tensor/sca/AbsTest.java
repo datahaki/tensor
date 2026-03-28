@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -20,8 +20,8 @@ class AbsTest {
 
   @Test
   void testComplex() {
-    assertEquals(Abs.FUNCTION.apply(ComplexScalar.of(3, 4)), RealScalar.of(5));
-    assertEquals(Abs.FUNCTION.apply(ComplexScalar.of(4, 3)), RealScalar.of(5));
+    assertEquals(Abs.FUNCTION.apply(Complex.of(3, 4)), RealScalar.of(5));
+    assertEquals(Abs.FUNCTION.apply(Complex.of(4, 3)), RealScalar.of(5));
   }
 
   @Test

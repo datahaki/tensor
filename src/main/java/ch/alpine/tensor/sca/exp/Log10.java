@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.exp;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -29,9 +29,9 @@ public enum Log10 implements ScalarUnaryOperator {
       double value = scalar.number().doubleValue();
       if (0 <= value)
         return DoubleScalar.of(Math.log10(value));
-      return ComplexScalar.of(Math.log10(-value), PI_LOG10);
+      return Complex.of(Math.log10(-value), PI_LOG10);
     }
-    if (scalar instanceof ComplexScalar z)
+    if (scalar instanceof Complex z)
       return Log.FUNCTION.apply(z).divide(LOG10);
     throw new Throw(scalar);
   }

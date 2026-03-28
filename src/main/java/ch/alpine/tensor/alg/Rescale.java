@@ -4,7 +4,7 @@ package ch.alpine.tensor.alg;
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -43,7 +43,7 @@ public class Rescale implements Serializable {
    * 
    * @param tensor of arbitrary structure
    * @return
-   * @throws Exception if any entry is a {@link ComplexScalar} */
+   * @throws Exception if any entry is a {@link Complex} */
   public static Tensor of(Tensor tensor) {
     return new Rescale(tensor).result();
   }

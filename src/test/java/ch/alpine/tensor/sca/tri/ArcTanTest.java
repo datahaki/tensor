@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -52,31 +52,31 @@ class ArcTanTest {
 
   @Test
   void testComplexReal() {
-    Scalar r = ArcTan.of(ComplexScalar.of(2, 3), RealScalar.of(12));
+    Scalar r = ArcTan.of(Complex.of(2, 3), RealScalar.of(12));
     // 1.39519 - 0.247768 I
-    assertEquals(r, ComplexScalar.of(1.3951860877095887, -0.24776768676598088));
+    assertEquals(r, Complex.of(1.3951860877095887, -0.24776768676598088));
   }
 
   @Test
   void testComplex() {
-    Scalar s = ComplexScalar.of(5, -7);
+    Scalar s = Complex.of(5, -7);
     Scalar r = ArcTan.FUNCTION.apply(s);
     assertEquals(r, ArcTan.FUNCTION.apply(s));
-    assertEquals(r, ComplexScalar.of(1.502726846368326, -0.09444062638970714));
+    assertEquals(r, Complex.of(1.502726846368326, -0.09444062638970714));
   }
 
   @Test
   void testComplex2() {
-    Scalar x = ComplexScalar.of(4, -1);
-    Scalar y = ComplexScalar.of(1, 2);
+    Scalar x = Complex.of(4, -1);
+    Scalar y = Complex.of(1, 2);
     Scalar r = ArcTan.of(x, y);
-    assertEquals(r, ComplexScalar.of(0.1608752771983211, +0.5756462732485114));
+    assertEquals(r, Complex.of(0.1608752771983211, +0.5756462732485114));
   }
 
   @Test
   void testComplexZeroP() {
     Scalar x = RealScalar.ZERO;
-    Scalar y = ComplexScalar.of(1, 2);
+    Scalar y = Complex.of(1, 2);
     Scalar r = ArcTan.of(x, y);
     assertEquals(r, DoubleScalar.of(Math.PI / 2));
   }
@@ -84,7 +84,7 @@ class ArcTanTest {
   @Test
   void testComplexZeroN() {
     Scalar x = RealScalar.ZERO;
-    Scalar y = ComplexScalar.of(-1, 2);
+    Scalar y = Complex.of(-1, 2);
     Scalar r = ArcTan.of(x, y);
     assertEquals(r, DoubleScalar.of(-Math.PI / 2));
   }
@@ -141,7 +141,7 @@ class ArcTanTest {
 
   @Test
   void testDoubleNaNFail() {
-    Scalar nan = ComplexScalar.of(Double.NaN, Double.NaN);
+    Scalar nan = Complex.of(Double.NaN, Double.NaN);
     Scalar res = ArcTan.FUNCTION.apply(nan);
     assertFalse(DeterminateScalarQ.of(res));
     assertEquals(nan.toString(), res.toString());

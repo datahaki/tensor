@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -93,7 +93,7 @@ class QuantityAdditiveTest {
 
   @Test
   void testComplex() {
-    Scalar s1 = ComplexScalar.of(1, 2);
+    Scalar s1 = Complex.of(1, 2);
     Scalar s2 = Quantity.of(0, "m*s");
     assertThrows(Throw.class, () -> s1.add(s2));
     assertThrows(Throw.class, () -> s2.add(s1));
@@ -111,7 +111,7 @@ class QuantityAdditiveTest {
   void testPlusFail() {
     assertThrows(Throw.class, () -> Quantity.of(2, "m").add(Quantity.of(2, "kg")));
     assertThrows(Exception.class, () -> _checkPlusSymmetry( //
-        Quantity.of(ComplexScalar.of(1, 2), "m"), //
+        Quantity.of(Complex.of(1, 2), "m"), //
         Quantity.of(2, "kg")));
   }
 }

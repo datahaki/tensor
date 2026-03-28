@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Modifier;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -17,21 +16,6 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 class UnitParserTest {
   private static void _confirmFail(String string) {
     assertThrows(Exception.class, () -> UnitParser.of(string));
-  }
-
-  @Disabled
-  @Test
-  void testDiv1() {
-    assertEquals(UnitParser.of("m|s^2"), UnitParser.of("m*s^-2"));
-    assertEquals(UnitParser.of("m|s^2"), UnitParser.of("m*s^-2"));
-    assertEquals(UnitParser.of("kg*m|s^2"), UnitParser.of("kg*m*s^-2"));
-    assertEquals(UnitParser.of("m^3|s^2"), UnitParser.of("m^3*s^-2"));
-    assertEquals(UnitParser.of("|s"), UnitParser.of("s^-1"));
-    assertEquals(UnitParser.of("|s^2"), UnitParser.of("s^-2"));
-    assertThrows(Exception.class, () -> UnitParser.of("m|s^2|T"));
-    assertThrows(Exception.class, () -> UnitParser.of("m|s^2*T"));
-    assertEquals(Unit.of("m|m"), Unit.of(""));
-    assertEquals(Unit.of("m*m|m^2"), Unit.of(""));
   }
 
   @Test

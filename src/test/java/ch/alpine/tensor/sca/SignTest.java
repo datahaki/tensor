@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -125,7 +125,7 @@ class SignTest {
 
   @Test
   void testFail() {
-    _checkSignIntFail(ComplexScalar.of(2, 3));
+    _checkSignIntFail(Complex.of(2, 3));
     _checkSignIntFail(Quaternion.of(RealScalar.of(-4), Tensors.vector(1, 2, 3)));
     // _checkFailAll(DoubleScalar.INDETERMINATE);
     _checkFailAll(StringScalar.of("string"));

@@ -11,7 +11,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -39,7 +39,7 @@ class QuantityImplTest {
 
   @Test
   void testSign() {
-    Scalar value = ComplexScalar.of(1, 2);
+    Scalar value = Complex.of(1, 2);
     Scalar result = Sign.FUNCTION.apply(Quantity.of(value, "m*s^-2"));
     Tolerance.CHOP.requireClose(Sign.FUNCTION.apply(value), result);
   }
@@ -82,7 +82,7 @@ class QuantityImplTest {
 
   @Test
   void testArg() { // checked with Mathematica
-    Scalar scalar = Quantity.of(ComplexScalar.of(2, 1), "m");
+    Scalar scalar = Quantity.of(Complex.of(2, 1), "m");
     Scalar arg = Arg.FUNCTION.apply(scalar);
     Tolerance.CHOP.requireClose(arg, ArcTan.FUNCTION.apply(Rational.HALF));
     Tolerance.CHOP.requireClose(arg, ArcTan.of(2, 1));

@@ -3,7 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import java.util.random.RandomGenerator;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.io.MathematicaFormat;
@@ -34,7 +34,7 @@ public record ComplexDiskUniformDistribution(Scalar radius) implements Distribut
   // ---
   @Override
   public Scalar randomVariate(RandomGenerator randomGenerator) {
-    return ComplexScalar.fromPolar( //
+    return Complex.fromPolar( //
         Sqrt.FUNCTION.apply(RandomVariate.of(UniformDistribution.unit(), randomGenerator)), //
         RandomVariate.of(ARG, randomGenerator)).multiply(radius);
   }

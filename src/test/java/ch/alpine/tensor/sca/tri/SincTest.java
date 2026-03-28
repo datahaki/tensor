@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -68,14 +68,14 @@ class SincTest {
 
   @Test
   void testComplex() {
-    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(2, 3.0)));
-    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(-0.002, 0.03)));
-    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(0.002, -0.003)));
-    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(-0.002, -0.003)));
-    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(Double.MIN_VALUE, Double.MIN_VALUE)));
-    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(Double.MIN_VALUE, -Double.MIN_VALUE)));
-    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(-Double.MIN_VALUE, Double.MIN_VALUE)));
-    checkBoth(Sinc.FUNCTION.apply(ComplexScalar.of(-Double.MIN_VALUE, -Double.MIN_VALUE)));
+    checkBoth(Sinc.FUNCTION.apply(Complex.of(2, 3.0)));
+    checkBoth(Sinc.FUNCTION.apply(Complex.of(-0.002, 0.03)));
+    checkBoth(Sinc.FUNCTION.apply(Complex.of(0.002, -0.003)));
+    checkBoth(Sinc.FUNCTION.apply(Complex.of(-0.002, -0.003)));
+    checkBoth(Sinc.FUNCTION.apply(Complex.of(Double.MIN_VALUE, Double.MIN_VALUE)));
+    checkBoth(Sinc.FUNCTION.apply(Complex.of(Double.MIN_VALUE, -Double.MIN_VALUE)));
+    checkBoth(Sinc.FUNCTION.apply(Complex.of(-Double.MIN_VALUE, Double.MIN_VALUE)));
+    checkBoth(Sinc.FUNCTION.apply(Complex.of(-Double.MIN_VALUE, -Double.MIN_VALUE)));
   }
 
   @Test

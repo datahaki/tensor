@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
@@ -36,14 +36,14 @@ class FiniteScalarQTest {
 
   @Test
   void testComplex() {
-    assertTrue(FiniteScalarQ.of(ComplexScalar.of(0., 0.3)));
-    assertTrue(FiniteScalarQ.of(ComplexScalar.of(0., 2)));
+    assertTrue(FiniteScalarQ.of(Complex.of(0., 0.3)));
+    assertTrue(FiniteScalarQ.of(Complex.of(0., 2)));
   }
 
   @Test
   void testComplexCorner() {
-    assertFalse(FiniteScalarQ.of(ComplexScalar.of(Double.POSITIVE_INFINITY, 0.3)));
-    assertFalse(FiniteScalarQ.of(ComplexScalar.of(0., Double.NaN)));
+    assertFalse(FiniteScalarQ.of(Complex.of(Double.POSITIVE_INFINITY, 0.3)));
+    assertFalse(FiniteScalarQ.of(Complex.of(0., Double.NaN)));
   }
 
   @Test
@@ -88,8 +88,8 @@ class FiniteScalarQTest {
     assertFalse(FiniteScalarQ.of(Quantity.of(DoubleScalar.POSITIVE_INFINITY, "s")));
     assertFalse(FiniteScalarQ.of(Quantity.of(DoubleScalar.NEGATIVE_INFINITY, "N")));
     assertFalse(FiniteScalarQ.of(Quantity.of(DoubleScalar.INDETERMINATE, "m")));
-    assertFalse(FiniteScalarQ.of(Quantity.of(ComplexScalar.of(3, Double.NaN), "m")));
-    assertFalse(FiniteScalarQ.of(Quantity.of(ComplexScalar.of(Double.NaN, 3), "m")));
+    assertFalse(FiniteScalarQ.of(Quantity.of(Complex.of(3, Double.NaN), "m")));
+    assertFalse(FiniteScalarQ.of(Quantity.of(Complex.of(Double.NaN, 3), "m")));
     assertFalse(FiniteScalarQ.of(Binomial.of(RealScalar.of(123412341234324L), RealScalar.ZERO)));
   }
 
@@ -116,13 +116,13 @@ class FiniteScalarQTest {
 
   @Test
   void testComplexBranching() {
-    Scalar scalar = ComplexScalar.of(Double.NaN, Double.NaN);
-    assertInstanceOf(ComplexScalar.class, scalar);
+    Scalar scalar = Complex.of(Double.NaN, Double.NaN);
+    assertInstanceOf(Complex.class, scalar);
     assertFalse(FiniteScalarQ.of(scalar));
-    assertTrue(FiniteScalarQ.of(ComplexScalar.of(1, 2)));
-    assertFalse(FiniteScalarQ.of(ComplexScalar.of(3, Double.NaN)));
-    assertFalse(FiniteScalarQ.of(ComplexScalar.of(Double.NaN, 4)));
-    assertFalse(FiniteScalarQ.of(ComplexScalar.of(Double.NaN, Double.NaN)));
+    assertTrue(FiniteScalarQ.of(Complex.of(1, 2)));
+    assertFalse(FiniteScalarQ.of(Complex.of(3, Double.NaN)));
+    assertFalse(FiniteScalarQ.of(Complex.of(Double.NaN, 4)));
+    assertFalse(FiniteScalarQ.of(Complex.of(Double.NaN, Double.NaN)));
   }
 
   @Test

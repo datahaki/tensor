@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -121,8 +121,8 @@ class LogisticDistributionTest {
 
   @Test
   void testComplexFail() {
-    assertThrows(ClassCastException.class, () -> LogisticDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
-    assertThrows(ClassCastException.class, () -> LogisticDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
+    assertThrows(ClassCastException.class, () -> LogisticDistribution.of(Complex.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> LogisticDistribution.of(RealScalar.ONE, Complex.of(1, 2)));
   }
 
   @Test

@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.erf;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.ReIm;
@@ -15,11 +15,11 @@ import ch.alpine.tensor.num.ReIm;
 public enum Erfi implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar I_NEGATE = ComplexScalar.of(0.0, -1.0);
+  private static final Scalar I_NEGATE = Complex.of(0.0, -1.0);
 
   @Override
   public Scalar apply(Scalar z) {
     ReIm reIm = ReIm.of(z);
-    return I_NEGATE.multiply(Erf.FUNCTION.apply(ComplexScalar.of(reIm.im().negate(), reIm.re())));
+    return I_NEGATE.multiply(Erf.FUNCTION.apply(Complex.of(reIm.im().negate(), reIm.re())));
   }
 }

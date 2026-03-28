@@ -32,7 +32,7 @@ class ComplexHelperTest {
   @Test
   void testPolar() {
     Scalar abs = Quantity.of(2, "V*m^-1");
-    Scalar q = ComplexScalar.fromPolar(abs, RealScalar.ONE);
+    Scalar q = Complex.fromPolar(abs, RealScalar.ONE);
     assertInstanceOf(Quantity.class, q);
     Scalar modulus = Abs.FUNCTION.apply(q);
     assertEquals(modulus, abs);
@@ -40,7 +40,7 @@ class ComplexHelperTest {
 
   @Test
   void testUnder1() {
-    Scalar c = ComplexScalar.of(2, 3);
+    Scalar c = Complex.of(2, 3);
     Scalar q = Quantity.of(1, "V");
     Scalar cuq = c.under(q);
     assertInstanceOf(Quantity.class, cuq);
@@ -54,7 +54,7 @@ class ComplexHelperTest {
 
   @Test
   void testUnder2() {
-    Scalar c = ComplexScalar.of(2, 3);
+    Scalar c = Complex.of(2, 3);
     Scalar q = Quantity.of(1, "V");
     Scalar quc = q.under(c);
     assertInstanceOf(Quantity.class, quc);
@@ -68,8 +68,8 @@ class ComplexHelperTest {
 
   @Test
   void testUnder3() {
-    Scalar q1 = Quantity.of(ComplexScalar.of(2, 3), "m");
-    Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "V");
+    Scalar q1 = Quantity.of(Complex.of(2, 3), "m");
+    Scalar q2 = Quantity.of(Complex.of(-1, 7), "V");
     Scalar quc = q1.under(q2);
     assertInstanceOf(Quantity.class, quc);
     Scalar cdq = q2.divide(q1);
@@ -82,21 +82,21 @@ class ComplexHelperTest {
 
   @Test
   void testUnder4() {
-    Scalar q1 = Quantity.of(ComplexScalar.of(2, 3), "m");
-    Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
+    Scalar q1 = Quantity.of(Complex.of(2, 3), "m");
+    Scalar q2 = Quantity.of(Complex.of(-1, 7), "m");
     Scalar quc = q1.under(q2);
-    assertInstanceOf(ComplexScalar.class, quc);
+    assertInstanceOf(Complex.class, quc);
     Scalar cdq = q2.divide(q1);
-    assertInstanceOf(ComplexScalar.class, cdq);
+    assertInstanceOf(Complex.class, cdq);
     Scalar qrc = q1.reciprocal().multiply(q2);
-    assertInstanceOf(ComplexScalar.class, qrc);
+    assertInstanceOf(Complex.class, qrc);
     assertEquals(quc, qrc);
     assertEquals(quc, cdq);
   }
 
   @Test
   void testPlusQuantity() {
-    Scalar c = ComplexScalar.of(2, 3);
+    Scalar c = Complex.of(2, 3);
     Scalar q = Quantity.of(0, "V");
     // Mathematica 12 does not resolve this
     assertThrows(Throw.class, () -> c.add(q));
@@ -107,7 +107,7 @@ class ComplexHelperTest {
   void testSqrt(Distribution distribution) {
     Scalar re = RandomVariate.of(distribution);
     Scalar im = RandomVariate.of(distribution);
-    Scalar scalar = ComplexScalar.of(re, im);
+    Scalar scalar = Complex.of(re, im);
     Scalar ref = ComplexHelper.sqrtPolar(scalar);
     Scalar cmp = ComplexHelper.sqrt(re, im);
     Tolerance.CHOP.requireClose(ref, cmp);
@@ -117,10 +117,10 @@ class ComplexHelperTest {
   void testEpsilonP1() {
     Scalar re = RealScalar.of(4.9E-324);
     Scalar im = RealScalar.of(4.9E-324);
-    Scalar scalar = ComplexScalar.of(re, im);
+    Scalar scalar = Complex.of(re, im);
     Scalar ref = ComplexHelper.sqrtPolar(scalar);
     Scalar cmp = ComplexHelper.sqrt(re, im);
-    Scalar mathematica = ComplexScalar.of(2.432040959320809E-162, 1.007384349597552E-162);
+    Scalar mathematica = Complex.of(2.432040959320809E-162, 1.007384349597552E-162);
     boolean lessThan = Scalars.lessThan( //
         Abs.between(cmp, mathematica), //
         Abs.between(ref, mathematica));
@@ -131,10 +131,10 @@ class ComplexHelperTest {
   void testEpsilonN1() {
     Scalar re = RealScalar.of(-4.9E-324);
     Scalar im = RealScalar.of(4.9E-324);
-    Scalar scalar = ComplexScalar.of(re, im);
+    Scalar scalar = Complex.of(re, im);
     Scalar ref = ComplexHelper.sqrtPolar(scalar);
     Scalar cmp = ComplexHelper.sqrt(re, im);
-    Scalar mathematica = ComplexScalar.of(1.007384349597552E-162, 2.432040959320809E-162);
+    Scalar mathematica = Complex.of(1.007384349597552E-162, 2.432040959320809E-162);
     boolean lessThan = Scalars.lessThan( //
         Abs.between(cmp, mathematica), //
         Abs.between(ref, mathematica));
@@ -156,7 +156,7 @@ class ComplexHelperTest {
 
   @Test
   void testPlusQuantityFail() {
-    Scalar c = ComplexScalar.of(2, 3);
+    Scalar c = Complex.of(2, 3);
     Scalar q = Quantity.of(1, "V");
     assertThrows(Throw.class, () -> c.add(q));
   }
@@ -165,7 +165,7 @@ class ComplexHelperTest {
   void testQuantityFail() {
     Scalar c = Quantity.of(3, "m");
     Scalar r = Pi.VALUE;
-    assertThrows(Throw.class, () -> ComplexScalar.of(c, r));
-    assertThrows(Throw.class, () -> ComplexScalar.of(r, c));
+    assertThrows(Throw.class, () -> Complex.of(c, r));
+    assertThrows(Throw.class, () -> Complex.of(r, c));
   }
 }

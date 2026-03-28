@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -103,9 +103,9 @@ class ChebyshevTest {
   void testComplex() {
     Distribution distribution = UniformDistribution.of(Clips.absolute(Pi.VALUE));
     for (int n = 1; n < 10; ++n) {
-      Scalar ab = ComplexScalar.fromPolar(RealScalar.ONE, RandomVariate.of(distribution));
+      Scalar ab = Complex.fromPolar(RealScalar.ONE, RandomVariate.of(distribution));
       final int fn = n;
-      ScalarUnaryOperator suo = z -> ComplexScalar.of( //
+      ScalarUnaryOperator suo = z -> Complex.of( //
           Chebyshev.T.of(fn).apply(Re.FUNCTION.apply(z)), //
           Chebyshev.U.of(fn - 1).apply(Re.FUNCTION.apply(z)).multiply(Im.FUNCTION.apply(z)));
       Scalar c1 = suo.apply(ab);

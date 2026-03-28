@@ -2,13 +2,13 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -18,6 +18,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.sca.Chop;
@@ -151,10 +152,10 @@ class BinomialTest {
     assertEquals(Binomial.of(1000000, 1000000 - 2), RealScalar.of(499999500000L));
   }
 
-  @Disabled
   @Test
   void testLargeFail() {
-    assertThrows(Throw.class, () -> Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO));
+    Scalar scalar = Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO);
+    assertFalse(DeterminateScalarQ.of(scalar));
   }
 
   @Test

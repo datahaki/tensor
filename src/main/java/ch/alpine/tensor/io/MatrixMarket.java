@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -75,7 +75,7 @@ enum MatrixMarket {
   private static Scalar extract(StringTokenizer stringTokenizer) {
     return switch (stringTokenizer.countTokens()) {
     case 1 -> token(stringTokenizer);
-    case 2 -> ComplexScalar.of( //
+    case 2 -> Complex.of( //
         token(stringTokenizer), //
         token(stringTokenizer));
     default -> throw new IllegalArgumentException();

@@ -7,7 +7,7 @@
 // adapted from colt by jph
 package ch.alpine.tensor.sca.bes;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -103,7 +103,7 @@ public enum BesselK {
       /* the real part of BesselK[0, x] is a SYMMETRIC function */
       Scalar re = _0(x.negate());
       Scalar im = DoubleScalar.INDETERMINATE; // unknown to us
-      ComplexScalar.of(re, im);
+      Complex.of(re, im);
       throw new ArithmeticException();
     }
     if (x.equals(RealScalar.ZERO))
@@ -186,7 +186,7 @@ public enum BesselK {
       /* the real part of BesselK[0, x] is an ANTI-SYMMETRIC function */
       Scalar re = _0(x.negate()).negate();
       Scalar im = DoubleScalar.INDETERMINATE; // unknown to us
-      ComplexScalar.of(re, im);
+      Complex.of(re, im);
       throw new ArithmeticException();
     }
     if (x.equals(RealScalar.ZERO))

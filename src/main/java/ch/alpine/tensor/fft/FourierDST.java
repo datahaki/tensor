@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.fft;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -48,7 +48,7 @@ public enum FourierDST implements DiscreteFourierTransform {
             zero, //
             vector, //
             zero, //
-            Reverse.of(vector.negate()))).extract(1, m).divide(ComplexScalar.I));
+            Reverse.of(vector.negate()))).extract(1, m).divide(Complex.I));
       }
       return super.transform(vector);
     }

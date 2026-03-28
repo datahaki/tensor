@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
@@ -72,8 +72,8 @@ class ChopTest {
   @Test
   void testComplex() {
     assertTrue(Chop._05.isClose( //
-        ComplexScalar.of(1.2, 3.1), //
-        ComplexScalar.of(1.2, 3.1000006)));
+        Complex.of(1.2, 3.1), //
+        Complex.of(1.2, 3.1000006)));
   }
 
   @Test

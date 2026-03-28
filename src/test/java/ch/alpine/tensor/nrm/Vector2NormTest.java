@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -26,7 +26,7 @@ class Vector2NormTest {
     assertEquals(Vector2Norm.of(Tensors.fromString("{0}")), RealScalar.ZERO);
     assertEquals(Vector2Norm.of(Tensors.fromString("{-3.90512}")), Scalars.fromString("3.90512"));
     assertEquals(Vector2Norm.of(Tensors.fromString("{-3/7}")), Scalars.fromString("3/7"));
-    Scalar rs = Vector2Norm.of(Tensors.of(ComplexScalar.of(RealScalar.ONE, RealScalar.of(2)))); // <- sqrt(5)
+    Scalar rs = Vector2Norm.of(Tensors.of(Complex.of(RealScalar.ONE, RealScalar.of(2)))); // <- sqrt(5)
     assertEquals(rs, Scalars.fromString("2.23606797749979"));
     assertEquals(Vector2NormSquared.of(Tensors.of(Scalars.fromString("-3/7"))), Scalars.fromString("9/49"));
   }
@@ -39,7 +39,7 @@ class Vector2NormTest {
 
   @Test
   void testVector2() {
-    Tensor A = Tensors.of(ComplexScalar.of( //
+    Tensor A = Tensors.of(Complex.of( //
         RealScalar.ONE, RealScalar.of(2)), DoubleScalar.of(1.5));
     assertEquals(Vector2Norm.of(A), Scalars.fromString("2.6925824035672523"));
     Tensor a = Tensors.vector(2, 3, 4);
@@ -48,7 +48,7 @@ class Vector2NormTest {
 
   @Test
   void testVector3() {
-    Tensor A = Tensors.of(ComplexScalar.of(1, 2), DoubleScalar.of(1.5));
+    Tensor A = Tensors.of(Complex.of(1, 2), DoubleScalar.of(1.5));
     assertEquals(Vector2Norm.of(A), DoubleScalar.of(2.6925824035672523)); // 2.69258
   }
 

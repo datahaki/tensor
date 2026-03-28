@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.chq;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
@@ -28,7 +28,7 @@ import ch.alpine.tensor.qty.Quantity;
  * </pre>
  * 
  * <p>NumberQ does not indicate whether {@link Scalar#number()} returns a Number.
- * For instance, {@link ComplexScalar#number()} throws an exception.
+ * For instance, {@link Complex#number()} throws an exception.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/NumberQ.html">NumberQ</a>
@@ -40,7 +40,7 @@ enum MathematicaNumberQ {
   /** @param scalar
    * @return whether scalar satisfies the NumberQ predicate */
   public static boolean of(Scalar scalar) {
-    if (scalar instanceof ComplexScalar complexScalar)
+    if (scalar instanceof Complex complexScalar)
       return of(complexScalar.real()) //
           && of(complexScalar.imag());
     if (scalar instanceof Quantity)

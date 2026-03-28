@@ -34,12 +34,12 @@ class AbstractRealScalarTest {
       Hold.zero(), //
       DecimalScalar.of(new BigDecimal("4.123"), 34), //
       Pi.in(50), //
-      ComplexScalar.of(2, 3), //
-      ComplexScalar.of(6, -8.3), //
-      ComplexScalar.of(RealScalar.of(2.3), Rational.of(2, 9)), //
-      ComplexScalar.of(Pi.in(40), Rational.of(-4, 5)), //
-      ComplexScalar.of(Rational.of(-2, 17), Pi.in(20)), //
-      ComplexScalar.of(Rational.of(-7, 13), Rational.of(53, 887)));
+      Complex.of(2, 3), //
+      Complex.of(6, -8.3), //
+      Complex.of(RealScalar.of(2.3), Rational.of(2, 9)), //
+      Complex.of(Pi.in(40), Rational.of(-4, 5)), //
+      Complex.of(Rational.of(-2, 17), Pi.in(20)), //
+      Complex.of(Rational.of(-7, 13), Rational.of(53, 887)));
 
   private static void _checkAdd(Scalar a, Scalar b) {
     {

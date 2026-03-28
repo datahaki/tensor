@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -30,8 +30,8 @@ class CosTest {
 
   @Test
   void testComplex() {
-    Scalar c = Cos.FUNCTION.apply(ComplexScalar.of(2, 3.));
-    Scalar s = ComplexScalar.of(-4.189625690968807, -9.109227893755337);
+    Scalar c = Cos.FUNCTION.apply(Complex.of(2, 3.));
+    Scalar s = Complex.of(-4.189625690968807, -9.109227893755337);
     assertEquals(c, s);
   }
 

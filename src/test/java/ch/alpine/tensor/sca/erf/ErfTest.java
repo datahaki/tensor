@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -61,16 +61,16 @@ class ErfTest {
 
   @Test
   void testComplex() {
-    Scalar scalar = ComplexScalar.of(+1.2, 1.4);
-    Scalar expect = ComplexScalar.of(+1.294669945215742, -0.4089868112498779);
+    Scalar scalar = Complex.of(+1.2, 1.4);
+    Scalar expect = Complex.of(+1.294669945215742, -0.4089868112498779);
     Scalar result = Erf.FUNCTION.apply(scalar);
     Tolerance.CHOP.requireClose(expect, result);
   }
 
   @Test
   void testComplexNeg() {
-    Scalar scalar = ComplexScalar.of(-1.2, 1.4);
-    Scalar expect = ComplexScalar.of(-1.294669945215742, -0.4089868112498779);
+    Scalar scalar = Complex.of(-1.2, 1.4);
+    Scalar expect = Complex.of(-1.294669945215742, -0.4089868112498779);
     Scalar result = Erf.FUNCTION.apply(scalar);
     Tolerance.CHOP.requireClose(expect, result);
   }

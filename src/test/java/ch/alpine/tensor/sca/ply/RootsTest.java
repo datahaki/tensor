@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -51,7 +51,7 @@ class RootsTest {
     Random random = new Random(3);
     for (int length = 1; length <= 3; ++length)
       for (int index = 0; index < LIMIT; ++index) {
-        Tensor zeros = ConstantArray.of(ComplexScalar.of( //
+        Tensor zeros = ConstantArray.of(Complex.of( //
             RandomVariate.of(distribution, random), //
             RandomVariate.of(distribution, random)), length);
         Tensor coeffs = Polynomial.fromRoots(zeros).coeffs();
@@ -205,7 +205,7 @@ class RootsTest {
     Distribution distribution = NormalDistribution.standard();
     int length = repetitionInfo.getCurrentRepetition();
     for (int index = 0; index < LIMIT; ++index) {
-      Tensor coeffs = Array.of(list -> Quantity.of(ComplexScalar.of( //
+      Tensor coeffs = Array.of(list -> Quantity.of(Complex.of( //
           RandomVariate.of(distribution), RandomVariate.of(distribution)), "m^-" + list.getFirst()), length);
       Tensor roots = Roots.of(coeffs);
       ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -108,6 +108,6 @@ class ColorDataGradientsTest {
     assumeFalse(colorDataGradient.equals(ColorDataGradients.HUE));
     assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(-0.1)));
     assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(1.1)));
-    assertThrows(Throw.class, () -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
+    assertThrows(Throw.class, () -> colorDataGradient.apply(Complex.of(0.5, 0.5)));
   }
 }

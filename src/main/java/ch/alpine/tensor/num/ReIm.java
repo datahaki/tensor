@@ -22,6 +22,12 @@ public record ReIm(Scalar re, Scalar im) implements Serializable {
         Im.FUNCTION.apply(z));
   }
 
+  public static Tensor vector(Scalar z) {
+    return Tensors.of( //
+        Re.FUNCTION.apply(z), //
+        Im.FUNCTION.apply(z));
+  }
+
   /** @param re
    * @param im
    * @param z_re

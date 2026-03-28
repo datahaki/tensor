@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -42,13 +42,13 @@ import ch.alpine.tensor.sca.exp.Log;
 public enum ArcTan implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar I_HALF = ComplexScalar.I.multiply(Rational.HALF);
+  private static final Scalar I_HALF = Complex.I.multiply(Rational.HALF);
 
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RealScalar)
       return DoubleScalar.of(Math.atan(scalar.number().doubleValue()));
-    return I_HALF.multiply(Log.FUNCTION.apply(ComplexScalar.I.add(scalar).divide(ComplexScalar.I.subtract(scalar))));
+    return I_HALF.multiply(Log.FUNCTION.apply(Complex.I.add(scalar).divide(Complex.I.subtract(scalar))));
   }
 
   /** Careful: the ordering of input arguments is

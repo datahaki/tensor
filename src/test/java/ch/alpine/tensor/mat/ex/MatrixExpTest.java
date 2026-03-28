@@ -14,7 +14,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -142,7 +142,7 @@ class MatrixExpTest {
   @RepeatedTest(5)
   void testNoScaleComplex() {
     Distribution distribution = NormalDistribution.of(0, 5);
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
+    Tensor matrix = Entrywise.with(Complex::of).apply( //
         RandomVariate.of(distribution, 2, 2), //
         RandomVariate.of(distribution, 2, 2));
     Tensor exp1 = MatrixExp.of(matrix);
@@ -172,7 +172,7 @@ class MatrixExpTest {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
     Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
+    Tensor matrix = Entrywise.with(Complex::of).apply(real, imag);
     HermitianMatrixQ.INSTANCE.require(matrix);
     Tensor exp1 = MatrixExp.of(matrix);
     Tensor exp2 = MatrixExp.ofHermitian(matrix);

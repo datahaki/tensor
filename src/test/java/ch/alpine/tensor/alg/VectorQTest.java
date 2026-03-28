@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -23,7 +23,7 @@ class VectorQTest {
   @Test
   void testScalar() {
     assertFalse(VectorQ.of(RealScalar.ONE));
-    assertFalse(VectorQ.of(ComplexScalar.I));
+    assertFalse(VectorQ.of(Complex.I));
   }
 
   @Test

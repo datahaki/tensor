@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -31,7 +31,7 @@ class DivisibleTest {
 
   @Test
   void testComplex() {
-    Scalar c2 = ComplexScalar.of(2, 3);
+    Scalar c2 = Complex.of(2, 3);
     Scalar c1 = c2.multiply(RealScalar.of(3));
     assertTrue(Divisible.of(c1, c2));
     assertFalse(Divisible.of(c2, c1));
@@ -39,8 +39,8 @@ class DivisibleTest {
 
   @Test
   void testGaussian() {
-    Scalar c1 = ComplexScalar.of(3, 1);
-    Scalar c2 = ComplexScalar.of(2, -1);
+    Scalar c1 = Complex.of(3, 1);
+    Scalar c2 = Complex.of(2, -1);
     assertTrue(Divisible.of(c1, c2));
     assertFalse(Divisible.of(c2, c1));
   }

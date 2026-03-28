@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -115,7 +115,7 @@ class FourierTest {
   @Test
   void testVandermonde() {
     for (int n = 1; n < 8; ++n) {
-      Tensor vector = Subdivide.of(RealScalar.ZERO, Pi.TWO, n).multiply(ComplexScalar.I).maps(Exp.FUNCTION).extract(0, n);
+      Tensor vector = Subdivide.of(RealScalar.ZERO, Pi.TWO, n).multiply(Complex.I).maps(Exp.FUNCTION).extract(0, n);
       Scalar scalar = Sqrt.FUNCTION.apply(Rational.of(1, n));
       Tensor matrix = VandermondeMatrix.of(vector).multiply(scalar);
       Tolerance.CHOP.requireClose(Fourier.FORWARD.matrix(n), matrix);

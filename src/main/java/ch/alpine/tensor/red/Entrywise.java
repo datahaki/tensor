@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -28,7 +28,7 @@ import ch.alpine.tensor.ext.Integers;
  * <p>Example:
  * Let real and imag be tensors of same dimensions with entries of type
  * {@link RealScalar}. Then the following code gives a tensor with
- * {@link ComplexScalar} consisting of corresponding real and imaginary
+ * {@link Complex} consisting of corresponding real and imaginary
  * values drawn from given tensors.
  * <pre>
  * Tensor tensor = Entrywise.with(ComplexScalar::of).apply(real, imag);

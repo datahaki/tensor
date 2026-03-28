@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -26,7 +26,7 @@ import ch.alpine.tensor.red.Entrywise;
 class MatlabExportTest {
   @Test
   void testScalar() {
-    Stream<String> stream = MatlabExport.of(ComplexScalar.of(2, 3));
+    Stream<String> stream = MatlabExport.of(Complex.of(2, 3));
     List<String> list = stream.collect(Collectors.toList());
     assertTrue(list.contains("a=2+3*I;"));
     // list.forEach(System.out::println);
@@ -51,7 +51,7 @@ class MatlabExportTest {
   @Test
   void testMatrix() {
     Tensor m = HilbertMatrix.of(3, 4);
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(m, m);
+    Tensor matrix = Entrywise.with(Complex::of).apply(m, m);
     Stream<String> stream = MatlabExport.of(matrix);
     List<String> list = stream.collect(Collectors.toList());
     assertTrue(list.contains("a=zeros([3, 4]);"));

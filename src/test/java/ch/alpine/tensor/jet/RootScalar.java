@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -22,8 +22,8 @@ public class RootScalar extends MultiplexScalar implements //
     AbsInterface, Serializable {
   /** creator with package visibility
    * 
-   * @param re neither a {@link ComplexScalar}, or {@link Quantity}
-   * @param im neither a {@link ComplexScalar}, or {@link Quantity}
+   * @param re neither a {@link Complex}, or {@link Quantity}
+   * @param im neither a {@link Complex}, or {@link Quantity}
    * @return */
   public static Scalar of(Scalar re, Scalar im, Scalar ba) {
     if (re instanceof MultiplexScalar || //

@@ -11,7 +11,7 @@ import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -39,7 +39,7 @@ class LinearSolveTest {
     RandomGenerator randomGenerator = ThreadLocalRandom.current();
     int n = 5 + randomGenerator.nextInt(6);
     Tensor A = Tensors.matrix((_, _) -> //
-    ComplexScalar.of( //
+    Complex.of( //
         RealScalar.of(randomGenerator.nextInt(15)), //
         RealScalar.of(randomGenerator.nextInt(15))), n, n);
     assumeTrue(Scalars.nonZero(Det.of(A)));
@@ -58,7 +58,7 @@ class LinearSolveTest {
     Tensor A = Tensors.matrix((_, _) -> //
     Rational.of(randomGenerator.nextInt(100), randomGenerator.nextInt(100) + 1), n, n);
     assumeTrue(Scalars.nonZero(Det.of(A)));
-    Tensor b = Tensors.matrix((_, _) -> ComplexScalar.of(//
+    Tensor b = Tensors.matrix((_, _) -> Complex.of(//
         RealScalar.of(randomGenerator.nextInt(15)), //
         RealScalar.of(randomGenerator.nextInt(15))), n, n + 3);
     Tensor X = LinearSolve.of(A, b);
@@ -73,7 +73,7 @@ class LinearSolveTest {
     Random random = new Random(123);
     int n = 7;
     Tensor A = Tensors.matrix((_, _) -> DoubleScalar.of(4 * random.nextGaussian() - 2), n, n);
-    Tensor b = Tensors.matrix((_, _) -> ComplexScalar.of( //
+    Tensor b = Tensors.matrix((_, _) -> Complex.of( //
         RealScalar.of(random.nextDouble()), //
         RealScalar.of(random.nextDouble())), n, n - 2);
     Tensor X = LinearSolve.of(A, b);

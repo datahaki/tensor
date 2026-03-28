@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -215,7 +215,7 @@ class InfluenceMatrixTest {
     Distribution distribution = TriangularDistribution.with(0, 2);
     Tensor re = RandomVariate.of(distribution, 5, 3);
     Tensor im = RandomVariate.of(distribution, 5, 3);
-    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im).maps(Rationalize._5);
+    Tensor design = Entrywise.with(Complex::of).apply(re, im).maps(Rationalize._5);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     assertEquals(influenceMatrix.leverages().maps(Im.FUNCTION), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();

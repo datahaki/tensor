@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -154,7 +154,7 @@ class QRDecompositionTest {
 
   @Test
   void testComplexDiagonal() {
-    Tensor matrix = DiagonalMatrix.of(ComplexScalar.of(2, 3), ComplexScalar.of(-6, -1));
+    Tensor matrix = DiagonalMatrix.of(Complex.of(2, 3), Complex.of(-6, -1));
     QRDecompositionWrap.of(matrix);
   }
 

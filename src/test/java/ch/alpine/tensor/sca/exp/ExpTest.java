@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.Chop;
 class ExpTest {
   @Test
   void testEuler() {
-    Scalar emi = Exp.FUNCTION.apply(ComplexScalar.of(RealScalar.ZERO, Pi.VALUE.negate()));
+    Scalar emi = Exp.FUNCTION.apply(Complex.of(RealScalar.ZERO, Pi.VALUE.negate()));
     Scalar tru = RealScalar.ONE.negate();
     Chop._15.requireClose(emi, tru);
   }
@@ -48,10 +48,10 @@ class ExpTest {
 
   @Test
   void testComplexDecimal() {
-    Scalar scalar = Exp.FUNCTION.apply(ComplexScalar.of( //
+    Scalar scalar = Exp.FUNCTION.apply(Complex.of( //
         DecimalScalar.of(new BigDecimal("1")), //
         DecimalScalar.of(new BigDecimal("2.12"))));
-    assertInstanceOf(ComplexScalar.class, scalar);
+    assertInstanceOf(Complex.class, scalar);
     // mathematica gives -1.4189653368301074` + 2.3185326117622904` I
     Scalar m = Scalars.fromString("-1.4189653368301074 + 2.3185326117622904 * I");
     Chop._15.requireClose(scalar, m);

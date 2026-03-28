@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Im;
@@ -19,9 +19,9 @@ class GivensComplexInv {
     Chop.NONE.requireZero(Im.FUNCTION.apply(theta2));
     Scalar cos = Cos.FUNCTION.apply(theta2);
     Scalar sin = Sin.FUNCTION.apply(theta2);
-    rpp = ComplexScalar.unit(theta1).multiply(ComplexScalar.I).multiply(sin);
-    rpq = ComplexScalar.unit(theta1).multiply(cos);
-    rqp = ComplexScalar.unit(theta1.negate()).negate().multiply(cos);
-    rqq = ComplexScalar.unit(theta1.negate()).multiply(ComplexScalar.I).negate().multiply(sin);
+    rpp = Complex.unit(theta1).multiply(Complex.I).multiply(sin);
+    rpq = Complex.unit(theta1).multiply(cos);
+    rqp = Complex.unit(theta1.negate()).negate().multiply(cos);
+    rqq = Complex.unit(theta1.negate()).multiply(Complex.I).negate().multiply(sin);
   }
 }

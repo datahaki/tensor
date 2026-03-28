@@ -22,7 +22,7 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -317,8 +317,8 @@ class DateTimeTest {
     assertEquals(dt1, dt1.floor());
     assertNotEquals(dt1, "asd");
     assertThrows(Throw.class, () -> dt1.add(RealScalar.of(3)));
-    assertThrows(Throw.class, () -> dt1.add(ComplexScalar.I));
-    assertThrows(Throw.class, () -> dt1.compareTo(ComplexScalar.I));
+    assertThrows(Throw.class, () -> dt1.add(Complex.I));
+    assertThrows(Throw.class, () -> dt1.compareTo(Complex.I));
   }
 
   @Test

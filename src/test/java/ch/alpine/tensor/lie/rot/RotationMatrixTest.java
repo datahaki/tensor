@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
@@ -30,9 +30,9 @@ class RotationMatrixTest {
 
   @Test
   void testComplex() {
-    Tensor matrix = RotationMatrix.of(ComplexScalar.of(1, 2));
-    Tolerance.CHOP.requireClose(matrix.Get(0, 0), ComplexScalar.of(2.0327230070196655294, -3.0518977991518000575));
-    Tolerance.CHOP.requireClose(matrix.Get(0, 1), ComplexScalar.of(-3.1657785132161681467, -1.9596010414216058971));
+    Tensor matrix = RotationMatrix.of(Complex.of(1, 2));
+    Tolerance.CHOP.requireClose(matrix.Get(0, 0), Complex.of(2.0327230070196655294, -3.0518977991518000575));
+    Tolerance.CHOP.requireClose(matrix.Get(0, 1), Complex.of(-3.1657785132161681467, -1.9596010414216058971));
     assertTrue(OrthogonalMatrixQ.INSTANCE.test(matrix));
   }
 

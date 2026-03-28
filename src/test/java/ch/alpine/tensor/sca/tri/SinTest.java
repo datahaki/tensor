@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -34,8 +34,8 @@ class SinTest {
 
   @Test
   void testComplex() {
-    Scalar c = Sin.FUNCTION.apply(ComplexScalar.of(2, 3.));
-    Scalar s = ComplexScalar.of(9.15449914691143, -4.168906959966565);
+    Scalar c = Sin.FUNCTION.apply(Complex.of(2, 3.));
+    Scalar s = Complex.of(9.15449914691143, -4.168906959966565);
     assertEquals(c, s);
   }
 

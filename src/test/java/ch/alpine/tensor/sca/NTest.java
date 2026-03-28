@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
@@ -33,7 +33,7 @@ class NTest {
 
   @Test
   void testComplex() {
-    Scalar scalar = ComplexScalar.of(3, 5);
+    Scalar scalar = Complex.of(3, 5);
     assertEquals(scalar.toString(), "3+5*I");
     assertEquals(N.DOUBLE.apply(scalar).toString(), "3.0+5.0*I");
   }
@@ -54,7 +54,7 @@ class NTest {
 
   @Test
   void testComplexContext() {
-    Scalar scalar = ComplexScalar.of(3, 7).reciprocal();
+    Scalar scalar = Complex.of(3, 7).reciprocal();
     ExactScalarQ.require(scalar);
     Scalar d = N.DECIMAL128.apply(scalar);
     // mathematica gives ...... 0.05172413793103448275862068965517241...-0.12068965517241379310344827586206897 I

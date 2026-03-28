@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca.ply;
 
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -41,10 +41,10 @@ class RootsDegree3 {
   private static final Scalar _27 = RealScalar.of(27);
   private static final Scalar P1_3 = Power.of(2, _1_3);
   private static final Scalar R1_2 = P1_3.negate();
-  private static final Scalar R2_2 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3)).divide(Power.of(2, _2_3));
-  private static final Scalar R2_3 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3).negate()).divide(_6).negate();
-  private static final Scalar R3_2 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3).negate()).divide(Power.of(2, _2_3));
-  private static final Scalar R3_3 = ComplexScalar.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3)).divide(_6).negate();
+  private static final Scalar R2_2 = Complex.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3)).divide(Power.of(2, _2_3));
+  private static final Scalar R2_3 = Complex.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3).negate()).divide(_6).negate();
+  private static final Scalar R3_2 = Complex.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3).negate()).divide(Power.of(2, _2_3));
+  private static final Scalar R3_3 = Complex.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3)).divide(_6).negate();
   private static final ScalarUnaryOperator POWER_1_3 = Power.function(_1_3);
   // ---
   private final Scalar d;
@@ -111,7 +111,7 @@ class RootsDegree3 {
       }
       // the equation has one real root and two non-real complex conjugate roots
       // the expression below also works for scalars with unit
-      roots = roots.maps(Re.FUNCTION).add(roots.maps(Im.FUNCTION).maps(Tolerance.CHOP).multiply(ComplexScalar.I));
+      roots = roots.maps(Re.FUNCTION).add(roots.maps(Im.FUNCTION).maps(Tolerance.CHOP).multiply(Complex.I));
     }
     return roots;
   }

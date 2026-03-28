@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
@@ -81,7 +81,7 @@ class WindowFunctionsTest {
   @ParameterizedTest
   @EnumSource
   void testComplexFail(WindowFunctions windowFunctions) {
-    Scalar x = ComplexScalar.of(0.1, 0.2);
+    Scalar x = Complex.of(0.1, 0.2);
     assertThrows(Exception.class, () -> windowFunctions.get().apply(x));
   }
 }

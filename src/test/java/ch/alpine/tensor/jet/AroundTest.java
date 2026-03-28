@@ -13,7 +13,7 @@ import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -231,7 +231,7 @@ class AroundTest {
 
   @Test
   void testAbsComplex() {
-    Scalar scalar = Around.of(ComplexScalar.of(3, 4), RealScalar.ONE);
+    Scalar scalar = Around.of(Complex.of(3, 4), RealScalar.ONE);
     Scalar abs = Abs.FUNCTION.apply(scalar);
     assertEquals(abs, Around.of(5, 1));
   }
@@ -250,7 +250,7 @@ class AroundTest {
 
   @Test
   void testAbsSquared() {
-    Around around = (Around) AbsSquared.FUNCTION.apply(Around.of(ComplexScalar.of(2, 3), RealScalar.of(2)));
+    Around around = (Around) AbsSquared.FUNCTION.apply(Around.of(Complex.of(2, 3), RealScalar.of(2)));
     ExactScalarQ.require(around.mean());
   }
 
