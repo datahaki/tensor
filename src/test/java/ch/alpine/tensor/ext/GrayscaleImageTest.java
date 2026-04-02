@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.img.ColorFormat;
+import ch.alpine.tensor.col.ColorFormat;
 import ch.alpine.tensor.io.ImageFormat;
 
 class GrayscaleImageTest {

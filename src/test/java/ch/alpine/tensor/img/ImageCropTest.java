@@ -15,6 +15,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.col.ColorDataGradients;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.spa.SparseArray;

@@ -130,12 +130,13 @@ public enum Unprotect {
    * Example:
    * "ch/alpine/tensor/io/basic.mathematica"
    * is mapped to
-   * "/home/username/Projects/tensor/target/test-classes/ch/alpine/tensor/io/basic.mathematica"
+   * "/home/username/[...]/tensor/target/test-classes/ch/alpine/tensor/io/basic.mathematica"
    * when running during tests
    * 
    * @param string
    * @return
    * @throws Exception if string does not correspond to a resource file, or directory */
+  // TODO check where resData input stream is more suitable
   public static Path resourcePath(String string) {
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
     URL url = classLoader.getResource(string);
@@ -154,6 +155,7 @@ public enum Unprotect {
   /** @param path
    * @param tensor
    * @throws Exception if export of tensor to path fails */
+  // TODO used infrequently
   public static void Export(Path path, Tensor tensor) {
     try {
       Export.of(path, tensor);
@@ -165,6 +167,7 @@ public enum Unprotect {
   /** @param path
    * @return
    * @throws Exception if import from path fails */
+  // TODO only used in tensor : tests
   public static Tensor Import(Path path) {
     try {
       return Import.of(path);

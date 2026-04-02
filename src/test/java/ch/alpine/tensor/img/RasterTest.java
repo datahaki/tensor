@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.col.ColorDataGradients;
+import ch.alpine.tensor.col.ColorDataLists;
 
 class RasterTest {
   @Test
@@ -17,13 +19,6 @@ class RasterTest {
     Tensor matrix = Tensors.fromString("{{0, 0.1}}");
     Tensor image = Raster.of(matrix, ColorDataGradients.CLASSIC);
     assertEquals(Dimensions.of(image), Arrays.asList(1, 2, 4));
-  }
-
-  @Test
-  void testHue() {
-    Tensor matrix = Tensors.fromString("{{0, 0.1}, {1, 2}, {1.2, 0.2}}");
-    Tensor image = Raster.of(matrix, HueColorData.DEFAULT);
-    assertEquals(Dimensions.of(image), Arrays.asList(3, 2, 4));
   }
 
   @Test

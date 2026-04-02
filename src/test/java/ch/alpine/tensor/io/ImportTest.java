@@ -141,7 +141,7 @@ class ImportTest {
 
   @Test
   void testColorschemeClassic() {
-    Tensor tensor = Import.of("ch/alpine/tensor/img/colorscheme/classic.csv");
+    Tensor tensor = Import.of("ch/alpine/tensor/col/scheme/classic.csv");
     assertNotNull(tensor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(256, 4));
     Interpolation interpolation = LinearInterpolation.of(tensor);
@@ -151,7 +151,7 @@ class ImportTest {
 
   @Test
   void testHue() {
-    Tensor tensor = Import.of("ch/alpine/tensor/img/colorscheme/_hue.csv");
+    Tensor tensor = Import.of("ch/alpine/tensor/col/scheme/_hue.csv");
     assertNotNull(tensor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(7, 4));
     Interpolation interpolation = LinearInterpolation.of(tensor);

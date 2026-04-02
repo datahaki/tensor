@@ -10,11 +10,15 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.VectorNorm;
 import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.tri.Sin;
 
 class TensorScalarFunctionTest {
@@ -43,5 +47,12 @@ class TensorScalarFunctionTest {
     TensorScalarFunction tensorScalarFunction = t -> t.Get(0);
     TensorScalarFunction copy = Serialization.copy(tensorScalarFunction);
     assertEquals(copy.apply(Tensors.vector(1, 2, 3)), RealScalar.ONE);
+  }
+
+  @Test
+  void testSlash() {
+    Tensor tensor = IdentityMatrix.of(5);
+    TensorScalarFunction s = Total::ofVector;
+    assertEquals(s.slash(tensor), Array.same(RealScalar.ONE, 5));
   }
 }

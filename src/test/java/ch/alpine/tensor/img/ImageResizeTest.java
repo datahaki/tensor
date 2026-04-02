@@ -3,11 +3,13 @@ package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Dimension;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.NavigableMap;
@@ -45,6 +47,12 @@ class ImageResizeTest {
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2, 2);
     assertEquals(Dimensions.of(image), Arrays.asList(66, 30, 4));
+  }
+
+  @Test
+  void testImage2Dir() throws Exception {
+    Path path = Unprotect.resourcePath("ch/alpine/tensor/img");
+    assertTrue(Files.isDirectory(path));
   }
 
   @Test

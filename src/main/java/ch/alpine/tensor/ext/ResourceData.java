@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
  * 
  * <p>Tensor resources provided by the tensor library include
  * <pre>
- * ch/alpine/tensor/img/colorscheme/classic.csv
+ * ch/alpine/tensor/col/scheme/classic.csv
  * </pre>
  * 
  * <p>Properties provided by the tensor library include

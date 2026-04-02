@@ -6,6 +6,7 @@ import java.util.function.Function;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Rescale;
+import ch.alpine.tensor.col.ColorDataGradients;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Raster.html">Raster</a> */

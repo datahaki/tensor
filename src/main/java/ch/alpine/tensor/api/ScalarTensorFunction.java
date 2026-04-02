@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.img.ColorDataGradient;
+import ch.alpine.tensor.col.ColorDataGradient;
 import ch.alpine.tensor.itp.BSplineFunction;
 
 /** serializable function that maps a {@link Scalar} to a {@link Tensor}

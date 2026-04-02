@@ -20,6 +20,11 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 class HomeDirectoryTest {
   @Test
+  void testUserHome() {
+    assertTrue(Files.isDirectory(HomeDirectory.LazeHolder.USER_HOME));
+  }
+
+  @Test
   void testNested() {
     Path path = HomeDirectory.Documents.resolve("proj1", "admin", "some.txt");
     assertTrue(path.endsWith("some.txt"));

@@ -76,6 +76,7 @@ class UnprotectTest {
     byref.set(RealScalar.ZERO, 0, 0);
     assertEquals(beg, Tensors.vector(0, 2, 3));
     assertEquals(byref, Tensors.fromString("{{0, 2, 3}, {0, 2, 3}, {0, 2, 3}}"));
+    byref.append(beg);
   }
 
   @Test

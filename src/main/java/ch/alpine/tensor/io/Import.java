@@ -53,7 +53,7 @@ public enum Import {
   }
 
   /** Example use:
-   * Interpolation interpolation = LinearInterpolation.of(Import.of("/colorscheme/classic.csv"));
+   * Interpolation interpolation = LinearInterpolation.of(Import.of("ch/alpine/col/scheme/classic.csv"));
    * 
    * @param string as path to resource
    * @return imported tensor

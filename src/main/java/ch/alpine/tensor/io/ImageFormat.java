@@ -14,8 +14,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
+import ch.alpine.tensor.col.ColorFormat;
 import ch.alpine.tensor.ext.GrayscaleImage;
-import ch.alpine.tensor.img.ColorFormat;
 
 /** ImageFormat uses the data alignment of {@link BufferedImage}.
  * 
