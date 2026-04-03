@@ -1,12 +1,11 @@
 // code by jph
-package ch.alpine.tensor.lie.bch;
+package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.lie.ExAd;
 
 class BchSeries6Test {
   @Test

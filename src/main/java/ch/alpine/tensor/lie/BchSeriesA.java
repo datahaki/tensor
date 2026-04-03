@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.lie.bch;
+package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;

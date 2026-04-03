@@ -1,17 +1,16 @@
 // code by jph
-package ch.alpine.tensor.lie.bch;
+package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.lie.ExAd;
 
-class BchSeries8Test {
+class BchSeriesATest {
   @Test
   void testOptimized() {
     Tensor ad = ExAd.SL2.ad();
-    assertInstanceOf(BchSeries8.class, BakerCampbellHausdorff.of(ad, 8));
+    assertInstanceOf(BchSeriesA.class, BakerCampbellHausdorff.of(ad, 10));
   }
 }

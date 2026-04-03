@@ -2,12 +2,14 @@
 package ch.alpine.tensor.sca.bes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
@@ -39,7 +41,7 @@ class BesselKTest {
   @Test
   void test1Zero() {
     Scalar scalar = BesselK._1(0);
-    assertEquals(scalar, ComplexInfinity.INSTANCE);
+    assertFalse(DeterminateScalarQ.of(scalar));
   }
 
   @Test

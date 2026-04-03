@@ -8,7 +8,7 @@ public interface BipartiteMatching {
   /** value of element in array returned by matching */
   int UNASSIGNED = -1;
 
-  /** @param matrix of distances
+  /** @param matrix with dimensions m x n of directed distances
    * @return */
   static BipartiteMatching of(Tensor matrix) {
     return new HungarianAlgorithm(matrix);

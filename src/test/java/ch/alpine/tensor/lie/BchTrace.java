@@ -1,6 +1,6 @@
 // code by jph
 // adapted from code by jph 2006
-package ch.alpine.tensor.lie.bch;
+package ch.alpine.tensor.lie;
 
 import java.io.Serializable;
 import java.util.Map;

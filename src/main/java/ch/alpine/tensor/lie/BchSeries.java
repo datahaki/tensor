@@ -1,9 +1,8 @@
 // code by jph
-package ch.alpine.tensor.lie.bch;
+package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorBinaryOperator;
-import ch.alpine.tensor.lie.JacobiIdentity;
 import ch.alpine.tensor.red.Total;
 
 /** the explicit computation of the terms in the series is about 8-10 times

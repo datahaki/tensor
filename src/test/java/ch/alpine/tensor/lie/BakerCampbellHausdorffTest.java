@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.lie.bch;
+package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -21,9 +21,6 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.lie.CliffordAlgebra;
-import ch.alpine.tensor.lie.ExAd;
-import ch.alpine.tensor.lie.KillingForm;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;

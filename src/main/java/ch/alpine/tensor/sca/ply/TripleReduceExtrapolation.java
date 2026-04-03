@@ -14,7 +14,7 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 /** the implementation uses quadratic extrapolation at the boundaries
  * the weighting is in linear space
  * 
- * @see github/datahaki/sophis/Curvature2D
+ * @see repo github/datahaki/sophis Curvature2D
  * @see AdjacentReduce */
 public abstract class TripleReduceExtrapolation implements TensorUnaryOperator {
   private static final InterpolatingPolynomial INTERPOLATING_POLYNOMIAL = //

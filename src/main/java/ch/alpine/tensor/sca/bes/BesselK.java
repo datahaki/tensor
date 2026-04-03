@@ -190,7 +190,7 @@ public enum BesselK {
       throw new ArithmeticException();
     }
     if (x.equals(RealScalar.ZERO))
-      return ComplexInfinity.INSTANCE;
+      return Complex.INFINITY;
     if (Scalars.lessEquals(x, RealScalar.TWO))
       return Log.FUNCTION.apply(z).multiply(BesselI._1(x)).add(A_k1.apply(x.multiply(x)).divide(x));
     return Exp.FUNCTION.apply(x.negate()).multiply(B_k1.apply(x)).divide(Sqrt.FUNCTION.apply(x));

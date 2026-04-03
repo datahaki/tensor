@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.lie.bch;
+package ch.alpine.tensor.lie;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;

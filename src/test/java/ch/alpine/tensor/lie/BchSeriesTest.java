@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.lie.bch;
+package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.lie.ExAd;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
