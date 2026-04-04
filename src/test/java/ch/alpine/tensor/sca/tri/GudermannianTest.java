@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.sca;
+package ch.alpine.tensor.sca.tri;
 
 import org.junit.jupiter.api.Test;
 

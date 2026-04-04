@@ -1,13 +1,16 @@
 // code by jph
-package ch.alpine.tensor.sca;
+package ch.alpine.tensor.sca.tri;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.exp.Exp;
-import ch.alpine.tensor.sca.tri.ArcTan;
 
-/** inspired by
+/** The Gudermannian function is a special function that connects
+ * trigonometric functions (like sine and tangent) with hyperbolic
+ * functions (like sinh and tanh) — without using complex numbers
+ * 
+ * inspired by
  * <a href="https://reference.wolfram.com/language/ref/Gudermannian.html">Gudermannian</a> */
 public enum Gudermannian implements ScalarUnaryOperator {
   FUNCTION;
