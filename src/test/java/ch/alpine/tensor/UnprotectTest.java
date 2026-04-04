@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.ext.HomeDirectory;
+import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -166,10 +167,18 @@ class UnprotectTest {
   void testIo() {
     Path path = tempDir.resolve("hilbert.csv");
     Tensor matrix = HilbertMatrix.of(3);
-    Unprotect.Export(path, matrix);
-    Tensor result = Unprotect.Import(path);
-    assertEquals(matrix, result);
-    assertEquals(matrix.toString(), result.toString());
+    try {
+      Export.of(path, matrix);
+    } catch (IOException ioException) {
+      throw new UncheckedIOException(ioException);
+    }
+    try {
+      Tensor result = Import.of(path);
+      assertEquals(matrix, result);
+      assertEquals(matrix.toString(), result.toString());
+    } catch (IOException ioException) {
+      throw new UncheckedIOException(ioException);
+    }
   }
 
   @Test
@@ -185,12 +194,6 @@ class UnprotectTest {
   void testDirectory() {
     Path path = Unprotect.resourcePath("ch/alpine/tensor/io");
     assertTrue(Files.isDirectory(path));
-  }
-
-  @Test
-  void testIoFail() {
-    assertThrows(Exception.class, () -> Unprotect.Export(HomeDirectory.Ephemeral.resolve("does", "not", "exist"), Pi._3_4));
-    assertThrows(Exception.class, () -> Unprotect.Import(HomeDirectory.Ephemeral.resolve("does", "not", "exist")));
   }
 
   @Test

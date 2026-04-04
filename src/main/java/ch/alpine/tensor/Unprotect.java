@@ -1,8 +1,6 @@
 // code by jph
 package ch.alpine.tensor;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
@@ -13,8 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.alpine.tensor.alg.Flatten;
-import ch.alpine.tensor.io.Export;
-import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.TableBuilder;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -150,29 +146,5 @@ public enum Unprotect {
         // ---
       }
     throw new IllegalArgumentException(string);
-  }
-
-  /** @param path
-   * @param tensor
-   * @throws Exception if export of tensor to path fails */
-  // TODO used infrequently
-  public static void Export(Path path, Tensor tensor) {
-    try {
-      Export.of(path, tensor);
-    } catch (IOException ioException) {
-      throw new UncheckedIOException(ioException);
-    }
-  }
-
-  /** @param path
-   * @return
-   * @throws Exception if import from path fails */
-  // TODO only used in tensor : tests
-  public static Tensor Import(Path path) {
-    try {
-      return Import.of(path);
-    } catch (IOException ioException) {
-      throw new UncheckedIOException(ioException);
-    }
   }
 }
