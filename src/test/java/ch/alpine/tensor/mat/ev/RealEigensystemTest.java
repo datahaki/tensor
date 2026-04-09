@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Random;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -62,15 +61,6 @@ class RealEigensystemTest {
     Tensor matrix = RandomVariate.of(NormalDistribution.of(0, 1e-10), n, n);
     RealEigensystem eigensystem = new RealEigensystem(matrix);
     new EigensystemQ(matrix).require(eigensystem, Chop._08);
-  }
-
-  @Disabled // schur decomp fails
-  @ParameterizedTest
-  @ValueSource(ints = { 1, 2, 3, 5, 6, 7, 10 })
-  void testRandomEps2(int n) {
-    Tensor matrix = RandomVariate.of(NormalDistribution.of(0, 1e-14), n, n);
-    RealEigensystem eigensystem = new RealEigensystem(matrix);
-    new EigensystemQ(matrix).require(eigensystem);
   }
 
   @ParameterizedTest

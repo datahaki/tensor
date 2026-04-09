@@ -11,7 +11,6 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -164,15 +163,6 @@ class RationalizeTest {
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(10_000);
     Scalar scalar = suo.apply(RealScalar.of(0.0));
     ExactScalarQ.require(scalar);
-  }
-
-  @Disabled
-  @Test
-  void testRationalizeQuantity() {
-    Scalar s = Quantity.of(0.25, "m");
-    ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(10_000);
-    Scalar scalar = suo.apply(s);
-    IO.println(scalar);
   }
 
   static Tensor t(Scalar v) {

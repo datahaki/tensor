@@ -82,6 +82,7 @@ class CyclesTest {
     assertTrue(1 < cb.navigableMap().size());
     assertEquals(cb.combine(cb.inverse()), Cycles.identity());
     assertEquals(cb.inverse().combine(cb), Cycles.identity());
+    assertEquals(ca.combine_previous(cb), ca.combine(cb));
     return ca.combine(cb).toString();
   }
 

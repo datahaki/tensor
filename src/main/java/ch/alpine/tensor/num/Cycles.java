@@ -11,7 +11,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -140,7 +142,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
    * 
    * @param cycles
    * @return */
-  public Cycles combine(Cycles cycles) {
+  Cycles combine_previous(Cycles cycles) {
     NavigableMap<Integer, Integer> result = new TreeMap<>();
     Set<Integer> set = new HashSet<>();
     for (Entry<Integer, Integer> entry : navigableMap.entrySet()) {
@@ -154,6 +156,25 @@ public class Cycles implements Comparable<Cycles>, Serializable {
       int seed = entry.getKey();
       if (set.add(seed))
         result.put(seed, entry.getValue());
+    }
+    return new Cycles(result);
+  }
+
+  /** code by google gemini
+   * 
+   * @param cycles
+   * @return */
+  public Cycles combine(Cycles cycles) {
+    NavigableMap<Integer, Integer> result = new TreeMap<>();
+    // We only need to check points that are moved by EITHER permutation
+    SortedSet<Integer> sortedSet = new TreeSet<>(navigableMap.keySet());
+    sortedSet.addAll(cycles.navigableMap.keySet());
+    for (int init : sortedSet) {
+      // Apply this, then other (following your current logic)
+      int next = navigableMap.getOrDefault(init, init);
+      int dest = cycles.navigableMap.getOrDefault(next, next);
+      if (init != dest)
+        result.put(init, dest);
     }
     return new Cycles(result);
   }
