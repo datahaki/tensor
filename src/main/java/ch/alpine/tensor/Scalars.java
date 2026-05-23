@@ -25,7 +25,7 @@ public enum Scalars {
    * "7/9" -> Rational.of(7, 9)
    * "3.14" -> DoubleScalar.of(3.14)
    * "1E-20" -> DoubleScalar.of(1E-20)
-   * "(3+2)*I/(-1+4)+8-I" -> ComplexScalar.of(8, 2/3) == "8+2/3*I"
+   * "(3+2)*I/(-1+4)+8-I" -> Complex.of(8, 2/3) == "8+2/3*I"
    * "9.81[m*s^-2]" -> Quantity.of(9.81, "m*s^-2")
    * "2020-12-20T04:30" -> DateTime
    * "2020-12-20T04:30:03.125239876" -> DateTime...
