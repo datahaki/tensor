@@ -14,7 +14,7 @@ jobs:
       - name: checkout main repo
         uses: actions/checkout@v5
 
-      - name: set up JDK 27
+      - name: set up JDK
         uses: actions/setup-java@v5
         with:
           java-version: '27'
