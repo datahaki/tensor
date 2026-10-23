@@ -12,7 +12,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.release>26</maven.compiler.release>
+		<maven.compiler.release>27</maven.compiler.release>
 	</properties>
 
 	<!-- Project metadata -->
@@ -67,7 +67,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.16.0</version>
 				<configuration>
-					<release>26</release>
+					<release>27</release>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -116,7 +116,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>3.1.4</version>
+				<version>3.2.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.sonatype.central</groupId>

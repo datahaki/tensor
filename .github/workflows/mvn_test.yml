@@ -14,10 +14,10 @@ jobs:
       - name: checkout main repo
         uses: actions/checkout@v5
 
-      - name: set up JDK 26
+      - name: set up JDK 27
         uses: actions/setup-java@v5
         with:
-          java-version: '26'
+          java-version: '27'
           distribution: 'zulu'
           cache: 'maven'
           check-latest: true

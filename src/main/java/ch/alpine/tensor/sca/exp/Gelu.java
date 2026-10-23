@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.sca.exp;
 
 import ch.alpine.tensor.DoubleScalar;
