@@ -34,6 +34,7 @@ public enum UpperTriangularize {
    * @return
    * @throws Exception if given matrix is not an array of rank 2 */
   public static Tensor of(Tensor matrix, int k) {
+    // TODO not efficient for SparseArray
     return Tensors.matrix((i, j) -> k <= j - i ? matrix.Get(i, j) : matrix.Get(i, j).zero(), //
         matrix.length(), Unprotect.dimension1(matrix));
   }

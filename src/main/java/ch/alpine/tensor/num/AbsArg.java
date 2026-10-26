@@ -10,7 +10,6 @@ import ch.alpine.tensor.sca.Arg;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/AbsArg.html">AbsArg</a> */
-// TODO TENSOR not used at all
 public enum AbsArg {
   ;
   /** @param z
@@ -20,7 +19,7 @@ public enum AbsArg {
   }
 
   /** @param z
-   * @return stream consisting of the two scalars Re[z], and Im[z] */
+   * @return stream consisting of the two scalars Abs[z], and Arg[z] */
   public static Stream<Tensor> stream(Scalar z) {
     return Stream.of( //
         Abs.FUNCTION.apply(z), //

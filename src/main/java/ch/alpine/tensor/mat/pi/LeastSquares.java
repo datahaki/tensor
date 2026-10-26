@@ -10,7 +10,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.cd.LDLDecomposition;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.qr.QRSignOperators;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.Chop;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LeastSquares.html">LeastSquares</a>
  * 
- * @see CholeskyDecomposition
+ * @see LDLDecomposition
  * @see QRDecomposition
  * @see SingularValueDecomposition
  * @see PseudoInverse */
@@ -43,10 +43,10 @@ public enum LeastSquares {
   private static final Chop CHOP = Tolerance.CHOP;
 
   /** If given matrix and b are in exact precision {@link ExactTensorQ} and the
-   * matrix has rank m the {@link CholeskyDecomposition} produces the solution
+   * matrix has rank m the {@link LDLDecomposition} produces the solution
    * to the least squares fit x in exact precision.
    * 
-   * The {@link CholeskyDecomposition} is also used, if given matrix consists
+   * The {@link LDLDecomposition} is also used, if given matrix consists
    * of scalars with two or more different {@link Unit}s.
    * 
    * @param matrix of size n x m
@@ -85,7 +85,7 @@ public enum LeastSquares {
     int m = Unprotect.dimension1Hint(matrix);
     if (m <= n) {
       Tensor mt = ConjugateTranspose.of(matrix);
-      return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt.dot(b));
+      return LDLDecomposition.of(mt.dot(matrix)).solve(mt.dot(b));
     }
     return PseudoInverse.usingCholesky(matrix).dot(b);
   }

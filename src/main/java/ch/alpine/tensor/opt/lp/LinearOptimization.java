@@ -27,7 +27,7 @@ public enum LinearOptimization {
             ? SimplexMethod.of(lp_standard, simplexPivot)
             : SimplexMethod.of(lp_standard.minObjective(), lp_standard.A, lp_standard.b, simplexPivot);
     Tensor x_extract = x.extract(0, lp_standard.var_count());
-    // TODO TENSOR unit adjust
+    // TODO unit adjust
     for (int i = 0; i < x_extract.length(); ++i)
       if (x_extract.Get(i).equals(RealScalar.ZERO))
         x_extract.set(Unprotect.zero_negateUnit(linearProgram.A.Get(0, i)).multiply(linearProgram.b.Get(0)), i);

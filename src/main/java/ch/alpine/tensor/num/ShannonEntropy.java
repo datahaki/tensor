@@ -13,7 +13,7 @@ public enum ShannonEntropy implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    // TODO TENSOR no units involved
+    // TODO no units involved
     return Scalars.isZero(scalar) //
         ? RealScalar.ZERO
         : scalar.multiply(Log.FUNCTION.apply(scalar)).negate();

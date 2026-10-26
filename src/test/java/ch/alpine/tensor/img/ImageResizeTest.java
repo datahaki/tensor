@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -83,6 +84,7 @@ class ImageResizeTest {
     Tensor diff = t1.subtract(t2).maps(Abs.FUNCTION);
     NavigableMap<Scalar, Long> navigableMap = Tally.sorted(Flatten.scalars(diff));
     assertEquals(navigableMap.size(), 1);
+    assertEquals(navigableMap.get(RealScalar.ZERO), 1980);
   }
 
   @ParameterizedTest

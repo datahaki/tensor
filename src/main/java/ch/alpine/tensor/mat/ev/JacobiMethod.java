@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.Conjugate;
 abstract class JacobiMethod {
   protected static final Scalar DBL_EPSILON = DoubleScalar.of(Math.ulp(1.0));
   private static final Scalar HUNDRED = DoubleScalar.of(100);
-  // TODO TENSOR MAT reintroduce adapted phase, but cap at 4?
+  // TODO MAT reintroduce adapted phase, but cap at 4?
   private static final int PHASE1 = 4;
   // ---
   protected final int n;

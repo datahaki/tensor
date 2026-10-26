@@ -77,7 +77,7 @@ class RSolveTest {
     Tensor b = RandomVariate.of(distribution, random, n);
     Tensor expect = LeastSquares.of(matrix, b);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
-    // TODO TENSOR QR this shows that the RSolve API is not yet finished, since there is no way to
+    // TODO QR this shows that the RSolve API is not yet finished, since there is no way to
     // ... perform the below computation with the public tensor API
     Tensor actual = RSolve.of(qrDecomposition, qrDecomposition.getQConjugateTranspose().dot(b));
     Tolerance.CHOP.requireClose(expect, actual);

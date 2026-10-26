@@ -74,7 +74,7 @@ public class StudentTDistribution implements Distribution, //
       Scalar V = RandomVariate.of(ChiSquareDistribution.of(v), randomGenerator);
       return Z.add(mu).multiply(Sqrt.FUNCTION.apply(v.divide(V)));
     }
-    // TODO TENSOR more general?
+    // TODO more general?
     throw new UnsupportedOperationException();
   }
 

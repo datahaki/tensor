@@ -44,7 +44,7 @@ enum RSolve {
   }
 
   private static void failFast(Tensor r, int[] sigma) {
-    // TODO TENSOR MAT refactor with Pivot
+    // TODO MAT refactor with Pivot
     Tensor diag = Tensors.vector(i -> Abs.FUNCTION.apply(Unprotect.withoutUnit(r.Get(i, sigma[i]))), sigma.length);
     Scalar max = (Scalar) diag.stream().reduce(Max::of).orElseThrow();
     Scalar min = (Scalar) diag.stream().reduce(Min::of).orElseThrow();

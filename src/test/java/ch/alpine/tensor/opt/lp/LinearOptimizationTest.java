@@ -60,7 +60,7 @@ class LinearOptimizationTest {
         Tensors.matrixInt(new int[][] { { 1, 5 }, { 2, 1 }, { 1, 1 } }), //
         Tensors.vector(40, 20, 12), Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    // TODO TENSOR LP primal vs dual
+    // TODO LP primal vs dual
     new LinearProgramQ(lpd).check(false);
     Tensor x = LinearOptimization.of(lpd);
     assertEquals(x, Tensors.vector(5, 7));
@@ -98,7 +98,7 @@ class LinearOptimizationTest {
       Tensor tensor = SimplexCorners.of(lpd);
       Tolerance.CHOP.requireClose(x, tensor.get(0));
     }
-    // TODO TENSOR LP primal vs dual, strictly speaking the lp in its
+    // TODO LP primal vs dual, strictly speaking the lp in its
     // current form is not covered by the duality theorem
     // LinearProgramQ.check(lpd, false);
   }
@@ -120,11 +120,11 @@ class LinearOptimizationTest {
     assertEquals(xp, solp.get(0));
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
-    // LinearProgramming.of(lpd); // TODO TENSOR LP throws exception due to "unbounded"
+    // LinearProgramming.of(lpd); // TODO LP throws exception due to "unbounded"
     Tensor sold = SimplexCorners.of(lpp);
     assertEquals(sold.dot(lpp.c).Get(0), Rational.of(10, 9));
     assertThrows(IllegalArgumentException.class, () -> lpp.requireFeasible(Tensors.vector(1, 1)));
-    // TODO TENSOR LP primal vs dual
+    // TODO LP primal vs dual
     // LinearProgramQ.check(lpp, false);
   }
 
@@ -144,7 +144,7 @@ class LinearOptimizationTest {
     assertEquals(x, Tensors.vector(0, 2));
     Tensor solp = SimplexCorners.of(lpd);
     assertEquals(x, solp.get(0));
-    // TODO TENSOR LP primal vs dual
+    // TODO LP primal vs dual
     // LinearProgramQ.check(lpp);
   }
 }

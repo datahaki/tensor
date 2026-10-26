@@ -26,7 +26,7 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.NullSpace;
-import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.cd.LDLDecomposition;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.ex.MatrixLog;
@@ -68,7 +68,7 @@ class Miscellaneous {
         QRDecomposition::of, //
         GramSchmidt::of, //
         Orthogonalize::of, //
-        CholeskyDecomposition::of, //
+        LDLDecomposition::of, //
         MatrixQ::require, //
         Inverse::of, //
         PseudoInverse::of, //

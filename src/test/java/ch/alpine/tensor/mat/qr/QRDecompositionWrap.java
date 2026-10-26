@@ -36,12 +36,12 @@ public enum QRDecompositionWrap {
       if (SquareMatrixQ.INSTANCE.test(A)) {
         // Scalar detA = Det.of(A);
         if (!Chop._10.isZero(qrDecomposition.det())) {
-          // TODO TENSOR also check pseudoInverse
+          // TODO also check pseudoInverse
           // Chop._10.requireClose(A.dot(qrDecomposition.pseudoInverse()), Qi);
         }
       }
       if (qInv0.equals(IdentityMatrix.of(A.length()))) {
-        // TODO TENSOR treat else case
+        // TODO treat else case
         Chop._10.requireClose(Q.dot(R), A);
         Chop._10.requireClose(Q.dot(Qi), IdentityMatrix.of(A.length()));
         Scalar detR = Diagonal.of(R).stream().map(Scalar.class::cast).reduce(Scalar::multiply).get();

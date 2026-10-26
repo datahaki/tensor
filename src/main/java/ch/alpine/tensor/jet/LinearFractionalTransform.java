@@ -61,7 +61,7 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
     Tolerance.CHOP.requireClose(val, val.one());
     return new LinearFractionalTransform(matrix.copy());
   }
-  // TODO TENSOR allow arbitrary matrix without ==1 contraint
+  // TODO allow arbitrary matrix without ==1 contraint
   // .. check for Det != 0
 
   private final Tensor matrix;

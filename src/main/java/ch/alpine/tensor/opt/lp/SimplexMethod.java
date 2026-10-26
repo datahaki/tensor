@@ -97,7 +97,7 @@ class SimplexMethod {
   }
 
   private Tensor getX() {
-    Tensor x = Array.zeros(n); // FIXME TENSOR not generic
+    Tensor x = Array.zeros(n); // FIXME not generic
     for (int index = 0; index < ind.length(); ++index)
       x.set(tab.Get(index, n), ind.Get(index).number().intValue());
     return x;

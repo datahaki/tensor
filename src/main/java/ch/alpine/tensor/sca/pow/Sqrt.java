@@ -35,7 +35,7 @@ public enum Sqrt implements ScalarUnaryOperator {
    * @return root of given scalar */
   // implementation inspired by Luciano Culacciatti
   // http://www.codeproject.com/Tips/257031/Implementing-SqrtRoot-in-BigDecimal
-  // TODO TENSOR could be improved, ask gemini: Binomial Series expansion
+  // TODO could be improved, ask gemini: Binomial Series expansion
   @PackageTestAccess
   static Scalar series(Scalar scalar) {
     if (Scalars.isZero(scalar))

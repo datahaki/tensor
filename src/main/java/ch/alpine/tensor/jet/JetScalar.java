@@ -40,7 +40,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
-/** EXPERIMENTAL TENSOR
+/** EXPERIMENTAL
  * 
  * automatic differentiation
  * 
@@ -165,7 +165,7 @@ public class JetScalar extends MultiplexScalar implements //
     OptionalInt optionalInt = Scalars.optionalInt(exponent);
     if (optionalInt.isPresent()) {
       int expInt = optionalInt.orElseThrow();
-      if (0 <= expInt) // TODO TENSOR JET exponent == zero!?
+      if (0 <= expInt) // TODO JET exponent == zero!?
         return new JetScalar(JetScalars.power(vector, expInt));
     }
     return JetScalars.chain(vector, Power.function(exponent), //

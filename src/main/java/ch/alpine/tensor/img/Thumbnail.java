@@ -33,7 +33,7 @@ public enum Thumbnail {
   }
 
   public static BufferedImage of(BufferedImage bufferedImage, int size, boolean rotate) {
-    // TODO TENSOR CbbFit
+    // TODO CbbFit
     int w = bufferedImage.getWidth();
     int h = bufferedImage.getHeight();
     Scalar s = RealScalar.of(size);

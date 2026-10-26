@@ -4,7 +4,7 @@ package ch.alpine.tensor.mat.pi;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
-import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.cd.LDLDecomposition;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
@@ -23,11 +23,11 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LeastSquares.html">LeastSquares</a>
  * 
- * @see CholeskyDecomposition
+ * @see LDLDecomposition
  * @see QRDecomposition
  * @see SingularValueDecomposition
  * @see PseudoInverse */
-// TODO TENSOR
+// TODO
 enum LeastSquaresFunction {
   ;
   /** @param matrix

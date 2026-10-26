@@ -11,7 +11,7 @@ import ch.alpine.tensor.red.Mean;
 public enum MeanSquaredLossLayer {
   ;
   public static Scalar of(Tensor a, Tensor b) {
-    // TODO TENSOR not sure
+    // TODO not sure
     return Mean.ofVector(Flatten.of(a.subtract(b)).maps(s -> s.multiply(s)));
   }
 }

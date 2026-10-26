@@ -52,7 +52,7 @@ public enum ImageFormat {
    * @param bufferedImage
    * @return tensor encoding the color values of given bufferedImage */
   public static Tensor from(BufferedImage bufferedImage) {
-    // TODO TENSOR reimport grayscale + alpha
+    // TODO reimport grayscale + alpha
     return switch (bufferedImage.getType()) {
     case BufferedImage.TYPE_BYTE_GRAY -> fromGrayscale(bufferedImage);
     default -> Tensors.matrix((y, x) -> ColorFormat.toVector(bufferedImage.getRGB(x, y)), //

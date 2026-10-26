@@ -47,7 +47,7 @@ class PolarDecompositionSvd extends PolarDecompositionBase implements Serializab
 
   @Override // from PolarDecomposition
   public Tensor getPositiveSemidefinite() {
-    // TODO TENSOR can this be simplified?
+    // TODO can this be simplified?
     return MatrixDotTranspose.of(Times.operator(svd.values()).slash(basis), basis);
   }
 
@@ -67,7 +67,7 @@ class PolarDecompositionSvd extends PolarDecompositionBase implements Serializab
     return tensor.add(TensorProduct.of(svd.getU().get(Tensor.ALL, n - 1), ve.add(ve)));
   }
 
-  /** EXPERIMENTAL TENSOR
+  /** EXPERIMENTAL
    * 
    * for input of square matrix, the function returns a matrix with determinant +1
    * 

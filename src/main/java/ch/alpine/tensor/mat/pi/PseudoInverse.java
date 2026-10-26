@@ -11,7 +11,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.cd.LDLDecomposition;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.mat.sv.SingularValueList;
@@ -77,9 +77,9 @@ public enum PseudoInverse {
     int m = Unprotect.dimension1Hint(matrix);
     if (m <= n) {
       Tensor mt = ConjugateTranspose.of(matrix);
-      return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt);
+      return LDLDecomposition.of(mt.dot(matrix)).solve(mt);
     }
-    return ConjugateTranspose.of(CholeskyDecomposition.of( //
+    return ConjugateTranspose.of(LDLDecomposition.of( //
         MatrixDotConjugateTranspose.self(matrix)).solve(matrix));
   }
 

@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
  * <a href="https://reference.wolfram.com/language/ref/Degree.html">Degree</a> */
 public enum Degree {
   ;
-  private static final Unit UNIT = Unit.of("deg");
+  public static final Unit UNIT = Unit.of("deg");
 
   /** the equivalent conversion formula in Mathematica is
    * QuantityMagnitude[Quantity[1, "Degrees"], "Radians"]

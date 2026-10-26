@@ -5,7 +5,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Flatten;
 
-// TODO TENSOR name is not ideal
+// TODO name is not ideal
 public enum EqualsReduce {
   ;
   /** @param tensor

@@ -90,7 +90,7 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
   }
 
   private Tensor flow(Tensor tensor, int count, Scalar value) {
-    // TODO TENSOR IMPL not efficient, too many multiplications
+    // TODO IMPL not efficient, too many multiplications
     return tensor.get(Integers.clip(0, tensor.length() - 1).applyAsInt(count)) //
         .multiply(lanczosKernel.apply(value.subtract(RealScalar.of(count))));
   }

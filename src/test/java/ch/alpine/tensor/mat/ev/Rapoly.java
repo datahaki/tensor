@@ -11,7 +11,7 @@ import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.sca.ply.Polynomial;
 
-/** EXPERIMENTAL TENSOR
+/** EXPERIMENTAL
  * 
  * wrapper of a polynomial that simplifies to a real/complex scalar when
  * higher coefficients are zero. */

@@ -142,7 +142,7 @@ public class Quadir extends AbstractRealScalar implements NInterface, Serializab
 
   @Override
   public Scalar n(MathContext mathContext) {
-    // TODO TENSOR
+    // TODO
     return n();
   }
 

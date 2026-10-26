@@ -65,10 +65,11 @@ public class Rational extends AbstractRealScalar implements //
    * @throws {@link ArithmeticException} if den is zero */
   private static Rational simplify(BigInteger num, BigInteger den) {
     BigInteger gcd = num.gcd(den);
-    BigInteger res = den.divide(gcd);
-    return res.signum() == 1 //
-        ? new Rational(num.divide(gcd), res) //
-        : new Rational(num.divide(gcd).negate(), res.negate());
+    BigInteger res_num = num.divide(gcd);
+    BigInteger res_den = den.divide(gcd);
+    return res_den.signum() == 1 //
+        ? new Rational(res_num, res_den) //
+        : new Rational(res_num.negate(), res_den.negate());
   }
 
   /** numerator */
@@ -188,9 +189,15 @@ public class Rational extends AbstractRealScalar implements //
     OptionalInt optionalInt = Scalars.optionalInt(exponent);
     if (optionalInt.isPresent()) {
       int expInt = optionalInt.orElseThrow();
-      return 0 <= expInt //
-          ? new Rational(num.pow(expInt), den.pow(expInt))
-          : of(den.pow(-expInt), num.pow(-expInt)); // TODO TENSOR gcd is unnecessary
+      if (0 <= expInt)
+        return new Rational(num.pow(expInt), den.pow(expInt));
+      if (num.equals(BigInteger.ZERO))
+        throw new RuntimeException();
+      BigInteger res_num = den.pow(-expInt);
+      BigInteger res_den = num.pow(-expInt);
+      return res_den.signum() == 1 //
+          ? new Rational(res_num, res_den)
+          : new Rational(res_num.negate(), res_den.negate());
     }
     return super.power(exponent);
   }

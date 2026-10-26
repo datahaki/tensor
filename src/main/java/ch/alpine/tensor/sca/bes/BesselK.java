@@ -213,7 +213,7 @@ public enum BesselK {
    *
    * @param nn the order of the Bessel function.
    * @param x the value to compute the bessel function of. */
-  // TODO TENSOR IMPL ensure test coverage, investigate corner cases, use Scalar
+  // TODO IMPL ensure test coverage, investigate corner cases, use Scalar
   public static double kn(int nn, double x) {
     /* Algorithm for Kn.
      * n-1

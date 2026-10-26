@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorBinaryOperator;
-import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.cd.LDLDecomposition;
 import ch.alpine.tensor.mat.re.GaussianElimination;
 import ch.alpine.tensor.mat.re.RowReduce;
 import ch.alpine.tensor.opt.lp.LinearProgram;
@@ -19,7 +19,7 @@ import ch.alpine.tensor.red.Inner;
  * </pre>
  * that are required for some algorithms:
  * 
- * {@link CholeskyDecomposition}
+ * {@link LDLDecomposition}
  * {@link GaussianElimination}
  * {@link RowReduce}
  * {@link LinearProgram}

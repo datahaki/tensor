@@ -41,10 +41,10 @@ enum MatrixLogs {
     return of(matrix);
   }
 
-  // TODO TENSOR do the same as in MatrixExp: finite steps with exact precision, then give up
+  // TODO do the same as in MatrixExp: finite steps with exact precision, then give up
   @PackageTestAccess
   static Tensor of(Tensor matrix) {
-    // TODO TENSOR make function to subtract from reference?
+    // TODO make function to subtract from reference?
     Tensor id = StaticHelper.IDENTITY_MATRIX.apply(matrix.length());
     Tensor rem = matrix.subtract(id);
     List<DenmanBeaversDet> deque = new LinkedList<>();

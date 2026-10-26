@@ -83,7 +83,7 @@ public class ClenshawChebyshev implements ScalarUnaryOperator {
       bk1 = bk0;
       bk0 = x2.multiply(bk1).subtract(bk2).add(a[++k]);
     }
-    // TODO TENSOR non permanent
+    // TODO non permanent
     Scalar r1 = bk0.subtract(bk2).add(a[k]).multiply(Rational.HALF);
     Scalar r2 = x1.multiply(bk1).subtract(bk2).add(a[k]);
     Chop._08.requireClose(r1, r2);

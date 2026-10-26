@@ -57,12 +57,12 @@ public class KaczmarzIteration {
     this.b = b;
     normsq = Tensor.of(matrix.stream().map(Vector2NormSquared::of));
     distribution = CategoricalDistribution.fromUnscaledPDF(normsq);
-    // TODO TENSOR TEST for mixed units
+    // TODO TEST for mixed units
     int m = Unprotect.dimension1(matrix);
     x = Tensors.vector(i -> Quantity.of(0, //
         QuantityUnit.of(b.Get(0)).add(QuantityUnit.of(matrix.Get(0, i)).negate())), m);
   }
-  // TODO TENSOR also relaxation parameter
+  // TODO also relaxation parameter
 
   /** fixed rate convergence
    * 
@@ -72,7 +72,7 @@ public class KaczmarzIteration {
     Tensor a = rows[i];
     Tensor ac = a.maps(Conjugate.FUNCTION);
     // LenientAdd.of(a, ac);
-    // TODO TENSOR does this dot product need lenient add?
+    // TODO does this dot product need lenient add?
     Scalar fac = b.Get(i).subtract(a.dot(x)).divide(normsq.Get(i));
     return x = x.add(ac.multiply(fac));
   }
@@ -89,7 +89,7 @@ public class KaczmarzIteration {
    * @param randomGenerator
    * @return */
   public Tensor refine(RandomGenerator randomGenerator) {
-    // QUEST TENSOR MAT for every batch generate discrete sequence with according occurrences
+    // TODO MAT for every batch generate discrete sequence with according occurrences
     return refine(RandomVariate.of(distribution, randomGenerator).number().intValue());
   }
 }

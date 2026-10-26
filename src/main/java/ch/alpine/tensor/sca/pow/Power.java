@@ -81,7 +81,7 @@ public enum Power {
     // }
     if (exponent.equals(RealScalar.ONE))
       return s -> s;
-    // TODO TENSOR exponents of the form 1/4, etc. could also be valid
+    // TODO exponents of the form 1/4, etc. could also be valid
     if (exponent instanceof Rational rational && //
         rational.denominator().equals(BigInteger.TWO))
       return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rational.numerator()));
@@ -100,7 +100,7 @@ public enum Power {
    * @param exponent
    * @return scalar ^ exponent */
   private static Scalar evaluate(Scalar scalar, Scalar exponent) {
-    // TODO TENSOR for Power.function it would me more efficient to do preprocessing exponent w/o scalar
+    // TODO for Power.function it would me more efficient to do preprocessing exponent w/o scalar
     if (scalar instanceof PowerInterface powerInterface)
       return powerInterface.power(exponent);
     Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);

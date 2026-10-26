@@ -31,14 +31,14 @@ import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.N;
 
-class CholeskyDecompositionImplTest {
+class LDLDecompositionImplTest {
   @Test
   void testSolveQuantity() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
-    CholeskyDecomposition choleskyDecomposition = //
-        Serialization.copy(CholeskyDecompositionWrap.of(matrix));
-    assertTrue(choleskyDecomposition.toString().startsWith("CholeskyDecomposition["));
+    LDLDecomposition ldlDecomposition = //
+        Serialization.copy(LDLDecompositionWrap.of(matrix));
+    assertTrue(ldlDecomposition.toString().startsWith("LDLDecomposition["));
   }
 
   @Test
@@ -51,16 +51,16 @@ class CholeskyDecompositionImplTest {
     matrix = Transpose.of(matrix).add(matrix).divide(GaussScalar.of(2, prime));
     SymmetricMatrixQ.INSTANCE.require(matrix);
     HermitianMatrixQ.INSTANCE.require(matrix);
-    CholeskyDecomposition choleskyDecomposition = //
-        Serialization.copy(CholeskyDecompositionWrap.of(matrix));
+    LDLDecomposition ldlDecomposition = //
+        Serialization.copy(LDLDecompositionWrap.of(matrix));
     Tensor result = MatrixDotTranspose.of(Dot.of( //
-        choleskyDecomposition.getL(), //
-        DiagonalMatrix.sparse(choleskyDecomposition.diagonal())), //
-        choleskyDecomposition.getL());
+        ldlDecomposition.getL(), //
+        DiagonalMatrix.sparse(ldlDecomposition.diagonal())), //
+        ldlDecomposition.getL());
     assertEquals(result, matrix);
     Scalar one = GaussScalar.of(1, prime);
     Tensor id = DiagonalMatrix.of(n, one);
-    Tensor res1 = choleskyDecomposition.solve(id);
+    Tensor res1 = ldlDecomposition.solve(id);
     Tensor res2 = Inverse.of(matrix, Pivots.FIRST_NON_ZERO);
     assertEquals(res1, res2);
   }
@@ -68,18 +68,18 @@ class CholeskyDecompositionImplTest {
   @Test
   void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5).maps(N.DECIMAL128);
-    CholeskyDecomposition choleskyDecomposition = CholeskyDecompositionWrap.of(matrix);
+    LDLDecomposition ldlDecomposition = LDLDecompositionWrap.of(matrix);
     Tensor result = MatrixDotTranspose.of(Dot.of( //
-        choleskyDecomposition.getL(), //
-        DiagonalMatrix.sparse(choleskyDecomposition.diagonal())), //
-        choleskyDecomposition.getL());
+        ldlDecomposition.getL(), //
+        DiagonalMatrix.sparse(ldlDecomposition.diagonal())), //
+        ldlDecomposition.getL());
     assertInstanceOf(DecimalScalar.class, result.Get(3, 3));
     Tolerance.CHOP.requireClose(matrix, result);
   }
 
   @Test
   void testPackageVisibility() {
-    assertTrue(Modifier.isPublic(CholeskyDecomposition.class.getModifiers()));
-    assertFalse(Modifier.isPublic(CholeskyDecompositionImpl.class.getModifiers()));
+    assertTrue(Modifier.isPublic(LDLDecomposition.class.getModifiers()));
+    assertFalse(Modifier.isPublic(LDLDecompositionImpl.class.getModifiers()));
   }
 }

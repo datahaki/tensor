@@ -12,9 +12,9 @@ import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 
-public enum CholeskyDecompositionWrap {
+public enum LDLDecompositionWrap {
   ;
-  public static CholeskyDecomposition of(Tensor matrix) {
+  public static LDLDecomposition of(Tensor matrix) {
     return of(matrix, Tolerance.CHOP);
   }
 
@@ -22,22 +22,22 @@ public enum CholeskyDecompositionWrap {
    * @param chop
    * @return Cholesky decomposition of matrix
    * @throws Exception if matrix is not hermitian, or decomposition failed */
-  public static CholeskyDecomposition of(Tensor matrix, Chop chop) {
+  public static LDLDecomposition of(Tensor matrix, Chop chop) {
     // matrix == getL().dot(Times.of(diagonal(), ConjugateTranspose.of(getL())));
-    CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix, chop);
+    LDLDecomposition ldlDecomposition = LDLDecomposition.of(matrix, chop);
     Scalar det = Det.of(matrix);
-    chop.requireClose(choleskyDecomposition.det(), det);
-    Tensor L = choleskyDecomposition.getL();
-    Tensor diagonal = choleskyDecomposition.diagonal();
-    Tensor ctL = ConjugateTranspose.of(choleskyDecomposition.getL());
+    chop.requireClose(ldlDecomposition.det(), det);
+    Tensor L = ldlDecomposition.getL();
+    Tensor diagonal = ldlDecomposition.diagonal();
+    Tensor ctL = ConjugateTranspose.of(ldlDecomposition.getL());
     if (Unprotect.isUnitUnique(matrix)) {
       Tensor chk = L.dot(Times.of(diagonal, ctL));
       chop.requireClose(matrix, chk);
     }
     if (!chop.isZero(det)) {
-      Tensor solve = choleskyDecomposition.solve(IdentityMatrix.of(matrix));
+      Tensor solve = ldlDecomposition.solve(IdentityMatrix.of(matrix));
       chop.requireClose(solve, Inverse.of(matrix));
     }
-    return choleskyDecomposition;
+    return ldlDecomposition;
   }
 }

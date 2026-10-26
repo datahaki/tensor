@@ -16,7 +16,7 @@ import ch.alpine.tensor.qty.LenientAdd;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 
-class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
+class LDLDecompositionImpl implements LDLDecomposition, Serializable {
   private final Chop chop;
   private final Tensor l;
   private final Tensor d;
@@ -24,7 +24,7 @@ class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
   /** @param matrix hermitian and positive semi-definite matrix
    * @param chop for check if given matrix is hermitian
    * @throws Exception if given matrix is not hermitian */
-  public CholeskyDecompositionImpl(Tensor matrix, Chop chop) {
+  public LDLDecompositionImpl(Tensor matrix, Chop chop) {
     this.chop = chop;
     int n = matrix.length();
     l = IdentityMatrix.of(matrix);
@@ -47,22 +47,22 @@ class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
     }
   }
 
-  @Override // from CholeskyDecomposition
+  @Override // from LDLDecomposition
   public Tensor getL() {
     return l;
   }
 
-  @Override // from CholeskyDecomposition
+  @Override // from LDLDecomposition
   public Tensor diagonal() {
     return d;
   }
 
-  @Override // from CholeskyDecomposition
+  @Override // from LDLDecomposition
   public Scalar det() {
     return d.stream().map(Scalar.class::cast).reduce(Scalar::multiply).orElseThrow();
   }
 
-  @Override // from CholeskyDecomposition
+  @Override // from LDLDecomposition
   public Tensor solve(Tensor b) {
     d.stream().map(Scalar.class::cast).forEach(chop::requireNonZero);
     int n = Integers.requireEquals(l.length(), b.length());
@@ -80,6 +80,6 @@ class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
 
   @Override // from Object
   public String toString() {
-    return MathematicaFormat.concise("CholeskyDecomposition", diagonal(), getL());
+    return MathematicaFormat.concise("LDLDecomposition", diagonal(), getL());
   }
 }

@@ -50,7 +50,7 @@ public class TimeSeriesAggregate {
         result.insert(clip.min(), optional.orElseThrow());
       offset = clip.max();
     }
-    // TODO TENSOR IMPL decide about how to terminate aggregate
+    // TODO IMPL decide about how to terminate aggregate
     return result;
   }
 }

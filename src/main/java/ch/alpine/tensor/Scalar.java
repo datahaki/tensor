@@ -3,7 +3,7 @@ package ch.alpine.tensor;
 
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.lie.rot.Quaternion;
-import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.cd.LDLDecomposition;
 import ch.alpine.tensor.mat.ex.MatrixPower;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -126,7 +126,7 @@ public interface Scalar extends Tensor {
    * 
    * <p>one() is provided for the implementation of generic functions and algorithms.
    * In the tensor library, the functions {@link MatrixPower}, {@link Inverse},
-   * {@link CholeskyDecomposition}, {@link PseudoInverse}, and {@link SimpleUnitSystem}
+   * {@link LDLDecomposition}, {@link PseudoInverse}, and {@link SimpleUnitSystem}
    * rely on the function.
    * 
    * @return multiplicative neutral element of this scalar */

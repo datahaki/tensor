@@ -22,14 +22,14 @@ import ch.alpine.tensor.sca.Chop;
  * Numerical Recipes instead of Mathematica, which returns the upper triangular matrix.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/CholeskyDecomposition.html">CholeskyDecomposition</a>
+ * <a href="https://reference.wolfram.com/language/ref/LDLDecomposition.html">LDLDecomposition</a>
  * 
  * @see HermitianMatrixQ */
-public interface CholeskyDecomposition {
+public interface LDLDecomposition {
   /** @param matrix hermitian and positive semi-definite matrix
    * @return Cholesky decomposition of matrix
    * @throws Exception if matrix is not hermitian, or decomposition failed */
-  static CholeskyDecomposition of(Tensor matrix) {
+  static LDLDecomposition of(Tensor matrix) {
     return of(matrix, Tolerance.CHOP);
   }
 
@@ -37,8 +37,8 @@ public interface CholeskyDecomposition {
    * @param chop
    * @return Cholesky decomposition of matrix
    * @throws Exception if matrix is not hermitian, or decomposition failed */
-  static CholeskyDecomposition of(Tensor matrix, Chop chop) {
-    return new CholeskyDecompositionImpl(matrix, chop);
+  static LDLDecomposition of(Tensor matrix, Chop chop) {
+    return new LDLDecompositionImpl(matrix, chop);
   }
 
   // ---

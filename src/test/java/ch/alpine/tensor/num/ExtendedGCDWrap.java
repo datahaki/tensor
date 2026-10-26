@@ -13,7 +13,7 @@ import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Mod;
 
 class ExtendedGCDWrap implements Serializable {
-  // TODO TENSOR API is dubious
+  // TODO API is dubious
   public ExtendedGCD function(Tensor vector) {
     return new ExtendedGCDImpl(vector);
   }

@@ -9,6 +9,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
+// FIXME incomplete
 class HalfNormalDistribution extends AbstractContinuousDistribution implements Serializable {
   private final Scalar theta;
 
@@ -16,7 +17,6 @@ class HalfNormalDistribution extends AbstractContinuousDistribution implements S
     this.theta = theta;
   }
 
-  // TODO TENSOR Auto-generated method stub
   @Override
   public Scalar at(Scalar x) {
     return null;

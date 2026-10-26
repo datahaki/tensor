@@ -56,7 +56,7 @@ abstract class FindBase implements Serializable {
         x2 = b.subtract(b.subtract(a).multiply(RESPHI));
         f2 = function.apply(x2);
       }
-    // TODO TENSOR improve IEEE search
+    // TODO improve IEEE search
     return (Scalar) LinearBinaryAverage.INSTANCE.split(a, b, Rational.HALF);
   }
 }

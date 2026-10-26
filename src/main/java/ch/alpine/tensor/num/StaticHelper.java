@@ -8,7 +8,7 @@ import ch.alpine.tensor.sca.Abs;
 /** reviewed */
 enum StaticHelper {
   ;
-  // TODO TENSOR NUM function does not result in Mathematica standard for all input
+  // TODO NUM function does not result in Mathematica standard for all input
   public static Scalar normalForm(Scalar scalar) {
     return scalar instanceof RealScalar //
         ? Abs.FUNCTION.apply(scalar)

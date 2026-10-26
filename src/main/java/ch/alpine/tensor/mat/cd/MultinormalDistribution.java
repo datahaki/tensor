@@ -13,14 +13,14 @@ public class MultinormalDistribution implements RandomSampleInterface, Serializa
   /** @param sigma covariance matrix
    * @return */
   public static RandomSampleInterface of(Tensor sigma) {
-    return new MultinormalDistribution(CholeskyDecomposition.of(sigma));
+    return new MultinormalDistribution(LDLDecomposition.of(sigma));
   }
 
   // ---
   private final Tensor L;
 
-  public MultinormalDistribution(CholeskyDecomposition choleskyDecomposition) {
-    L = choleskyDecomposition.getL();
+  public MultinormalDistribution(LDLDecomposition ldlDecomposition) {
+    L = ldlDecomposition.getL();
   }
 
   @Override

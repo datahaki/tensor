@@ -94,7 +94,7 @@ class TimeSeriesWrap implements TimeSeries {
 
   @Override
   public Stream<Tensor> lines() {
-    return resamplingMethod.lines(null); // TODO TENSOR
+    return resamplingMethod.lines(null); // TODO
   }
 
   @Override // from Object
