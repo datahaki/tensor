@@ -29,7 +29,7 @@ class AbstractRealScalarTest {
   private final List<Scalar> SCALARS = Arrays.asList( //
       RealScalar.ZERO, RealScalar.ONE, //
       Rational.of(-7, 3), //
-      // Quex.of(3, 4, 2), // TODO TENSOR
+      // Quex.of(3, 4, 2), // TODO
       RealScalar.of(-3.4), //
       Hold.zero(), //
       DecimalScalar.of(new BigDecimal("4.123"), 34), //
