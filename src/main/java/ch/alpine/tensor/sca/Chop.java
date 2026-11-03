@@ -114,6 +114,12 @@ public class Chop implements ScalarUnaryOperator {
     return Scalars.isZero(apply(scalar));
   }
 
+  /** @param scalar
+   * @return */
+  public boolean nonZero(Scalar scalar) {
+    return Scalars.nonZero(apply(scalar));
+  }
+
   /** @param tensor
    * @return true, if all entries of Chop.of(tensor) equal to {@link Scalar#zero()} */
   public boolean allZero(Tensor tensor) {

@@ -45,7 +45,7 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
    * 
    * <p>The implementation also supports input of type {@link Quantity}.
    * 
-   * @param samples vector
+   * @param samples vector with at least 2 distinct values
    * @param width of bins over which to assume uniform distribution, i.e. constant PDF
    * @return
    * @throws Exception if width is zero or negative */
@@ -53,7 +53,7 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
     return new HistogramDistribution(samples, width);
   }
 
-  /** @param samples vector
+  /** @param samples vector with at least 2 distinct values
    * @param binningMethod
    * @return histogram distribution with bin width computed from given binning method
    * @see BinningMethods */
@@ -61,7 +61,7 @@ public class HistogramDistribution extends AbstractContinuousDistribution implem
     return of(samples, binningMethod.apply(samples));
   }
 
-  /** @param samples
+  /** @param samples vector with at least 2 distinct values
    * @return histogram distribution with bin width computed from Freedman-Diaconis rule */
   public static Distribution of(Tensor samples) {
     return of(samples, BinningMethods.IQR);

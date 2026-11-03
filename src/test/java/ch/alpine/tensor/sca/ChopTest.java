@@ -146,6 +146,12 @@ class ChopTest {
   }
 
   @Test
+  void nonZero() {
+    assertTrue(Chop._04.nonZero(RealScalar.of(0.2)));
+    assertFalse(Chop._04.nonZero(RealScalar.of(0.000002)));
+  }
+
+  @Test
   void testRequireCloseException() {
     Tensor b1 = Tensors.vector(2, 3);
     Tensor b2 = Tensors.vector(2, 4);
