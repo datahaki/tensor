@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -140,7 +139,7 @@ class TensorTest {
 
   @Test
   void testScalarStream() {
-    List<Tensor> asd = Arrays.asList(RealScalar.ZERO, RealScalar.of(3));
+    List<Tensor> asd = List.of(RealScalar.ZERO, RealScalar.of(3));
     Tensor a = Tensor.of(asd.stream());
     assertEquals(a.length(), 2);
   }

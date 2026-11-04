@@ -13,6 +13,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 
@@ -41,6 +42,12 @@ class Log10Test {
   @Test
   void testBase() {
     Scalar scalar = DoubleScalar.of(1412.123);
+    Tolerance.CHOP.requireClose(Log10.FUNCTION.apply(scalar), Log.base(RealScalar.of(10)).apply(scalar));
+  }
+
+  @Test
+  void testJet() {
+    Scalar scalar = JetScalar.of(RealScalar.of(14.3), 2);
     Tolerance.CHOP.requireClose(Log10.FUNCTION.apply(scalar), Log.base(RealScalar.of(10)).apply(scalar));
   }
 

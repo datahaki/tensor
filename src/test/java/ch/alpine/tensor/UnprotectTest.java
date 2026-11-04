@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,7 +43,7 @@ class UnprotectTest {
 
   @Test
   void testUsingListScalar() {
-    List<Tensor> list = Arrays.asList(RealScalar.of(4), RealScalar.of(5));
+    List<Tensor> list = List.of(RealScalar.of(4), RealScalar.of(5));
     Tensor tensor = Unprotect.using(list);
     assertEquals(tensor, Tensors.vector(4, 5));
   }

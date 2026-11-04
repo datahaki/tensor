@@ -166,6 +166,7 @@ class TensorToSparseArrayTest {
 
   @Test
   void testArraysAsListSerialization() {
+    assertDoesNotThrow(() -> Serialization.copy(List.of(3, 4, 5, 6)));
     assertDoesNotThrow(() -> Serialization.copy(Arrays.asList(3, 4, 5, 6)));
     assertThrows(Exception.class, () -> Serialization.copy(Arrays.asList(3, 4, 5, 6).subList(1, 3)));
   }

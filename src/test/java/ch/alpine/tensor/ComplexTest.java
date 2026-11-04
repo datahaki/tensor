@@ -53,10 +53,10 @@ class ComplexTest {
 
   @Test
   void testConstructFail() {
-    // assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
-    // assertThrows(Throw.class, () -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
+    // assertThrows(Throw.class, () -> Complex.of(RealScalar.ONE, ComplexScalar.I));
+    // assertThrows(Throw.class, () -> Complex.of(ComplexScalar.I, RealScalar.ONE));
     assertThrows(Throw.class, () -> Complex.of(Quaternion.ONE, RealScalar.ONE));
-    // assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, Quaternion.ONE));
+    // assertThrows(Throw.class, () -> Complex.of(RealScalar.ONE, Quaternion.ONE));
   }
 
   @Test

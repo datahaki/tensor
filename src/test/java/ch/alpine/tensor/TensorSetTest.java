@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -123,7 +122,7 @@ class TensorSetTest {
     Tensor ad = Array.zeros(3, 3, 3);
     Tensor mat = HilbertMatrix.of(3);
     ad.set(mat, Tensor.ALL, 2);
-    assertEquals(Dimensions.of(ad), Arrays.asList(3, 3, 3));
+    assertEquals(Dimensions.of(ad), List.of(3, 3, 3));
     assertEquals(ad.get(Tensor.ALL, 2), mat);
   }
 

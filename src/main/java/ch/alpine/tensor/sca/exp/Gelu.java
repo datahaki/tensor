@@ -10,6 +10,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Tanh;
 
+/** useful in machine learning instead of ReLu==Ramp */
 public enum Gelu implements ScalarUnaryOperator {
   FUNCTION;
 

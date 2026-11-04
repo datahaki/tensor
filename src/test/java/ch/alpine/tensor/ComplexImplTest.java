@@ -62,8 +62,8 @@ class ComplexImplTest {
     Scalar c3 = Complex.of(c1, c2);
     assertEquals(c3, Complex.of(-6, -6));
     // Scalar r1 = RealScalar.of(7);
-    // assertThrows(Throw.class, () -> ComplexScalar.of(r1, c2));
-    // assertThrows(Throw.class, () -> ComplexScalar.of(c1, r1));
+    // assertThrows(Throw.class, () -> Complex.of(r1, c2));
+    // assertThrows(Throw.class, () -> Complex.of(c1, r1));
   }
 
   @Test
@@ -264,7 +264,7 @@ class ComplexImplTest {
     assertEquals(Complex.of(DoubleScalar.POSITIVE_INFINITY, RealScalar.ONE).reciprocal(), RealScalar.ZERO);
     assertEquals(Complex.of(DoubleScalar.NEGATIVE_INFINITY, RealScalar.ONE).reciprocal(), RealScalar.ZERO);
     // mathematica also does not simplify 1 / (inf+inf*I)
-    // assertEquals(ComplexScalar.of( //
+    // assertEquals(Complex.of( //
     // DoubleScalar.POSITIVE_INFINITY, DoubleScalar.POSITIVE_INFINITY).reciprocal(), RealScalar.ZERO);
   }
 

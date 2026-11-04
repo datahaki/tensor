@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
@@ -74,7 +74,7 @@ class TensorParserTest {
   @Test
   void testChars() {
     Tensor tensor = Tensors.fromString("{{a, b, a}, {a, a, b}, {b, a, a}}");
-    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
+    assertEquals(Dimensions.of(tensor), List.of(3, 3));
   }
 
   @Test

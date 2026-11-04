@@ -81,29 +81,29 @@ public class GaussScalar extends AbstractScalar implements //
       return in(value.multiply(requireCommonPrime((GaussScalar) scalar)), prime);
     if (scalar instanceof Quantity)
       return scalar.multiply(this);
-    if (scalar instanceof Complex complexScalar)
+    if (scalar instanceof Complex complex)
       return Complex.of( //
-          multiply(complexScalar.real()), //
-          multiply(complexScalar.imag()));
+          multiply(complex.real()), //
+          multiply(complex.imag()));
     throw new Throw(this, scalar);
   }
 
   @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
-    if (scalar instanceof Complex complexScalar)
+    if (scalar instanceof Complex complex)
       return Complex.of( //
-          divide(complexScalar.real()), //
-          divide(complexScalar.imag()));
+          divide(complex.real()), //
+          divide(complex.imag()));
     return super.divide(scalar);
   }
 
   @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
-    if (scalar instanceof Complex complexScalar) {
+    if (scalar instanceof Complex complex) {
       GaussScalar reciprocal = reciprocal();
       return Complex.of( //
-          reciprocal.multiply(complexScalar.real()), //
-          reciprocal.multiply(complexScalar.imag()));
+          reciprocal.multiply(complex.real()), //
+          reciprocal.multiply(complex.imag()));
     }
     return super.under(scalar);
   }

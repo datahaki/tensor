@@ -4,7 +4,6 @@ package test.misc;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
@@ -57,7 +56,7 @@ import ch.alpine.tensor.sca.N;
 
 class Miscellaneous {
   static List<Function<Tensor, ?>> functions() {
-    return Arrays.asList( //
+    return List.of( //
         RowReduce::of, //
         MatrixRank::of, //
         NullSpace::of, //
@@ -125,7 +124,7 @@ class Miscellaneous {
   }
 
   static List<TensorScalarFunction> matrixnorms() {
-    return Arrays.asList( //
+    return List.of( //
         Matrix1Norm::of, //
         Matrix2Norm::of, //
         MatrixInfinityNorm::of);
@@ -149,7 +148,7 @@ class Miscellaneous {
   }
 
   static List<TensorScalarFunction> vectornorms() {
-    return Arrays.asList( //
+    return List.of( //
         Vector1Norm::of, //
         Vector2Norm::of, //
         VectorInfinityNorm::of //

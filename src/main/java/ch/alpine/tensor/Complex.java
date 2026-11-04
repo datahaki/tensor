@@ -34,7 +34,7 @@ public interface Complex extends Scalar, //
    * tensors, one as real and the other as imaginary part into a single tensor
    * with complex scalars as entries.
    * <pre>
-   * Entrywise.with(ComplexScalar::of).apply(r, i);
+   * Entrywise.with(Complex::of).apply(r, i);
    * </pre>
    * 
    * @param re

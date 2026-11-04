@@ -167,8 +167,8 @@ class ModTest {
   @Test
   void testComplexSet() {
     _checkComplexSet(Complex.of(2, 3), 13);
-    // _checkComplexSet(ComplexScalar.of(1, 3), 13); // not consistent with Mathematica
-    // _checkComplexSet(ComplexScalar.of(2, 4), 13);
+    // _checkComplexSet(Complex.of(1, 3), 13); // not consistent with Mathematica
+    // _checkComplexSet(Complex.of(2, 4), 13);
   }
 
   @Test

@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.random.RandomGenerator;
@@ -72,7 +72,7 @@ class TensorsTest {
 
   @Test
   void testInteger() {
-    Tensor p = Tensors.vector(Arrays.asList(3, 4, -5, 6));
+    Tensor p = Tensors.vector(List.of(3, 4, -5, 6));
     Tensor q = Tensors.vector(3, 4, -5, 6);
     Tensor r = Tensors.vector(3.0, 4.0, -5.0, 6.0);
     assertInstanceOf(Rational.class, p.Get(0));
@@ -95,14 +95,14 @@ class TensorsTest {
 
   @Test
   void testDouble() {
-    Tensor p = Tensors.vector(Arrays.asList(3.3, 4., 5.3, 6.));
+    Tensor p = Tensors.vector(List.of(3.3, 4., 5.3, 6.));
     Tensor q = Tensors.vector(3.3, 4., 5.3, 6.);
     assertEquals(p, q);
   }
 
   @Test
   void testNumber() {
-    Tensor p = Tensors.vector(Arrays.asList(3, 4, 5.3, 6));
+    Tensor p = Tensors.vector(List.of(3, 4, 5.3, 6));
     Tensor q = Tensors.vector(3, 4, 5.3, 6);
     assertInstanceOf(Rational.class, p.Get(0));
     assertEquals(p, q);

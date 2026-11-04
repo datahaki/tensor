@@ -4,7 +4,7 @@ package ch.alpine.tensor.alg;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +41,7 @@ class ArrayFlattenTest {
         { IdentityMatrix.of(4), HilbertMatrix.of(4, 1) }, //
         { IdentityMatrix.of(5) } };
     Tensor tensor = ArrayFlatten.of(blocks);
-    assertEquals(Dimensions.of(tensor), Arrays.asList(11, 5));
+    assertEquals(Dimensions.of(tensor), List.of(11, 5));
     ExactTensorQ.require(tensor);
   }
 

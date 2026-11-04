@@ -50,7 +50,7 @@ class ScalarsTest {
       " ( I ) ", //
       "123123*I", //
       "123E-123*I" })
-  void testParseComplexScalar(String string) {
+  void testParseComplex(String string) {
     checkInvariant(string, ComplexImpl.class);
   }
 

@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 
 import org.junit.jupiter.api.Test;
@@ -100,7 +100,7 @@ class UnmodifiableTensorTest {
   void testBlockReferences() {
     Tensor eye = IdentityMatrix.of(3);
     Tensor unm = eye.unmodifiable();
-    Tensor blk = unm.block(Arrays.asList(1, 0), Arrays.asList(2, 2));
+    Tensor blk = unm.block(List.of(1, 0), List.of(2, 2));
     assertEquals(blk, Tensors.fromString("{{0, 1}, {0, 0}}"));
     assertThrows(UnsupportedOperationException.class, () -> blk.set(RealScalar.TWO, 1, 0));
     eye.set(RealScalar.TWO, 1, 0);

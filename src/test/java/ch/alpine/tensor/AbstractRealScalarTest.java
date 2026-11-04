@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -26,7 +25,7 @@ import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
 class AbstractRealScalarTest {
-  private final List<Scalar> SCALARS = Arrays.asList( //
+  private final List<Scalar> SCALARS = List.of( //
       RealScalar.ZERO, RealScalar.ONE, //
       Rational.of(-7, 3), //
       // Quex.of(3, 4, 2), // TODO

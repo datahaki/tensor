@@ -5,7 +5,6 @@ import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** logarithm to base 10
@@ -31,8 +30,6 @@ public enum Log10 implements ScalarUnaryOperator {
         return DoubleScalar.of(Math.log10(value));
       return Complex.of(Math.log10(-value), PI_LOG10);
     }
-    if (scalar instanceof Complex z)
-      return Log.FUNCTION.apply(z).divide(LOG10);
-    throw new Throw(scalar);
+    return Log.FUNCTION.apply(scalar).divide(LOG10);
   }
 }

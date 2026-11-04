@@ -31,7 +31,7 @@ import ch.alpine.tensor.ext.Integers;
  * {@link Complex} consisting of corresponding real and imaginary
  * values drawn from given tensors.
  * <pre>
- * Tensor tensor = Entrywise.with(ComplexScalar::of).apply(real, imag);
+ * Tensor tensor = Entrywise.with(Complex::of).apply(real, imag);
  * </pre>
  * 
  * <p>Entrywise reproduces existing functionality:

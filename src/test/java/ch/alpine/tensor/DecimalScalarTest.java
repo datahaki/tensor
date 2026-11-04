@@ -162,9 +162,9 @@ class DecimalScalarTest {
   void testComplexEmpty() {
     Scalar value = Scalars.fromString(" 1.1567572194352718` - 1.2351191805935866` * I ");
     assertInstanceOf(Complex.class, value);
-    Complex complexScalar = (Complex) value;
-    assertEquals(complexScalar.real(), RealScalar.of(+1.1567572194352718));
-    assertEquals(complexScalar.imag(), RealScalar.of(-1.2351191805935866));
+    Complex complex = (Complex) value;
+    assertEquals(complex.real(), RealScalar.of(+1.1567572194352718));
+    assertEquals(complex.imag(), RealScalar.of(-1.2351191805935866));
   }
 
   @Test

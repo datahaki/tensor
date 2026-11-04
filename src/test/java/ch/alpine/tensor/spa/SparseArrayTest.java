@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -166,7 +165,7 @@ class SparseArrayTest {
   void testExtract() {
     Tensor tensor = SparseArray.of(RealScalar.ZERO, 5, 8, 7);
     tensor.set(Pi.TWO, 2, 3, 4);
-    assertEquals(Dimensions.of(tensor.extract(1, 3)), Arrays.asList(2, 8, 7));
+    assertEquals(Dimensions.of(tensor.extract(1, 3)), List.of(2, 8, 7));
     for (int count = 0; count < tensor.length(); ++count)
       assertEquals(tensor.extract(count, count), Tensors.empty());
   }
@@ -190,7 +189,7 @@ class SparseArrayTest {
   void testCreate() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
     Tensor sparse = TensorToSparseArray.of(tensor);
-    assertEquals(Dimensions.of(sparse), Arrays.asList(3, 5));
+    assertEquals(Dimensions.of(sparse), List.of(3, 5));
     assertEquals(Pretty.of(sparse), Pretty.of(tensor));
     sparse.toString();
     Tensor result = sparse.divide(Rational.HALF);
@@ -204,9 +203,9 @@ class SparseArrayTest {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     Tensor sparse = TensorToSparseArray.of(tensor);
     assertEquals(Normal.of(sparse), tensor);
-    Tensor result = sparse.block(Arrays.asList(1, 0), Arrays.asList(2, 3));
+    Tensor result = sparse.block(List.of(1, 0), List.of(2, 3));
     Tensor expect = Tensors.fromString("{{5, 6, 8}, {0, 2, 9}}");
-    assertEquals(Dimensions.of(result), Arrays.asList(2, 3));
+    assertEquals(Dimensions.of(result), List.of(2, 3));
     assertEquals(result, expect);
     Tensor mapped = result.maps(s -> s);
     assertEquals(mapped, expect);
@@ -218,7 +217,7 @@ class SparseArrayTest {
   void testBlock1() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     Tensor sparse = TensorToSparseArray.of(tensor);
-    Tensor result = sparse.block(Arrays.asList(1, 0), Arrays.asList(0, 0));
+    Tensor result = sparse.block(List.of(1, 0), List.of(0, 0));
     assertEquals(result, Tensors.empty());
     assertEquals(Dimensions.of(result), List.of(0));
   }
@@ -229,7 +228,7 @@ class SparseArrayTest {
     Tensor sparse = TensorToSparseArray.of(tensor);
     Tensor result = sparse.block(List.of(2), List.of(1));
     assertEquals(result, tensor.block(List.of(2), List.of(1)));
-    assertEquals(Dimensions.of(result), Arrays.asList(1, 5));
+    assertEquals(Dimensions.of(result), List.of(1, 5));
     MatrixQ.require(result);
   }
 
@@ -362,7 +361,7 @@ class SparseArrayTest {
   void testDotFull() {
     Tensor tensor = LeviCivitaTensor.of(3).dot(HilbertMatrix.of(3));
     tensor.toString();
-    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3, 3));
+    assertEquals(Dimensions.of(tensor), List.of(3, 3, 3));
   }
 
   @Test

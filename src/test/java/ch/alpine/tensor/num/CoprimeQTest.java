@@ -29,8 +29,8 @@ class CoprimeQTest {
     _check(19 * 5, 17 * 5 * 8, false);
   }
   // public void testComplex() {
-  // Scalar a = ComplexScalar.of(2, 1);
-  // Scalar b = ComplexScalar.of(3, 1);
+  // Scalar a = Complex.of(2, 1);
+  // Scalar b = Complex.of(3, 1);
   // Scalar lcm = LCM.of(a, b);
   // Scalar prd = a.multiply(b);
   // System.out.println(lcm);

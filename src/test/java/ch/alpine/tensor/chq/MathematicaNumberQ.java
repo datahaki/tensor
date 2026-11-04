@@ -40,9 +40,9 @@ enum MathematicaNumberQ {
   /** @param scalar
    * @return whether scalar satisfies the NumberQ predicate */
   public static boolean of(Scalar scalar) {
-    if (scalar instanceof Complex complexScalar)
-      return of(complexScalar.real()) //
-          && of(complexScalar.imag());
+    if (scalar instanceof Complex complex)
+      return of(complex.real()) //
+          && of(complex.imag());
     if (scalar instanceof Quantity)
       return false;
     return FiniteScalarQ.of(scalar) //

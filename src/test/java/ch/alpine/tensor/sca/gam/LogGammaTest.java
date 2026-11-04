@@ -54,11 +54,11 @@ class LogGammaTest {
     _check(Complex.of(-0.2, +0.3), Complex.of(+1.0734581009508424, -2.429743746722234)); // mathematica
     _check(Complex.of(-0.3, -0.2), Complex.of(+1.2259360301379854, +2.789379730848464)); // mathematica
     // not consistent with Mathematica
-    // _check(ComplexScalar.of(-0.7, -.2), ComplexScalar.of(+1.2068474867912489, +3.483554001467165)); // mathematica
-    // _check(ComplexScalar.of(-0.4, 1.0), ComplexScalar.of(-0.7317745484911662, -2.7553511672879787)); // mathematica
-    // _check(ComplexScalar.of(-0.4, 0.5), ComplexScalar.of(+0.4757895613772085, -2.863218144225338)); // mathematica
-    // _check(ComplexScalar.of(-1, 1), ComplexScalar.of(-0.997496789581829, -4.228631137454775)); // mathematica
-    // _check(ComplexScalar.of(-1.2, 2.3), ComplexScalar.of(-4.235543307932702, -3.623795254074647)); // mathematica
+    // _check(Complex.of(-0.7, -.2), Complex.of(+1.2068474867912489, +3.483554001467165)); // mathematica
+    // _check(Complex.of(-0.4, 1.0), Complex.of(-0.7317745484911662, -2.7553511672879787)); // mathematica
+    // _check(Complex.of(-0.4, 0.5), Complex.of(+0.4757895613772085, -2.863218144225338)); // mathematica
+    // _check(Complex.of(-1, 1), Complex.of(-0.997496789581829, -4.228631137454775)); // mathematica
+    // _check(Complex.of(-1.2, 2.3), Complex.of(-4.235543307932702, -3.623795254074647)); // mathematica
   }
 
   @RepeatedTest(10)
