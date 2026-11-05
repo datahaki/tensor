@@ -6,6 +6,7 @@ import ch.alpine.tensor.Scalar;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Degree.html">Degree</a> */
+// TODO ideally this enum should be obsolete, simply use Quantity[90, "deg"] e.g.
 public enum Degree {
   ;
   public static final Unit UNIT = Unit.of("deg");

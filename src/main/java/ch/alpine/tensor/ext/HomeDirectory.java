@@ -44,7 +44,7 @@ public enum HomeDirectory {
   /** Video files */
   Videos;
 
-  enum LazeHolder {
+  enum LazyHolder {
     ;
     public static final Path USER_HOME = Path.of(System.getProperty("user.home"));
   }
@@ -52,11 +52,11 @@ public enum HomeDirectory {
   private final Path path;
 
   HomeDirectory(String... strings) {
-    path = join(LazeHolder.USER_HOME, strings);
+    path = join(LazyHolder.USER_HOME, strings);
   }
 
   HomeDirectory() {
-    path = join(LazeHolder.USER_HOME, name());
+    path = join(LazyHolder.USER_HOME, name());
   }
 
   /** On linux, the directory has the form

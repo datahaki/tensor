@@ -21,7 +21,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 class HomeDirectoryTest {
   @Test
   void testUserHome() {
-    assertTrue(Files.isDirectory(HomeDirectory.LazeHolder.USER_HOME));
+    assertTrue(Files.isDirectory(HomeDirectory.LazyHolder.USER_HOME));
   }
 
   @Test
