@@ -52,11 +52,19 @@ public enum Partition {
    * @return stream of tensors
    * @throws Exception if given tensor is a scalar */
   public static Stream<Tensor> stream(Tensor tensor, int size, int offset) {
+    // TODO check if Stream.gather is better
     ScalarQ.thenThrow(tensor);
     Integers.requirePositive(offset);
     Integers.requireLessEquals(offset, size);
     return IntStream.iterate(0, index -> index + offset) //
         .limit((tensor.length() + offset - size) / offset) //
         .mapToObj(index -> tensor.extract(index, index + size));
+  }
+
+  /** @param tensor
+   * @param size
+   * @return */
+  public static Stream<Tensor> stream(Tensor tensor, int size) {
+    return stream(tensor, size, size);
   }
 }
