@@ -9,7 +9,8 @@ import ch.alpine.tensor.spa.SparseArray;
  * <pre>
  * matrix . Transpose[b]
  * </pre>
- * optimized for matrices (and restricted to them)
+ * 
+ * confirmed to give a speedup
  * 
  * <p>The purpose of the implementation to make obsolete the explicit
  * computation of the {@link Transpose} */

@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Partition;
+import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.StringScalar;
@@ -187,6 +189,13 @@ class UnprotectTest {
     assertTrue(Files.isRegularFile(path));
     Import.of(string);
     Import.of(path);
+  }
+
+  @Test
+  void testAddColumn() {
+    Tensor x = Range.of(0, 11);
+    Tensor gather = Partition.gather(x, 7);
+    IO.println(gather);
   }
 
   @Test

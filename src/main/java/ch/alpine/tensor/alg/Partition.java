@@ -1,10 +1,12 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import java.util.stream.Gatherers;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.ext.Integers;
 
@@ -23,12 +25,26 @@ public enum Partition {
   ;
   /** Partition[{a, b, c, d, e, f, g}, 2] == {{a, b}, {c, d}, {e, f}}
    * 
+   * Partition[{a, b, c, d, e, f, g}, 4] == {{a, b, c, d}}
+   * 
+   * Partition[{a, b, c, d, e, f, g}, 10] == {}
+   * 
    * @param tensor
    * @param size positive
    * @return tensor of rank one higher than input tensor
    * @throws Exception if given tensor is a scalar */
   public static Tensor of(Tensor tensor, int size) {
     return of(tensor, size, size);
+  }
+
+  /** EXPERIMENTAL
+   * 
+   * @param tensor
+   * @param size
+   * @return */
+  public static Tensor gather(Tensor tensor, int size) {
+    return Tensor.of(tensor.stream() //
+        .gather(Gatherers.windowFixed(size)).map(Unprotect::using));
   }
 
   /** Partition[{a, b, c, d, e, f, g}, 3, 2] == {{a, b, c}, {c, d, e}, {e, f, g}}

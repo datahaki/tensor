@@ -11,12 +11,9 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.alpine.tensor.alg.Flatten;
-import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.TableBuilder;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
-import ch.alpine.tensor.sca.Clip;
-import ch.alpine.tensor.sca.Clips;
 
 /** Notice:
  * 
@@ -149,9 +146,5 @@ public enum Unprotect {
         // ---
       }
     throw new IllegalArgumentException(string);
-  }
-
-  public static Clip warp(Clip clip, ScalarUnaryOperator suo) {
-    return Clips.interval(suo.apply(clip.min()), suo.apply(clip.max()));
   }
 }

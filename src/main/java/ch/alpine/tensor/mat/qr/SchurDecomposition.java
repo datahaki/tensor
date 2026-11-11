@@ -12,11 +12,10 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.ScalarArray;
-import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ev.Eigensystem;
@@ -354,12 +353,12 @@ public class SchurDecomposition implements Serializable {
 
   public Tensor exp() {
     Tensor p = getUnitary();
-    return Dot.of(p, parlett(Exp.FUNCTION).orElseGet(() -> MatrixExp.of(getT())), ConjugateTranspose.of(p));
+    return MatrixDotConjugateTranspose.of(p.dot(parlett(Exp.FUNCTION).orElseGet(() -> MatrixExp.of(getT()))), p);
   }
 
   public Tensor log() {
     Tensor p = getUnitary();
-    return Dot.of(p, parlett(Log.FUNCTION).orElseGet(() -> MatrixLog.of(getT())), ConjugateTranspose.of(p));
+    return MatrixDotConjugateTranspose.of(p.dot(parlett(Log.FUNCTION).orElseGet(() -> MatrixLog.of(getT()))), p);
   }
 
   @Override

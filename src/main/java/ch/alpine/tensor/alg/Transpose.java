@@ -52,7 +52,7 @@ public enum Transpose {
    * @throws Exception if input is a vector or scalar */
   public static Tensor of(Tensor tensor) {
     int length = Unprotect.dimension1(tensor);
-    if (length == Scalar.LENGTH)
+    if (length == Scalar.LENGTH) // tensor is a vector
       throw new Throw(tensor);
     return tensor instanceof SparseArray //
         ? of(tensor, 1, 0)
