@@ -53,6 +53,7 @@ public class Entrywise implements TensorBinaryOperator {
   private static final Entrywise MIN = with(Min::of);
   private static final Entrywise MAX = with(Max::of);
   private static final Entrywise MUL = with(Scalar::multiply);
+  private static final Entrywise DIV = with(Scalar::divide);
 
   /** @return entrywise minimum operator */
   public static Entrywise min() {
@@ -68,6 +69,12 @@ public class Entrywise implements TensorBinaryOperator {
    * @see Times */
   public static Entrywise mul() {
     return MUL;
+  }
+
+  /** @return pointwise division
+   * @see Times */
+  public static Entrywise div() {
+    return DIV;
   }
 
   // ---

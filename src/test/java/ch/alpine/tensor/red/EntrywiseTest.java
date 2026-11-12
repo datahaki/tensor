@@ -119,6 +119,15 @@ class EntrywiseTest {
   }
 
   @Test
+  void testDiv() {
+    Tensor num = Tensors.vector(4, 6, 8, 10);
+    Tensor den = Tensors.vector(1, 3, 4, 2);
+    Tensor result = Entrywise.div().apply(num, den);
+    Tensor expect = Tensors.vector(4, 2, 2, 5);
+    assertEquals(result, expect);
+  }
+
+  @Test
   void testFail() {
     Entrywise entrywise = Entrywise.max();
     assertThrows(IllegalArgumentException.class, () -> entrywise.apply(Tensors.vector(3, 2, 3), Tensors.vector(-2, 1)));
