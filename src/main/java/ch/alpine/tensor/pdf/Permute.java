@@ -2,12 +2,15 @@
 package ch.alpine.tensor.pdf;
 
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.num.PermutationCycles;
+import ch.alpine.tensor.num.RandomPermutation;
 
 /** Permute is useful when the same permutation needs to be applied to several tensors,
  * for instance an xdata and ydata vector.
@@ -27,6 +30,19 @@ public class Permute implements TensorUnaryOperator {
 
   public static TensorUnaryOperator of(int[] sigma) {
     return new Permute(sigma);
+  }
+
+  /** @param n
+   * @param randomGenerator
+   * @return */
+  public static TensorUnaryOperator range(int n, RandomGenerator randomGenerator) {
+    return of(RandomPermutation.of(n, randomGenerator));
+  }
+
+  /** @param n
+   * @return */
+  public static TensorUnaryOperator range(int n) {
+    return range(n, ThreadLocalRandom.current());
   }
 
   // ---

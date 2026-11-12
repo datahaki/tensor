@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAmount;
@@ -192,7 +193,15 @@ public class DateTime extends AbstractScalar implements Comparable<Scalar>, Roun
     return new DateTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond));
   }
 
-  /** @return instance based on LocalDateTime.now() */
+  /** @param zoneId for instance ZoneOffset.UTC
+   * @return */
+  public static DateTime now(ZoneId zoneId) {
+    return new DateTime(LocalDateTime.now(zoneId));
+  }
+
+  /** uses ZoneId.systemDefault()
+   * 
+   * @return instance based on LocalDateTime.now() */
   public static DateTime now() {
     return new DateTime(LocalDateTime.now());
   }
@@ -206,7 +215,8 @@ public class DateTime extends AbstractScalar implements Comparable<Scalar>, Roun
    * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to
    * given zoneOffset
    * @see LocalDateTime#ofEpochSecond(long, int, ZoneOffset) */
-  public static DateTime ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
+  @Deprecated
+  static DateTime ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
     Scalar seconds = MAGNITUDE_S.apply(scalar);
     Scalar floor = Floor.FUNCTION.apply(seconds);
     Scalar nanos = seconds.subtract(floor).multiply(NANOS);
@@ -282,7 +292,8 @@ public class DateTime extends AbstractScalar implements Comparable<Scalar>, Roun
   /** @param zoneOffset
    * @return seconds from the epoch of 1970-01-01T00:00:00Z with unit "s"
    * which is negative for dates before that threshold in exact precision */
-  public Scalar toEpoch(ZoneOffset zoneOffset) {
+  @Deprecated
+  Scalar toEpoch(ZoneOffset zoneOffset) {
     // function getNano() returns in the range 0 to 999,999,999
     Scalar nanos = Rational.of(localDateTime.getNano(), NANOS_LONG);
     return Quantity.of(RealScalar.of(localDateTime.toEpochSecond(zoneOffset)).add(nanos), UNIT_S);

@@ -11,11 +11,13 @@ public enum TransposeMatrixDot {
   ;
   public static Tensor of(Tensor matrix, Tensor tensor) {
     matrix.Get(0, 0);
-    int m = Unprotect.dimension1Hint(matrix);
+    // slower
+    // Int myI = new Int();
     // return matrix.stream() //
-    // .map(row -> TensorProduct.of(row, tensor)) //
+    // .map(row -> TensorProduct.of(row, tensor.get(myI.getAndIncrement()))) //
     // .reduce(Tensor::add) //
     // .orElseThrow();
+    int m = Unprotect.dimension1Hint(matrix);
     return Tensor.of(IntStream.range(0, m) //
         .mapToObj(i -> matrix.get(Tensor.ALL, i).dot(tensor)));
   }

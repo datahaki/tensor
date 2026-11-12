@@ -10,7 +10,11 @@ import ch.alpine.tensor.sca.exp.Exp;
  * <a href="https://reference.wolfram.com/language/ref/SoftmaxLayer.html">SoftmaxLayer</a> */
 public enum SoftmaxVector {
   ;
-  /** @param logits vector
+  /** Logits are the raw numerical scores a machine learning model
+   * produces for each possible output before converting those scores
+   * into probabilities.
+   * 
+   * @param logits vector
    * @return vector of probabilities that sum up to 1
    * @throws Exception if vector is empty */
   public static Tensor of(Tensor logits) {
