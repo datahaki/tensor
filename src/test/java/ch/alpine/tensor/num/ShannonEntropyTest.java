@@ -10,7 +10,7 @@ import ch.alpine.tensor.RealScalar;
 class ShannonEntropyTest {
   @Test
   void testEvaluation() {
-    assertEquals(ShannonEntropy.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
-    assertEquals(ShannonEntropy.FUNCTION.apply(RealScalar.of(1E-100)), RealScalar.of(2.302585092994046E-98));
+    assertEquals(ShannonEntropy.NATS.apply(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(ShannonEntropy.NATS.apply(RealScalar.of(1E-100)), RealScalar.of(2.302585092994046E-98));
   }
 }

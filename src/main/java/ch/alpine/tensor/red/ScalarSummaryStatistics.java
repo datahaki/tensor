@@ -128,13 +128,9 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
   public Scalar getVariance() {
     return m_2.divide(cnt.subtract(cnt.one()));
   }
-  
 
-  /**
-   * 
-   * @return
-   * @see StandardDeviation
-   */
+  /** @return
+   * @see StandardDeviation */
   public Scalar getStandardDeviation() {
     return Sqrt.FUNCTION.apply(getVariance());
   }
@@ -187,6 +183,8 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
     @Override // from Collector
     public Set<Characteristics> characteristics() {
       return EnumSet.of(
+          // in order for concurrent we need to introduce "synchronized" to all methods
+          // which results in overhead even in a single thread environment
           // Characteristics.CONCURRENT, // we don't understand the specs
           Characteristics.UNORDERED, //
           Characteristics.IDENTITY_FINISH);
