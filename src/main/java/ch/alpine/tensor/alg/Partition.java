@@ -41,10 +41,11 @@ public enum Partition {
    * 
    * @param tensor
    * @param size
-   * @return */
+   * @return unmodifiable tensor */
   public static Tensor gather(Tensor tensor, int size) {
     return Tensor.of(tensor.stream() //
-        .gather(Gatherers.windowFixed(size)).map(Unprotect::using));
+        .gather(Gatherers.windowFixed(size)) //
+        .map(Unprotect::using));
   }
 
   /** Partition[{a, b, c, d, e, f, g}, 3, 2] == {{a, b, c}, {c, d, e}, {e, f, g}}

@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.AdjacentReduce;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 
@@ -15,7 +16,8 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
  * the weighting is in linear space
  * 
  * @see repo github/datahaki/sophis Curvature2D
- * @see AdjacentReduce */
+ * @see AdjacentReduce
+ * @see MatrixGradient */
 public abstract class TripleReduceExtrapolation implements TensorUnaryOperator {
   private static final InterpolatingPolynomial INTERPOLATING_POLYNOMIAL = //
       InterpolatingPolynomial.of(Tensors.vector(1, 2, 3));
@@ -40,9 +42,9 @@ public abstract class TripleReduceExtrapolation implements TensorUnaryOperator {
     int zero = 0;
     int last = length - 1;
     if (5 <= length) {
-      Tensor prefix = Tensors.of(tensor[zero + 1], tensor[zero + 2], tensor[zero + 3]);
+      Tensor prefix = Unprotect.byRef(tensor[zero + 1], tensor[zero + 2], tensor[zero + 3]);
       tensor[zero] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(prefix).apply(RealScalar.ZERO);
-      Tensor suffix = Tensors.of(tensor[last - 3], tensor[last - 2], tensor[last - 1]);
+      Tensor suffix = Unprotect.byRef(tensor[last - 3], tensor[last - 2], tensor[last - 1]);
       tensor[last] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(suffix).apply(LAST);
     } else {
       tensor[zero] = tensor[zero + 1].copy();

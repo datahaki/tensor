@@ -2,8 +2,10 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.Month;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,7 +17,11 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.sca.Chop;
 
 class MeanTest {
@@ -36,8 +42,30 @@ class MeanTest {
   }
 
   @Test
+  void testDateTime() {
+    Distribution distribution = UniformDistribution.of( //
+        DateTime.of(1980, Month.APRIL, 3, 4, 12), //
+        DateTime.of(2010, Month.SEPTEMBER, 9, 4, 12));
+    Tensor vector = RandomVariate.of(distribution, 100);
+    Scalar mean = Mean.ofVector(vector);
+    assertInstanceOf(DateTime.class, mean);
+  }
+
+  @Test
+  void testGaussScalar() {
+    Tensor vector = Tensors.of( //
+        GaussScalar.of(3, 13), //
+        GaussScalar.of(5, 13), //
+        GaussScalar.of(10, 13), //
+        GaussScalar.of(11, 13), //
+        GaussScalar.of(12, 13));
+    Scalar mean = Mean.ofVector(vector);
+    assertEquals(mean, GaussScalar.of(3, 13));
+  }
+
+  @Test
   void testEmpty1() {
-    assertThrows(ArithmeticException.class, () -> Mean.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> Mean.of(Tensors.empty()));
   }
 
   @Test

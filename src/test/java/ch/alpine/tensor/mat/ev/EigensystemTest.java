@@ -55,7 +55,7 @@ class EigensystemTest {
 
   @Test
   void testExact() {
-    // QUEST ALG tune iterations of phase 1 based on cross checking accuracy to exact result
+    // ALG tune iterations of phase 1 based on cross checking accuracy to exact result
     int n = 6;
     Distribution distribution = UniformDistribution.of(-10, 10);
     Tensor vector = RandomVariate.of(distribution, n);

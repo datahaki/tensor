@@ -14,8 +14,10 @@ import java.util.stream.Collector;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** ScalarSummaryStatistics tracks the sum, minimum, and maximum in a single pass
  * over a stream of {@link Scalar}s. The stream may be processed in parallel.
@@ -51,6 +53,7 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
   private long count = 0;
   private Scalar cnt = null;
   private Scalar avg = null;
+  private Scalar m_2 = null;
   private Scalar min = null;
   private Scalar max = null;
 
@@ -60,11 +63,15 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
     if (Objects.isNull(min)) {
       cnt = scalar.one();
       avg = scalar;
+      m_2 = AbsSquared.FUNCTION.apply(scalar.zero());
       min = scalar;
       max = scalar;
     } else {
+      Scalar del = scalar.subtract(avg);
       cnt = cnt.add(scalar.one());
-      avg = avg.add(scalar.subtract(avg).divide(cnt));
+      avg = avg.add(del.divide(cnt));
+      Scalar dl2 = scalar.subtract(avg);
+      m_2 = m_2.add(del.multiply(dl2));
       min = Min.of(min, scalar);
       max = Max.of(max, scalar);
     }
@@ -81,10 +88,14 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
     if (0 == count)
       return other;
     count += other.count;
-    cnt = cnt.add(other.cnt);
-    avg = avg.add(other.avg.subtract(avg).multiply(other.cnt).divide(cnt));
+    Scalar com = cnt.add(other.cnt);
+    Scalar del = other.avg.subtract(avg);
+    avg = avg.add(del.multiply(other.cnt).divide(com));
+    Scalar fac = Times.of(del, del, cnt, other.cnt).divide(com);
+    m_2 = m_2.add(other.m_2).add(fac);
     min = Min.of(min, other.min);
     max = Max.of(max, other.max);
+    cnt = com;
     return this;
   }
 
@@ -107,8 +118,25 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
 
   /** @return average of scalars in stream or null if stream is empty
    * @throws Exception if scalar type does not support division by {@link RealScalar} */
-  public Scalar getAverage() {
+  public Scalar getMean() {
     return avg;
+  }
+
+  /** @return
+   * @throws Exception if stream has insufficient count
+   * @see Variance */
+  public Scalar getVariance() {
+    return m_2.divide(cnt.subtract(cnt.one()));
+  }
+  
+
+  /**
+   * 
+   * @return
+   * @see StandardDeviation
+   */
+  public Scalar getStandardDeviation() {
+    return Sqrt.FUNCTION.apply(getVariance());
   }
 
   /** @return number of scalars in stream */
@@ -128,7 +156,7 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
     return "ScalarSummaryStatistics" + //
         "{count=" + getCount() + //
         ", min=" + getMin() + //
-        ", average=" + getAverage() + //
+        ", average=" + getMean() + //
         ", max=" + getMax() + "}";
   }
 

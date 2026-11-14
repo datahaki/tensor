@@ -14,15 +14,15 @@ import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.red.MinMax;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.ply.TripleReduceExtrapolation;
 
-// TODO document
 public record MatrixGradient(Tensor dx, Tensor dy) implements Serializable {
-  private static final TripleReduceExtrapolation INSTANCE = new TripleReduceExtrapolation() {
+  private static final TensorUnaryOperator INSTANCE = new TripleReduceExtrapolation() {
     @Override
     protected Tensor reduce(Tensor p, Tensor q, Tensor r) {
       return r.subtract(p).multiply(Rational.HALF);
@@ -30,11 +30,14 @@ public record MatrixGradient(Tensor dx, Tensor dy) implements Serializable {
 
     @Override
     protected Tensor petite(Tensor matrix) {
+      // function invoked if matrix has length 0, 1, or 2
       // TODO could be improved
       return matrix.maps(Scalar::zero);
     }
   };
 
+  /** @param matrix
+   * @return dx differences */
   public static MatrixGradient of(Tensor matrix) {
     return new MatrixGradient(INSTANCE.apply(matrix), INSTANCE.slash(matrix));
   }

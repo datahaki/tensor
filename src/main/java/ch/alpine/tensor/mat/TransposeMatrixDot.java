@@ -6,7 +6,8 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 
-/** TODO implementation does not give a speedup yet ! */
+/** CAREFUL: implementation does not give a speedup yet,
+ * but timing is identical to Transpose.of(A).dot(B) */
 public enum TransposeMatrixDot {
   ;
   public static Tensor of(Tensor matrix, Tensor tensor) {

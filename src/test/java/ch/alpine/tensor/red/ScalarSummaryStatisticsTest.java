@@ -19,12 +19,16 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.ScalarSummaryStatistics.ScalarSummaryStatisticsCollector;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
@@ -32,13 +36,24 @@ import ch.alpine.tensor.sca.Clips;
 class ScalarSummaryStatisticsTest {
   @Test
   void testMembers() {
-    ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(1, 4, 2, 8, 3, 10) //
+    Tensor vector = Tensors.vector(1, 4, 2, 8, 3, 10);
+    ScalarSummaryStatistics scalarSummaryStatistics = vector //
         .stream().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     assertEquals(scalarSummaryStatistics.getSum(), RealScalar.of(28));
     assertEquals(scalarSummaryStatistics.getMin(), RealScalar.of(1));
     assertEquals(scalarSummaryStatistics.getMax(), RealScalar.of(10));
-    assertEquals(scalarSummaryStatistics.getAverage(), Rational.of(14, 3));
+    assertEquals(scalarSummaryStatistics.getMean(), Rational.of(14, 3));
     assertEquals(scalarSummaryStatistics.getCount(), 6);
+    {
+      Scalar var1 = Variance.ofVector(vector);
+      Scalar var2 = scalarSummaryStatistics.getVariance();
+      assertEquals(var1, var2);
+    }
+    {
+      Scalar var1 = StandardDeviation.ofVector(vector);
+      Scalar var2 = scalarSummaryStatistics.getStandardDeviation();
+      assertEquals(var1, var2);
+    }
   }
 
   @Test
@@ -48,21 +63,28 @@ class ScalarSummaryStatisticsTest {
     assertEquals(scalarSummaryStatistics.getSum(), RealScalar.of(28));
     assertEquals(scalarSummaryStatistics.getMin(), RealScalar.of(1));
     assertEquals(scalarSummaryStatistics.getMax(), RealScalar.of(10));
-    assertEquals(scalarSummaryStatistics.getAverage(), Rational.of(14, 3));
+    assertEquals(scalarSummaryStatistics.getMean(), Rational.of(14, 3));
     assertEquals(scalarSummaryStatistics.getCount(), 6);
   }
 
   @Test
   void testQuantity() {
-    ScalarSummaryStatistics stats = Tensors.fromString("{3[s], 11[s], 6[s], 4[s]}").stream() //
+    Tensor vector = Tensors.fromString("{3[s], 11[s], 6[s], 4[s]}");
+    ScalarSummaryStatistics stats = vector.stream() //
         .parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     assertEquals(stats.getSum(), Quantity.of(24, "s"));
     assertEquals(stats.getMin(), Quantity.of(3, "s"));
     assertEquals(stats.getMax(), Quantity.of(11, "s"));
-    assertEquals(stats.getAverage(), Quantity.of(6, "s"));
+    assertEquals(stats.getMean(), Quantity.of(6, "s"));
     assertEquals(stats.getCount(), 4);
     assertEquals(stats.toString(), "ScalarSummaryStatistics{count=4, min=3[s], average=6[s], max=11[s]}");
     assertEquals(stats.getClip(), Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
+    {
+      Scalar var1 = Variance.ofVector(vector);
+      Scalar var2 = stats.getVariance();
+      assertEquals(var1, var2);
+      ExactScalarQ.require(var2);
+    }
   }
 
   @Test
@@ -72,7 +94,7 @@ class ScalarSummaryStatisticsTest {
     assertEquals(stats.getSum(), RealScalar.of(28));
     assertEquals(stats.getMin(), RealScalar.of(1));
     assertEquals(stats.getMax(), RealScalar.of(10));
-    assertEquals(stats.getAverage(), Rational.of(14, 3));
+    assertEquals(stats.getMean(), Rational.of(14, 3));
     assertEquals(stats.getCount(), 6);
     assertEquals(stats.toString(), "ScalarSummaryStatistics{count=6, min=1, average=14/3, max=10}");
   }
@@ -84,7 +106,8 @@ class ScalarSummaryStatisticsTest {
     assertNull(stats.getSum());
     assertNull(stats.getMin());
     assertNull(stats.getMax());
-    assertNull(stats.getAverage());
+    assertNull(stats.getMean());
+    assertThrows(Exception.class, () -> stats.getVariance());
     assertEquals(stats.getCount(), 0);
     stats.toString();
     assertNull(stats.getClip());
@@ -119,8 +142,8 @@ class ScalarSummaryStatisticsTest {
     ScalarSummaryStatistics ss1 = vector.stream().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     ScalarSummaryStatistics ss2 = vector.stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     Tensor mean = Mean.of(vector);
-    Chop._14.requireClose(ss1.getAverage(), ss2.getAverage());
-    Chop._14.requireClose(ss1.getAverage(), mean);
+    Chop._14.requireClose(ss1.getMean(), ss2.getMean());
+    Chop._14.requireClose(ss1.getMean(), mean);
   }
 
   @Test
@@ -135,7 +158,7 @@ class ScalarSummaryStatisticsTest {
     Scalar sum = sss1.getSum();
     assertEquals(sum, GaussScalar.of(4, 7));
     assertEquals(sss1.getCount(), 4);
-    assertEquals(sss1.getAverage(), GaussScalar.of(1, 7));
+    assertEquals(sss1.getMean(), GaussScalar.of(1, 7));
   }
 
   @Test
@@ -149,7 +172,7 @@ class ScalarSummaryStatisticsTest {
     Scalar sum = sss1.getSum();
     assertEquals(sum, GaussScalar.of(2, 7));
     assertEquals(sss1.getCount(), 3);
-    assertEquals(sss1.getAverage(), GaussScalar.of(3, 7));
+    assertEquals(sss1.getMean(), GaussScalar.of(3, 7));
     sss1.toString();
   }
 
@@ -162,8 +185,12 @@ class ScalarSummaryStatisticsTest {
     ScalarSummaryStatistics sss1 = vector.stream().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     sss1.getClip();
     sss1.toString();
-    assertInstanceOf(DateTime.class, sss1.getAverage());
+    Tolerance.CHOP.requireClose(Mean.ofVector(vector), sss1.getMean());
+    assertInstanceOf(DateTime.class, sss1.getMean());
     assertThrows(Exception.class, sss1::getSum);
+    Scalar variance = sss1.getVariance();
+    assertEquals(QuantityUnit.of(variance), Unit.of("s^2"));
+    // assertEquals(variance, Variance.ofVector(vector));
   }
 
   @Test

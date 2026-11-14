@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.red;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
@@ -27,10 +26,12 @@ public enum Mean {
    * 
    * @param tensor non-empty
    * @return average of entries in tensor
-   * @throws ArithmeticException if tensor is empty
+   * @throws Exception if tensor is empty
    * @throws Throw if tensor is a {@link Scalar} */
   public static Tensor of(Tensor tensor) {
-    return Total.of(tensor).divide(RealScalar.of(tensor.length()));
+    return tensor.length() == 1 //
+        ? tensor.get(0)
+        : tensor.stream().collect(MeanSummaryStatistics.collector()).getMean();
   }
 
   /** in practice, the mean of a vector is the most common use

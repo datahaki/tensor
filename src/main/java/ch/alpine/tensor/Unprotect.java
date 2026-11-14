@@ -132,7 +132,6 @@ public enum Unprotect {
    * @param string
    * @return
    * @throws Exception if string does not correspond to a resource file, or directory */
-  // TODO check where resData input stream is more suitable
   public static Path resourcePath(String string) {
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
     URL url = classLoader.getResource(string);
