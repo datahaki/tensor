@@ -51,7 +51,7 @@ public final class TableBuilder implements Serializable {
    * which is appended as a row to the table.
    * 
    * @param tensors */
-  public void appendRow(Tensor... tensors) {
+  public synchronized void appendRow(Tensor... tensors) {
     tensor.append(Flatten.of(tensors));
   }
 
@@ -81,13 +81,17 @@ public final class TableBuilder implements Serializable {
     return tensor.unmodifiable();
   }
 
-  public Tensor getRow(int index) {
-    return tensor.get(index);
+  public Tensor getRow(int i) {
+    return tensor.get(i);
+  }
+
+  public Tensor getColumn(int j) {
+    return tensor.get(Tensor.ALL, j);
   }
 
   /** @param list
    * @return */
-  public Tensor getColumns(int... list) {
+  public synchronized Tensor getColumns(int... list) {
     TensorUnaryOperator extract = row -> Tensor.of(IntStream.of(list).mapToObj(row::Get));
     return extract.slash(tensor);
   }

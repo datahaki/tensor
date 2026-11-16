@@ -81,13 +81,13 @@ public enum Serialization {
         objectOutputStream.flush();
       }
       // 2. Zero-copy read directly from the underlying buffer array
-      try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(buffer.buf(), 0, buffer.count()))) {
-        return (T) ois.readObject();
+      try (ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(buffer.buf(), 0, buffer.count()))) {
+        return (T) objectInputStream.readObject();
       }
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
+    } catch (IOException ioException) {
+      throw new UncheckedIOException(ioException);
     } catch (ClassNotFoundException e) {
-      throw new IllegalStateException("Failed to deserialize object during deep copy", e);
+      throw new IllegalStateException(e);
     }
   }
 }
