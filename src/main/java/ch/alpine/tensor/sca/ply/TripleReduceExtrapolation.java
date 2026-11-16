@@ -11,6 +11,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.AdjacentReduce;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.img.MatrixGradient;
 
 /** the implementation uses quadratic extrapolation at the boundaries
  * the weighting is in linear space

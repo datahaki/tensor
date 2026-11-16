@@ -1,12 +1,15 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
+import ch.alpine.tensor.sca.Clip;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Mean.html">Mean</a> */
@@ -34,6 +37,12 @@ public enum Mean {
         : tensor.stream().collect(MeanSummaryStatistics.collector()).getMean();
   }
 
+  /** @param cbb
+   * @return center point of given cbb */
+  public static Tensor of(CoordinateBoundingBox cbb) {
+    return Tensor.of(cbb.stream().map(Mean::of));
+  }
+
   /** in practice, the mean of a vector is the most common use
    * 
    * @param vector
@@ -49,5 +58,11 @@ public enum Mean {
    * @return mean of given probability distribution */
   public static Scalar of(Distribution distribution) {
     return Expectation.mean(distribution);
+  }
+
+  /** @param clip
+   * @return */
+  public static Scalar of(Clip clip) {
+    return clip.min().add(clip.length().multiply(Rational.HALF));
   }
 }

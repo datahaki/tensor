@@ -15,11 +15,18 @@ import ch.alpine.tensor.Scalars;
 /** associates strings with instances of unit */
 enum UnitParser {
   ;
+  /** atomic unit may consist of roman letters in lower case a-z,
+   * upper case A-Z, as well as the underscore character '_', and
+   * the percent character `%` */
+  private static final Predicate<String> PREDICATE = //
+      Pattern.compile("[%A-Z_a-z‰]+").asMatchPredicate();
+
   /** examples of convertible strings are:
    * "m^3"
    * "kg*m*s^-2"
    * "%"
    * "FUBA^-1*m*m"
+   * "‰"
    * 
    * @param string, for instance "A*kg^-1*s^2"
    * @return unit
@@ -56,12 +63,6 @@ enum UnitParser {
       return UnitImpl.create(navigableMap);
     }
   }
-
-  /** atomic unit may consist of roman letters in lower case a-z,
-   * upper case A-Z, as well as the underscore character '_', and
-   * the percent character `%` */
-  private static final Predicate<String> PREDICATE = //
-      Pattern.compile("[%A-Z_a-z]+").asMatchPredicate();
 
   /** @param key atomic unit expression, for instance "kg"
    * @return given key

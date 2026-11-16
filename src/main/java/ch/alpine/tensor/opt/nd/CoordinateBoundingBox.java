@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.MemberQ;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
@@ -81,7 +81,7 @@ public class CoordinateBoundingBox implements MemberQ {
   public CoordinateBoundingBox splitLo(int index) {
     List<Clip> copy = new ArrayList<>(list);
     Clip clip = clip(index);
-    copy.set(index, Clips.interval(clip.min(), median(clip)));
+    copy.set(index, Clips.interval(clip.min(), Mean.of(clip)));
     return new CoordinateBoundingBox(copy);
   }
 
@@ -90,18 +90,14 @@ public class CoordinateBoundingBox implements MemberQ {
   public CoordinateBoundingBox splitHi(int index) {
     List<Clip> copy = new ArrayList<>(list);
     Clip clip = clip(index);
-    copy.set(index, Clips.interval(median(clip), clip.max()));
+    copy.set(index, Clips.interval(Mean.of(clip), clip.max()));
     return new CoordinateBoundingBox(copy);
   }
 
   /** @param index
    * @return median of bounds in dimension of given index */
   public Scalar median(int index) {
-    return median(clip(index));
-  }
-
-  private static Scalar median(Clip clip) {
-    return clip.min().add(clip.length().multiply(Rational.HALF));
+    return Mean.of(clip(index));
   }
 
   // ---
