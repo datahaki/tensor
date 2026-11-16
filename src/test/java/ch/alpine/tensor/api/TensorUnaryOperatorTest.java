@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -21,7 +19,7 @@ import ch.alpine.tensor.sca.tri.Tan;
 
 class TensorUnaryOperatorTest {
   @Test
-  void testChain() throws ClassNotFoundException, IOException {
+  void testChain() {
     TensorUnaryOperator tuo = ListCorrelate.with(Tensors.vector(1, 2)).andThen(ListCorrelate.with(Tensors.vector(3, 4)));
     Serialization.copy(tuo);
     tuo.apply(Tensors.vector(1, 2, 3, 4, 5, 6, 7, 8));
@@ -33,14 +31,14 @@ class TensorUnaryOperatorTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     TensorUnaryOperator tensorUnaryOperator = t -> t;
     TensorUnaryOperator copy = Serialization.copy(tensorUnaryOperator);
     assertEquals(copy.apply(Tensors.vector(1, 2, 3)), Tensors.vector(1, 2, 3));
   }
 
   @Test
-  void testSerializableId() throws ClassNotFoundException, IOException {
+  void testSerializableId() {
     TensorUnaryOperator tensorUnaryOperator = t -> t;
     TensorUnaryOperator copy = Serialization.copy(tensorUnaryOperator);
     assertEquals(copy.apply(Tensors.vector(1, 2, 4)), Tensors.vector(1, 2, 4));

@@ -4,8 +4,6 @@ package ch.alpine.tensor.sca.win;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -24,14 +22,14 @@ class GaussianWindowTest {
   }
 
   @Test
-  void testOutside() throws ClassNotFoundException, IOException {
+  void testOutside() {
     Scalar scalar = Serialization.copy(GaussianWindow.FUNCTION).apply(RealScalar.of(-0.52));
     assertEquals(scalar, RealScalar.ZERO);
     assertEquals(GaussianWindow.FUNCTION.toString(), "GaussianWindow[3/10]");
   }
 
   @Test
-  void testCustom() throws ClassNotFoundException, IOException {
+  void testCustom() {
     ScalarUnaryOperator copy = Serialization.copy(GaussianWindow.of(Rational.of(2, 10)));
     Scalar apply = copy.apply(RealScalar.of(0.4));
     Scalar exact = RealScalar.of(0.13533528323661262);

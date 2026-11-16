@@ -4,8 +4,6 @@ package ch.alpine.tensor.prc;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -15,7 +13,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class BinomialProcessTest {
   @Test
-  void testRandomFunction() throws ClassNotFoundException, IOException {
+  void testRandomFunction() {
     RandomProcess randomProcess = BinomialProcess.of(Rational.of(1, 4));
     assertTrue(randomProcess.toString().startsWith("RenewalProcess"));
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
@@ -26,7 +24,7 @@ class BinomialProcessTest {
   }
 
   @Test
-  void testMax() throws ClassNotFoundException, IOException {
+  void testMax() {
     RandomProcess randomProcess = BinomialProcess.of(0.25);
     assertTrue(randomProcess.toString().startsWith("RenewalProcess"));
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));

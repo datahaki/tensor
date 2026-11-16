@@ -3,8 +3,6 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Complex;
@@ -51,7 +49,7 @@ class ReImTest {
   }
 
   @Test
-  void testSerialization() throws ClassNotFoundException, IOException {
+  void testSerialization() {
     ReIm reIm = ReIm.of(Complex.of(2, 5));
     Serialization.copy(reIm);
   }

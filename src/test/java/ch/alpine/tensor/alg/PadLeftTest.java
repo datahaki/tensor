@@ -4,8 +4,6 @@ package ch.alpine.tensor.alg;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
@@ -18,7 +16,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class PadLeftTest {
   @Test
-  void testVectorLo() throws ClassNotFoundException, IOException {
+  void testVectorLo() {
     TensorUnaryOperator tuo = Serialization.copy(PadLeft.zeros(10));
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6);
     Tensor result = tuo.apply(vector);
@@ -67,7 +65,7 @@ class PadLeftTest {
   }
 
   @Test
-  void testSerialization() throws ClassNotFoundException, IOException {
+  void testSerialization() {
     Serialization.copy(PadLeft.zeros());
   }
 

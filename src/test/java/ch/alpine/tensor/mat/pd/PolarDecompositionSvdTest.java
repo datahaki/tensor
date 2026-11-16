@@ -4,7 +4,6 @@ package ch.alpine.tensor.mat.pd;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -43,7 +42,7 @@ class PolarDecompositionSvdTest {
   }
 
   @Test
-  void testStrang() throws ClassNotFoundException, IOException {
+  void testStrang() {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
     PolarDecompositionSvd polarDecompositionSvd = Serialization.copy(PolarDecompositionSvd.up(matrix));
     Tensor q = polarDecompositionSvd.getUnitary();

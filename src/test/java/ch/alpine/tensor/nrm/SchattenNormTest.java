@@ -4,7 +4,6 @@ package ch.alpine.tensor.nrm;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class SchattenNormTest {
   @Test
-  void testFrobenius() throws ClassNotFoundException, IOException {
+  void testFrobenius() {
     TensorScalarFunction tensorScalarFunction = Serialization.copy(SchattenNorm.of(2));
     Distribution distribution = UniformDistribution.of(-2, 2);
     Tensor design = RandomVariate.of(distribution, 5, 3);
@@ -42,7 +41,7 @@ class SchattenNormTest {
   }
 
   @Test
-  void testExact() throws ClassNotFoundException, IOException {
+  void testExact() {
     Random random = new Random(1);
     TensorScalarFunction tensorScalarFunction = Serialization.copy(SchattenNorm.of(1.2));
     Distribution distribution = DiscreteUniformDistribution.of(0, 2);

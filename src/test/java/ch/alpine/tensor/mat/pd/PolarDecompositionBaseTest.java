@@ -1,8 +1,6 @@
 // code by jph
 package ch.alpine.tensor.mat.pd;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -14,7 +12,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class PolarDecompositionBaseTest {
   @Test
-  void testStrang() throws ClassNotFoundException, IOException {
+  void testStrang() {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
     PolarDecomposition polarDecomposition = Serialization.copy(PolarDecomposition.pu(matrix));
     Tensor s = polarDecomposition.getPositiveSemidefinite().multiply(Sqrt.FUNCTION.apply(RealScalar.of(5)));

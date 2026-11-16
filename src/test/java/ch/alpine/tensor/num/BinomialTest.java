@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.stream.IntStream;
 
@@ -72,7 +71,7 @@ class BinomialTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     Binomial binomial = Serialization.copy(Binomial.of(3));
     assertEquals(binomial.over(2), RealScalar.of(3));
   }

@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -22,7 +20,7 @@ import ch.alpine.tensor.spa.SparseArray;
 
 class ImageCropTest {
   @Test
-  void testSerialization() throws ClassNotFoundException, IOException {
+  void testSerialization() {
     TensorUnaryOperator tensorUnaryOperator = //
         ImageCrop.eq(Tensors.vector(255, 255, 255, 255));
     Serialization.copy(tensorUnaryOperator);
@@ -69,7 +67,7 @@ class ImageCropTest {
   }
 
   @Test
-  void testColor() throws ClassNotFoundException, IOException {
+  void testColor() {
     Tensor image = Tensors.fromString("{{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}");
     image = Raster.of(image, ColorDataGradients.CLASSIC);
     TensorUnaryOperator tensorUnaryOperator = Serialization.copy(ImageCrop.eq(image.get(0, 0)));

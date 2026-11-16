@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -39,7 +37,7 @@ class WeibullDistributionTest {
   }
 
   @Test
-  void testExpectation() throws ClassNotFoundException, IOException {
+  void testExpectation() {
     Distribution distribution = WeibullDistribution.of(1.2, 2.3);
     Serialization.copy(distribution);
     assertTrue(distribution.toString().startsWith("WeibullDistribution["));

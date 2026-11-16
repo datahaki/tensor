@@ -4,7 +4,6 @@ package ch.alpine.tensor.pdf.c;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,7 +27,7 @@ import ch.alpine.tensor.sca.Chop;
 class Gamma1DistributionTest {
   @ParameterizedTest
   @ValueSource(strings = { "0.3", "1", "1.3" })
-  void testPDF(String string) throws ClassNotFoundException, IOException {
+  void testPDF(String string) {
     Scalar alpha = Scalars.fromString(string);
     Distribution d1 = new GammaDistribution(alpha, RealScalar.ONE);
     Distribution d2 = new Gamma1Distribution(alpha);

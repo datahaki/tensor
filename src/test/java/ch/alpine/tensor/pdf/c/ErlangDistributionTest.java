@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -36,7 +34,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class ErlangDistributionTest {
   @Test
-  void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() {
     Distribution distribution = Serialization.copy(ErlangDistribution.of(3, 1.8));
     PDF pdf = PDF.of(distribution);
     Scalar p = pdf.at(RealScalar.of(3.2));

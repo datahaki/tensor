@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -40,7 +38,7 @@ class InverseGaussianDistributionTest {
   }
 
   @Test
-  void testQuantity() throws ClassNotFoundException, IOException {
+  void testQuantity() {
     Distribution distribution = Serialization.copy( //
         InverseGaussianDistribution.of(Quantity.of(2.3, "m"), Quantity.of(1.4, "m")));
     PDF pdf = PDF.of(distribution);

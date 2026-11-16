@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -25,7 +23,7 @@ import ch.alpine.tensor.red.Variance;
 
 class PoissonBinomialDistributionTest {
   @Test
-  void testEmpty() throws ClassNotFoundException, IOException {
+  void testEmpty() {
     Distribution distribution = Serialization.copy(PoissonBinomialDistribution.of(Tensors.empty()));
     Tensor samples = RandomVariate.of(distribution, 10);
     assertEquals(samples, Array.zeros(10));

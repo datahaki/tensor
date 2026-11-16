@@ -4,7 +4,6 @@ package ch.alpine.tensor.mat.qr;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import ch.alpine.tensor.ext.Serialization;
 class QRSignOperatorsTest {
   @ParameterizedTest
   @EnumSource
-  void testSerializable(QRSignOperators qrSignOperators) throws ClassNotFoundException, IOException {
+  void testSerializable(QRSignOperators qrSignOperators) {
     Serialization.copy(qrSignOperators);
   }
 

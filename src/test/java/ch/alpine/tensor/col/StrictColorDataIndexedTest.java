@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
-import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +45,7 @@ class StrictColorDataIndexedTest {
   }
 
   @Test
-  void testDerive() throws ClassNotFoundException, IOException {
+  void testDerive() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = Serialization.copy(StrictColorDataIndexed.of(tensor));
     colorDataIndexed = colorDataIndexed.deriveWithAlpha(255);
@@ -57,7 +56,7 @@ class StrictColorDataIndexedTest {
   }
 
   @Test
-  void testEmpty() throws ClassNotFoundException, IOException {
+  void testEmpty() {
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(Tensors.empty());
     Serialization.copy(colorDataIndexed.deriveWithAlpha(128));
   }

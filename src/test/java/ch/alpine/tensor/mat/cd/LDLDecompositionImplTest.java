@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -33,7 +32,7 @@ import ch.alpine.tensor.sca.N;
 
 class LDLDecompositionImplTest {
   @Test
-  void testSolveQuantity() throws ClassNotFoundException, IOException {
+  void testSolveQuantity() {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     LDLDecomposition ldlDecomposition = //
@@ -42,7 +41,7 @@ class LDLDecompositionImplTest {
   }
 
   @Test
-  void testGaussScalar() throws ClassNotFoundException, IOException {
+  void testGaussScalar() {
     int n = 7;
     int prime = 7879;
     RandomGenerator randomGenerator = new Random(1);

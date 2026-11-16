@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -52,7 +50,7 @@ class DiracDeltaDistributionTest {
   }
 
   @Test
-  void testRandom() throws ClassNotFoundException, IOException {
+  void testRandom() {
     Distribution distribution = Serialization.copy(DiracDeltaDistribution.of(Pi.VALUE));
     assertEquals(RandomVariate.of(distribution), Pi.VALUE);
     assertEquals(CentralMoment.of(distribution, 0), RealScalar.ONE);

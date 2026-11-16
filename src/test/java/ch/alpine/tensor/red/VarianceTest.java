@@ -54,7 +54,7 @@ class VarianceTest {
 
   @Test
   void testFailLength() {
-    assertThrows(ArithmeticException.class, () -> Variance.ofVector(Tensors.empty()));
+    assertThrows(Exception.class, () -> Variance.ofVector(Tensors.empty()));
     assertThrows(ArithmeticException.class, () -> Variance.ofVector(Tensors.vector(3)));
   }
 

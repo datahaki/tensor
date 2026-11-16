@@ -4,7 +4,6 @@ package ch.alpine.tensor.opt.hun;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -94,7 +93,7 @@ class HungarianAlgorithmTest {
     _check1(matrix, RealScalar.of(9), Tensors.vector(4, 1, 0, 3, 2));
   }
 
-  private static void _check3(Tensor matrix) throws ClassNotFoundException, IOException {
+  private static void _check3(Tensor matrix) {
     BipartiteMatching bipartiteMatching = Serialization.copy(BipartiteMatching.of(matrix));
     _check2(matrix, bipartiteMatching.minimum(), Tensors.vectorInt(bipartiteMatching.matching()));
     HungarianAlgorithm hungarianAlgorithm = (HungarianAlgorithm) bipartiteMatching;
@@ -103,16 +102,18 @@ class HungarianAlgorithmTest {
     assertTrue(hungarianAlgorithm.iterations() <= Math.min(list.get(0), list.get(1)));
   }
 
+  @SuppressWarnings("unused")
   @Test
-  void testRandom() throws ClassNotFoundException, IOException {
+  void testRandom() {
     Distribution distribution = UniformDistribution.unit();
     int row = 40 + ThreadLocalRandom.current().nextInt(25);
     _check3(RandomVariate.of(distribution, row, 53));
     _check3(RandomVariate.of(distribution, 53, row));
   }
 
+  @SuppressWarnings("unused")
   @Test
-  void testDiscreteRandom() throws ClassNotFoundException, IOException {
+  void testDiscreteRandom() {
     Distribution distribution = DiscreteUniformDistribution.of(-20, 100);
     int row = 40 + ThreadLocalRandom.current().nextInt(25);
     _check3(RandomVariate.of(distribution, row, 53));

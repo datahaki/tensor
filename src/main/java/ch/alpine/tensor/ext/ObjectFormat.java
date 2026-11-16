@@ -30,8 +30,7 @@ public enum ObjectFormat {
    * @throws ClassNotFoundException
    * @throws DataFormatException
    * @throws IOException */
-  public static <T> T parse(byte[] bytes) //
-      throws ClassNotFoundException, IOException, DataFormatException {
+  public static <T> T parse(byte[] bytes) throws ClassNotFoundException, IOException, DataFormatException {
     return Serialization.parse(Compression.inflate(bytes));
   }
 

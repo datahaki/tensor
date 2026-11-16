@@ -4,8 +4,6 @@ package ch.alpine.tensor.opt.nd;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalars;
@@ -51,13 +49,13 @@ class NdCentersTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     for (NdCenters ndCenters : NdCenters.values())
       Serialization.copy(ndCenters);
   }
 
   @Test
-  void testSerializableIf() throws ClassNotFoundException, IOException {
+  void testSerializableIf() {
     for (NdCenters ndCenters : NdCenters.values())
       Serialization.copy(ndCenters.apply(Array.zeros(3)));
   }

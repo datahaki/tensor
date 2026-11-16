@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -194,7 +192,7 @@ class LinearInterpolationTest {
   }
 
   @Test
-  void testClip() throws ClassNotFoundException, IOException {
+  void testClip() {
     ScalarUnaryOperator interpolation = Serialization.copy(LinearInterpolation.of(Clips.interval(10, 14)));
     assertEquals(ExactScalarQ.require(interpolation.apply(RealScalar.ZERO)), RealScalar.of(10));
     assertEquals(ExactScalarQ.require(interpolation.apply(Rational.of(1, 4))), RealScalar.of(11));

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -90,7 +89,7 @@ class DimensionsTest {
   }
 
   @Test
-  void testLengths() throws ClassNotFoundException, IOException {
+  void testLengths() {
     Tensor tensor = Tensors.fromString("{{{2, 3}, {{}}}, {4, 5, 7}, 3}");
     Dimensions dimensions = Serialization.copy(new Dimensions(tensor));
     assertEquals(dimensions.lengths(0), new HashSet<>(List.of(3)));

@@ -4,8 +4,6 @@ package ch.alpine.tensor.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -23,7 +21,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 
 class TensorScalarFunctionTest {
   @Test
-  void testCompose() throws ClassNotFoundException, IOException {
+  void testCompose() {
     TensorScalarFunction tsf = VectorNorm.of(2).compose(Times.operator(Tensors.vector(1, 2, 3)));
     Serialization.copy(tsf);
     Scalar scalar = tsf.apply(Tensors.vector(3, 2, 2));
@@ -31,7 +29,7 @@ class TensorScalarFunctionTest {
   }
 
   @Test
-  void testAndThen() throws ClassNotFoundException, IOException {
+  void testAndThen() {
     TensorScalarFunction tsf = VectorNorm.of(2).andThen(Sin.FUNCTION);
     Serialization.copy(tsf);
     tsf.apply(Tensors.vector(1, 2, 3, 4));
@@ -43,7 +41,7 @@ class TensorScalarFunctionTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     TensorScalarFunction tensorScalarFunction = t -> t.Get(0);
     TensorScalarFunction copy = Serialization.copy(tensorScalarFunction);
     assertEquals(copy.apply(Tensors.vector(1, 2, 3)), RealScalar.ONE);

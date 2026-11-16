@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -47,7 +46,7 @@ import ch.alpine.tensor.sca.exp.Log;
 
 class ExponentialDistributionTest {
   @Test
-  void testPositive() throws ClassNotFoundException, IOException {
+  void testPositive() {
     Distribution distribution = Serialization.copy(ExponentialDistribution.of(RealScalar.ONE));
     for (int count = 0; count < 10; ++count) {
       Scalar scalar = RandomVariate.of(distribution);

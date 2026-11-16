@@ -4,8 +4,6 @@ package ch.alpine.tensor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Array;
@@ -14,7 +12,7 @@ import ch.alpine.tensor.num.Pi;
 
 class ThrowTest {
   @Test
-  void testFull() throws ClassNotFoundException, IOException {
+  void testFull() {
     Exception exception = Serialization.copy(new Throw(Tensors.vector(1, 2), Tensors.vector(9, 3)));
     assertEquals(exception.getMessage(), "Throw[{1, 2}, {9, 3}]");
   }

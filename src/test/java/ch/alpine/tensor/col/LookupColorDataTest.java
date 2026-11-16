@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Color;
-import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +49,7 @@ class LookupColorDataTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     Serialization.copy(LookupColorData.GRAYSCALE);
   }
 }

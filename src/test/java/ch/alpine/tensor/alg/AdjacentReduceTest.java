@@ -3,8 +3,6 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
@@ -20,7 +18,7 @@ class AdjacentReduceTest {
   }
 
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Tensor tensor = Range.of(0, 5);
     int length = tensor.length();
     AdjacentReduce adjacentReduce = new AdjacentReduce(new Some());

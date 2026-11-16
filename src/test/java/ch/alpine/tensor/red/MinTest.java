@@ -4,7 +4,6 @@ package ch.alpine.tensor.red;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -53,7 +52,7 @@ class MinTest {
   }
 
   @Test
-  void testSet() throws ClassNotFoundException, IOException {
+  void testSet() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
     ScalarUnaryOperator _op = Min.function(RealScalar.ZERO);
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(_op);

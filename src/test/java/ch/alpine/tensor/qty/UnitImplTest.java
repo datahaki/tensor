@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -44,7 +43,7 @@ class UnitImplTest {
   }
 
   @Test
-  void testSerializationEquals() throws ClassNotFoundException, IOException {
+  void testSerializationEquals() {
     Unit unit1 = Unit.of("kg^2*m^-1*K*ABC");
     Unit unit2 = Serialization.copy(unit1);
     assertEquals(unit1, unit2);

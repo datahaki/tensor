@@ -4,7 +4,6 @@ package ch.alpine.tensor.pdf.c;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -34,7 +33,7 @@ import ch.alpine.tensor.sca.exp.Exp;
 
 class LogNormalDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     LogNormalDistribution distribution = (LogNormalDistribution) Serialization.copy( //
         LogNormalDistribution.of(Rational.HALF, Rational.of(2, 3)));
     Tolerance.CHOP.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(Rational.of(13, 18)));

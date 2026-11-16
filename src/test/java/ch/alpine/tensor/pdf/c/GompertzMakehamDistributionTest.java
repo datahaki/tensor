@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -35,7 +33,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class GompertzMakehamDistributionTest {
   @Test
-  void testPDF() throws ClassNotFoundException, IOException {
+  void testPDF() {
     Distribution distribution = //
         Serialization.copy(GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2)));
     PDF pdf = PDF.of(distribution);

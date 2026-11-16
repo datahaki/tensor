@@ -4,8 +4,6 @@ package ch.alpine.tensor.num;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
@@ -15,7 +13,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class LinearRecurrenceTest {
   @Test
-  void testPadovan() throws ClassNotFoundException, IOException {
+  void testPadovan() {
     LinearRecurrence linearRecurrence = Serialization.copy(new LinearRecurrence(Tensors.vector(0, 1, 1), Tensors.vector(1, 1, 1)));
     assertEquals(Tensors.vector(1, 1, 1, 2, 2, 3, 4, 5, 7, 9), linearRecurrence.until(10));
     assertEquals(Tensors.vector(1, 1), linearRecurrence.until(2));

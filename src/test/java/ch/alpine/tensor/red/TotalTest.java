@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -58,7 +56,7 @@ class TotalTest {
   }
 
   @Test
-  void testOfVectorNormalize() throws ClassNotFoundException, IOException {
+  void testOfVectorNormalize() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     TensorUnaryOperator copy = Serialization.copy(tensorUnaryOperator);
     Tensor vector = copy.apply(Tensors.vector(1, 2, 3));

@@ -4,8 +4,6 @@ package ch.alpine.tensor.pdf.c;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -26,7 +24,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class LevyDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Distribution distribution = Serialization.copy(LevyDistribution.of(-1.3, 2.5));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(3)), RealScalar.of(0.052896750155658534));
@@ -42,7 +40,7 @@ class LevyDistributionTest {
   }
 
   @Test
-  void testQuantity() throws ClassNotFoundException, IOException {
+  void testQuantity() {
     Distribution distribution = Serialization.copy(LevyDistribution.of(Quantity.of(-1.3, "m"), Quantity.of(2.5, "m")));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(Quantity.of(3, "m")), Quantity.of(0.052896750155658534, "m^-1"));

@@ -4,7 +4,6 @@ package ch.alpine.tensor.sca.ply;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -132,7 +131,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  void testScalarLengthFail() throws ClassNotFoundException, IOException {
+  void testScalarLengthFail() {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
     assertThrows(Throw.class, () -> interpolatingPolynomial.scalarUnaryOperator(Tensors.vector(1, 2)));
@@ -140,7 +139,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  void testTensorLengthFail() throws ClassNotFoundException, IOException {
+  void testTensorLengthFail() {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
     assertThrows(IllegalArgumentException.class, () -> interpolatingPolynomial.scalarTensorFunction(Tensors.vector(1, 2)));

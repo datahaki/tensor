@@ -4,7 +4,6 @@ package ch.alpine.tensor.mat.qr;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -48,7 +47,7 @@ class GramSchmidtTest {
   }
 
   @RepeatedTest(3)
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4);
     QRDecomposition qrDecomposition = Serialization.copy(GramSchmidt.of(matrix));
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());

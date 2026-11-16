@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -41,7 +39,7 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  void testRad() throws ClassNotFoundException, IOException {
+  void testRad() {
     QuantityMagnitude quantityMagnitude = Serialization.copy(QuantityMagnitude.SI());
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in(Unit.of("rad"));
     Tolerance.CHOP.requireClose(scalarUnaryOperator.apply(Quantity.of(360, "deg")), RealScalar.of(Math.PI * 2));

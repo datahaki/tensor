@@ -4,8 +4,6 @@ package ch.alpine.tensor.red;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -192,13 +190,13 @@ class TimesTest {
   }
 
   @Test
-  void testOperator() throws ClassNotFoundException, IOException {
+  void testOperator() {
     TensorUnaryOperator tuo = Times.operator(Tensors.vector(1, 2, 3));
     Serialization.copy(tuo).apply(Tensors.vector(3, 4, 5));
   }
 
   @Test
-  void testBiOperator() throws ClassNotFoundException, IOException {
+  void testBiOperator() {
     Serialization.copy(Times.operator(Pi.VALUE));
   }
 

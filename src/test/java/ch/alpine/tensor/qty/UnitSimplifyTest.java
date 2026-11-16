@@ -4,7 +4,6 @@ package ch.alpine.tensor.qty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +17,7 @@ import ch.alpine.tensor.num.Pi;
 
 class UnitSimplifyTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Set<Unit> set = new HashSet<>();
     set.add(Unit.of("kW"));
     set.add(Unit.of("kW*h^-1"));

@@ -4,8 +4,6 @@ package ch.alpine.tensor.itp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -75,7 +73,7 @@ class BernsteinBasisTest {
   }
 
   @Test
-  void testSimple2() throws ClassNotFoundException, IOException {
+  void testSimple2() {
     ScalarTensorFunction scalarTensorFunction = Serialization.copy(of(2));
     assertEquals(scalarTensorFunction.apply(Rational.HALF), Tensors.fromString("{1/2, 1/2}"));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(0)), Tensors.fromString("{1, 0}"));

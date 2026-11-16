@@ -4,8 +4,6 @@ package ch.alpine.tensor.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -20,14 +18,14 @@ import ch.alpine.tensor.sca.tri.Sin;
 
 class ScalarTensorFunctionTest {
   @Test
-  void testCompose() throws ClassNotFoundException, IOException {
+  void testCompose() {
     ScalarTensorFunction stf = ColorDataGradients.ALPINE.compose(Sin.FUNCTION);
     Serialization.copy(stf);
     stf.apply(Rational.HALF);
   }
 
   @Test
-  void testAndThen() throws ClassNotFoundException, IOException {
+  void testAndThen() {
     ScalarTensorFunction stf = ColorDataGradients.ALPINE.andThen(Mean::of);
     Serialization.copy(stf);
     Tensor tensor = stf.apply(RealScalar.ONE);
@@ -40,7 +38,7 @@ class ScalarTensorFunctionTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     ScalarTensorFunction tensorScalarFunction = s -> Tensors.of(s, s, s);
     ScalarTensorFunction copy = Serialization.copy(tensorScalarFunction);
     assertEquals(copy.apply(RealScalar.ONE), Tensors.vector(1, 1, 1));

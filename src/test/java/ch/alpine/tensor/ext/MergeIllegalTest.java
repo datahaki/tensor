@@ -3,13 +3,11 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 class MergeIllegalTest {
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     Serialization.copy(MergeIllegal.operator());
   }
 

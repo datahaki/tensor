@@ -4,8 +4,6 @@ package ch.alpine.tensor.fft;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -41,7 +39,7 @@ class PeriodogramArrayTest {
 
   @ParameterizedTest
   @EnumSource
-  void testWindow(WindowFunctions windowFunctions) throws ClassNotFoundException, IOException {
+  void testWindow(WindowFunctions windowFunctions) {
     TensorUnaryOperator tuo = Serialization.copy(new PeriodogramArray(SpectrogramArrays.FOURIER.operator()).config(4, 1).config(windowFunctions.get()));
     Tensor res = tuo.apply(Tensors.vector(0, 1, 0, -1, 0, 1, 0, -1));
     assertEquals(res.length(), 4);

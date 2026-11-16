@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -40,7 +38,7 @@ class GeometricDistributionTest {
   }
 
   @Test
-  void testNarrow() throws ClassNotFoundException, IOException {
+  void testNarrow() {
     final Scalar p = Rational.of(1, 19);
     GeometricDistribution distribution = //
         (GeometricDistribution) Serialization.copy(GeometricDistribution.of(p));

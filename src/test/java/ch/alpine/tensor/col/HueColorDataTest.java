@@ -4,7 +4,6 @@ package ch.alpine.tensor.col;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ class HueColorDataTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     Serialization.copy(HueColorData.DEFAULT);
   }
 

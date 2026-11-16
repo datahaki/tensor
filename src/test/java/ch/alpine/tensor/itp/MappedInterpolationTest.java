@@ -4,8 +4,6 @@ package ch.alpine.tensor.itp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -15,7 +13,7 @@ import ch.alpine.tensor.sca.Floor;
 
 class MappedInterpolationTest {
   @Test
-  void testFloor() throws ClassNotFoundException, IOException {
+  void testFloor() {
     Interpolation interpolation = //
         Serialization.copy(MappedInterpolation.of(Tensors.vector(10, 20, 30, 40), Floor.FUNCTION));
     assertEquals(interpolation.get(Tensors.vector(2.8)), RealScalar.of(30));

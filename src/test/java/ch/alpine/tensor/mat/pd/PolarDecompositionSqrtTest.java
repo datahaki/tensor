@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -86,7 +85,7 @@ class PolarDecompositionSqrtTest {
   }
 
   @Test
-  void testStrang() throws ClassNotFoundException, IOException {
+  void testStrang() {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
     PolarDecomposition polarDecomposition = Serialization.copy(PolarDecomposition.up(matrix));
     Tensor expect = Tensors.fromString("{{2, 1}, {1, 2}}").multiply(Sqrt.FUNCTION.apply(RealScalar.of(5)));

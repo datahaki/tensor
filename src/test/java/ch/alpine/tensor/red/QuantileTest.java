@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class QuantileTest {
   @Test
-  void testMultiple() throws ClassNotFoundException, IOException {
+  void testMultiple() {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(Quantile.of(vector));
     Tensor q = Tensors.fromString("{0, 1/5, 2/5, 3/5, 4/5, 1}").maps(scalarUnaryOperator);
@@ -50,7 +49,7 @@ class QuantileTest {
   }
 
   @Test
-  void testSorted() throws ClassNotFoundException, IOException {
+  void testSorted() {
     Tensor vector = Sort.of(Tensors.vector(0, 2, 1, 4, 3));
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(Quantile.ofSorted(vector));
     Tensor q = Tensors.fromString("{0, 1/5, 2/5, 3/5, 4/5, 1}").maps(scalarUnaryOperator);

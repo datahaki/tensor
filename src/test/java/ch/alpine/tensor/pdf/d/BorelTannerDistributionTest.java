@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -24,7 +22,7 @@ import ch.alpine.tensor.red.Variance;
 
 class BorelTannerDistributionTest {
   @Test
-  void test() throws ClassNotFoundException, IOException {
+  void test() {
     Distribution distribution = Serialization.copy(BorelTannerDistribution.of(0.3, 5));
     assertTrue(distribution.toString().startsWith("BorelTannerDistribution["));
     PDF pdf = PDF.of(distribution);
@@ -39,14 +37,14 @@ class BorelTannerDistributionTest {
   }
 
   @Test
-  void testBuild() throws ClassNotFoundException, IOException {
+  void testBuild() {
     Distribution distribution = Serialization.copy(BorelTannerDistribution.of(0.3, 5));
     CDF cdf = CDF.of(distribution);
     Tolerance.CHOP.requireClose(cdf.p_lessEquals(RealScalar.of(20)), RealScalar.of(0.9996946869376027));
   }
 
   @Test
-  void testExact() throws ClassNotFoundException, IOException {
+  void testExact() {
     Scalar alpha = Rational.of(2, 3);
     Distribution distribution = Serialization.copy(BorelTannerDistribution.of(alpha, 7));
     CDF cdf = CDF.of(distribution);

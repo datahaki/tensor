@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
@@ -85,7 +84,7 @@ class BoundedLinkedListTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(2);
     assertTrue(boundedLinkedList.add(3));
     assertTrue(boundedLinkedList.add(4));

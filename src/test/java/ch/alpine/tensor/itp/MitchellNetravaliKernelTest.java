@@ -4,8 +4,6 @@ package ch.alpine.tensor.itp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -19,7 +17,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class MitchellNetravaliKernelTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(MitchellNetravaliKernel.of( //
         Rational.of(1, 5), //
         Rational.of(1, 3)));

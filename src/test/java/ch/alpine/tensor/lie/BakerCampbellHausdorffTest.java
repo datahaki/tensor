@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -121,7 +120,7 @@ class BakerCampbellHausdorffTest {
   }
 
   @Test
-  void testSparse() throws ClassNotFoundException, IOException {
+  void testSparse() {
     CliffordAlgebra cliffordAlgebra = CliffordAlgebra.of(1, 2);
     Tensor cp = cliffordAlgebra.cp();
     assertInstanceOf(SparseArray.class, cp);
@@ -136,7 +135,7 @@ class BakerCampbellHausdorffTest {
   }
 
   @Test
-  void testJacobiFail() throws ClassNotFoundException, IOException {
+  void testJacobiFail() {
     Tensor ad = ExAd.SL2.ad().copy();
     Serialization.copy(BakerCampbellHausdorff.of(ad, 2));
     ad.set(Scalar::zero, Tensor.ALL, 1, 2);

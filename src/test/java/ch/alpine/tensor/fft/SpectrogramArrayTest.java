@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +38,7 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
 
 class SpectrogramArrayTest {
   @Test
-  void testOperator() throws ClassNotFoundException, IOException {
+  void testOperator() {
     TensorUnaryOperator tuo = SpectrogramArray.of(Fourier.INVERSE::transform).config(1345, 300);
     Serialization.copy(tuo);
     tuo.apply(TestHelper.signal());
@@ -47,7 +46,7 @@ class SpectrogramArrayTest {
   }
 
   @Test
-  void testDimension() throws ClassNotFoundException, IOException {
+  void testDimension() {
     TensorUnaryOperator tuo = Serialization.copy(SpectrogramArray.of(Fourier.FORWARD::transform).config(8, 8));
     Tensor tensor = tuo.apply(Range.of(0, 128));
     assertEquals(Dimensions.of(tensor), Arrays.asList(16, 8));

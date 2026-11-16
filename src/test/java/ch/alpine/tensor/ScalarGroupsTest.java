@@ -4,7 +4,6 @@ package ch.alpine.tensor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ class ScalarGroupsTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     BinaryPower<Scalar> copy = Serialization.copy(Scalars.mul());
     assertEquals(copy.raise(RealScalar.of(2), BigInteger.valueOf(3)), RealScalar.of(8));
   }
@@ -48,7 +47,7 @@ class ScalarGroupsTest {
   }
 
   @Test
-  void testSerializable1() throws ClassNotFoundException, IOException {
+  void testSerializable1() {
     BinaryPower<Scalar> copy = Serialization.copy(Scalars.add());
     assertEquals(copy.raise(RealScalar.of(2), BigInteger.valueOf(3)), RealScalar.of(6));
   }

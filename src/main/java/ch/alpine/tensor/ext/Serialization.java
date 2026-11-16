@@ -1,4 +1,4 @@
-// code by jph
+// code by gemini, jph
 package ch.alpine.tensor.ext;
 
 import java.io.ByteArrayInputStream;
@@ -7,10 +7,31 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
 
 /** Used in: Export, Import, ObjectFormat */
 public enum Serialization {
   ;
+  private static final class Buffer extends ByteArrayOutputStream {
+    private static final int INITIAL_BUFFER_SIZE = 8192; // 8kB pre-allocated buffer
+
+    public Buffer() {
+      super(INITIAL_BUFFER_SIZE);
+    }
+
+    public byte[] buf() {
+      return buf;
+    }
+
+    public int count() {
+      return count;
+    }
+  }
+
+  // Thread-local instances avoid thread contention and heavy GC allocations
+  private static final ThreadLocal<Buffer> THREAD_LOCAL = //
+      ThreadLocal.withInitial(Buffer::new);
+
   /** encodes {@link Serializable} input {@link Object} as array of bytes.
    * 
    * <p>In order to store the object <b>uncompressed</b> to a file, use
@@ -20,11 +41,13 @@ public enum Serialization {
    * @return serialization of object
    * @throws IOException */
   public static byte[] of(Object object) throws IOException {
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+    Buffer buffer = THREAD_LOCAL.get();
+    buffer.reset();
+    try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(buffer)) {
       objectOutputStream.writeObject(object);
       objectOutputStream.flush();
-      return byteArrayOutputStream.toByteArray();
+      // Note: toByteArray() creates a copy here, kept for public of(Object) API compatibility
+      return buffer.toByteArray();
     }
   }
 
@@ -46,13 +69,25 @@ public enum Serialization {
     }
   }
 
-  /** function also known as "deepcopy"
-   * 
-   * @param object that implements {@link Serializable} may be null
-   * @return new instance of T with identical content as given object
-   * @throws ClassNotFoundException
-   * @throws IOException */
-  public static <T> T copy(T object) throws ClassNotFoundException, IOException {
-    return parse(of(object));
+  /** Creates a high-performance deep copy of a {@link Serializable} object. */
+  @SuppressWarnings("unchecked")
+  public static <T> T copy(T object) {
+    Buffer buffer = THREAD_LOCAL.get();
+    try {
+      buffer.reset();
+      // 1. Write to the buffer
+      try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(buffer)) {
+        objectOutputStream.writeObject(object);
+        objectOutputStream.flush();
+      }
+      // 2. Zero-copy read directly from the underlying buffer array
+      try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(buffer.buf(), 0, buffer.count()))) {
+        return (T) ois.readObject();
+      }
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    } catch (ClassNotFoundException e) {
+      throw new IllegalStateException("Failed to deserialize object during deep copy", e);
+    }
   }
 }

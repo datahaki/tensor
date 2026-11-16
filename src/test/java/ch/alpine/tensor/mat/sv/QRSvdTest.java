@@ -4,7 +4,6 @@ package ch.alpine.tensor.mat.sv;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -41,7 +40,7 @@ class QRSvdTest {
   }
 
   @Test
-  void testRect5x2() throws ClassNotFoundException, IOException {
+  void testRect5x2() {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 2);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     SingularValueDecomposition approximateSvd = Serialization.copy(QRSvd.of(qrDecomposition));

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +38,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
 
 class JetScalarTest {
   @Test
-  void testMultiply() throws ClassNotFoundException, IOException {
+  void testMultiply() {
     Scalar s1 = Serialization.copy(JetScalar.of(Tensors.vector(4, 1, 2)));
     Scalar s2 = JetScalar.of(Tensors.vector(2, 3, -1));
     Scalar scalar = s1.multiply(s2);

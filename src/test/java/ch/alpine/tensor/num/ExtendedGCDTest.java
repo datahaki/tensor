@@ -4,7 +4,6 @@ package ch.alpine.tensor.num;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,7 @@ class ExtendedGCDTest {
   }
 
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Function<Tensor, ExtendedGCD> function = ExtendedGCD.function();
     Tensor vector = Tensors.vector(12334 * 5, 32332 * 5);
     ExtendedGCD extendedGCD = Serialization.copy(function.apply(vector));

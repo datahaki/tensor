@@ -4,8 +4,6 @@ package ch.alpine.tensor.sca;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -15,7 +13,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class SoftThresholdTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     ScalarUnaryOperator deadzone = Serialization.copy(SoftThreshold.of(Clips.interval(-2, 1)));
     assertEquals(deadzone.apply(RealScalar.of(3)), RealScalar.of(2));
     assertEquals(deadzone.apply(RealScalar.of(-3)), RealScalar.of(-1));

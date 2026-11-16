@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -22,7 +20,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class UnitConvertTest {
   @Test
-  void testKm() throws ClassNotFoundException, IOException {
+  void testKm() {
     UnitConvert unitConvert = Serialization.copy(UnitConvert.SI());
     Scalar q = Quantity.of(2, "K*km^2");
     Unit unit = Unit.of("K*cm^2");

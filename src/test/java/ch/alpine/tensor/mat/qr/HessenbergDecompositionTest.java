@@ -3,8 +3,6 @@ package ch.alpine.tensor.mat.qr;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -25,7 +23,7 @@ import test.wrap.HessenbergDecompositionQ;
 class HessenbergDecompositionTest {
   @ParameterizedTest
   @ValueSource(ints = { 2, 3, 5, 10 })
-  void testReal(int n) throws ClassNotFoundException, IOException {
+  void testReal(int n) {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
     matrix.set(Scalar::zero, 1, 0);
     HessenbergDecomposition hessenbergDecomposition = HessenbergDecomposition.of(matrix);

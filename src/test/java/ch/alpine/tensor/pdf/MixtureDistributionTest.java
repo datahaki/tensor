@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -30,7 +29,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class MixtureDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Distribution d = BernoulliDistribution.of(Rational.HALF);
     Distribution d1 = Serialization.copy(MixtureDistribution.of(Tensors.vector(1, 2, 3), d, d, d));
     Distribution d2 = BernoulliDistribution.of(Rational.HALF);

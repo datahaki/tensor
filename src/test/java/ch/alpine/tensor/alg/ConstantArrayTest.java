@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -75,7 +74,7 @@ class ConstantArrayTest {
   }
 
   @Test
-  void testNCopiesScalar() throws ClassNotFoundException, IOException {
+  void testNCopiesScalar() {
     Tensor tensor = ConstantArray.of(RealScalar.of(3), 6);
     Serialization.copy(tensor);
     assertTrue(Tensors.isUnmodifiable(tensor));

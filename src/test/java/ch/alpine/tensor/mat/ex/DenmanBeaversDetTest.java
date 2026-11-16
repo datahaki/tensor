@@ -4,8 +4,6 @@ package ch.alpine.tensor.mat.ex;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
@@ -22,7 +20,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class DenmanBeaversDetTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     for (int n = 1; n < 10; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor x2 = MatrixPower.of(x, 2);

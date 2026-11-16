@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -164,7 +163,7 @@ class ScalarUnaryOperatorTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     ScalarUnaryOperator scalarUnaryOperator = t -> t;
     ScalarUnaryOperator copy = Serialization.copy(scalarUnaryOperator);
     assertEquals(copy.apply(Complex.I), Complex.I);
@@ -185,7 +184,7 @@ class ScalarUnaryOperatorTest {
   }
 
   @Test
-  void testChain() throws ClassNotFoundException, IOException {
+  void testChain() {
     ScalarUnaryOperator suo = ScalarUnaryOperatorTest.chain(Sin.FUNCTION, Tan.FUNCTION);
     Serialization.copy(suo);
     suo.apply(RealScalar.of(0.2));

@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -15,7 +13,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class PoissonProcessTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     RandomProcess randomProcess = PoissonProcess.of(2);
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
     randomFunction.evaluate(RealScalar.of(30));
@@ -26,7 +24,7 @@ class PoissonProcessTest {
   }
 
   @Test
-  void testQuantity() throws ClassNotFoundException, IOException {
+  void testQuantity() {
     RandomProcess randomProcess = PoissonProcess.of(Quantity.of(0.2, "s^-1"));
     RandomFunction randomFunction = Serialization.copy(RandomFunction.of(randomProcess));
     randomFunction.evaluate(Quantity.of(30, "s"));

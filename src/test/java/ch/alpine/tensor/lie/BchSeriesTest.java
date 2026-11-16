@@ -3,8 +3,6 @@ package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -21,7 +19,7 @@ class BchSeriesTest {
 
   @ParameterizedTest
   @EnumSource
-  void test6(ExAd exAd) throws ClassNotFoundException, IOException {
+  void test6(ExAd exAd) {
     Tensor ad = exAd.ad();
     BchSeries6 bchSeries6 = Serialization.copy(new BchSeries6(ad));
     BakerCampbellHausdorff bakerCampbellHausdorff = new BakerCampbellHausdorff(ad, 6, Chop.NONE);

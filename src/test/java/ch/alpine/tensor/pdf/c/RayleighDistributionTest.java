@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -29,7 +27,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class RayleighDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Distribution distribution = Serialization.copy(RayleighDistribution.of(1.3));
     Tolerance.CHOP.requireClose( //
         PDF.of(distribution).at(RealScalar.of(0.7)), //

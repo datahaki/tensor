@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class TruncatedDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Clip clip = Clips.interval(10, 11);
     Distribution distribution = Serialization.copy(TruncatedDistribution.of(NormalDistribution.of(10, 2), clip));
     Scalar scalar = RandomVariate.of(distribution);
@@ -120,7 +119,7 @@ class TruncatedDistributionTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     Clip clip = Clips.interval(10, 11);
     Distribution distribution = TruncatedDistribution.of(BinomialDistribution.of(20, DoubleScalar.of(0.5)), clip);
     Scalar scalar = RandomVariate.of(distribution);

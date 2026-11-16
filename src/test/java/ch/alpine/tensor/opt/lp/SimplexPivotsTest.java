@@ -3,7 +3,6 @@ package ch.alpine.tensor.opt.lp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
 import java.util.NavigableMap;
 import java.util.stream.Stream;
 
@@ -24,7 +23,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class SimplexPivotsTest {
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     for (SimplexPivot simplexPivot : SimplexPivots.values())
       Serialization.copy(simplexPivot);
   }

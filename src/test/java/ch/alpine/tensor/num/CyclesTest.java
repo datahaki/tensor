@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
@@ -17,7 +15,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class CyclesTest {
   @Test
-  void testZeroAllowed() throws ClassNotFoundException, IOException {
+  void testZeroAllowed() {
     Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{0}}")));
     assertEquals(cycles.min(), -1);
     assertEquals(cycles.max(), -1);
@@ -25,7 +23,7 @@ class CyclesTest {
   }
 
   @Test
-  void testZeroOne() throws ClassNotFoundException, IOException {
+  void testZeroOne() {
     Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{0, 1}}")));
     assertEquals(cycles.min(), 0);
     assertEquals(cycles.max(), 1);
@@ -46,7 +44,7 @@ class CyclesTest {
   }
 
   @Test
-  void testSingleton() throws ClassNotFoundException, IOException {
+  void testSingleton() {
     Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertEquals(cycles.toTensor(), Tensors.of(Tensors.vector(5, 9)));
     assertEquals(cycles.min(), 5);
@@ -105,7 +103,7 @@ class CyclesTest {
   }
 
   @Test
-  void testNonEquals() throws ClassNotFoundException, IOException {
+  void testNonEquals() {
     Object cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertNotEquals(cycles, Pi.VALUE);
   }

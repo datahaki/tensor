@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -34,7 +32,7 @@ class BinomialRandomVariateTest {
   }
 
   @Test
-  void testRandom() throws ClassNotFoundException, IOException {
+  void testRandom() {
     int n = 200;
     Distribution distribution = Serialization.copy(new BinomialRandomVariate(n, RealScalar.of(0.4)));
     Scalar value = RandomVariate.of(distribution);

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class WaringYuleDistributionTest {
   @Test
-  void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() {
     Distribution distribution = Serialization.copy(WaringYuleDistribution.of(1.4, 1));
     PDF pdf = PDF.of(distribution);
     Scalar scalar = pdf.at(RealScalar.TWO);

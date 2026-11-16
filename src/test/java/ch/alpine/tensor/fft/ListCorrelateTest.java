@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.function.UnaryOperator;
 
@@ -60,7 +59,7 @@ class ListCorrelateTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     Tensor kernel = Tensors.of(Tensors.vector(1, -1));
     UnaryOperator<Tensor> uo = ListCorrelate.with(kernel);
     UnaryOperator<Tensor> cp = Serialization.copy(uo);

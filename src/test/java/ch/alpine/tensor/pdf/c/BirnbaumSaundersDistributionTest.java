@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -29,7 +27,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class BirnbaumSaundersDistributionTest {
   @Test
-  void test() throws ClassNotFoundException, IOException {
+  void test() {
     Distribution distribution = Serialization.copy(BirnbaumSaundersDistribution.of(0.3, 0.8));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
@@ -54,7 +52,7 @@ class BirnbaumSaundersDistributionTest {
   }
 
   @Test
-  void testMean() throws ClassNotFoundException, IOException {
+  void testMean() {
     Distribution distribution = Serialization.copy(BirnbaumSaundersDistribution.standard());
     assertEquals(Mean.of(distribution), RealScalar.ONE);
     assertEquals(Variance.of(distribution), RealScalar.ONE);

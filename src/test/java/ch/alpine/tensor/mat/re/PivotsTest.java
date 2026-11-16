@@ -4,7 +4,6 @@ package ch.alpine.tensor.mat.re;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import ch.alpine.tensor.ext.Serialization;
 class PivotsTest {
   @ParameterizedTest
   @EnumSource(Pivots.class)
-  void testSerializable(Pivot pivot) throws ClassNotFoundException, IOException {
+  void testSerializable(Pivot pivot) {
     Serialization.copy(pivot);
   }
 

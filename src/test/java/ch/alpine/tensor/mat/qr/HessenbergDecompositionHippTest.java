@@ -4,8 +4,6 @@ package ch.alpine.tensor.mat.qr;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -30,7 +28,7 @@ class HessenbergDecompositionHippTest {
   }
 
   @Test
-  void testMathematicaEx() throws ClassNotFoundException, IOException {
+  void testMathematicaEx() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}}");
     HessenbergDecomposition hessenbergDecomposition = Serialization.copy(_check(matrix));
     assertTrue(hessenbergDecomposition.toString().startsWith("HessenbergDecomposition["));

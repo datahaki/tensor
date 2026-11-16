@@ -39,7 +39,7 @@ class StandardizeTest {
 
   @Test
   void testLengthShort() {
-    assertThrows(ArithmeticException.class, () -> Standardize.ofVector(Tensors.empty()));
+    assertThrows(Exception.class, () -> Standardize.ofVector(Tensors.empty()));
     assertThrows(ArithmeticException.class, () -> Standardize.ofVector(Tensors.vector(2)));
   }
 

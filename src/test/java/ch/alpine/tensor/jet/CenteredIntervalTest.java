@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -41,7 +39,7 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class CenteredIntervalTest {
   @Test
-  void testNegate() throws ClassNotFoundException, IOException {
+  void testNegate() {
     Scalar scalar = Serialization.copy(CenteredInterval.of(6, 1)).negate();
     assertEquals(scalar, CenteredInterval.of(-6, 1));
   }

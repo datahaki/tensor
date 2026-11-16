@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,7 +34,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class ParetoDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Distribution distribution = Serialization.copy(ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(1.8)));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(4.0)), RealScalar.of(0.16619372965993448));

@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -239,7 +238,7 @@ class IntListTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     List<Integer> copy = Serialization.copy(intList);
     assertEquals(copy, Arrays.asList(2, 3, 4));

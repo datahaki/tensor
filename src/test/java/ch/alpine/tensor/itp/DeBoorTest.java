@@ -4,8 +4,6 @@ package ch.alpine.tensor.itp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -22,7 +20,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class DeBoorTest {
   @Test
-  void testDegree0() throws ClassNotFoundException, IOException {
+  void testDegree0() {
     Tensor knots = Tensors.empty().unmodifiable();
     Tensor control = Tensors.vector(-1).unmodifiable();
     DeBoor deBoor = Serialization.copy(DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control));
@@ -121,7 +119,7 @@ class DeBoorTest {
   }
 
   @Test
-  void testWikiStyleConstant0() throws ClassNotFoundException, IOException {
+  void testWikiStyleConstant0() {
     Tensor knots = Tensors.unmodifiableEmpty();
     Tensor control = Tensors.vector(90).unmodifiable();
     DeBoor deBoor = Serialization.copy(DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control));

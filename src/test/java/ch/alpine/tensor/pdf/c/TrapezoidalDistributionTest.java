@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -58,7 +57,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  void testPDF() throws ClassNotFoundException, IOException {
+  void testPDF() {
     Scalar a = Rational.of(1, 1);
     Scalar b = Rational.of(2, 1);
     Scalar c = Rational.of(3, 1);

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,7 +66,7 @@ class ColorDataGradientsTest {
 
   @ParameterizedTest
   @EnumSource(ColorDataGradients.class)
-  void testDeriveWithOpacityAll(ColorDataGradient colorDataGradient) throws ClassNotFoundException, IOException {
+  void testDeriveWithOpacityAll(ColorDataGradient colorDataGradient) {
     Serialization.copy(colorDataGradient.deriveWithOpacity(RealScalar.of(0.2)));
   }
 

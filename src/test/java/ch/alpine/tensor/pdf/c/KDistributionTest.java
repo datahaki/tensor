@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
@@ -29,7 +27,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class KDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     KDistribution kDistribution = (KDistribution) Serialization.copy(KDistribution.of(1, 2.3));
     PDF pdf = PDF.of(kDistribution);
     Scalar p = pdf.at(RealScalar.of(0.2));

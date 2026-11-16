@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -58,7 +57,7 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Im;
 
 class InfluenceMatrixTest {
-  private static void _check(InfluenceMatrix influenceMatrix) throws ClassNotFoundException, IOException {
+  private static void _check(InfluenceMatrix influenceMatrix) {
     InfluenceMatrix _influenceMatrix = Serialization.copy(influenceMatrix);
     Tensor leverages = _influenceMatrix.leverages();
     leverages.stream() //
@@ -78,7 +77,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  void testLeftKernel() throws ClassNotFoundException, IOException {
+  void testLeftKernel() {
     Random random = new Random(2);
     Tensor design = RandomVariate.of(NormalDistribution.standard(), random, 10, 3);
     InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
@@ -103,7 +102,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  void testLeftImage() throws ClassNotFoundException, IOException {
+  void testLeftImage() {
     int n = 10;
     Distribution distribution = NormalDistribution.standard();
     Tensor design = RandomVariate.of(distribution, n, 3);
@@ -154,7 +153,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  void testGaussScalar3() throws ClassNotFoundException, IOException {
+  void testGaussScalar3() {
     int n = 7;
     int m = 3;
     int prime = 6577;
@@ -172,7 +171,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  void testGaussScalar5() throws ClassNotFoundException, IOException {
+  void testGaussScalar5() {
     int n = 7;
     int m = 5;
     int prime = 7919;

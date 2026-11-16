@@ -4,7 +4,6 @@ package ch.alpine.tensor.pdf.c;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.RepeatedTest;
@@ -30,7 +29,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class ChiSquareDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Distribution distribution = Serialization.copy(ChiSquareDistribution.of(2.3));
     PDF pdf = PDF.of(distribution);
     Scalar scalar = pdf.at(RealScalar.of(1.4));

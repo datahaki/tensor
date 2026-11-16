@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
 
@@ -103,7 +102,7 @@ class UnitSystemTest {
   }
 
   @Test
-  void testKnots() throws ClassNotFoundException, IOException {
+  void testKnots() {
     UnitSystem unitSystem = Serialization.copy(UnitSystem.SI());
     Scalar r1 = unitSystem.apply(Quantity.of(1, "kn"));
     Unit unit = QuantityUnit.of(r1);
@@ -117,7 +116,7 @@ class UnitSystemTest {
   }
 
   @Test
-  void testSmallSi() throws ClassNotFoundException, IOException {
+  void testSmallSi() {
     Properties properties = ResourceData.properties("ch/alpine/tensor/qty/small.properties");
     assertFalse(properties.entrySet().isEmpty());
     UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(properties));

@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Complex;
@@ -53,7 +51,7 @@ class LogTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(RealScalar.of(2));
     ScalarUnaryOperator copy = Serialization.copy(scalarUnaryOperator);
     Scalar scalar = copy.apply(RealScalar.of(4));

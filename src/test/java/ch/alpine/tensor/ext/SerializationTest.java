@@ -3,6 +3,7 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ class NonSerializable {
 
 class SerializationTest {
   @Test
-  void testCopy() throws ClassNotFoundException, IOException {
+  void testCopy() {
     String s1 = "abc";
     String s2 = Serialization.copy(s1);
     assertEquals(s1, s2);
@@ -27,7 +28,7 @@ class SerializationTest {
   }
 
   @Test
-  void testCopy2() throws ClassNotFoundException, IOException {
+  void testCopy2() {
     Tensor t1 = Tensors.vector(2, 3, 4, 5);
     Tensor t2 = Serialization.copy(t1);
     assertEquals(t1, t2);
@@ -36,11 +37,12 @@ class SerializationTest {
 
   @Test
   void testParseNull() throws ClassNotFoundException, IOException {
-    Serialization.parse(Serialization.of(null));
+    Object object = Serialization.parse(Serialization.of(null));
+    assertNull(object);
   }
 
   @Test
-  void testCopyNull() throws ClassNotFoundException, IOException {
+  void testCopyNull() {
     Serialization.copy(null);
   }
 

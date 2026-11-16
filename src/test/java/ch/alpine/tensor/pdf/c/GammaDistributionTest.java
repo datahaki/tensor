@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class GammaDistributionTest {
   @Test
-  void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() {
     Distribution distribution = Serialization.copy(GammaDistribution.of(RealScalar.of(1.123), RealScalar.of(2.3)));
     PDF pdf = PDF.of(distribution);
     Chop._08.requireClose(pdf.at(RealScalar.of(0.78)), DoubleScalar.of(0.28770929331586703));

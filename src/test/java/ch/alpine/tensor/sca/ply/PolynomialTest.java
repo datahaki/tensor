@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
@@ -496,7 +495,7 @@ class PolynomialTest {
   }
 
   @Test
-  void testDegree1() throws ClassNotFoundException, IOException {
+  void testDegree1() {
     Polynomial polynomial = Serialization.copy(Polynomial.fit(Tensors.vector(10, 11), Tensors.vector(5, -2), 1));
     ExactTensorQ.require(polynomial.coeffs());
     assertEquals(polynomial.coeffs().toString(), "{75, -7}");

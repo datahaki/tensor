@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -30,7 +28,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class DagumDistributionTest {
   @Test
-  void testCdf() throws ClassNotFoundException, IOException {
+  void testCdf() {
     Distribution distribution = Serialization.copy(DagumDistribution.of(0.2, 0.3, 0.6));
     CDF cdf = CDF.of(distribution);
     Scalar scalar = cdf.p_lessThan(RealScalar.of(3));
@@ -38,7 +36,7 @@ class DagumDistributionTest {
   }
 
   @Test
-  void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() {
     Distribution distribution = Serialization.copy(DagumDistribution.of(0.2, 0.3, 0.6));
     PDF pdf = PDF.of(distribution);
     Scalar scalar = pdf.at(RealScalar.of(2));
@@ -46,7 +44,7 @@ class DagumDistributionTest {
   }
 
   @Test
-  void testPdf2() throws ClassNotFoundException, IOException {
+  void testPdf2() {
     Distribution distribution = Serialization.copy(DagumDistribution.of(0.2, 0.3, 0.7));
     PDF pdf = PDF.of(distribution);
     Scalar scalar = pdf.at(RealScalar.of(2));

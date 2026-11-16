@@ -3,8 +3,6 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -13,7 +11,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class NdMatchTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     NdMatch<String> ndMatch = Serialization.copy( //
         new NdMatch<>(new NdEntry<>(Tensors.vector(1, 2, 3), "abc"), RealScalar.TWO));
     assertEquals(ndMatch.location(), Tensors.vector(1, 2, 3));

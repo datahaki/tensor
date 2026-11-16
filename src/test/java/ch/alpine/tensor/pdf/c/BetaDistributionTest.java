@@ -4,7 +4,6 @@ package ch.alpine.tensor.pdf.c;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import ch.alpine.tensor.red.Variance;
 
 class BetaDistributionTest {
   @Test
-  void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() {
     Distribution distribution = Serialization.copy(BetaDistribution.of(2, 3));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(0.4)), RealScalar.of(1.728));

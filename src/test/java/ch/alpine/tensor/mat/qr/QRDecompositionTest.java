@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -106,7 +105,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  void testRandomReal2() throws ClassNotFoundException, IOException {
+  void testRandomReal2() {
     Tensor A = RandomVariate.of(UniformDistribution.unit(), 3, 5);
     QRDecomposition qrDecomposition = Serialization.copy(QRDecompositionWrap.of(A));
     Chop.NONE.requireZero(qrDecomposition.det());

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class EqualizingDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Distribution distribution = Serialization.copy(EqualizingDistribution.fromUnscaledPDF(Tensors.vector(3)));
     CDF cdf = CDF.of(distribution);
     Tensor domain = Subdivide.of(0, 1, 10);

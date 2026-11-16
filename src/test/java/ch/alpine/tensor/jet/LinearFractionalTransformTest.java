@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
@@ -35,7 +33,7 @@ import ch.alpine.tensor.red.Times;
 
 class LinearFractionalTransformTest {
   @Test
-  void testMathematica() throws ClassNotFoundException, IOException {
+  void testMathematica() {
     Tensor matrix = Tensors.fromString("{{1, 2, 5}, {3, 4, 6}, {7, 8, 1}}");
     LinearFractionalTransform linearFractionalTransform = //
         Serialization.copy(LinearFractionalTransform.of(matrix));

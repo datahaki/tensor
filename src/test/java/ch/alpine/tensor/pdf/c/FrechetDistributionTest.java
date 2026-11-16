@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -37,7 +36,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class FrechetDistributionTest {
   @Test
-  void testPDF() throws ClassNotFoundException, IOException {
+  void testPDF() {
     Distribution distribution = //
         Serialization.copy(FrechetDistribution.of(RealScalar.of(1.3), RealScalar.of(1.2)));
     PDF pdf = PDF.of(distribution);

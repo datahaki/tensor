@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Random;
@@ -101,7 +100,7 @@ class InfluenceMatrixImplTest {
   }
 
   @Test
-  void testExact3() throws ClassNotFoundException, IOException {
+  void testExact3() {
     int n = 7;
     int m = 3;
     Distribution distribution = DiscreteUniformDistribution.of(-20, 20);
@@ -122,7 +121,7 @@ class InfluenceMatrixImplTest {
   }
 
   @Test
-  void testExact5() throws ClassNotFoundException, IOException {
+  void testExact5() {
     int n = 7;
     int m = 5;
     Distribution distribution = DiscreteUniformDistribution.of(-20, 20);

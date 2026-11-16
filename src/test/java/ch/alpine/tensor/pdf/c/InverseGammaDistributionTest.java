@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -27,7 +25,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class InverseGammaDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Distribution distribution = Serialization.copy(InverseGammaDistribution.of(1.2, 2.3));
     PDF pdf = PDF.of(distribution);
     Scalar f = pdf.at(RealScalar.of(4));
@@ -40,13 +38,13 @@ class InverseGammaDistributionTest {
   }
 
   @Test
-  void testMean() throws ClassNotFoundException, IOException {
+  void testMean() {
     Distribution distribution = Serialization.copy(InverseGammaDistribution.of(0.2, 2.3));
     assertEquals(Mean.of(distribution).toString(), "NaN");
   }
 
   @Test
-  void testVariance() throws ClassNotFoundException, IOException {
+  void testVariance() {
     Distribution distribution = Serialization.copy(InverseGammaDistribution.of(2.2, 2.3));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(18.368055555555532));
     assertThrows(Exception.class, () -> RandomVariate.of(distribution));

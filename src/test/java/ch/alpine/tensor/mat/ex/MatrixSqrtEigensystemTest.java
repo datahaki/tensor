@@ -3,7 +3,6 @@ package ch.alpine.tensor.mat.ex;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
@@ -29,7 +28,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class MatrixSqrtEigensystemTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     RandomGenerator randomGenerator = new Random(1);
     int n = 11;
     Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), randomGenerator, n, n));

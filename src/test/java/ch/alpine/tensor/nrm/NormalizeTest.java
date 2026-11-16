@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -117,7 +115,7 @@ class NormalizeTest {
   }
 
   @Test
-  void testComplex() throws ClassNotFoundException, IOException {
+  void testComplex() {
     TensorUnaryOperator normalize = Serialization.copy(Vector2Norm.NORMALIZE);
     Tensor vector = Tensors.fromString("{1+I, 2*I, -3-9.2*I}");
     Tensor s = normalize.apply(vector);

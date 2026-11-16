@@ -4,7 +4,6 @@ package ch.alpine.tensor.num;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,14 +29,14 @@ import ch.alpine.tensor.ext.Serialization;
 class CyclesGroupTest {
   private final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
 
-  private void _check(Cycles arg, BigInteger exponent, Cycles expexted) throws ClassNotFoundException, IOException {
+  private void _check(Cycles arg, BigInteger exponent, Cycles expexted) {
     assertEquals(Serialization.copy(BINARY_POWER).raise(arg, exponent), expexted);
     assertEquals(arg.power(exponent), expexted);
     assertEquals(arg.power(RealScalar.of(exponent)), expexted);
   }
 
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     _check(Cycles.of("{{4, 2, 5}, {6, 3, 1, 7}}"), BigInteger.valueOf(6), //
         Cycles.of("{{1, 6}, {3, 7}}"));
     _check(Cycles.of("{{4, 2, 5}, {6, 3, 1, 7}}"), BigInteger.valueOf(-2), //

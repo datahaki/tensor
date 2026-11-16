@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.List;
@@ -348,7 +347,7 @@ class EllipticCurveTest {
   }
 
   @Test
-  void testFiniteSecp256k1() throws ClassNotFoundException, IOException {
+  void testFiniteSecp256k1() {
     BigInteger prime = BigInteger.TWO.pow(256).subtract(BigInteger.TWO.pow(32)).subtract(BigInteger.valueOf(977));
     EllipticCurve ellipticCurve = EllipticCurve.of(GaussScalar.of(0, prime), GaussScalar.of(7, prime));
     Serialization.copy(ellipticCurve);

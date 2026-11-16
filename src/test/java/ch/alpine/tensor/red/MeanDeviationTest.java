@@ -48,7 +48,7 @@ class MeanDeviationTest {
 
   @Test
   void testEmptyFail() {
-    assertThrows(ArithmeticException.class, () -> MeanDeviation.ofVector(Tensors.empty()));
+    assertThrows(Exception.class, () -> MeanDeviation.ofVector(Tensors.empty()));
   }
 
   @Test

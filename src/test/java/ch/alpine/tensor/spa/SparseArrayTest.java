@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,7 @@ import ch.alpine.tensor.red.Total;
 
 class SparseArrayTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Tensor tensor = Serialization.copy(SparseArray.of(RealScalar.ZERO, 5, 6, 8));
     Tensor value = tensor.get(1);
     assertEquals(value.length(), 6);

@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -24,7 +22,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class CoordinateBoundingBoxTest {
   @Test
-  void testProject() throws ClassNotFoundException, IOException {
+  void testProject() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     Serialization.copy(coordinateBoundingBox);
     assertEquals(coordinateBoundingBox.mapInside(Tensors.vector(0, 0)), Tensors.vector(2, 3));
@@ -38,7 +36,7 @@ class CoordinateBoundingBoxTest {
   }
 
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     assertEquals(coordinateBoundingBox.min(), Tensors.vector(2, 3));
     assertEquals(coordinateBoundingBox.max(), Tensors.vector(12, 23));
@@ -47,7 +45,7 @@ class CoordinateBoundingBoxTest {
   }
 
   @Test
-  void testSame() throws ClassNotFoundException, IOException {
+  void testSame() {
     Clip clip = Clips.absolute(1);
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBoundingBox.of(clip, clip);
     CoordinateBoundingBox lo = coordinateBoundingBox.splitLo(1);

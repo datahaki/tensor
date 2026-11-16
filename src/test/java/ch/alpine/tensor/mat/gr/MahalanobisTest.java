@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -70,7 +68,7 @@ class MahalanobisTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 7, 8 })
-  void testExact(int n) throws ClassNotFoundException, IOException {
+  void testExact(int n) {
     Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
     Tensor design = RandomVariate.of(distribution, n, 3);
     ExactTensorQ.require(design);

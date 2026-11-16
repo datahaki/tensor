@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -42,7 +41,7 @@ import ch.alpine.tensor.spa.SparseArray;
 
 class CliffordAlgebraTest {
   @Test
-  void testD0() throws ClassNotFoundException, IOException {
+  void testD0() {
     CliffordAlgebra cliffordAlgebra = Serialization.copy(CliffordAlgebraCache.positive(0));
     assertEquals(cliffordAlgebra.gp(), Tensors.fromString("{{{1}}}"));
   }

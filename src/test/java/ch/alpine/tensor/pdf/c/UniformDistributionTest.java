@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -113,7 +112,7 @@ class UniformDistributionTest {
   }
 
   @Test
-  void testUnit() throws ClassNotFoundException, IOException {
+  void testUnit() {
     UniformDistribution distribution = //
         (UniformDistribution) Serialization.copy(UniformDistribution.unit());
     assertEquals(distribution.mean(), Rational.of(1, 2));

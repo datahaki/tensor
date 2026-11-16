@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -162,7 +161,7 @@ class UnitSystemsTest {
   }
 
   @Test
-  void testIdentity() throws ClassNotFoundException, IOException {
+  void testIdentity() {
     UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("ch/alpine/tensor/qty/chf.properties"));
     UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "CHF");
     assertSame(baseSystem, unitSystem);

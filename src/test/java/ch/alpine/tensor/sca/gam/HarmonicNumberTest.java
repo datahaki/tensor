@@ -4,7 +4,6 @@ package ch.alpine.tensor.sca.gam;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ class HarmonicNumberTest {
   }
 
   @Test
-  void testTen() throws ClassNotFoundException, IOException {
+  void testTen() {
     HarmonicNumber harmonicNumber = Serialization.copy(HarmonicNumber.unit());
     Tensor vector = Tensor.of(IntStream.range(1, 11).mapToObj(HarmonicNumber.unit()));
     Tensor expect = Tensors.fromString("{1, 3/2, 11/6, 25/12, 137/60, 49/20, 363/140, 761/280, 7129/2520, 7381/2520}");

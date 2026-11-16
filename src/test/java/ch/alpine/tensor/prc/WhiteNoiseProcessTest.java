@@ -3,7 +3,6 @@ package ch.alpine.tensor.prc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class WhiteNoiseProcessTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     RandomFunction randomFunction = RandomFunction.of(Serialization.copy(WhiteNoiseProcess.instance()));
     assertEquals(randomFunction.path(), Tensors.empty());
     Scalar t = RealScalar.of(10);

@@ -4,7 +4,6 @@ package ch.alpine.tensor.fft;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
@@ -64,7 +63,7 @@ class ListConvolveTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     Tensor kernel = Tensors.of(Tensors.vector(1, -1));
     UnaryOperator<Tensor> uo = ListConvolve.with(kernel);
     UnaryOperator<Tensor> cp = Serialization.copy(uo);

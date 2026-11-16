@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -28,7 +27,7 @@ class SimpleUnitSystemTest {
   }
 
   @Test
-  void testMap() throws ClassNotFoundException, IOException {
+  void testMap() {
     Properties properties = new Properties();
     properties.setProperty("cent", "1/100[FRA]");
     UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(properties));
@@ -66,7 +65,7 @@ class SimpleUnitSystemTest {
   }
 
   @Test
-  void testDerive() throws ClassNotFoundException, IOException {
+  void testDerive() {
     UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(UnitSystem.SI().map()));
     assertEquals(unitSystem.map(), UnitSystem.SI().map());
   }
@@ -99,7 +98,7 @@ class SimpleUnitSystemTest {
   }
 
   @Test
-  void testDimensions() throws ClassNotFoundException, IOException {
+  void testDimensions() {
     UnitSystem unitSystem = Serialization.copy(UnitSystem.SI());
     assertEquals(unitSystem.dimensions(Unit.of("N")), Unit.of("kg*m*s^-2"));
     assertEquals(unitSystem.dimensions(Unit.of("km")), Unit.of("m"));

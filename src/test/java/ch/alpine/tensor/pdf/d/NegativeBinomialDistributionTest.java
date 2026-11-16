@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Rational;
@@ -30,7 +28,7 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class NegativeBinomialDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Distribution distribution = Serialization.copy(NegativeBinomialDistribution.of(4, Rational.of(1, 3)));
     assertEquals(PDF.of(distribution).at(RealScalar.of(3)), Rational.of(160, 2187));
     assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(3)), Rational.of(379, 2187));

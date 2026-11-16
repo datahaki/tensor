@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class StudentTDistributionTest {
   @Test
-  void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() {
     Distribution distribution = Serialization.copy(StudentTDistribution.of(2, 3, 5));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose( //

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -76,7 +75,7 @@ class CoordinateBoundsTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     Serialization.copy(CoordinateBounds.of(Tensors.vector(2, 3, 9), Tensors.vector(12, 23, 11)));
   }
 

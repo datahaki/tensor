@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
@@ -220,7 +219,7 @@ class QuaternionImplTest {
   }
 
   @Test
-  void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
     Scalar q2 = Serialization.copy(q1);
     assertEquals(q1, q2);

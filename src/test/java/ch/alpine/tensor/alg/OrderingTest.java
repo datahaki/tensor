@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,7 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 
 class OrderingTest {
   @Test
-  void testVector() throws ClassNotFoundException, IOException {
+  void testVector() {
     Tensor vector = Tensors.vector(4, 2, 3, 0, 1);
     int[] array = Serialization.copy(Ordering.INCREASING).of(vector);
     Tensor ascending = Tensor.of( //

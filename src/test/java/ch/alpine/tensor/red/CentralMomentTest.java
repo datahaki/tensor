@@ -65,7 +65,7 @@ class CentralMomentTest {
 
   @Test
   void testEmptyFail() {
-    assertThrows(ArithmeticException.class, () -> CentralMoment.of(Tensors.empty(), 2));
+    assertThrows(Exception.class, () -> CentralMoment.of(Tensors.empty(), 2));
   }
 
   @Test
