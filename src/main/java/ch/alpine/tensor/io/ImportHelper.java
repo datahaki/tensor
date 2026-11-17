@@ -30,7 +30,7 @@ enum ImportHelper {
 
   private static Tensor of(Extension extension, InputStream inputStream) throws IOException {
     return switch (extension) {
-    case MATHEMATICA -> Get.of(inputStream);
+    case MATHEMATICA -> MathematicaFormat.Get.of(inputStream);
     case VECTOR -> VectorFormat.parse(ReadLine.of(inputStream));
     // ---
     case CSV -> XsvFormat.CSV.parse(ReadLine.of(inputStream));

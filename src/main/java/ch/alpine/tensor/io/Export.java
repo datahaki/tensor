@@ -11,6 +11,8 @@ import java.util.Objects;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.ObjectFormat;
 import ch.alpine.tensor.ext.PathName;
+import ch.alpine.tensor.io.MathematicaFormat.Get;
+import ch.alpine.tensor.io.MathematicaFormat.Put;
 
 /** supported file formats are:
  * BMP, JPG, PNG (for images)

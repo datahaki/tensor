@@ -16,7 +16,7 @@ import ch.alpine.tensor.ext.ResourceData;
 
 /** function exists to export expressions from the tensor library to a string
  * that can be parsed by Mathematica */
-public enum MathematicaForm {
+enum MathematicaForm {
   INSTANCE;
 
   private static final String OPENING_BRACKET_STRING = Character.toString(Tensor.OPENING_BRACKET);

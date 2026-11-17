@@ -82,7 +82,7 @@ class MathematicaFormatTest {
   @Test
   void testBasic() throws IOException {
     Path path = Unprotect.resourcePath("ch/alpine/tensor/io/basic.mathematica");
-    Tensor tensor = Get.of(path);
+    Tensor tensor = MathematicaFormat.Get.of(path);
     checkNonString(tensor);
   }
 
@@ -95,7 +95,7 @@ class MathematicaFormatTest {
   @Test
   void testExponent() throws IOException {
     Path path = Unprotect.resourcePath("ch/alpine/tensor/io/exponent.mathematica");
-    Tensor tensor = Get.of(path);
+    Tensor tensor = MathematicaFormat.Get.of(path);
     checkNonString(tensor);
     assertEquals(tensor, Import.of("ch/alpine/tensor/io/exponent.mathematica"));
   }
@@ -104,7 +104,7 @@ class MathematicaFormatTest {
   void testExponent2() {
     Tensor tensor = MathematicaFormat.parse(Stream.of("{1*^-10, 1*^10}"));
     checkNonString(tensor);
-    String put = Put.string(tensor);
+    String put = MathematicaFormat.Put.string(tensor);
     Tensor recon = MathematicaFormat.parse(Stream.of(put));
     assertEquals(tensor, recon);
   }
@@ -112,10 +112,10 @@ class MathematicaFormatTest {
   @Test
   void testPrime() throws IOException {
     Path path = Unprotect.resourcePath("ch/alpine/tensor/io/decimals.mathematica");
-    Tensor tensor = Get.of(path);
+    Tensor tensor = MathematicaFormat.Get.of(path);
     assertTrue(tensor.stream().anyMatch(scalar -> scalar instanceof DecimalScalar));
     checkNonString(tensor);
-    assertEquals(tensor.toString(), Put.string(tensor));
+    assertEquals(tensor.toString(), MathematicaFormat.Put.string(tensor));
   }
 
   @Test

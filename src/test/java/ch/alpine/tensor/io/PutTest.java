@@ -21,14 +21,14 @@ class PutTest {
   void testUnstructured() throws IOException {
     Path path = tempDir.resolve("file.put");
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I, 34.1231}, {556, 3/456, -323/2, {3, 8.45`}}}");
-    Put.of(path, tensor.unmodifiable());
-    Tensor readin = Get.of(path);
+    MathematicaFormat.Put.of(path, tensor.unmodifiable());
+    Tensor readin = MathematicaFormat.Get.of(path);
     assertEquals(tensor, readin);
   }
 
   @Test
   void testNullFail() {
     Path path = tempDir.resolve("fileNullFail.put");
-    assertThrows(Exception.class, () -> Put.of(path, null));
+    assertThrows(Exception.class, () -> MathematicaFormat.Put.of(path, null));
   }
 }

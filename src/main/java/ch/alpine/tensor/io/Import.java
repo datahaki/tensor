@@ -18,6 +18,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.ObjectFormat;
 import ch.alpine.tensor.ext.PathName;
 import ch.alpine.tensor.ext.ResourceData;
+import ch.alpine.tensor.io.MathematicaFormat.Get;
 
 /** supported file formats are: CSV, GIF, JPG, PNG, etc.
  * 

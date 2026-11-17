@@ -36,7 +36,7 @@ enum ExportHelper {
    * @throws IOException */
   public static void of(Extension extension, Tensor tensor, OutputStream outputStream) throws IOException {
     switch (extension) {
-    case MATHEMATICA -> Put.of(outputStream, tensor);
+    case MATHEMATICA -> MathematicaFormat.Put.of(outputStream, tensor);
     case VECTOR -> lines(VectorFormat.of(tensor), outputStream);
     // ---
     case CSV -> lines(XsvFormat.CSV.of(tensor), outputStream);

@@ -3,6 +3,9 @@ package ch.alpine.tensor.io;
 
 import java.awt.image.BufferedImage;
 
+import ch.alpine.tensor.io.MathematicaFormat.Get;
+import ch.alpine.tensor.io.MathematicaFormat.Put;
+
 /** file extensions used by the tensor library
  * 
  * @see ImportHelper

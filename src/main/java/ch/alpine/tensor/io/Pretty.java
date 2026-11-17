@@ -7,6 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.TensorRank;
+import ch.alpine.tensor.io.MathematicaFormat.Put;
 
 /** Pretty helps to format tensors for easy reading in the console.
  * 

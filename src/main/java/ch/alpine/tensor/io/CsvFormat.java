@@ -7,6 +7,7 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.ObjectFormat;
+import ch.alpine.tensor.io.MathematicaFormat.Put;
 import ch.alpine.tensor.qty.Quantity;
 
 /** comma separated values format

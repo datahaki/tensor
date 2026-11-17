@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collector;
@@ -12,6 +17,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Numel;
+import ch.alpine.tensor.ext.ReadLine;
 import ch.alpine.tensor.spa.SparseArray;
 
 /** utility to exchange data with Wolfram Mathematica
@@ -40,6 +46,98 @@ import ch.alpine.tensor.spa.SparseArray;
  * </pre> */
 public enum MathematicaFormat {
   ;
+  /** The file format is intended for data exchange between
+   * Mathematica and the tensor library.
+   * 
+   * <p>Get imports an expression that was created by Mathematica::Put
+   * <pre>
+   * Put[expression, file, CharacterEncoding -> "UTF8"]
+   * </pre>
+   * as well as the tensor libraries' {@link Put}.
+   * 
+   * The format is similar to Object::toString and readable in any text editor.
+   * 
+   * <p>example content
+   * <pre>
+   * {{2 + 9*I, 3 - I, 3 - 2.423*I},
+   * {(23 + I) / 4, 3.1415}, {}}
+   * </pre>
+   * 
+   * <p>the format does not specify or require any particular
+   * file extension. Mathematica also does not define an extension
+   * for this format.
+   * 
+   * <p>Careful:
+   * the import of {@link SparseArray} is not supported.
+   * 
+   * <p>inspired by
+   * <a href="https://reference.wolfram.com/language/ref/Get.html">Get</a> */
+  public enum Get {
+    ;
+    /** @param path source
+     * @return
+     * @throws IOException */
+    public static Tensor of(Path path) throws IOException {
+      try (InputStream inputStream = Files.newInputStream(path)) {
+        return of(inputStream);
+      }
+    }
+
+    /** @param inputStream source
+     * @return */
+    public static Tensor of(InputStream inputStream) {
+      return MathematicaFormat.parse(ReadLine.of(inputStream));
+    }
+  }
+
+  /** export of tensor to file, or a string compatible with Mathematica.
+   * The output is similar to Object::toString and readable in any text editor.
+   * 
+   * <p>The file format is intended for data exchange between
+   * Mathematica and the tensor library.
+   * 
+   * <p>file is readable in Mathematica where the file is
+   * imported using Mathematica::Get
+   * <pre>
+   * Get[file, CharacterEncoding -> "UTF8"]
+   * </pre>
+   * 
+   * <p>the format does not specify or require any particular
+   * file extension. Mathematica also does not define an extension
+   * for this format.
+   * 
+   * <p>Quote from Mathematica:
+   * "Put by default uses the character encoding "PrintableASCII" when
+   * creating a file."
+   * 
+   * <p>inspired by
+   * <a href="https://reference.wolfram.com/language/ref/Put.html">Put</a> */
+  public enum Put {
+    ;
+    /** @param path destination of write
+     * @param tensor
+     * @throws IOException */
+    public static void of(Path path, Tensor tensor) throws IOException {
+      Objects.requireNonNull(tensor);
+      try (OutputStream outputStream = Files.newOutputStream(path)) {
+        of(outputStream, tensor);
+      }
+    }
+
+    /** @param outputStream
+     * @param tensor */
+    public static void of(OutputStream outputStream, Tensor tensor) {
+      ExportHelper.lines(MathematicaFormat.of(tensor), outputStream);
+    }
+
+    /** @param tensor
+     * @return string expression of tensor compatible with Mathematica
+     * @see Pretty#of(Tensor) */
+    public static String string(Tensor tensor) {
+      return MathematicaFormat.of(tensor).collect(Collectors.joining("\n"));
+    }
+  }
+
   private static final String OPENING_BRACKET_STRING = Character.toString(Tensor.OPENING_BRACKET);
   private static final String CLOSING_BRACKET_STRING = Character.toString(Tensor.CLOSING_BRACKET);
   public static final Collector<CharSequence, ?, String> EMBRACE = //
