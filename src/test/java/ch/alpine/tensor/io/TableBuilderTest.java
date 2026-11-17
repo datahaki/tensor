@@ -67,6 +67,10 @@ class TableBuilderTest {
     assertEquals(tensor, tableBuilder.getColumns(0, 1, 2));
     assertEquals(tensor.get(Tensor.ALL, 1).maps(Tensors::of), tableBuilder.getColumns(1));
     assertEquals(tensor.get(3), tableBuilder.getRow(3));
+    Tensor[] tensors = tableBuilder.oneToMany();
+    assertEquals(tensors[0], tableBuilder.getColumns(0, 1));
+    assertEquals(tensors[1], tableBuilder.getColumns(0, 2));
+    assertEquals(tensors.length, 2);
   }
 
   @Test

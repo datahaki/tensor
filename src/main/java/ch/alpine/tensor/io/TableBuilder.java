@@ -4,6 +4,7 @@ package ch.alpine.tensor.io;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -94,5 +95,23 @@ public final class TableBuilder implements Serializable {
   public synchronized Tensor getColumns(int... list) {
     TensorUnaryOperator extract = row -> Tensor.of(IntStream.of(list).mapToObj(row::Get));
     return extract.slash(tensor);
+  }
+
+  /** function prepares columns for plotting for instance with
+   * ListPlot or ListLinePlot
+   * 
+   * @return tensors where tensors[i] == getColumns(0, 1 + i) */
+  public synchronized Tensor[] oneToMany() {
+    int dim0 = tensor.length();
+    if (dim0 == 0)
+      return new Tensor[] {};
+    int dim1 = Unprotect.dimension1Hint(tensor);
+    Tensor[] tensors = Stream.generate(() -> Tensors.reserve(dim0)) //
+        .limit(dim1 - 1) //
+        .toArray(Tensor[]::new);
+    tensor.stream() //
+        .forEach(row -> IntStream.range(1, dim1) //
+            .forEach(i -> tensors[i - 1].append(Tensors.of(row.Get(0), row.Get(i)))));
+    return tensors;
   }
 }
