@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 
 class ArrayReshapeTest {
   @Test
@@ -34,6 +36,14 @@ class ArrayReshapeTest {
     Tensor result = ArrayReshape.of(tensor.stream(), 2, 3);
     List<Integer> list = Dimensions.of(result);
     assertEquals(list, Arrays.asList(2, 3, 1));
+  }
+
+  @Test
+  void testRandom() {
+    Tensor X = RandomVariate.of(NormalDistribution.standard(), 2, 3, 4, 5);
+    Tensor flat = Flatten.of(X);
+    Tensor Y = ArrayReshape.of(flat, 2, 3, 4, 5);
+    assertEquals(X, Y);
   }
 
   @Test

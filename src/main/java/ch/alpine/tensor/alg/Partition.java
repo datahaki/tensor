@@ -39,6 +39,12 @@ public enum Partition {
 
   /** EXPERIMENTAL
    * 
+   * Partition[{a, b, c, d, e, f, g}, 2] == {{a, b}, {c, d}, {e, f}, {g}}
+   * 
+   * Partition[{a, b, c, d, e, f, g}, 4] == {{a, b, c, d}, {e, f, g}}
+   * 
+   * Partition[{a, b, c, d, e, f, g}, 10] == {{a, b, c, d, e, f, g}}
+   * 
    * @param tensor
    * @param size
    * @return unmodifiable tensor */

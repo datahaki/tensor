@@ -85,6 +85,11 @@ class ScalarSummaryStatisticsTest {
       assertEquals(var1, var2);
       ExactScalarQ.require(var2);
     }
+    {
+      Scalar var1 = StandardDeviation.ofVector(vector);
+      Scalar var2 = stats.getStandardDeviation();
+      Tolerance.CHOP.requireClose(var1, var2);
+    }
   }
 
   @Test

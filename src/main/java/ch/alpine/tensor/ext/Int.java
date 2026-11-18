@@ -29,4 +29,9 @@ public class Int { // MutableInt
   public int getAndDecrement() {
     return value--;
   }
+
+  @Override
+  public String toString() {
+    return Integer.toString(value);
+  }
 }
