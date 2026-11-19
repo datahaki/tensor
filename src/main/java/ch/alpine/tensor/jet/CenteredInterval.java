@@ -177,16 +177,12 @@ public class CenteredInterval extends AbstractScalar implements //
 
   @Override // from ExpInterface
   public Scalar exp() {
-    return new CenteredInterval(Clips.interval( //
-        Exp.FUNCTION.apply(clip.min()), //
-        Exp.FUNCTION.apply(clip.max())));
+    return new CenteredInterval(Clips.operator(Exp.FUNCTION).apply(clip));
   }
 
   @Override // from LogInterface
   public Scalar log() {
-    return new CenteredInterval(Clips.interval( //
-        Log.FUNCTION.apply(clip.min()), //
-        Log.FUNCTION.apply(clip.max())));
+    return new CenteredInterval(Clips.operator(Log.FUNCTION).apply(clip));
   }
 
   @Override // from InexactScalarMarker
@@ -205,9 +201,7 @@ public class CenteredInterval extends AbstractScalar implements //
 
   @Override // from SignInterface
   public Scalar sign() {
-    return of(Clips.interval( //
-        Sign.FUNCTION.apply(clip.min()), //
-        Sign.FUNCTION.apply(clip.max())));
+    return of(Clips.operator(Sign.FUNCTION).apply(clip));
   }
 
   // ---

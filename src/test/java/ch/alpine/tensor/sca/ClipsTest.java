@@ -275,7 +275,7 @@ class ClipsTest {
 
   @Test
   void testFinite() {
-    Clip result = Clips.translation(Rational.HALF).apply(Clips.positive(3));
+    Clip result = Clips.operator(Rational.HALF::add).apply(Clips.positive(3));
     assertEquals(result, Clips.interval(0.5, 3.5));
   }
 

@@ -33,9 +33,7 @@ public class BSplineFunctionString extends BSplineFunctionBase {
     super(LinearBinaryAverage.INSTANCE, degree, sequence);
     last = sequence.length() - 1;
     domain = Clips.positive(last);
-    clip = Clips.interval( //
-        domain.min().add(shift), //
-        domain.max().add(shift));
+    clip = Clips.operator(shift::add).apply(domain);
   }
 
   @Override // from BSplineFunction

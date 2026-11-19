@@ -35,7 +35,7 @@ public enum TransformedDistribution {
     public Clip support() {
       UnivariateDistribution univariateDistribution = (UnivariateDistribution) distribution;
       Clip clip = univariateDistribution.support();
-      return Clips.translation(offset).apply(clip);
+      return Clips.operator(offset::add).apply(clip);
     }
 
     @Override

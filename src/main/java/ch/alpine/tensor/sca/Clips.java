@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -9,7 +10,7 @@ import java.util.function.UnaryOperator;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.jet.CenteredInterval;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -187,14 +188,18 @@ public enum Clips {
         Max.of(clip1.max(), clip2.max()));
   }
 
-  /** @param value finite to be added to clip boundaries
-   * @return
-   * @see FiniteScalarQ */
-  public static UnaryOperator<Clip> translation(Scalar value) {
-    FiniteScalarQ.require(value);
+  /** Careful:
+   * the operator requires that for a given clip[min, max] subject to
+   * the operator suo that suo[min] less equals suo[max]
+   * 
+   * @param suo non-null
+   * @return operator that maps clip[min, max] to clip[suo[min], suo[max]]
+   * @throws Exception if suo is null */
+  public static UnaryOperator<Clip> operator(ScalarUnaryOperator suo) {
+    Objects.requireNonNull(suo);
     return clip -> create( //
-        clip.min().add(value), //
-        clip.max().add(value));
+        suo.apply(clip.min()), //
+        suo.apply(clip.max()));
   }
 
   /** @param clip
