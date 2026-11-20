@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
@@ -63,7 +64,7 @@ class BoxRandomSampleTest {
     CoordinateBoundingBox cbb = CoordinateBoundingBox.of(Clips.unit(), Clips.unit());
     Tensor points = RandomVariate.of(NormalDistribution.standard(), 100, 2);
     assertFalse(points.stream().allMatch(cbb::test));
-    Tensor tensor = cbb.mapInside().slash(points);
+    Tensor tensor = Slash.of(points, cbb.mapInside());
     assertTrue(tensor.stream().allMatch(cbb::test));
   }
 

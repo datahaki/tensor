@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Lists;
@@ -28,7 +29,7 @@ abstract class PadBase implements TensorUnaryOperator {
         return Tensor.of(trim(tensor, dim0).map(padBase));
       List<Integer> copy = new ArrayList<>(dimensions);
       copy.set(0, dim0 - length);
-      return join(padBase.slash(tensor), ConstantArray.of(element, copy));
+      return join(Slash.of(tensor, padBase), ConstantArray.of(element, copy));
     }
     return dim0 <= length //
         ? Tensor.of(trim(tensor, dim0).map(Tensor::copy))

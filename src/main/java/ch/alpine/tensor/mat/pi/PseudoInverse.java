@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Transpose;
@@ -142,6 +143,6 @@ public enum PseudoInverse {
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd, Chop chop) {
     Tensor wi = SingularValueList.inverted(svd, chop);
-    return MatrixDotTranspose.of(Times.operator(wi).slash(svd.getV()), svd.getU());
+    return MatrixDotTranspose.of(Slash.of(svd.getV(), Times.operator(wi)), svd.getU());
   }
 }

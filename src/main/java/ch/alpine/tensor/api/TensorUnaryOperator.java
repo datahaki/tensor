@@ -33,6 +33,7 @@ public interface TensorUnaryOperator extends UnaryOperator<Tensor>, Serializable
    *
    * @param tensor
    * @return {apply(tensor.get(0)), apply(tensor.get(1)), ..., apply(tensor.get(length-1)))} */
+  @Deprecated
   default Tensor slash(Tensor tensor) {
     return Tensor.of(tensor.stream().map(this));
   }

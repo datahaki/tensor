@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
@@ -94,7 +95,7 @@ public final class TableBuilder implements Serializable {
    * @return */
   public synchronized Tensor getColumns(int... list) {
     TensorUnaryOperator extract = row -> Tensor.of(IntStream.of(list).mapToObj(row::Get));
-    return extract.slash(tensor);
+    return Slash.of(tensor, extract);
   }
 
   /** function prepares columns for plotting for instance with

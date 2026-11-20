@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
@@ -39,7 +40,7 @@ public record MatrixGradient(Tensor dx, Tensor dy) implements Serializable {
   /** @param matrix
    * @return dx differences */
   public static MatrixGradient of(Tensor matrix) {
-    return new MatrixGradient(INSTANCE.apply(matrix), INSTANCE.slash(matrix));
+    return new MatrixGradient(INSTANCE.apply(matrix), Slash.of(matrix, INSTANCE));
   }
 
   private int[] sigma() {

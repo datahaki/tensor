@@ -2,6 +2,7 @@
 package ch.alpine.tensor.jet;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.ArrayFlatten;
@@ -41,7 +42,7 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
   public static LinearFractionalTransform fit(Tensor p, Tensor q) {
     final int d = Unprotect.dimension1(p);
     final int m = d + 1;
-    Tensor p1 = AppendOne.FUNCTION.slash(p);
+    Tensor p1 = Slash.of(p, AppendOne.FUNCTION);
     Tensor zero = p1.maps(Scalar::zero);
     Tensor qt = Transpose.of(q);
     Tensor[][] array = new Tensor[d][m];

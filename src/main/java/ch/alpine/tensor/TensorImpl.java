@@ -25,7 +25,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor copy() {
-    return Unprotect.slash(this, Tensor::copy);
+    return Slash.of(this, Tensor::copy);
   }
 
   @Override // from Tensor
@@ -45,7 +45,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
     int head = index.getFirst();
     List<Integer> _index = Lists.rest(index);
     return head == ALL //
-        ? Unprotect.slash(this, tensor -> tensor.get(_index))
+        ? Slash.of(this, tensor -> tensor.get(_index))
         : byRef(head).get(_index);
   }
 
@@ -106,36 +106,36 @@ class TensorImpl extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor negate() {
-    return Unprotect.slash(this, Tensor::negate);
+    return Slash.of(this, Tensor::negate);
   }
 
   @Override // from Tensor
   public Tensor add(Tensor tensor) {
     Integers.requireEquals(length(), tensor.length());
     Int i = new Int();
-    return Unprotect.slash(tensor, entry -> list.get(i.getAndIncrement()).add(entry));
+    return Slash.of(tensor, entry -> list.get(i.getAndIncrement()).add(entry));
   }
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
     Integers.requireEquals(length(), tensor.length());
     Int i = new Int();
-    return Unprotect.slash(tensor, entry -> list.get(i.getAndIncrement()).subtract(entry));
+    return Slash.of(tensor, entry -> list.get(i.getAndIncrement()).subtract(entry));
   }
 
   @Override // from Tensor
   public Tensor multiply(Scalar scalar) {
-    return Unprotect.slash(this, tensor -> tensor.multiply(scalar));
+    return Slash.of(this, tensor -> tensor.multiply(scalar));
   }
 
   @Override // from Tensor
   public Tensor divide(Scalar scalar) {
-    return Unprotect.slash(this, tensor -> tensor.divide(scalar));
+    return Slash.of(this, tensor -> tensor.divide(scalar));
   }
 
   @Override // from Tensor
   public Tensor maps(Function<Scalar, ? extends Tensor> function) {
-    return Unprotect.slash(this, tensor -> tensor.maps(function));
+    return Slash.of(this, tensor -> tensor.maps(function));
   }
 
   @Override // from Tensor
@@ -146,7 +146,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
       return tensor.stream().map(entry -> entry.multiply(Get(i.getAndIncrement()))) //
           .reduce(Tensor::add).orElse(Hold.zero()); // compromise
     }
-    return Unprotect.slash(this, entry -> entry.dot(tensor));
+    return Slash.of(this, entry -> entry.dot(tensor));
   }
 
   @Override // from Tensor

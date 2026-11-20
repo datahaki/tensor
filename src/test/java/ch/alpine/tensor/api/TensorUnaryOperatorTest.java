@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
@@ -57,7 +58,7 @@ class TensorUnaryOperatorTest {
   @Test
   void testSlash() {
     TensorUnaryOperator tuo = t -> t;
-    assertEquals(IdentityMatrix.of(3), tuo.slash(IdentityMatrix.of(3)));
+    assertEquals(IdentityMatrix.of(3), Slash.of(IdentityMatrix.of(3), tuo));
   }
 
   @Test

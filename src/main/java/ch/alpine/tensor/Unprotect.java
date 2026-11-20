@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,10 +40,6 @@ public enum Unprotect {
   // public static Tensor of(Tensor tensor, Function<Stream<? extends Tensor>, Stream<? extends Tensor>> map) {
   // return of(tensor.length(), map.apply(tensor.stream()));
   // }
-
-  public static Tensor slash(Tensor tensor, Function<Tensor, ? extends Tensor> tuo) {
-    return of(tensor.length(), tensor.stream().map(tuo));
-  }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 

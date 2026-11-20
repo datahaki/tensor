@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -18,7 +19,7 @@ class PermuteTest {
   void test() {
     int[] perm = new int[] { 2, 3, 1, 0 };
     TensorUnaryOperator tuo = Permute.of(perm);
-    Tensor P = tuo.slash(IdentityMatrix.of(4));
+    Tensor P = Slash.of(IdentityMatrix.of(4), tuo);
     Tensor r = Range.of(0, 4).dot(P);
     int[] intArray = Primitives.toIntArray(r);
     assertArrayEquals(perm, intArray);
@@ -30,7 +31,7 @@ class PermuteTest {
     int N = 30;
     int[] perm = PermutationList.of(cycles, N);
     TensorUnaryOperator tuo = Permute.of(perm);
-    Tensor P = tuo.slash(IdentityMatrix.of(N));
+    Tensor P = Slash.of(IdentityMatrix.of(N), tuo);
     Tensor r = Range.of(0, N).dot(P);
     int[] intArray = Primitives.toIntArray(r);
     assertArrayEquals(perm, intArray);

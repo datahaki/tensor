@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.sv;
 
 import java.io.Serializable;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.red.Mean;
@@ -25,7 +26,7 @@ public record PrincipalComponents(SingularValueDecomposition svd, Tensor mean) i
 
   /** @return unscaled principal components */
   public Tensor unscaled() {
-    return Times.operator(svd.values()).slash(svd.getU());
+    return Slash.of(svd.getU(), Times.operator(svd.values()));
   }
 
   /** @return principal component directions scaled by singular values */

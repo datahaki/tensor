@@ -4,6 +4,7 @@ package ch.alpine.tensor.spa;
 import java.util.function.Function;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 
@@ -33,6 +34,6 @@ public class Normal implements TensorUnaryOperator {
   public Tensor apply(Tensor tensor) {
     return tensor instanceof Scalar scalar //
         ? function.apply(scalar)
-        : slash(tensor);
+        : Slash.of(tensor, this);
   }
 }

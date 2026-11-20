@@ -6,6 +6,7 @@ import java.awt.Color;
 import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -43,7 +44,7 @@ abstract class BaseColorDataIndexed implements ColorDataIndexed {
   /** @param alpha in the range [0, 1, ..., 255]
    * @return */
   protected final Tensor tableWithAlpha(int alpha) {
-    return withAlpha(alpha).slash(tensor);
+    return Slash.of(tensor, withAlpha(alpha));
   }
 
   /** @param alpha in the range [0, 1, ..., 255]

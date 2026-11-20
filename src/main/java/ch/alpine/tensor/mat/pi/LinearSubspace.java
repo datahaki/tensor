@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.pi;
 import java.util.List;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ArrayReshape;
@@ -35,7 +36,7 @@ public interface LinearSubspace extends TensorUnaryOperator {
     Tensor nullSpace = LeftNullSpace.of(eqs);
     return Tensors.isEmpty(nullSpace) //
         ? new LinearSubspaceNull(size)
-        : new LinearSubspaceImpl(nullSpace, reshape.slash(nullSpace));
+        : new LinearSubspaceImpl(nullSpace, Slash.of(nullSpace, reshape));
   }
 
   /** @param constraint

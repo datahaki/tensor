@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.pd;
 
 import java.io.Serializable;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.lie.TensorProduct;
@@ -48,7 +49,7 @@ class PolarDecompositionSvd extends PolarDecompositionBase implements Serializab
   @Override // from PolarDecomposition
   public Tensor getPositiveSemidefinite() {
     // TODO can this be simplified?
-    return MatrixDotTranspose.of(Times.operator(svd.values()).slash(basis), basis);
+    return MatrixDotTranspose.of(Slash.of(basis, Times.operator(svd.values())), basis);
   }
 
   /** @return */

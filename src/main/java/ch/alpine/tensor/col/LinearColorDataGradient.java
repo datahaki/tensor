@@ -3,6 +3,7 @@ package ch.alpine.tensor.col;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -58,7 +59,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
 
   @Override // from ColorDataGradient
   public LinearColorDataGradient deriveWithOpacity(Scalar opacity) {
-    return new LinearColorDataGradient(withOpacity(opacity).slash(tensor));
+    return new LinearColorDataGradient(Slash.of(tensor, withOpacity(opacity)));
   }
 
   /** @param opacity in the interval [0, 1]
