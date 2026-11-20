@@ -38,7 +38,7 @@ public enum Tensors {
   /** @param tensors array
    * @return concatenation of copies of given {@link Tensor}s or {@link Scalar}s */
   public static Tensor of(Tensor... tensors) {
-    return Tensor.of(Arrays.stream(tensors).map(Tensor::copy));
+    return Unprotect.of(tensors.length, Arrays.stream(tensors).map(Tensor::copy));
   }
 
   /** Hint: function does not check scalar arguments for null
@@ -46,7 +46,7 @@ public enum Tensors {
    * @param scalars array
    * @return vector of references to given {@link Scalar}s */
   public static Tensor of(Scalar... scalars) {
-    return Tensor.of(Arrays.stream(scalars));
+    return Unprotect.of(scalars.length, Arrays.stream(scalars));
   }
 
   /** Example:
@@ -57,7 +57,7 @@ public enum Tensors {
    * @param numbers array
    * @return vector of numbers as {@link RealScalar}s */
   public static Tensor vector(Number... numbers) {
-    return Tensor.of(Arrays.stream(numbers).map(RealScalar::of));
+    return Unprotect.of(numbers.length, Arrays.stream(numbers).map(RealScalar::of));
   }
 
   /** @param list
@@ -103,20 +103,20 @@ public enum Tensors {
    * @return (n x m)-matrix with (i, j)th-entry == bifunction.apply(i, j)
    * @see Outer */
   public static Tensor matrix(BiFunction<Integer, Integer, ? extends Tensor> biFunction, int n, int m) {
-    return Tensor.of(IntStream.range(0, n).mapToObj( //
-        i -> Tensor.of(IntStream.range(0, m).mapToObj(j -> biFunction.apply(i, j)))));
+    return Unprotect.of(n, IntStream.range(0, n).mapToObj( //
+        i -> Unprotect.of(m, IntStream.range(0, m).mapToObj(j -> biFunction.apply(i, j)))));
   }
 
   /** @param data
    * @return matrix with dimensions and {@link Scalar} entries as array data */
   public static Tensor matrix(Scalar[][] data) {
-    return Tensor.of(Arrays.stream(data).map(Tensors::of));
+    return Unprotect.of(data.length, Arrays.stream(data).map(Tensors::of));
   }
 
   /** @param data
    * @return matrix with dimensions and {@link RealScalar} entries */
   public static Tensor matrix(Number[][] data) {
-    return Tensor.of(Arrays.stream(data).map(Tensors::vector));
+    return Unprotect.of(data.length, Arrays.stream(data).map(Tensors::vector));
   }
 
   /** @param data

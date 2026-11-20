@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Arg;
 
@@ -15,7 +16,7 @@ public enum AbsArg {
   /** @param z
    * @return vector {Abs[z], Arg[z]} */
   public static Tensor of(Scalar z) {
-    return Tensor.of(stream(z));
+    return Unprotect.of(2, stream(z));
   }
 
   /** @param z

@@ -101,7 +101,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor extract(int fromIndex, int toIndex) {
-    return Tensor.of(list.subList(fromIndex, toIndex).stream().map(Tensor::copy));
+    return Unprotect.of(toIndex - fromIndex, list.subList(fromIndex, toIndex).stream().map(Tensor::copy));
   }
 
   @Override // from Tensor
@@ -161,7 +161,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
       return new TensorImpl(subList);
     List<Integer> _ofs = Lists.rest(ofs);
     List<Integer> _len = Lists.rest(len);
-    return Tensor.of(subList.stream().map(entry -> entry.block(_ofs, _len)));
+    return Unprotect.of(len0, subList.stream().map(entry -> entry.block(_ofs, _len)));
   }
 
   @Override // from Tensor

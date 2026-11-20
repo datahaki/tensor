@@ -29,12 +29,12 @@ public enum Unprotect {
   ;
   /** uses only 77 % when compared to Tensor::of and reserve is used precisely
    * 
-   * @param prealloc
+   * @param length
    * @param stream
    * @return */
-  public static Tensor of(int prealloc, Stream<? extends Tensor> stream) {
-    Tensor tensor = new TensorImpl(stream.collect(Collectors.toCollection(() -> new ArrayList<>(prealloc))));
-    Integers.requireEquals(prealloc, tensor.length());
+  public static Tensor of(int length, Stream<? extends Tensor> stream) {
+    Tensor tensor = new TensorImpl(stream.collect(Collectors.toCollection(() -> new ArrayList<>(length))));
+    Integers.requireEquals(length, tensor.length());
     return tensor;
   }
   // public static Tensor of(Tensor tensor, Function<Stream<? extends Tensor>, Stream<? extends Tensor>> map) {
@@ -57,7 +57,7 @@ public enum Unprotect {
    * @return It That Must Not Be Described
    * @see Tensors#of(Tensor...) */
   public static Tensor byRef(Tensor... tensors) {
-    return Tensor.of(Arrays.stream(tensors));
+    return of(tensors.length, Arrays.stream(tensors));
   }
 
   // ---

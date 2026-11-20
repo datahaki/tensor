@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.MemberQ;
 import ch.alpine.tensor.ext.Integers;
@@ -108,12 +109,12 @@ public class CoordinateBoundingBox implements MemberQ {
 
   /** @return lower left corner of bounding box */
   public Tensor min() {
-    return Tensor.of(stream().map(Clip::min));
+    return Unprotect.of(list.size(), stream().map(Clip::min));
   }
 
   /** @return upper right corner of bounding box */
   public Tensor max() {
-    return Tensor.of(stream().map(Clip::max));
+    return Unprotect.of(list.size(), stream().map(Clip::max));
   }
 
   // ---

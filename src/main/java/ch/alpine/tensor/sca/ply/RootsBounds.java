@@ -48,6 +48,7 @@ public enum RootsBounds {
     Scalar ofMonic(Tensor monic) {
       int last = monic.length();
       Int i = new Int(last);
+      // TODO why not reduce sum()
       return Total.ofVector(Tensor.of(monic.stream() //
           .map(Scalar.class::cast) //
           .map(Abs.FUNCTION) //

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 
 /** inspired by
@@ -11,8 +12,7 @@ public enum Standardize {
    * @return result with Mean[result] == 0 and Variance[result] == 1
    * @throws Exception if input does not have sufficient elements, or is not a vector */
   public static Tensor ofVector(Tensor vector) {
-    Tensor nmean = Mean.of(vector).negate();
-    return Tensor.of(vector.stream().map(nmean::add)) //
+    return Slash.of(vector, Mean.of(vector).negate()::add) //
         .divide(StandardDeviation.ofVector(vector)); // StandardDeviation subtracts the mean internally
   }
 }

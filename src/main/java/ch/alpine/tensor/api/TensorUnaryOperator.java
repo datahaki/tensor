@@ -25,16 +25,4 @@ public interface TensorUnaryOperator extends UnaryOperator<Tensor>, Serializable
     Objects.requireNonNull(after);
     return tensor -> after.apply(apply(tensor));
   }
-
-  /** slash corresponds to Mathematica's
-   * <pre>
-   * /@
-   * </pre>
-   *
-   * @param tensor
-   * @return {apply(tensor.get(0)), apply(tensor.get(1)), ..., apply(tensor.get(length-1)))} */
-  @Deprecated
-  default Tensor slash(Tensor tensor) {
-    return Tensor.of(tensor.stream().map(this));
-  }
 }
