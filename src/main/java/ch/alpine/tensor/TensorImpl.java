@@ -25,7 +25,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor copy() {
-    return Tensor.of(stream().map(Tensor::copy));
+    return Unprotect.slash(this, Tensor::copy);
   }
 
   @Override // from Tensor
@@ -45,7 +45,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
     int head = index.getFirst();
     List<Integer> _index = Lists.rest(index);
     return head == ALL //
-        ? Tensor.of(stream().map(tensor -> tensor.get(_index)))
+        ? Unprotect.slash(this, tensor -> tensor.get(_index))
         : byRef(head).get(_index);
   }
 
@@ -106,36 +106,36 @@ class TensorImpl extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor negate() {
-    return Tensor.of(stream().map(Tensor::negate));
+    return Unprotect.slash(this, Tensor::negate);
   }
 
   @Override // from Tensor
   public Tensor add(Tensor tensor) {
     Integers.requireEquals(length(), tensor.length());
     Int i = new Int();
-    return Tensor.of(tensor.stream().map(entry -> list.get(i.getAndIncrement()).add(entry)));
+    return Unprotect.slash(tensor, entry -> list.get(i.getAndIncrement()).add(entry));
   }
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
     Integers.requireEquals(length(), tensor.length());
     Int i = new Int();
-    return Tensor.of(tensor.stream().map(entry -> list.get(i.getAndIncrement()).subtract(entry)));
+    return Unprotect.slash(tensor, entry -> list.get(i.getAndIncrement()).subtract(entry));
   }
 
   @Override // from Tensor
   public Tensor multiply(Scalar scalar) {
-    return Tensor.of(stream().map(tensor -> tensor.multiply(scalar)));
+    return Unprotect.slash(this, tensor -> tensor.multiply(scalar));
   }
 
   @Override // from Tensor
   public Tensor divide(Scalar scalar) {
-    return Tensor.of(stream().map(tensor -> tensor.divide(scalar)));
+    return Unprotect.slash(this, tensor -> tensor.divide(scalar));
   }
 
   @Override // from Tensor
   public Tensor maps(Function<Scalar, ? extends Tensor> function) {
-    return Tensor.of(stream().map(tensor -> tensor.maps(function)));
+    return Unprotect.slash(this, tensor -> tensor.maps(function));
   }
 
   @Override // from Tensor
@@ -146,7 +146,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
       return tensor.stream().map(entry -> entry.multiply(Get(i.getAndIncrement()))) //
           .reduce(Tensor::add).orElse(Hold.zero()); // compromise
     }
-    return Tensor.of(stream().map(entry -> entry.dot(tensor)));
+    return Unprotect.slash(this, entry -> entry.dot(tensor));
   }
 
   @Override // from Tensor

@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Flatten;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.TableBuilder;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -28,11 +30,20 @@ public enum Unprotect {
   ;
   /** uses only 77 % when compared to Tensor::of and reserve is used precisely
    * 
-   * @param initialCapacity
+   * @param prealloc
    * @param stream
    * @return */
-  public static Tensor of(int initialCapacity, Stream<? extends Tensor> stream) {
-    return new TensorImpl(stream.collect(Collectors.toCollection(() -> new ArrayList<>(initialCapacity))));
+  public static Tensor of(int prealloc, Stream<? extends Tensor> stream) {
+    Tensor tensor = new TensorImpl(stream.collect(Collectors.toCollection(() -> new ArrayList<>(prealloc))));
+    Integers.requireEquals(prealloc, tensor.length());
+    return tensor;
+  }
+  // public static Tensor of(Tensor tensor, Function<Stream<? extends Tensor>, Stream<? extends Tensor>> map) {
+  // return of(tensor.length(), map.apply(tensor.stream()));
+  // }
+
+  public static Tensor slash(Tensor tensor, Function<Tensor, ? extends Tensor> tuo) {
+    return of(tensor.length(), tensor.stream().map(tuo));
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
