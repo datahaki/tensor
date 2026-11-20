@@ -6,9 +6,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.io.TableBuilder;
@@ -23,6 +26,15 @@ import ch.alpine.tensor.qty.QuantityUnit;
  * <a href="https://reference.wolfram.com/language/ref/Unprotect.html">Unprotect</a> */
 public enum Unprotect {
   ;
+  /** uses only 77 % when compared to Tensor::of and reserve is used precisely
+   * 
+   * @param initialCapacity
+   * @param stream
+   * @return */
+  public static Tensor of(int initialCapacity, Stream<? extends Tensor> stream) {
+    return new TensorImpl(stream.collect(Collectors.toCollection(() -> new ArrayList<>(initialCapacity))));
+  }
+
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param list non-null

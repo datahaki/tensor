@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
@@ -59,7 +60,7 @@ public interface Tensor extends Iterable<Tensor> {
    * @param stream of tensors to form the first level of the return value
    * @return tensor that holds the tensors of the input stream */
   static Tensor of(Stream<? extends Tensor> stream) {
-    return new TensorImpl(stream.collect(Collectors.toList()));
+    return new TensorImpl(stream.collect(Collectors.toCollection(ArrayList::new)));
   }
 
   /** function returns a tensor with content equal to this tensor but with the
