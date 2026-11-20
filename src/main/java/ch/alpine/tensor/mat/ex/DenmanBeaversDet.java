@@ -42,7 +42,7 @@ class DenmanBeaversDet implements MatrixSqrt, Serializable {
     yk = matrix;
     Tensor id = StaticHelper.IDENTITY_MATRIX.apply(n);
     Tensor id2 = id.multiply(HALF);
-    ScalarUnaryOperator power = Power.function(Rational.of(-1, n << 1));
+    ScalarUnaryOperator power = Power.withExponent(Rational.of(-1, n << 1));
     // Incomplete square root cascade
     int max = MatrixSqrt.MAX_ITERATIONS.get();
     for (; iteration < max; ++iteration) {

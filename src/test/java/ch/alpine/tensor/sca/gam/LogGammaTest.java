@@ -76,7 +76,7 @@ class LogGammaTest {
   void testMonotonous() {
     Tensor tensor = Tensor.of(IntStream.range(2, 200) //
         .mapToObj(RealScalar::of) //
-        .map(Power.function(10.0)) //
+        .map(Power.withExponent(10.0)) //
         .map(LogGamma.FUNCTION));
     OrderedQ.require(tensor);
   }

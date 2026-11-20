@@ -91,7 +91,7 @@ class ScalarUnaryOperators {
         N.DOUBLE, //
         N.DECIMAL32, //
         N.DECIMAL64, //
-        Power.function(3), //
+        Power.withExponent(3), //
         Ramp.FUNCTION, //
         Re.FUNCTION, //
         Round.FUNCTION, //

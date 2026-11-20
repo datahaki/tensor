@@ -45,7 +45,7 @@ class RootsDegree3 {
   private static final Scalar R2_3 = Complex.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3).negate()).divide(_6).negate();
   private static final Scalar R3_2 = Complex.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3).negate()).divide(Power.of(2, _2_3));
   private static final Scalar R3_3 = Complex.of(RealScalar.ONE, Sqrt.FUNCTION.apply(_3)).divide(_6).negate();
-  private static final ScalarUnaryOperator POWER_1_3 = Power.function(_1_3);
+  private static final ScalarUnaryOperator POWER_1_3 = Power.withExponent(_1_3);
   // ---
   private final Scalar d;
   private final Scalar c;

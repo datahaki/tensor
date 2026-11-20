@@ -55,7 +55,7 @@ public class FRatioDistribution implements Distribution, //
     scale = Beta.of(n2, m2);
     f1 = Power.of(n, n2);
     f2 = Power.of(m, m2);
-    power = Power.function(n2.add(m2).negate());
+    power = Power.withExponent(n2.add(m2).negate());
     rvin = ChiSquareDistribution.of(n);
     rvim = ChiSquareDistribution.of(m);
   }

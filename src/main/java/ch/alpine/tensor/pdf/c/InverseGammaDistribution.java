@@ -47,7 +47,7 @@ public class InverseGammaDistribution extends AbstractContinuousDistribution imp
   private InverseGammaDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;
     this.beta = beta;
-    power = Power.function(alpha);
+    power = Power.withExponent(alpha);
     gamma = Gamma.FUNCTION.apply(alpha);
   }
 

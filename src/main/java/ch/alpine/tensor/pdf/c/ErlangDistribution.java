@@ -72,7 +72,7 @@ public class ErlangDistribution extends AbstractContinuousDistribution implement
     this.lambda = lambda;
     rec_lambda_zero = Unprotect.zero_negateUnit(lambda);
     factor = Power.of(lambda, k).divide(Factorial.of(k - 1));
-    power = Power.function(k - 1);
+    power = Power.withExponent(k - 1);
     mean = _k.divide(lambda);
   }
 

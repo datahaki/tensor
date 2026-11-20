@@ -80,13 +80,13 @@ public enum MatrixPower {
    * @param exponent
    * @return matrix ^ exponent */
   public static Tensor ofSymmetric(Tensor matrix, Scalar exponent) {
-    return Eigensystem.ofSymmetric(matrix, Tolerance.CHOP).map(Power.function(exponent));
+    return Eigensystem.ofSymmetric(matrix, Tolerance.CHOP).map(Power.withExponent(exponent));
   }
 
   /** @param matrix
    * @param exponent
    * @return matrix ^ exponent */
   public static Tensor ofHermitian(Tensor matrix, Scalar exponent) {
-    return Eigensystem.ofHermitian(matrix, Tolerance.CHOP).map(Power.function(exponent));
+    return Eigensystem.ofHermitian(matrix, Tolerance.CHOP).map(Power.withExponent(exponent));
   }
 }

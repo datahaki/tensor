@@ -56,7 +56,7 @@ public class StudentTDistribution implements Distribution, //
     this.mu = mu;
     this.sigma = sigma;
     this.v = v;
-    power = Power.function(RealScalar.ONE.add(v).divide(RealScalar.TWO));
+    power = Power.withExponent(RealScalar.ONE.add(v).divide(RealScalar.TWO));
     factor = Sqrt.FUNCTION.apply(v).multiply(sigma).multiply(Beta.of(v.multiply(Rational.HALF), Rational.HALF));
   }
 

@@ -87,7 +87,7 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
   @Override // from CentralMomentInterface
   public final Scalar centralMoment(int order) {
     Scalar mean = mean();
-    ScalarUnaryOperator power = Power.function(order);
+    ScalarUnaryOperator power = Power.withExponent(order);
     return inverse_cdf.values().stream() //
         .map(x -> power.apply(x.subtract(mean)).multiply(at(x))) //
         .reduce(Scalar::add) //

@@ -53,8 +53,8 @@ public class BetaDistribution implements Distribution, //
   private BetaDistribution(Scalar a1, Scalar a2) {
     this.a1 = a1;
     this.a2 = a2;
-    power1 = Power.function(a1.subtract(RealScalar.ONE));
-    power2 = Power.function(a2.subtract(RealScalar.ONE));
+    power1 = Power.withExponent(a1.subtract(RealScalar.ONE));
+    power2 = Power.withExponent(a2.subtract(RealScalar.ONE));
     factor = Beta.of(a1, a2);
     rviA1 = new Gamma1Distribution(a1);
     rviA2 = new Gamma1Distribution(a2);

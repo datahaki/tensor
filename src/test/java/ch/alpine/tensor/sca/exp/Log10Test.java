@@ -25,6 +25,12 @@ class Log10Test {
   }
 
   @Test
+  void testTen() {
+    Tolerance.CHOP.requireClose(Log10.FUNCTION.apply(RealScalar.of(10)), RealScalar.ONE);
+    Tolerance.CHOP.requireClose(Log10.FUNCTION.apply(RealScalar.of(100)), RealScalar.TWO);
+  }
+
+  @Test
   void testLog() {
     Scalar s = DoubleScalar.of(-3);
     Scalar r = Complex.of(0.4771212547196624, 1.3643763538418412);

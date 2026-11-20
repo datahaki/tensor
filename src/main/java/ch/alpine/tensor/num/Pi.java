@@ -30,7 +30,7 @@ public enum Pi {
   private static final Scalar _12 = RealScalar.of(12);
   private static final Scalar _426880 = RealScalar.of(426880);
   private static final Scalar _16 = RealScalar.of(16);
-  private static final ScalarUnaryOperator CUBE = Power.function(3);
+  private static final ScalarUnaryOperator CUBE = Power.withExponent(3);
   private static final BigDecimal _10005 = new BigDecimal("10005");
 
   /** @param precision is approximately the number of correct digits in the decimal encoding

@@ -39,7 +39,7 @@ public class HarmonicNumber implements IntFunction<Scalar>, Serializable {
 
   private HarmonicNumber(Scalar exponent) {
     this.exponent = exponent;
-    power = Power.function(exponent.negate());
+    power = Power.withExponent(exponent.negate());
   }
 
   @Override

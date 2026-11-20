@@ -50,7 +50,7 @@ public class LevyDistribution extends AbstractContinuousDistribution implements 
   private LevyDistribution(Scalar mu, Scalar sigma) {
     this.mu = mu;
     this.sigma = sigma;
-    power = Power.function(Rational.of(3, 2));
+    power = Power.withExponent(Rational.of(3, 2));
   }
 
   @Override

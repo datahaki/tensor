@@ -52,7 +52,7 @@ public enum TestMarkovChebyshev {
 
   private static final Tensor LARGE = Tensor.of(IntStream.range(7, 200) //
       .mapToObj(RealScalar::of) //
-      .map(Power.function(3)));
+      .map(Power.withExponent(3)));
   private static final Tensor NUMER = LARGE.maps(N.DOUBLE);
 
   public static void monotonous(Distribution distribution) {

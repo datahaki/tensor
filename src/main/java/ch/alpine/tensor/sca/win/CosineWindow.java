@@ -24,7 +24,7 @@ public class CosineWindow extends ParameterizedWindow {
 
   private CosineWindow(Scalar alpha) {
     super(alpha);
-    power = Power.function(alpha);
+    power = Power.withExponent(alpha);
   }
 
   @Override // from ParameterizedWindow

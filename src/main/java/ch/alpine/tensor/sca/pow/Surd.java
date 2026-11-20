@@ -25,7 +25,7 @@ public class Surd implements ScalarUnaryOperator {
 
   private Surd(long n) {
     this.n = n;
-    this.power = Power.function(Rational.of(1, n));
+    this.power = Power.withExponent(Rational.of(1, n));
   }
 
   @Override

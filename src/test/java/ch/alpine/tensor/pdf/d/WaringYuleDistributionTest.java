@@ -51,7 +51,7 @@ class WaringYuleDistributionTest {
     PDF cdf = PDF.of(distribution);
     Tensor tensor = Reverse.of(Tensor.of(IntStream.range(5, 200) //
         .mapToObj(RealScalar::of) //
-        .map(Power.function(5)) //
+        .map(Power.withExponent(5)) //
         .map(cdf::at)));
     OrderedQ.require(tensor);
   }

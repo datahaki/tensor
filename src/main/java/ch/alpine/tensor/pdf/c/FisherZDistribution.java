@@ -53,7 +53,7 @@ public class FisherZDistribution implements Distribution, //
     Scalar n_2 = n.multiply(Rational.HALF);
     Scalar m_2 = m.multiply(Rational.HALF);
     scale = Times.of(RealScalar.TWO, Power.of(n, n_2), Power.of(m, m_2)).divide(Beta.of(n_2, m_2));
-    power = Power.function(n_2.add(m_2).negate());
+    power = Power.withExponent(n_2.add(m_2).negate());
     rvi = FRatioDistribution.of(n, m);
   }
 

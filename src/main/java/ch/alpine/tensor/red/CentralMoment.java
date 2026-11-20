@@ -21,7 +21,7 @@ public enum CentralMoment {
     Scalar nmean = Mean.ofVector(vector).negate();
     return vector.stream() //
         .map(nmean::add) //
-        .map(Power.function(order)) //
+        .map(Power.withExponent(order)) //
         .reduce(Scalar::add) //
         .orElseThrow() //
         .divide(RealScalar.of(vector.length()));

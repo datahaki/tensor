@@ -62,15 +62,15 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
     this.p = p;
     this.a = a;
     this.b = b;
-    power_a = Power.function(a);
-    power_pn = Power.function(p.negate());
-    power_p1n = Power.function(p.add(RealScalar.ONE).negate());
-    power_an = Power.function(a.negate());
-    power_prn = Power.function(p.reciprocal().negate());
-    power_arn = Power.function(a.reciprocal().negate());
+    power_a = Power.withExponent(a);
+    power_pn = Power.withExponent(p.negate());
+    power_p1n = Power.withExponent(p.add(RealScalar.ONE).negate());
+    power_an = Power.withExponent(a.negate());
+    power_prn = Power.withExponent(p.reciprocal().negate());
+    power_arn = Power.withExponent(a.reciprocal().negate());
     Scalar pa = p.multiply(a);
     pa_power_pan_b = Power.of(b, pa.negate()).multiply(pa); // pa * b^(-pa)
-    power_pa1 = Power.function(pa.subtract(RealScalar.ONE));
+    power_pa1 = Power.withExponent(pa.subtract(RealScalar.ONE));
   }
 
   @Override

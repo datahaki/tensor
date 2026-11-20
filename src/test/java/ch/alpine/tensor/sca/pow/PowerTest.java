@@ -17,6 +17,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.jet.Hold;
@@ -33,14 +34,21 @@ class PowerTest {
   }
 
   @Test
+  void testPower10() {
+    ScalarUnaryOperator POW10 = x -> Power.of(10, x);
+    assertEquals(POW10.apply(RealScalar.ONE), RealScalar.of(10));
+    assertEquals(POW10.apply(RealScalar.TWO), RealScalar.of(100));
+  }
+
+  @Test
   void testSqrtExactHalfPos() {
-    Scalar scalar = Power.function(Rational.HALF).apply(RealScalar.of(4));
+    Scalar scalar = Power.withExponent(Rational.HALF).apply(RealScalar.of(4));
     assertEquals(ExactScalarQ.require(scalar), RealScalar.of(2));
   }
 
   @Test
   void testSqrtExactHalfNeg() {
-    Scalar scalar = Power.function(Rational.HALF.negate()).apply(RealScalar.of(9));
+    Scalar scalar = Power.withExponent(Rational.HALF.negate()).apply(RealScalar.of(9));
     assertEquals(ExactScalarQ.require(scalar), Rational.of(1, 3));
   }
 
@@ -137,8 +145,8 @@ class PowerTest {
 
   @Test
   void testFunction() {
-    assertEquals(RealScalar.of(7).maps(Power.function(0.5)), Sqrt.FUNCTION.apply(RealScalar.of(7)));
-    assertEquals(Power.function(0.5).apply(RealScalar.of(7)), Sqrt.FUNCTION.apply(RealScalar.of(7)));
+    assertEquals(RealScalar.of(7).maps(Power.withExponent(0.5)), Sqrt.FUNCTION.apply(RealScalar.of(7)));
+    assertEquals(Power.withExponent(0.5).apply(RealScalar.of(7)), Sqrt.FUNCTION.apply(RealScalar.of(7)));
   }
 
   @Test
@@ -197,11 +205,11 @@ class PowerTest {
 
   @Test
   void testFailNullNumber() {
-    assertThrows(NullPointerException.class, () -> Power.function((Number) null));
+    assertThrows(NullPointerException.class, () -> Power.withExponent((Number) null));
   }
 
   @Test
   void testFailNullScalar() {
-    assertThrows(NullPointerException.class, () -> Power.function((Scalar) null));
+    assertThrows(NullPointerException.class, () -> Power.withExponent((Scalar) null));
   }
 }

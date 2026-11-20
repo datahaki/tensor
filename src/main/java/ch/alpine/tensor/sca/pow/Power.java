@@ -35,37 +35,37 @@ public enum Power {
    * and ultimately makes use of the identity
    * <code>x^y == Exp(y * Log(x))</code>
    * 
-   * @param scalar
+   * @param base
    * @param exponent
-   * @return scalar ^ exponent */
-  public static Scalar of(Scalar scalar, Scalar exponent) {
-    return function(exponent).apply(scalar);
+   * @return base ^ exponent */
+  public static Scalar of(Scalar base, Scalar exponent) {
+    return withExponent(exponent).apply(base);
   }
 
-  /** @param scalar
+  /** @param base
    * @param exponent
-   * @return scalar ^ exponent */
-  public static Scalar of(Scalar scalar, Number exponent) {
-    return of(scalar, RealScalar.of(exponent));
+   * @return base ^ exponent */
+  public static Scalar of(Scalar base, Number exponent) {
+    return of(base, RealScalar.of(exponent));
   }
 
-  /** @param number
+  /** @param base
    * @param exponent
-   * @return number ^ exponent */
-  public static Scalar of(Number number, Scalar exponent) {
-    return of(RealScalar.of(number), exponent);
+   * @return base ^ exponent */
+  public static Scalar of(Number base, Scalar exponent) {
+    return of(RealScalar.of(base), exponent);
   }
 
-  /** @param number
+  /** @param base
    * @param exponent
-   * @return number ^ exponent */
-  public static Scalar of(Number number, Number exponent) {
-    return of(RealScalar.of(number), RealScalar.of(exponent));
+   * @return base ^ exponent */
+  public static Scalar of(Number base, Number exponent) {
+    return of(RealScalar.of(base), RealScalar.of(exponent));
   }
 
   /** @param exponent
-   * @return function that maps a scalar to scalar ^ exponent */
-  public static ScalarUnaryOperator function(Scalar exponent) {
+   * @return function that maps a base to base ^ exponent */
+  public static ScalarUnaryOperator withExponent(Scalar exponent) {
     // if (exponent instanceof Rational rational) {
     // BigInteger num = rational.numerator();
     // BigInteger den = rational.denominator();
@@ -91,8 +91,16 @@ public enum Power {
 
   /** @param exponent
    * @return function that maps a scalar to scalar ^ exponent */
-  public static ScalarUnaryOperator function(Number exponent) {
-    return function(RealScalar.of(exponent));
+  public static ScalarUnaryOperator withExponent(Number exponent) {
+    return withExponent(RealScalar.of(exponent));
+  }
+
+  public static ScalarUnaryOperator withBase(Scalar base) {
+    return exponent -> evaluate(base, exponent);
+  }
+
+  public static ScalarUnaryOperator withBase(Number base) {
+    return withBase(RealScalar.of(base));
   }
 
   // ---

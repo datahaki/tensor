@@ -168,8 +168,8 @@ public class JetScalar extends MultiplexScalar implements //
       if (0 <= expInt) // TODO JET exponent == zero!?
         return new JetScalar(JetScalars.power(vector, expInt));
     }
-    return JetScalars.chain(vector, Power.function(exponent), //
-        scalar -> Power.function(exponent.subtract(RealScalar.ONE)).apply(scalar).multiply(exponent));
+    return JetScalars.chain(vector, Power.withExponent(exponent), //
+        scalar -> Power.withExponent(exponent.subtract(RealScalar.ONE)).apply(scalar).multiply(exponent));
   }
 
   @Override // from SignInterface
