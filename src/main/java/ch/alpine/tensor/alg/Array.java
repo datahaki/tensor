@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.spa.SparseArray;
 
@@ -55,11 +56,10 @@ public enum Array {
     if (level == dimensions.size())
       return function.apply(index);
     int length = dimensions.get(level);
-    return Tensor.of(IntStream.range(0, length) //
-        .mapToObj(count -> {
-          index.set(level, count);
-          return of(function, level + 1, dimensions, index);
-        }), length);
+    return Tensors.vector(count -> {
+      index.set(level, count);
+      return of(function, level + 1, dimensions, index);
+    }, length);
   }
 
   // ---

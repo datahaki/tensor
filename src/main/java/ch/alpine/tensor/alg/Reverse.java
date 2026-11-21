@@ -1,11 +1,10 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.stream.IntStream;
-
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ScalarQ;
 
 /** inspired by
@@ -28,9 +27,7 @@ public enum Reverse {
   public static Tensor of(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int last = tensor.length() - 1;
-    return Tensor.of(IntStream.range(0, tensor.length()) //
-        .map(index -> last - index) //
-        .mapToObj(tensor::get), tensor.length());
+    return Tensors.vector(index -> tensor.get(last - index), tensor.length());
   }
 
   /** @param tensor

@@ -64,11 +64,12 @@ public interface Tensor extends Iterable<Tensor> {
     return new TensorImpl(stream.collect(Collectors.toCollection(ArrayList::new)));
   }
 
-  /** uses only 77 % when compared to Tensor::of and reserve is used precisely
-   * 
-   * @param stream
+  /** the function uses 77 % of the duration when compared to {@link #of(Stream)}
+   *
+   * @param stream with stream.count() == length
    * @param length
-   * @return */
+   * @return tensor of given length that holds the tensors of the input stream
+   * @throws Exception if stream.count() != length */
   static Tensor of(Stream<? extends Tensor> stream, int length) {
     Tensor tensor = new TensorImpl(stream.collect(Collectors.toCollection(() -> new ArrayList<>(length))));
     Integers.requireEquals(length, tensor.length());

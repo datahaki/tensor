@@ -104,8 +104,7 @@ public enum Tensors {
    * @return (n x m)-matrix with (i, j)th-entry == bifunction.apply(i, j)
    * @see Outer */
   public static Tensor matrix(BiFunction<Integer, Integer, ? extends Tensor> biFunction, int n, int m) {
-    return Tensor.of(IntStream.range(0, n).mapToObj( //
-        i -> Tensor.of(IntStream.range(0, m).mapToObj(j -> biFunction.apply(i, j)), m)), n);
+    return vector(i -> vector(j -> biFunction.apply(i, j), m), n);
   }
 
   /** @param data

@@ -22,4 +22,8 @@ public enum FrobeniusNorm {
   public static Scalar squared(Tensor tensor) {
     return Vector2NormSquared.of(Flatten.of(tensor));
   }
+
+  public static Scalar between(Tensor t1, Tensor t2) {
+    return of(t1.subtract(t2));
+  }
 }

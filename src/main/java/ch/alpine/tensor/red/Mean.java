@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import java.util.stream.Stream;
+
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -52,6 +54,12 @@ public enum Mean {
    * @see ScalarSummaryStatistics */
   public static Scalar ofVector(Tensor vector) {
     return (Scalar) of(vector);
+  }
+
+  /** @param stream
+   * @return */
+  public static Tensor of(Stream<Tensor> stream) {
+    return stream.collect(MeanSummaryStatistics.collector()).getMean();
   }
 
   /** @param distribution
