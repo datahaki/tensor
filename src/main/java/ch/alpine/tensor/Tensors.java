@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.alg.ConstantArray;
@@ -69,8 +70,8 @@ public enum Tensors {
   /** @param function
    * @param length
    * @return vector of length with i-th entry == function.apply(i) */
-  public static Tensor vector(Function<Integer, ? extends Tensor> function, int length) {
-    return Unprotect.of(length, IntStream.range(0, length).boxed().map(function));
+  public static Tensor vector(IntFunction<? extends Tensor> function, int length) {
+    return Unprotect.forArray(length, function);
   }
 
   /** @param values
@@ -88,7 +89,7 @@ public enum Tensors {
   /** @param values
    * @return tensor of {@link DoubleScalar} with given values */
   public static Tensor vectorFloat(float... values) {
-    return Unprotect.of(values.length, IntStream.range(0, values.length).mapToDouble(i -> values[i]).mapToObj(DoubleScalar::of));
+    return Unprotect.forArray(values.length, i -> DoubleScalar.of(values[i]));
   }
 
   /** @param values

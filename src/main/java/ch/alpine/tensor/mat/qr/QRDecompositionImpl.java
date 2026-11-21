@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Int;
@@ -32,9 +33,8 @@ class QRDecompositionImpl extends QRDecompositionBase implements Serializable {
     Tensor qInv = qInv0;
     for (int k = 0; k < m; ++k) { // m reflections
       Int i = new Int(-k);
-      Tensor x = Tensor.of(r.get(Tensor.ALL, k).stream() // k-th column of R
-          .map(Scalar.class::cast) //
-          .map(scalar -> i.getAndIncrement() < 0 ? scalar.zero() : scalar));
+      Tensor x = Slash.vector(r.get(Tensor.ALL, k), // k-th column of R
+          scalar -> i.getAndIncrement() < 0 ? scalar.zero() : scalar);
       Scalar xn = Vector2Norm.of(x);
       if (Scalars.nonZero(xn)) { // else reflection reduces to identity, hopefully => det == 0
         Tensor signed = qrSignOperator.sign(x.Get(k)).multiply(xn);

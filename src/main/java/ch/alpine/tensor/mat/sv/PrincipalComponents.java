@@ -20,7 +20,7 @@ public record PrincipalComponents(SingularValueDecomposition svd, Tensor mean) i
     Tensor mean = Mean.of(matrix);
     Tensor nmean = mean.negate();
     return new PrincipalComponents( //
-        SingularValueDecomposition.of(Tensor.of(matrix.stream().map(nmean::add))).decreasing(), //
+        SingularValueDecomposition.of(Slash.of(matrix, nmean::add)).decreasing(), //
         mean);
   }
 

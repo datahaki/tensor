@@ -74,7 +74,8 @@ public interface InfluenceMatrix {
   default Tensor residualMaker() {
     Int i = new Int();
     // I-X^+.X is projector on ker X
-    return Tensor.of(matrix().stream() //
+    Tensor matrix = matrix();
+    return Unprotect.of(matrix.length(), matrix.stream() //
         .map(Tensor::negate) // copy
         .peek(row -> {
           int index = i.getAndIncrement();

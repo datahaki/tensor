@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.lie.Symmetrize;
@@ -76,12 +77,12 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
 
   @Override // from InfluenceMatrix
   public Tensor leverages() {
-    return Tensor.of(design.stream().map(this::norm_squared));
+    return Slash.of(design, this::norm_squared);
   }
 
   @Override // from InfluenceMatrix
   public Tensor leverages_sqrt() {
-    return Tensor.of(design.stream().map(this::norm));
+    return Slash.of(design, this::norm);
   }
 
   @Override // from InfluenceMatrix

@@ -73,7 +73,7 @@ public class Permutations {
     else {
       Set<Map<Tensor, Long>> set = new HashSet<>();
       for (int index = 0; index < length; ++index) {
-        Tensor key = Tensor.of(Stream.concat( //
+        Tensor key = Unprotect.of(length - 1, Stream.concat( //
             post.stream().limit(index), //
             post.stream().skip(index + 1)));
         if (set.add(key.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))))

@@ -13,13 +13,13 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
  * from which the samples are drawn
  * 
  * @see CoordinateBoundingBox */
-public record BoxRandomSample(CoordinateBoundingBox coordinateBoundingBox) implements RandomSampleInterface, Serializable {
+public record BoxRandomSample(CoordinateBoundingBox cbb) implements RandomSampleInterface, Serializable {
   /** @param coordinateBoundingBox axis-aligned bounding box
    * @return
    * @see CoordinateBounds */
   @Override
   public Tensor randomSample(RandomGenerator randomGenerator) {
-    return Tensor.of(coordinateBoundingBox.stream() //
+    return Tensor.of(cbb.stream() //
         .map(UniformDistribution::of) //
         .map(distribution -> RandomVariate.of(distribution, randomGenerator)));
   }

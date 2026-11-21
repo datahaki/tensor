@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.re;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
@@ -76,8 +77,8 @@ public enum LinearSolve {
   private static Tensor vector(Tensor matrix, Tensor b) {
     Integers.requireEquals(matrix.length(), b.length());
     Int i = new Int();
-    Tensor reduce = RowReduce.of(Tensor.of(matrix.stream() //
-        .map(row -> Append.of(row, b.get(i.getAndIncrement())))));
+    Tensor reduce = RowReduce.of(Slash.of(matrix, //
+        row -> Append.of(row, b.get(i.getAndIncrement()))));
     int last = Unprotect.dimension1(matrix);
     Scalar zero = Unprotect.zero_negateUnit(matrix.Get(0, 0)).multiply(b.Get(0).zero());
     Tensor x = Array.same(zero, last); // initial solution

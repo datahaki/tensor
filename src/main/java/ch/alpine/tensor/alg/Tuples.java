@@ -4,10 +4,10 @@ package ch.alpine.tensor.alg;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.lie.Permutations;
 
 /** implementation consistent with Mathematica except in special case n == 0
@@ -31,7 +31,9 @@ public enum Tuples {
    * @return tensor with k ^ n elements
    * @throws Exception if n is negative */
   public static Tensor of(Tensor tensor, int n) {
-    Tensor array = Array.of(list -> Tensor.of(list.stream().map(tensor::get)), Collections.nCopies(n, tensor.length()));
+    Tensor array = Array.of(list -> //
+    Unprotect.of(list.size(), list.stream().map(tensor::get)), //
+        Collections.nCopies(n, tensor.length()));
     return n <= 1 //
         ? array
         : Tensor.of(Flatten.stream(array, n - 1));
@@ -48,8 +50,9 @@ public enum Tuples {
   public static Tensor of(Tensor... tensors) {
     List<Integer> dims = Arrays.stream(tensors).map(Tensor::length).toList();
     Tensor tensor = Tensors.reserve(dims.stream().reduce(Math::multiplyExact).orElseThrow());
-    Array.forEach(list -> tensor.append(Tensor.of(IntStream.range(0, list.size()) //
-        .mapToObj(i -> tensors[i].get(list.get(i))))), dims);
+    Array.forEach( //
+        list -> tensor.append(Unprotect.forArray(list.size(), i -> tensors[i].get(list.get(i)))), //
+        dims);
     return tensor;
   }
 }

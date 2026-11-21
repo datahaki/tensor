@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.sca.Mod;
 
 /** reference implementation of a {@link ColorDataIndexed} with cyclic indexing */
@@ -21,7 +22,8 @@ public class CyclicColorDataIndexed extends BaseColorDataIndexed {
   /** @param colors
    * @return palette of given colors where index maps to colors[index] */
   public static ColorDataIndexed of(Color... colors) {
-    return new CyclicColorDataIndexed(Tensor.of(Arrays.stream(colors).map(ColorFormat::toVector)));
+    return new CyclicColorDataIndexed( //
+        Unprotect.of(colors.length, Arrays.stream(colors).map(ColorFormat::toVector)));
   }
 
   // ---

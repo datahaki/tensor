@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Flatten;
@@ -40,6 +42,11 @@ public enum Unprotect {
   // public static Tensor of(Tensor tensor, Function<Stream<? extends Tensor>, Stream<? extends Tensor>> map) {
   // return of(tensor.length(), map.apply(tensor.stream()));
   // }
+
+  // TODO decide what should be the API Tensors.vector( func, length )
+  public static Tensor forArray(int length, IntFunction<? extends Tensor> ifn) {
+    return of(length, IntStream.range(0, length).mapToObj(ifn));
+  }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 

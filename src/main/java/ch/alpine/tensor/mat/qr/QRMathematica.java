@@ -28,12 +28,12 @@ public class QRMathematica extends QRDecompositionBase implements Serializable {
 
   @Override // from QRDecomposition
   public Tensor getQConjugateTranspose() {
-    return Tensor.of(qrDecomposition.getQConjugateTranspose().stream().limit(length)); // min(n, m) x n
+    return Unprotect.of(length, qrDecomposition.getQConjugateTranspose().stream().limit(length)); // min(n, m) x n
   }
 
   @Override // from QRDecomposition
   public Tensor getR() {
-    return Tensor.of(qrDecomposition.getR().stream().limit(length)); // min(n, m) x m
+    return Unprotect.of(length, qrDecomposition.getR().stream().limit(length)); // min(n, m) x m
   }
 
   @Override

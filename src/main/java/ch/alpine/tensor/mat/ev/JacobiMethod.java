@@ -2,8 +2,6 @@
 // modified by jph
 package ch.alpine.tensor.mat.ev;
 
-import java.util.stream.IntStream;
-
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -40,7 +38,7 @@ abstract class JacobiMethod {
       Scalar sum = sumAbs_offDiagonal();
       if (Scalars.isZero(sum))
         return new Eigensystem( //
-            Tensor.of(IntStream.range(0, n).mapToObj(this::diag)), // values
+            Unprotect.forArray(n, this::diag), // values
             Unprotect.byRef(V).maps(Conjugate.FUNCTION)); // vectors
       Scalar tresh = iteration < PHASE1 //
           ? sum.multiply(factor)

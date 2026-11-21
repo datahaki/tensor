@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.sca.ply;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 import ch.alpine.tensor.RealScalar;
@@ -31,27 +30,27 @@ public abstract class TripleReduceExtrapolation implements TensorUnaryOperator {
     int length = sequence.length();
     if (length < 3)
       return petite(sequence);
-    Tensor[] tensor = new Tensor[length];
+    Tensor[] tensors = new Tensor[length];
     {
       Iterator<Tensor> iterator = sequence.iterator();
       Tensor p = iterator.next();
       Tensor q = iterator.next();
       int index = 0;
       while (iterator.hasNext())
-        tensor[++index] = reduce(p, p = q, q = iterator.next());
+        tensors[++index] = reduce(p, p = q, q = iterator.next());
     }
     int zero = 0;
     int last = length - 1;
     if (5 <= length) {
-      Tensor prefix = Unprotect.byRef(tensor[zero + 1], tensor[zero + 2], tensor[zero + 3]);
-      tensor[zero] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(prefix).apply(RealScalar.ZERO);
-      Tensor suffix = Unprotect.byRef(tensor[last - 3], tensor[last - 2], tensor[last - 1]);
-      tensor[last] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(suffix).apply(LAST);
+      Tensor prefix = Unprotect.byRef(tensors[zero + 1], tensors[zero + 2], tensors[zero + 3]);
+      tensors[zero] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(prefix).apply(RealScalar.ZERO);
+      Tensor suffix = Unprotect.byRef(tensors[last - 3], tensors[last - 2], tensors[last - 1]);
+      tensors[last] = INTERPOLATING_POLYNOMIAL.scalarTensorFunction(suffix).apply(LAST);
     } else {
-      tensor[zero] = tensor[zero + 1].copy();
-      tensor[last] = tensor[last - 1].copy();
+      tensors[zero] = tensors[zero + 1].copy();
+      tensors[last] = tensors[last - 1].copy();
     }
-    return Tensor.of(Arrays.stream(tensor));
+    return Unprotect.byRef(tensors);
   }
 
   /** @param p

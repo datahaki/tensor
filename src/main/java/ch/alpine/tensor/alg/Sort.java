@@ -52,6 +52,6 @@ public enum Sort {
    * @return tensor with entries sorted according to given comparator */
   @SuppressWarnings("unchecked")
   public static <T extends Scalar> Tensor ofVector(Tensor vector, Comparator<T> comparator) {
-    return Tensor.of(vector.stream().map(scalar -> (T) scalar).sorted(comparator));
+    return Unprotect.of(vector.length(), vector.stream().map(scalar -> (T) scalar).sorted(comparator));
   }
 }

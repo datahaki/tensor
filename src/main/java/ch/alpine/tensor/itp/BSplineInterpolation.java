@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarTensorFunction;
@@ -54,7 +55,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
     // TODO IMPL SERIOUS can be improved by truncating data to a neighborhood
     return index.length() == 1 //
         ? interp
-        : of(degree, interp).get(Tensor.of(index.stream().skip(1)));
+        : of(degree, interp).get(Unprotect.of(index.length() - 1, index.stream().skip(1)));
   }
 
   @Override // from Interpolation

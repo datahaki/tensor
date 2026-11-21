@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.re;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
@@ -55,7 +56,7 @@ public class KaczmarzIteration {
   public KaczmarzIteration(Tensor matrix, Tensor b) {
     rows = matrix.stream().toArray(Tensor[]::new);
     this.b = b;
-    normsq = Tensor.of(matrix.stream().map(Vector2NormSquared::of));
+    normsq = Slash.of(matrix, Vector2NormSquared::of);
     distribution = CategoricalDistribution.fromUnscaledPDF(normsq);
     // TODO TEST for mixed units
     int m = Unprotect.dimension1(matrix);

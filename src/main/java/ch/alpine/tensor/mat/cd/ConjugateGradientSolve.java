@@ -1,10 +1,9 @@
 // code by jph
 package ch.alpine.tensor.mat.cd;
 
-import java.util.stream.IntStream;
-
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -23,8 +22,7 @@ public enum ConjugateGradientSolve {
    * @return matrix \ b */
   public static Tensor of(Tensor matrix, Tensor b, int n) {
     n = Integers.requirePositive(Math.min(n, matrix.length()));
-    Tensor x = Tensor.of(IntStream.range(0, n) //
-        .mapToObj(index -> b.Get(index).divide(matrix.Get(index, index)).zero()));
+    Tensor x = Unprotect.forArray(n, index -> b.Get(index).divide(matrix.Get(index, index)).zero());
     return of(matrix, b, x, n);
   }
 

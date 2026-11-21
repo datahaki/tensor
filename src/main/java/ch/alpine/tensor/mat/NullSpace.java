@@ -104,8 +104,9 @@ public enum NullSpace {
    * @param chop
    * @return tensor of vectors that span the kernel of given matrix */
   public static Tensor of(SingularValueDecomposition svd, Chop chop) {
-    return Tensor.of(IntStream.range(0, svd.values().length()) //
-        .filter(index -> Scalars.isZero(chop.apply(svd.values().Get(index)))) //
+    Tensor values = svd.values();
+    return Tensor.of(IntStream.range(0, values.length()) //
+        .filter(index -> Scalars.isZero(chop.apply(values.Get(index)))) //
         .mapToObj(index -> svd.getV().get(Tensor.ALL, index)));
   }
 

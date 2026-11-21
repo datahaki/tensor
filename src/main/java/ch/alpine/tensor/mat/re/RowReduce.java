@@ -2,11 +2,11 @@
 package ch.alpine.tensor.mat.re;
 
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.LenientAdd;
 
@@ -50,6 +50,6 @@ public class RowReduce extends AbstractReduce {
         ++c0;
       }
     }
-    return Tensor.of(IntStream.range(0, lhs.length).map(this::ind).mapToObj(i -> lhs[i]));
+    return Unprotect.forArray(lhs.length, i -> lhs[ind(i)]);
   }
 }
