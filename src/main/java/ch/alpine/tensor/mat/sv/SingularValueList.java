@@ -26,8 +26,8 @@ public enum SingularValueList {
    * All singular values are non-negative. */
   public static Tensor of(SingularValueDecomposition svd) {
     Tensor values = svd.values();
-    return Unprotect.of(values.length(), values.stream() //
-        .sorted(TensorComparator.INSTANCE.reversed()));
+    return Tensor.of(values.stream() //
+        .sorted(TensorComparator.INSTANCE.reversed()), values.length());
   }
 
   /** Careful: the order of the inverted singular values correspond to the order of

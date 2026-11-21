@@ -4,7 +4,6 @@ package ch.alpine.tensor.io;
 import java.util.Arrays;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 
 /** auxiliary functions related to {@link StringScalar} */
 public enum StringTensor {
@@ -18,6 +17,6 @@ public enum StringTensor {
    * @param strings
    * @return */
   public static Tensor vector(String... strings) {
-    return Unprotect.of(strings.length, Arrays.stream(strings).map(StringScalar::of));
+    return Tensor.of(Arrays.stream(strings).map(StringScalar::of), strings.length);
   }
 }

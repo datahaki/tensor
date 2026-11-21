@@ -73,9 +73,9 @@ public class Permutations {
     else {
       Set<Map<Tensor, Long>> set = new HashSet<>();
       for (int index = 0; index < length; ++index) {
-        Tensor key = Unprotect.of(length - 1, Stream.concat( //
+        Tensor key = Tensor.of(Stream.concat( //
             post.stream().limit(index), //
-            post.stream().skip(index + 1)));
+            post.stream().skip(index + 1)), length - 1);
         if (set.add(key.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))))
           recur(Append.of(ante, post.get(index)), key);
       }

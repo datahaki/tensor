@@ -6,7 +6,7 @@ import java.util.Arrays;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.LenientAdd;
 
@@ -50,6 +50,6 @@ public class RowReduce extends AbstractReduce {
         ++c0;
       }
     }
-    return Unprotect.forArray(lhs.length, i -> lhs[ind(i)]);
+    return Tensors.vector(i -> lhs[ind(i)], lhs.length);
   }
 }

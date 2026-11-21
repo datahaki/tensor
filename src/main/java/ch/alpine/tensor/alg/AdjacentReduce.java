@@ -5,7 +5,6 @@ import java.util.stream.Gatherers;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.ScalarQ;
@@ -27,8 +26,8 @@ public record AdjacentReduce(TensorBinaryOperator reduce) implements TensorUnary
       ScalarQ.thenThrow(tensor);
       return Tensors.empty();
     }
-    return Unprotect.of(tensor.length() - 1, tensor.stream() //
+    return Tensor.of(tensor.stream() //
         .gather(Gatherers.windowSliding(2)) //
-        .map(list -> reduce.apply(list.get(0), list.get(1))));
+        .map(list -> reduce.apply(list.get(0), list.get(1))), tensor.length() - 1);
   }
 }

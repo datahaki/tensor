@@ -4,7 +4,6 @@ package ch.alpine.tensor.alg;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 
 /** inspired by
@@ -38,9 +37,9 @@ public enum Drop {
    * @return */
   public static Tensor index(Tensor tensor, int index) {
     Integers.requireLessThan(index, tensor.length());
-    return Unprotect.of(tensor.length() - 1, Stream.concat( //
+    return Tensor.of(Stream.concat( //
         tensor.stream().limit(index), //
         tensor.stream().skip(index + 1)) //
-        .map(Tensor::copy));
+        .map(Tensor::copy), tensor.length() - 1);
   }
 }

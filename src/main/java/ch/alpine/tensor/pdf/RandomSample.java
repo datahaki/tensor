@@ -6,7 +6,6 @@ import java.util.random.RandomGenerator;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 
 /** RandomSample is a generalization of {@link RandomVariate}.
  * 
@@ -33,7 +32,7 @@ public enum RandomSample {
    * @return
    * @throws Exception if given length is negative */
   public static Tensor of(RandomSampleInterface randomSampleInterface, RandomGenerator randomGenerator, int length) {
-    return Unprotect.of(length, stream(randomSampleInterface, randomGenerator).limit(length));
+    return Tensor.of(stream(randomSampleInterface, randomGenerator).limit(length), length);
   }
 
   /** @param randomSampleInterface

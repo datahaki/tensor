@@ -6,6 +6,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.io.ScalarArray;
@@ -38,7 +39,7 @@ abstract class JacobiMethod {
       Scalar sum = sumAbs_offDiagonal();
       if (Scalars.isZero(sum))
         return new Eigensystem( //
-            Unprotect.forArray(n, this::diag), // values
+            Tensors.vector(this::diag, n), // values
             Unprotect.byRef(V).maps(Conjugate.FUNCTION)); // vectors
       Scalar tresh = iteration < PHASE1 //
           ? sum.multiply(factor)

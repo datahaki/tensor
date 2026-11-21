@@ -75,12 +75,12 @@ public interface InfluenceMatrix {
     Int i = new Int();
     // I-X^+.X is projector on ker X
     Tensor matrix = matrix();
-    return Unprotect.of(matrix.length(), matrix.stream() //
+    return Tensor.of(matrix.stream() //
         .map(Tensor::negate) // copy
         .peek(row -> {
           int index = i.getAndIncrement();
           row.set(scalar -> scalar.add(((Scalar) scalar).one()), index);
-        }));
+        }), matrix.length());
   }
 
   /** Remark: The sum of the leverages equals the rank of the design matrix.

@@ -6,7 +6,6 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.chq.ScalarQ;
 
 /** inspired by
@@ -29,9 +28,9 @@ public enum Reverse {
   public static Tensor of(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int last = tensor.length() - 1;
-    return Unprotect.of(tensor.length(), IntStream.range(0, tensor.length()) //
+    return Tensor.of(IntStream.range(0, tensor.length()) //
         .map(index -> last - index) //
-        .mapToObj(tensor::get));
+        .mapToObj(tensor::get), tensor.length());
   }
 
   /** @param tensor

@@ -6,17 +6,11 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.IntFunction;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Flatten;
-import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.TableBuilder;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -29,25 +23,6 @@ import ch.alpine.tensor.qty.QuantityUnit;
  * <a href="https://reference.wolfram.com/language/ref/Unprotect.html">Unprotect</a> */
 public enum Unprotect {
   ;
-  /** uses only 77 % when compared to Tensor::of and reserve is used precisely
-   * 
-   * @param length
-   * @param stream
-   * @return */
-  public static Tensor of(int length, Stream<? extends Tensor> stream) {
-    Tensor tensor = new TensorImpl(stream.collect(Collectors.toCollection(() -> new ArrayList<>(length))));
-    Integers.requireEquals(length, tensor.length());
-    return tensor;
-  }
-  // public static Tensor of(Tensor tensor, Function<Stream<? extends Tensor>, Stream<? extends Tensor>> map) {
-  // return of(tensor.length(), map.apply(tensor.stream()));
-  // }
-
-  // TODO decide what should be the API Tensors.vector( func, length )
-  public static Tensor forArray(int length, IntFunction<? extends Tensor> ifn) {
-    return of(length, IntStream.range(0, length).mapToObj(ifn));
-  }
-
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param list non-null
@@ -64,7 +39,7 @@ public enum Unprotect {
    * @return It That Must Not Be Described
    * @see Tensors#of(Tensor...) */
   public static Tensor byRef(Tensor... tensors) {
-    return of(tensors.length, Arrays.stream(tensors));
+    return Tensor.of(Arrays.stream(tensors), tensors.length);
   }
 
   // ---

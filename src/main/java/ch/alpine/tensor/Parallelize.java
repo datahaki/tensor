@@ -45,6 +45,6 @@ public enum Parallelize {
    * @return (rows x cols)-matrix with (i, j)th-entry == bifunction.apply(i, j) */
   public static Tensor matrix(BiFunction<Integer, Integer, ? extends Tensor> biFunction, int rows, int cols) {
     return Tensor.of(IntStream.range(0, rows).parallel().mapToObj( //
-        i -> Unprotect.forArray(cols, j -> biFunction.apply(i, j))));
+        i -> Tensors.vector(j -> biFunction.apply(i, j), cols)));
   }
 }

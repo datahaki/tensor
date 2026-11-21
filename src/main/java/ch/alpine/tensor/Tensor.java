@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.fft.ListCorrelate;
 
 /** A {@link Tensor} is a scalar, or a list of tensors.
@@ -61,6 +62,17 @@ public interface Tensor extends Iterable<Tensor> {
    * @return tensor that holds the tensors of the input stream */
   static Tensor of(Stream<? extends Tensor> stream) {
     return new TensorImpl(stream.collect(Collectors.toCollection(ArrayList::new)));
+  }
+
+  /** uses only 77 % when compared to Tensor::of and reserve is used precisely
+   * 
+   * @param stream
+   * @param length
+   * @return */
+  static Tensor of(Stream<? extends Tensor> stream, int length) {
+    Tensor tensor = new TensorImpl(stream.collect(Collectors.toCollection(() -> new ArrayList<>(length))));
+    Integers.requireEquals(length, tensor.length());
+    return tensor;
   }
 
   /** function returns a tensor with content equal to this tensor but with the

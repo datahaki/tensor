@@ -14,7 +14,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Ordering;
@@ -96,10 +95,10 @@ public class CliffordAlgebra implements Serializable {
         SignedSubset signedSubset = new SignedSubset(Join.of(list.get(i), list.get(j)));
         gp.set(signedSubset.sign(), map.get(signedSubset.normal), j, i);
       }
-    reverse = Unprotect.of(list.size(), list.stream() //
+    reverse = Tensor.of(list.stream() //
         .map(Reverse::of) //
         .map(SignedSubset::new) //
-        .map(SignedSubset::sign));
+        .map(SignedSubset::sign), list.size());
   }
 
   /** @param x
@@ -174,7 +173,7 @@ public class CliffordAlgebra implements Serializable {
           deque.add(scalar);
       }
       sign = SIGN[parity];
-      normal = Unprotect.of(deque.size(), deque.stream());
+      normal = Tensor.of(deque.stream(), deque.size());
     }
 
     public Scalar sign() {

@@ -14,10 +14,10 @@ public enum Slash {
    * @param tensor
    * @return {tuo(tensor.get(0)), tuo(tensor.get(1)), ..., tuo(tensor.get(length-1)))} */
   public static Tensor of(Tensor tensor, Function<Tensor, ? extends Tensor> tuo) {
-    return Unprotect.of(tensor.length(), tensor.stream().map(tuo));
+    return Tensor.of(tensor.stream().map(tuo), tensor.length());
   }
 
   public static Tensor vector(Tensor vector, Function<Scalar, ? extends Tensor> stf) {
-    return Unprotect.of(vector.length(), vector.stream().map(Scalar.class::cast).map(stf));
+    return Tensor.of(vector.stream().map(Scalar.class::cast).map(stf), vector.length());
   }
 }

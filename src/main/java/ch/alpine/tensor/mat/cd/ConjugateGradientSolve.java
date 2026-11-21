@@ -3,7 +3,7 @@ package ch.alpine.tensor.mat.cd;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -22,7 +22,7 @@ public enum ConjugateGradientSolve {
    * @return matrix \ b */
   public static Tensor of(Tensor matrix, Tensor b, int n) {
     n = Integers.requirePositive(Math.min(n, matrix.length()));
-    Tensor x = Unprotect.forArray(n, index -> b.Get(index).divide(matrix.Get(index, index)).zero());
+    Tensor x = Tensors.vector(index -> b.Get(index).divide(matrix.Get(index, index)).zero(), n);
     return of(matrix, b, x, n);
   }
 

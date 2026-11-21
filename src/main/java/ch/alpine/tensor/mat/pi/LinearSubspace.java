@@ -7,7 +7,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.ArrayReshape;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -30,10 +29,10 @@ public interface LinearSubspace extends TensorUnaryOperator {
     size.forEach(Integers::requirePositive);
     int cumprod = size.stream().reduce(Math::multiplyExact).orElseThrow();
     TensorUnaryOperator reshape = v -> ArrayReshape.of(v, size);
-    Tensor eqs = Unprotect.of(cumprod, IdentityMatrix.stream(cumprod) //
+    Tensor eqs = Tensor.of(IdentityMatrix.stream(cumprod) //
         .map(reshape) //
         .map(constraint) //
-        .map(Flatten::of));
+        .map(Flatten::of), cumprod);
     Tensor nullSpace = LeftNullSpace.of(eqs);
     return Tensors.isEmpty(nullSpace) //
         ? new LinearSubspaceNull(size)

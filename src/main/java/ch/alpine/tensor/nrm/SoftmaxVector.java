@@ -3,7 +3,6 @@ package ch.alpine.tensor.nrm;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.sca.exp.Exp;
 
@@ -20,6 +19,6 @@ public enum SoftmaxVector {
    * @throws Exception if vector is empty */
   public static Tensor of(Tensor logits) {
     Scalar n_max = logits.stream().reduce(Max::of).map(Scalar.class::cast).orElseThrow().negate();
-    return NormalizeTotal.FUNCTION.apply(Unprotect.of(logits.length(), logits.stream().map(n_max::add).map(Exp.FUNCTION)));
+    return NormalizeTotal.FUNCTION.apply(Tensor.of(logits.stream().map(n_max::add).map(Exp.FUNCTION), logits.length()));
   }
 }

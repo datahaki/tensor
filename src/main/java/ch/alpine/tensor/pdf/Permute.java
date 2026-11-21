@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.Primitives;
@@ -57,6 +56,6 @@ public class Permute implements TensorUnaryOperator {
   @Override
   public Tensor apply(Tensor tensor) {
     Integers.requireEquals(sigma.length, tensor.length());
-    return Unprotect.of(sigma.length, Arrays.stream(sigma).mapToObj(tensor::get));
+    return Tensor.of(Arrays.stream(sigma).mapToObj(tensor::get), sigma.length);
   }
 }

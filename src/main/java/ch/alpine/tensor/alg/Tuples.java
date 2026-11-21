@@ -7,7 +7,6 @@ import java.util.List;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.lie.Permutations;
 
 /** implementation consistent with Mathematica except in special case n == 0
@@ -32,7 +31,7 @@ public enum Tuples {
    * @throws Exception if n is negative */
   public static Tensor of(Tensor tensor, int n) {
     Tensor array = Array.of(list -> //
-    Unprotect.of(list.size(), list.stream().map(tensor::get)), //
+    Tensor.of(list.stream().map(tensor::get), list.size()), //
         Collections.nCopies(n, tensor.length()));
     return n <= 1 //
         ? array
@@ -51,7 +50,7 @@ public enum Tuples {
     List<Integer> dims = Arrays.stream(tensors).map(Tensor::length).toList();
     Tensor tensor = Tensors.reserve(dims.stream().reduce(Math::multiplyExact).orElseThrow());
     Array.forEach( //
-        list -> tensor.append(Unprotect.forArray(list.size(), i -> tensors[i].get(list.get(i)))), //
+        list -> tensor.append(Tensors.vector(i -> tensors[i].get(list.get(i)), list.size())), //
         dims);
     return tensor;
   }

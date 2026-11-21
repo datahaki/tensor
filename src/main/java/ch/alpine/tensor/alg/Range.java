@@ -10,7 +10,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.sca.Clip;
 
@@ -45,7 +44,7 @@ public enum Range {
    * @see Subdivide */
   public static Tensor of(long startInclusive, long endExclusive) {
     int length = Math.max(0, Math.toIntExact(endExclusive - startInclusive));
-    return Unprotect.of(length, LongStream.range(startInclusive, endExclusive).mapToObj(RealScalar::of));
+    return Tensor.of(LongStream.range(startInclusive, endExclusive).mapToObj(RealScalar::of), length);
   }
 
   /** @param startInclusive
@@ -54,9 +53,9 @@ public enum Range {
    * or the empty vector if startInclusive is greater or equal to endExclusive */
   public static Tensor of(BigInteger startInclusive, BigInteger endExclusive) {
     int length = Math.max(0, endExclusive.subtract(startInclusive).intValueExact());
-    return Unprotect.of(length, Stream.iterate(startInclusive, value -> value.add(BigInteger.ONE)) //
+    return Tensor.of(Stream.iterate(startInclusive, value -> value.add(BigInteger.ONE)) //
         .limit(length) //
-        .map(RealScalar::of));
+        .map(RealScalar::of), length);
   }
 
   /** Careful: max is inclusive

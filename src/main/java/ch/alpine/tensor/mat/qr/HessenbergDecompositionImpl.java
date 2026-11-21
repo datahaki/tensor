@@ -7,7 +7,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -41,7 +41,7 @@ class HessenbergDecompositionImpl implements HessenbergDecomposition, Serializab
     h = matrix;
     for (int m = 1; m < n - 1; ++m) {
       final int mp = m - 1;
-      Tensor a = Unprotect.forArray(n, i -> h.Get(i, mp));
+      Tensor a = Tensors.vector(i -> h.Get(i, mp), n);
       for (int i = 0; i < m; ++i)
         a.set(Scalar::zero, i);
       Scalar norm = Vector2Norm.of(a);

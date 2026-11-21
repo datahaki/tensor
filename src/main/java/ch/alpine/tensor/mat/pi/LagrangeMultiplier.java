@@ -90,7 +90,7 @@ public record LagrangeMultiplier(int n, Tensor matrix) implements Serializable {
    * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target
    * @throws Exception if rank of matrix is not maximal */
   public Tensor usingCholesky(Tensor target, Tensor rhs) {
-    return Unprotect.of(n, LDLDecomposition.of(matrix).solve(b(target, rhs)).stream().limit(n));
+    return Tensor.of(LDLDecomposition.of(matrix).solve(b(target, rhs)).stream().limit(n), n);
   }
 
   /** robust solver in case rank of eye or eqs is not maximal
@@ -99,7 +99,7 @@ public record LagrangeMultiplier(int n, Tensor matrix) implements Serializable {
    * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
   public Tensor usingSvd(Tensor target, Tensor rhs) {
     // FIXME use LinSolve.any !?
-    return Unprotect.of(n, LeastSquares.usingSvd(matrix, b(target, rhs)).stream().limit(n));
+    return Tensor.of(LeastSquares.usingSvd(matrix, b(target, rhs)).stream().limit(n), n);
   }
 
   @Override // from Object

@@ -5,7 +5,6 @@ import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Ordering;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
@@ -53,7 +52,7 @@ public interface SingularValueDecomposition {
     Tensor values = values();
     int[] ordering = Ordering.DECREASING.of(values);
     TensorUnaryOperator reorder = //
-        vector -> Unprotect.of(ordering.length, IntStream.of(ordering).mapToObj(vector::Get));
+        vector -> Tensor.of(IntStream.of(ordering).mapToObj(vector::Get), ordering.length);
     return new SVDRecord( //
         Slash.of(getU(), reorder), //
         reorder.apply(values), //
