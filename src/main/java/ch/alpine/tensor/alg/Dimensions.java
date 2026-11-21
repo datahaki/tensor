@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** implementation consistent with Mathematica
  * 
@@ -96,5 +97,10 @@ public class Dimensions implements Serializable {
   @PackageTestAccess
   int maxDepth() {
     return lengths.size() - 1;
+  }
+
+  @Override
+  public String toString() {
+    return MathematicaFormat.concise("Dimensions", list, isArray());
   }
 }
