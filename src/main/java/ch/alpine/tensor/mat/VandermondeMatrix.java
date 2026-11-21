@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
-import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.NestList;
 import ch.alpine.tensor.ext.Integers;
@@ -32,9 +32,8 @@ public enum VandermondeMatrix {
    * @return */
   public static Tensor of(Tensor vector, int degree) {
     Integers.requirePositiveOrZero(degree);
-    return Tensor.of(vector.stream() //
-        .map(Scalar.class::cast) //
-        .map(scalar -> NestList.of(scalar::multiply, scalar.one(), degree))); //
+    return Slash.vector(vector, //
+        scalar -> NestList.of(scalar::multiply, scalar.one(), degree)); //
   }
 
   /** @param vector non-empty

@@ -16,4 +16,8 @@ public enum Slash {
   public static Tensor of(Tensor tensor, Function<Tensor, ? extends Tensor> tuo) {
     return Unprotect.of(tensor.length(), tensor.stream().map(tuo));
   }
+
+  public static Tensor vector(Tensor vector, Function<Scalar, ? extends Tensor> stf) {
+    return Unprotect.of(vector.length(), vector.stream().map(Scalar.class::cast).map(stf));
+  }
 }

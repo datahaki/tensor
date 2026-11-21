@@ -6,6 +6,7 @@ import java.util.Comparator;
 import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.lie.rot.Quaternion;
 
 /** on the level of tensors, the implementation is consistent with Mathematica::Sort.
@@ -37,7 +38,7 @@ public enum Sort {
    * @param comparator
    * @return tensor with entries sorted according to given comparator */
   public static Tensor of(Tensor tensor, Comparator<Tensor> comparator) {
-    return Tensor.of(tensor.stream() //
+    return Unprotect.of(tensor.length(), tensor.stream() //
         .sorted(comparator) //
         .map(Tensor::copy));
   }

@@ -4,6 +4,7 @@ package ch.alpine.tensor.alg;
 import java.util.Map;
 import java.util.function.Function;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 
 /** TensorMap is equivalent to Mathematica::Map but was given a different name
@@ -31,7 +32,7 @@ public enum TensorMap {
   // helper function
   private static Tensor _of(Function<Tensor, ? extends Tensor> function, Tensor tensor, int level) {
     return 1 == level //
-        ? Tensor.of(tensor.stream().map(function))
-        : Tensor.of(tensor.stream().map(entry -> _of(function, entry, level - 1)));
+        ? Slash.of(tensor, function)
+        : Slash.of(tensor, entry -> _of(function, entry, level - 1));
   }
 }

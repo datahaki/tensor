@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 
 /** Reference:
  * https://www.techempower.com/blog/2016/10/19/efficient-multiple-stream-concatenation-in-java/
@@ -24,7 +25,7 @@ public enum Insert {
    * @return new tensor equal to given tensor but with given element inserted at index
    * @throws Exception if index is out of range */
   public static Tensor of(Tensor tensor, Tensor element, int index) {
-    return Tensor.of(Stream.of( //
+    return Unprotect.of(tensor.length() + 1, Stream.of( //
         tensor.extract(0, index), //
         Tensors.of(element), //
         tensor.extract(index, tensor.length())) //

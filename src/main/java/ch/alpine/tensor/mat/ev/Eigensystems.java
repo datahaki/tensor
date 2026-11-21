@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.ev;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
@@ -39,8 +40,8 @@ enum Eigensystems {
         return new Eigensystem(values, vectors);
       throw new Throw(matrix);
     }
-    return new Eigensystem(values, Tensor.of(values.stream() //
-        .map(Scalar.class::cast) //
-        .map(root -> NullSpace.of(matrix.subtract(id.multiply(root))).get(0))));
+    return new Eigensystem( //
+        values, //
+        Slash.vector(values, root -> NullSpace.of(matrix.subtract(id.multiply(root))).get(0)));
   }
 }

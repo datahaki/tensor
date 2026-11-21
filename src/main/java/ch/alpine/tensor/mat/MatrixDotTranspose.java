@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.spa.SparseArray;
@@ -31,7 +32,7 @@ public enum MatrixDotTranspose {
     matrix.Get(0, 0); // fail fast if input is not a matrix
     return tensor instanceof SparseArray //
         ? matrix.dot(Transpose.of(tensor))
-        : Tensor.of(matrix.stream().map(row -> Tensor.of(tensor.stream().map(row::dot))));
+        : Slash.of(matrix, row -> Slash.of(tensor, row::dot));
   }
 
   /** @param matrix

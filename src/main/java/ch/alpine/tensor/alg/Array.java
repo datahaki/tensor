@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.spa.SparseArray;
 
@@ -54,7 +55,8 @@ public enum Array {
   private static Tensor of(Function<List<Integer>, ? extends Tensor> function, int level, List<Integer> dimensions, List<Integer> index) {
     if (level == dimensions.size())
       return function.apply(index);
-    return Tensor.of(IntStream.range(0, dimensions.get(level)) //
+    int length = dimensions.get(level);
+    return Unprotect.of(length, IntStream.range(0, length) //
         .mapToObj(count -> {
           index.set(level, count);
           return of(function, level + 1, dimensions, index);
@@ -102,10 +104,11 @@ public enum Array {
   // helper function
   private static Tensor fill(Supplier<? extends Scalar> supplier, int level, List<Integer> dimensions) {
     int next = level + 1;
-    return Tensor.of(Stream.generate(dimensions.size() == next //
+    int length = dimensions.get(level);
+    return Unprotect.of(length, Stream.generate(dimensions.size() == next //
         ? supplier
         : () -> fill(supplier, next, dimensions)) //
-        .limit(dimensions.get(level)));
+        .limit(length));
   }
 
   // ---

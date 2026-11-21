@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
@@ -51,6 +52,6 @@ class TensorScalarFunctionTest {
   void testSlash() {
     Tensor tensor = IdentityMatrix.of(5);
     TensorScalarFunction s = Total::ofVector;
-    assertEquals(s.slash(tensor), Array.same(RealScalar.ONE, 5));
+    assertEquals(Slash.of(tensor, s), Array.same(RealScalar.ONE, 5));
   }
 }

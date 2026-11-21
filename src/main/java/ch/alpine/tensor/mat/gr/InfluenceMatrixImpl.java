@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Int;
@@ -55,8 +56,8 @@ class InfluenceMatrixImpl implements InfluenceMatrix, Serializable {
     if (Objects.nonNull(matrix))
       return Diagonal.of(matrix);
     Int i = new Int();
-    return Tensor.of(design.stream() //
-        .map(row -> row.dot(d_pinv.get(Tensor.ALL, i.getAndIncrement()))));
+    // compute diagonal of dot product: design . d_pinv
+    return Slash.of(design, row -> row.dot(d_pinv.get(Tensor.ALL, i.getAndIncrement())));
   }
 
   @Override // from InfluenceMatrix

@@ -63,38 +63,38 @@ public enum Tensors {
   /** @param list
    * @return vector of numbers in list as {@link RealScalar}s */
   public static Tensor vector(List<? extends Number> list) {
-    return Tensor.of(list.stream().map(RealScalar::of));
+    return Unprotect.of(list.size(), list.stream().map(RealScalar::of));
   }
 
   /** @param function
    * @param length
    * @return vector of length with i-th entry == function.apply(i) */
   public static Tensor vector(Function<Integer, ? extends Tensor> function, int length) {
-    return Tensor.of(IntStream.range(0, length).boxed().map(function));
+    return Unprotect.of(length, IntStream.range(0, length).boxed().map(function));
   }
 
   /** @param values
    * @return tensor of {@link Rational} with given values */
   public static Tensor vectorInt(int... values) {
-    return Tensor.of(Arrays.stream(values).mapToObj(RealScalar::of));
+    return Unprotect.of(values.length, Arrays.stream(values).mapToObj(RealScalar::of));
   }
 
   /** @param values
    * @return tensor of {@link Rational} with given values */
   public static Tensor vectorLong(long... values) {
-    return Tensor.of(Arrays.stream(values).mapToObj(RealScalar::of));
+    return Unprotect.of(values.length, Arrays.stream(values).mapToObj(RealScalar::of));
   }
 
   /** @param values
    * @return tensor of {@link DoubleScalar} with given values */
   public static Tensor vectorFloat(float... values) {
-    return Tensor.of(IntStream.range(0, values.length).mapToDouble(i -> values[i]).mapToObj(DoubleScalar::of));
+    return Unprotect.of(values.length, IntStream.range(0, values.length).mapToDouble(i -> values[i]).mapToObj(DoubleScalar::of));
   }
 
   /** @param values
    * @return tensor of {@link DoubleScalar} with given values */
   public static Tensor vectorDouble(double... values) {
-    return Tensor.of(Arrays.stream(values).mapToObj(DoubleScalar::of));
+    return Unprotect.of(values.length, Arrays.stream(values).mapToObj(DoubleScalar::of));
   }
 
   /** @param biFunction
@@ -121,26 +121,26 @@ public enum Tensors {
 
   /** @param data
    * @return matrix with dimensions and {@link Rational} entries as array data */
-  public static Tensor matrixInt(int[][] data) {
-    return Tensor.of(Arrays.stream(data).map(Tensors::vectorInt));
+  public static Tensor matrixInt(int[][] data) { // use values instead of data
+    return Unprotect.of(data.length, Arrays.stream(data).map(Tensors::vectorInt));
   }
 
   /** @param data
    * @return matrix with dimensions and {@link Rational} entries as array data */
   public static Tensor matrixLong(long[][] data) {
-    return Tensor.of(Arrays.stream(data).map(Tensors::vectorLong));
+    return Unprotect.of(data.length, Arrays.stream(data).map(Tensors::vectorLong));
   }
 
-  /** @param values
+  /** @param data
    * @return tensor of {@link DoubleScalar} with given values */
-  public static Tensor matrixFloat(float[][] values) {
-    return Tensor.of(Arrays.stream(values).map(Tensors::vectorFloat));
+  public static Tensor matrixFloat(float[][] data) {
+    return Unprotect.of(data.length, Arrays.stream(data).map(Tensors::vectorFloat));
   }
 
   /** @param data
    * @return matrix with dimensions and {@link DoubleScalar} entries as array data */
   public static Tensor matrixDouble(double[][] data) {
-    return Tensor.of(Arrays.stream(data).map(Tensors::vectorDouble));
+    return Unprotect.of(data.length, Arrays.stream(data).map(Tensors::vectorDouble));
   }
 
   public static final ThreadLocal<Function<String, Scalar>> SCALAR_PARSER = //

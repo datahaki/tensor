@@ -9,6 +9,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
@@ -59,7 +60,7 @@ public enum Subdivide {
   public static Tensor of(Tensor startInclusive, Tensor endInclusive, int n) {
     Integers.requirePositive(n);
     Tensor delta = endInclusive.subtract(startInclusive);
-    return Tensor.of(Stream.concat( //
+    return Unprotect.of(n + 1, Stream.concat( //
         IntStream.range(0, n) //
             .mapToObj(count -> startInclusive.add(delta.multiply(Rational.of(count, n)))), //
         Stream.of(endInclusive.copy())));

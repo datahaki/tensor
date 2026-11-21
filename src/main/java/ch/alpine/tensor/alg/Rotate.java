@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/RotateLeft.html">RotateLeft</a>
@@ -38,7 +39,7 @@ public enum Rotate {
     if (Tensors.isEmpty(tensor))
       return Tensors.empty();
     int index = Math.floorMod(ordinal() == 0 ? n : -n, tensor.length());
-    return Tensor.of(Stream.concat( //
+    return Unprotect.of(tensor.length(), Stream.concat( //
         tensor.stream().skip(index), //
         tensor.stream().limit(index)).map(Tensor::copy));
   }

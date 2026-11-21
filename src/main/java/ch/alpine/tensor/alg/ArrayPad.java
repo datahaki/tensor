@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.red.EqualsReduce;
@@ -57,6 +58,6 @@ public class ArrayPad {
     List<Integer> _copy = Lists.rest(copy);
     List<Integer> _ante = Lists.rest(ante);
     List<Integer> _post = Lists.rest(post);
-    return Join.of(0, a, Tensor.of(tensor.stream().map(entry -> iterate(entry, _copy, _ante, _post))), b);
+    return Join.of(0, a, Slash.of(tensor, entry -> iterate(entry, _copy, _ante, _post)), b);
   }
 }

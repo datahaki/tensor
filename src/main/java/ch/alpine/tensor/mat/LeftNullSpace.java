@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Join;
@@ -50,6 +51,6 @@ public enum LeftNullSpace {
     while (c0 < cols && j < rows)
       if (Scalars.nonZero(lhs.Get(j, c0++))) // <- careful: c0 is modified
         ++j;
-    return Tensor.of(lhs.extract(j, rows).stream().map(row -> row.extract(cols, cols + rows)));
+    return Slash.of(lhs.extract(j, rows), row -> row.extract(cols, cols + rows));
   }
 }

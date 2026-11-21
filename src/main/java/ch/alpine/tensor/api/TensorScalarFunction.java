@@ -30,8 +30,4 @@ public interface TensorScalarFunction extends Function<Tensor, Scalar>, Serializ
     Objects.requireNonNull(after);
     return tensor -> after.apply(apply(tensor));
   }
-
-  default Tensor slash(Tensor tensor) {
-    return Tensor.of(tensor.stream().map(this));
-  }
 }
