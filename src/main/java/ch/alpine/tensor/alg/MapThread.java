@@ -3,7 +3,6 @@ package ch.alpine.tensor.alg;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -35,8 +34,7 @@ public enum MapThread {
       throw new Throw(list.toArray(Object[]::new));
     return list.isEmpty() //
         ? Tensors.empty()
-        : Tensor.of(IntStream.range(0, list.getFirst().length()) //
-            .mapToObj(index -> of(function, extract(index, list), level - 1)));
+        : Tensors.vector(index -> of(function, extract(index, list), level - 1), list.getFirst().length());
   }
 
   // helper function

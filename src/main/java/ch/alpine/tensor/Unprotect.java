@@ -34,6 +34,8 @@ public enum Unprotect {
     return new TensorImpl(Objects.requireNonNull(list));
   }
 
+  /** @param collection
+   * @return tensor with references to elements from collection.stream() */
   public static Tensor collect(Collection<? extends Tensor> collection) {
     return Tensor.of(collection.stream(), collection.size());
   }

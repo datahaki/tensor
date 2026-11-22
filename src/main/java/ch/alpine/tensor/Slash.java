@@ -1,7 +1,9 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.util.Arrays;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 
 /** inspired by mathematica's /@ i.e. "slash at" */
 public enum Slash {
@@ -19,5 +21,13 @@ public enum Slash {
 
   public static Tensor vector(Tensor vector, Function<Scalar, ? extends Tensor> stf) {
     return Tensor.of(vector.stream().map(Scalar.class::cast).map(stf), vector.length());
+  }
+
+  public static Tensor of(int[] array, IntFunction<? extends Tensor> itf) {
+    return Tensor.of(Arrays.stream(array).mapToObj(itf), array.length);
+  }
+
+  public static <T> Tensor of(T[] array, Function<T, ? extends Tensor> itf) {
+    return Tensor.of(Arrays.stream(array).map(itf), array.length);
   }
 }

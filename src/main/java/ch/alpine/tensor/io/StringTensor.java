@@ -1,8 +1,7 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.util.Arrays;
-
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 
 /** auxiliary functions related to {@link StringScalar} */
@@ -17,6 +16,6 @@ public enum StringTensor {
    * @param strings
    * @return */
   public static Tensor vector(String... strings) {
-    return Tensor.of(Arrays.stream(strings).map(StringScalar::of), strings.length);
+    return Slash.of(strings, StringScalar::of);
   }
 }

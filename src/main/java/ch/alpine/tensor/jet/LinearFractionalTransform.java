@@ -42,7 +42,7 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
   public static LinearFractionalTransform fit(Tensor p, Tensor q) {
     final int d = Unprotect.dimension1(p);
     final int m = d + 1;
-    Tensor p1 = Slash.of(p, AppendOne.FUNCTION);
+    Tensor p1 = Slash.of(p, AffineAppend.M1);
     Tensor zero = p1.maps(Scalar::zero);
     Tensor qt = Transpose.of(q);
     Tensor[][] array = new Tensor[d][m];
@@ -52,7 +52,7 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
       array[i][d] = Times.of(qt.get(i).negate(), p);
     }
     Tensor sol = LinearSolve.of(ArrayFlatten.of(array), Flatten.of(qt));
-    Tensor vec = AppendOne.FUNCTION.apply(sol);
+    Tensor vec = AffineAppend.M1.apply(sol);
     return new LinearFractionalTransform(ArrayReshape.of(vec, m, m));
   }
 
@@ -85,7 +85,7 @@ public class LinearFractionalTransform implements TensorUnaryOperator {
 
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor vector) {
-    Tensor affine = matrix.dot(AppendOne.FUNCTION.apply(vector));
+    Tensor affine = matrix.dot(AffineAppend.M1.apply(vector));
     return affine.extract(0, vector.length()).divide(affine.Get(n));
   }
 

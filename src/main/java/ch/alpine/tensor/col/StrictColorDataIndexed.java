@@ -2,9 +2,9 @@
 package ch.alpine.tensor.col;
 
 import java.awt.Color;
-import java.util.Arrays;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 
 /** reference implementation of a {@link ColorDataIndexed} with strict indexing
@@ -23,8 +23,7 @@ public class StrictColorDataIndexed extends BaseColorDataIndexed {
   /** @param colors
    * @return palette of given colors where index maps to colors[index] */
   public static ColorDataIndexed of(Color... colors) {
-    return new StrictColorDataIndexed( //
-        Tensor.of(Arrays.stream(colors).map(ColorFormat::toVector), colors.length));
+    return new StrictColorDataIndexed(Slash.of(colors, ColorFormat::toVector));
   }
 
   // ---

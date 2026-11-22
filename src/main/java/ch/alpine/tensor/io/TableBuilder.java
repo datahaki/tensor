@@ -94,7 +94,7 @@ public final class TableBuilder implements Serializable {
   /** @param list
    * @return */
   public synchronized Tensor getColumns(int... list) {
-    TensorUnaryOperator extract = row -> Tensor.of(IntStream.of(list).mapToObj(row::Get), list.length);
+    TensorUnaryOperator extract = row -> Slash.of(list, row::Get);
     return Slash.of(tensor, extract);
   }
 

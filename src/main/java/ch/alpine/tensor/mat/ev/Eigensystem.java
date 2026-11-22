@@ -2,8 +2,8 @@
 package ch.alpine.tensor.mat.ev;
 
 import java.io.Serializable;
-import java.util.stream.IntStream;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Ordering;
@@ -118,8 +118,8 @@ public record Eigensystem(Tensor values, Tensor vectors) implements Serializable
   public Eigensystem decreasing() {
     int[] ordering = Ordering.DECREASING.of(values);
     return new Eigensystem( //
-        Tensor.of(IntStream.of(ordering).mapToObj(values::get)), //
-        Tensor.of(IntStream.of(ordering).mapToObj(vectors::get)));
+        Slash.of(ordering, values::get), //
+        Slash.of(ordering, vectors::get));
   }
 
   /** Mathematica::MatrixFunction

@@ -14,6 +14,7 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Ordering;
@@ -173,7 +174,7 @@ public class CliffordAlgebra implements Serializable {
           deque.add(scalar);
       }
       sign = SIGN[parity];
-      normal = Tensor.of(deque.stream(), deque.size());
+      normal = Unprotect.collect(deque);
     }
 
     public Scalar sign() {

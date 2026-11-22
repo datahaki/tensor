@@ -2,9 +2,9 @@
 package ch.alpine.tensor.col;
 
 import java.awt.Color;
-import java.util.Arrays;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.sca.Mod;
 
@@ -21,8 +21,7 @@ public class CyclicColorDataIndexed extends BaseColorDataIndexed {
   /** @param colors
    * @return palette of given colors where index maps to colors[index] */
   public static ColorDataIndexed of(Color... colors) {
-    return new CyclicColorDataIndexed( //
-        Tensor.of(Arrays.stream(colors).map(ColorFormat::toVector), colors.length));
+    return new CyclicColorDataIndexed(Slash.of(colors, ColorFormat::toVector));
   }
 
   // ---

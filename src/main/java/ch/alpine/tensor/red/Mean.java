@@ -58,7 +58,7 @@ public enum Mean {
 
   /** @param stream
    * @return */
-  public static Tensor of(Stream<Tensor> stream) {
+  public static Tensor of(Stream<? extends Tensor> stream) {
     return stream.collect(MeanSummaryStatistics.collector()).getMean();
   }
 

@@ -9,18 +9,18 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-class AppendOneTest {
+class AffineAppendTest {
   @Test
   void testSimple() {
     Tensor vector = Tensors.vector(2, 3);
-    Tensor result = AppendOne.FUNCTION.apply(vector);
+    Tensor result = AffineAppend.M1.apply(vector);
     assertEquals(vector, Tensors.vector(2, 3));
     assertEquals(result, Tensors.vector(2, 3, 1));
   }
 
   @Test
   void testEmptyFail() {
-    assertThrows(Exception.class, () -> AppendOne.FUNCTION.apply(Tensors.empty()));
+    assertThrows(Exception.class, () -> AffineAppend.M1.apply(Tensors.empty()));
   }
 
   @Test

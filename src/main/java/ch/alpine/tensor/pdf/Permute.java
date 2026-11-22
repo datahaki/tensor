@@ -1,10 +1,10 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
-import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
+import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
@@ -56,6 +56,6 @@ public class Permute implements TensorUnaryOperator {
   @Override
   public Tensor apply(Tensor tensor) {
     Integers.requireEquals(sigma.length, tensor.length());
-    return Tensor.of(Arrays.stream(sigma).mapToObj(tensor::get), sigma.length);
+    return Slash.of(sigma, tensor::get);
   }
 }
