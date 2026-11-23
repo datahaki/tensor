@@ -17,6 +17,9 @@ public enum Numel {
    * @param tensor
    * @return number of {@link Scalar}s in tensor */
   public static int of(Tensor tensor) {
-    return Math.toIntExact(Flatten.stream(tensor, -1).count());
+    Dimensions dimensions = new Dimensions(tensor);
+    return dimensions.isArray() //
+        ? dimensions.list().stream().reduce(Math::multiplyExact).orElse(1)
+        : Math.toIntExact(Flatten.stream(tensor, -1).count());
   }
 }

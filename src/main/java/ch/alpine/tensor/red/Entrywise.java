@@ -13,6 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarBinaryOperator;
 import ch.alpine.tensor.api.TensorBinaryOperator;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 
 /** Entrywise applies a BinaryOperator<Scalar> across multiple tensors.
@@ -94,6 +95,10 @@ public class Entrywise implements TensorBinaryOperator {
     while (ia.hasNext())
       list.add(apply(ia.next(), ib.next()));
     return Unprotect.using(list);
+  }
+
+  public TensorUnaryOperator operator(Tensor a) {
+    return b -> apply(a, b);
   }
 
   /** Example:
