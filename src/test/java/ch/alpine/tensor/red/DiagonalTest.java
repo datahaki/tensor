@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -19,16 +18,9 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.num.Pi;
 
 class DiagonalTest {
-  @Test
-  @Disabled
-  // FIXME API needs review
-  void testVector() {
-    Tensor tensor = Diagonal.of(Range.of(10, 20));
-    assertTrue(Tensors.isEmpty(tensor));
-  }
-
   @Test
   void testSpecial() {
     assertEquals(Diagonal.of(IdentityMatrix.of(5)), Tensors.vector(1, 1, 1, 1, 1));
@@ -48,36 +40,9 @@ class DiagonalTest {
   }
 
   @Test
-  void testCase1() {
-    Tensor tensor = Tensors.fromString("{{2}, 3}");
-    Tensor diagonal = Diagonal.mathematica(tensor);
-    assertEquals(diagonal, Tensors.vector(2));
-  }
-
-  @Test
-  void testCase2() {
-    Tensor tensor = Tensors.fromString("{{2}, {3, 4}}");
-    Tensor diagonal = Diagonal.mathematica(tensor);
-    assertEquals(diagonal, Tensors.vector(2, 4));
-  }
-
-  @Test
-  void testCase3() {
-    Tensor tensor = Tensors.fromString("{{2}, {3, 4},{5,6,7}}");
-    Tensor diagonal = Diagonal.mathematica(tensor);
-    assertEquals(diagonal, Tensors.vector(2, 4, 7));
-  }
-
-  @Test
-  void testCase4() {
-    Tensor tensor = Tensors.fromString("{{2}, {3},{5,6,7}}");
-    Tensor diagonal = Diagonal.mathematica(tensor);
-    assertEquals(diagonal, Tensors.vector(2));
-  }
-
-  @Test
   void testSides1() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
+    assertThrows(Exception.class, () -> Diagonal.of(matrix, 5));
     assertEquals(Diagonal.of(matrix, 4), Tensors.empty());
     assertEquals(Diagonal.of(matrix, 3), Tensors.vector(4));
     assertEquals(Diagonal.of(matrix, 2), Tensors.vector(3, 8));
@@ -85,8 +50,7 @@ class DiagonalTest {
     assertEquals(Diagonal.of(matrix, 0), Tensors.vector(1, 6));
     assertEquals(Diagonal.of(matrix, -1), Tensors.vector(5));
     assertEquals(Diagonal.of(matrix, -2), Tensors.empty());
-    // FIXME API what
-    // assertEquals(Diagonal.of(matrix, -3), Tensors.empty());
+    assertThrows(Exception.class, () -> Diagonal.of(matrix, -3));
   }
 
   @Test
@@ -102,13 +66,13 @@ class DiagonalTest {
   }
 
   @Test
-  void testCase5() {
-    assertEquals(Diagonal.of(HilbertMatrix.of(4, 5)), Diagonal.mathematica(HilbertMatrix.of(4, 5)));
-    assertEquals(Diagonal.of(HilbertMatrix.of(5, 4)), Diagonal.mathematica(HilbertMatrix.of(5, 4)));
+  void testFailScalar() {
+    assertThrows(Throw.class, () -> Diagonal.of(RealScalar.ONE));
   }
 
   @Test
-  void testFailScalar() {
-    assertThrows(Throw.class, () -> Diagonal.of(RealScalar.ONE));
+  void testFailVector() {
+    assertThrows(Exception.class, () -> Diagonal.of(Pi.VALUE));
+    assertThrows(Exception.class, () -> Diagonal.of(Range.of(10, 20)));
   }
 }
