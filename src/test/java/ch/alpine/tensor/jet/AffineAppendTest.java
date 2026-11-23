@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -16,6 +18,13 @@ class AffineAppendTest {
     Tensor result = AffineAppend.M1.apply(vector);
     assertEquals(vector, Tensors.vector(2, 3));
     assertEquals(result, Tensors.vector(2, 3, 1));
+  }
+
+  @ParameterizedTest
+  @EnumSource
+  void testLength(AffineAppend affineAppend) {
+    Tensor vector = affineAppend.apply(Tensors.fromString("{2[m], 2022-02-30T23:45}"));
+    assertEquals(vector.length(), 3);
   }
 
   @Test

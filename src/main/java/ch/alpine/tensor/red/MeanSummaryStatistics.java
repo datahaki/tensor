@@ -14,6 +14,7 @@ import java.util.stream.Collector;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 class MeanSummaryStatistics implements Consumer<Tensor> {
   /** Example:
@@ -31,13 +32,11 @@ class MeanSummaryStatistics implements Consumer<Tensor> {
   }
 
   // ---
-  private long count = 0;
   private Scalar cnt = null;
   private Tensor avg = null;
 
   @Override // from Consumer
   public void accept(Tensor tensor) {
-    ++count;
     if (Objects.isNull(cnt)) {
       cnt = EqualsReduce.one(tensor);
       avg = tensor;
@@ -54,11 +53,6 @@ class MeanSummaryStatistics implements Consumer<Tensor> {
    * @param other
    * @return */
   public MeanSummaryStatistics combine(MeanSummaryStatistics other) {
-    if (0 == other.count)
-      return this;
-    if (0 == count)
-      return other;
-    count += other.count;
     Scalar com = cnt.add(other.cnt);
     Tensor del = other.avg.subtract(avg);
     avg = avg.add(del.multiply(other.cnt).divide(com));
@@ -72,16 +66,9 @@ class MeanSummaryStatistics implements Consumer<Tensor> {
     return Objects.requireNonNull(avg);
   }
 
-  /** @return number of scalars in stream */
-  public long getCount() {
-    return count;
-  }
-
   @Override // from Object
   public String toString() {
-    return "ScalarSummaryStatistics" + //
-        "{count=" + getCount() + //
-        ", mean=" + getMean() + "}";
+    return MathematicaFormat.concise("MeanSummaryStatistics", getMean());
   }
 
   enum MeanSummaryStatisticsCollector implements //

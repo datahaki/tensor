@@ -22,12 +22,14 @@ import ch.alpine.tensor.num.RandomPermutation;
  * 
  * @see PermutationCycles */
 public class Permute implements TensorUnaryOperator {
-  /** @param sigma
+  /** @param sigma permutation, e.g. {3, 4, 0, 2, 1}
    * @return */
   public static TensorUnaryOperator of(Tensor sigma) {
     return new Permute(Integers.requirePermutation(Primitives.toIntArray(sigma)));
   }
 
+  /** @param sigma permutation, e.g. {3, 4, 0, 2, 1}
+   * @return */
   public static TensorUnaryOperator of(int[] sigma) {
     return new Permute(sigma);
   }

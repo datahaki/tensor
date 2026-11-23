@@ -18,6 +18,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
+import ch.alpine.tensor.opt.nd.CoordinateBounds;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -52,6 +54,15 @@ class MeanTest {
   }
 
   @Test
+  void testDateTimeStream() {
+    Distribution distribution = UniformDistribution.of( //
+        DateTime.of(1980, Month.APRIL, 3, 4, 12), //
+        DateTime.of(2010, Month.SEPTEMBER, 9, 4, 12));
+    Scalar mean = (Scalar) Mean.of(RandomVariate.stream(distribution).limit(14));
+    assertInstanceOf(DateTime.class, mean);
+  }
+
+  @Test
   void testGaussScalar() {
     Tensor vector = Tensors.of( //
         GaussScalar.of(3, 13), //
@@ -61,6 +72,16 @@ class MeanTest {
         GaussScalar.of(12, 13));
     Scalar mean = Mean.ofVector(vector);
     assertEquals(mean, GaussScalar.of(3, 13));
+  }
+
+  @Test
+  void testDate() {
+    CoordinateBoundingBox cbb = CoordinateBounds.of( //
+        Tensors.fromString("{1[m], 2000-12-12T10:00}"), //
+        Tensors.fromString("{3[m], 2010-03-07T00:08}"));
+    Tensor tensor = Mean.of(cbb);
+    Tensor expect = Tensors.fromString("{2[m], 2005-07-25T05:04}");
+    assertEquals(tensor, expect);
   }
 
   @Test

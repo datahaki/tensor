@@ -64,6 +64,12 @@ class ThrowTest {
   }
 
   @Test
+  void testUnlessSupplier() {
+    Throw.unless(true, () -> "");
+    assertThrows(Exception.class, () -> Throw.unless(false, () -> ""));
+  }
+
+  @Test
   void testNull3() {
     try {
       throw new Throw(null, Tensors.vector(4, 7, 1, 1), null, RealScalar.ONE);

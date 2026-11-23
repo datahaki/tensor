@@ -50,7 +50,6 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
   }
 
   // ---
-  private long count = 0;
   private Scalar cnt = null;
   private Scalar avg = null;
   private Scalar m_2 = null;
@@ -59,7 +58,6 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
 
   @Override // from Consumer
   public void accept(Scalar scalar) {
-    ++count;
     if (Objects.isNull(min)) {
       cnt = scalar.one();
       avg = scalar;
@@ -83,11 +81,6 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
    * @param other
    * @return */
   public ScalarSummaryStatistics combine(ScalarSummaryStatistics other) {
-    if (0 == other.count)
-      return this;
-    if (0 == count)
-      return other;
-    count += other.count;
     Scalar com = cnt.add(other.cnt);
     Scalar del = other.avg.subtract(avg);
     avg = avg.add(del.multiply(other.cnt).divide(com));
@@ -135,25 +128,20 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
     return Sqrt.FUNCTION.apply(getVariance());
   }
 
-  /** @return number of scalars in stream */
-  public long getCount() {
-    return count;
-  }
-
   /** @return clip[min, max], or null if stream is empty */
   public Clip getClip() {
-    return 0 < count //
-        ? Clips.interval(getMin(), getMax())
-        : null;
+    return Objects.isNull(min) //
+        ? null
+        : Clips.interval(getMin(), getMax());
   }
 
   @Override // from Object
   public String toString() {
     return "ScalarSummaryStatistics" + //
-        "{count=" + getCount() + //
-        ", min=" + getMin() + //
+        "{min=" + getMin() + //
+        ", max=" + getMax() + //
         ", average=" + getMean() + //
-        ", max=" + getMax() + "}";
+        ", var=" + getVariance() + "}";
   }
 
   enum ScalarSummaryStatisticsCollector implements //

@@ -43,7 +43,6 @@ class ScalarSummaryStatisticsTest {
     assertEquals(scalarSummaryStatistics.getMin(), RealScalar.of(1));
     assertEquals(scalarSummaryStatistics.getMax(), RealScalar.of(10));
     assertEquals(scalarSummaryStatistics.getMean(), Rational.of(14, 3));
-    assertEquals(scalarSummaryStatistics.getCount(), 6);
     {
       Scalar var1 = Variance.ofVector(vector);
       Scalar var2 = scalarSummaryStatistics.getVariance();
@@ -64,7 +63,6 @@ class ScalarSummaryStatisticsTest {
     assertEquals(scalarSummaryStatistics.getMin(), RealScalar.of(1));
     assertEquals(scalarSummaryStatistics.getMax(), RealScalar.of(10));
     assertEquals(scalarSummaryStatistics.getMean(), Rational.of(14, 3));
-    assertEquals(scalarSummaryStatistics.getCount(), 6);
   }
 
   @Test
@@ -76,7 +74,6 @@ class ScalarSummaryStatisticsTest {
     assertEquals(stats.getMin(), Quantity.of(3, "s"));
     assertEquals(stats.getMax(), Quantity.of(11, "s"));
     assertEquals(stats.getMean(), Quantity.of(6, "s"));
-    assertEquals(stats.getCount(), 4);
     assertEquals(stats.toString(), "ScalarSummaryStatistics{count=4, min=3[s], average=6[s], max=11[s]}");
     assertEquals(stats.getClip(), Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
     {
@@ -100,7 +97,6 @@ class ScalarSummaryStatisticsTest {
     assertEquals(stats.getMin(), RealScalar.of(1));
     assertEquals(stats.getMax(), RealScalar.of(10));
     assertEquals(stats.getMean(), Rational.of(14, 3));
-    assertEquals(stats.getCount(), 6);
     assertEquals(stats.toString(), "ScalarSummaryStatistics{count=6, min=1, average=14/3, max=10}");
   }
 
@@ -113,7 +109,6 @@ class ScalarSummaryStatisticsTest {
     assertNull(stats.getMax());
     assertNull(stats.getMean());
     assertThrows(Exception.class, () -> stats.getVariance());
-    assertEquals(stats.getCount(), 0);
     stats.toString();
     assertNull(stats.getClip());
   }
@@ -162,7 +157,6 @@ class ScalarSummaryStatisticsTest {
         vector.stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     Scalar sum = sss1.getSum();
     assertEquals(sum, GaussScalar.of(4, 7));
-    assertEquals(sss1.getCount(), 4);
     assertEquals(sss1.getMean(), GaussScalar.of(1, 7));
   }
 
@@ -176,7 +170,6 @@ class ScalarSummaryStatisticsTest {
         vector.stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     Scalar sum = sss1.getSum();
     assertEquals(sum, GaussScalar.of(2, 7));
-    assertEquals(sss1.getCount(), 3);
     assertEquals(sss1.getMean(), GaussScalar.of(3, 7));
     sss1.toString();
   }

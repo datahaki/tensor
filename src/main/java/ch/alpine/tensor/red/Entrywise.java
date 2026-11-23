@@ -98,6 +98,7 @@ public class Entrywise implements TensorBinaryOperator {
   }
 
   public TensorUnaryOperator operator(Tensor a) {
+    Objects.requireNonNull(a);
     return b -> apply(a, b);
   }
 

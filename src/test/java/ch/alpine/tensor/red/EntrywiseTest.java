@@ -77,6 +77,14 @@ class EntrywiseTest {
   }
 
   @Test
+  void testMulSimpleOp() {
+    Entrywise entrywise = Entrywise.mul();
+    SerializableQ.require(entrywise);
+    Tensor result = entrywise.operator(Tensors.vector(1, 2, 3)).apply(Tensors.vector(1, 2, 3));
+    assertEquals(result, Tensors.vector(1, 4, 9));
+  }
+
+  @Test
   void testMinScalar() {
     Entrywise entrywise = Entrywise.min();
     Tensor result = entrywise.apply( //

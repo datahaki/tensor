@@ -12,7 +12,7 @@ public enum TensorShuffle {
   /** @param tensor
    * @return random permutation of entries of tensor */
   public static Tensor of(Tensor tensor) {
-    return Tensor.of(stream(tensor));
+    return Tensor.of(stream(tensor), tensor.length());
   }
 
   /** @param tensor

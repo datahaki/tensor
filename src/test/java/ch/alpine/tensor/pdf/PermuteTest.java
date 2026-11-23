@@ -2,11 +2,13 @@
 package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Slash;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.io.Primitives;
@@ -35,5 +37,10 @@ class PermuteTest {
     Tensor r = Range.of(0, N).dot(P);
     int[] intArray = Primitives.toIntArray(r);
     assertArrayEquals(perm, intArray);
+  }
+
+  @Test
+  void testFail() {
+    assertThrows(Exception.class, () -> Permute.of(Tensors.vector(3)));
   }
 }

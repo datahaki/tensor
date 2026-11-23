@@ -87,10 +87,6 @@ public final class TableBuilder implements Serializable {
     return tensor.get(i);
   }
 
-  public Tensor getColumn(int j) {
-    return tensor.get(Tensor.ALL, j);
-  }
-
   /** @param list
    * @return */
   public synchronized Tensor getColumns(int... list) {

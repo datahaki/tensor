@@ -12,6 +12,7 @@ class IntTest {
   @Test
   void testSimple() {
     Int int1 = new Int(3);
+    assertEquals(int1.toString(), "3");
     assertEquals(int1.intValue(), 3);
     assertEquals(int1.getAndDecrement(), 3); // value is 2 now
     assertEquals(int1.getAndDecrement(), 2); // value is 1 now

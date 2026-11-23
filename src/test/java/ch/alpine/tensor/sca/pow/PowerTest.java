@@ -135,6 +135,12 @@ class PowerTest {
   }
 
   @Test
+  void testBase() {
+    Scalar scalar = Power.withBase(3).apply(RealScalar.of(4));
+    assertEquals(scalar, RealScalar.of(3 * 3 * 3 * 3));
+  }
+
+  @Test
   void testComplex() {
     Scalar a = Complex.of(2, +3);
     Scalar b = Complex.of(4, -2);
