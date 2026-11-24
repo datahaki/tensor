@@ -50,10 +50,11 @@ public enum ColorDataLists {
   /** 16 colors */
   _112,
   /** hue palette with 13 colors normalized according to brightness
-   * tensor library default */
+   * based on golden angle increments along hue */
   _250, // luma
-  /** hue palette with 13 colors */
-  _251, //
+  /** hue palette with 13 colors
+   * based on golden angle increments along hue */
+  _251, // luma
   ;
 
   private final Tensor tensor = Import.of("ch/alpine/tensor/col/list/" + name().substring(1) + ".csv");

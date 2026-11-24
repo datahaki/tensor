@@ -42,6 +42,10 @@ public enum Unprotect {
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
+   * In order to obtain the references to the entries of a given tensor
+   * use the following pattern:
+   * Tensor[] entries = tensor.stream().toArray(Tensor[]::new);
+   * 
    * @param tensors
    * @return It That Must Not Be Described
    * @see Tensors#of(Tensor...) */

@@ -6,7 +6,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.Sign;
 
-/** The logistic function 1 / (1 + Exp[-z]) is a solution to the differential equation y' == y * (1 - y)
+/** The logistic function 
+ * LogisticSigmoid[z] == 1 / (1 + Exp[-z]) 
+ * is a solution to the differential equation y' == y * (1 - y)
  * 
  * <p>The taylor series is
  * LogisticSigmoid[x] == 1/2 + x/4 - x^3/48 + x^5/480 + ...
