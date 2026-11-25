@@ -10,6 +10,7 @@ import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.ScalarGroups;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -20,7 +21,9 @@ import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.AbsInterface;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.SignInterface;
+import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
@@ -60,6 +63,8 @@ public class JetScalar extends MultiplexScalar implements //
     AbsInterface, ArcTanInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
     Comparable<Scalar>, Serializable {
+  private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarGroups.MUL);
+
   /** @param jet {f[x], f'[x], f''[x], ...}
    * @return */
   public static JetScalar of(Tensor jet) {
@@ -99,21 +104,20 @@ public class JetScalar extends MultiplexScalar implements //
   }
 
   @Override // from Scalar
-  public Scalar multiply(Scalar scalar) {
+  public JetScalar multiply(Scalar scalar) {
     return scalar instanceof JetScalar jetScalar //
         ? new JetScalar(JetScalars.product(jet, jetScalar.jet))
         : new JetScalar(jet.multiply(scalar));
   }
 
   @Override // from Scalar
-  public Scalar negate() {
+  public JetScalar negate() {
     return new JetScalar(jet.negate());
   }
 
   @Override // from Scalar
-  public Scalar reciprocal() {
+  public JetScalar reciprocal() {
     return JetScalars.chain(jet, Scalar::reciprocal, s -> s.multiply(s).negate().reciprocal());
-    // new JetScalar(JetScalars.reciprocal(jet));
   }
 
   @Override // from Scalar
@@ -122,7 +126,7 @@ public class JetScalar extends MultiplexScalar implements //
   }
 
   @Override // from Scalar
-  public Scalar one() {
+  public JetScalar one() {
     return JetScalars.CACHE_ONE.apply(jet.length());
   }
 
@@ -134,7 +138,6 @@ public class JetScalar extends MultiplexScalar implements //
     result.set(scalar::add, 0); // this + constant scalar
     return new JetScalar(result);
   }
-  // ---
 
   @Override // from AbsInterface
   public Scalar abs() {
@@ -166,15 +169,13 @@ public class JetScalar extends MultiplexScalar implements //
   }
 
   @Override // from PowerInterface
-  public JetScalar power(Scalar exponent) {
+  public Scalar power(Scalar exponent) {
     OptionalInt optionalInt = Scalars.optionalInt(exponent);
-    if (optionalInt.isPresent()) {
-      int expInt = optionalInt.orElseThrow();
-      if (0 <= expInt) // TODO JET exponent == zero!?
-        return new JetScalar(JetScalars.power(jet, expInt));
-    }
-    return JetScalars.chain(jet, Power.withExponent(exponent), //
-        scalar -> Power.withExponent(exponent.subtract(RealScalar.ONE)).apply(scalar).multiply(exponent));
+    if (optionalInt.isPresent())
+      return BINARY_POWER.raise(this, optionalInt.orElseThrow());
+    ScalarUnaryOperator dPower = Power.withExponent(exponent.subtract(RealScalar.ONE));
+    ScalarUnaryOperator df = scalar -> dPower.apply(scalar).multiply(exponent);
+    return JetScalars.chain(jet, Power.withExponent(exponent), df);
   }
 
   @Override // from SignInterface

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.jet;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Drop;
@@ -8,6 +9,7 @@ import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Cache;
+import ch.alpine.tensor.num.Binomial;
 
 /** contains routines for JetScalar */
 enum JetScalars {
@@ -31,7 +33,7 @@ enum JetScalars {
    * 
    * @param vector
    * @return */
-  public static Tensor opD(Tensor vector) {
+  private static Tensor opD(Tensor vector) {
     return Drop.head(vector, 1);
   }
 
@@ -39,21 +41,28 @@ enum JetScalars {
    * 
    * @param vector
    * @return */
-  public static Tensor opF(Tensor vector) {
+  private static Tensor opF(Tensor vector) {
     return Drop.tail(vector, 1);
   }
 
+  /** implementation by gemini
+   * 
+   * @param f
+   * @param g
+   * @return */
   public static Tensor product(Tensor f, Tensor g) {
-    return Tensors.isEmpty(f) && Tensors.isEmpty(g) //
-        ? Tensors.empty()
-        : Join.of( //
-            Tensors.of(f.Get(0).multiply(g.Get(0))), //
-            product(opF(f), opD(g)).add(product(opD(f), opF(g))));
-  }
-
-  public static Tensor power(Tensor vector, int n) {
-    return n == 0 //
-        ? UnitVector.of(vector.length(), 0)
-        : product(power(vector, n - 1), vector);
+    int n = Math.min(f.length(), g.length());
+    if (n == 0)
+      return Tensors.empty();
+    Tensor result = Tensors.reserve(n);
+    for (int k = 0; k < n; ++k) {
+      Scalar sum = f.Get(0).multiply(g.Get(k));
+      for (int j = 1; j <= k; ++j) {
+        Scalar term = f.Get(j).multiply(g.Get(k - j));
+        sum = sum.add(term.multiply(Binomial.of(k, j)));
+      }
+      result.append(sum);
+    }
+    return result;
   }
 }

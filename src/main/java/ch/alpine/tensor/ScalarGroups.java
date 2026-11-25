@@ -7,7 +7,7 @@ import ch.alpine.tensor.num.BinaryPower;
 
 /** implementation computes integer powers of {@link Complex},
  * {@link Quaternion}, etc. */
-enum ScalarGroups implements GroupInterface<Scalar> {
+public enum ScalarGroups implements GroupInterface<Scalar> {
   ADD {
     @Override // from GroupInterface
     public Scalar neutral(Scalar scalar) {
