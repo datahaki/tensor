@@ -37,10 +37,10 @@ class ArcSinDistributionTest {
     Scalar p = cdf.p_lessThan(x0);
     Scalar x1 = inv.quantile(p);
     Tolerance.CHOP.requireClose(x0, x1);
-    Scalar x = JetScalar.of(Rational.HALF, 4);
+    Scalar x = JetScalar.identity(Rational.HALF, 4);
     JetScalar js1 = (JetScalar) cdf.p_lessEquals(x);
     JetScalar js2 = (JetScalar) pdf.at(x);
-    Tolerance.CHOP.requireClose(js1.vector().extract(1, 4), js2.vector().extract(0, 3));
+    Tolerance.CHOP.requireClose(js1.jet().extract(1, 4), js2.jet().extract(0, 3));
     assertTrue(d.toString().startsWith("ArcSinDistribution"));
     assertEquals(Mean.of(d), RealScalar.ZERO);
     assertEquals(Variance.of(d), Rational.HALF);

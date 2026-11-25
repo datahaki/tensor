@@ -37,9 +37,9 @@ class JetScalarsTest {
     Polynomial f1 = f0.derivative();
     Scalar value = Rational.of(3, 17);
     Tensor gnd = Tensors.of(f0.apply(value), f1.apply(value));
-    Scalar scalar = JetScalar.of(value, gnd.length());
+    Scalar scalar = JetScalar.identity(value, gnd.length());
     JetScalar der = (JetScalar) f0.apply(scalar);
-    assertEquals(der.vector(), gnd);
+    assertEquals(der.jet(), gnd);
   }
 
   @Test
@@ -50,9 +50,9 @@ class JetScalarsTest {
     Polynomial f2 = f1.derivative();
     Scalar value = Rational.of(3, 17);
     Tensor gnd = Tensors.of(f0.apply(value), f1.apply(value), f2.apply(value));
-    Scalar scalar = JetScalar.of(value, gnd.length());
+    Scalar scalar = JetScalar.identity(value, gnd.length());
     JetScalar der = (JetScalar) f0.apply(scalar);
-    assertEquals(der.vector(), gnd);
+    assertEquals(der.jet(), gnd);
   }
 
   public static final Distribution[] DISTRIBUTIONS = { //
@@ -74,10 +74,10 @@ class JetScalarsTest {
       CDF cdf = CDF.of(distribution);
       PDF pdf = PDF.of(distribution);
       for (Tensor _x : Subdivide.of(2, 4, 6)) {
-        Scalar x = JetScalar.of((Scalar) _x, 4);
+        Scalar x = JetScalar.identity((Scalar) _x, 4);
         JetScalar js1 = (JetScalar) cdf.p_lessEquals(x);
         JetScalar js2 = (JetScalar) pdf.at(x);
-        Tolerance.CHOP.requireClose(js1.vector().extract(1, 4), js2.vector().extract(0, 3));
+        Tolerance.CHOP.requireClose(js1.jet().extract(1, 4), js2.jet().extract(0, 3));
       }
     }
   }

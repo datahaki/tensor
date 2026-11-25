@@ -5,7 +5,7 @@ import ch.alpine.tensor.Scalar;
 
 /** when the computation cannot be carried out, the implementation should return
  * <pre>
- * ArcTan.FUNCTION.apply(divide(x))
+ * ArcTan.FUNCTION.apply(this.divide(x))
  * </pre>
  * 
  * Mathematica::ArcTan[x, y]

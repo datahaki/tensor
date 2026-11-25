@@ -442,7 +442,7 @@ class PolynomialTest {
       assertEquals(t1, t2);
     }
     {
-      JetScalar x = JetScalar.of(Rational.HALF, 3);
+      JetScalar x = JetScalar.identity(Rational.HALF, 3);
       Scalar t1 = c1.apply(x).multiply(c2.apply(x));
       Scalar t2 = pd.apply(x);
       assertEquals(t1, t2);

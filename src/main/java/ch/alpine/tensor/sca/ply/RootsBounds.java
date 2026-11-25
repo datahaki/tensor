@@ -58,7 +58,8 @@ public enum RootsBounds {
           .skip(last - 2)));
     }
   },
-  /** implementation by gemini */
+  /** implementation by gemini
+   * never outperforms all others for polynomials of degree 4 or greater */
   KOJIMA {
     @Override
     Scalar ofMonic(Tensor monic) {

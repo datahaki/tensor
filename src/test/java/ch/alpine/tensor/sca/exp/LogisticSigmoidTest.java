@@ -34,22 +34,22 @@ class LogisticSigmoidTest {
   @Test
   void test() {
     Scalar t = RandomVariate.of(NormalDistribution.standard());
-    JetScalar jetScalar = JetScalar.of(t, 2);
+    JetScalar jetScalar = JetScalar.identity(t, 2);
     Scalar f0 = LogisticSigmoid.FUNCTION.apply(jetScalar);
     Scalar d0 = LogisticSigmoid.DERIVATIVE.apply(t);
     JetScalar js = (JetScalar) f0;
-    Tolerance.CHOP.requireClose(js.vector().Get(1), d0);
+    Tolerance.CHOP.requireClose(js.jet().Get(1), d0);
   }
 
   @Test
   void testNested() {
     Scalar t = RandomVariate.of(NormalDistribution.standard());
-    JetScalar jetScalar = JetScalar.of(t, 2);
+    JetScalar jetScalar = JetScalar.identity(t, 2);
     Scalar f0 = LogisticSigmoid.FUNCTION.apply(jetScalar);
     ScalarUnaryOperator NESTED = y -> y.multiply(RealScalar.ONE.subtract(y)); // x * (1 - x)
     Scalar d0 = NESTED.apply(f0);
     Scalar d1 = LogisticSigmoid.DERIVATIVE.apply(t);
     JetScalar df = (JetScalar) d0;
-    Tolerance.CHOP.requireClose(df.vector().Get(0), d1);
+    Tolerance.CHOP.requireClose(df.jet().Get(0), d1);
   }
 }

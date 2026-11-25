@@ -19,6 +19,14 @@ enum JetScalars {
     return new JetScalar(UnitVector.of(n, 0));
   }
 
+  public static JetScalar chain(Tensor vector, ScalarUnaryOperator f, ScalarUnaryOperator df) {
+    if (Tensors.isEmpty(vector))
+      return EMPTY;
+    return new JetScalar(Join.of( //
+        Tensors.of(f.apply(vector.Get(0))), //
+        product(((JetScalar) df.apply(new JetScalar(opF(vector)))).jet(), opD(vector))));
+  }
+
   /** drop function, promote derivatives, and decrease order by 1
    * 
    * @param vector
@@ -43,26 +51,9 @@ enum JetScalars {
             product(opF(f), opD(g)).add(product(opD(f), opF(g))));
   }
 
-  public static Tensor reciprocal(Tensor g) {
-    if (Tensors.isEmpty(g))
-      return Tensors.empty();
-    Tensor opF = opF(g);
-    return Join.of( //
-        Tensors.of(g.Get(0).reciprocal()), //
-        product(opD(g).negate(), reciprocal(product(opF, opF))));
-  }
-
   public static Tensor power(Tensor vector, int n) {
     return n == 0 //
         ? UnitVector.of(vector.length(), 0)
         : product(power(vector, n - 1), vector);
-  }
-
-  public static JetScalar chain(Tensor vector, ScalarUnaryOperator f, ScalarUnaryOperator df) {
-    if (Tensors.isEmpty(vector))
-      return EMPTY;
-    return new JetScalar(Join.of( //
-        Tensors.of(f.apply(vector.Get(0))), //
-        product(((JetScalar) df.apply(new JetScalar(opF(vector)))).vector(), opD(vector))));
   }
 }

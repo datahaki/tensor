@@ -53,7 +53,7 @@ class Log10Test {
 
   @Test
   void testJet() {
-    Scalar scalar = JetScalar.of(RealScalar.of(14.3), 2);
+    Scalar scalar = JetScalar.identity(RealScalar.of(14.3), 2);
     Tolerance.CHOP.requireClose(Log10.FUNCTION.apply(scalar), Log.base(RealScalar.of(10)).apply(scalar));
   }
 

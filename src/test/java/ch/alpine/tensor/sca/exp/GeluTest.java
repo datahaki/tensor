@@ -12,10 +12,10 @@ class GeluTest {
   @Test
   void testFandDxSync() {
     Scalar x = RealScalar.of(0.3);
-    JetScalar jetScalar = JetScalar.of(x, 2);
+    JetScalar jetScalar = JetScalar.identity(x, 2);
     JetScalar result = (JetScalar) Gelu.FUNCTION.apply(jetScalar);
     Scalar dx = Gelu.dx(x);
-    Scalar expect = result.vector().Get(1);
+    Scalar expect = result.jet().Get(1);
     Tolerance.CHOP.requireClose(dx, expect);
   }
 }

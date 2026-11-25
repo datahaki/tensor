@@ -101,7 +101,7 @@ class FiniteScalarQTest {
 
   @Test
   void testJetScalar() {
-    assertTrue(FiniteScalarQ.of(JetScalar.of(Pi.VALUE, 3)));
+    assertTrue(FiniteScalarQ.of(JetScalar.identity(Pi.VALUE, 3)));
   }
 
   @Test

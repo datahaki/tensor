@@ -34,15 +34,15 @@ import ch.alpine.tensor.sca.exp.LogInterface;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.PowerInterface;
 import ch.alpine.tensor.sca.pow.SqrtInterface;
+import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.ArcTanInterface;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Cosh;
 import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
-/** EXPERIMENTAL
- * 
- * automatic differentiation
+/** automatic differentiation
  * 
  * Applications:
  * JetScalar is used
@@ -57,16 +57,15 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * @implSpec
  * This class is immutable and thread-safe. */
 public class JetScalar extends MultiplexScalar implements //
-    AbsInterface, ExpInterface, LogInterface, PowerInterface, //
+    AbsInterface, ArcTanInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
     Comparable<Scalar>, Serializable {
-  /** @param vector {f[x], f'[x], f''[x], ...}
+  /** @param jet {f[x], f'[x], f''[x], ...}
    * @return */
-  // TODO choose better function name
-  public static JetScalar of(Tensor vector) {
-    if (vector.stream().anyMatch(JetScalar.class::isInstance))
-      throw new Throw(vector);
-    return new JetScalar(VectorQ.require(vector).copy());
+  public static JetScalar of(Tensor jet) {
+    if (jet.stream().anyMatch(JetScalar.class::isInstance))
+      throw new Throw(jet);
+    return new JetScalar(VectorQ.require(jet).copy());
   }
 
   /** constructor for variables
@@ -78,8 +77,7 @@ public class JetScalar extends MultiplexScalar implements //
    * @param n strictly positive
    * @return vector {f[x], f'[x], f''[x], ...} where f = identity therefore
    * J{x, 1, 0, 0, ...} */
-  // TODO choose better function name
-  public static JetScalar of(Scalar scalar, int n) {
+  public static JetScalar identity(Scalar scalar, int n) {
     if (scalar instanceof JetScalar)
       throw new Throw(scalar);
     if (n == 1)
@@ -90,49 +88,49 @@ public class JetScalar extends MultiplexScalar implements //
   }
 
   // ---
-  // TODO choose better field name
-  private final Tensor vector;
+  private final Tensor jet;
 
   JetScalar(Tensor vector) {
-    this.vector = vector;
+    this.jet = vector;
   }
 
-  public Tensor vector() {
-    return vector.unmodifiable();
+  public Tensor jet() {
+    return jet.unmodifiable();
   }
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
     return scalar instanceof JetScalar jetScalar //
-        ? new JetScalar(JetScalars.product(vector, jetScalar.vector))
-        : new JetScalar(vector.multiply(scalar));
+        ? new JetScalar(JetScalars.product(jet, jetScalar.jet))
+        : new JetScalar(jet.multiply(scalar));
   }
 
   @Override // from Scalar
   public Scalar negate() {
-    return new JetScalar(vector.negate());
+    return new JetScalar(jet.negate());
   }
 
   @Override // from Scalar
   public Scalar reciprocal() {
-    return new JetScalar(JetScalars.reciprocal(vector));
+    return JetScalars.chain(jet, Scalar::reciprocal, s -> s.multiply(s).negate().reciprocal());
+    // new JetScalar(JetScalars.reciprocal(jet));
   }
 
   @Override // from Scalar
   public Scalar zero() {
-    return new JetScalar(vector.maps(Scalar::zero));
+    return new JetScalar(jet.maps(Scalar::zero));
   }
 
   @Override // from Scalar
   public Scalar one() {
-    return JetScalars.CACHE_ONE.apply(vector.length());
+    return JetScalars.CACHE_ONE.apply(jet.length());
   }
 
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof JetScalar jetScalar)
-      return new JetScalar(vector.add(jetScalar.vector));
-    Tensor result = vector.copy();
+      return new JetScalar(jet.add(jetScalar.jet));
+    Tensor result = jet.copy();
     result.set(scalar::add, 0); // this + constant scalar
     return new JetScalar(result);
   }
@@ -140,27 +138,31 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from AbsInterface
   public Scalar abs() {
-    return JetScalars.chain(vector, Abs.FUNCTION, Sign.FUNCTION);
+    return JetScalars.chain(jet, Abs.FUNCTION, Sign.FUNCTION);
   }
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return JetScalars.chain(vector, AbsSquared.FUNCTION, AbsSquared.DERIVATIVE);
+    return JetScalars.chain(jet, AbsSquared.FUNCTION, AbsSquared.DERIVATIVE);
   }
-  // @Override // from ArcTanInterface
-  // public Scalar arcTan(Scalar x) {
-  // JetScalar divide = (JetScalar) divide(x);
-  // return StaticHelper.chain(divide.vector, ArcTan.FUNCTION, s -> RealScalar.ONE.divide(RealScalar.ONE.add(s.multiply(s))));
-  // }
+
+  @Override // from ArcTanInterface
+  public Scalar arcTan(Scalar x) {
+    JetScalar quotient = (JetScalar) divide(x);
+    return JetScalars.chain( //
+        quotient.jet(), //
+        ArcTan.FUNCTION, //
+        s -> RealScalar.ONE.add(s.multiply(s)).reciprocal());
+  }
 
   @Override // from ExpInterface
   public Scalar exp() {
-    return JetScalars.chain(vector, Exp.FUNCTION, Exp.FUNCTION);
+    return JetScalars.chain(jet, Exp.FUNCTION, Exp.FUNCTION);
   }
 
   @Override // from LogInterface
   public Scalar log() {
-    return JetScalars.chain(vector, Log.FUNCTION, Scalar::reciprocal);
+    return JetScalars.chain(jet, Log.FUNCTION, Scalar::reciprocal);
   }
 
   @Override // from PowerInterface
@@ -169,15 +171,15 @@ public class JetScalar extends MultiplexScalar implements //
     if (optionalInt.isPresent()) {
       int expInt = optionalInt.orElseThrow();
       if (0 <= expInt) // TODO JET exponent == zero!?
-        return new JetScalar(JetScalars.power(vector, expInt));
+        return new JetScalar(JetScalars.power(jet, expInt));
     }
-    return JetScalars.chain(vector, Power.withExponent(exponent), //
+    return JetScalars.chain(jet, Power.withExponent(exponent), //
         scalar -> Power.withExponent(exponent.subtract(RealScalar.ONE)).apply(scalar).multiply(exponent));
   }
 
   @Override // from SignInterface
   public Scalar sign() {
-    return JetScalars.chain(vector, Sign.FUNCTION, Scalar::zero);
+    return JetScalars.chain(jet, Sign.FUNCTION, Scalar::zero);
   }
 
   @Override // from SqrtInterface
@@ -187,55 +189,55 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from TrigonometryInterface
   public Scalar cos() {
-    return JetScalars.chain(vector, Cos.FUNCTION, scalar -> Sin.FUNCTION.apply(scalar).negate());
+    return JetScalars.chain(jet, Cos.FUNCTION, scalar -> Sin.FUNCTION.apply(scalar).negate());
   }
 
   @Override // from TrigonometryInterface
   public Scalar cosh() {
-    return JetScalars.chain(vector, Cosh.FUNCTION, Sinh.FUNCTION);
+    return JetScalars.chain(jet, Cosh.FUNCTION, Sinh.FUNCTION);
   }
 
   @Override // from TrigonometryInterface
   public Scalar sin() {
-    return JetScalars.chain(vector, Sin.FUNCTION, Cos.FUNCTION);
+    return JetScalars.chain(jet, Sin.FUNCTION, Cos.FUNCTION);
   }
 
   @Override // from TrigonometryInterface
   public Scalar sinh() {
-    return JetScalars.chain(vector, Sinh.FUNCTION, Cosh.FUNCTION);
+    return JetScalars.chain(jet, Sinh.FUNCTION, Cosh.FUNCTION);
   }
 
   @Override // from MultiplexScalar
   public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
-    return new JetScalar(vector.maps(unaryOperator));
+    return new JetScalar(jet.maps(unaryOperator));
   }
 
   @Override // from MultiplexScalar
   public boolean allMatch(Predicate<Scalar> predicate) {
-    return vector.stream().map(Scalar.class::cast).allMatch(predicate);
+    return jet.stream().map(Scalar.class::cast).allMatch(predicate);
   }
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
     return scalar instanceof JetScalar jetScalar //
-        ? TensorComparator.INSTANCE.compare(vector, jetScalar.vector)
-        : TensorComparator.INSTANCE.compare(vector, Join.of(Tensors.of(scalar), Array.zeros(vector.length() - 1)));
+        ? TensorComparator.INSTANCE.compare(jet, jetScalar.jet)
+        : TensorComparator.INSTANCE.compare(jet, Join.of(Tensors.of(scalar), Array.zeros(jet.length() - 1)));
   }
 
   // ---
   @Override
   public int hashCode() {
-    return vector.hashCode();
+    return jet.hashCode();
   }
 
   @Override
   public boolean equals(Object object) {
     return object instanceof JetScalar jetScalar //
-        && vector.equals(jetScalar.vector);
+        && jet.equals(jetScalar.jet);
   }
 
   @Override
   public String toString() {
-    return "J" + vector.toString();
+    return "J" + jet.toString();
   }
 }
