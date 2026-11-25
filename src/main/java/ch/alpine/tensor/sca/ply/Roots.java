@@ -25,6 +25,7 @@ public enum Roots {
   ;
   /** these work for polynomials with coefficients of type Quantity */
   private static final RootsBounds[] QUANTITY_ROOTS_BOUNDS = { //
+      RootsBounds.KOJIMA, //
       RootsBounds.LAGRANGE2, //
       RootsBounds.FUJIWARA };
 

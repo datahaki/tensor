@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Drop;
@@ -55,6 +56,30 @@ public enum RootsBounds {
           .map(ratio -> Power.of(ratio, Rational.of(1, i.getAndDecrement()))) //
           .sorted() //
           .skip(last - 2)));
+    }
+  },
+  /** implementation by gemini */
+  KOJIMA {
+    @Override
+    Scalar ofMonic(Tensor monic) {
+      int n = monic.length();
+      Scalar absNext = Abs.FUNCTION.apply(monic.Get(n - 1));
+      if (n == 1)
+        return absNext;
+      Scalar max = absNext.add(absNext);
+      for (int k = n - 1; k >= 1; k--) {
+        Scalar absPrev = Abs.FUNCTION.apply(monic.Get(k - 1));
+        if (Scalars.isZero(absNext) && Scalars.nonZero(absPrev))
+          return FUJIWARA.ofMonic(monic);
+        if (Scalars.nonZero(absNext) && Scalars.nonZero(absPrev)) {
+          Scalar ratio = absPrev.divide(absNext);
+          if (k > 1)
+            ratio = ratio.multiply(RealScalar.TWO);
+          max = Max.of(max, ratio);
+        }
+        absNext = absPrev;
+      }
+      return max;
     }
   },
   /** FUJIWARA works for coefficients of type {@link Quantity} */
