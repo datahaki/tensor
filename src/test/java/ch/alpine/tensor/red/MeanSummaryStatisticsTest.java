@@ -13,7 +13,7 @@ class MeanSummaryStatisticsTest {
     MeanSummaryStatistics meanSummaryStatistics = new MeanSummaryStatistics();
     meanSummaryStatistics.accept(DateTime.of(1234, 11, 3, 12, 23));
     meanSummaryStatistics.accept(DateTime.of(1834, 10, 3, 12, 23));
-    Tensor mean = meanSummaryStatistics.getMean();
+    Tensor mean = meanSummaryStatistics.getMean().orElseThrow();
     assertInstanceOf(DateTime.class, mean);
   }
 }

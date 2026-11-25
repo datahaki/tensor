@@ -36,7 +36,7 @@ public enum Mean {
   public static Tensor of(Tensor tensor) {
     return tensor.length() == 1 //
         ? tensor.get(0)
-        : tensor.stream().collect(MeanSummaryStatistics.collector()).getMean();
+        : tensor.stream().collect(MeanSummaryStatistics.collector()).getMean().orElseThrow();
   }
 
   /** @param cbb
@@ -59,7 +59,7 @@ public enum Mean {
   /** @param stream
    * @return */
   public static Tensor of(Stream<? extends Tensor> stream) {
-    return stream.collect(MeanSummaryStatistics.collector()).getMean();
+    return stream.collect(MeanSummaryStatistics.collector()).getMean().orElseThrow();
   }
 
   /** @param distribution

@@ -3,6 +3,7 @@ package ch.alpine.tensor.red;
 
 import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -16,14 +17,11 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.MathematicaFormat;
 
-class MeanSummaryStatistics implements Consumer<Tensor> {
+public class MeanSummaryStatistics implements Consumer<Tensor> {
   /** Example:
    * <pre>
-   * ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(4, 2, 10, 8, 1, 3)
-   * .stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
-   * scalarSummaryStatistics.getMin() == 1
-   * scalarSummaryStatistics.getMax() == 10
-   * scalarSummaryStatistics.getSum() == 28
+   * MeanSummaryStatistics meanSummaryStatistics = Tensors.vector(4, 2, 10, 8, 1, 3)
+   * .stream().parallel().collect(MeanSummaryStatistics.collector());
    * </pre>
    * 
    * @return */
@@ -39,7 +37,7 @@ class MeanSummaryStatistics implements Consumer<Tensor> {
   public void accept(Tensor tensor) {
     if (Objects.isNull(cnt)) {
       cnt = EqualsReduce.one(tensor);
-      avg = tensor;
+      avg = tensor.copy();
     } else {
       cnt = cnt.add(cnt.one());
       // LinearBinaryAverage.INSTANCE.split(avg, tensor, cnt.reciprocal());
@@ -62,8 +60,8 @@ class MeanSummaryStatistics implements Consumer<Tensor> {
 
   /** @return average of scalars in stream or null if stream is empty
    * @throws Exception if scalar type does not support division by {@link RealScalar} */
-  public Tensor getMean() {
-    return Objects.requireNonNull(avg);
+  public Optional<Tensor> getMean() {
+    return Optional.ofNullable(avg).map(Tensor::copy);
   }
 
   @Override // from Object

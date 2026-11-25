@@ -6,8 +6,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.Sign;
 
-/** The logistic function 
- * LogisticSigmoid[z] == 1 / (1 + Exp[-z]) 
+/** The logistic function
+ * LogisticSigmoid[z] == 1 / (1 + Exp[-z])
  * is a solution to the differential equation y' == y * (1 - y)
  * 
  * <p>The taylor series is
@@ -19,15 +19,24 @@ import ch.alpine.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LogisticSigmoid.html">LogisticSigmoid</a> */
 public enum LogisticSigmoid implements ScalarUnaryOperator {
-  FUNCTION;
-
-  @Override
-  public Scalar apply(Scalar scalar) {
-    if (Sign.isPositiveOrZero(scalar)) {
-      Scalar z = Exp.FUNCTION.apply(scalar.negate());
-      return RealScalar.ONE.add(z).reciprocal();
+  FUNCTION {
+    @Override
+    public Scalar apply(Scalar scalar) {
+      if (Sign.isPositiveOrZero(scalar)) {
+        Scalar z = Exp.FUNCTION.apply(scalar.negate());
+        return RealScalar.ONE.add(z).reciprocal();
+      }
+      Scalar z = Exp.FUNCTION.apply(scalar);
+      return RealScalar.ONE.add(z).under(z);
     }
-    Scalar z = Exp.FUNCTION.apply(scalar);
-    return RealScalar.ONE.add(z).under(z);
-  }
+  },
+  DERIVATIVE {
+    @Override
+    public Scalar apply(Scalar scalar) {
+      // y = sigma(x) * (1 - sigma(x))
+      Scalar exp = Exp.FUNCTION.apply(scalar); // Exp[x]
+      Scalar den = RealScalar.ONE.add(exp); // 1+Exp[x]
+      return exp.divide(den.multiply(den)); // Exp[x] / (1+Exp[x])^2
+    }
+  };
 }

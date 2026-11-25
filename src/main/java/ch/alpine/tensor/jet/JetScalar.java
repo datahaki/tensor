@@ -45,9 +45,14 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * automatic differentiation
  * 
  * Applications:
- * JetScalar is used to test the consistency between the {@link CDF} and {@link PDF}
+ * JetScalar is used
+ * 
+ * to test the consistency between the {@link CDF} and {@link PDF}
  * of {@link UnivariateDistribution}s.
- * JetScalar validates Hermite subdivision in repo sophus.
+ * 
+ * to validate the implementation of Hermite subdivision
+ * 
+ * to validate the implementation of network layers
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
@@ -57,6 +62,7 @@ public class JetScalar extends MultiplexScalar implements //
     Comparable<Scalar>, Serializable {
   /** @param vector {f[x], f'[x], f''[x], ...}
    * @return */
+  // TODO choose better function name
   public static JetScalar of(Tensor vector) {
     if (vector.stream().anyMatch(JetScalar.class::isInstance))
       throw new Throw(vector);
@@ -72,6 +78,7 @@ public class JetScalar extends MultiplexScalar implements //
    * @param n strictly positive
    * @return vector {f[x], f'[x], f''[x], ...} where f = identity therefore
    * J{x, 1, 0, 0, ...} */
+  // TODO choose better function name
   public static JetScalar of(Scalar scalar, int n) {
     if (scalar instanceof JetScalar)
       throw new Throw(scalar);
@@ -83,6 +90,7 @@ public class JetScalar extends MultiplexScalar implements //
   }
 
   // ---
+  // TODO choose better field name
   private final Tensor vector;
 
   JetScalar(Tensor vector) {
@@ -137,12 +145,7 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return JetScalars.chain(vector, AbsSquared.FUNCTION, s -> {
-      Scalar v1 = Abs.FUNCTION.apply(s);
-      Scalar v2 = Sign.FUNCTION.apply(s);
-      Scalar v3 = v1.multiply(v2);
-      return v3.add(v3);
-    });
+    return JetScalars.chain(vector, AbsSquared.FUNCTION, AbsSquared.DERIVATIVE);
   }
   // @Override // from ArcTanInterface
   // public Scalar arcTan(Scalar x) {

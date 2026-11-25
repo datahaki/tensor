@@ -15,14 +15,23 @@ import ch.alpine.tensor.lie.rot.Quaternion;
  * <p>If a {@link Scalar} does not implement {@link AbsInterface}, then the function
  * AbsSquared throws an Exception. */
 public enum AbsSquared implements ScalarUnaryOperator {
-  FUNCTION;
-
-  @Override
-  public Scalar apply(Scalar scalar) {
-    if (scalar instanceof AbsInterface absInterface)
-      return absInterface.absSquared();
-    throw new Throw(scalar);
-  }
+  FUNCTION {
+    @Override
+    public Scalar apply(Scalar scalar) {
+      if (scalar instanceof AbsInterface absInterface)
+        return absInterface.absSquared();
+      throw new Throw(scalar);
+    }
+  },
+  DERIVATIVE {
+    @Override
+    public Scalar apply(Scalar scalar) {
+      Scalar v1 = Abs.FUNCTION.apply(scalar);
+      Scalar v2 = Sign.FUNCTION.apply(scalar);
+      Scalar v3 = v1.multiply(v2);
+      return v3.add(v3);
+    }
+  };
 
   /** @param a
    * @param b

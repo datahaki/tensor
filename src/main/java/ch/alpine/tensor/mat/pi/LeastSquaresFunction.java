@@ -27,7 +27,6 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
  * @see QRDecomposition
  * @see SingularValueDecomposition
  * @see PseudoInverse */
-// TODO
 enum LeastSquaresFunction {
   ;
   /** @param matrix

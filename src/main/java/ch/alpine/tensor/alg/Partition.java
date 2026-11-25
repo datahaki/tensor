@@ -75,7 +75,6 @@ public enum Partition {
    * @return stream of tensors
    * @throws Exception if given tensor is a scalar */
   public static Stream<Tensor> stream(Tensor tensor, int size, int offset) {
-    // TODO check if Stream.gather is better
     ScalarQ.thenThrow(tensor);
     Integers.requirePositive(offset);
     Integers.requireLessEquals(offset, size);
