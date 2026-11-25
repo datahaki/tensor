@@ -98,6 +98,7 @@ class AroundTest {
     Scalar mean = Mean.ofVector(vector);
     assertInstanceOf(Around.class, mean);
     Scalar actual = Around.of(Scalars.fromString("2/3"), RealScalar.of(1.1055415967851332));
+    actual.zero();
     // TODO whatever
     // assertEquals(mean, actual);
   }

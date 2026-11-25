@@ -33,9 +33,13 @@ public class MeanSummaryStatistics implements Consumer<Tensor> {
   private Scalar cnt = null;
   private Tensor avg = null;
 
+  private boolean isEmpty() {
+    return Objects.isNull(cnt);
+  }
+
   @Override // from Consumer
   public void accept(Tensor tensor) {
-    if (Objects.isNull(cnt)) {
+    if (isEmpty()) {
       cnt = EqualsReduce.one(tensor);
       avg = tensor.copy();
     } else {
@@ -51,6 +55,10 @@ public class MeanSummaryStatistics implements Consumer<Tensor> {
    * @param other
    * @return */
   public MeanSummaryStatistics combine(MeanSummaryStatistics other) {
+    if (other.isEmpty())
+      return this;
+    if (isEmpty())
+      return other;
     Scalar com = cnt.add(other.cnt);
     Tensor del = other.avg.subtract(avg);
     avg = avg.add(del.multiply(other.cnt).divide(com));

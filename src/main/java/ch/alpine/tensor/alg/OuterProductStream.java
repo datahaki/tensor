@@ -34,7 +34,6 @@ class OuterProductStream {
     total = size.total();
   }
 
-  @SuppressWarnings("unused")
   private boolean hasNext(int index) {
     return count < total;
   }

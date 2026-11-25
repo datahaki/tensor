@@ -58,7 +58,7 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
 
   @Override // from Consumer
   public void accept(Scalar scalar) {
-    if (Objects.isNull(min)) {
+    if (isEmpty()) {
       cnt = scalar.one();
       avg = scalar;
       m_2 = AbsSquared.FUNCTION.apply(scalar.zero());
@@ -81,6 +81,10 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
    * @param other
    * @return */
   public ScalarSummaryStatistics combine(ScalarSummaryStatistics other) {
+    if (other.isEmpty())
+      return this;
+    if (isEmpty())
+      return other;
     Scalar com = cnt.add(other.cnt);
     Scalar del = other.avg.subtract(avg);
     avg = avg.add(del.multiply(other.cnt).divide(com));
@@ -92,9 +96,13 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
     return this;
   }
 
+  private boolean isEmpty() {
+    return Objects.isNull(cnt);
+  }
+
   /** @return sum of scalars in stream or null if stream is empty */
   public Scalar getSum() {
-    return Objects.isNull(avg) //
+    return isEmpty() //
         ? null
         : avg.multiply(cnt);
   }
@@ -119,7 +127,9 @@ public final class ScalarSummaryStatistics implements Consumer<Scalar> {
    * @throws Exception if stream has insufficient count
    * @see Variance */
   public Scalar getVariance() {
-    return m_2.divide(cnt.subtract(cnt.one()));
+    return isEmpty() //
+        ? null
+        : m_2.divide(cnt.subtract(cnt.one()));
   }
 
   /** @return

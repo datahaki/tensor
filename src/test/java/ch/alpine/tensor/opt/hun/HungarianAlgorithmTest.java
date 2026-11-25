@@ -102,7 +102,6 @@ class HungarianAlgorithmTest {
     assertTrue(hungarianAlgorithm.iterations() <= Math.min(list.get(0), list.get(1)));
   }
 
-  @SuppressWarnings("unused")
   @Test
   void testRandom() {
     Distribution distribution = UniformDistribution.unit();
@@ -111,7 +110,6 @@ class HungarianAlgorithmTest {
     _check3(RandomVariate.of(distribution, 53, row));
   }
 
-  @SuppressWarnings("unused")
   @Test
   void testDiscreteRandom() {
     Distribution distribution = DiscreteUniformDistribution.of(-20, 100);

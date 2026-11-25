@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,10 +14,8 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +29,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
-import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
@@ -47,6 +43,34 @@ import ch.alpine.tensor.sca.Sign;
 import test.wrap.SerializableQ;
 
 class DateTimeTest {
+  /** When applications log timestamps as epoch long either in milliseconds, or micro-seconds
+   * resolution, this function transforms the time stamp to a human-readable date-time stamp
+   * based on the given time zone.
+   * 
+   * @param scalar with time based SI-unit, for instance "s", "h", "days", "wk", "mo", "yr", etc.
+   * @param zoneOffset
+   * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to
+   * given zoneOffset
+   * @see LocalDateTime#ofEpochSecond(long, int, ZoneOffset) */
+  // @Deprecated
+  // static DateTime ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
+  // Scalar seconds = MAGNITUDE_S.apply(scalar);
+  // Scalar floor = Floor.FUNCTION.apply(seconds);
+  // Scalar nanos = seconds.subtract(floor).multiply(NANOS);
+  // return new DateTime(LocalDateTime.ofEpochSecond( //
+  // Scalars.longValueExact(floor), //
+  // nanos.number().intValue(), //
+  // zoneOffset));
+  // }
+  /** @param zoneOffset
+   * @return seconds from the epoch of 1970-01-01T00:00:00Z with unit "s"
+   * which is negative for dates before that threshold in exact precision */
+  // @Deprecated
+  // Scalar toEpoch(ZoneOffset zoneOffset) {
+  // // function getNano() returns in the range 0 to 999,999,999
+  // Scalar nanos = Rational.of(localDateTime.getNano(), NANOS_LONG);
+  // return Quantity.of(RealScalar.of(localDateTime.toEpochSecond(zoneOffset)).add(nanos), UNIT_S);
+  // }
   @Test
   void test1() {
     Scalar dt1 = DateTime.of(2020, 12, 20, 4, 30);
@@ -227,30 +251,28 @@ class DateTimeTest {
     Scalar swapin = scalar.add(dateTime);
     assertEquals(swapin.toString(), "2013-11-30T04:54:03.141592653");
   }
-
-  @Test
-  void testDTSHi() {
-    DateTime dts1 = DateTime.of(2013, 11, 30, 4, 54, 0, 123_213_678);
-    Scalar scalar1 = dts1.floor().toEpoch(ZoneOffset.MIN);
-    Scalar scalar2 = dts1.toEpoch(ZoneOffset.MIN);
-    Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
-    assertEquals(scalar1, scalar3);
-    Sign.requirePositive(scalar1);
-    DateTime dts2 = DateTime.ofEpoch(scalar2, ZoneOffset.MIN);
-    assertEquals(dts1, dts2);
-  }
-
-  @Test
-  void testDTSLo() {
-    DateTime dts1 = DateTime.of(1965, 11, 30, 4, 54, 0, 123_213_678);
-    Scalar scalar1 = dts1.floor().toEpoch(ZoneOffset.MAX);
-    Scalar scalar2 = dts1.toEpoch(ZoneOffset.MAX);
-    Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
-    assertEquals(scalar1, scalar3);
-    Sign.requirePositive(scalar1.negate());
-    DateTime dts2 = DateTime.ofEpoch(scalar2, ZoneOffset.MAX);
-    assertEquals(dts1, dts2);
-  }
+  // @Test
+  // void testDTSHi() {
+  // DateTime dts1 = DateTime.of(2013, 11, 30, 4, 54, 0, 123_213_678);
+  // Scalar scalar1 = dts1.floor().toEpoch(ZoneOffset.MIN);
+  // Scalar scalar2 = dts1.toEpoch(ZoneOffset.MIN);
+  // Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
+  // assertEquals(scalar1, scalar3);
+  // Sign.requirePositive(scalar1);
+  // DateTime dts2 = DateTime.ofEpoch(scalar2, ZoneOffset.MIN);
+  // assertEquals(dts1, dts2);
+  // }
+  // @Test
+  // void testDTSLo() {
+  // DateTime dts1 = DateTime.of(1965, 11, 30, 4, 54, 0, 123_213_678);
+  // Scalar scalar1 = dts1.floor().toEpoch(ZoneOffset.MAX);
+  // Scalar scalar2 = dts1.toEpoch(ZoneOffset.MAX);
+  // Scalar scalar3 = Floor.FUNCTION.apply(scalar2);
+  // assertEquals(scalar1, scalar3);
+  // Sign.requirePositive(scalar1.negate());
+  // DateTime dts2 = DateTime.ofEpoch(scalar2, ZoneOffset.MAX);
+  // assertEquals(dts1, dts2);
+  // }
 
   @Test
   void testPiHours() {
@@ -403,35 +425,31 @@ class DateTimeTest {
     assertEquals(dateTime1, dateTime2);
     assertEquals(dateTime1.subtract(dateTime2), Quantity.of(0, "s"));
   }
-
-  @Test
-  void testMillis() {
-    // Switzerland has +2 hours
-    long millis = System.currentTimeMillis();
-    ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
-    DateTime dateTime = DateTime.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
-    dateTime.format(dateTimeFormatter);
-    dateTime.floor();
-  }
-
-  private static final ScalarUnaryOperator TO_MILLIS = QuantityMagnitude.SI().in("ms");
-
-  /** @param zoneOffset
-   * @return date instance */
-  public static Date toDate(DateTime dateTime, ZoneOffset zoneOffset) {
-    return new Date(Floor.longValueExact(TO_MILLIS.apply(dateTime.toEpoch(zoneOffset))));
-  }
-
-  @Test
-  void testDate() {
-    // Switzerland has +2 hours
-    long millis = System.currentTimeMillis();
-    ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
-    DateTime dateTime = DateTime.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
-    Date date = toDate(dateTime, zoneOffset);
-    assertNotNull(date);
-  }
+  // @Test
+  // void testMillis() {
+  // // Switzerland has +2 hours
+  // long millis = System.currentTimeMillis();
+  // ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
+  // DateTime dateTime = DateTime.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
+  // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+  // dateTime.format(dateTimeFormatter);
+  // dateTime.floor();
+  // }
+  // private static final ScalarUnaryOperator TO_MILLIS = QuantityMagnitude.SI().in("ms");
+  // /** @param zoneOffset
+  // * @return date instance */
+  // public static Date toDate(DateTime dateTime, ZoneOffset zoneOffset) {
+  // return new Date(Floor.longValueExact(TO_MILLIS.apply(dateTime.toEpoch(zoneOffset))));
+  // }
+  // @Test
+  // void testDate() {
+  // // Switzerland has +2 hours
+  // long millis = System.currentTimeMillis();
+  // ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
+  // DateTime dateTime = DateTime.ofEpoch(Quantity.of(millis, "ms"), zoneOffset);
+  // Date date = toDate(dateTime, zoneOffset);
+  // assertNotNull(date);
+  // }
 
   @Test
   void testRoundingDown() {
@@ -520,11 +538,10 @@ class DateTimeTest {
       assertThrows(Exception.class, () -> dom.add(dor));
     }
   }
-
-  @Test
-  void testOfEpochFail() {
-    assertThrows(Exception.class, () -> DateTime.ofEpoch(Quantity.of(1e100, "s"), ZoneOffset.UTC));
-  }
+  // @Test
+  // void testOfEpochFail() {
+  // assertThrows(Exception.class, () -> DateTime.ofEpoch(Quantity.of(1e100, "s"), ZoneOffset.UTC));
+  // }
 
   @Test
   void testNullFail() {

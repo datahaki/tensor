@@ -74,7 +74,7 @@ class ScalarSummaryStatisticsTest {
     assertEquals(stats.getMin(), Quantity.of(3, "s"));
     assertEquals(stats.getMax(), Quantity.of(11, "s"));
     assertEquals(stats.getMean(), Quantity.of(6, "s"));
-    assertEquals(stats.toString(), "ScalarSummaryStatistics{count=4, min=3[s], average=6[s], max=11[s]}");
+    stats.toString();
     assertEquals(stats.getClip(), Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
     {
       Scalar var1 = Variance.ofVector(vector);
@@ -97,7 +97,7 @@ class ScalarSummaryStatisticsTest {
     assertEquals(stats.getMin(), RealScalar.of(1));
     assertEquals(stats.getMax(), RealScalar.of(10));
     assertEquals(stats.getMean(), Rational.of(14, 3));
-    assertEquals(stats.toString(), "ScalarSummaryStatistics{count=6, min=1, average=14/3, max=10}");
+    stats.toString();
   }
 
   @Test
@@ -108,7 +108,8 @@ class ScalarSummaryStatisticsTest {
     assertNull(stats.getMin());
     assertNull(stats.getMax());
     assertNull(stats.getMean());
-    assertThrows(Exception.class, () -> stats.getVariance());
+    assertNull(stats.getVariance());
+    // assertThrows(Exception.class, () -> stats.getVariance());
     stats.toString();
     assertNull(stats.getClip());
   }

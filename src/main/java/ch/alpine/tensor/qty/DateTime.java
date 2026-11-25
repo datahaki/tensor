@@ -206,26 +206,6 @@ public class DateTime extends AbstractScalar implements Comparable<Scalar>, Roun
     return new DateTime(LocalDateTime.now());
   }
 
-  /** When applications log timestamps as epoch long either in milliseconds, or micro-seconds
-   * resolution, this function transforms the time stamp to a human-readable date-time stamp
-   * based on the given time zone.
-   * 
-   * @param scalar with time based SI-unit, for instance "s", "h", "days", "wk", "mo", "yr", etc.
-   * @param zoneOffset
-   * @return epoch of 1970-01-01T00:00:00Z plus the duration specified in given scalar relative to
-   * given zoneOffset
-   * @see LocalDateTime#ofEpochSecond(long, int, ZoneOffset) */
-  @Deprecated
-  static DateTime ofEpoch(Scalar scalar, ZoneOffset zoneOffset) {
-    Scalar seconds = MAGNITUDE_S.apply(scalar);
-    Scalar floor = Floor.FUNCTION.apply(seconds);
-    Scalar nanos = seconds.subtract(floor).multiply(NANOS);
-    return new DateTime(LocalDateTime.ofEpochSecond( //
-        Scalars.longValueExact(floor), //
-        nanos.number().intValue(), //
-        zoneOffset));
-  }
-
   /** @param scalar
    * @return */
   public static Month month(Scalar scalar) {
@@ -287,16 +267,6 @@ public class DateTime extends AbstractScalar implements Comparable<Scalar>, Roun
   /** @return instance of {@link LocalDateTime} backing this {@link DateTime} */
   public LocalDateTime localDateTime() {
     return localDateTime;
-  }
-
-  /** @param zoneOffset
-   * @return seconds from the epoch of 1970-01-01T00:00:00Z with unit "s"
-   * which is negative for dates before that threshold in exact precision */
-  @Deprecated
-  Scalar toEpoch(ZoneOffset zoneOffset) {
-    // function getNano() returns in the range 0 to 999,999,999
-    Scalar nanos = Rational.of(localDateTime.getNano(), NANOS_LONG);
-    return Quantity.of(RealScalar.of(localDateTime.toEpochSecond(zoneOffset)).add(nanos), UNIT_S);
   }
 
   /** @return the year, from MIN_YEAR to MAX_YEAR */
