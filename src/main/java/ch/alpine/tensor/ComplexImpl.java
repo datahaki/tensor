@@ -11,7 +11,6 @@ import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.nrm.Hypot;
-import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -29,8 +28,6 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * This class is immutable and thread-safe. */
 class ComplexImpl extends MultiplexScalar implements Complex, //
     SqrtInterface, TrigonometryInterface, Serializable {
-  private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarGroups.MUL);
-
   /** creator with package visibility
    * 
    * @param re neither a {@link Complex}, or {@link Quantity}
@@ -168,7 +165,7 @@ class ComplexImpl extends MultiplexScalar implements Complex, //
     if (ExactScalarQ.of(this) && exponent instanceof RealScalar) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
-        return BINARY_POWER.raise(this, optional.orElseThrow());
+        return Scalars.mul().raise(this, optional.orElseThrow());
     }
     return Exp.FUNCTION.apply(exponent.multiply(Log.FUNCTION.apply(this)));
   }

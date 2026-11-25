@@ -10,7 +10,6 @@ import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ScalarGroups;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -23,7 +22,6 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.SignInterface;
-import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
@@ -63,8 +61,6 @@ public class JetScalar extends MultiplexScalar implements //
     AbsInterface, ArcTanInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
     Comparable<Scalar>, Serializable {
-  private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarGroups.MUL);
-
   /** @param jet {f[x], f'[x], f''[x], ...}
    * @return */
   public static JetScalar of(Tensor jet) {
@@ -172,7 +168,7 @@ public class JetScalar extends MultiplexScalar implements //
   public Scalar power(Scalar exponent) {
     OptionalInt optionalInt = Scalars.optionalInt(exponent);
     if (optionalInt.isPresent())
-      return BINARY_POWER.raise(this, optionalInt.orElseThrow());
+      return Scalars.mul().raise(this, optionalInt.orElseThrow());
     ScalarUnaryOperator dPower = Power.withExponent(exponent.subtract(RealScalar.ONE));
     ScalarUnaryOperator df = scalar -> dPower.apply(scalar).multiply(exponent);
     return JetScalars.chain(jet, Power.withExponent(exponent), df);

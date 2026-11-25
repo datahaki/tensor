@@ -74,6 +74,14 @@ class ArrayTest {
   }
 
   @Test
+  void testEmpty2() {
+    Tensor empties1 = Array.zeros(3, 0);
+    Tensor empties2 = Array.zeros(3, 5);
+    Tensor of = Join.of(1, empties1, empties2);
+    assertEquals(of, empties2);
+  }
+
+  @Test
   void testBlock() {
     Tensor table = Array.of(l -> Tensors.vector(l.get(0), l.get(1), l.get(2)), 3, 2, 4);
     checkDims(table, List.of(), List.of());

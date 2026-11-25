@@ -3,6 +3,7 @@ package ch.alpine.tensor.chq;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Throw;
 
 /** Example usage:
  * {@link Scalars#compare(Scalar, Scalar)} throws an Exception
@@ -32,5 +33,13 @@ public enum DeterminateScalarQ {
    * @return whether given scalar is equal to itself */
   public static boolean of(Scalar scalar) {
     return scalar.equals(scalar);
+  }
+
+  /** @param scalar
+   * @return
+   * @throws Exception unless scalar satisfies DeterminateScalarQ */
+  public static Scalar require(Scalar scalar) {
+    Throw.unless(of(scalar));
+    return scalar;
   }
 }
