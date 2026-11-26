@@ -86,6 +86,12 @@ class ConstantArrayTest {
   }
 
   @Test
+  void testEmpty() {
+    Tensor tensor = ConstantArray.of(Tensors.empty(), 3);
+    assertEquals(tensor, Tensors.fromString("{{}, {}, {}}"));
+  }
+
+  @Test
   void testFailNull() {
     assertThrows(NullPointerException.class, () -> ConstantArray.of(null, 6, 3));
   }

@@ -15,6 +15,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Drop;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.alg.UnitVector;
@@ -22,6 +23,8 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.SignInterface;
+import ch.alpine.tensor.ext.Cache;
+import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
@@ -57,16 +60,16 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class JetScalar extends MultiplexScalar implements //
+public class Jet extends MultiplexScalar implements //
     AbsInterface, ArcTanInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
     Comparable<Scalar>, Serializable {
   /** @param jet {f[x], f'[x], f''[x], ...}
    * @return */
-  public static JetScalar of(Tensor jet) {
-    if (jet.stream().anyMatch(JetScalar.class::isInstance))
+  public static Jet of(Tensor jet) {
+    if (jet.stream().anyMatch(Jet.class::isInstance))
       throw new Throw(jet);
-    return new JetScalar(VectorQ.require(jet).copy());
+    return new Jet(VectorQ.require(jet).copy());
   }
 
   /** constructor for variables
@@ -78,90 +81,146 @@ public class JetScalar extends MultiplexScalar implements //
    * @param n strictly positive
    * @return vector {f[x], f'[x], f''[x], ...} where f = identity therefore
    * J{x, 1, 0, 0, ...} */
-  public static JetScalar identity(Scalar scalar, int n) {
-    if (scalar instanceof JetScalar)
+  public static Jet identity(Scalar scalar, int n) {
+    if (scalar instanceof Jet)
       throw new Throw(scalar);
     if (n == 1)
-      return new JetScalar(Tensors.of(scalar));
+      return new Jet(Tensors.of(scalar));
     Tensor vector = UnitVector.of(n, 1);
     vector.set(scalar, 0);
-    return new JetScalar(vector);
+    return new Jet(vector);
+  }
+
+  private static final Jet EMPTY = new Jet(Tensors.empty());
+  private static final Cache<Integer, Jet> CACHE_ONE = Cache.of(Jet::build_one, 16);
+
+  private static Jet build_one(int n) {
+    return new Jet(UnitVector.of(n, 0));
+  }
+
+  private static Jet chain(Tensor vector, ScalarUnaryOperator f, ScalarUnaryOperator df) {
+    if (Tensors.isEmpty(vector))
+      return EMPTY;
+    return new Jet(Join.of( //
+        Tensors.of(f.apply(vector.Get(0))), //
+        product(((Jet) df.apply(new Jet(opF(vector)))).derivatives(), opD(vector))));
+  }
+
+  /** drop function, promote derivatives, and decrease order by 1
+   * 
+   * @param vector
+   * @return */
+  private static Tensor opD(Tensor vector) {
+    return Drop.head(vector, 1);
+  }
+
+  /** keep function and derivatives, and decrease order by 1
+   * 
+   * @param vector
+   * @return */
+  private static Tensor opF(Tensor vector) {
+    return Drop.tail(vector, 1);
+  }
+
+  /** implementation by gemini
+   * 
+   * @param f
+   * @param g
+   * @return */
+  private static Tensor product(Tensor f, Tensor g) {
+    int n = Math.min(f.length(), g.length());
+    if (n == 0)
+      return Tensors.empty();
+    Tensor result = Tensors.reserve(n);
+    for (int k = 0; k < n; ++k) {
+      Scalar sum = f.Get(0).multiply(g.Get(k));
+      for (int j = 1; j <= k; ++j) {
+        Scalar term = f.Get(j).multiply(g.Get(k - j));
+        sum = sum.add(term.multiply(Binomial.of(k, j)));
+      }
+      result.append(sum);
+    }
+    return result;
   }
 
   // ---
-  private final Tensor jet;
+  private final Tensor derivatives;
 
-  JetScalar(Tensor vector) {
-    this.jet = vector;
+  Jet(Tensor vector) {
+    this.derivatives = vector;
   }
 
-  public Tensor jet() {
-    return jet.unmodifiable();
+  public Tensor derivatives() {
+    return derivatives.unmodifiable();
   }
 
-  @Override // from Scalar
-  public JetScalar multiply(Scalar scalar) {
-    return scalar instanceof JetScalar jetScalar //
-        ? new JetScalar(JetScalars.product(jet, jetScalar.jet))
-        : new JetScalar(jet.multiply(scalar));
+  public Scalar derivative(int order) {
+    return derivatives.Get(order);
   }
 
   @Override // from Scalar
-  public JetScalar negate() {
-    return new JetScalar(jet.negate());
+  public Jet multiply(Scalar scalar) {
+    return scalar instanceof Jet jetScalar //
+        ? new Jet(product(derivatives, jetScalar.derivatives))
+        : new Jet(derivatives.multiply(scalar));
   }
 
   @Override // from Scalar
-  public JetScalar reciprocal() {
-    return JetScalars.chain(jet, Scalar::reciprocal, s -> s.multiply(s).negate().reciprocal());
+  public Jet negate() {
+    return new Jet(derivatives.negate());
+  }
+
+  @Override // from Scalar
+  public Jet reciprocal() {
+    return chain(derivatives, Scalar::reciprocal, s -> s.multiply(s).negate().reciprocal());
   }
 
   @Override // from Scalar
   public Scalar zero() {
-    return new JetScalar(jet.maps(Scalar::zero));
+    return new Jet(derivatives.maps(Scalar::zero));
   }
 
   @Override // from Scalar
-  public JetScalar one() {
-    return JetScalars.CACHE_ONE.apply(jet.length());
+  public Jet one() {
+    return CACHE_ONE.apply(derivatives.length());
   }
 
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof JetScalar jetScalar)
-      return new JetScalar(jet.add(jetScalar.jet));
-    Tensor result = jet.copy();
+    if (scalar instanceof Jet jetScalar)
+      return new Jet(derivatives.add(jetScalar.derivatives));
+    Tensor result = derivatives.copy();
     result.set(scalar::add, 0); // this + constant scalar
-    return new JetScalar(result);
+    return new Jet(result);
   }
 
   @Override // from AbsInterface
   public Scalar abs() {
-    return JetScalars.chain(jet, Abs.FUNCTION, Sign.FUNCTION);
+    return chain(derivatives, Abs.FUNCTION, Sign.FUNCTION);
   }
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return JetScalars.chain(jet, AbsSquared.FUNCTION, AbsSquared.DERIVATIVE);
+    return chain(derivatives, AbsSquared.FUNCTION, AbsSquared.DERIVATIVE);
   }
 
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
-    JetScalar quotient = (JetScalar) divide(x);
-    return JetScalars.chain( //
-        quotient.jet(), //
+    Jet quotient = (Jet) divide(x);
+    return chain( //
+        quotient.derivatives(), //
         ArcTan.FUNCTION, //
         s -> RealScalar.ONE.add(s.multiply(s)).reciprocal());
   }
 
   @Override // from ExpInterface
   public Scalar exp() {
-    return JetScalars.chain(jet, Exp.FUNCTION, Exp.FUNCTION);
+    return chain(derivatives, Exp.FUNCTION, Exp.FUNCTION);
   }
 
   @Override // from LogInterface
   public Scalar log() {
-    return JetScalars.chain(jet, Log.FUNCTION, Scalar::reciprocal);
+    return chain(derivatives, Log.FUNCTION, Scalar::reciprocal);
   }
 
   @Override // from PowerInterface
@@ -171,12 +230,12 @@ public class JetScalar extends MultiplexScalar implements //
       return Scalars.mul().raise(this, optionalInt.orElseThrow());
     ScalarUnaryOperator dPower = Power.withExponent(exponent.subtract(RealScalar.ONE));
     ScalarUnaryOperator df = scalar -> dPower.apply(scalar).multiply(exponent);
-    return JetScalars.chain(jet, Power.withExponent(exponent), df);
+    return chain(derivatives, Power.withExponent(exponent), df);
   }
 
   @Override // from SignInterface
   public Scalar sign() {
-    return JetScalars.chain(jet, Sign.FUNCTION, Scalar::zero);
+    return chain(derivatives, Sign.FUNCTION, Scalar::zero);
   }
 
   @Override // from SqrtInterface
@@ -186,55 +245,55 @@ public class JetScalar extends MultiplexScalar implements //
 
   @Override // from TrigonometryInterface
   public Scalar cos() {
-    return JetScalars.chain(jet, Cos.FUNCTION, scalar -> Sin.FUNCTION.apply(scalar).negate());
+    return chain(derivatives, Cos.FUNCTION, scalar -> Sin.FUNCTION.apply(scalar).negate());
   }
 
   @Override // from TrigonometryInterface
   public Scalar cosh() {
-    return JetScalars.chain(jet, Cosh.FUNCTION, Sinh.FUNCTION);
+    return chain(derivatives, Cosh.FUNCTION, Sinh.FUNCTION);
   }
 
   @Override // from TrigonometryInterface
   public Scalar sin() {
-    return JetScalars.chain(jet, Sin.FUNCTION, Cos.FUNCTION);
+    return chain(derivatives, Sin.FUNCTION, Cos.FUNCTION);
   }
 
   @Override // from TrigonometryInterface
   public Scalar sinh() {
-    return JetScalars.chain(jet, Sinh.FUNCTION, Cosh.FUNCTION);
+    return chain(derivatives, Sinh.FUNCTION, Cosh.FUNCTION);
   }
 
   @Override // from MultiplexScalar
   public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
-    return new JetScalar(jet.maps(unaryOperator));
+    return new Jet(derivatives.maps(unaryOperator));
   }
 
   @Override // from MultiplexScalar
   public boolean allMatch(Predicate<Scalar> predicate) {
-    return jet.stream().map(Scalar.class::cast).allMatch(predicate);
+    return derivatives.stream().map(Scalar.class::cast).allMatch(predicate);
   }
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
-    return scalar instanceof JetScalar jetScalar //
-        ? TensorComparator.INSTANCE.compare(jet, jetScalar.jet)
-        : TensorComparator.INSTANCE.compare(jet, Join.of(Tensors.of(scalar), Array.zeros(jet.length() - 1)));
+    return scalar instanceof Jet jetScalar //
+        ? TensorComparator.INSTANCE.compare(derivatives, jetScalar.derivatives)
+        : TensorComparator.INSTANCE.compare(derivatives, Join.of(Tensors.of(scalar), Array.zeros(derivatives.length() - 1)));
   }
 
   // ---
   @Override
   public int hashCode() {
-    return jet.hashCode();
+    return derivatives.hashCode();
   }
 
   @Override
   public boolean equals(Object object) {
-    return object instanceof JetScalar jetScalar //
-        && jet.equals(jetScalar.jet);
+    return object instanceof Jet jet //
+        && derivatives.equals(jet.derivatives);
   }
 
   @Override
   public String toString() {
-    return "J" + jet.toString();
+    return "Jet" + derivatives.toString();
   }
 }

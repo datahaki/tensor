@@ -27,7 +27,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.jet.JetScalar;
+import ch.alpine.tensor.jet.Jet;
 import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
@@ -442,7 +442,7 @@ class PolynomialTest {
       assertEquals(t1, t2);
     }
     {
-      JetScalar x = JetScalar.identity(Rational.HALF, 3);
+      Jet x = Jet.identity(Rational.HALF, 3);
       Scalar t1 = c1.apply(x).multiply(c2.apply(x));
       Scalar t2 = pd.apply(x);
       assertEquals(t1, t2);
