@@ -13,6 +13,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -31,6 +32,11 @@ class EntrywiseTest {
   void testHelpOf() {
     assertEquals(Entrywise.with(Max::of).of(Tensors.of(Tensors.vector(1, 2, 3), Tensors.vector(5, 0, 4))), Tensors.vector(5, 2, 4));
     assertEquals(Entrywise.with(Min::of).of(Tensors.of(Tensors.vector(1, 2, 3), Tensors.vector(5, 0, 4))), Tensors.vector(1, 0, 3));
+  }
+
+  @Test
+  void testEq() {
+    Serialization.copy(Entrywise.eq());
   }
 
   @Test

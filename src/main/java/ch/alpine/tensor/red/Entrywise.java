@@ -15,6 +15,7 @@ import ch.alpine.tensor.api.ScalarBinaryOperator;
 import ch.alpine.tensor.api.TensorBinaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.num.Boole;
 
 /** Entrywise applies a BinaryOperator<Scalar> across multiple tensors.
  * The tensors are required to have the same dimensions/structure.
@@ -50,32 +51,36 @@ public class Entrywise implements TensorBinaryOperator {
     return new Entrywise(Objects.requireNonNull(scalarBinaryOperator));
   }
 
-  // shorthand Min::of does not result in serializable operator, due to template arguments
-  private static final Entrywise MIN = with(Min::of);
-  private static final Entrywise MAX = with(Max::of);
-  private static final Entrywise MUL = with(Scalar::multiply);
-  private static final Entrywise DIV = with(Scalar::divide);
-
   /** @return entrywise minimum operator */
   public static Entrywise min() {
-    return MIN;
+    return with(Min::of);
   }
 
   /** @return entrywise maximum operator */
   public static Entrywise max() {
-    return MAX;
+    return with(Max::of);
   }
 
-  /** @return pointwise multiplication
+  /** @return entrywise multiplication
    * @see Times */
   public static Entrywise mul() {
-    return MUL;
+    return with(Scalar::multiply);
   }
 
-  /** @return pointwise division
+  /** @return entrywise division
    * @see Times */
   public static Entrywise div() {
-    return DIV;
+    return with(Scalar::divide);
+  }
+
+  /** @return entrywise equals: 1 if equal, 0 otherwise */
+  public static Entrywise eq() {
+    return with((a, b) -> Boole.of(a.equals(b)));
+  }
+
+  /** @return entrywise non-equals: 0 if equal, 1 otherwise */
+  public static Entrywise neq() {
+    return with((a, b) -> Boole.of(!a.equals(b)));
   }
 
   // ---
