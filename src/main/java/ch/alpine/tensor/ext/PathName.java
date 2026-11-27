@@ -10,7 +10,7 @@ import java.util.Objects;
  * 
  * @param path
  * @param parent may be null
- * @param title
+ * @param title without DOT and extension
  * @param extension */
 public record PathName(Path path, Path parent, String title, String extension, boolean hasDot) {
   private static final char DOT = '.';

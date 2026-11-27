@@ -95,6 +95,14 @@ class ImageFormatTest {
   }
 
   @Test
+  void testGrayScaleFail() {
+    BufferedImage bufferedImage = ImageFormat.of(Tensors.fromString("{{255}}"));
+    int type = bufferedImage.getType();
+    assertEquals(type, BufferedImage.TYPE_BYTE_GRAY);
+    ImageFormat.of(Tensors.fromString("{{260}}")); // does not throw but roll over
+  }
+
+  @Test
   void testFails() {
     assertThrows(Exception.class, () -> ImageFormat.of(Array.zeros(10, 10, 3), 0));
     assertThrows(Exception.class, () -> ImageFormat.of(Array.zeros(10, 10, 5), 0));

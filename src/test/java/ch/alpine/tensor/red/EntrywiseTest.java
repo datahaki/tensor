@@ -127,6 +127,12 @@ class EntrywiseTest {
   }
 
   @Test
+  void testEq2() {
+    assertEquals(Entrywise.eq().apply(RealScalar.TWO, RealScalar.TWO), RealScalar.ONE);
+    assertEquals(Entrywise.neq().apply(RealScalar.TWO, RealScalar.TWO), RealScalar.ZERO);
+  }
+
+  @Test
   void testEmpty() {
     Entrywise entrywise = Entrywise.with(Max::of);
     assertThrows(NoSuchElementException.class, () -> entrywise.of(Tensors.empty()));

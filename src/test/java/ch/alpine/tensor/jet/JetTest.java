@@ -21,11 +21,28 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.pdf.CDF;
+import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.DagumDistribution;
+import ch.alpine.tensor.pdf.c.ExponentialDistribution;
+import ch.alpine.tensor.pdf.c.GompertzMakehamDistribution;
+import ch.alpine.tensor.pdf.c.GumbelDistribution;
+import ch.alpine.tensor.pdf.c.LaplaceDistribution;
+import ch.alpine.tensor.pdf.c.LogisticDistribution;
+import ch.alpine.tensor.pdf.c.ParetoDistribution;
+import ch.alpine.tensor.pdf.c.RayleighDistribution;
+import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -223,5 +240,57 @@ class JetTest {
   void testNestFail() {
     Jet js = Jet.identity(RealScalar.of(2), 3);
     assertThrows(Throw.class, () -> Jet.of(Tensors.of(RealScalar.of(1), js)));
+  }
+
+  @Test
+  void testPolynomial2() {
+    Tensor coeffs = Tensors.vector(2, 1, 3, 4);
+    Polynomial f0 = Polynomial.of(coeffs);
+    Polynomial f1 = f0.derivative();
+    Scalar value = Rational.of(3, 17);
+    Tensor gnd = Tensors.of(f0.apply(value), f1.apply(value));
+    Scalar scalar = Jet.identity(value, gnd.length());
+    Jet der = (Jet) f0.apply(scalar);
+    assertEquals(der.derivatives(), gnd);
+  }
+
+  @Test
+  void testPolynomialRandom() {
+    Tensor c0 = RandomVariate.of(DiscreteUniformDistribution.of(-3, 3), 4);
+    Polynomial f0 = Polynomial.of(c0);
+    Polynomial f1 = f0.derivative();
+    Polynomial f2 = f1.derivative();
+    Scalar value = Rational.of(3, 17);
+    Tensor gnd = Tensors.of(f0.apply(value), f1.apply(value), f2.apply(value));
+    Scalar scalar = Jet.identity(value, gnd.length());
+    Jet der = (Jet) f0.apply(scalar);
+    assertEquals(der.derivatives(), gnd);
+  }
+
+  public static final Distribution[] DISTRIBUTIONS = { //
+      ExponentialDistribution.of(Rational.HALF), //
+      ParetoDistribution.of(Rational.HALF, RealScalar.ONE), //
+      UniformDistribution.of(1, 10), //
+      TrapezoidalDistribution.of(0, 4, 5, 8), //
+      DagumDistribution.of(1, 2, 3), //
+      GompertzMakehamDistribution.of(1, 2), //
+      GumbelDistribution.of(1, 2), //
+      LaplaceDistribution.of(1, 2), //
+      LogisticDistribution.of(1, 2), //
+      RayleighDistribution.of(2) //
+  };
+
+  @Test
+  void testDistributions() {
+    for (Distribution distribution : DISTRIBUTIONS) {
+      CDF cdf = CDF.of(distribution);
+      PDF pdf = PDF.of(distribution);
+      for (Tensor _x : Subdivide.of(2, 4, 6)) {
+        Scalar x = Jet.identity((Scalar) _x, 4);
+        Jet js1 = (Jet) cdf.p_lessEquals(x);
+        Jet js2 = (Jet) pdf.at(x);
+        Tolerance.CHOP.requireClose(js1.derivatives().extract(1, 4), js2.derivatives().extract(0, 3));
+      }
+    }
   }
 }

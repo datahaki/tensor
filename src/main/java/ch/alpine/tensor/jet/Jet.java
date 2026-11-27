@@ -56,7 +56,8 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * 
  * to validate the implementation of Hermite subdivision
  * 
- * to validate the implementation of network layers
+ * to validate the implementation of forward and backward pass
+ * of network layers
  * 
  * @implSpec
  * This class is immutable and thread-safe. */

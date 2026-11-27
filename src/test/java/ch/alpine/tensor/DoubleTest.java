@@ -35,13 +35,14 @@ class DoubleTest {
   void testZeros() {
     final double d1 = 0.0;
     final double d2 = -0.0;
-    assertFalse(Double.valueOf(d1).equals(d2));
     assertFalse(d1 < d2);
     assertFalse(d2 < d1);
     assertTrue(d1 <= d2);
     assertTrue(d2 <= d1);
     assertTrue(d1 >= d2);
     assertTrue(d2 >= d1);
+    assertEquals(Double.compare(d1, d1), 0);
+    assertEquals(Double.compare(d2, d2), 0);
     // the tensor library overrides this logic (see DoubleScalar)
     assertEquals(Double.compare(d1, d2), +1);
     assertEquals(Double.compare(d2, d1), -1);
