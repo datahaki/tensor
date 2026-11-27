@@ -53,10 +53,10 @@ class ComplexTest {
 
   @Test
   void testConstructFail() {
-    // assertThrows(Throw.class, () -> Complex.of(RealScalar.ONE, ComplexScalar.I));
-    // assertThrows(Throw.class, () -> Complex.of(ComplexScalar.I, RealScalar.ONE));
-    assertThrows(Throw.class, () -> Complex.of(Quaternion.ONE, RealScalar.ONE));
-    // assertThrows(Throw.class, () -> Complex.of(RealScalar.ONE, Quaternion.ONE));
+    // assertThrows(Exception.class, () -> Complex.of(RealScalar.ONE, ComplexScalar.I));
+    // assertThrows(Exception.class, () -> Complex.of(ComplexScalar.I, RealScalar.ONE));
+    assertThrows(Exception.class, () -> Complex.of(Quaternion.ONE, RealScalar.ONE));
+    // assertThrows(Exception.class, () -> Complex.of(RealScalar.ONE, Quaternion.ONE));
   }
 
   @Test
@@ -68,14 +68,14 @@ class ComplexTest {
 
   @Test
   void testPolarFail() {
-    assertThrows(Throw.class, () -> Complex.fromPolar(RealScalar.ONE, Complex.I));
+    assertThrows(Exception.class, () -> Complex.fromPolar(RealScalar.ONE, Complex.I));
     assertThrows(ClassCastException.class, () -> Complex.fromPolar(Complex.I, RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> Complex.fromPolar(Complex.I, Complex.I));
   }
 
   @Test
   void testPolarQuantityFail() {
-    assertThrows(Throw.class, () -> Complex.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
+    assertThrows(Exception.class, () -> Complex.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
   }
 
   @Test
@@ -86,7 +86,7 @@ class ComplexTest {
 
   @Test
   void testPolarNumberFail() {
-    assertThrows(Throw.class, () -> Complex.fromPolar(-1, 3));
+    assertThrows(Exception.class, () -> Complex.fromPolar(-1, 3));
   }
 
   private static void _checkNaN(Scalar scalar) {
@@ -185,7 +185,7 @@ class ComplexTest {
 
   @Test
   void testUnitFail() {
-    assertThrows(Throw.class, () -> Complex.unit(Complex.of(-1, 3)));
-    assertThrows(Throw.class, () -> Complex.unit(Quantity.of(3, "s")));
+    assertThrows(Exception.class, () -> Complex.unit(Complex.of(-1, 3)));
+    assertThrows(Exception.class, () -> Complex.unit(Quantity.of(3, "s")));
   }
 }

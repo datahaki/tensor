@@ -12,7 +12,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -143,14 +142,14 @@ class NormalizeTest {
     assertTrue(tensorUnaryOperator.toString().startsWith("Normalize"));
     Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
     assertEquals(tensor, Tensors.fromString("{-1/4, 3/4, 1/2}"));
-    assertThrows(Throw.class, () -> tensorUnaryOperator.apply(Tensors.empty()));
+    assertThrows(Exception.class, () -> tensorUnaryOperator.apply(Tensors.empty()));
   }
 
   @Test
   void testInconsistentFail() {
     Distribution distribution = UniformDistribution.of(3, 5);
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(_ -> RandomVariate.of(distribution));
-    assertThrows(Throw.class, () -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2)));
+    assertThrows(Exception.class, () -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2)));
   }
 
   @Test

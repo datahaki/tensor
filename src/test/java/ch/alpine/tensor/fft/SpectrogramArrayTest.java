@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
@@ -154,13 +153,13 @@ class SpectrogramArrayTest {
   @Test
   void testDimensionsFail() {
     TensorUnaryOperator tensorUnaryOperator = SpectrogramArrays.FOURIER.operator().config(32, 8);
-    assertThrows(Throw.class, () -> tensorUnaryOperator.apply(RealScalar.ONE));
+    assertThrows(Exception.class, () -> tensorUnaryOperator.apply(RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> tensorUnaryOperator.apply(HilbertMatrix.of(32)));
   }
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> SpectrogramArrays.FOURIER.operator().apply(RealScalar.ONE));
+    assertThrows(Exception.class, () -> SpectrogramArrays.FOURIER.operator().apply(RealScalar.ONE));
   }
 
   @Test

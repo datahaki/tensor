@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
@@ -90,8 +89,8 @@ class MatrixRankTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> MatrixRank.of(RealScalar.TWO));
-    assertThrows(Throw.class, () -> MatrixRank.of(Pi.VALUE));
+    assertThrows(Exception.class, () -> MatrixRank.of(RealScalar.TWO));
+    assertThrows(Exception.class, () -> MatrixRank.of(Pi.VALUE));
   }
 
   @Test

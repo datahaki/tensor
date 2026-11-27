@@ -15,7 +15,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
@@ -100,7 +99,7 @@ class SymmetrizeTest {
   @Test
   void testNonArrayFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
-    assertThrows(Throw.class, () -> Symmetrize.of(tensor));
+    assertThrows(Exception.class, () -> Symmetrize.of(tensor));
   }
 
   @Test

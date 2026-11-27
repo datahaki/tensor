@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -104,7 +103,7 @@ class InfluenceMatrixSvdTest {
   @Test
   void testRequireUnitFail() {
     Scalar scalar = RealScalar.of(1.0 + 1e-5);
-    assertThrows(Throw.class, () -> InfluenceMatrixSvd.requireUnit(scalar));
+    assertThrows(Exception.class, () -> InfluenceMatrixSvd.requireUnit(scalar));
   }
 
   @Test

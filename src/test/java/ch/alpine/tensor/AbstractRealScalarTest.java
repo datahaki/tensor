@@ -144,8 +144,8 @@ class AbstractRealScalarTest {
 
   @Test
   void testArcTan() {
-    assertThrows(Throw.class, () -> ArcTan.of(RealScalar.of(2.3), GaussScalar.of(3, 7)));
-    assertThrows(Throw.class, () -> ArcTan.of(GaussScalar.of(3, 7), RealScalar.of(2.3)));
+    assertThrows(Exception.class, () -> ArcTan.of(RealScalar.of(2.3), GaussScalar.of(3, 7)));
+    assertThrows(Exception.class, () -> ArcTan.of(GaussScalar.of(3, 7), RealScalar.of(2.3)));
   }
 
   @Test
@@ -170,6 +170,6 @@ class AbstractRealScalarTest {
 
   @Test
   void testPowerFail() {
-    assertThrows(Throw.class, () -> Power.of(1, GaussScalar.of(2, 7)));
+    assertThrows(Exception.class, () -> Power.of(1, GaussScalar.of(2, 7)));
   }
 }

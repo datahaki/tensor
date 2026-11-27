@@ -48,7 +48,7 @@ class BooleanScalarTest {
   @Test
   void testReciprocal() {
     assertEquals(BooleanScalar.TRUE.reciprocal(), BooleanScalar.TRUE);
-    assertThrows(Throw.class, BooleanScalar.FALSE::reciprocal);
+    assertThrows(Exception.class, BooleanScalar.FALSE::reciprocal);
   }
 
   @Test

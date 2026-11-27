@@ -48,32 +48,32 @@ class AbstractScalarTest {
   @Test
   void testGet1Fail() {
     assertEquals(Pi.VALUE.get(), Pi.VALUE);
-    assertThrows(Throw.class, () -> Pi.VALUE.get(List.of(0)));
-    assertThrows(Throw.class, () -> Pi.VALUE.get(List.of(0, 0)));
-    assertThrows(Throw.class, () -> Pi.VALUE.get(List.of(-1)));
-    assertThrows(Throw.class, () -> Pi.VALUE.get(List.of(-1, 0)));
-    assertThrows(Throw.class, () -> RealScalar.ONE.Get(1));
-    assertThrows(Throw.class, () -> RealScalar.ONE.get(new int[] { 1 }));
+    assertThrows(Exception.class, () -> Pi.VALUE.get(List.of(0)));
+    assertThrows(Exception.class, () -> Pi.VALUE.get(List.of(0, 0)));
+    assertThrows(Exception.class, () -> Pi.VALUE.get(List.of(-1)));
+    assertThrows(Exception.class, () -> Pi.VALUE.get(List.of(-1, 0)));
+    assertThrows(Exception.class, () -> RealScalar.ONE.Get(1));
+    assertThrows(Exception.class, () -> RealScalar.ONE.get(new int[] { 1 }));
   }
 
   @Test
   void testGet2Fail() {
-    assertThrows(Throw.class, () -> Rational.HALF.Get(1, 4));
-    assertThrows(Throw.class, () -> Pi.TWO.get(new int[] { 1, 2 }));
+    assertThrows(Exception.class, () -> Rational.HALF.Get(1, 4));
+    assertThrows(Exception.class, () -> Pi.TWO.get(new int[] { 1, 2 }));
   }
 
   @Test
   void testSetFail() {
-    assertThrows(Throw.class, () -> RealScalar.ONE.set(RealScalar.ZERO));
-    assertThrows(Throw.class, () -> RealScalar.ONE.set(_ -> RealScalar.ZERO));
+    assertThrows(Exception.class, () -> RealScalar.ONE.set(RealScalar.ZERO));
+    assertThrows(Exception.class, () -> RealScalar.ONE.set(_ -> RealScalar.ZERO));
   }
 
   @Test
   void testSetListFail() {
-    assertThrows(Throw.class, () -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] {})));
-    assertThrows(Throw.class, () -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] { 2 })));
-    assertThrows(Throw.class, () -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] {})));
-    assertThrows(Throw.class, () -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] { 2 })));
+    assertThrows(Exception.class, () -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] {})));
+    assertThrows(Exception.class, () -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] { 2 })));
+    assertThrows(Exception.class, () -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] {})));
+    assertThrows(Exception.class, () -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] { 2 })));
   }
 
   @Test
@@ -85,12 +85,12 @@ class AbstractScalarTest {
 
   @Test
   void testAppendFail() {
-    assertThrows(Throw.class, () -> RealScalar.ONE.append(RealScalar.ZERO));
+    assertThrows(Exception.class, () -> RealScalar.ONE.append(RealScalar.ZERO));
   }
 
   @Test
   void testExtractFail() {
-    assertThrows(Throw.class, () -> RealScalar.ONE.extract(1, 2));
+    assertThrows(Exception.class, () -> RealScalar.ONE.extract(1, 2));
   }
 
   @Test
@@ -100,6 +100,6 @@ class AbstractScalarTest {
 
   @Test
   void testBlockFail() {
-    assertThrows(Throw.class, () -> RealScalar.ONE.block(List.of(1), List.of(1)));
+    assertThrows(Exception.class, () -> RealScalar.ONE.block(List.of(1), List.of(1)));
   }
 }

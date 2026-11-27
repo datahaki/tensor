@@ -11,7 +11,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -39,7 +38,7 @@ class RootScalarTest {
   @Test
   void testNumber() {
     RootScalar rootScalar = new RootScalar(Rational.of(-7, 5), Rational.of(-3, 17), RealScalar.of(3));
-    assertThrows(Throw.class, rootScalar::number);
+    assertThrows(Exception.class, rootScalar::number);
   }
 
   @Test

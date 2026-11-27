@@ -17,7 +17,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -87,7 +86,7 @@ class BenIsraelCohenTest {
   void testMixedUnitsFail() {
     Tensor matrix = Tensors.fromString( //
         "{{-4/5[kg], 3/10[m], 1/2[m]}, {3[s], -2[s], 1[s]}}");
-    assertThrows(Throw.class, () -> BenIsraelCohen.of(matrix));
+    assertThrows(Exception.class, () -> BenIsraelCohen.of(matrix));
   }
 
   @Test
@@ -118,7 +117,7 @@ class BenIsraelCohenTest {
   void testExceedIters() {
     Tensor matrix = Import.of("ch/alpine/tensor/mat/pi/bic_fail.csv");
     MatrixQ.require(matrix);
-    assertThrows(Throw.class, () -> BenIsraelCohen.of(matrix));
+    assertThrows(Exception.class, () -> BenIsraelCohen.of(matrix));
   }
 
   @ParameterizedTest
@@ -164,9 +163,9 @@ class BenIsraelCohenTest {
 
   @Test
   void testAbsurd() {
-    assertThrows(Throw.class, () -> BenIsraelCohen.of(Tensors.fromString("{{NaN}}")));
-    assertThrows(Throw.class, () -> BenIsraelCohen.of(Tensors.fromString("{{Infinity}}")));
-    assertThrows(Throw.class, () -> BenIsraelCohen.of(Tensors.fromString("{{1.7976931348623157e+308}}")));
+    assertThrows(Exception.class, () -> BenIsraelCohen.of(Tensors.fromString("{{NaN}}")));
+    assertThrows(Exception.class, () -> BenIsraelCohen.of(Tensors.fromString("{{Infinity}}")));
+    assertThrows(Exception.class, () -> BenIsraelCohen.of(Tensors.fromString("{{1.7976931348623157e+308}}")));
   }
 
   @Test

@@ -14,7 +14,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.lie.Symmetrize;
@@ -163,6 +162,6 @@ class MatrixSqrtTest {
 
   @Test
   void testNonSymmetricFail() {
-    assertThrows(Throw.class, () -> MatrixSqrt.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4)));
+    assertThrows(Exception.class, () -> MatrixSqrt.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4)));
   }
 }

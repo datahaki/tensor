@@ -17,7 +17,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -76,7 +75,7 @@ class ExactScalarQTest {
 
   @Test
   void testRequireFail() {
-    assertThrows(Throw.class, () -> ExactScalarQ.require(DoubleScalar.of(3)));
+    assertThrows(Exception.class, () -> ExactScalarQ.require(DoubleScalar.of(3)));
   }
 
   @Test

@@ -128,16 +128,16 @@ class DoubleScalarTest {
   @Test
   void testNaN() {
     DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
-    assertThrows(Throw.class, nan::isNonNegative);
-    assertThrows(Throw.class, nan::signum);
+    assertThrows(Exception.class, nan::isNonNegative);
+    assertThrows(Exception.class, nan::signum);
   }
 
   @Test
   void testCompareFail() {
     Scalar a = RealScalar.of(7.2);
     Scalar b = GaussScalar.of(3, 5);
-    assertThrows(Throw.class, () -> Max.of(a, b));
-    assertThrows(Throw.class, () -> Max.of(b, a));
+    assertThrows(Exception.class, () -> Max.of(a, b));
+    assertThrows(Exception.class, () -> Max.of(b, a));
   }
 
   @Test

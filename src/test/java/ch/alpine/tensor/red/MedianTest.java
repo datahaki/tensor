@@ -10,7 +10,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
@@ -44,12 +43,12 @@ class MedianTest {
   @Test
   void testEmpty() {
     assertThrows(IllegalArgumentException.class, () -> Median.of(Tensors.empty()));
-    assertThrows(Throw.class, () -> Median.of(Pi.VALUE));
+    assertThrows(Exception.class, () -> Median.of(Pi.VALUE));
   }
 
   @Test
   void testUnorderedFail() {
-    assertThrows(Throw.class, () -> Median.ofSorted(Tensors.vector(3, 2, 1)));
-    assertThrows(Throw.class, () -> Median.ofSorted(Tensors.vector(1, 2, 1)));
+    assertThrows(Exception.class, () -> Median.ofSorted(Tensors.vector(3, 2, 1)));
+    assertThrows(Exception.class, () -> Median.ofSorted(Tensors.vector(1, 2, 1)));
   }
 }

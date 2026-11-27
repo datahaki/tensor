@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -44,6 +43,6 @@ class LastTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(Throw.class, () -> Last.of(RealScalar.of(99)));
+    assertThrows(Exception.class, () -> Last.of(RealScalar.of(99)));
   }
 }

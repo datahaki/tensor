@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clips;
@@ -71,7 +70,7 @@ class CoordinateBoundsTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(Throw.class, () -> CoordinateBounds.of(RealScalar.ZERO));
+    assertThrows(Exception.class, () -> CoordinateBounds.of(RealScalar.ZERO));
   }
 
   @Test
@@ -92,12 +91,12 @@ class CoordinateBoundsTest {
 
   @Test
   void testFail2() {
-    assertThrows(Throw.class, () -> CoordinateBounds.of(Tensors.vector(-2, 10), Tensors.vector(8, 9)));
+    assertThrows(Exception.class, () -> CoordinateBounds.of(Tensors.vector(-2, 10), Tensors.vector(8, 9)));
   }
 
   @Test
   void testFail3() {
     CoordinateBounds.of(Tensors.vector(0), Tensors.fromString("{2}"));
-    assertThrows(Throw.class, () -> CoordinateBounds.of(Tensors.vector(0), Tensors.fromString("{2[m]}")));
+    assertThrows(Exception.class, () -> CoordinateBounds.of(Tensors.vector(0), Tensors.fromString("{2[m]}")));
   }
 }

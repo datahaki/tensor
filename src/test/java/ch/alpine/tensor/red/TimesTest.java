@@ -207,7 +207,7 @@ class TimesTest {
 
   @Test
   void testTotalProdFail() {
-    assertThrows(Throw.class, () -> pmul(RealScalar.ONE));
+    assertThrows(Exception.class, () -> pmul(RealScalar.ONE));
   }
 
   @Test

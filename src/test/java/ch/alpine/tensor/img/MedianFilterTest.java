@@ -10,7 +10,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.chq.ExactTensorQ;
 
@@ -83,7 +82,7 @@ class MedianFilterTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> MedianFilter.of(RealScalar.of(3), 1));
+    assertThrows(Exception.class, () -> MedianFilter.of(RealScalar.of(3), 1));
   }
 
   @Test

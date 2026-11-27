@@ -18,7 +18,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
@@ -166,7 +165,7 @@ class ClipsTest {
 
   @Test
   void testIntersectionFail() {
-    assertThrows(Throw.class, () -> Clips.intersection(Clips.interval(2, 3), Clips.interval(5, 10)));
+    assertThrows(Exception.class, () -> Clips.intersection(Clips.interval(2, 3), Clips.interval(5, 10)));
   }
 
   @Test
@@ -212,16 +211,16 @@ class ClipsTest {
   void testCoverFail0() {
     Clip c1 = Clips.positive(Quantity.of(0, "m"));
     Clip c2 = Clips.positive(Quantity.of(0, "s"));
-    assertThrows(Throw.class, () -> Clips.cover(c1, c2));
-    assertThrows(Throw.class, () -> Clips.intersection(c1, c2));
+    assertThrows(Exception.class, () -> Clips.cover(c1, c2));
+    assertThrows(Exception.class, () -> Clips.intersection(c1, c2));
   }
 
   @Test
   void testCoverFail1() {
     Clip c1 = Clips.positive(Quantity.of(1, "m"));
     Clip c2 = Clips.positive(Quantity.of(2, "s"));
-    assertThrows(Throw.class, () -> Clips.cover(c1, c2));
-    assertThrows(Throw.class, () -> Clips.intersection(c1, c2));
+    assertThrows(Exception.class, () -> Clips.cover(c1, c2));
+    assertThrows(Exception.class, () -> Clips.intersection(c1, c2));
   }
 
   @Test
@@ -293,40 +292,40 @@ class ClipsTest {
 
   @Test
   void testPositiveFail() {
-    assertThrows(Throw.class, () -> Clips.positive(Quantity.of(-1, "kg")));
+    assertThrows(Exception.class, () -> Clips.positive(Quantity.of(-1, "kg")));
   }
 
   @Test
   void testNaNFail() {
-    assertThrows(Throw.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, DoubleScalar.INDETERMINATE));
-    assertThrows(Throw.class, () -> Clips.interval(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
-    assertThrows(Throw.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
+    assertThrows(Exception.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, DoubleScalar.INDETERMINATE));
+    assertThrows(Exception.class, () -> Clips.interval(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
+    assertThrows(Exception.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
   @Test
   void testAbsoluteFail() {
-    assertThrows(Throw.class, () -> Clips.absolute(Quantity.of(-1, "kg")));
+    assertThrows(Exception.class, () -> Clips.absolute(Quantity.of(-1, "kg")));
   }
 
   @Test
   void testInsideFail() {
-    assertThrows(Throw.class, () -> Clips.unit().isInside(Quantity.of(0.5, "m")));
+    assertThrows(Exception.class, () -> Clips.unit().isInside(Quantity.of(0.5, "m")));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> Clips.unit().apply(Quantity.of(-5, "m")));
-    assertThrows(Throw.class, () -> Clips.absoluteOne().apply(Quantity.of(-5, "m")));
+    assertThrows(Exception.class, () -> Clips.unit().apply(Quantity.of(-5, "m")));
+    assertThrows(Exception.class, () -> Clips.absoluteOne().apply(Quantity.of(-5, "m")));
   }
 
   @Test
   void testQuantityMixedZero() {
-    assertThrows(Throw.class, () -> Clips.interval(Quantity.of(0, "m"), Quantity.of(0, "")));
+    assertThrows(Exception.class, () -> Clips.interval(Quantity.of(0, "m"), Quantity.of(0, "")));
   }
 
   @Test
   void testQuantityMixedUnitsFail() {
-    assertThrows(Throw.class, () -> Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "kg")));
+    assertThrows(Exception.class, () -> Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "kg")));
   }
 
   @Test

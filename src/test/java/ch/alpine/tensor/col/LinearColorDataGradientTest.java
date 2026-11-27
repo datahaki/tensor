@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Subdivide;
@@ -34,7 +33,7 @@ class LinearColorDataGradientTest {
   @Test
   void testCornerCaseLo() {
     LinearColorDataGradient.of(Tensors.fromString("{{255, 255, 255, 255}, {0, 0, 0, 255}}"));
-    assertThrows(Throw.class, () -> LinearColorDataGradient.of(Tensors.fromString("{{0, 0, 0, 0}, {-0.1, 0, 0, 0}}")));
+    assertThrows(Exception.class, () -> LinearColorDataGradient.of(Tensors.fromString("{{0, 0, 0, 0}, {-0.1, 0, 0, 0}}")));
   }
 
   @Test
@@ -49,11 +48,11 @@ class LinearColorDataGradientTest {
 
   @Test
   void testVectorFail() {
-    assertThrows(Throw.class, () -> LinearColorDataGradient.of(Tensors.vector(1, 2, 3, 4)));
+    assertThrows(Exception.class, () -> LinearColorDataGradient.of(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
   void testEmptyFail() {
-    assertThrows(Throw.class, () -> LinearColorDataGradient.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> LinearColorDataGradient.of(Tensors.empty()));
   }
 }

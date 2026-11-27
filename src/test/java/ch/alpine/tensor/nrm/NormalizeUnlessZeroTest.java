@@ -11,7 +11,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -22,7 +21,7 @@ class NormalizeUnlessZeroTest {
   @Test
   void testNormalizeNaN() {
     Tensor vector = Tensors.of(RealScalar.ONE, DoubleScalar.INDETERMINATE, RealScalar.ONE);
-    assertThrows(Throw.class, () -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
+    assertThrows(Exception.class, () -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
   }
 
   @Test
@@ -57,13 +56,13 @@ class NormalizeUnlessZeroTest {
   void testMixedUnit1Fail() {
     TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
     Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(1, "s"));
-    assertThrows(Throw.class, () -> tuo.apply(one));
+    assertThrows(Exception.class, () -> tuo.apply(one));
   }
 
   @Test
   void testMixedUnit2Fail() {
     TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
     Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(0, "s"));
-    assertThrows(Throw.class, () -> tuo.apply(one));
+    assertThrows(Exception.class, () -> tuo.apply(one));
   }
 }

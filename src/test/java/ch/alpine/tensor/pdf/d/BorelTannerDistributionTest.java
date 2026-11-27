@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -58,8 +57,8 @@ class BorelTannerDistributionTest {
 
   @Test
   void testFails() {
-    assertThrows(Throw.class, () -> BorelTannerDistribution.of(0, 7));
-    assertThrows(Throw.class, () -> BorelTannerDistribution.of(1, 7));
+    assertThrows(Exception.class, () -> BorelTannerDistribution.of(0, 7));
+    assertThrows(Exception.class, () -> BorelTannerDistribution.of(1, 7));
     assertThrows(Exception.class, () -> BorelTannerDistribution.of(0.2, 0));
   }
 }

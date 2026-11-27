@@ -15,7 +15,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -57,8 +56,8 @@ class CosineDistanceTest {
   @MethodSource("vectornormalizers")
   void testNormalizePositiveInfinity(TensorUnaryOperator tuo) {
     Tensor vector = Tensors.of(DoubleScalar.POSITIVE_INFINITY, RealScalar.ONE);
-    assertThrows(Throw.class, () -> tuo.apply(vector));
-    assertThrows(Throw.class, () -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
+    assertThrows(Exception.class, () -> tuo.apply(vector));
+    assertThrows(Exception.class, () -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
   }
 
   @ParameterizedTest

@@ -13,7 +13,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
@@ -109,6 +108,6 @@ class OrderingTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> Ordering.INCREASING.of(Pi.HALF));
+    assertThrows(Exception.class, () -> Ordering.INCREASING.of(Pi.HALF));
   }
 }

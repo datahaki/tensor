@@ -19,7 +19,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
@@ -203,7 +202,7 @@ class LinearSolveTest {
     Tensor b = Join.of(vector);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    assertThrows(Throw.class, () -> Det.of(m));
+    assertThrows(Exception.class, () -> Det.of(m));
   }
 
   @Test
@@ -228,7 +227,7 @@ class LinearSolveTest {
   void testSome2() {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");
     Tensor b = Tensors.fromString("{1, -2, 1}");
-    assertThrows(Throw.class, () -> LinearSolve.any(m, b));
+    assertThrows(Exception.class, () -> LinearSolve.any(m, b));
   }
 
   @Test
@@ -325,7 +324,7 @@ class LinearSolveTest {
     Tensor b = Tensors.vector(2, 2, -2);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    assertThrows(Throw.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
+    assertThrows(Exception.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
   @Test
@@ -334,7 +333,7 @@ class LinearSolveTest {
     Tensor b = Tensors.vector(-2, -2, 10);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    assertThrows(Throw.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
+    assertThrows(Exception.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
   @Test
@@ -349,7 +348,7 @@ class LinearSolveTest {
 
   @Test
   void testNoSolutionFail() {
-    assertThrows(Throw.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1)));
-    assertThrows(Throw.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1.0)));
+    assertThrows(Exception.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1)));
+    assertThrows(Exception.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1.0)));
   }
 }

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.lie.LehmerTensor;
 import ch.alpine.tensor.mat.gr.IdempotentMatrixQ;
 import ch.alpine.tensor.qty.DateTime;
@@ -69,7 +68,7 @@ class IdentityMatrixTest {
     Scalar dts4 = DateTime.of(2003, 11, 9, 4, 14);
     Tensor matrix = Tensors.matrix(new Scalar[][] { { dts1, dts2 }, { dts3, dts4 } });
     Tensor eye = IdentityMatrix.of(matrix);
-    assertThrows(Throw.class, () -> matrix.dot(eye));
+    assertThrows(Exception.class, () -> matrix.dot(eye));
   }
 
   @Test

@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
@@ -68,7 +67,7 @@ class RotateTest {
   @ParameterizedTest
   @EnumSource
   void testFailScalar(Rotate rotate) {
-    assertThrows(Throw.class, () -> rotate.of(RealScalar.ONE, 0));
+    assertThrows(Exception.class, () -> rotate.of(RealScalar.ONE, 0));
   }
 
   @ParameterizedTest

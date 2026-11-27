@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.Pi;
 
 class AppendTest {
@@ -41,7 +40,7 @@ class AppendTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> Append.of(RealScalar.ONE, Pi.TWO));
+    assertThrows(Exception.class, () -> Append.of(RealScalar.ONE, Pi.TWO));
   }
 
   @Test

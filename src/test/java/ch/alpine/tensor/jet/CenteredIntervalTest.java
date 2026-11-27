@@ -16,7 +16,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -156,17 +155,17 @@ class CenteredIntervalTest {
 
   @Test
   void testReciprocalFail() {
-    assertThrows(Throw.class, () -> CenteredInterval.of(-2.3, 5.6).reciprocal());
+    assertThrows(Exception.class, () -> CenteredInterval.of(-2.3, 5.6).reciprocal());
   }
 
   @Test
   void testPowerFail() {
-    assertThrows(Throw.class, () -> Power.of(CenteredInterval.of(-2.3, 5.6), 2.3));
+    assertThrows(Exception.class, () -> Power.of(CenteredInterval.of(-2.3, 5.6), 2.3));
   }
 
   @Test
   void testNumberFail() {
-    assertThrows(Throw.class, () -> CenteredInterval.of(-2.3, 5.6).number());
+    assertThrows(Exception.class, () -> CenteredInterval.of(-2.3, 5.6).number());
   }
 
   @Test

@@ -27,7 +27,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -80,9 +79,9 @@ class DateTimeTest {
     Scalar scalar2 = dt2.subtract(dt1);
     assertInstanceOf(Quantity.class, scalar2);
     assertEquals(dt1.add(scalar2), dt2);
-    assertThrows(Throw.class, dt1::negate);
-    assertThrows(Throw.class, () -> dt1.multiply(RealScalar.of(-1)));
-    assertThrows(Throw.class, () -> dt1.subtract(Rational.HALF));
+    assertThrows(Exception.class, dt1::negate);
+    assertThrows(Exception.class, () -> dt1.multiply(RealScalar.of(-1)));
+    assertThrows(Exception.class, () -> dt1.subtract(Rational.HALF));
     assertEquals(dt2.subtract(dt1.multiply(RealScalar.of(1))), scalar2);
     Clip clip = Clips.interval(dt1, dt2);
     DateTime dt3 = DateTime.of(2021, 1, 3, 2, 12);
@@ -324,11 +323,11 @@ class DateTimeTest {
     assertNotEquals(dt1, dt2);
     assertEquals(dt1.compareTo(dt2), -1);
     assertEquals(dt2.compareTo(dt1), +1);
-    assertThrows(Throw.class, () -> dt1.add(dt2));
-    assertThrows(Throw.class, () -> dt1.negate().add(dt2.negate()));
-    assertThrows(Throw.class, () -> dt1.multiply(Pi.TWO));
-    assertThrows(Throw.class, dt1::reciprocal);
-    assertThrows(Throw.class, dt1::number);
+    assertThrows(Exception.class, () -> dt1.add(dt2));
+    assertThrows(Exception.class, () -> dt1.negate().add(dt2.negate()));
+    assertThrows(Exception.class, () -> dt1.multiply(Pi.TWO));
+    assertThrows(Exception.class, dt1::reciprocal);
+    assertThrows(Exception.class, dt1::number);
     assertEquals(dt1.zero(), Quantity.of(0, "s"));
     assertEquals(dt1.one(), RealScalar.ONE);
   }
@@ -338,16 +337,16 @@ class DateTimeTest {
     DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30);
     assertEquals(dt1, dt1.floor());
     assertNotEquals(dt1, "asd");
-    assertThrows(Throw.class, () -> dt1.add(RealScalar.of(3)));
-    assertThrows(Throw.class, () -> dt1.add(Complex.I));
-    assertThrows(Throw.class, () -> dt1.compareTo(Complex.I));
+    assertThrows(Exception.class, () -> dt1.add(RealScalar.of(3)));
+    assertThrows(Exception.class, () -> dt1.add(Complex.I));
+    assertThrows(Exception.class, () -> dt1.compareTo(Complex.I));
   }
 
   @Test
   void testAddSubtractFail1() {
     DateTime dt1 = DateTime.of(2020, 12, 20, 4, 30);
-    assertThrows(Throw.class, () -> dt1.subtract(Pi.VALUE));
-    assertThrows(Throw.class, () -> dt1.subtract(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> dt1.subtract(Pi.VALUE));
+    assertThrows(Exception.class, () -> dt1.subtract(Tensors.vector(1, 2, 3)));
   }
 
   @Test

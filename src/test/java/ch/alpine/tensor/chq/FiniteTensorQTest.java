@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 
 class FiniteTensorQTest {
   @Test
@@ -26,7 +25,7 @@ class FiniteTensorQTest {
 
   @Test
   void testRequireFail() {
-    assertThrows(Throw.class, () -> FiniteTensorQ.require(Tensors.vector(1, Double.NaN, 1.)));
-    assertThrows(Throw.class, () -> FiniteTensorQ.require(Tensors.vector(1, Double.POSITIVE_INFINITY)));
+    assertThrows(Exception.class, () -> FiniteTensorQ.require(Tensors.vector(1, Double.NaN, 1.)));
+    assertThrows(Exception.class, () -> FiniteTensorQ.require(Tensors.vector(1, Double.POSITIVE_INFINITY)));
   }
 }

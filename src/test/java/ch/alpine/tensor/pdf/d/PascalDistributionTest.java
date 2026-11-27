@@ -15,7 +15,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -165,7 +164,7 @@ class PascalDistributionTest {
 
   @Test
   void testFailP() {
-    assertThrows(Throw.class, () -> PascalDistribution.of(3, RealScalar.of(-0.2)));
-    assertThrows(Throw.class, () -> PascalDistribution.of(3, RealScalar.of(1.2)));
+    assertThrows(Exception.class, () -> PascalDistribution.of(3, RealScalar.of(-0.2)));
+    assertThrows(Exception.class, () -> PascalDistribution.of(3, RealScalar.of(1.2)));
   }
 }

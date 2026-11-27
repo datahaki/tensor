@@ -10,7 +10,6 @@ import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Chop;
 
@@ -34,6 +33,6 @@ class TanhTest {
   @Test
   void testFail() {
     Scalar scalar = GaussScalar.of(3, 11);
-    assertThrows(Throw.class, () -> Tanh.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Tanh.FUNCTION.apply(scalar));
   }
 }

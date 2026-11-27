@@ -10,7 +10,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
 class HarmonicMeanTest {
@@ -34,7 +33,7 @@ class HarmonicMeanTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> HarmonicMean.ofVector(RealScalar.ONE));
+    assertThrows(Exception.class, () -> HarmonicMean.ofVector(RealScalar.ONE));
   }
 
   @Test

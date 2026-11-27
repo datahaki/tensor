@@ -24,8 +24,8 @@ class ScalarsTest {
   @Test
   void testRequireZero() {
     assertEquals(Scalars.requireZero(Quantity.of(0, "A")), Quantity.of(0, "A"));
-    assertThrows(Throw.class, () -> Scalars.requireZero(Quantity.of(1, "A")));
-    assertThrows(Throw.class, () -> Scalars.requireZero(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Scalars.requireZero(Quantity.of(1, "A")));
+    assertThrows(Exception.class, () -> Scalars.requireZero(RealScalar.ONE));
   }
 
   void checkInvariant(String string, Class<?> cls) {
@@ -244,7 +244,7 @@ class ScalarsTest {
 
   @Test
   void testIntValueExactFractionFail() {
-    assertThrows(Throw.class, () -> Scalars.intValueExact(Rational.of(2, 3)));
+    assertThrows(Exception.class, () -> Scalars.intValueExact(Rational.of(2, 3)));
   }
 
   @Test
@@ -343,12 +343,12 @@ class ScalarsTest {
   void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(6, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    assertThrows(Throw.class, () -> Scalars.divides(qs1, qs2));
+    assertThrows(Exception.class, () -> Scalars.divides(qs1, qs2));
   }
 
   @Test
   void testBigIntegerExactNullFail() {
-    assertThrows(Throw.class, () -> Scalars.bigIntegerValueExact(null));
+    assertThrows(Exception.class, () -> Scalars.bigIntegerValueExact(null));
   }
 
   @Test

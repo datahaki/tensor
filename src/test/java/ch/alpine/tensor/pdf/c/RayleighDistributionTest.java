@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -70,8 +69,8 @@ class RayleighDistributionTest {
 
   @Test
   void testSigmaFail() {
-    assertThrows(Throw.class, () -> RayleighDistribution.of(0));
-    assertThrows(Throw.class, () -> RayleighDistribution.of(-1));
-    assertThrows(Throw.class, () -> RayleighDistribution.of(Quantity.of(2, "m")));
+    assertThrows(Exception.class, () -> RayleighDistribution.of(0));
+    assertThrows(Exception.class, () -> RayleighDistribution.of(-1));
+    assertThrows(Exception.class, () -> RayleighDistribution.of(Quantity.of(2, "m")));
   }
 }

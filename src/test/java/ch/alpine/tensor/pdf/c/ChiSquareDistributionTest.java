@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -37,7 +36,7 @@ class ChiSquareDistributionTest {
     assertEquals(Mean.of(distribution), RealScalar.of(2.3));
     assertEquals(Variance.of(distribution), RealScalar.of(2.3 + 2.3));
     assertEquals(pdf.at(RealScalar.of(-1.4)), RealScalar.ZERO);
-    assertThrows(Throw.class, () -> pdf.at(Quantity.of(2, "m")));
+    assertThrows(Exception.class, () -> pdf.at(Quantity.of(2, "m")));
   }
 
   @Test
@@ -69,9 +68,9 @@ class ChiSquareDistributionTest {
 
   @Test
   void testFails() {
-    assertThrows(Throw.class, () -> ChiSquareDistribution.of(0));
-    assertThrows(Throw.class, () -> ChiSquareDistribution.of(-2.3));
-    assertThrows(Throw.class, () -> ChiSquareDistribution.of(Quantity.of(2, "m")));
+    assertThrows(Exception.class, () -> ChiSquareDistribution.of(0));
+    assertThrows(Exception.class, () -> ChiSquareDistribution.of(-2.3));
+    assertThrows(Exception.class, () -> ChiSquareDistribution.of(Quantity.of(2, "m")));
   }
 
   @Test

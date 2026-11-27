@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -65,7 +64,7 @@ class BirnbaumSaundersDistributionTest {
 
   @Test
   void testFails() {
-    assertThrows(Throw.class, () -> BirnbaumSaundersDistribution.of(0, 7));
-    assertThrows(Throw.class, () -> BirnbaumSaundersDistribution.of(1, 0));
+    assertThrows(Exception.class, () -> BirnbaumSaundersDistribution.of(0, 7));
+    assertThrows(Exception.class, () -> BirnbaumSaundersDistribution.of(1, 0));
   }
 }

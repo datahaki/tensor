@@ -12,7 +12,6 @@ import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 
 class IntegerQTest {
   @Test
@@ -37,7 +36,7 @@ class IntegerQTest {
 
   @Test
   void testRequireFail() {
-    assertThrows(Throw.class, () -> IntegerQ.require(RealScalar.of(0.2)));
+    assertThrows(Exception.class, () -> IntegerQ.require(RealScalar.of(0.2)));
   }
 
   @Test

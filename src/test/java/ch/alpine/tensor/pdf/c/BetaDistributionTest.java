@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
@@ -48,7 +47,7 @@ class BetaDistributionTest {
 
   @Test
   void testFailNonPositive() {
-    assertThrows(Throw.class, () -> BetaDistribution.of(0, 3));
-    assertThrows(Throw.class, () -> BetaDistribution.of(2, 0));
+    assertThrows(Exception.class, () -> BetaDistribution.of(0, 3));
+    assertThrows(Exception.class, () -> BetaDistribution.of(2, 0));
   }
 }

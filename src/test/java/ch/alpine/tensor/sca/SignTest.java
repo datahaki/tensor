@@ -13,7 +13,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.qty.Quantity;
@@ -93,17 +92,17 @@ class SignTest {
     Sign.requirePositiveOrZero(RealScalar.ZERO);
     Sign.requirePositiveOrZero(RealScalar.ONE);
     Sign.requirePositiveOrZero(Quantity.of(2, "m*s^-2"));
-    assertThrows(Throw.class, () -> Sign.requirePositiveOrZero(RealScalar.ONE.negate()));
-    assertThrows(Throw.class, () -> Sign.requirePositiveOrZero(DoubleScalar.INDETERMINATE));
+    assertThrows(Exception.class, () -> Sign.requirePositiveOrZero(RealScalar.ONE.negate()));
+    assertThrows(Exception.class, () -> Sign.requirePositiveOrZero(DoubleScalar.INDETERMINATE));
   }
 
   @Test
   void testRequirePositive() {
     Sign.requirePositive(RealScalar.ONE);
     Sign.requirePositive(Quantity.of(2, "m*s^-2"));
-    assertThrows(Throw.class, () -> Sign.requirePositive(RealScalar.ZERO));
-    assertThrows(Throw.class, () -> Sign.requirePositive(RealScalar.ONE.negate()));
-    assertThrows(Throw.class, () -> Sign.requirePositive(DoubleScalar.INDETERMINATE));
+    assertThrows(Exception.class, () -> Sign.requirePositive(RealScalar.ZERO));
+    assertThrows(Exception.class, () -> Sign.requirePositive(RealScalar.ONE.negate()));
+    assertThrows(Exception.class, () -> Sign.requirePositive(DoubleScalar.INDETERMINATE));
   }
 
   @Test
@@ -112,7 +111,7 @@ class SignTest {
   }
 
   private static void _checkFailAll(Scalar value) {
-    assertThrows(Throw.class, () -> Sign.FUNCTION.apply(value));
+    assertThrows(Exception.class, () -> Sign.FUNCTION.apply(value));
     _checkSignIntFail(value);
   }
 

@@ -20,7 +20,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.alg.Transpose;
@@ -202,7 +201,7 @@ class SingularValueDecompositionTest {
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> SingularValueDecomposition.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> SingularValueDecomposition.of(RealScalar.ONE));
     assertThrows(Exception.class, () -> SingularValueDecomposition.of(Tensors.vector(1, 2, 3)));
     assertThrows(ClassCastException.class, () -> SingularValueDecomposition.of(Tensors.fromString("{{1, 2}, {2, {3}}}")));
     assertThrows(IllegalArgumentException.class, () -> SingularValueDecomposition.of(Array.zeros(2, 3, 4)));

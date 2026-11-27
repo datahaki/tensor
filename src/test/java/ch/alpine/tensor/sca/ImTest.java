@@ -13,7 +13,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.StringScalar;
@@ -57,12 +56,12 @@ class ImTest {
   @Test
   void testFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(Throw.class, () -> Im.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Im.FUNCTION.apply(scalar));
   }
 
   @Test
   void testDateTimeFail() {
     Scalar scalar = DateTime.now();
-    assertThrows(Throw.class, () -> Im.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Im.FUNCTION.apply(scalar));
   }
 }

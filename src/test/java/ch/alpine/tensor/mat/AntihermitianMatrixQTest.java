@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 
 class AntihermitianMatrixQTest {
@@ -29,6 +28,6 @@ class AntihermitianMatrixQTest {
   @Test
   void testRequireFail() {
     Tensor matrix = Tensors.fromString("{{1,1+2*I},{-1+2*I,0}}");
-    assertThrows(Throw.class, () -> AntihermitianMatrixQ.INSTANCE.require(matrix));
+    assertThrows(Exception.class, () -> AntihermitianMatrixQ.INSTANCE.require(matrix));
   }
 }

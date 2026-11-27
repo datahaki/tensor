@@ -15,7 +15,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.MapThread;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
@@ -78,17 +77,17 @@ class MaxTest {
 
   @Test
   void testMaxNaN() {
-    assertThrows(Throw.class, () -> Max.of(DoubleScalar.of(1), DoubleScalar.INDETERMINATE));
-    assertThrows(Throw.class, () -> Max.of(DoubleScalar.INDETERMINATE, DoubleScalar.of(1)));
-    assertThrows(Throw.class, () -> Max.of(RealScalar.of(1), DoubleScalar.INDETERMINATE));
-    assertThrows(Throw.class, () -> Max.of(DoubleScalar.INDETERMINATE, RealScalar.of(1)));
+    assertThrows(Exception.class, () -> Max.of(DoubleScalar.of(1), DoubleScalar.INDETERMINATE));
+    assertThrows(Exception.class, () -> Max.of(DoubleScalar.INDETERMINATE, DoubleScalar.of(1)));
+    assertThrows(Exception.class, () -> Max.of(RealScalar.of(1), DoubleScalar.INDETERMINATE));
+    assertThrows(Exception.class, () -> Max.of(DoubleScalar.INDETERMINATE, RealScalar.of(1)));
   }
 
   @Test
   void testFail() {
     Scalar string = StringScalar.of("string");
     Scalar gauss = GaussScalar.of(1, 3);
-    assertThrows(Throw.class, () -> Max.of(string, gauss));
-    assertThrows(Throw.class, () -> Max.of(gauss, string));
+    assertThrows(Exception.class, () -> Max.of(string, gauss));
+    assertThrows(Exception.class, () -> Max.of(gauss, string));
   }
 }

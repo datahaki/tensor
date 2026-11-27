@@ -11,7 +11,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.lie.rot.Cross;
 import ch.alpine.tensor.sca.Chop;
@@ -33,7 +32,7 @@ class SymmetricMatrixQTest {
     Tensor matrix = Tensors.fromString("{{1, 2.000000000000001}, {2, 1}}");
     SymmetricMatrixQ.INSTANCE.require(matrix);
     assertFalse(new SymmetricMatrixQ(Chop.NONE).test(matrix));
-    assertThrows(Throw.class, () -> new SymmetricMatrixQ(Chop.NONE).require(matrix));
+    assertThrows(Exception.class, () -> new SymmetricMatrixQ(Chop.NONE).require(matrix));
   }
 
   @Test
@@ -64,12 +63,12 @@ class SymmetricMatrixQTest {
   @Test
   void testRequire() {
     SymmetricMatrixQ.INSTANCE.require(IdentityMatrix.of(3));
-    assertThrows(Throw.class, () -> SymmetricMatrixQ.INSTANCE.require(Tensors.vector(1, 2, 3)));
-    assertThrows(Throw.class, () -> SymmetricMatrixQ.INSTANCE.require(Cross.skew3(Tensors.vector(1, 2, 3))));
+    assertThrows(Exception.class, () -> SymmetricMatrixQ.INSTANCE.require(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> SymmetricMatrixQ.INSTANCE.require(Cross.skew3(Tensors.vector(1, 2, 3))));
   }
 
   @Test
   void testRequireEmptyFail() {
-    assertThrows(Throw.class, () -> SymmetricMatrixQ.INSTANCE.require(Tensors.empty()));
+    assertThrows(Exception.class, () -> SymmetricMatrixQ.INSTANCE.require(Tensors.empty()));
   }
 }

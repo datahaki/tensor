@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Transpose;
@@ -178,15 +177,15 @@ class MatrixLogsTest {
   void testSeries1p() {
     MatrixLogs.series1P(Array.zeros(3, 3));
     MatrixLogs.series1P(ConstantArray.of(RealScalar.ZERO, 3, 3));
-    assertThrows(Throw.class, () -> MatrixLogs.series1P(ConstantArray.of(RealScalar.ONE, 3, 3)));
-    assertThrows(Throw.class, () -> MatrixLogs.series1P(ConstantArray.of(RealScalar.of(1.0), 3, 3)));
+    assertThrows(Exception.class, () -> MatrixLogs.series1P(ConstantArray.of(RealScalar.ONE, 3, 3)));
+    assertThrows(Exception.class, () -> MatrixLogs.series1P(ConstantArray.of(RealScalar.of(1.0), 3, 3)));
   }
 
   @Test
   void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 2, 3);
-    assertThrows(Throw.class, () -> MatrixLog.of(matrix));
+    assertThrows(Exception.class, () -> MatrixLog.of(matrix));
   }
 
   @Test

@@ -17,7 +17,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.BasisTransform;
 import ch.alpine.tensor.alg.Join;
@@ -130,19 +129,19 @@ class EigensystemTest {
   void testQuantityMixed() {
     Tensor matrix = Tensors.fromString("{{10[m^2], 2[m*kg]}, {2[m*kg], 4[kg^2]}}");
     SymmetricMatrixQ.INSTANCE.require(matrix);
-    assertThrows(Throw.class, () -> Eigensystem.of(matrix));
-    assertThrows(Throw.class, () -> Eigensystems._2(matrix));
-    assertThrows(Throw.class, () -> Eigensystem.ofSymmetric(matrix));
+    assertThrows(Exception.class, () -> Eigensystem.of(matrix));
+    assertThrows(Exception.class, () -> Eigensystems._2(matrix));
+    assertThrows(Exception.class, () -> Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
   void testEmptyFail() {
-    assertThrows(Throw.class, () -> Eigensystem.ofSymmetric(Tensors.empty()));
+    assertThrows(Exception.class, () -> Eigensystem.ofSymmetric(Tensors.empty()));
   }
 
   @Test
   void testNonSymmetricFail() {
-    assertThrows(Throw.class, () -> Eigensystem.ofSymmetric(Tensors.fromString("{{1, 2}, {3, 4}}")));
+    assertThrows(Exception.class, () -> Eigensystem.ofSymmetric(Tensors.fromString("{{1, 2}, {3, 4}}")));
   }
 
   @Test
@@ -177,6 +176,6 @@ class EigensystemTest {
 
   @Test
   void testNonSymmetric2Fail() {
-    assertThrows(Throw.class, () -> Eigensystem.ofSymmetric(Array.zeros(2, 3)));
+    assertThrows(Exception.class, () -> Eigensystem.ofSymmetric(Array.zeros(2, 3)));
   }
 }

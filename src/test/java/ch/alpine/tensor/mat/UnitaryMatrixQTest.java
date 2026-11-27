@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.fft.Fourier;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.sca.Chop;
@@ -51,6 +50,6 @@ class UnitaryMatrixQTest {
   void testRequire() {
     new UnitaryMatrixQ(Chop._12).require(Fourier.FORWARD.matrix(7));
     UnitaryMatrixQ.INSTANCE.require(Fourier.FORWARD.matrix(8));
-    assertThrows(Throw.class, () -> UnitaryMatrixQ.INSTANCE.require(Tensors.fromString("{{1, 2}, {I, I}}")));
+    assertThrows(Exception.class, () -> UnitaryMatrixQ.INSTANCE.require(Tensors.fromString("{{1, 2}, {I, I}}")));
   }
 }

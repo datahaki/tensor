@@ -51,4 +51,24 @@ class StaticHelperTest {
   void testPackageVisibility() {
     assertFalse(Modifier.isPublic(StaticHelper.class.getModifiers()));
   }
+
+  @Test
+  void testDoubleCompareEq() {
+    assertEquals(StaticHelper.compare(0.0, -0.0), 0);
+    assertEquals(StaticHelper.compare(-0.0, 0.0), 0);
+    assertEquals(StaticHelper.compare(0.0, 0.0), 0);
+    assertEquals(StaticHelper.compare(-0.0, -0.0), 0);
+  }
+
+  @Test
+  void testDoubleCompareLt() {
+    assertEquals(StaticHelper.compare(0, 1), Double.compare(0, 1));
+    assertEquals(StaticHelper.compare(1, 0), Double.compare(1, 0));
+  }
+
+  @Test
+  void testDoubleCompareThrows() {
+    assertThrows(Exception.class, () -> StaticHelper.compare(0.2, Double.NaN));
+    assertThrows(Exception.class, () -> StaticHelper.compare(Double.NaN, 0.2));
+  }
 }

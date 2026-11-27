@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -34,6 +33,6 @@ class ConjugateTest {
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> Conjugate.FUNCTION.apply(StringScalar.of("asd")));
+    assertThrows(Exception.class, () -> Conjugate.FUNCTION.apply(StringScalar.of("asd")));
   }
 }

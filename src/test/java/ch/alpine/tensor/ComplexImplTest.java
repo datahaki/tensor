@@ -62,8 +62,8 @@ class ComplexImplTest {
     Scalar c3 = Complex.of(c1, c2);
     assertEquals(c3, Complex.of(-6, -6));
     // Scalar r1 = RealScalar.of(7);
-    // assertThrows(Throw.class, () -> Complex.of(r1, c2));
-    // assertThrows(Throw.class, () -> Complex.of(c1, r1));
+    // assertThrows(Exception.class, () -> Complex.of(r1, c2));
+    // assertThrows(Exception.class, () -> Complex.of(c1, r1));
   }
 
   @Test
@@ -286,8 +286,8 @@ class ComplexImplTest {
   void testAddQuantityFail() {
     Scalar s1 = Quantity.of(1, "m");
     Scalar s2 = Complex.of(2, 3);
-    assertThrows(Throw.class, () -> s1.add(s2));
-    assertThrows(Throw.class, () -> s2.add(s1));
+    assertThrows(Exception.class, () -> s1.add(s2));
+    assertThrows(Exception.class, () -> s2.add(s1));
   }
 
   @Test

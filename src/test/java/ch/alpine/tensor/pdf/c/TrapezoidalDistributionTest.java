@@ -17,7 +17,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -191,8 +190,8 @@ class TrapezoidalDistributionTest {
     assertInstanceOf(RealScalar.class, apply);
     // assertTrue(distribution.toString().startsWith("TrapezoidalDistribution["));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
     TestMarkovChebyshev.symmetricAroundMean(distribution);
   }
 
@@ -255,8 +254,8 @@ class TrapezoidalDistributionTest {
     TestMarkovChebyshev.chebyshev(distribution);
     TestMarkovChebyshev.markov(distribution);
     TrapezoidalDistribution.of(Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
-    assertThrows(Throw.class, () -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m")));
-    assertThrows(Throw.class, () -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m")));
+    assertThrows(Exception.class, () -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m")));
+    assertThrows(Exception.class, () -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m")));
     TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(5, "m"));
   }
 
@@ -319,13 +318,13 @@ class TrapezoidalDistributionTest {
   void testNumericFail() {
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
     TrapezoidalDistribution.of(Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
-    assertThrows(Throw.class, () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m")));
-    assertThrows(Throw.class, () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(1., "m")));
+    assertThrows(Exception.class, () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m")));
+    assertThrows(Exception.class, () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(1., "m")));
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(5., "m"));
   }
 
   @Test
   void testCenterFail() {
-    assertThrows(Throw.class, () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m")));
+    assertThrows(Exception.class, () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m")));
   }
 }

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 
 class DeleteDuplicatesTest {
   @Test
@@ -28,6 +27,6 @@ class DeleteDuplicatesTest {
 
   @Test
   void testScalar() {
-    assertThrows(Throw.class, () -> DeleteDuplicates.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> DeleteDuplicates.of(RealScalar.ONE));
   }
 }

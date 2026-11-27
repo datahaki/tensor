@@ -12,7 +12,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.pdf.c.CauchyDistribution;
 import ch.alpine.tensor.pdf.c.DagumDistribution;
@@ -61,7 +60,7 @@ class UnivariateDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar scalar = Median.of(distribution);
     assertTrue(FiniteScalarQ.of(scalar));
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
     assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
     inverseCDF.quantile(RealScalar.ZERO);
     inverseCDF.quantile(RealScalar.of(Math.nextUp(0)));

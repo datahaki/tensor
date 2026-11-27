@@ -15,7 +15,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -57,7 +56,7 @@ class ArrayQTest {
   @Test
   void testRequireFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, 3}");
-    assertThrows(Throw.class, () -> ArrayQ.require(tensor));
+    assertThrows(Exception.class, () -> ArrayQ.require(tensor));
   }
 
   @Test

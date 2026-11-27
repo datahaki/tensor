@@ -13,7 +13,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.num.GaussScalar;
@@ -163,6 +162,6 @@ class SubdivideTest {
 
   @Test
   void testGaussScalarFail() {
-    assertThrows(Throw.class, () -> Subdivide.of(GaussScalar.of(2, 7), GaussScalar.of(1, 7), 2));
+    assertThrows(Exception.class, () -> Subdivide.of(GaussScalar.of(2, 7), GaussScalar.of(1, 7), 2));
   }
 }

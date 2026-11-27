@@ -12,7 +12,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -43,7 +42,7 @@ class SoftmaxVectorTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> SoftmaxVector.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> SoftmaxVector.of(RealScalar.ONE));
   }
 
   @Test

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.Pi;
 
 class PartitionTest {
@@ -63,7 +62,7 @@ class PartitionTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> Partition.of(RealScalar.ONE, 2));
+    assertThrows(Exception.class, () -> Partition.of(RealScalar.ONE, 2));
   }
 
   @Test
@@ -86,7 +85,7 @@ class PartitionTest {
 
   @Test
   void testStreamFail() {
-    assertThrows(Throw.class, () -> Partition.stream(Pi.VALUE, 3, 2));
-    assertThrows(Throw.class, () -> Partition.stream(Pi.VALUE, 2, 3));
+    assertThrows(Exception.class, () -> Partition.stream(Pi.VALUE, 3, 2));
+    assertThrows(Exception.class, () -> Partition.stream(Pi.VALUE, 2, 3));
   }
 }

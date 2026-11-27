@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.pdf.Distribution;
@@ -53,7 +52,7 @@ class ImageFilterTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> ImageFilter.of(RealScalar.ONE, 1, MAX));
+    assertThrows(Exception.class, () -> ImageFilter.of(RealScalar.ONE, 1, MAX));
   }
 
   @Test

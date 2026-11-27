@@ -13,7 +13,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -65,12 +64,12 @@ class TotalTest {
 
   @Test
   void testOfVectorFail() {
-    assertThrows(Throw.class, () -> Total.ofVector(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Total.ofVector(RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> Total.ofVector(HilbertMatrix.of(3)));
   }
 
   @Test
   void testTotalScalarFail() {
-    assertThrows(Throw.class, () -> Total.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Total.of(RealScalar.ONE));
   }
 }

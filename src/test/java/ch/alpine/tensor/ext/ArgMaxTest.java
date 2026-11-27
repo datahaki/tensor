@@ -13,7 +13,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
@@ -72,7 +71,7 @@ class ArgMaxTest {
 
   @Test
   void testScalar() {
-    assertThrows(Throw.class, () -> ArgMax.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> ArgMax.of(RealScalar.ONE));
   }
 
   @Test

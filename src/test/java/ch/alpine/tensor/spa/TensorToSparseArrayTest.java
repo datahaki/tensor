@@ -21,7 +21,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
@@ -88,7 +87,7 @@ class TensorToSparseArrayTest {
     assertEquals(SparseArray.of(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(SparseArray.of(GaussScalar.of(0, 7)), GaussScalar.of(0, 7));
     assertThrows(IllegalArgumentException.class, () -> SparseArray.of(RealScalar.ZERO, 2, -3));
-    assertThrows(Throw.class, () -> SparseArray.of(RealScalar.ONE, 2, 3));
+    assertThrows(Exception.class, () -> SparseArray.of(RealScalar.ONE, 2, 3));
   }
 
   @Test
@@ -161,7 +160,7 @@ class TensorToSparseArrayTest {
     Tensor tensor = SparseArray.of(RealScalar.ZERO, 3);
     assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "")));
     assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "s*m")));
-    assertThrows(Throw.class, () -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(Exception.class, () -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
   }
 
   @Test

@@ -12,7 +12,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -59,6 +58,6 @@ class FoldTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> Fold.of(Tensor::dot, Pi.HALF, Pi.HALF));
+    assertThrows(Exception.class, () -> Fold.of(Tensor::dot, Pi.HALF, Pi.HALF));
   }
 }

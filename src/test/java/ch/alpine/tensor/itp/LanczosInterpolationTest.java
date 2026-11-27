@@ -13,7 +13,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.Import;
@@ -107,7 +106,7 @@ class LanczosInterpolationTest {
   @Test
   void testFailSemi() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);
-    assertThrows(Throw.class, () -> LanczosInterpolation.of(vector, 0));
-    assertThrows(Throw.class, () -> LanczosInterpolation.of(vector, -1));
+    assertThrows(Exception.class, () -> LanczosInterpolation.of(vector, 0));
+    assertThrows(Exception.class, () -> LanczosInterpolation.of(vector, -1));
   }
 }

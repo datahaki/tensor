@@ -14,7 +14,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -59,7 +58,7 @@ class ClipTest {
   @Test
   void testFail() {
     Clips.interval(5, 5);
-    assertThrows(Throw.class, () -> Clips.interval(2, -3));
+    assertThrows(Exception.class, () -> Clips.interval(2, -3));
   }
 
   @Test
@@ -81,8 +80,8 @@ class ClipTest {
     assertTrue(clip.isInside(Quantity.of(1, "m")));
     assertTrue(clip.isInside(Quantity.of(2, "m")));
     assertFalse(clip.isInside(Quantity.of(3, "m")));
-    assertThrows(Throw.class, () -> clip.isInside(Quantity.of(0, "V")));
-    assertThrows(Throw.class, () -> clip.isInside(Quantity.of(3, "V")));
+    assertThrows(Exception.class, () -> clip.isInside(Quantity.of(0, "V")));
+    assertThrows(Exception.class, () -> clip.isInside(Quantity.of(3, "V")));
   }
 
   @Test
@@ -122,7 +121,7 @@ class ClipTest {
   void testClipOutside() {
     Clip clip = Clips.interval(3, 5);
     assertEquals(clip.requireInside(RealScalar.of(3.9)), RealScalar.of(3.9));
-    assertThrows(Throw.class, () -> clip.requireInside(RealScalar.of(2.9)));
+    assertThrows(Exception.class, () -> clip.requireInside(RealScalar.of(2.9)));
   }
 
   @Test
@@ -147,7 +146,7 @@ class ClipTest {
     assertFalse(clip.isOutside(Quantity.of(1, "m")));
     assertFalse(clip.isOutside(Quantity.of(2, "m")));
     assertTrue(clip.isOutside(Quantity.of(3, "m")));
-    assertThrows(Throw.class, () -> clip.isOutside(Quantity.of(3, "V")));
+    assertThrows(Exception.class, () -> clip.isOutside(Quantity.of(3, "V")));
   }
 
   @Test

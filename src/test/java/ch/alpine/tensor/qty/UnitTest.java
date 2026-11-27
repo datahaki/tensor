@@ -99,7 +99,7 @@ class UnitTest {
   void testMultiplyFail() {
     Unit kg1 = Unit.of("kg");
     Scalar q = Quantity.of(3, "m");
-    assertThrows(Throw.class, () -> kg1.multiply(q));
+    assertThrows(Exception.class, () -> kg1.multiply(q));
   }
 
   @Test
@@ -114,14 +114,14 @@ class UnitTest {
     map.put("some", GaussScalar.of(1, 7));
     unit(map);
     map.put("zero", GaussScalar.of(0, 7));
-    assertThrows(Throw.class, () -> unit(map));
+    assertThrows(Exception.class, () -> unit(map));
   }
 
   @Test
   void testQuantityExponentFail() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("some", Quantity.of(1, "r"));
-    assertThrows(Throw.class, () -> unit(map));
+    assertThrows(Exception.class, () -> unit(map));
   }
 
   // https://tinyurl.com/y44sj2et

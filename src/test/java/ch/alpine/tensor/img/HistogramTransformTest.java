@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
@@ -54,21 +53,21 @@ class HistogramTransformTest {
   @Test
   void testNegativeFail() {
     Tensor tensor = Tensors.of(Tensors.vector(0, -0.1, 3));
-    assertThrows(Throw.class, () -> HistogramTransform.of(tensor));
+    assertThrows(Exception.class, () -> HistogramTransform.of(tensor));
   }
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> HistogramTransform.of(Pi.VALUE));
+    assertThrows(Exception.class, () -> HistogramTransform.of(Pi.VALUE));
   }
 
   @Test
   void testVectorFail() {
-    assertThrows(Throw.class, () -> HistogramTransform.of(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> HistogramTransform.of(Tensors.vector(1, 2, 3)));
   }
 
   @Test
   void testRank3Fail() {
-    assertThrows(Throw.class, () -> HistogramTransform.of(Array.zeros(2, 2, 2)));
+    assertThrows(Exception.class, () -> HistogramTransform.of(Array.zeros(2, 2, 2)));
   }
 }

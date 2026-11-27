@@ -14,7 +14,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Rotate;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -95,9 +94,9 @@ class BSplineFunctionCyclicTest {
   void testEmptyFail() {
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionCyclic.of(-2, Tensors.empty()));
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionCyclic.of(-1, Tensors.empty()));
-    assertThrows(Throw.class, () -> BSplineFunctionCyclic.of(+0, Tensors.empty()));
-    assertThrows(Throw.class, () -> BSplineFunctionCyclic.of(+1, Tensors.empty()));
-    assertThrows(Throw.class, () -> BSplineFunctionCyclic.of(+2, Tensors.empty()));
+    assertThrows(Exception.class, () -> BSplineFunctionCyclic.of(+0, Tensors.empty()));
+    assertThrows(Exception.class, () -> BSplineFunctionCyclic.of(+1, Tensors.empty()));
+    assertThrows(Exception.class, () -> BSplineFunctionCyclic.of(+2, Tensors.empty()));
   }
 
   @Test

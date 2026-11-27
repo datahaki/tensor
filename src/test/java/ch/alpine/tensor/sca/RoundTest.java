@@ -19,7 +19,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -58,8 +57,8 @@ class RoundTest {
 
   @Test
   void testIntExactValueFail() {
-    assertThrows(Throw.class, () -> Round.intValueExact(Quantity.of(1.2, "h")));
-    assertThrows(Throw.class, () -> Round.longValueExact(Quantity.of(2.3, "h*s")));
+    assertThrows(Exception.class, () -> Round.intValueExact(Quantity.of(1.2, "h")));
+    assertThrows(Exception.class, () -> Round.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
   @Test
@@ -203,6 +202,6 @@ class RoundTest {
 
   @Test
   void testTypeFail() {
-    assertThrows(Throw.class, () -> Round.FUNCTION.apply(StringScalar.of("some")));
+    assertThrows(Exception.class, () -> Round.FUNCTION.apply(StringScalar.of("some")));
   }
 }

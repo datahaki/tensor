@@ -12,7 +12,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.Distribution;
@@ -82,7 +81,7 @@ class VectorNormTest {
 
   @Test
   void testNormPFail() {
-    assertThrows(Throw.class, () -> VectorNorm.of(0.99));
+    assertThrows(Exception.class, () -> VectorNorm.of(0.99));
   }
 
   @Test
@@ -94,7 +93,7 @@ class VectorNormTest {
   @Test
   void testScalarFail() {
     TensorScalarFunction tensorScalarFunction = VectorNorm.of(2.6);
-    assertThrows(Throw.class, () -> tensorScalarFunction.apply(RealScalar.of(12)));
+    assertThrows(Exception.class, () -> tensorScalarFunction.apply(RealScalar.of(12)));
   }
 
   @Test

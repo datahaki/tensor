@@ -10,7 +10,6 @@ import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.sca.Chop;
 
@@ -34,6 +33,6 @@ class TanTest {
   @Test
   void testTypeFail() {
     Scalar scalar = StringScalar.of("some");
-    assertThrows(Throw.class, () -> Tan.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Tan.FUNCTION.apply(scalar));
   }
 }

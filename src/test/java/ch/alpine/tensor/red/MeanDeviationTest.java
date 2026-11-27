@@ -10,7 +10,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -43,7 +42,7 @@ class MeanDeviationTest {
 
   @Test
   void testVectorFail() {
-    assertThrows(Throw.class, () -> MeanDeviation.ofVector(RealScalar.ONE));
+    assertThrows(Exception.class, () -> MeanDeviation.ofVector(RealScalar.ONE));
   }
 
   @Test

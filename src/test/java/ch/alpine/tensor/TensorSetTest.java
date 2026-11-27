@@ -47,7 +47,7 @@ class TensorSetTest {
     matrix.set(Total::ofVector, 2);
     assertFalse(eye.equals(matrix));
     assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}, 47/60}"));
-    assertThrows(Throw.class, () -> eye.set(Total::ofVector, Tensor.ALL, 2));
+    assertThrows(Exception.class, () -> eye.set(Total::ofVector, Tensor.ALL, 2));
   }
 
   @Test

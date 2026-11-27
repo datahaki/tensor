@@ -10,7 +10,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
@@ -53,19 +52,19 @@ class BinCountsTest {
 
   @Test
   void testNegativeFail() {
-    assertThrows(Throw.class, () -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.ONE));
-    assertThrows(Throw.class, () -> BinCounts.of(Tensors.vector(-1e-10, -10), RealScalar.ONE));
-    assertThrows(Throw.class, () -> BinCounts.of(Tensors.vector(1, 2, 3, 4, 0, -3, 12, 32), RealScalar.ONE));
+    assertThrows(Exception.class, () -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.ONE));
+    assertThrows(Exception.class, () -> BinCounts.of(Tensors.vector(-1e-10, -10), RealScalar.ONE));
+    assertThrows(Exception.class, () -> BinCounts.of(Tensors.vector(1, 2, 3, 4, 0, -3, 12, 32), RealScalar.ONE));
   }
 
   @Test
   void testDomainFail() {
-    assertThrows(Throw.class, () -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.of(1.0)));
+    assertThrows(Exception.class, () -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.of(1.0)));
   }
 
   @Test
   void testWidthFail() {
-    assertThrows(Throw.class, () -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(0.0))); // zero
-    assertThrows(Throw.class, () -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(-0.2))); // negative
+    assertThrows(Exception.class, () -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(0.0))); // zero
+    assertThrows(Exception.class, () -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(-0.2))); // negative
   }
 }

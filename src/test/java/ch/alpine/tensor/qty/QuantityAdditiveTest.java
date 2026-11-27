@@ -11,7 +11,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.red.Total;
 
@@ -24,9 +23,9 @@ class QuantityAdditiveTest {
 
   @Test
   void testMixFail() {
-    assertThrows(Throw.class, () -> Quantity.of(0, "m").add(Quantity.of(0, "kg")));
-    assertThrows(Throw.class, () -> Quantity.of(0, "m").add(Quantity.of(2, "kg")));
-    assertThrows(Throw.class, () -> Quantity.of(0, "m").add(Quantity.of(2, "")));
+    assertThrows(Exception.class, () -> Quantity.of(0, "m").add(Quantity.of(0, "kg")));
+    assertThrows(Exception.class, () -> Quantity.of(0, "m").add(Quantity.of(2, "kg")));
+    assertThrows(Exception.class, () -> Quantity.of(0, "m").add(Quantity.of(2, "")));
   }
 
   @Test
@@ -41,62 +40,62 @@ class QuantityAdditiveTest {
   void testPlusUnits4() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(0.0, "");
-    assertThrows(Throw.class, () -> s1.add(s2));
+    assertThrows(Exception.class, () -> s1.add(s2));
   }
 
   @Test
   void testPlusUnits5() {
     Scalar s1 = Quantity.of(0.0, "m"); //
     Scalar s2 = RealScalar.ZERO;
-    assertThrows(Throw.class, () -> s1.add(s2));
+    assertThrows(Exception.class, () -> s1.add(s2));
   }
 
   @Test
   void testPlusMix() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(2, "kg");
-    assertThrows(Throw.class, () -> s1.add(s2));
-    assertThrows(Throw.class, () -> s2.add(s1));
+    assertThrows(Exception.class, () -> s1.add(s2));
+    assertThrows(Exception.class, () -> s2.add(s1));
   }
 
   @Test
   void testPlusMix2() {
     Scalar s1 = Quantity.of(3, "m"); //
     Scalar s2 = Quantity.of(0, "kg");
-    assertThrows(Throw.class, () -> s1.add(s2));
-    assertThrows(Throw.class, () -> s2.add(s1));
+    assertThrows(Exception.class, () -> s1.add(s2));
+    assertThrows(Exception.class, () -> s2.add(s1));
   }
 
   @Test
   void testPlusMix3() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(0, "kg");
-    assertThrows(Throw.class, () -> s1.add(s2));
-    assertThrows(Throw.class, () -> s2.add(s1));
+    assertThrows(Exception.class, () -> s1.add(s2));
+    assertThrows(Exception.class, () -> s2.add(s1));
   }
 
   @Test
   void testPlusMixFail() {
     Scalar s1 = Quantity.of(1.0, "m"); //
     Scalar s2 = GaussScalar.of(0, 7);
-    assertThrows(Throw.class, () -> s1.add(s2));
-    assertThrows(Throw.class, () -> s2.add(s1));
+    assertThrows(Exception.class, () -> s1.add(s2));
+    assertThrows(Exception.class, () -> s2.add(s1));
   }
 
   @Test
   void testPlusMixZeroFail() {
     Scalar s1 = Quantity.of(0.0, "m"); //
     Scalar s2 = GaussScalar.of(0, 7);
-    assertThrows(Throw.class, () -> s1.add(s2));
-    assertThrows(Throw.class, () -> s2.add(s1));
+    assertThrows(Exception.class, () -> s1.add(s2));
+    assertThrows(Exception.class, () -> s2.add(s1));
   }
 
   @Test
   void testComplex() {
     Scalar s1 = Complex.of(1, 2);
     Scalar s2 = Quantity.of(0, "m*s");
-    assertThrows(Throw.class, () -> s1.add(s2));
-    assertThrows(Throw.class, () -> s2.add(s1));
+    assertThrows(Exception.class, () -> s1.add(s2));
+    assertThrows(Exception.class, () -> s2.add(s1));
   }
 
   @Test
@@ -109,7 +108,7 @@ class QuantityAdditiveTest {
 
   @Test
   void testPlusFail() {
-    assertThrows(Throw.class, () -> Quantity.of(2, "m").add(Quantity.of(2, "kg")));
+    assertThrows(Exception.class, () -> Quantity.of(2, "m").add(Quantity.of(2, "kg")));
     assertThrows(Exception.class, () -> _checkPlusSymmetry( //
         Quantity.of(Complex.of(1, 2), "m"), //
         Quantity.of(2, "kg")));

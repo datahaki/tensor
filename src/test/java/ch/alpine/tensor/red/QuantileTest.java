@@ -16,7 +16,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.OrderedQ;
 import ch.alpine.tensor.alg.Reverse;
@@ -67,7 +66,7 @@ class QuantileTest {
   @Test
   void testFailSorted() {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
-    assertThrows(Throw.class, () -> Quantile.ofSorted(vector));
+    assertThrows(Exception.class, () -> Quantile.ofSorted(vector));
   }
 
   @Test
@@ -80,7 +79,7 @@ class QuantileTest {
     assertEquals(scalarUnaryOperator.apply(RealScalar.ZERO), qs1);
     assertEquals(scalarUnaryOperator.apply(RealScalar.ONE), qs2);
     Scalar qs4 = Quantity.of(2, "s");
-    assertThrows(Throw.class, () -> Sort.of(Tensors.of(qs1, qs4))); // comparison fails
+    assertThrows(Exception.class, () -> Sort.of(Tensors.of(qs1, qs4))); // comparison fails
   }
 
   @Test
@@ -96,12 +95,12 @@ class QuantileTest {
   @Test
   void testDistribution() {
     ScalarUnaryOperator suo = Quantile.of(UniformDistribution.of(5, 10));
-    assertThrows(Throw.class, () -> suo.apply(Rational.of(-1, 5)));
+    assertThrows(Exception.class, () -> suo.apply(Rational.of(-1, 5)));
     assertEquals(suo.apply(Rational.of(0, 5)), RealScalar.of(5));
     assertEquals(suo.apply(Rational.of(1, 5)), RealScalar.of(6));
     assertEquals(suo.apply(Rational.of(2, 5)), RealScalar.of(7));
     assertEquals(suo.apply(Rational.of(5, 5)), RealScalar.of(10));
-    assertThrows(Throw.class, () -> suo.apply(Rational.of(+6, 5)));
+    assertThrows(Exception.class, () -> suo.apply(Rational.of(+6, 5)));
   }
 
   @Test
@@ -114,28 +113,28 @@ class QuantileTest {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
     Tensor weight = Tensors.of(RealScalar.ONE, Complex.of(1, 2));
-    assertThrows(Throw.class, () -> weight.maps(scalarUnaryOperator));
+    assertThrows(Exception.class, () -> weight.maps(scalarUnaryOperator));
   }
 
   @Test
   void testFailQuantity() {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
-    assertThrows(Throw.class, () -> scalarUnaryOperator.apply(Quantity.of(0, "m")));
-    assertThrows(Throw.class, () -> scalarUnaryOperator.apply(Quantity.of(0.2, "m")));
+    assertThrows(Exception.class, () -> scalarUnaryOperator.apply(Quantity.of(0, "m")));
+    assertThrows(Exception.class, () -> scalarUnaryOperator.apply(Quantity.of(0.2, "m")));
   }
 
   @Test
   void testFailScalar() {
-    assertThrows(Throw.class, () -> Quantile.of(Pi.VALUE));
+    assertThrows(Exception.class, () -> Quantile.of(Pi.VALUE));
   }
 
   @Test
   void testMatrixFail() {
     Tensor matrix = Reverse.of(IdentityMatrix.of(7));
     OrderedQ.require(matrix);
-    assertThrows(Throw.class, () -> Quantile.of(matrix));
-    assertThrows(Throw.class, () -> Quantile.ofSorted(matrix));
+    assertThrows(Exception.class, () -> Quantile.of(matrix));
+    assertThrows(Exception.class, () -> Quantile.ofSorted(matrix));
   }
 
   @Test

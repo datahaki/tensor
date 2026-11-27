@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
@@ -45,6 +44,6 @@ class RotationMatrixTest {
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> RotationMatrix.of(GaussScalar.of(2, 7)));
+    assertThrows(Exception.class, () -> RotationMatrix.of(GaussScalar.of(2, 7)));
   }
 }

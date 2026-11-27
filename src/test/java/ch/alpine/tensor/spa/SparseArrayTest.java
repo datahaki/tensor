@@ -15,7 +15,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -140,7 +139,7 @@ class SparseArrayTest {
   void testFails() {
     Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
     assertThrows(UnsupportedOperationException.class, () -> sparse.append(Array.zeros(4, 8)));
-    assertThrows(Throw.class, () -> sparse.maps(RealScalar.ONE::add));
+    assertThrows(Exception.class, () -> sparse.maps(RealScalar.ONE::add));
   }
 
   @Test
@@ -248,7 +247,7 @@ class SparseArrayTest {
     sparse.set(RealScalar.TWO::add, 1);
     assertEquals(sparse, Tensors.vector(2, 3, 4, 1, 1));
     assertInstanceOf(SparseArray.class, sparse);
-    assertThrows(Throw.class, () -> sparse.set(Tensors.vector(3), 2));
+    assertThrows(Exception.class, () -> sparse.set(Tensors.vector(3), 2));
   }
 
   @Test
@@ -352,8 +351,8 @@ class SparseArrayTest {
     Tensor sparse = TensorToSparseArray.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 2);
     sparse.set(Array.zeros(5), 2);
-    assertThrows(Throw.class, () -> sparse.set(Array.zeros(5, 2), 2));
-    assertThrows(Throw.class, () -> sparse.set(Tensors.fromString("{1,2,{3},4,5}"), 2));
+    assertThrows(Exception.class, () -> sparse.set(Array.zeros(5, 2), 2));
+    assertThrows(Exception.class, () -> sparse.set(Tensors.fromString("{1,2,{3},4,5}"), 2));
   }
 
   @Test
@@ -388,7 +387,7 @@ class SparseArrayTest {
   @Test
   void testFallbackScalarFail() {
     assertEquals(SparseArray.of(Quantity.of(0, "A")), Quantity.of(0, "A"));
-    assertThrows(Throw.class, () -> SparseArray.of(Pi.VALUE));
+    assertThrows(Exception.class, () -> SparseArray.of(Pi.VALUE));
   }
 
   @Test

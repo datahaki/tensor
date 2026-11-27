@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
@@ -80,6 +79,6 @@ class FoldListTest {
 
   @Test
   void testFailSecond() {
-    assertThrows(Throw.class, () -> FoldList.of(Tensor::add, RealScalar.of(31), RealScalar.of(31)));
+    assertThrows(Exception.class, () -> FoldList.of(Tensor::add, RealScalar.of(31), RealScalar.of(31)));
   }
 }

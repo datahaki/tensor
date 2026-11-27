@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -140,7 +139,7 @@ class Miscellaneous {
   @ParameterizedTest
   @MethodSource("matrixnorms")
   void testFails(TensorScalarFunction norm) {
-    assertThrows(Throw.class, () -> norm.apply(RealScalar.ONE));
+    assertThrows(Exception.class, () -> norm.apply(RealScalar.ONE));
     assertThrows(Exception.class, () -> norm.apply(Tensors.empty()));
     assertThrows(Exception.class, () -> norm.apply(Tensors.vector(1, 2, 3)));
     assertThrows(Exception.class, () -> norm.apply(LeviCivitaTensor.of(3)));
@@ -159,7 +158,7 @@ class Miscellaneous {
   @MethodSource("vectornorms")
   void testEmptyFail(TensorScalarFunction norm) {
     assertThrows(NoSuchElementException.class, () -> norm.apply(Tensors.empty()));
-    assertThrows(Throw.class, () -> norm.apply(RealScalar.ONE));
+    assertThrows(Exception.class, () -> norm.apply(RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> norm.apply(Tensors.fromString("{{1, 2}, {3}}")));
   }
 

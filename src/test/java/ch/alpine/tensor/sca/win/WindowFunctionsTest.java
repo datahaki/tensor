@@ -15,7 +15,6 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
@@ -69,13 +68,13 @@ class WindowFunctionsTest {
   @ParameterizedTest
   @EnumSource
   void testInsideFail(WindowFunctions windowFunctions) {
-    assertThrows(Throw.class, () -> windowFunctions.get().apply(Quantity.of(0.1, "s")));
+    assertThrows(Exception.class, () -> windowFunctions.get().apply(Quantity.of(0.1, "s")));
   }
 
   @ParameterizedTest
   @EnumSource
   void testOustideFail(WindowFunctions windowFunctions) {
-    assertThrows(Throw.class, () -> windowFunctions.get().apply(Quantity.of(1, "s")));
+    assertThrows(Exception.class, () -> windowFunctions.get().apply(Quantity.of(1, "s")));
   }
 
   @ParameterizedTest

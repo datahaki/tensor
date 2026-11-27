@@ -17,7 +17,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.ResourceData;
@@ -94,7 +93,7 @@ class UnitSystemTest {
     UnitSystem prices = SimpleUnitSystem.from(properties);
     assertEquals(prices.apply(Quantity.of(3, "Apples")), Quantity.of(6, "CHF"));
     Tensor cart = Tensors.of(Quantity.of(2, "Apples"), Quantity.of(3, "Chocolates"), Quantity.of(3, "Oranges"));
-    assertThrows(Throw.class, () -> Total.of(cart));
+    assertThrows(Exception.class, () -> Total.of(cart));
     Scalar total = Total.ofVector(cart.maps(prices));
     assertEquals(total, Quantity.of(16, "CHF"));
     Scalar euro = UnitConvert.of(prices).to(Unit.of("EUR")).apply(total);

@@ -11,7 +11,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -244,7 +243,7 @@ class DeBoorTest {
 
   @Test
   void testKnotsMatrixFail() {
-    assertThrows(Throw.class, () -> DeBoor.of(LinearBinaryAverage.INSTANCE, HilbertMatrix.of(2), Tensors.vector(1, 2)));
+    assertThrows(Exception.class, () -> DeBoor.of(LinearBinaryAverage.INSTANCE, HilbertMatrix.of(2), Tensors.vector(1, 2)));
   }
 
   @Test

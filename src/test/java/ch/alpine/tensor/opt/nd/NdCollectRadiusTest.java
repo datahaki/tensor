@@ -19,7 +19,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
@@ -84,6 +83,6 @@ class NdCollectRadiusTest {
   @Test
   void testNonPositiveFail() {
     NdCenterInterface ndCenterInterface = NdCenters.VECTOR_INFINITY_NORM.apply(Array.zeros(2));
-    assertThrows(Throw.class, () -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
+    assertThrows(Exception.class, () -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
   }
 }

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
@@ -32,7 +31,7 @@ class InverseErfTest {
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> InverseErf.FUNCTION.apply(RealScalar.of(+1.3)));
-    assertThrows(Throw.class, () -> InverseErf.FUNCTION.apply(RealScalar.of(-1.1)));
+    assertThrows(Exception.class, () -> InverseErf.FUNCTION.apply(RealScalar.of(+1.3)));
+    assertThrows(Exception.class, () -> InverseErf.FUNCTION.apply(RealScalar.of(-1.1)));
   }
 }

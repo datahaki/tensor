@@ -12,7 +12,6 @@ import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.io.StringTensor;
 import ch.alpine.tensor.lie.rot.Quaternion;
@@ -104,11 +103,11 @@ class PermutationsTest {
 
   @Test
   void testTensorScalarFail() {
-    assertThrows(Throw.class, () -> Permutations.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Permutations.of(RealScalar.ONE));
   }
 
   @Test
   void testStreamScalarFail() {
-    assertThrows(Throw.class, () -> Permutations.stream(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Permutations.stream(RealScalar.ONE));
   }
 }

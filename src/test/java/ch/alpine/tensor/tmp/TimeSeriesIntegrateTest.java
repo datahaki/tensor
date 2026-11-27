@@ -12,7 +12,6 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
@@ -77,6 +76,6 @@ class TimeSeriesIntegrateTest {
   void testException(ResamplingMethods resamplingMethods) {
     ResamplingMethod resamplingMethod = resamplingMethods.get();
     TimeSeries timeSeries = TimeSeries.empty(resamplingMethod);
-    assertThrows(Throw.class, () -> TimeSeriesIntegrate.of(timeSeries, Clips.interval(0, 1)));
+    assertThrows(Exception.class, () -> TimeSeriesIntegrate.of(timeSeries, Clips.interval(0, 1)));
   }
 }

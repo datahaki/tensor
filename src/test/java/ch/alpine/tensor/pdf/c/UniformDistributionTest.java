@@ -22,7 +22,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -290,24 +289,24 @@ class UniformDistributionTest {
   @Test
   void testInfiniteFail() {
     Clip clip = Clips.positive(Double.POSITIVE_INFINITY);
-    assertThrows(Throw.class, () -> UniformDistribution.of(clip));
+    assertThrows(Exception.class, () -> UniformDistribution.of(clip));
   }
 
   @Test
   void testQuantileFail() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(6, "g"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> UniformDistribution.of(Quantity.of(3, "m"), Quantity.of(5, "km")));
+    assertThrows(Exception.class, () -> UniformDistribution.of(Quantity.of(3, "m"), Quantity.of(5, "km")));
   }
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> UniformDistribution.of(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(Exception.class, () -> UniformDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 }

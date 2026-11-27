@@ -16,7 +16,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -91,7 +90,7 @@ class QuaternionToRotationMatrixTest {
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0)));
-    assertThrows(Throw.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0)));
+    assertThrows(Exception.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0)));
+    assertThrows(Exception.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0)));
   }
 }

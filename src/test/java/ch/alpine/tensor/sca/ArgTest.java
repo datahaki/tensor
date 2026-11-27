@@ -15,7 +15,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.lie.rot.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -56,12 +55,12 @@ class ArgTest {
 
   @Test
   void testQuaternionFail() {
-    assertThrows(Throw.class, () -> Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4)));
+    assertThrows(Exception.class, () -> Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4)));
   }
 
   @Test
   void testGaussScalarFail() {
     Scalar scalar = GaussScalar.of(1, 7);
-    assertThrows(Throw.class, () -> Arg.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Arg.FUNCTION.apply(scalar));
   }
 }

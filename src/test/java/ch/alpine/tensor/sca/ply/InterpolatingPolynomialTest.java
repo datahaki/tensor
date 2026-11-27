@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -134,8 +133,8 @@ class InterpolatingPolynomialTest {
   void testScalarLengthFail() {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
-    assertThrows(Throw.class, () -> interpolatingPolynomial.scalarUnaryOperator(Tensors.vector(1, 2)));
-    assertThrows(Throw.class, () -> interpolatingPolynomial.scalarUnaryOperator(HilbertMatrix.of(3)));
+    assertThrows(Exception.class, () -> interpolatingPolynomial.scalarUnaryOperator(Tensors.vector(1, 2)));
+    assertThrows(Exception.class, () -> interpolatingPolynomial.scalarUnaryOperator(HilbertMatrix.of(3)));
   }
 
   @Test

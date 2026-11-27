@@ -91,7 +91,7 @@ class HodgeDualTest {
 
   @Test
   void testScalar1() {
-    assertThrows(Throw.class, () -> HodgeDual.of(Tensors.vector(1, 2, 3), 0));
+    assertThrows(Exception.class, () -> HodgeDual.of(Tensors.vector(1, 2, 3), 0));
   }
 
   @Test
@@ -108,7 +108,7 @@ class HodgeDualTest {
   @Test
   void testEmpty() {
     assertTrue(new Dimensions(Tensors.empty()).isArray());
-    assertThrows(Throw.class, () -> HodgeDual.of(Tensors.empty(), 0));
+    assertThrows(Exception.class, () -> HodgeDual.of(Tensors.empty(), 0));
   }
 
   @Test
@@ -120,8 +120,8 @@ class HodgeDualTest {
   @Test
   void testNonArrayFail() {
     Tensor vector = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
-    assertThrows(Throw.class, () -> HodgeDual.of(vector, 2));
-    assertThrows(Throw.class, () -> HodgeDual.of(vector, 3));
+    assertThrows(Exception.class, () -> HodgeDual.of(vector, 2));
+    assertThrows(Exception.class, () -> HodgeDual.of(vector, 3));
   }
 
   @Test

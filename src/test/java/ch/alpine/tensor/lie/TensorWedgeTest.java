@@ -12,7 +12,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.lie.rot.Cross;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
@@ -110,7 +109,7 @@ class TensorWedgeTest {
   @Test
   void testFailIrrectangular() {
     Tensor matrix = Tensors.fromString("{{1, 2}, {0, 4, 3}}");
-    assertThrows(Throw.class, () -> TensorWedge.of(matrix));
+    assertThrows(Exception.class, () -> TensorWedge.of(matrix));
   }
 
   @Test

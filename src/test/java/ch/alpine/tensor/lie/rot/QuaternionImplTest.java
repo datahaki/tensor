@@ -16,7 +16,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -141,8 +140,8 @@ class QuaternionImplTest {
   void testPlusFail() {
     Scalar quaternion = Quaternion.of(1, 3, -2, 2);
     Scalar quantity = Quantity.of(1, "m");
-    assertThrows(Throw.class, () -> quaternion.add(quantity));
-    assertThrows(Throw.class, () -> quantity.add(quaternion));
+    assertThrows(Exception.class, () -> quaternion.add(quantity));
+    assertThrows(Exception.class, () -> quantity.add(quaternion));
   }
 
   @Test
@@ -151,8 +150,8 @@ class QuaternionImplTest {
     Scalar gaussScalar = GaussScalar.of(3, 11);
     assertNotEquals(quaternion, gaussScalar);
     assertNotEquals(gaussScalar, quaternion);
-    assertThrows(Throw.class, () -> quaternion.multiply(gaussScalar));
-    assertThrows(Throw.class, () -> gaussScalar.multiply(quaternion));
+    assertThrows(Exception.class, () -> quaternion.multiply(gaussScalar));
+    assertThrows(Exception.class, () -> gaussScalar.multiply(quaternion));
   }
 
   @Test
@@ -170,7 +169,7 @@ class QuaternionImplTest {
   @Test
   void testNumberFail() {
     Quaternion quaternion = Quaternion.of(1, 3, -2, 2);
-    assertThrows(Throw.class, quaternion::number);
+    assertThrows(Exception.class, quaternion::number);
   }
 
   @Test

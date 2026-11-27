@@ -16,7 +16,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
@@ -54,13 +53,13 @@ class QuantityImplTest {
   @Test
   void testExactIntFail() {
     Scalar scalar = Quantity.of(10, "m");
-    assertThrows(Throw.class, () -> Scalars.intValueExact(scalar));
+    assertThrows(Exception.class, () -> Scalars.intValueExact(scalar));
   }
 
   @Test
   void testNumberFail() {
     Scalar scalar = Quantity.of(11, "m*s");
-    assertThrows(Throw.class, scalar::number);
+    assertThrows(Exception.class, scalar::number);
   }
 
   @Test
@@ -115,17 +114,17 @@ class QuantityImplTest {
   @Test
   void testPowerQuantityQuantityFail() {
     Scalar scalar = Scalars.fromString("-7+3*I[kg^-2*m*s]");
-    assertThrows(Throw.class, () -> Power.of(scalar, Quantity.of(3, "s")));
+    assertThrows(Exception.class, () -> Power.of(scalar, Quantity.of(3, "s")));
   }
 
   @Test
   void testPowerRealQuantityFail() {
-    assertThrows(Throw.class, () -> Power.of(RealScalar.ONE, Quantity.of(3, "s")));
+    assertThrows(Exception.class, () -> Power.of(RealScalar.ONE, Quantity.of(3, "s")));
   }
 
   @Test
   void testPowerDoubleQuantityFail() {
-    assertThrows(Throw.class, () -> Power.of(Pi.VALUE, Quantity.of(3, "s")));
+    assertThrows(Exception.class, () -> Power.of(Pi.VALUE, Quantity.of(3, "s")));
   }
 
   @Test

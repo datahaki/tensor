@@ -15,7 +15,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Drop;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.pow.Power;
@@ -73,11 +72,11 @@ class IntegerDigitsTest {
 
   @Test
   void testPrecisionFail() {
-    assertThrows(Throw.class, () -> IntegerDigits.of(RealScalar.of(1.0)));
+    assertThrows(Exception.class, () -> IntegerDigits.of(RealScalar.of(1.0)));
   }
 
   @Test
   void testRationalFail() {
-    assertThrows(Throw.class, () -> IntegerDigits.of(Rational.of(10, 3)));
+    assertThrows(Exception.class, () -> IntegerDigits.of(Rational.of(10, 3)));
   }
 }

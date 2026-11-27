@@ -21,7 +21,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
@@ -184,7 +183,7 @@ class ModTest {
   void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(5, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    assertThrows(Throw.class, () -> Mod.function(qs2).apply(qs1));
+    assertThrows(Exception.class, () -> Mod.function(qs2).apply(qs1));
   }
 
   @Test
@@ -214,11 +213,11 @@ class ModTest {
 
   @Test
   void testZeroAFail() {
-    assertThrows(Throw.class, () -> Mod.function(RealScalar.ZERO));
+    assertThrows(Exception.class, () -> Mod.function(RealScalar.ZERO));
   }
 
   @Test
   void testZeroBFail() {
-    assertThrows(Throw.class, () -> Mod.function(RealScalar.ZERO, RealScalar.ONE));
+    assertThrows(Exception.class, () -> Mod.function(RealScalar.ZERO, RealScalar.ONE));
   }
 }

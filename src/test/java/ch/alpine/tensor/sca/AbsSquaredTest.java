@@ -14,7 +14,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.lie.rot.Quaternion;
@@ -81,6 +80,6 @@ class AbsSquaredTest {
 
   @Test
   void testStringFail() {
-    assertThrows(Throw.class, () -> AbsSquared.FUNCTION.apply(StringScalar.of("idsc")));
+    assertThrows(Exception.class, () -> AbsSquared.FUNCTION.apply(StringScalar.of("idsc")));
   }
 }

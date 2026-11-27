@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -63,8 +62,8 @@ class StandardNormalDistributionTest {
   void testInverseCDF() {
     Distribution distribution = StandardNormalDistribution.INSTANCE;
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
   }
 
   @Test

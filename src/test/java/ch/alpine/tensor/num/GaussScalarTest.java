@@ -28,7 +28,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.ArgMax;
@@ -148,15 +147,15 @@ class GaussScalarTest {
     }
     assumeTrue(prime == 11);
     assertEquals(count, 6);
-    assertThrows(Throw.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(2, 11)));
+    assertThrows(Exception.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(2, 11)));
   }
 
   @Test
   void testSqrt5() {
     assertEquals(Sqrt.FUNCTION.apply(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
     assertEquals(Sqrt.FUNCTION.apply(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
-    assertThrows(Throw.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(2, 5)));
-    assertThrows(Throw.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(3, 5)));
+    assertThrows(Exception.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(2, 5)));
+    assertThrows(Exception.class, () -> Sqrt.FUNCTION.apply(GaussScalar.of(3, 5)));
   }
 
   @Test
@@ -241,7 +240,7 @@ class GaussScalarTest {
     GaussScalar gaussScalar = GaussScalar.of(3, 107);
     assertEquals(gaussScalar.number(), BigInteger.valueOf(3));
     assertEquals(gaussScalar.prime(), BigInteger.valueOf(107));
-    assertThrows(Throw.class, () -> Power.of(gaussScalar, Pi.HALF));
+    assertThrows(Exception.class, () -> Power.of(gaussScalar, Pi.HALF));
   }
 
   @Test
@@ -284,11 +283,11 @@ class GaussScalarTest {
   void testBinaryOpFail() {
     GaussScalar gs1 = GaussScalar.of(432, 677);
     GaussScalar gs2 = GaussScalar.of(4, 13);
-    assertThrows(Throw.class, () -> gs1.multiply(gs2));
-    assertThrows(Throw.class, () -> gs1.add(gs2));
-    assertThrows(Throw.class, () -> gs1.divide(gs2));
-    assertThrows(Throw.class, () -> gs1.under(gs2));
-    assertThrows(Throw.class, () -> gs1.compareTo(gs2));
+    assertThrows(Exception.class, () -> gs1.multiply(gs2));
+    assertThrows(Exception.class, () -> gs1.add(gs2));
+    assertThrows(Exception.class, () -> gs1.divide(gs2));
+    assertThrows(Exception.class, () -> gs1.under(gs2));
+    assertThrows(Exception.class, () -> gs1.compareTo(gs2));
   }
 
   @Test
@@ -366,42 +365,42 @@ class GaussScalarTest {
   void testIllegalGauss() {
     Scalar a = GaussScalar.of(4, 7);
     Scalar b = GaussScalar.of(4, 11);
-    assertThrows(Throw.class, () -> a.add(b));
+    assertThrows(Exception.class, () -> a.add(b));
   }
 
   @Test
   void testIllegal() {
     Scalar a = GaussScalar.of(4, 7);
     Scalar b = DoubleScalar.of(4.33);
-    assertThrows(Throw.class, () -> a.add(b));
-    assertThrows(Throw.class, () -> a.multiply(b));
+    assertThrows(Exception.class, () -> a.add(b));
+    assertThrows(Exception.class, () -> a.multiply(b));
   }
 
   @Test
   void testMultiplyFail() {
-    assertThrows(Throw.class, () -> GaussScalar.of(2, 7).multiply(RealScalar.of(0.3)));
+    assertThrows(Exception.class, () -> GaussScalar.of(2, 7).multiply(RealScalar.of(0.3)));
   }
 
   @Test
   void testPowerFail2() {
     Scalar scalar = GaussScalar.of(2, 7);
-    assertThrows(Throw.class, () -> Power.of(scalar, 2.3));
-    assertThrows(Throw.class, () -> Power.of(scalar, Rational.of(2, 3)));
+    assertThrows(Exception.class, () -> Power.of(scalar, 2.3));
+    assertThrows(Exception.class, () -> Power.of(scalar, Rational.of(2, 3)));
   }
 
   @Test
   void testCompareFail1() {
-    assertThrows(Throw.class, () -> Scalars.compare(GaussScalar.of(2, 7), GaussScalar.of(9, 11)));
+    assertThrows(Exception.class, () -> Scalars.compare(GaussScalar.of(2, 7), GaussScalar.of(9, 11)));
   }
 
   @Test
   void testCompareTypeFail() {
-    assertThrows(Throw.class, () -> Scalars.compare(GaussScalar.of(2, 7), RealScalar.of(0.3)));
-    assertThrows(Throw.class, () -> Scalars.compare(RealScalar.of(0.3), GaussScalar.of(2, 7)));
+    assertThrows(Exception.class, () -> Scalars.compare(GaussScalar.of(2, 7), RealScalar.of(0.3)));
+    assertThrows(Exception.class, () -> Scalars.compare(RealScalar.of(0.3), GaussScalar.of(2, 7)));
   }
 
   @Test
   void testComparableFail() {
-    assertThrows(Throw.class, () -> Scalars.compare(DoubleScalar.of(3.14), GaussScalar.of(1, 7)));
+    assertThrows(Exception.class, () -> Scalars.compare(DoubleScalar.of(3.14), GaussScalar.of(1, 7)));
   }
 }

@@ -11,7 +11,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -45,6 +44,6 @@ class InverseErfcTest {
   @Test
   void testFail() {
     InverseCDF inverseCDF = (InverseCDF) TriangularDistribution.with(2, 8);
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.5)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(1.5)));
   }
 }

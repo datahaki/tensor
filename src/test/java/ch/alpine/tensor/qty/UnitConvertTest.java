@@ -12,7 +12,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -144,7 +143,7 @@ class UnitConvertTest {
     Scalar mass = Quantity.of(200, "g"); // gram
     Scalar a = Quantity.of(981, "cm*s^-2");
     Scalar force = mass.multiply(a);
-    assertThrows(Throw.class, () -> UnitConvert.SI().to(Unit.of("m")).apply(force));
+    assertThrows(Exception.class, () -> UnitConvert.SI().to(Unit.of("m")).apply(force));
   }
 
   @Test

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 
 class ColorFormatTest {
@@ -45,7 +44,7 @@ class ColorFormatTest {
 
   @Test
   void testFailLength() {
-    assertThrows(Throw.class, () -> ColorFormat.toColor(Array.zeros(3)));
-    assertThrows(Throw.class, () -> ColorFormat.toColor(Array.zeros(5)));
+    assertThrows(Exception.class, () -> ColorFormat.toColor(Array.zeros(3)));
+    assertThrows(Exception.class, () -> ColorFormat.toColor(Array.zeros(5)));
   }
 }

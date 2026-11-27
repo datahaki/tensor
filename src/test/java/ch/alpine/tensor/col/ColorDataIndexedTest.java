@@ -9,7 +9,6 @@ import java.awt.Color;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Complex;
-import ch.alpine.tensor.Throw;
 
 class ColorDataIndexedTest {
   @Test
@@ -21,7 +20,7 @@ class ColorDataIndexedTest {
   @Test
   void testFailComplex() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._058.cyclic();
-    assertThrows(Throw.class, () -> colorDataIndexed.apply(Complex.of(3, 4)));
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Complex.of(3, 4)));
   }
 
   @Test

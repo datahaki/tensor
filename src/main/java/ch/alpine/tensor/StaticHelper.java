@@ -116,4 +116,24 @@ enum StaticHelper {
     BigInteger bigInteger = bigDecimal.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact();
     return Rational.integer(bigInteger);
   }
+
+  /** code by gemini
+   * 
+   * similar to Double.compare(...)
+   * but returns 0 if x == 0.0 and y == -0.0
+   * and throws Exception if either argument is NaN
+   * 
+   * @param x
+   * @param y
+   * @return
+   * @throws Exception if either argument is NaN */
+  public static int compare(double x, double y) {
+    if (x == y)
+      return 0;
+    if (x < y)
+      return -1;
+    if (x > y)
+      return 1;
+    throw new IllegalArgumentException("Arguments must not be NaN");
+  }
 }

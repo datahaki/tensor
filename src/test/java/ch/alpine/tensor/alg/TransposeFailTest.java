@@ -9,31 +9,30 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 
 class TransposeFailTest {
   @Test
   void testScalarFail() {
     Tensor v = DoubleScalar.NEGATIVE_INFINITY;
-    assertThrows(Throw.class, () -> Transpose.of(v));
+    assertThrows(Exception.class, () -> Transpose.of(v));
     assertThrows(IndexOutOfBoundsException.class, () -> Transpose.of(v, new int[] { 2 }));
   }
 
   @Test
   void testEmptyFail() {
-    assertThrows(Throw.class, () -> Transpose.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> Transpose.of(Tensors.empty()));
   }
 
   @Test
   void testVectorFail() {
-    assertThrows(Throw.class, () -> Transpose.of(Tensors.vector(2, 3, 4, 5)));
+    assertThrows(Exception.class, () -> Transpose.of(Tensors.vector(2, 3, 4, 5)));
   }
 
   @Test
   void testEmpty2() {
     Tensor empty2 = Tensors.fromString("{{}, {}}");
     assertEquals(Transpose.of(empty2), Tensors.empty());
-    assertThrows(Throw.class, () -> Transpose.of(Transpose.of(empty2)));
+    assertThrows(Exception.class, () -> Transpose.of(Transpose.of(empty2)));
   }
 
   @Test
@@ -45,8 +44,8 @@ class TransposeFailTest {
 
   @Test
   void testFail2() {
-    assertThrows(Throw.class, () -> Transpose.of(Tensors.fromString("{{1, 2}, {3, 4, 5}}")));
-    assertThrows(Throw.class, () -> Transpose.of(Tensors.fromString("{{1, 2, 3}, {4, 5}}")));
+    assertThrows(Exception.class, () -> Transpose.of(Tensors.fromString("{{1, 2}, {3, 4, 5}}")));
+    assertThrows(Exception.class, () -> Transpose.of(Tensors.fromString("{{1, 2, 3}, {4, 5}}")));
   }
 
   @Test

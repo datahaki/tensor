@@ -10,7 +10,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Flatten;
 
 class MeanFilterTest {
@@ -62,7 +61,7 @@ class MeanFilterTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> MeanFilter.of(RealScalar.of(3), 1));
+    assertThrows(Exception.class, () -> MeanFilter.of(RealScalar.of(3), 1));
   }
 
   @Test

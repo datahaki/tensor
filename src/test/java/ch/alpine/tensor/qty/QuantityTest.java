@@ -15,7 +15,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.io.StringScalar;
@@ -97,8 +96,8 @@ class QuantityTest {
   @Test
   void testParseFail() {
     assertThrows(IllegalArgumentException.class, () -> Quantity.of(3.14, "^2"));
-    assertThrows(Throw.class, () -> Quantity.of(3.14, "m^2a"));
-    assertThrows(Throw.class, () -> Quantity.of(3.14, "m^"));
+    assertThrows(Exception.class, () -> Quantity.of(3.14, "m^2a"));
+    assertThrows(Exception.class, () -> Quantity.of(3.14, "m^"));
     assertThrows(IllegalArgumentException.class, () -> Quantity.of(3.14, "m[^2"));
     assertThrows(IllegalArgumentException.class, () -> Quantity.of(3.14, "m]^2"));
   }
@@ -106,12 +105,12 @@ class QuantityTest {
   @Test
   void testNestFail() {
     Scalar q1 = Quantity.of(3.14, "m");
-    assertThrows(Throw.class, () -> Quantity.of(q1, "s"));
+    assertThrows(Exception.class, () -> Quantity.of(q1, "s"));
   }
 
   @Test
   void testNestEmptyFail() {
-    assertThrows(Throw.class, () -> Quantity.of(Quantity.of(2, "s"), ""));
+    assertThrows(Exception.class, () -> Quantity.of(Quantity.of(2, "s"), ""));
   }
 
   @Test

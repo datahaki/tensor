@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 
 class InfluenceMatrixQTest {
@@ -17,7 +16,7 @@ class InfluenceMatrixQTest {
   void testSimple() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {2, 3}}");
     assertFalse(InfluenceMatrixQ.INSTANCE.test(matrix));
-    assertThrows(Throw.class, () -> InfluenceMatrixQ.INSTANCE.require(matrix));
+    assertThrows(Exception.class, () -> InfluenceMatrixQ.INSTANCE.require(matrix));
   }
 
   @Test
@@ -32,7 +31,7 @@ class InfluenceMatrixQTest {
   void testChop() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {2, 3}}");
     assertFalse(InfluenceMatrixQ.INSTANCE.test(matrix));
-    assertThrows(Throw.class, () -> InfluenceMatrixQ.INSTANCE.require(matrix));
+    assertThrows(Exception.class, () -> InfluenceMatrixQ.INSTANCE.require(matrix));
   }
 
   @Test

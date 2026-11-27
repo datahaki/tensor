@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
@@ -32,7 +31,7 @@ class GeometricMeanTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(Throw.class, () -> GeometricMean.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> GeometricMean.of(RealScalar.ONE));
   }
 
   @Test

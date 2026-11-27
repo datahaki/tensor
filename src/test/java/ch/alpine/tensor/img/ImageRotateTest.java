@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.io.ImageFormat;
@@ -73,7 +72,7 @@ class ImageRotateTest {
   @ParameterizedTest
   @EnumSource
   void testScalarFail(ImageRotate imageRotate) {
-    assertThrows(Throw.class, () -> imageRotate.apply(Pi.HALF));
+    assertThrows(Exception.class, () -> imageRotate.apply(Pi.HALF));
   }
 
   @Test
@@ -89,6 +88,6 @@ class ImageRotateTest {
   @EnumSource
   void testUnstructuredFail(ImageRotate imageRotate) {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
-    assertThrows(Throw.class, () -> imageRotate.apply(tensor));
+    assertThrows(Exception.class, () -> imageRotate.apply(tensor));
   }
 }

@@ -12,7 +12,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 
 class DivisibleTest {
@@ -56,13 +55,13 @@ class DivisibleTest {
   void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(6, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    assertThrows(Throw.class, () -> Divisible.of(qs1, qs2));
+    assertThrows(Exception.class, () -> Divisible.of(qs1, qs2));
   }
 
   @Test
   void testNumericFail() {
-    assertThrows(Throw.class, () -> Divisible.of(RealScalar.of(9.), RealScalar.of(3)));
-    assertThrows(Throw.class, () -> Divisible.of(Quantity.of(9., "m"), Quantity.of(3, "m")));
+    assertThrows(Exception.class, () -> Divisible.of(RealScalar.of(9.), RealScalar.of(3)));
+    assertThrows(Exception.class, () -> Divisible.of(Quantity.of(9., "m"), Quantity.of(3, "m")));
   }
 
   @Test
@@ -73,7 +72,7 @@ class DivisibleTest {
 
   @Test
   void testZeroFail() {
-    assertThrows(Throw.class, () -> Divisible.of(RealScalar.ONE, RealScalar.ZERO));
-    assertThrows(Throw.class, () -> Scalars.divides(RealScalar.ZERO, RealScalar.ONE));
+    assertThrows(Exception.class, () -> Divisible.of(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(Exception.class, () -> Scalars.divides(RealScalar.ZERO, RealScalar.ONE));
   }
 }

@@ -22,7 +22,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.IntegerQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -335,9 +334,9 @@ class BinomialDistributionTest {
   @Test
   void testFailP() {
     BinomialDistribution.of(3, RealScalar.ZERO);
-    assertThrows(Throw.class, () -> BinomialDistribution.of(10, Rational.of(-1, 3)));
+    assertThrows(Exception.class, () -> BinomialDistribution.of(10, Rational.of(-1, 3)));
     BinomialDistribution.of(3, RealScalar.ONE);
-    assertThrows(Throw.class, () -> BinomialDistribution.of(10, Rational.of(4, 3)));
-    assertThrows(Throw.class, () -> BinomialDistribution.of(10, Quantity.of(0.2, "s")));
+    assertThrows(Exception.class, () -> BinomialDistribution.of(10, Rational.of(4, 3)));
+    assertThrows(Exception.class, () -> BinomialDistribution.of(10, Quantity.of(0.2, "s")));
   }
 }

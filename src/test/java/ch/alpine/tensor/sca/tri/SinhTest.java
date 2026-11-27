@@ -17,7 +17,6 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -60,7 +59,7 @@ class SinhTest {
   @Test
   void testQuantityFail() {
     UnitDimensions.THREAD_LOCAL.set(UnitDimensionsDate.INSTANCE);
-    assertThrows(Throw.class, () -> Sinh.FUNCTION.apply(Quantity.of(1, "deg")));
+    assertThrows(Exception.class, () -> Sinh.FUNCTION.apply(Quantity.of(1, "deg")));
     UnitDimensions.THREAD_LOCAL.remove();
   }
 

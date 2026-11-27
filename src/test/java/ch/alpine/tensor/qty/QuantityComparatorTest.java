@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Sort;
 import test.wrap.SerializableQ;
 
@@ -55,7 +54,7 @@ class QuantityComparatorTest {
   void testIncompatibleFail() {
     Comparator<Scalar> comparator = QuantityComparator.SI();
     Tensor vector = Tensors.fromString("{4[h], 300[s], 2[km], 180[s]}");
-    assertThrows(Throw.class, () -> Sort.ofVector(vector, comparator));
+    assertThrows(Exception.class, () -> Sort.ofVector(vector, comparator));
   }
 
   @Test

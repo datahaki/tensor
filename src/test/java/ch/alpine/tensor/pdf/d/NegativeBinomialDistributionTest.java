@@ -11,7 +11,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Binomial;
@@ -86,7 +85,7 @@ class NegativeBinomialDistributionTest {
   @Test
   void testFails() {
     assertThrows(IllegalArgumentException.class, () -> NegativeBinomialDistribution.of(-1, Rational.HALF));
-    assertThrows(Throw.class, () -> NegativeBinomialDistribution.of(2, RealScalar.ZERO));
-    assertThrows(Throw.class, () -> NegativeBinomialDistribution.of(2, RealScalar.of(1.1)));
+    assertThrows(Exception.class, () -> NegativeBinomialDistribution.of(2, RealScalar.ZERO));
+    assertThrows(Exception.class, () -> NegativeBinomialDistribution.of(2, RealScalar.of(1.1)));
   }
 }

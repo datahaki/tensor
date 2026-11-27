@@ -17,7 +17,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.alg.Transpose;
@@ -123,12 +122,12 @@ class LDLDecompositionTest {
 
   @Test
   void testFail1() {
-    assertThrows(Throw.class, () -> LDLDecompositionWrap.of(Tensors.fromString("{{4, 2}, {1, 4}}")));
+    assertThrows(Exception.class, () -> LDLDecompositionWrap.of(Tensors.fromString("{{4, 2}, {1, 4}}")));
   }
 
   @Test
   void testFail2() {
-    assertThrows(Throw.class, () -> LDLDecompositionWrap.of(Tensors.fromString("{{4, I}, {I, 4}}")));
+    assertThrows(Exception.class, () -> LDLDecompositionWrap.of(Tensors.fromString("{{4, I}, {I, 4}}")));
   }
 
   @Test
@@ -257,7 +256,7 @@ class LDLDecompositionTest {
     Tensor matrix = m1.dot(m2);
     assertEquals(MatrixRank.of(matrix), r);
     {
-      assertThrows(Throw.class, () -> PseudoInverse.usingCholesky(matrix));
+      assertThrows(Exception.class, () -> PseudoInverse.usingCholesky(matrix));
       Tensor ls1 = LeastSquares.of(matrix, br);
       Tensor ls2 = PseudoInverse.of(matrix).dot(br);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -265,7 +264,7 @@ class LDLDecompositionTest {
     {
       Tensor m = Transpose.of(matrix);
       Tensor b = RandomVariate.of(distribution, _m);
-      assertThrows(Throw.class, () -> PseudoInverse.usingCholesky(m));
+      assertThrows(Exception.class, () -> PseudoInverse.usingCholesky(m));
       Tensor ls1 = LeastSquares.of(m, b);
       Tensor ls2 = PseudoInverse.of(m).dot(b);
       Tolerance.CHOP.requireClose(ls1, ls2);

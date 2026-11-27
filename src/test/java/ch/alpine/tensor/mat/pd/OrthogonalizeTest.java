@@ -18,7 +18,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
@@ -281,17 +280,17 @@ class OrthogonalizeTest {
   @Test
   void testUsingSvdFail() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
-    assertThrows(Throw.class, () -> Orthogonalize.usingSvd(matrix));
+    assertThrows(Exception.class, () -> Orthogonalize.usingSvd(matrix));
   }
 
   @Test
   void testFailScalar() {
-    assertThrows(Throw.class, () -> Orthogonalize.of(Pi.VALUE));
+    assertThrows(Exception.class, () -> Orthogonalize.of(Pi.VALUE));
   }
 
   @Test
   void testFailVector() {
-    assertThrows(Throw.class, () -> Orthogonalize.of(Tensors.vector(1, 2, 3, 4)));
+    assertThrows(Exception.class, () -> Orthogonalize.of(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test

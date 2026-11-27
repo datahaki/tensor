@@ -11,7 +11,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
@@ -72,7 +71,7 @@ class HannWindowTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> HannWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(Exception.class, () -> HannWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 
   @Test

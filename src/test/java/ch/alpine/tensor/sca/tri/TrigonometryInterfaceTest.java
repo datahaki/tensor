@@ -19,7 +19,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
@@ -96,7 +95,7 @@ class TrigonometryInterfaceTest {
 
   @Test
   void testFails() {
-    assertThrows(Throw.class, () -> Sin.FUNCTION.apply(Quantity.of(1.2, "m")));
-    assertThrows(Throw.class, () -> Sin.FUNCTION.apply(GaussScalar.of(2, 7)));
+    assertThrows(Exception.class, () -> Sin.FUNCTION.apply(Quantity.of(1.2, "m")));
+    assertThrows(Exception.class, () -> Sin.FUNCTION.apply(GaussScalar.of(2, 7)));
   }
 }

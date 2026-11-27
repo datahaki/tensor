@@ -13,7 +13,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.alg.Transpose;
@@ -61,7 +60,7 @@ class SchattenNormTest {
 
   @Test
   void testPOutsideRangeFail() {
-    assertThrows(Throw.class, () -> SchattenNorm.of(0.999));
+    assertThrows(Exception.class, () -> SchattenNorm.of(0.999));
   }
 
   @Test
@@ -70,7 +69,7 @@ class SchattenNormTest {
     assertThrows(ClassCastException.class, () -> tensorScalarFunction.apply(LeviCivitaTensor.of(3)));
     assertThrows(Exception.class, () -> tensorScalarFunction.apply(Tensors.vector(1, 2, 3)));
     assertThrows(Exception.class, () -> tensorScalarFunction.apply(Tensors.empty()));
-    assertThrows(Throw.class, () -> tensorScalarFunction.apply(Pi.HALF));
+    assertThrows(Exception.class, () -> tensorScalarFunction.apply(Pi.HALF));
   }
 
   @Test

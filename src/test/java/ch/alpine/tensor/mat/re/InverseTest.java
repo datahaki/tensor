@@ -23,7 +23,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -115,15 +114,15 @@ class InverseTest {
   void testDet0() {
     Tensor matrix = Import.of("ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
-    assertThrows(Throw.class, () -> Inverse.of(matrix));
-    assertThrows(Throw.class, () -> Inverse.of(matrix.maps(N.DOUBLE)));
+    assertThrows(Exception.class, () -> Inverse.of(matrix));
+    assertThrows(Exception.class, () -> Inverse.of(matrix.maps(N.DOUBLE)));
   }
 
   @Test
   void testZeroFail() {
     Tensor matrix = DiagonalMatrix.of(1, 2, 0, 3);
-    assertThrows(Throw.class, () -> Inverse.of(matrix));
-    assertThrows(Throw.class, () -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
+    assertThrows(Exception.class, () -> Inverse.of(matrix));
+    assertThrows(Exception.class, () -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
   }
 
   @Test

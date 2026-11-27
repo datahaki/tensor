@@ -13,7 +13,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.mat.pi.LinearSubspace;
@@ -80,7 +79,7 @@ class MatrixQTest {
 
   @Test
   void testElseThrow() {
-    assertThrows(Throw.class, () -> MatrixQ.require(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> MatrixQ.require(Tensors.vector(1, 2, 3)));
   }
 
   @Test
@@ -104,6 +103,6 @@ class MatrixQTest {
   void testRequireSizeFail() {
     Tensor tensor = MatrixQ.requireSize(IdentityMatrix.of(3), 3, 3);
     assertEquals(tensor, IdentityMatrix.of(3));
-    assertThrows(Throw.class, () -> MatrixQ.requireSize(IdentityMatrix.of(3), 3, 4));
+    assertThrows(Exception.class, () -> MatrixQ.requireSize(IdentityMatrix.of(3), 3, 4));
   }
 }

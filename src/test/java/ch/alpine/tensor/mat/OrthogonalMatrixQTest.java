@@ -13,7 +13,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.re.Det;
@@ -47,12 +46,12 @@ class OrthogonalMatrixQTest {
   void testRequireChop() {
     Tensor tensor = new OrthogonalMatrixQ(Chop.NONE).require(IdentityMatrix.of(4));
     assertEquals(tensor, IdentityMatrix.of(4));
-    assertThrows(Throw.class, () -> new OrthogonalMatrixQ(Chop.NONE).require(HilbertMatrix.of(3)));
+    assertThrows(Exception.class, () -> new OrthogonalMatrixQ(Chop.NONE).require(HilbertMatrix.of(3)));
   }
 
   @Test
   void testRequire() {
     OrthogonalMatrixQ.INSTANCE.require(IdentityMatrix.of(4));
-    assertThrows(Throw.class, () -> OrthogonalMatrixQ.INSTANCE.require(HilbertMatrix.of(3)));
+    assertThrows(Exception.class, () -> OrthogonalMatrixQ.INSTANCE.require(HilbertMatrix.of(3)));
   }
 }

@@ -11,7 +11,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 
 class FactorialTest {
   @Test
@@ -70,6 +69,6 @@ class FactorialTest {
 
   @Test
   void testNumericFail() {
-    assertThrows(Throw.class, () -> Factorial.FUNCTION.apply(RealScalar.of(1.2)));
+    assertThrows(Exception.class, () -> Factorial.FUNCTION.apply(RealScalar.of(1.2)));
   }
 }

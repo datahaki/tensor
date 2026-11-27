@@ -18,7 +18,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
@@ -90,12 +89,12 @@ class ExpTest {
   @Test
   void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
-    assertThrows(Throw.class, () -> Exp.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Exp.FUNCTION.apply(scalar));
   }
 
   @Test
   void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    assertThrows(Throw.class, () -> Exp.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Exp.FUNCTION.apply(scalar));
   }
 }

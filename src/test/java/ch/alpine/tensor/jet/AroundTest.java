@@ -20,7 +20,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -221,14 +220,14 @@ class AroundTest {
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> Around.of(2, -3));
+    assertThrows(Exception.class, () -> Around.of(2, -3));
   }
 
   @Test
   void testNumberFail() {
     Scalar scalar = Around.of(2, 3);
     assertEquals(scalar.toString(), "2\u00B13");
-    assertThrows(Throw.class, scalar::number);
+    assertThrows(Exception.class, scalar::number);
   }
 
   @Test
@@ -240,7 +239,7 @@ class AroundTest {
 
   @Test
   void testSpecialCase() {
-    assertThrows(Throw.class, () -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
+    assertThrows(Exception.class, () -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
   }
 
   @Test
@@ -292,7 +291,7 @@ class AroundTest {
 
   @Test
   void testPowerFail() {
-    assertThrows(Throw.class, () -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
+    assertThrows(Exception.class, () -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
   }
 
   @Test
@@ -306,7 +305,7 @@ class AroundTest {
   @Test
   void testArcTanhFail() {
     Scalar scalar = Around.of(2, 3);
-    assertThrows(Throw.class, () -> ArcTanh.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> ArcTanh.FUNCTION.apply(scalar));
   }
 
   @Test

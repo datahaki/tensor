@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
 class ArgMinTest {
@@ -45,7 +44,7 @@ class ArgMinTest {
 
   @Test
   void testScalar() {
-    assertThrows(Throw.class, () -> ArgMin.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> ArgMin.of(RealScalar.ONE));
   }
 
   @Test

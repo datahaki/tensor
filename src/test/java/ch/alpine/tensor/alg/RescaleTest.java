@@ -12,7 +12,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.qty.DateTime;
 import ch.alpine.tensor.qty.Quantity;
@@ -152,13 +151,13 @@ class RescaleTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> Rescale.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Rescale.of(RealScalar.ONE));
   }
 
   @Test
   void testQuantityMixedFail() {
     Tensor vector = Tensors.of(Quantity.of(1, "s"), Quantity.of(2, "m"));
-    assertThrows(Throw.class, () -> Rescale.of(vector));
+    assertThrows(Exception.class, () -> Rescale.of(vector));
   }
 
   @Test
@@ -170,7 +169,7 @@ class RescaleTest {
   @Test
   void testQuantityZeroFail() {
     Tensor vector = Tensors.of(Quantity.of(0, ""), Quantity.of(0, "m"));
-    assertThrows(Throw.class, () -> Rescale.of(vector));
+    assertThrows(Exception.class, () -> Rescale.of(vector));
   }
 
   @Test

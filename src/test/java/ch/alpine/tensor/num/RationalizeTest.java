@@ -20,7 +20,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -214,11 +213,11 @@ class RationalizeTest {
 
   @Test
   void testFailPositive() {
-    assertThrows(Throw.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.ZERO));
+    assertThrows(Exception.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.ZERO));
   }
 
   @Test
   void testFailIntegerQ() {
-    assertThrows(Throw.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.of(1.23)));
+    assertThrows(Exception.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.of(1.23)));
   }
 }

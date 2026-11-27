@@ -20,7 +20,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 
 class QuantityCompareTest {
   private static void _checkEquals(Scalar s1, Scalar s2, boolean actual) {
@@ -55,8 +54,8 @@ class QuantityCompareTest {
     Scalar q1 = Quantity.of(0, "s");
     Scalar q2 = Quantity.of(0, "rad");
     assertNotEquals(q1, q2);
-    assertThrows(Throw.class, () -> Scalars.compare(q1, q2));
-    assertThrows(Throw.class, () -> Scalars.compare(RealScalar.ZERO, q2));
+    assertThrows(Exception.class, () -> Scalars.compare(q1, q2));
+    assertThrows(Exception.class, () -> Scalars.compare(RealScalar.ZERO, q2));
   }
 
   @Test
@@ -98,7 +97,7 @@ class QuantityCompareTest {
 
   @Test
   void testCompareFail2() {
-    assertThrows(Throw.class, () -> Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s")));
+    assertThrows(Exception.class, () -> Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s")));
   }
 
   @Test

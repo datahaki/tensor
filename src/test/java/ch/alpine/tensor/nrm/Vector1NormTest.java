@@ -13,7 +13,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.NegativeBinomialDistribution;
@@ -45,7 +44,7 @@ class Vector1NormTest {
         RealScalar.ZERO, //
         Quantity.of(-4, "m") //
     );
-    assertThrows(Throw.class, () -> Vector1Norm.of(vec));
+    assertThrows(Exception.class, () -> Vector1Norm.of(vec));
   }
 
   @Test

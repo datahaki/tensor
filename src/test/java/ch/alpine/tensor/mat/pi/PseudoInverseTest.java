@@ -19,7 +19,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
@@ -217,8 +216,8 @@ class PseudoInverseTest {
     Tensor matrix = m1.dot(m2);
     assertEquals(MatrixRank.of(matrix), r);
     {
-      assertThrows(Throw.class, () -> PseudoInverse.usingQR(matrix));
-      assertThrows(Throw.class, () -> LeastSquares.usingQR(matrix, br));
+      assertThrows(Exception.class, () -> PseudoInverse.usingQR(matrix));
+      assertThrows(Exception.class, () -> LeastSquares.usingQR(matrix, br));
       Tensor ls1 = LeastSquares.of(matrix, br);
       Tensor ls2 = PseudoInverse.of(matrix).dot(br);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -226,8 +225,8 @@ class PseudoInverseTest {
     {
       Tensor m = Transpose.of(matrix);
       Tensor b = RandomVariate.of(distribution, 4);
-      assertThrows(Throw.class, () -> PseudoInverse.usingQR(m));
-      assertThrows(Throw.class, () -> LeastSquares.usingQR(m, b));
+      assertThrows(Exception.class, () -> PseudoInverse.usingQR(m));
+      assertThrows(Exception.class, () -> LeastSquares.usingQR(m, b));
       Tensor ls1 = LeastSquares.of(m, b);
       Tensor ls2 = PseudoInverse.of(m).dot(b);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -275,8 +274,8 @@ class PseudoInverseTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> PseudoInverse.of(RealScalar.ONE));
-    assertThrows(Throw.class, () -> PseudoInverse.usingSvd(RealScalar.ONE));
+    assertThrows(Exception.class, () -> PseudoInverse.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> PseudoInverse.usingSvd(RealScalar.ONE));
   }
 
   @Test

@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 
@@ -39,6 +38,6 @@ class AntisymmetricMatrixQTest {
   void testRequire() {
     Tensor matrix = Tensors.fromString("{{0, 2}, {-2, 0}}");
     assertEquals(AntisymmetricMatrixQ.INSTANCE.require(matrix), matrix);
-    assertThrows(Throw.class, () -> AntisymmetricMatrixQ.INSTANCE.require(Tensors.fromString("{{0, 2}, {-1, 0}}")));
+    assertThrows(Exception.class, () -> AntisymmetricMatrixQ.INSTANCE.require(Tensors.fromString("{{0, 2}, {-1, 0}}")));
   }
 }

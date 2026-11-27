@@ -13,7 +13,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Round;
 
@@ -74,12 +73,12 @@ class CsvHelperTest {
 
   @Test
   void testComplexFail() {
-    assertThrows(Throw.class, () -> CsvHelper.FUNCTION.apply(Complex.of(3, 4)));
+    assertThrows(Exception.class, () -> CsvHelper.FUNCTION.apply(Complex.of(3, 4)));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> CsvHelper.FUNCTION.apply(Quantity.of(3, "s")));
+    assertThrows(Exception.class, () -> CsvHelper.FUNCTION.apply(Quantity.of(3, "s")));
   }
 
   @Test

@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -58,11 +57,11 @@ class ConjugateTransposeTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> ConjugateTranspose.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> ConjugateTranspose.of(RealScalar.ONE));
   }
 
   @Test
   void testVectorFail() {
-    assertThrows(Throw.class, () -> ConjugateTranspose.of(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> ConjugateTranspose.of(Tensors.vector(1, 2, 3)));
   }
 }

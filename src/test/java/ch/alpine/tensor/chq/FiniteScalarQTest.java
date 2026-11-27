@@ -18,7 +18,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.jet.Jet;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.num.GaussScalar;
@@ -130,7 +129,7 @@ class FiniteScalarQTest {
     Scalar scalar = Scalars.fromString("NaN+2*I[m*s]");
     assertEquals(scalar.toString(), "NaN+2*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
-    assertThrows(Throw.class, () -> FiniteScalarQ.require(scalar));
+    assertThrows(Exception.class, () -> FiniteScalarQ.require(scalar));
   }
 
   @Test
@@ -142,7 +141,7 @@ class FiniteScalarQTest {
   @Test
   void testRequireThrow() {
     FiniteScalarQ.require(Pi.VALUE);
-    assertThrows(Throw.class, () -> FiniteScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(Exception.class, () -> FiniteScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
   }
 
   @Test

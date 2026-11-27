@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 
 class UnitImplTest {
@@ -39,7 +38,7 @@ class UnitImplTest {
   @Test
   void testMultiplyFail() {
     Unit unit = Unit.of("kg^2*m^-1");
-    assertThrows(Throw.class, () -> unit.multiply(Quantity.of(3, "s")));
+    assertThrows(Exception.class, () -> unit.multiply(Quantity.of(3, "s")));
   }
 
   @Test

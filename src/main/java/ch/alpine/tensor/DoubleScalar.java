@@ -135,16 +135,8 @@ public final class DoubleScalar extends AbstractRealScalar implements //
 
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
-    if (Double.isNaN(value))
-      throw new Throw(this, scalar);
-    if (scalar instanceof RealScalar) {
-      double other = scalar.number().doubleValue();
-      if (Double.isNaN(other))
-        throw new Throw(this, scalar);
-      if (value == other) // +0.0 == -0.0
-        return 0;
-      return Double.compare(value, other);
-    }
+    if (scalar instanceof RealScalar)
+      return StaticHelper.compare(value, scalar.number().doubleValue());
     throw new Throw(this, scalar);
   }
 

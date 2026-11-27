@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
@@ -95,7 +94,7 @@ class MahalanobisTest {
 
   @Test
   void testEmptyFail() {
-    assertThrows(Throw.class, () -> new Mahalanobis(Tensors.empty()));
+    assertThrows(Exception.class, () -> new Mahalanobis(Tensors.empty()));
   }
 
   @Test

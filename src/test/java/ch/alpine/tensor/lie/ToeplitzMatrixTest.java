@@ -14,7 +14,6 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -85,7 +84,7 @@ class ToeplitzMatrixTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(Throw.class, () -> ToeplitzMatrix.of(RealScalar.of(5)));
+    assertThrows(Exception.class, () -> ToeplitzMatrix.of(RealScalar.of(5)));
   }
 
   @Test

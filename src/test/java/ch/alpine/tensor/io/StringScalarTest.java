@@ -15,7 +15,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 
 class StringScalarTest {
@@ -57,16 +56,16 @@ class StringScalarTest {
 
   @Test
   void testFailOp() {
-    assertThrows(Throw.class, () -> StringScalar.of("asd").reciprocal());
-    assertThrows(Throw.class, () -> StringScalar.of("asd").negate());
-    assertThrows(Throw.class, () -> StringScalar.of("asd").number());
-    assertThrows(Throw.class, () -> StringScalar.of("asd").multiply(RealScalar.ONE));
-    assertThrows(Throw.class, () -> StringScalar.of("asd").add(RealScalar.ONE));
+    assertThrows(Exception.class, () -> StringScalar.of("asd").reciprocal());
+    assertThrows(Exception.class, () -> StringScalar.of("asd").negate());
+    assertThrows(Exception.class, () -> StringScalar.of("asd").number());
+    assertThrows(Exception.class, () -> StringScalar.of("asd").multiply(RealScalar.ONE));
+    assertThrows(Exception.class, () -> StringScalar.of("asd").add(RealScalar.ONE));
   }
 
   @Test
   void testMultiplyFail() {
-    assertThrows(Throw.class, () -> Complex.I.multiply(StringScalar.of("asd")));
+    assertThrows(Exception.class, () -> Complex.I.multiply(StringScalar.of("asd")));
   }
 
   @Test
@@ -77,8 +76,8 @@ class StringScalarTest {
   @Test
   void testOneFail() {
     Scalar scalar = StringScalar.of("abc");
-    assertThrows(Throw.class, scalar::zero);
-    assertThrows(Throw.class, scalar::one);
+    assertThrows(Exception.class, scalar::zero);
+    assertThrows(Exception.class, scalar::one);
   }
 
   @Test

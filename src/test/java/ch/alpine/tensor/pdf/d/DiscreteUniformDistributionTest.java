@@ -16,7 +16,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -181,8 +180,8 @@ class DiscreteUniformDistributionTest {
   void testFailQuantile() {
     Distribution distribution = DiscreteUniformDistribution.of(3, 9);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
@@ -194,7 +193,7 @@ class DiscreteUniformDistributionTest {
 
   @Test
   void testFailsInt() {
-    assertThrows(Throw.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4.5)));
+    assertThrows(Exception.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4.5)));
   }
 
   @Test

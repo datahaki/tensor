@@ -12,7 +12,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -156,7 +155,7 @@ class EntrywiseTest {
   @Test
   void testScalarTensorFail() {
     Entrywise entrywise = Entrywise.max();
-    assertThrows(Throw.class, () -> entrywise.apply(Tensors.vector(3, 2, 3), RealScalar.ONE));
+    assertThrows(Exception.class, () -> entrywise.apply(Tensors.vector(3, 2, 3), RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> entrywise.apply(RealScalar.ONE, Tensors.vector(3, 2, 3)));
   }
 

@@ -16,7 +16,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
@@ -144,19 +143,19 @@ class FrechetDistributionTest {
   @Test
   void testInverseCDF_1() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.0)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(1.0)));
   }
 
   @Test
   void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> FrechetDistribution.of(RealScalar.of(3), RealScalar.of(0)));
-    assertThrows(Throw.class, () -> FrechetDistribution.of(RealScalar.of(0), RealScalar.of(2)));
-    assertThrows(Throw.class, () -> FrechetDistribution.of(Quantity.of(2.3, "s"), Quantity.of(1.5, "m^-1")));
+    assertThrows(Exception.class, () -> FrechetDistribution.of(RealScalar.of(3), RealScalar.of(0)));
+    assertThrows(Exception.class, () -> FrechetDistribution.of(RealScalar.of(0), RealScalar.of(2)));
+    assertThrows(Exception.class, () -> FrechetDistribution.of(Quantity.of(2.3, "s"), Quantity.of(1.5, "m^-1")));
   }
 }

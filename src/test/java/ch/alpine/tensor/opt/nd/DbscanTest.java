@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
@@ -106,7 +105,7 @@ class DbscanTest {
   @Test
   void testFail() {
     Tensor points = Range.of(0, 8).maps(Tensors::of);
-    assertThrows(Throw.class, () -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(-1.1), 3));
+    assertThrows(Exception.class, () -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(-1.1), 3));
     assertThrows(IllegalArgumentException.class, () -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(+1.1), 0));
   }
 }

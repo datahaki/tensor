@@ -19,7 +19,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
@@ -59,8 +58,8 @@ class QuaternionTest {
     Quaternion actual = quaternion.reciprocal();
     Quaternion expect = Quaternion.of(Scalars.fromString("3/38[m^-1]"), Tensors.fromString("{-1/19[m^-1], -3/38[m^-1], -2/19[m^-1]}"));
     assertEquals(expect, actual);
-    assertThrows(Throw.class, quaternion::exp);
-    assertThrows(Throw.class, quaternion::log);
+    assertThrows(Exception.class, quaternion::exp);
+    assertThrows(Exception.class, quaternion::log);
   }
 
   @Test
@@ -290,8 +289,8 @@ class QuaternionTest {
 
   @Test
   void testMatrixFail() {
-    assertThrows(Throw.class, () -> Quaternion.of(RealScalar.ONE, HilbertMatrix.of(3, 3)));
-    assertThrows(Throw.class, () -> Quaternion.of(RealScalar.ONE, RealScalar.of(4)));
+    assertThrows(Exception.class, () -> Quaternion.of(RealScalar.ONE, HilbertMatrix.of(3, 3)));
+    assertThrows(Exception.class, () -> Quaternion.of(RealScalar.ONE, RealScalar.of(4)));
   }
 
   @Test
@@ -317,6 +316,6 @@ class QuaternionTest {
 
   @Test
   void testFormatFail() {
-    assertThrows(Throw.class, () -> Quaternion.of(RealScalar.ONE, Tensors.vector(1, 2, 3, 4)));
+    assertThrows(Exception.class, () -> Quaternion.of(RealScalar.ONE, Tensors.vector(1, 2, 3, 4)));
   }
 }

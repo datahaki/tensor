@@ -20,7 +20,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.fft.Fourier;
@@ -232,7 +231,7 @@ class MatrixPowerTest {
 
   @Test
   void testNonSymmetricFail() {
-    assertThrows(Throw.class, () -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), Rational.HALF));
+    assertThrows(Exception.class, () -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), Rational.HALF));
   }
 
   @Test

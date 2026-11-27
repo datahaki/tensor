@@ -11,7 +11,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -66,8 +65,8 @@ class MaxwellDistributionTest {
 
   @Test
   void testSigmaFail() {
-    assertThrows(Throw.class, () -> MaxwellDistribution.of(0));
-    assertThrows(Throw.class, () -> MaxwellDistribution.of(-1));
-    assertThrows(Throw.class, () -> MaxwellDistribution.of(Quantity.of(2, "m")));
+    assertThrows(Exception.class, () -> MaxwellDistribution.of(0));
+    assertThrows(Exception.class, () -> MaxwellDistribution.of(-1));
+    assertThrows(Exception.class, () -> MaxwellDistribution.of(Quantity.of(2, "m")));
   }
 }

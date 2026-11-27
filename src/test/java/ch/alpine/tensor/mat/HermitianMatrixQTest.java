@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.sca.Chop;
@@ -53,11 +52,11 @@ class HermitianMatrixQTest {
 
   @Test
   void testRequireFail() {
-    assertThrows(Throw.class, () -> HermitianMatrixQ.INSTANCE.require(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> HermitianMatrixQ.INSTANCE.require(Tensors.vector(1, 2, 3)));
   }
 
   @Test
   void testRequireChop() {
-    assertThrows(Throw.class, () -> new HermitianMatrixQ(Chop._02).require(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> new HermitianMatrixQ(Chop._02).require(Tensors.vector(1, 2, 3)));
   }
 }

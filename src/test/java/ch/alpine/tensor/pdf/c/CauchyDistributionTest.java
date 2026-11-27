@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -112,12 +111,12 @@ class CauchyDistributionTest {
 
   @Test
   void testZeroFail() {
-    assertThrows(Throw.class, () -> CauchyDistribution.of(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(Exception.class, () -> CauchyDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
   @Test
   void testNegativeFail() {
-    assertThrows(Throw.class, () -> CauchyDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
+    assertThrows(Exception.class, () -> CauchyDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
   }
 
   @Test

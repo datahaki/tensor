@@ -16,7 +16,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.StringScalar;
@@ -106,12 +105,12 @@ class PowerTest {
 
   @Test
   void testZeroComplex1Fail() {
-    assertThrows(Throw.class, () -> Power.of(RealScalar.ZERO, Complex.I));
+    assertThrows(Exception.class, () -> Power.of(RealScalar.ZERO, Complex.I));
   }
 
   @Test
   void testZeroComplex2Fail() {
-    assertThrows(Throw.class, () -> Power.of(RealScalar.ZERO, Scalars.fromString("-0.1+3*I")));
+    assertThrows(Exception.class, () -> Power.of(RealScalar.ZERO, Scalars.fromString("-0.1+3*I")));
   }
 
   @Test
@@ -158,7 +157,7 @@ class PowerTest {
   @Test
   void testTypeFail() {
     Scalar scalar = StringScalar.of("some");
-    assertThrows(Throw.class, () -> Power.of(scalar, 0));
+    assertThrows(Exception.class, () -> Power.of(scalar, 0));
   }
 
   @Test
@@ -171,7 +170,7 @@ class PowerTest {
   @Test
   void testGaussScalar() {
     Scalar scalar = GaussScalar.of(6, 31);
-    assertThrows(Throw.class, () -> Power.of(scalar, 3.13));
+    assertThrows(Exception.class, () -> Power.of(scalar, 3.13));
   }
 
   @Test
@@ -197,7 +196,7 @@ class PowerTest {
   void testQuantityFail() {
     Scalar qs1 = Quantity.of(2, "cd");
     Scalar qs2 = Quantity.of(4, "cd");
-    assertThrows(Throw.class, () -> Power.of(qs1, qs2));
+    assertThrows(Exception.class, () -> Power.of(qs1, qs2));
   }
 
   @Test

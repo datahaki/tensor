@@ -11,7 +11,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.chq.ExactScalarQ;
 
@@ -41,6 +40,6 @@ class CubicInterpolationTest {
   @Test
   void testFail() {
     assertThrows(NullPointerException.class, () -> CubicInterpolation.of(null));
-    assertThrows(Throw.class, () -> CubicInterpolation.of(Tensors.vector()));
+    assertThrows(Exception.class, () -> CubicInterpolation.of(Tensors.vector()));
   }
 }

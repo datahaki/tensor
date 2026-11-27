@@ -18,7 +18,6 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.DeterminateScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -144,8 +143,8 @@ class GammaTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(Quantity.of(3, "m*s")));
-    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(Quantity.of(-2, "m"))); // <- fails for the wrong reason
-    assertThrows(Throw.class, () -> Gamma.FUNCTION.apply(Quantity.of(-2.12, "m^2")));
+    assertThrows(Exception.class, () -> Gamma.FUNCTION.apply(Quantity.of(3, "m*s")));
+    assertThrows(Exception.class, () -> Gamma.FUNCTION.apply(Quantity.of(-2, "m"))); // <- fails for the wrong reason
+    assertThrows(Exception.class, () -> Gamma.FUNCTION.apply(Quantity.of(-2.12, "m^2")));
   }
 }

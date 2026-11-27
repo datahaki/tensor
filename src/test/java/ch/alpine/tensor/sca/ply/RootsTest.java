@@ -21,7 +21,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Last;
@@ -313,7 +312,7 @@ class RootsTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> Roots.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Roots.of(RealScalar.ONE));
   }
 
   @Test

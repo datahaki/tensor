@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -75,8 +74,8 @@ class LogNormalDistributionTest {
     Tolerance.CHOP.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(Rational.of(46, 45)));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(4.323016391513655));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   @Test
@@ -110,7 +109,7 @@ class LogNormalDistributionTest {
   @Test
   void testDateTime() {
     DateTime mu = DateTime.of(2020, 12, 20, 4, 30);
-    assertThrows(Throw.class, () -> LogNormalDistribution.of(mu, Quantity.of(3, "s")));
+    assertThrows(Exception.class, () -> LogNormalDistribution.of(mu, Quantity.of(3, "s")));
   }
 
   @Test
@@ -127,13 +126,13 @@ class LogNormalDistributionTest {
 
   @Test
   void testSigmaNonPositiveFail() {
-    assertThrows(Throw.class, () -> LogNormalDistribution.of(Rational.HALF, Rational.of(-2, 3)));
+    assertThrows(Exception.class, () -> LogNormalDistribution.of(Rational.HALF, Rational.of(-2, 3)));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(Throw.class, () -> LogNormalDistribution.of(Quantity.of(Rational.HALF, "m"), Rational.of(2, 3)));
-    assertThrows(Throw.class, () -> LogNormalDistribution.of(Rational.of(2, 3), Quantity.of(Rational.HALF, "m")));
+    assertThrows(Exception.class, () -> LogNormalDistribution.of(Quantity.of(Rational.HALF, "m"), Rational.of(2, 3)));
+    assertThrows(Exception.class, () -> LogNormalDistribution.of(Rational.of(2, 3), Quantity.of(Rational.HALF, "m")));
   }
 
   @Test

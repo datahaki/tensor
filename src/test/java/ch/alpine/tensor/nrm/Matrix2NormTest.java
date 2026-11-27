@@ -16,7 +16,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.LehmerTensor;
@@ -107,8 +106,8 @@ class Matrix2NormTest {
 
   @Test
   void testNonMatrixFail() {
-    assertThrows(Throw.class, () -> Matrix2Norm.bound(RealScalar.of(2)));
-    assertThrows(Throw.class, () -> Matrix2Norm.bound(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> Matrix2Norm.bound(RealScalar.of(2)));
+    assertThrows(Exception.class, () -> Matrix2Norm.bound(Tensors.vector(1, 2, 3)));
     assertThrows(ClassCastException.class, () -> Matrix2Norm.bound(LehmerTensor.of(3)));
   }
 

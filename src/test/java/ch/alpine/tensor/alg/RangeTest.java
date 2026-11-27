@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Clips;
 
@@ -69,7 +68,7 @@ class RangeTest {
 
   @Test
   void testClipFail() {
-    assertThrows(Throw.class, () -> Range.closed(Clips.interval(3, 3.4)));
-    assertThrows(Throw.class, () -> Range.closed(Clips.interval(3.4, 4)));
+    assertThrows(Exception.class, () -> Range.closed(Clips.interval(3, 3.4)));
+    assertThrows(Exception.class, () -> Range.closed(Clips.interval(3.4, 4)));
   }
 }

@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -35,8 +34,8 @@ class ColorDataListsTest {
   @Test
   void testQuantityTransparent() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._103.cyclic();
-    assertThrows(Throw.class, () -> colorDataIndexed.apply(Quantity.of(2, "s")));
-    assertThrows(Throw.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "s")));
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(2, "s")));
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "s")));
   }
 
   @ParameterizedTest

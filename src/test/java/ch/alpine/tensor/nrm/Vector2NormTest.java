@@ -13,7 +13,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -74,19 +73,19 @@ class Vector2NormTest {
         Quantity.of(-4, "m^2"), //
         RealScalar.ZERO //
     );
-    assertThrows(Throw.class, () -> Vector2Norm.of(vec));
+    assertThrows(Exception.class, () -> Vector2Norm.of(vec));
   }
 
   @Test
   void testQuantityMixedFail1() {
     Tensor vector = Tensors.fromString("{0[m^2], 0[s*rad]}");
-    assertThrows(Throw.class, () -> Vector2Norm.of(vector));
+    assertThrows(Exception.class, () -> Vector2Norm.of(vector));
   }
 
   @Test
   void testQuantityMixedFail2() {
     Tensor vector = Tensors.fromString("{0[m^2], 0[m]}");
-    assertThrows(Throw.class, () -> Vector2Norm.of(vector));
+    assertThrows(Exception.class, () -> Vector2Norm.of(vector));
   }
 
   @Test
@@ -132,18 +131,18 @@ class Vector2NormTest {
   void testFail() {
     Tensor vector = Tensors.vectorDouble(0.0, 0.0);
     NormalizeUnlessZero.with(Vector2Norm::of).apply(vector);
-    assertThrows(Throw.class, () -> Vector2Norm.NORMALIZE.apply(vector));
+    assertThrows(Exception.class, () -> Vector2Norm.NORMALIZE.apply(vector));
   }
 
   @Test
   void testNumberQFail1() {
-    assertThrows(Throw.class, () -> unlessZero(DoubleScalar.POSITIVE_INFINITY, RealScalar.ZERO));
-    assertThrows(Throw.class, () -> unlessZero(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
+    assertThrows(Exception.class, () -> unlessZero(DoubleScalar.POSITIVE_INFINITY, RealScalar.ZERO));
+    assertThrows(Exception.class, () -> unlessZero(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
   @Test
   void testNumberQFail2() {
-    assertThrows(Throw.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
-    assertThrows(Throw.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
+    assertThrows(Exception.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(Exception.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
   }
 }

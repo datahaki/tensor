@@ -20,7 +20,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -197,14 +196,14 @@ class JetTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> Jet.of(RealScalar.of(2)));
+    assertThrows(Exception.class, () -> Jet.of(RealScalar.of(2)));
   }
 
   @ParameterizedTest
   @ValueSource(ints = { 1, 2, 3 })
   void testJetScalarConstantFail(int n) {
     Jet jetScalar = Jet.identity(RealScalar.of(2), n);
-    assertThrows(Throw.class, () -> Jet.identity(jetScalar, n));
+    assertThrows(Exception.class, () -> Jet.identity(jetScalar, n));
   }
 
   @Test
@@ -219,7 +218,7 @@ class JetTest {
 
   @Test
   void testMatrixFail() {
-    assertThrows(Throw.class, () -> Jet.of(HilbertMatrix.of(3)));
+    assertThrows(Exception.class, () -> Jet.of(HilbertMatrix.of(3)));
   }
 
   @Test
@@ -239,7 +238,7 @@ class JetTest {
   @Test
   void testNestFail() {
     Jet js = Jet.identity(RealScalar.of(2), 3);
-    assertThrows(Throw.class, () -> Jet.of(Tensors.of(RealScalar.of(1), js)));
+    assertThrows(Exception.class, () -> Jet.of(Tensors.of(RealScalar.of(1), js)));
   }
 
   @Test

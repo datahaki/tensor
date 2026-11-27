@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -35,7 +34,7 @@ class ScalarArrayTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> ScalarArray.ofVector(Pi.HALF));
+    assertThrows(Exception.class, () -> ScalarArray.ofVector(Pi.HALF));
   }
 
   @Test

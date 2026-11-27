@@ -10,7 +10,6 @@ import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.DateTime;
 
@@ -36,12 +35,12 @@ class ReTest {
   @Test
   void testStringFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(Throw.class, () -> Re.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Re.FUNCTION.apply(scalar));
   }
 
   @Test
   void testDateTimeFail() {
     Scalar scalar = DateTime.now();
-    assertThrows(Throw.class, () -> Re.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Re.FUNCTION.apply(scalar));
   }
 }

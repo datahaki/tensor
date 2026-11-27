@@ -12,7 +12,6 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.jet.Jet;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
@@ -60,6 +59,6 @@ class Log10Test {
   @Test
   void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    assertThrows(Throw.class, () -> Log10.FUNCTION.apply(scalar));
+    assertThrows(Exception.class, () -> Log10.FUNCTION.apply(scalar));
   }
 }

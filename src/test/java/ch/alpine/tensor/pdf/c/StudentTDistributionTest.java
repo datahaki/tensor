@@ -13,7 +13,6 @@ import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
@@ -105,15 +104,15 @@ class StudentTDistributionTest {
   @Test
   void testQuantityFail() {
     UnitDimensions.THREAD_LOCAL.set(UnitDimensionsDate.INSTANCE);
-    assertThrows(Throw.class, () -> StudentTDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km"), RealScalar.ONE));
+    assertThrows(Exception.class, () -> StudentTDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km"), RealScalar.ONE));
     UnitDimensions.THREAD_LOCAL.remove();
-    assertThrows(Throw.class, () -> StudentTDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m"), RealScalar.ONE));
-    assertThrows(Throw.class, () -> StudentTDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m"), RealScalar.ONE));
+    assertThrows(Exception.class, () -> StudentTDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m"), RealScalar.ONE));
+    assertThrows(Exception.class, () -> StudentTDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m"), RealScalar.ONE));
   }
 
   @Test
   void testNegativeSigmaFail() {
     NormalDistribution.of(5, 1);
-    assertThrows(Throw.class, () -> StudentTDistribution.of(5, -1, 1));
+    assertThrows(Exception.class, () -> StudentTDistribution.of(5, -1, 1));
   }
 }

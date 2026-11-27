@@ -20,7 +20,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.OrderedQ;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -201,7 +200,7 @@ class CategoricalDistributionTest {
   @Test
   void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 3, 1)));
-    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
     assertThrows(NullPointerException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
@@ -209,7 +208,7 @@ class CategoricalDistributionTest {
   void testWrongReference() {
     AbstractDiscreteDistribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
-    assertThrows(Throw.class, () -> distribution.quantile(RealScalar.of(Math.nextDown(0.0))));
+    assertThrows(Exception.class, () -> distribution.quantile(RealScalar.of(Math.nextDown(0.0))));
   }
 
   @Test
@@ -233,13 +232,13 @@ class CategoricalDistributionTest {
 
   @Test
   void testNegativeFail() {
-    assertThrows(Throw.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
+    assertThrows(Exception.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
   }
 
   @Test
   void testZeroFail() {
     assertThrows(ArithmeticException.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0)));
-    assertThrows(Throw.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0.0, 0, 0)));
+    assertThrows(Exception.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0.0, 0, 0)));
   }
 
   @Test
@@ -249,7 +248,7 @@ class CategoricalDistributionTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(Throw.class, () -> CategoricalDistribution.fromUnscaledPDF(RealScalar.ONE));
+    assertThrows(Exception.class, () -> CategoricalDistribution.fromUnscaledPDF(RealScalar.ONE));
   }
 
   @Test

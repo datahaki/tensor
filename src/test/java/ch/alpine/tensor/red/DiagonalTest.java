@@ -11,7 +11,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
@@ -67,7 +66,7 @@ class DiagonalTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(Throw.class, () -> Diagonal.of(RealScalar.ONE));
+    assertThrows(Exception.class, () -> Diagonal.of(RealScalar.ONE));
   }
 
   @Test

@@ -15,7 +15,6 @@ import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -229,15 +228,15 @@ class NormalDistributionTest {
   @Test
   void testQuantityFail() {
     UnitDimensions.THREAD_LOCAL.set(UnitDimensionsDate.INSTANCE);
-    assertThrows(Throw.class, () -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(Exception.class, () -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
     UnitDimensions.THREAD_LOCAL.remove();
-    assertThrows(Throw.class, () -> NormalDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    assertThrows(Throw.class, () -> NormalDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(Exception.class, () -> NormalDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(Exception.class, () -> NormalDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
   void testNegativeSigmaFail() {
     NormalDistribution.of(5, 1);
-    assertThrows(Throw.class, () -> NormalDistribution.of(5, -1));
+    assertThrows(Exception.class, () -> NormalDistribution.of(5, -1));
   }
 }

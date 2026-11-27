@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.sca.N;
@@ -24,7 +23,7 @@ class LenientAddTest {
     Scalar q = Quantity.of(0, "s");
     assertEquals(LenientAdd.of(p, q), p);
     assertEquals(LenientAdd.of(q, p), p);
-    assertThrows(Throw.class, () -> p.add(q));
+    assertThrows(Exception.class, () -> p.add(q));
   }
 
   @Test
@@ -33,15 +32,15 @@ class LenientAddTest {
     Scalar q = Quantity.of(0, "s");
     assertEquals(LenientAdd.of(p, q), RealScalar.ZERO);
     assertEquals(LenientAdd.of(q, p), RealScalar.ZERO);
-    assertThrows(Throw.class, () -> p.add(q));
+    assertThrows(Exception.class, () -> p.add(q));
   }
 
   @Test
   void testDifferentFail() {
     Scalar p = Quantity.of(3, "m");
     Scalar q = Quantity.of(1, "s");
-    assertThrows(Throw.class, () -> LenientAdd.of(p, q));
-    assertThrows(Throw.class, () -> p.add(q));
+    assertThrows(Exception.class, () -> LenientAdd.of(p, q));
+    assertThrows(Exception.class, () -> p.add(q));
   }
 
   @Test

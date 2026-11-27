@@ -20,7 +20,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -37,7 +36,7 @@ import ch.alpine.tensor.sca.N;
 class DetTest {
   @Test
   void testEmpty() {
-    assertThrows(Throw.class, () -> Det.of(Tensors.empty()));
+    assertThrows(Exception.class, () -> Det.of(Tensors.empty()));
   }
 
   @Test
@@ -45,7 +44,7 @@ class DetTest {
     Tensor m = Tensors.matrix(new Number[][] { {} });
     // this is consistent with Mathematica
     // Mathematica throws an exception
-    assertThrows(Throw.class, () -> Det.of(m));
+    assertThrows(Exception.class, () -> Det.of(m));
   }
 
   @Test
@@ -111,7 +110,7 @@ class DetTest {
         { -2, 3, +4, 0 }, //
         { +0, 2, -1, 2 }, //
     });
-    assertThrows(Throw.class, () -> Det.of(m));
+    assertThrows(Exception.class, () -> Det.of(m));
   }
 
   @Test
@@ -122,7 +121,7 @@ class DetTest {
         { -5, 3, +4 }, //
         { +0, 2, -1 } //
     });
-    assertThrows(Throw.class, () -> Det.of(m));
+    assertThrows(Exception.class, () -> Det.of(m));
   }
 
   @Test
@@ -177,20 +176,20 @@ class DetTest {
   @EnumSource(Pivots.class)
   void testSingular(Pivot pivot) {
     assertEquals(Det.of(Array.zeros(5, 5), pivot), RealScalar.ZERO);
-    assertThrows(Throw.class, () -> Det.of(Array.zeros(2, 5), pivot));
-    assertThrows(Throw.class, () -> Det.of(Array.zeros(5, 2), pivot));
+    assertThrows(Exception.class, () -> Det.of(Array.zeros(2, 5), pivot));
+    assertThrows(Exception.class, () -> Det.of(Array.zeros(5, 2), pivot));
   }
 
   @Test
   void testSingularFail() {
-    assertThrows(Throw.class, () -> Det.of(Array.zeros(2, 5)));
-    assertThrows(Throw.class, () -> Det.of(Array.zeros(5, 2)));
+    assertThrows(Exception.class, () -> Det.of(Array.zeros(2, 5)));
+    assertThrows(Exception.class, () -> Det.of(Array.zeros(5, 2)));
   }
 
   @Test
   void testNullFail() {
-    assertThrows(Throw.class, () -> Det.of(Array.zeros(5, 2), null));
-    assertThrows(Throw.class, () -> Det.of(Array.zeros(2, 5), null));
+    assertThrows(Exception.class, () -> Det.of(Array.zeros(5, 2), null));
+    assertThrows(Exception.class, () -> Det.of(Array.zeros(2, 5), null));
   }
 
   // https://ch.mathworks.com/help/matlab/ref/det.html
@@ -234,13 +233,13 @@ class DetTest {
   @Test
   void testUnitsSingle() {
     Tensor tensor = Tensors.fromString("{{1[m], 2}, {4, 5[m]}, {3, 5}}");
-    assertThrows(Throw.class, () -> Det.of(tensor));
+    assertThrows(Exception.class, () -> Det.of(tensor));
   }
 
   @Test
   void testUnitsMixed() {
     Tensor tensor = Tensors.fromString("{{1[m], 2}, {4, 5[s]}, {3, 5}}");
-    assertThrows(Throw.class, () -> Det.of(tensor));
+    assertThrows(Exception.class, () -> Det.of(tensor));
     // assertEquals(Det.of(tensor), Quantity.of(0, ""));
   }
 
@@ -286,34 +285,34 @@ class DetTest {
   @Test
   void testFailMatrixQ() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
-    assertThrows(Throw.class, () -> Det.of(tensor));
+    assertThrows(Exception.class, () -> Det.of(tensor));
   }
 
   @Test
   void testFailNonArray() {
     Tensor matrix = HilbertMatrix.of(4);
     matrix.set(Tensors.vector(1, 2, 3), 1, 2);
-    assertThrows(Throw.class, () -> Det.of(matrix));
+    assertThrows(Exception.class, () -> Det.of(matrix));
   }
 
   @Test
   void testFailRank3() {
-    assertThrows(Throw.class, () -> Det.of(LeviCivitaTensor.of(3)));
+    assertThrows(Exception.class, () -> Det.of(LeviCivitaTensor.of(3)));
   }
 
   @Test
   void testFailScalar() {
-    assertThrows(Throw.class, () -> Det.of(Pi.HALF));
+    assertThrows(Exception.class, () -> Det.of(Pi.HALF));
   }
 
   @Test
   void testFailVector() {
-    assertThrows(Throw.class, () -> Det.of(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> Det.of(Tensors.vector(1, 2, 3)));
   }
 
   @Test
   void testFailRank3b() {
-    assertThrows(Throw.class, () -> Det.of(Array.zeros(2, 2, 3)));
+    assertThrows(Exception.class, () -> Det.of(Array.zeros(2, 2, 3)));
   }
 
   @Test

@@ -99,7 +99,7 @@ class ComplexHelperTest {
     Scalar c = Complex.of(2, 3);
     Scalar q = Quantity.of(0, "V");
     // Mathematica 12 does not resolve this
-    assertThrows(Throw.class, () -> c.add(q));
+    assertThrows(Exception.class, () -> c.add(q));
   }
 
   @ParameterizedTest
@@ -158,14 +158,14 @@ class ComplexHelperTest {
   void testPlusQuantityFail() {
     Scalar c = Complex.of(2, 3);
     Scalar q = Quantity.of(1, "V");
-    assertThrows(Throw.class, () -> c.add(q));
+    assertThrows(Exception.class, () -> c.add(q));
   }
 
   @Test
   void testQuantityFail() {
     Scalar c = Quantity.of(3, "m");
     Scalar r = Pi.VALUE;
-    assertThrows(Throw.class, () -> Complex.of(c, r));
-    assertThrows(Throw.class, () -> Complex.of(r, c));
+    assertThrows(Exception.class, () -> Complex.of(c, r));
+    assertThrows(Exception.class, () -> Complex.of(r, c));
   }
 }

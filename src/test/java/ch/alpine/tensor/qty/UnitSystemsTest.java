@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Rational;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.ResourceData;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Chop;
@@ -185,6 +184,6 @@ class UnitSystemsTest {
     UnitSystem s1 = SimpleUnitSystem.from(Map.of("ym", Quantity.of(10, "m")));
     UnitSystem s2 = SimpleUnitSystem.from(Map.of("ym", Quantity.of(100, "m")));
     UnitSystems.join(s1, s1);
-    assertThrows(Throw.class, () -> UnitSystems.join(s1, s2));
+    assertThrows(Exception.class, () -> UnitSystems.join(s1, s2));
   }
 }

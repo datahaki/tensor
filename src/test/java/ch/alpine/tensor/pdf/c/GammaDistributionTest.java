@@ -17,7 +17,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
@@ -76,7 +75,7 @@ class GammaDistributionTest {
 
   @Test
   void testFail() {
-    assertThrows(Throw.class, () -> GammaDistribution.of(RealScalar.of(-1.0), RealScalar.of(2.3)));
-    assertThrows(Throw.class, () -> GammaDistribution.of(RealScalar.of(0.1), RealScalar.of(-2.3)));
+    assertThrows(Exception.class, () -> GammaDistribution.of(RealScalar.of(-1.0), RealScalar.of(2.3)));
+    assertThrows(Exception.class, () -> GammaDistribution.of(RealScalar.of(0.1), RealScalar.of(-2.3)));
   }
 }
