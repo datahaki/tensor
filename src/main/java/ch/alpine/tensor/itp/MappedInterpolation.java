@@ -9,6 +9,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.img.ImageResize;
+import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
 
 /** interpolation maps a given tensor to an integer index via a user specified function.
  * 
@@ -43,5 +44,11 @@ public class MappedInterpolation extends AbstractInterpolation implements Serial
   @Override // from Interpolation
   public final Tensor at(Scalar index) {
     return tensor.get(Scalars.intValueExact(function.apply(index)));
+  }
+
+  @Override
+  public CoordinateBoundingBox domain() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

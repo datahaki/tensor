@@ -10,6 +10,8 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
+import ch.alpine.tensor.sca.Clips;
 
 /** BSplineInterpolation defines a parametric curve that interpolates
  * the given control points at integer values.
@@ -42,10 +44,12 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
   // ---
   private final int degree;
   private final ScalarTensorFunction scalarTensorFunction;
+  private CoordinateBoundingBox cbb;
 
   private BSplineInterpolation(int degree, Tensor control) {
     this.degree = degree;
     scalarTensorFunction = BSplineFunctionString.of(degree, solve(degree, control));
+    cbb = CoordinateBoundingBox.of(Clips.positive(control.length() - 1));
   }
 
   @Override // from Interpolation
@@ -60,5 +64,11 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
   @Override // from Interpolation
   public Tensor at(Scalar index) {
     return scalarTensorFunction.apply(index);
+  }
+
+  @Override
+  public CoordinateBoundingBox domain() {
+    // TODO not sure, but for sure add tests
+    return cbb;
   }
 }

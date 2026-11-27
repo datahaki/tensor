@@ -26,6 +26,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.Import;
+import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -39,9 +40,8 @@ import test.wrap.InterpolationQ;
 
 class LinearInterpolationTest {
   @Test
-  void testEmpty() {
-    Interpolation interpolation = LinearInterpolation.of(Tensors.empty());
-    assertEquals(interpolation.get(Tensors.empty()), Tensors.empty());
+  void testEmptyFail() {
+    assertThrows(Exception.class, () -> LinearInterpolation.of(Tensors.empty()));
   }
 
   @Test
@@ -71,6 +71,9 @@ class LinearInterpolationTest {
     assertEquals(interpolation.get(Tensors.vector(2)), RealScalar.of(30));
     assertEquals(interpolation.get(Tensors.vector(2.5)), RealScalar.of(35));
     assertEquals(interpolation.get(Tensors.vector(3)), RealScalar.of(40));
+    assertThrows(Exception.class, () -> interpolation.get(Tensors.vector(3.1)));
+    CoordinateBoundingBox cbb = interpolation.domain();
+    IO.println(cbb);
   }
 
   @Test
@@ -169,12 +172,6 @@ class LinearInterpolationTest {
       assertEquals(scalar, interpolation.get(Tensors.of(index)));
       assertEquals(scalar, interpolation.at(index));
     }
-  }
-
-  @Test
-  void test0D() {
-    Interpolation interpolation = LinearInterpolation.of(Tensors.empty());
-    assertThrows(Exception.class, () -> interpolation.get(RealScalar.ZERO));
   }
 
   @Test

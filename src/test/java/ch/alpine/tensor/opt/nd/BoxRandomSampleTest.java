@@ -18,6 +18,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.itp.Interpolation;
+import ch.alpine.tensor.itp.LanczosInterpolation;
+import ch.alpine.tensor.itp.LinearInterpolation;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.pdf.RandomSample;
 import ch.alpine.tensor.pdf.RandomSampleInterface;
@@ -57,6 +61,30 @@ class BoxRandomSampleTest {
       VectorQ.requireLength(tensor, 3);
       assertTrue(cbb.test(tensor));
     }
+  }
+
+  @Test
+  void testLinearInterp() {
+    Interpolation interpolation = LinearInterpolation.of(HilbertMatrix.of(3, 10));
+    CoordinateBoundingBox cbb = interpolation.domain();
+    BoxRandomSample boxRandomSample = new BoxRandomSample(cbb);
+    int limit = 100;
+    List<Tensor> list = RandomSample.stream(boxRandomSample) //
+        .limit(limit) //
+        .map(interpolation::get).toList();
+    assertEquals(list.size(), limit);
+  }
+
+  @Test
+  void testLanczosInterp() {
+    Interpolation interpolation = LanczosInterpolation.of(HilbertMatrix.of(3, 10));
+    CoordinateBoundingBox cbb = interpolation.domain();
+    BoxRandomSample boxRandomSample = new BoxRandomSample(cbb);
+    int limit = 100;
+    List<Tensor> list = RandomSample.stream(boxRandomSample) //
+        .limit(limit) //
+        .map(interpolation::get).toList();
+    assertEquals(list.size(), limit);
   }
 
   @Test

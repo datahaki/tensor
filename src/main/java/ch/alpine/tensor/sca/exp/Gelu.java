@@ -12,25 +12,27 @@ import ch.alpine.tensor.sca.tri.Tanh;
 
 /** useful in machine learning instead of ReLu==Ramp */
 public enum Gelu implements ScalarUnaryOperator {
-  FUNCTION;
+  FUNCTION {
+    @Override
+    public Scalar apply(Scalar x) {
+      Scalar x3 = x.multiply(x).multiply(x);
+      Scalar u = f.multiply(x3).add(x).multiply(sca);
+      return Tanh.FUNCTION.apply(u).add(RealScalar.ONE).multiply(Rational.HALF).multiply(x);
+    }
+  },
+  DERIVATIVE {
+    @Override
+    public Scalar apply(Scalar x) {
+      Scalar x3 = x.multiply(x).multiply(x);
+      Scalar u = f.multiply(x3).add(x).multiply(sca);
+      Scalar tanhu = Tanh.FUNCTION.apply(u);
+      Scalar t1 = RealScalar.ONE.add(tanhu).multiply(Rational.HALF);
+      Scalar t2 = RealScalar.ONE.subtract(tanhu.multiply(tanhu)).multiply(Rational.HALF).multiply(x);
+      Scalar fac = sca.multiply(RealScalar.ONE.add(RealScalar.of(3).multiply(f.multiply(x.multiply(x)))));
+      return t1.add(t2.multiply(fac));
+    }
+  };
 
   static final Scalar f = DoubleScalar.of(0.044715);
   static final Scalar sca = Sqrt.FUNCTION.apply(RealScalar.TWO.divide(Pi.VALUE));
-
-  @Override
-  public Scalar apply(Scalar x) {
-    Scalar x3 = x.multiply(x).multiply(x);
-    Scalar u = f.multiply(x3).add(x).multiply(sca);
-    return Tanh.FUNCTION.apply(u).add(RealScalar.ONE).multiply(Rational.HALF).multiply(x);
-  }
-
-  public static Scalar dx(Scalar x) {
-    Scalar x3 = x.multiply(x).multiply(x);
-    Scalar u = f.multiply(x3).add(x).multiply(sca);
-    Scalar tanhu = Tanh.FUNCTION.apply(u);
-    Scalar t1 = RealScalar.ONE.add(tanhu).multiply(Rational.HALF);
-    Scalar t2 = RealScalar.ONE.subtract(tanhu.multiply(tanhu)).multiply(Rational.HALF).multiply(x);
-    Scalar fac = sca.multiply(RealScalar.ONE.add(RealScalar.of(3).multiply(f.multiply(x.multiply(x)))));
-    return t1.add(t2.multiply(fac));
-  }
 }

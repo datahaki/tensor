@@ -3,6 +3,7 @@ package ch.alpine.tensor.itp;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
 
 /** multi-dimensional interpolation
  * 
@@ -30,4 +31,7 @@ public interface Interpolation {
 
   /** @return {@link #at(Scalar)} cast as {@link Scalar} */
   Scalar At(Scalar index);
+
+  /** @return region from which {@link #get(Tensor)} may be called */
+  CoordinateBoundingBox domain();
 }

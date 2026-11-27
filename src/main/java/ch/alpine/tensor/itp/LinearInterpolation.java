@@ -10,9 +10,11 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.ScalarBinaryOperator;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.Primitives;
+import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clip;
@@ -46,9 +48,13 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
 
   // ---
   private final Tensor tensor;
+  private final CoordinateBoundingBox cbb;
 
   private LinearInterpolation(Tensor tensor) {
     this.tensor = tensor;
+    cbb = CoordinateBoundingBox.of(Dimensions.of(tensor).stream() //
+        .map(i -> i - 1) //
+        .map(Clips::positive));
   }
 
   @Override // from Interpolation
@@ -83,5 +89,10 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
    * @throws Exception if given ratio is not a {@link Scalar} */
   private static ScalarBinaryOperator interp(Tensor ratio) {
     return (a, b) -> a.add(ratio.multiply(b.subtract(a)));
+  }
+
+  @Override
+  public CoordinateBoundingBox domain() {
+    return cbb;
   }
 }

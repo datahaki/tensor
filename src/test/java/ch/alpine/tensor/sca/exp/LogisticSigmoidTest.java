@@ -34,8 +34,8 @@ class LogisticSigmoidTest {
   @Test
   void test() {
     Scalar t = RandomVariate.of(NormalDistribution.standard());
-    Jet jetScalar = Jet.identity(t, 2);
-    Scalar f0 = LogisticSigmoid.FUNCTION.apply(jetScalar);
+    Jet jet = Jet.identity(t, 2);
+    Scalar f0 = LogisticSigmoid.FUNCTION.apply(jet);
     Scalar d0 = LogisticSigmoid.DERIVATIVE.apply(t);
     Jet js = (Jet) f0;
     Tolerance.CHOP.requireClose(js.derivative(1), d0);

@@ -21,6 +21,12 @@ import ch.alpine.tensor.sca.Clips;
 
 class CoordinateBoundingBoxTest {
   @Test
+  void testEmpty2() {
+    CoordinateBoundingBox cbb = CoordinateBoundingBox.of();
+    assertEquals(cbb.dimensions(), 0);
+  }
+
+  @Test
   void testProject() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     Serialization.copy(coordinateBoundingBox);

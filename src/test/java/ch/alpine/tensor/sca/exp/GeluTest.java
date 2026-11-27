@@ -12,9 +12,9 @@ class GeluTest {
   @Test
   void testFandDxSync() {
     Scalar x = RealScalar.of(0.3);
-    Jet jetScalar = Jet.identity(x, 2);
-    Jet result = (Jet) Gelu.FUNCTION.apply(jetScalar);
-    Scalar dx = Gelu.dx(x);
+    Jet jet = Jet.identity(x, 2);
+    Jet result = (Jet) Gelu.FUNCTION.apply(jet);
+    Scalar dx = Gelu.DERIVATIVE.apply(x);
     Scalar expect = result.derivative(1);
     Tolerance.CHOP.requireClose(dx, expect);
   }

@@ -12,7 +12,10 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.opt.nd.CoordinateBoundingBox;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
 /** A typical application of {@code LanczosInterpolation} is image resizing.
@@ -42,10 +45,12 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
   // ---
   private final Tensor tensor;
   private final LanczosKernel lanczosKernel;
+  private final CoordinateBoundingBox cbb;
 
   private LanczosInterpolation(Tensor tensor, LanczosKernel lanczosKernel) {
     this.tensor = Objects.requireNonNull(tensor);
     this.lanczosKernel = lanczosKernel;
+    cbb = CoordinateBoundingBox.of(Dimensions.of(tensor).stream().map(Clips::positive));
   }
 
   @Override // from Interpolation
@@ -93,5 +98,10 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
     // TODO IMPL not efficient, too many multiplications
     return tensor.get(Integers.clip(0, tensor.length() - 1).applyAsInt(count)) //
         .multiply(lanczosKernel.apply(value.subtract(RealScalar.of(count))));
+  }
+
+  @Override
+  public CoordinateBoundingBox domain() {
+    return cbb;
   }
 }
