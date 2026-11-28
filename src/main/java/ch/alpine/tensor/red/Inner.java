@@ -23,6 +23,7 @@ import ch.alpine.tensor.ext.Integers;
  * <a href="https://reference.wolfram.com/language/ref/Inner.html">Inner</a>
  * 
  * @see Entrywise */
+// TODO Inner is not used much
 public class Inner implements TensorBinaryOperator {
   /** @param biFunction non-null
    * @return

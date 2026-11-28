@@ -9,6 +9,7 @@ import java.util.Objects;
 import ch.alpine.tensor.Complex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarBinaryOperator;
@@ -81,6 +82,10 @@ public class Entrywise implements TensorBinaryOperator {
   /** @return entrywise non-equals: 0 if equal, 1 otherwise */
   public static Entrywise neq() {
     return with((a, b) -> Boole.of(!a.equals(b)));
+  }
+
+  public static Entrywise leq() {
+    return with((a, b) -> Boole.of(Scalars.lessEquals(a, b)));
   }
 
   // ---

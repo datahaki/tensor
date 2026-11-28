@@ -55,8 +55,12 @@ public enum Join {
 
   // helper function called in base case of more general function of(...)
   private static Tensor flatten(List<Tensor> list) {
+    int length = list.stream() //
+        .mapToInt(Tensor::length) //
+        .reduce(Math::addExact) //
+        .orElse(0);
     return Tensor.of(list.stream() //
         .flatMap(Tensor::stream) //
-        .map(Tensor::copy));
+        .map(Tensor::copy), length);
   }
 }

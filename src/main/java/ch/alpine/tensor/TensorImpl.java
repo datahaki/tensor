@@ -111,9 +111,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor add(Tensor tensor) {
-    Integers.requireEquals(length(), tensor.length());
-    Int i = new Int();
-    return Slash.of(tensor, entry -> list.get(i.getAndIncrement()).add(entry));
+    return Slash.of(Tensor::add, this, tensor);
   }
 
   @Override // from Tensor
@@ -140,11 +138,12 @@ class TensorImpl extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor dot(Tensor tensor) {
-    if (length() == 0 || byRef(0) instanceof Scalar) { // quick hint whether this is a vector
-      Integers.requireEquals(length(), tensor.length());
-      Int i = new Int();
-      return tensor.stream().map(entry -> entry.multiply(Get(i.getAndIncrement()))) //
-          .reduce(Tensor::add).orElse(Hold.zero()); // compromise
+    int length = length();
+    if (length == 0 || byRef(0) instanceof Scalar) { // quick hint whether this is a vector
+      Integers.requireEquals(length, tensor.length());
+      return length == 0 //
+          ? Hold.zero()
+          : Slash.reduce(Tensor::add, Tensor::multiply, tensor, this);
     }
     return Slash.of(this, entry -> entry.dot(tensor));
   }

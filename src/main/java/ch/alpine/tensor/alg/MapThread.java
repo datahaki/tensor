@@ -11,6 +11,7 @@ import ch.alpine.tensor.ext.Integers;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/MapThread.html">MapThread</a> */
+// TODO MapThread is not used much
 public enum MapThread {
   ;
   /** MapThread[f, List[{a1, a2, a3}, {b1, b2, b3}, ...], 1]
