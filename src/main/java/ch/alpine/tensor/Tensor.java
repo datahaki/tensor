@@ -119,9 +119,13 @@ public interface Tensor extends Iterable<Tensor> {
    * get(ALL) should be implemented as copy(). Therefore, the function is <b>not</b>
    * a special case of the more general function {@link #get(int...)}.
    * 
-   * @param i in the range 0 and length() - 1
+   * @param i in the range 0, 1, ..., length() - 1
    * @return copy of this[i], i.e. the i-th element of this tensor */
   Tensor get(int i);
+
+  /** @param i in the range 0, 1, ..., length() - 1
+   * @return reference to i-th element */
+  Tensor byRef(int i);
 
   /** non-negative index[...] refer to the position in the tensor
    * 

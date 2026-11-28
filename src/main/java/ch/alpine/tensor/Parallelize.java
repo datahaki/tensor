@@ -25,13 +25,12 @@ public enum Parallelize {
    * @param rhs
    * @return lhs.dot(rhs) */
   public static Tensor dot(Tensor lhs, Tensor rhs) {
-    if (lhs.length() == 0 || lhs.get(0) instanceof Scalar) { // quick hint whether lhs is a vector
+    if (lhs.length() == 0 || lhs.get(0) instanceof Scalar) // quick hint whether lhs is a vector
       return IntStream.range(0, Integers.requireEquals(lhs.length(), rhs.length())) //
           .parallel() //
-          .mapToObj(index -> rhs.get(index).multiply(lhs.Get(index))) //
+          .mapToObj(index -> rhs.byRef(index).multiply(lhs.Get(index))) //
           .reduce(Tensor::add) //
           .orElse(Hold.zero());
-    }
     return Tensor.of(lhs.stream().parallel().map(entry -> entry.dot(rhs)));
   }
 

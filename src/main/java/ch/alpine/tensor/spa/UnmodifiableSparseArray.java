@@ -17,7 +17,7 @@ class UnmodifiableSparseArray extends SparseArray {
   }
 
   @Override // from TensorImpl
-  protected Tensor byRef(int i) {
+  public Tensor byRef(int i) {
     return super.byRef(i).unmodifiable();
   }
 

@@ -34,7 +34,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
   }
 
   @Override // from AbstractTensor
-  protected Tensor byRef(int i) {
+  public Tensor byRef(int i) {
     return list.get(i);
   }
 
@@ -116,9 +116,7 @@ class TensorImpl extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
-    Integers.requireEquals(length(), tensor.length());
-    Int i = new Int();
-    return Slash.of(tensor, entry -> list.get(i.getAndIncrement()).subtract(entry));
+    return Slash.of(Tensor::subtract, this, tensor);
   }
 
   @Override // from Tensor
@@ -175,6 +173,8 @@ class TensorImpl extends AbstractTensor implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return list.stream().map(Tensor::toString).collect(MathematicaFormat.EMBRACE);
+    return list.stream() //
+        .map(Tensor::toString) //
+        .collect(MathematicaFormat.EMBRACE);
   }
 }

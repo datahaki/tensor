@@ -15,7 +15,9 @@ class ParallelizeTest {
   void testDotSimple() {
     Tensor a = Tensors.vector(1, 2, 3);
     Tensor b = Tensors.vector(-3, 4, -8);
-    assertEquals(a.dot(b), Parallelize.dot(a, b));
+    Scalar expect = RealScalar.of(-19);
+    assertEquals(a.dot(b), expect);
+    assertEquals(Parallelize.dot(a, b), expect);
   }
 
   @Test

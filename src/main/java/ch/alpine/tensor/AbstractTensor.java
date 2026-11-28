@@ -9,10 +9,6 @@ import ch.alpine.tensor.spa.SparseArray;
 
 /** base class for {@link TensorImpl} and {@link SparseArray} */
 public abstract class AbstractTensor implements Tensor {
-  /** @param i in the range 0, 1, ..., length() - 1
-   * @return reference to i-th element */
-  protected abstract Tensor byRef(int i);
-
   @Override // from Tensor
   public final Scalar Get(int i) {
     return (Scalar) byRef(i);

@@ -28,6 +28,11 @@ public abstract class AbstractScalar implements Scalar {
     throw new Throw(this, i);
   }
 
+  @Override // from Tensor
+  public Tensor byRef(int i) {
+    throw new Throw(this, i);
+  }
+
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
   @Override // from Tensor
   public final Tensor get(int... index) {

@@ -84,7 +84,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
   }
 
   @Override // from AbstractTensor
-  protected Tensor byRef(int i) {
+  public Tensor byRef(int i) {
     Tensor tensor = navigableMap.get(requireInRange(i));
     if (Objects.isNull(tensor))
       return size.size() == 1 //

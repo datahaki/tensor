@@ -25,7 +25,7 @@ class UnmodifiableTensor extends TensorImpl {
   }
 
   @Override // from TensorImpl
-  protected Tensor byRef(int i) {
+  public Tensor byRef(int i) {
     return super.byRef(i).unmodifiable();
   }
 
